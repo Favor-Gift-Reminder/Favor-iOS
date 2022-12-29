@@ -7,11 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
+		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
+		2E635391295D906A00B23A14 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635390295D906A00B23A14 /* Differentiator */; };
+		2E635393295D906A00B23A14 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635392295D906A00B23A14 /* RxDataSources */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
 		2E7C30A0295D7C4300BAC43D /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309F295D7C4300BAC43D /* ViewController.swift */; };
 		2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A4295D7C4500BAC43D /* Assets.xcassets */; };
 		2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */; };
+		2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B0295D8DA400BAC43D /* ReactorKit */; };
+		2E7C30B4295D8DC200BAC43D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B3295D8DC200BAC43D /* Then */; };
+		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +36,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
+				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
+				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
+				2E7C30B4295D8DC200BAC43D /* Then in Frameworks */,
+				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
+				2E635391295D906A00B23A14 /* Differentiator in Frameworks */,
+				2E63538E295D904000B23A14 /* Kingfisher in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +94,15 @@
 			dependencies = (
 			);
 			name = Favor;
+			packageProductDependencies = (
+				2E7C30B0295D8DA400BAC43D /* ReactorKit */,
+				2E7C30B3295D8DC200BAC43D /* Then */,
+				2E7C30B6295D8E1000BAC43D /* SnapKit */,
+				2E63538A295D900F00B23A14 /* RxMoya */,
+				2E63538D295D904000B23A14 /* Kingfisher */,
+				2E635390295D906A00B23A14 /* Differentiator */,
+				2E635392295D906A00B23A14 /* RxDataSources */,
+			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
 			productType = "com.apple.product-type.application";
@@ -108,6 +131,14 @@
 				Base,
 			);
 			mainGroup = 2E7C308F295D7C4300BAC43D;
+			packageReferences = (
+				2E7C30AF295D8DA400BAC43D /* XCRemoteSwiftPackageReference "ReactorKit" */,
+				2E7C30B2295D8DC200BAC43D /* XCRemoteSwiftPackageReference "Then" */,
+				2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */,
+				2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */,
+				2E63538C295D904000B23A14 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -204,7 +235,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -258,7 +289,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -278,9 +309,11 @@
 				DEVELOPMENT_TEAM = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,9 +340,11 @@
 				DEVELOPMENT_TEAM = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -348,6 +383,95 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.0;
+			};
+		};
+		2E63538C295D904000B23A14 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+		2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		2E7C30AF295D8DA400BAC43D /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		2E7C30B2295D8DC200BAC43D /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2E63538A295D900F00B23A14 /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = RxMoya;
+		};
+		2E63538D295D904000B23A14 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E63538C295D904000B23A14 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		2E635390295D906A00B23A14 /* Differentiator */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = Differentiator;
+		};
+		2E635392295D906A00B23A14 /* RxDataSources */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */;
+			productName = RxDataSources;
+		};
+		2E7C30B0295D8DA400BAC43D /* ReactorKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E7C30AF295D8DA400BAC43D /* XCRemoteSwiftPackageReference "ReactorKit" */;
+			productName = ReactorKit;
+		};
+		2E7C30B3295D8DC200BAC43D /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E7C30B2295D8DC200BAC43D /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		2E7C30B6295D8E1000BAC43D /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2E7C3090295D7C4300BAC43D /* Project object */;
 }
