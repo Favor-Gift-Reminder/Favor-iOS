@@ -1,0 +1,30 @@
+excluded: # 린트 과정에서 무시할 파일 경로. `included`보다 우선순위 높음
+  - Pods
+  - Favor/AppDelegate.swift
+  - Favor/SceneDelegate.swift
+
+disabled_rules: # Default Rules에서 비활성화할 규칙
+  - trailing_whitespace
+  - force_cast
+  - force_unwrapping
+  - identifier_name
+  - function_body_length
+  - line_length
+  - multiple_closures_with_trailing_closure
+  - shorthand_operator
+  - force_try
+  - trailing_comma
+  - type_name
+  - cyclomatic_complexity
+  - large_tuple
+
+vertical_whitespace:
+  max_empty_lines: 2
+
+indentation_width:
+  indentation_width: 2
+  include_comments: false
+
+opt_in_rules:
+  - indentation_width                   
+  - closure_end_indentation
