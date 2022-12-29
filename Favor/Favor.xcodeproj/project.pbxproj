@@ -21,6 +21,7 @@
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
+		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +58,7 @@
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
+				E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */,
 				2E7C309A295D7C4300BAC43D /* Favor */,
 				2E7C3099295D7C4300BAC43D /* Products */,
 			);
@@ -99,6 +102,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2E7C30AC295D7C4500BAC43D /* Build configuration list for PBXNativeTarget "Favor" */;
 			buildPhases = (
+				E5E28ED0295DAD87006B9245 /* SwiftLint Script */,
 				2E7C3094295D7C4300BAC43D /* Sources */,
 				2E7C3095295D7C4300BAC43D /* Frameworks */,
 				2E7C3096295D7C4300BAC43D /* Resources */,
@@ -167,12 +171,35 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		E5E28ED0295DAD87006B9245 /* SwiftLint Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "SwiftLint Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nexport PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2E7C3094295D7C4300BAC43D /* Sources */ = {
@@ -322,7 +349,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XW996HTK32;
+				DEVELOPMENT_TEAM = 95JTZ6AP78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -353,7 +380,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XW996HTK32;
+				DEVELOPMENT_TEAM = 95JTZ6AP78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
