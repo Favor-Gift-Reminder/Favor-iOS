@@ -12,7 +12,7 @@
 
 <br/>
 
-[![Swift Badge](http://img.shields.io/badge/-5.7.1-555555?style=for-the-badge&label=Swift&labelColor=F54A2A&logo=swift&logoColor=white)]()
+[![Swift Badge](http://img.shields.io/badge/-5.7.1-555555?style=for-the-badge&label=Swift&labelColor=F54A2A&logo=swift&logoColor=white)]() <br/>
 [![SnapKit Badge](http://img.shields.io/badge/-5.6.0-555555?style=for-the-badge&label=SnapKit&labelColor=4AA5b7&logoColor=white)]()
 [![ReactorKit Badge](http://img.shields.io/badge/-3.2.0-555555?style=for-the-badge&label=ReactorKit&labelColor=5D8FDB&logoColor=white)]()
 [![RxSwift Badge](http://img.shields.io/badge/-3.2.0-555555?style=for-the-badge&label=RxSwift&labelColor=EC5BB0&logoColor=white)]() <br/>
