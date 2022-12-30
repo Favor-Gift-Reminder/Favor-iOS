@@ -24,6 +24,21 @@
 |이창준|김응철|
 |:-:|:-:|
 |<img src="https://avatars.githubusercontent.com/u/60438045?v=4" width=200>|<img src="https://avatars.githubusercontent.com/u/97531269?v=4" width=200>|
-|[@nomatterjun](https://github.com)|[@eung7](https://github.com/eung7)|
+|[@nomatterjun](https://github.com/nomatterjun)|[@eung7](https://github.com/eung7)|
+
+<br/>
+
+## ⚒ 아키텍쳐 
+
+### ⏺ ARCHITECTURE
+
+> **ARCHITECTURE**
+- description of architecture
+<br/>
+
+## 🚀 기술적 도전
+
+### ⏺ CHALLENGE
+- description of challenge
 
 <br/>
