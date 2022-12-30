@@ -17,17 +17,6 @@ final class HomeViewController: BaseViewController, View {
 	
 	// MARK: - Properties
 	
-	// MARK: - Initializer
-	
-	init(reactor: Reactor) {
-		super.init()
-		self.reactor = reactor
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-	
 	// MARK: - Setup
 	
 	override func setupStyles() {

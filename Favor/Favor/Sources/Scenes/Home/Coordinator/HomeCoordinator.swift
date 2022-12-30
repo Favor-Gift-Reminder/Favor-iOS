@@ -17,7 +17,8 @@ final class HomeCoordinator: BaseCoordinator {
 	
 	override func start() {
 		let homeReactor = HomeReactor(coordinator: self)
-		let homeViewController = HomeViewController(reactor: homeReactor)
+		let homeViewController = HomeViewController()
+    homeViewController.reactor = homeReactor
 		self.navigationController.pushViewController(homeViewController, animated: true)
 	}
 	

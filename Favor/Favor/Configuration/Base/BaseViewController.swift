@@ -13,17 +13,6 @@ class BaseViewController: UIViewController {
 
   /// A dispose bag. 각 ViewController에 종속적이다.
   final var disposeBag = DisposeBag()
-
-  /// A coordinator used to navigate`ViewControllers`
-  weak var coordinator: Coordinator?
-	
-	init() {
-		super.init(nibName: nil, bundle: nil)
-	}
-	
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
 	
   override func viewDidLoad() {
     super.viewDidLoad()
