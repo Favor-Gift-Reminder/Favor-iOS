@@ -1,7 +1,7 @@
 excluded: # 린트 과정에서 무시할 파일 경로. `included`보다 우선순위 높음
   - Pods
-  - Favor/AppDelegate.swift
-  - Favor/SceneDelegate.swift
+  - Favor/Sources/Scenes/Application/AppDelegate.swift
+  - Favor/Sources/Scenes/Application/SceneDelegate.swift
 
 disabled_rules: # Default Rules에서 비활성화할 규칙
   - trailing_whitespace
@@ -28,3 +28,13 @@ indentation_width:
 opt_in_rules:
   - indentation_width                   
   - closure_end_indentation
+  - empty_count
+  - empty_string
+  - file_name_no_space
+  - file_types_order
+  - multiline_arguments
+  - multiline_function_chains
+  - multiline_parameters_brackets
+  - sorted_imports
+  - vertical_parameter_alignment_on_call
+  - weak_delegate
