@@ -27,3 +27,18 @@
 |[@nomatterjun](https://github.com)|[@eung7](https://github.com/eung7)|
 
 <br/>
+
+## ⚒ 아키텍쳐 
+
+### ⏺ ARCHITECTURE
+
+> **ARCHITECTURE**
+- description of architecture
+<br/>
+
+## 🚀 기술적 도전
+
+### ⏺ CHALLENGE
+- description of challenge
+
+<br/>
