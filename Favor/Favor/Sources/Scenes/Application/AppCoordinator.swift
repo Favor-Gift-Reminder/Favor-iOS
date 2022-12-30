@@ -7,34 +7,18 @@
 
 import UIKit
 
-final class AppCoordinator: Coordinator {
+final class AppCoordinator: BaseCoordinator {
 	
 	// MARK: - Properties
 	
-	var navigationController: UINavigationController
-	var childCoordinators: [Coordinator]
-	var parentCoordinator: Coordinator?
-	
 	// MARK: - Initializer
-	
-	init(_ navigationController: UINavigationController) {
-		self.childCoordinators = []
-		self.navigationController = navigationController
-	}
 	
 	// MARK: - Functions
 	
-	func start() {
-		self.showHomeFlow()
-	}
-	
-}
-
-private extension AppCoordinator {
-	
-	/// Home 화면을 push합니다.
-	func showHomeFlow() {
-		// TODO: Home 화면 구현 후 pushNavigationController 구현
+	override func start() {
+		// TODO: - Onboard 구현 후 분기 처리
+		let homeCoordinator = HomeCoordinator(self.navigationController)
+		self.start(childCoordinator: homeCoordinator)
 	}
 	
 }

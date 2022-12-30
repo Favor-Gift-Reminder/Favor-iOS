@@ -19,6 +19,10 @@
 		2E7C30B4295D8DC200BAC43D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B3295D8DC200BAC43D /* Then */; };
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
 		2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */; };
+		2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB016F295EBE6F0072D158 /* HomeVC.swift */; };
+		2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0171295EBF150072D158 /* HomeReactor.swift */; };
+		2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0174295EBF820072D158 /* HomeCoordinator.swift */; };
+		2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -31,15 +35,17 @@
 		2E7C30A4295D7C4500BAC43D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7C30A7295D7C4500BAC43D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2EBB0157295E8D750072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0159295E8D8E0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		2EBB015B295E8D970072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0162295E8E070072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB0166295E8E2C0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		2EBB016F295EBE6F0072D158 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
+		2EBB0171295EBF150072D158 /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
+		2EBB0174295EBF820072D158 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -183,6 +189,7 @@
 		2EBB0153295E8CE50072D158 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				2EBB0173295EBF780072D158 /* Coordinator */,
 				2EBB0154295E8CEC0072D158 /* Reactor */,
 				2EBB0155295E8CFD0072D158 /* Views */,
 				2EBB0156295E8D0A0072D158 /* ViewControllers */,
@@ -193,7 +200,7 @@
 		2EBB0154295E8CEC0072D158 /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
-				2EBB015B295E8D970072D158 /* .gitkeep */,
+				2EBB0171295EBF150072D158 /* HomeReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -209,7 +216,7 @@
 		2EBB0156295E8D0A0072D158 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				2EBB0157295E8D750072D158 /* .gitkeep */,
+				2EBB016F295EBE6F0072D158 /* HomeVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -222,9 +229,18 @@
 			path = DataMapping;
 			sourceTree = "<group>";
 		};
+		2EBB0173295EBF780072D158 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				2EBB0174295EBF820072D158 /* HomeCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */,
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
 			);
@@ -343,8 +359,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
+				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
+				2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */,
 				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
+				2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */,
+				2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 			);
