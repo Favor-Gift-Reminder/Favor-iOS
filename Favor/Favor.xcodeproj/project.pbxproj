@@ -18,14 +18,7 @@
 		2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B0295D8DA400BAC43D /* ReactorKit */; };
 		2E7C30B4295D8DC200BAC43D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B3295D8DC200BAC43D /* Then */; };
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
-		2EBB0158295E8D750072D158 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB0157295E8D750072D158 /* .gitkeep */; };
-		2EBB015A295E8D8E0072D158 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB0159295E8D8E0072D158 /* .gitkeep */; };
-		2EBB015C295E8D970072D158 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB015B295E8D970072D158 /* .gitkeep */; };
-		2EBB0161295E8DFC0072D158 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB0160295E8DFC0072D158 /* .gitkeep */; };
-		2EBB0163295E8E070072D158 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB0162295E8E070072D158 /* .gitkeep */; };
-		2EBB0165295E8E1B0072D158 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB0164295E8E1B0072D158 /* README.md */; };
-		2EBB0167295E8E2C0072D158 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB0166295E8E2C0072D158 /* .gitkeep */; };
-		2EBB016B295EA9DA0072D158 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 2EBB016A295EA9DA0072D158 /* README.md */; };
+		2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -46,6 +39,7 @@
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB0166295E8E2C0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -179,6 +173,7 @@
 		2EBB0152295E8CCA0072D158 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */,
 				2E7C309B295D7C4300BAC43D /* AppDelegate.swift */,
 				2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */,
 			);
@@ -314,15 +309,7 @@
 			files = (
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
-				2EBB0167295E8E2C0072D158 /* .gitkeep in Resources */,
-				2EBB0165295E8E1B0072D158 /* README.md in Resources */,
-				2EBB015A295E8D8E0072D158 /* .gitkeep in Resources */,
-				2EBB0163295E8E070072D158 /* .gitkeep in Resources */,
-				2EBB016B295EA9DA0072D158 /* README.md in Resources */,
-				2EBB015C295E8D970072D158 /* .gitkeep in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
-				2EBB0158295E8D750072D158 /* .gitkeep in Resources */,
-				2EBB0161295E8DFC0072D158 /* .gitkeep in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +344,7 @@
 			files = (
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
+				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 			);
