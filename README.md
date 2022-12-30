@@ -12,6 +12,8 @@
 
 <br/>
 
+## 🔨 개발환경 및 라이브러리
+
 [![Swift Badge](http://img.shields.io/badge/-5.7.1-555555?style=for-the-badge&label=Swift&labelColor=F54A2A&logo=swift&logoColor=white)]() <br/>
 [![SnapKit Badge](http://img.shields.io/badge/-5.6.0-555555?style=for-the-badge&label=SnapKit&labelColor=4AA5b7&logoColor=white)]()
 [![ReactorKit Badge](http://img.shields.io/badge/-3.2.0-555555?style=for-the-badge&label=ReactorKit&labelColor=5D8FDB&logoColor=white)]()
@@ -30,15 +32,24 @@
 
 ## ⚒ 아키텍쳐 
 
-### ⏺ ARCHITECTURE
+### ⏺ MVVM-C & ReactorKit
 
-> **ARCHITECTURE**
-- description of architecture
+> **MVVM**
+- MVVM 패턴을 사용하여 ViewController에는 화면 구성 코드만 담고 ViewModel(Reactor)에게 비즈니스 로직과 데이터 가공 코드를 담았습니다.
+- 비즈니스 로직 테스트에서 UI 컴포넌트 의존성을 없앨 수 있어 유닛 테스트에 용이했습니다.
+> **Coordinator**
+- Navigation Controller로 대표되는 화면 전환 로직들을 코디네이터 패턴에 전임하여 뷰 전환 코드의 재사용성을 높였습니다.
+- 데이터 전달, 의존성 주입 등의 로직을 비즈니스 로직에서 분리하여 코디네이터가 담당하도록 하였습니다.
+> **ReactorKit**
+- ViewModel마다 신경써야 했던 의존성 주입 문제의 피곤을 덜 수 있도록 ReactorKit을 도입하였습니다.
+- Action ➡️ Mutate ➡️ State의 일방성 스트림을 통해 자연스러운 코딩 컨벤션 통일이 가능했습니다.
 <br/>
 
-## 🚀 기술적 도전
+## ⚽ 테크 Goal
 
-### ⏺ CHALLENGE
+### 🔀 RxSwift + ReactorKit
+- description of challenge
+### ⚒️ XCTest 코드 작성
 - description of challenge
 
 <br/>
