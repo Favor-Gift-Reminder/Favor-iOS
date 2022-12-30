@@ -102,7 +102,7 @@
 			children = (
 				2EBB0151295E8CAD0072D158 /* Assets */,
 				E5E28ECA295DAC15006B9245 /* Base */,
-				2EBB0150295E8CA10072D158 /* Constatns */,
+				2EBB0150295E8CA10072D158 /* Constants */,
 				2EBB014F295E8C9B0072D158 /* Extensions */,
 				2EBB014E295E8C960072D158 /* Fonts */,
 			);
@@ -160,12 +160,12 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		2EBB0150295E8CA10072D158 /* Constatns */ = {
+		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
 				2EBB0166295E8E2C0072D158 /* .gitkeep */,
 			);
-			path = Constatns;
+			path = Constants;
 			sourceTree = "<group>";
 		};
 		2EBB0151295E8CAD0072D158 /* Assets */ = {
