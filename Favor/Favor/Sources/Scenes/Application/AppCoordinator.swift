@@ -16,9 +16,17 @@ final class AppCoordinator: BaseCoordinator {
 	// MARK: - Functions
 	
 	override func start() {
-		// TODO: - Onboard 구현 후 분기 처리
-		let homeCoordinator = HomeCoordinator(self.navigationController)
-		self.start(childCoordinator: homeCoordinator)
+    self.showSplashFlow()
 	}
 	
+}
+
+extension AppCoordinator {
+  
+  /// 앱에 필요한 데이터들을 pre-fetch하기 위해 출력되는 View입니다.
+  func showSplashFlow() {
+    let splashViewController = SplashViewController()
+    self.navigationController.setNavigationBarHidden(true, animated: false)
+    self.navigationController.pushViewController(splashViewController, animated: false)
+  }
 }
