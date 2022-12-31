@@ -13,6 +13,7 @@
 		2E635393295D906A00B23A14 /* RxDataSources in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635392295D906A00B23A14 /* RxDataSources */; };
 		2E76F58329601B75002FF001 /* TabBarCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58229601B75002FF001 /* TabBarCoordinator.swift */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
+		2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58729601EF2002FF001 /* SplashReactor.swift */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
 		2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A4295D7C4500BAC43D /* Assets.xcassets */; };
@@ -25,6 +26,7 @@
 		2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0171295EBF150072D158 /* HomeReactor.swift */; };
 		2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0174295EBF820072D158 /* HomeCoordinator.swift */; };
 		2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */; };
+		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -33,6 +35,7 @@
 /* Begin PBXFileReference section */
 		2E76F58229601B75002FF001 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
+		2E76F58729601EF2002FF001 /* SplashReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReactor.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7C309B295D7C4300BAC43D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -50,6 +53,7 @@
 		2EBB0171295EBF150072D158 /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		2EBB0174295EBF820072D158 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
+		2ECC94C9296026A200B530F7 /* TabBarPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarPage.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -73,6 +77,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E76F58629601EC3002FF001 /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				2E76F58729601EF2002FF001 /* SplashReactor.swift */,
+				2E76F58429601CD6002FF001 /* SplashVC.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
@@ -183,11 +196,11 @@
 		2EBB0152295E8CCA0072D158 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				2E76F58629601EC3002FF001 /* Splash */,
+				2ECC94C82960268000B530F7 /* TabBar */,
 				2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */,
 				2E7C309B295D7C4300BAC43D /* AppDelegate.swift */,
 				2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */,
-				2E76F58429601CD6002FF001 /* SplashVC.swift */,
-				2E76F58229601B75002FF001 /* TabBarCoordinator.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -241,6 +254,15 @@
 				2EBB0174295EBF820072D158 /* HomeCoordinator.swift */,
 			);
 			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		2ECC94C82960268000B530F7 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				2E76F58229601B75002FF001 /* TabBarCoordinator.swift */,
+				2ECC94C9296026A200B530F7 /* TabBarPage.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
@@ -365,11 +387,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
+				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
 				2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */,
 				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
+				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
 				2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */,
 				2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,

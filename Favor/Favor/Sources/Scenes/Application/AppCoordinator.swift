@@ -29,4 +29,10 @@ extension AppCoordinator {
     self.navigationController.setNavigationBarHidden(true, animated: false)
     self.navigationController.pushViewController(splashViewController, animated: false)
   }
+  
+  /// Main Scene에 진입 시에 하단에 깔리는 TabBar를 담당하는 View입니다.
+  func showTabBarFlow() {
+    let tabBarCoordinator = TabBarCoordinator(self.navigationController)
+    self.start(childCoordinator: tabBarCoordinator)
+  }
 }
