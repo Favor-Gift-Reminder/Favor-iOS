@@ -39,4 +39,9 @@ enum FavorStyle {
       }
     }
   }
+  
+  // TODO: - 각 폰트 scale/weight 따라 이름 짓기.
+  enum Font {
+    
+  }
 }
