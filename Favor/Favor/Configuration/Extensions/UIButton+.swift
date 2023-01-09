@@ -36,6 +36,10 @@ extension UIButton.Configuration {
         return FavorStyle.Color.white.value
       }
     }
+    
+    var cornerRadius: CGFloat { 
+       //...
+    } 
   }
   
   /// Pre-configured된 UIButton.Configuration에 따라 UIButton을 생성합니다.
