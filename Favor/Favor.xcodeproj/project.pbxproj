@@ -27,6 +27,9 @@
 		2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0174295EBF820072D158 /* HomeCoordinator.swift */; };
 		2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */; };
 		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
+		2ECD69B02967246400D00F8F /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69AF2967246400D00F8F /* UIButton+.swift */; };
+		2ECD69B2296727B500D00F8F /* FavorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B1296727B500D00F8F /* FavorStyle.swift */; };
+		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -46,7 +49,6 @@
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0162295E8E070072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		2EBB0166295E8E2C0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		2EBB016F295EBE6F0072D158 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
@@ -54,6 +56,9 @@
 		2EBB0174295EBF820072D158 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		2ECC94C9296026A200B530F7 /* TabBarPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarPage.swift; sourceTree = "<group>"; };
+		2ECD69AF2967246400D00F8F /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
+		2ECD69B1296727B500D00F8F /* FavorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorStyle.swift; sourceTree = "<group>"; };
+		2ECD69B329672CF000D00F8F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -173,6 +178,8 @@
 			isa = PBXGroup;
 			children = (
 				2EBB0164295E8E1B0072D158 /* README.md */,
+				2ECD69AF2967246400D00F8F /* UIButton+.swift */,
+				2ECD69B329672CF000D00F8F /* UIColor+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -180,7 +187,7 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				2EBB0166295E8E2C0072D158 /* .gitkeep */,
+				2ECD69B1296727B500D00F8F /* FavorStyle.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -387,6 +394,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
+				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
+				2ECD69B02967246400D00F8F /* UIButton+.swift in Sources */,
 				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
@@ -394,6 +403,7 @@
 				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
+				2ECD69B2296727B500D00F8F /* FavorStyle.swift in Sources */,
 				2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */,
 				2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
