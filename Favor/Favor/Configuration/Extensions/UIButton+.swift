@@ -37,9 +37,13 @@ extension UIButton.Configuration {
       }
     }
     
-    var cornerRadius: CGFloat { 
-       //...
-    } 
+    /// 버튼의 모서리 반경 (corner radius)
+    var cornerRadius: CGFloat {
+      return 0.0
+    }
+
+    // TODO: - 폰트
+    
   }
   
   /// Pre-configured된 UIButton.Configuration에 따라 UIButton을 생성합니다.
