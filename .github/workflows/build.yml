@@ -1,7 +1,7 @@
 name: build
 
 env:
-  project: "Favor"
+  PROJECT: 'Favor'
 
 on:
   pull_request:
@@ -9,43 +9,49 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-12
     strategy:
-      matrix:
-        include:
-          - xcode: "14.2"
-            ios: "15.0"
-            simulator: "iPhone 13 Pro"
+        matrix:
+          include:
+            - xcode: "14.0"
+              ios: "16.0"
+              simulator: "iPhone 13 Pro"
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+    - name: Checkout
+      uses: actions/checkout@v3
+      
+    - name: Create secret file
+      env:
+          API_SECRET: ${{ secrets.API_SECRET }}
+      run: |
+        echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/Service-Info.plist
+        ls -al ${{ env.PROJECT }}
 
-      - name: Select Xcode ${{ matrix.xcode }}
-        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app && /usr/bin/xcodebuild -version
+    - name: Select Xcode ${{ matrix.xcode }}
+      run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode}}.app && /usr/bin/xcodebuild -version
 
-      - name: Cache SwiftPM
-        uses: actions/cache@v3
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData/${{ env.project }}*/SourcePackages/
-          key: ${{ runner.os }}-spm-${{ hashFiles('${{ env.project }}.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+    - name: Cache SwiftPM
+      uses: actions/cache@v3
+      with:
+          path: ~/Library/Developer/Xcode/DerivedData/${{ env.PROJECT }}*/SourcePackages/
+          key: ${{ runner.os }}-spm-${{ hashFiles('${{ env.PROJECT }}.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
-            
-      - name: Cache DerivedData
-        uses: actions/cache@v3
-        with:
-          path: ~/Library/Developer/Xcode/DerivedData
-          key: ${{ runner.os }}-iOS_derived_data-xcode_${{ matrix.xcode }}
-          restore-keys: |
-            ${{ runner.os }}-iOS_derived_data-
-      
-      - name: Build iOS ${{ matrix.ios }} on ${{ matrix.simulator }}
-        env:
-          xcodeproj: "${{ env.project }}/${{ env.project }}.xcodeproj"
-        run: >
-          xcodebuild build
-          -project ${{ env.xcodeproj }}
-          -scheme Favor
-          -destination "platform=iOS Simulator,OS=${{ matrix.ios }},name=${{ matrix.simulator }}"
-          
+
+    - name: Cache DerivedData
+      uses: actions/cache@v3
+      with:
+        path: ~/Library/Developer/Xcode/DerivedData
+        key: ${{ runner.os }}-iOS_derived_data-xcode_${{ matrix.xcode }}
+        restore-keys: |
+          ${{ runner.os }}-iOS_derived_data-
+  
+    - name: Build iOS ${{ matrix.ios }} on ${{ matrix.simulator }}
+      env:
+        XCODEPROJ: "${{ env.PROJECT }}/${{ env.PROJECT }}.xcodeproj"
+      run: >
+        xcodebuild build
+        -project ${{ env.XCODEPROJ }}
+        -scheme Favor 
+        -destination 'platform=iOS Simulator,OS=${{ matrix.ios }},name=${{ matrix.simulator }}'
