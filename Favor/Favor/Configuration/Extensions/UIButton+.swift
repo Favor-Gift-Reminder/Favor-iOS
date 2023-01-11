@@ -102,7 +102,8 @@ extension UIButton.Configuration {
     var config = self
     switch state {
     case .normal:
-      break
+      config.baseForegroundColor = FavorStyle.Color.white.value
+      config.baseBackgroundColor = FavorStyle.Color.typo.value
     case .disabled:
       config.baseForegroundColor = FavorStyle.Color.typo.value
       config.baseBackgroundColor = FavorStyle.Color.box1.value
