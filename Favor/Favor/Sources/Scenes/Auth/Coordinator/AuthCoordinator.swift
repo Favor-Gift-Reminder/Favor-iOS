@@ -16,7 +16,7 @@ final class AuthCoordinator: BaseCoordinator {
   // MARK: - Functions
   
   override func start() {
-    //
+    self.showSignInFlow()
   }
   
 }
