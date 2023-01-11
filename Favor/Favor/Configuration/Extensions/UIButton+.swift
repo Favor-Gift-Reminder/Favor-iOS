@@ -42,25 +42,56 @@ extension UIButton.Configuration {
     }
     
     /// 버튼의 모서리 반경 (corner radius)
-    var cornerRadius: CGFloat {
-      return 0.0
+    var cornerRadius: CGFloat { // TODO: - 정확한 값 정해지면 적용하기.
+      return 28.0
     }
 
-    // TODO: - 폰트
+    // 버튼의 텍스트 폰트
+    var font: UIFont {
+      return .systemFont(ofSize: 18.0, weight: .bold)
+    }
     
   }
   
   /// Pre-configured된 UIButton.Configuration에 따라 UIButton을 생성합니다.
   /// - Parameters:
-  ///     - style: 버튼의 스타일 (large, regular, small)
+  ///     - style: 버튼의 스타일 (large, small)
   ///     - title: 버튼의 텍스트
-  static func makeButton(with style: FavorButton, title: String? = nil) -> UIButton.Configuration {
-    var configuration = UIButton.Configuration.filled()
-    configuration.title = title
+  ///     - image: 버튼의 이미지(아이콘)
+  static func makeButton(
+    with style: FavorButton,
+    title: String? = nil,
+    image: UIImage? = nil
+  ) -> UIButton.Configuration {
+    // Base
+    var configuration: UIButton.Configuration
+    switch style {
+    case .small, .large:
+      configuration = .filled()
+    case .plain:
+      configuration = .plain()
+    }
+    // Title
+    if let title {
+      var titleAttr = AttributedString.init(title)
+      titleAttr.font = style.font
+      configuration.attributedTitle = titleAttr
+    }
     configuration.titleAlignment = .center
-    configuration.background.cornerRadius = 12.0 // TODO: - 정확한 값 여쭤보기.
+    // Image
+    if let image {
+      configuration.image = image
+      configuration.imagePlacement = .leading
+      configuration.imagePadding = 8
+    }
+    // Layer
+    configuration.background.cornerRadius = style.cornerRadius
+    // Layout
+    configuration.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14)
+    // Color
     configuration.baseBackgroundColor = style.backgroundColor
     configuration.baseForegroundColor = style.foregroundColor
+    
     return configuration
   }
 }
