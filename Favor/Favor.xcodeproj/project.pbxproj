@@ -131,8 +131,10 @@
 		2E1C5659296C24AE0067FC78 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */,
-				2E1C565B296C24CB0067FC78 /* AuthReactor.swift */,
+				2EE07EE5296EDCB100048A3C /* Coordinator */,
+				2EE07EE4296EDCA900048A3C /* Reactor */,
+				2EE07EE3296EDCA500048A3C /* Views */,
+				2EE07EE2296EDC9E00048A3C /* ViewControllers */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -523,6 +525,36 @@
 				2EE07EDE296E8E5600048A3C /* .gitkeep */,
 			);
 			path = Reactor;
+			sourceTree = "<group>";
+		};
+		2EE07EE2296EDC9E00048A3C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EE07EE3296EDCA500048A3C /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EE07EE4296EDCA900048A3C /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				2E1C565B296C24CB0067FC78 /* AuthReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		2EE07EE5296EDCB100048A3C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
