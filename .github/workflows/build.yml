@@ -13,8 +13,8 @@ jobs:
     strategy:
         matrix:
           include:
-            - xcode: "14.0"
-              ios: "16.0"
+            - xcode: "14.2"
+              ios: "16.2"
               simulator: "iPhone 13 Pro"
 
     steps:
