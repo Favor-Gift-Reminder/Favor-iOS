@@ -35,4 +35,15 @@ extension AppCoordinator {
     let tabBarCoordinator = TabBarCoordinator(self.navigationController)
     self.start(childCoordinator: tabBarCoordinator)
   }
+  
+  /// 첫 실행 시 온보딩 화면을 출력하는 View입니다.
+  func showOnboardFlow() {
+    
+  }
+  
+  /// 로그인 / 회원가입 로직을 처리하는 View입니다. 최초 실행 시 온보딩 view에서 접근됩니다.
+  func showAuthFlow() {
+    let authCoordinator = AuthCoordinator(self.navigationController)
+    self.start(childCoordinator: authCoordinator)
+  }
 }
