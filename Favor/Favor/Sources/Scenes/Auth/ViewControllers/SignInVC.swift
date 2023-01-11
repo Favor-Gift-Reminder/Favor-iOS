@@ -19,9 +19,9 @@ final class SignInViewController: BaseViewController {
   
   // MARK: - UI Components
   
-  private lazy var kakaoLoginButton = UIButton.Configuration.makeButton(with: .regular)
+  private lazy var kakaoLoginButton = UIButton.Configuration.makeButton(with: .large)
   
-  private lazy var idLoginButton = UIButton.Configuration.makeButton(with: .regular)
+  private lazy var idLoginButton = UIButton.Configuration.makeButton(with: .large)
   
   private lazy var vStack = UIStackView().then {
     $0.axis = .vertical
