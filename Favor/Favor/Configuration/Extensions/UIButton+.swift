@@ -19,21 +19,25 @@ extension UIButton {
 extension UIButton.Configuration {
   
   enum FavorButton {
-    case large, regular, small
+    case large, small, plain
     
     /// 버튼의 배경 색상
     var backgroundColor: UIColor? {
       switch self {
-      default:
+      case .large, .small:
         return FavorStyle.Color.typo.value
+      case .plain:
+        return .clear
       }
     }
     
     /// 버튼의 내용 색상
     var foregroundColor: UIColor? {
       switch self {
-      default:
+      case .large, .small:
         return FavorStyle.Color.white.value
+      case .plain:
+        return FavorStyle.Color.detail.value
       }
     }
     
