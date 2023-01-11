@@ -17,6 +17,10 @@ final class SignInReactor: Reactor {
   var initialState: State
   
   enum Action {
+    case idLoginButtonTap
+  }
+  
+  enum Mutation {
     
   }
   
@@ -29,6 +33,14 @@ final class SignInReactor: Reactor {
   init(coordinator: AuthCoordinator) {
     self.coordinator = coordinator
     self.initialState = State()
+  }
+  
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .idLoginButtonTap:
+      self.coordinator?.showSignInFlow()
+      return Observable<Mutation>.empty()
+    }
   }
   
 }
