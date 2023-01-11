@@ -94,4 +94,21 @@ extension UIButton.Configuration {
     
     return configuration
   }
+  
+  /// UIButton의 state에 따라 배경색과 텍스트 색을 바꿉니다.
+  /// - Parameters:
+  ///   - state: 교체할 버튼의 state
+  func updateState(to state: UIButton.State) -> UIButton.Configuration {
+    var config = self
+    switch state {
+    case .normal:
+      break
+    case .disabled:
+      config.baseForegroundColor = FavorStyle.Color.typo.value
+      config.baseBackgroundColor = FavorStyle.Color.box1.value
+    default:
+      break
+    }
+    return config
+  }
 }
