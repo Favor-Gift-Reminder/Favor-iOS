@@ -13,6 +13,7 @@ final class SignInReactor: Reactor {
   
   // MARK: - Properties
   
+  weak var coordinator: AuthCoordinator?
   var initialState: State
   
   enum Action {
@@ -25,7 +26,8 @@ final class SignInReactor: Reactor {
   
   // MARK: - Initializer
   
-  init() {
+  init(coordinator: AuthCoordinator) {
+    self.coordinator = coordinator
     self.initialState = State()
   }
   
