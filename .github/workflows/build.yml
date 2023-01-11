@@ -28,7 +28,7 @@ jobs:
         uses: actions/cache@v3
         with:
           path: ~/Library/Developer/Xcode/DerivedData/${{ env.project }}*/SourcePackages/
-          key: ${{ runner.os }}-spm-${{ hashFiles("${{ env.project }}.xcworkspace/xcshareddata/swiftpm/Package.resolved") }}
+          key: ${{ runner.os }}-spm-${{ hashFiles('${{ env.project }}.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
           restore-keys: |
             ${{ runner.os }}-spm-
             
