@@ -33,15 +33,10 @@
 		2ECD69B02967246400D00F8F /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69AF2967246400D00F8F /* UIButton+.swift */; };
 		2ECD69B2296727B500D00F8F /* FavorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B1296727B500D00F8F /* FavorStyle.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
+		2ED22DAD296F9E9400ED6221 /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAC296F9E9400ED6221 /* UIFactory.swift */; };
 		2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EA1296C5F4B00048A3C /* SearchCoordinator.swift */; };
 		2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EA5296C605A00048A3C /* NewGiftCoordinator.swift */; };
 		2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EAF296E7BF700048A3C /* ReminderCoordinator.swift */; };
-		2EE07EB2296E8C1F00048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EB1296E8C1F00048A3C /* .gitkeep */; };
-		2EE07EB4296E8C2B00048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EB3296E8C2B00048A3C /* .gitkeep */; };
-		2EE07EB6296E8C3700048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EB5296E8C3700048A3C /* .gitkeep */; };
-		2EE07EBC296E8CF300048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EBB296E8CF300048A3C /* .gitkeep */; };
-		2EE07EC5296E8D5100048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EC4296E8D5100048A3C /* .gitkeep */; };
-		2EE07EC7296E8D5900048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EC6296E8D5900048A3C /* .gitkeep */; };
 		2EE07EC9296E8D6200048A3C /* MyPageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EC8296E8D6200048A3C /* MyPageCoordinator.swift */; };
 		2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECA296E8D8400048A3C /* MyPageVC.swift */; };
 		2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECC296E8D9A00048A3C /* SettingVC.swift */; };
@@ -50,8 +45,6 @@
 		2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED2296E8DE600048A3C /* EventEditVC.swift */; };
 		2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED6296E8E1900048A3C /* GiftVC.swift */; };
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
-		2EE07EDD296E8E5000048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EDC296E8E4F00048A3C /* .gitkeep */; };
-		2EE07EDF296E8E5600048A3C /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EDE296E8E5600048A3C /* .gitkeep */; };
 		2EE07EE1296EBE0C00048A3C /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EE0296EBE0C00048A3C /* API-Info.plist */; };
 		2EE07EE7296EDE5100048A3C /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SignInVC.swift */; };
 		2EE07EE9296EDE9700048A3C /* SignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SignInReactor.swift */; };
@@ -87,6 +80,7 @@
 		2ECD69AF2967246400D00F8F /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		2ECD69B1296727B500D00F8F /* FavorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorStyle.swift; sourceTree = "<group>"; };
 		2ECD69B329672CF000D00F8F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		2ED22DAC296F9E9400ED6221 /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
 		2EE07EA1296C5F4B00048A3C /* SearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
 		2EE07EA5296C605A00048A3C /* NewGiftCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftCoordinator.swift; sourceTree = "<group>"; };
 		2EE07EAF296E7BF700048A3C /* ReminderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCoordinator.swift; sourceTree = "<group>"; };
@@ -569,6 +563,7 @@
 				2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */,
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
+				2ED22DAC296F9E9400ED6221 /* UIFactory.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -651,16 +646,8 @@
 			files = (
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
-				2EE07EDF296E8E5600048A3C /* .gitkeep in Resources */,
 				2EE07EE1296EBE0C00048A3C /* API-Info.plist in Resources */,
-				2EE07EC7296E8D5900048A3C /* .gitkeep in Resources */,
-				2EE07EB4296E8C2B00048A3C /* .gitkeep in Resources */,
-				2EE07EB6296E8C3700048A3C /* .gitkeep in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
-				2EE07EB2296E8C1F00048A3C /* .gitkeep in Resources */,
-				2EE07EDD296E8E5000048A3C /* .gitkeep in Resources */,
-				2EE07EC5296E8D5100048A3C /* .gitkeep in Resources */,
-				2EE07EBC296E8CF300048A3C /* .gitkeep in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +681,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
+				2ED22DAD296F9E9400ED6221 /* UIFactory.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				2ECD69B02967246400D00F8F /* UIButton+.swift in Sources */,
 				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,

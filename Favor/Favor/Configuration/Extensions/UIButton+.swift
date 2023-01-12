@@ -11,6 +11,23 @@ import UIKit
 
 extension UIButton {
   
+  /// UIButton의 state에 따라 배경색과 텍스트 색을 바꾸는 `UpdateHandler`를 생성하고 할당합니다.
+  func makeUpdateHandler() {
+    let handler: UIButton.ConfigurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.baseForegroundColor = FavorStyle.Color.white.value
+        button.configuration?.baseBackgroundColor = FavorStyle.Color.typo.value
+      case .disabled:
+        button.configuration?.baseForegroundColor = FavorStyle.Color.typo.value
+        button.configuration?.baseBackgroundColor = FavorStyle.Color.box1.value
+      default:
+        break
+      }
+    }
+    self.configurationUpdateHandler = handler
+  }
+  
 }
 
 // MARK: - UIButton Configuraiton
@@ -19,44 +36,37 @@ extension UIButton {
 extension UIButton.Configuration {
   
   enum FavorButton {
-    case large, regular, small
+    case large, small, plain
     
     /// 버튼의 배경 색상
     var backgroundColor: UIColor? {
       switch self {
-      default:
+      case .large, .small:
         return FavorStyle.Color.typo.value
+      case .plain:
+        return .clear
       }
     }
     
     /// 버튼의 내용 색상
     var foregroundColor: UIColor? {
       switch self {
-      default:
+      case .large, .small:
         return FavorStyle.Color.white.value
+      case .plain:
+        return FavorStyle.Color.detail.value
       }
     }
     
     /// 버튼의 모서리 반경 (corner radius)
-    var cornerRadius: CGFloat {
-      return 0.0
+    var cornerRadius: CGFloat { // TODO: - 정확한 값 정해지면 적용하기.
+      return 28.0
     }
 
-    // TODO: - 폰트
-    
+    // 버튼의 텍스트 폰트
+    var font: UIFont {
+      return .systemFont(ofSize: 18.0, weight: .bold)
+    }
   }
   
-  /// Pre-configured된 UIButton.Configuration에 따라 UIButton을 생성합니다.
-  /// - Parameters:
-  ///     - style: 버튼의 스타일 (large, regular, small)
-  ///     - title: 버튼의 텍스트
-  static func makeButton(with style: FavorButton, title: String? = nil) -> UIButton.Configuration {
-    var configuration = UIButton.Configuration.filled()
-    configuration.title = title
-    configuration.titleAlignment = .center
-    configuration.background.cornerRadius = 12.0 // TODO: - 정확한 값 여쭤보기.
-    configuration.baseBackgroundColor = style.backgroundColor
-    configuration.baseForegroundColor = style.foregroundColor
-    return configuration
-  }
 }
