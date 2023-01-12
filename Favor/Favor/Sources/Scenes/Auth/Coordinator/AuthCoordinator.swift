@@ -25,7 +25,9 @@ extension AuthCoordinator {
   
   /// 로그인 화면을 담당하는 View입니다.
   func showSignInFlow() {
-    
+    let signInVC = SignInViewController()
+    signInVC.reactor = SignInReactor(coordinator: self)
+    self.navigationController.pushViewController(signInVC, animated: true)
   }
   
   /// 회원가입 화면을 담당하는 View입니다.
