@@ -1,5 +1,5 @@
 //
-//  SignInReactor.swift
+//  SelectSignInReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/11.
@@ -9,7 +9,7 @@ import Foundation
 
 import ReactorKit
 
-final class SignInReactor: Reactor {
+final class SelectSignInReactor: Reactor {
   
   // MARK: - Properties
   

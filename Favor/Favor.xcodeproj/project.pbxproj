@@ -46,8 +46,8 @@
 		2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED6296E8E1900048A3C /* GiftVC.swift */; };
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
 		2EE07EE1296EBE0C00048A3C /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EE0296EBE0C00048A3C /* API-Info.plist */; };
-		2EE07EE7296EDE5100048A3C /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SignInVC.swift */; };
-		2EE07EE9296EDE9700048A3C /* SignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SignInReactor.swift */; };
+		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
+		2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -101,8 +101,8 @@
 		2EE07EDC296E8E4F00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EDE296E8E5600048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EE0296EBE0C00048A3C /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
-		2EE07EE6296EDE5100048A3C /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
-		2EE07EE8296EDE9700048A3C /* SignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInReactor.swift; sourceTree = "<group>"; };
+		2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInVC.swift; sourceTree = "<group>"; };
+		2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInReactor.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -528,7 +528,7 @@
 		2EE07EE2296EDC9E00048A3C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				2EE07EE6296EDE5100048A3C /* SignInVC.swift */,
+				2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -544,7 +544,7 @@
 			isa = PBXGroup;
 			children = (
 				2E1C565B296C24CB0067FC78 /* AuthReactor.swift */,
-				2EE07EE8296EDE9700048A3C /* SignInReactor.swift */,
+				2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -687,7 +687,7 @@
 				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,
 				2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */,
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
-				2EE07EE9296EDE9700048A3C /* SignInReactor.swift in Sources */,
+				2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */,
 				2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */,
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				2EE07EC9296E8D6200048A3C /* MyPageCoordinator.swift in Sources */,
@@ -703,7 +703,7 @@
 				2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */,
 				2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
-				2EE07EE7296EDE5100048A3C /* SignInVC.swift in Sources */,
+				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */,

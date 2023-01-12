@@ -1,5 +1,5 @@
 //
-//  SignInVC.swift
+//  SelectSignInVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/11.
@@ -11,8 +11,8 @@ import ReactorKit
 import SnapKit
 import Then
 
-final class SignInViewController: BaseViewController, View {
-  typealias Reactor = SignInReactor
+final class SelectSignInViewController: BaseViewController, View {
+  typealias Reactor = SelectSignInReactor
   
   // MARK: - Constants
   
@@ -52,7 +52,7 @@ final class SignInViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SignInReactor) {
+  func bind(reactor: SelectSignInReactor) {
     //
   }
   
