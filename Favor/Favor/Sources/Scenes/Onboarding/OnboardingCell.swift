@@ -15,6 +15,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   
   private let mainImageView: UIImageView = {
     let iv = UIImageView()
+    iv.backgroundColor = FavorStyle.Color.box1.value
     
     return iv
   }()
@@ -24,7 +25,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
     
     return lb
   }()
-  
+    
   private lazy var mainStack: UIStackView = {
     let sv = UIStackView()
     [
@@ -38,6 +39,9 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
     
     return sv
   }()
+  
+  private let startBtn = UIFactory.favorButton(with: .large, title: "시작하기")
+  private let mainContainerView = UIView()
   
   // MARK: - Initialize
   
@@ -57,12 +61,30 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   func setupStyles() {}
   
   func setupLayouts() {
-    contentView.addSubview(mainStack)
+    mainContainerView.addSubview(mainStack)
+    
+    [
+      mainContainerView,
+      startBtn
+    ].forEach {
+      contentView.addSubview($0)
+    }
   }
   
   func setupConstraints() {
+    mainContainerView.snp.makeConstraints { make in
+      make.top.leading.trailing.equalToSuperview()
+      make.bottom.equalTo(startBtn.snp.top)
+    }
+    
     mainStack.snp.makeConstraints { make in
       make.center.equalToSuperview()
+    }
+    
+    startBtn.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.height.equalTo(56)
+      make.bottom.equalToSuperview().inset(53)
     }
   }
 }
