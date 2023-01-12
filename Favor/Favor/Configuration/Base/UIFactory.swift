@@ -65,6 +65,5 @@ final class UIFactory {
       }
     }
     return handler
-  }
-  
+  }  
 }
