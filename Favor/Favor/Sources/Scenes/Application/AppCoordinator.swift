@@ -16,7 +16,7 @@ final class AppCoordinator: BaseCoordinator {
 	// MARK: - Functions
 	
 	override func start() {
-    self.showSplashFlow()
+    self.showAuthFlow()
 	}
 	
 }
