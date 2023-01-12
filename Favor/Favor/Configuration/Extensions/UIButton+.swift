@@ -60,7 +60,7 @@ extension UIButton.Configuration {
   ///     - image: 버튼의 이미지(아이콘)
   static func makeButton(
     with style: FavorButton,
-    title: String? = nil,
+    title: String,
     image: UIImage? = nil
   ) -> UIButton.Configuration {
     // Base
@@ -72,11 +72,9 @@ extension UIButton.Configuration {
       configuration = .plain()
     }
     // Title
-    if let title {
-      var titleAttr = AttributedString.init(title)
-      titleAttr.font = style.font
-      configuration.attributedTitle = titleAttr
-    }
+    var titleAttr = AttributedString.init(title)
+    titleAttr.font = style.font
+    configuration.attributedTitle = titleAttr
     configuration.titleAlignment = .center
     // Image
     configuration.image = image
