@@ -133,12 +133,12 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
-		2E1C565F296C28BF0067FC78 /* Onboard */ = {
+		2E1C565F296C28BF0067FC78 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
 				2E1C5660296C29210067FC78 /* OnboardingVC.swift */,
 			);
-			path = Onboard;
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		2E76F58629601EC3002FF001 /* Splash */ = {
@@ -209,7 +209,7 @@
 				2EE07ED4296E8DFF00048A3C /* Gift */,
 				2EBB0153295E8CE50072D158 /* Home */,
 				2EE07EBD296E8D2300048A3C /* MyPage */,
-				2E1C565F296C28BF0067FC78 /* Onboard */,
+				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				2EE07EAA296E7BC100048A3C /* Reminder */,
 			);
 			path = Scenes;
