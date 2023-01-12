@@ -46,6 +46,7 @@
 		2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED6296E8E1900048A3C /* GiftVC.swift */; };
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
 		2EE07EE1296EBE0C00048A3C /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EE0296EBE0C00048A3C /* API-Info.plist */; };
+		E57F31432970398200E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F31422970398200E3D449 /* BaseView.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -99,6 +100,7 @@
 		2EE07EDC296E8E4F00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EDE296E8E5600048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EE0296EBE0C00048A3C /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
+		E57F31422970398200E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -526,6 +528,7 @@
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
 				2ED22DAC296F9E9400ED6221 /* UIFactory.swift */,
+				E57F31422970398200E3D449 /* BaseView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -673,6 +676,7 @@
 				2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
+				E57F31432970398200E3D449 /* BaseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
