@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/01/09.
 //
 
+import OSLog
 import UIKit
 
 final class AuthCoordinator: BaseCoordinator {
@@ -30,9 +31,16 @@ extension AuthCoordinator {
     self.navigationController.pushViewController(selectSignInVC, animated: true)
   }
   
+  /// 아이디로 로그인을 선택했을 때의 View입니다.
+  func showSignInFlow() {
+    let signInVC = SignInViewController()
+    signInVC.reactor = SignInReactor(coordinator: self)
+    self.navigationController.pushViewController(signInVC, animated: true)
+  }
+  
   /// 회원가입 화면을 담당하는 View입니다.
   func showSignUpFlow() {
-    
+    os_log(.error, "Sign Up flow not yet implemented.")
   }
   
   /// 회원가입 정보 입력 후 프로필 설정을 진행하는 View입니다.
@@ -44,4 +52,5 @@ extension AuthCoordinator {
   func showTermFlow() {
     
   }
+  
 }

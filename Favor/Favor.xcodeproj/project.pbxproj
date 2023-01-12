@@ -34,6 +34,8 @@
 		2ECD69B2296727B500D00F8F /* FavorStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B1296727B500D00F8F /* FavorStyle.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		2ED22DAD296F9E9400ED6221 /* UIFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAC296F9E9400ED6221 /* UIFactory.swift */; };
+		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
+		2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DB0296FF4D100ED6221 /* SignInReactor.swift */; };
 		2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EA1296C5F4B00048A3C /* SearchCoordinator.swift */; };
 		2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EA5296C605A00048A3C /* NewGiftCoordinator.swift */; };
 		2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EAF296E7BF700048A3C /* ReminderCoordinator.swift */; };
@@ -81,6 +83,8 @@
 		2ECD69B1296727B500D00F8F /* FavorStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorStyle.swift; sourceTree = "<group>"; };
 		2ECD69B329672CF000D00F8F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		2ED22DAC296F9E9400ED6221 /* UIFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIFactory.swift; sourceTree = "<group>"; };
+		2ED22DAE296FF4A900ED6221 /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
+		2ED22DB0296FF4D100ED6221 /* SignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInReactor.swift; sourceTree = "<group>"; };
 		2EE07EA1296C5F4B00048A3C /* SearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
 		2EE07EA5296C605A00048A3C /* NewGiftCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftCoordinator.swift; sourceTree = "<group>"; };
 		2EE07EAF296E7BF700048A3C /* ReminderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCoordinator.swift; sourceTree = "<group>"; };
@@ -529,6 +533,7 @@
 			isa = PBXGroup;
 			children = (
 				2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */,
+				2ED22DAE296FF4A900ED6221 /* SignInVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -545,6 +550,7 @@
 			children = (
 				2E1C565B296C24CB0067FC78 /* AuthReactor.swift */,
 				2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */,
+				2ED22DB0296FF4D100ED6221 /* SignInReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -680,10 +686,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */,
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
 				2ED22DAD296F9E9400ED6221 /* UIFactory.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				2ECD69B02967246400D00F8F /* UIButton+.swift in Sources */,
+				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,
 				2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */,
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,

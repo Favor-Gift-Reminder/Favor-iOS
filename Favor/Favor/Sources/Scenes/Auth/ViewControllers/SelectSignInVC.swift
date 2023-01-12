@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 import Then
 
@@ -53,7 +54,23 @@ final class SelectSignInViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SelectSignInReactor) {
-    //
+    // Action
+    self.kakaoLoginButton.rx.tap
+      .map { Reactor.Action.kakaoLoginButtonTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.idLoginButton.rx.tap
+      .map { Reactor.Action.idLoginButtonTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.signUpButton.rx.tap
+      .map { Reactor.Action.signUpButtonTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // State
   }
   
   // MARK: - Functions
