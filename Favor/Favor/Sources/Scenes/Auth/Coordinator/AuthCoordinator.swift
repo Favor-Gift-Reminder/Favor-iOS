@@ -35,7 +35,7 @@ extension AuthCoordinator {
   func showSignInFlow() {
     let signInVC = SignInViewController()
     signInVC.reactor = SignInReactor(coordinator: self)
-    signInVC.title = "로그인"
+    signInVC.title = "로그인"
     self.navigationController.pushViewController(signInVC, animated: true)
   }
   
