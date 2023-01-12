@@ -11,6 +11,23 @@ import UIKit
 
 extension UIButton {
   
+  /// UIButton의 state에 따라 배경색과 텍스트 색을 바꾸는 `UpdateHandler`를 생성하고 할당합니다.
+  func makeUpdateHandler() {
+    let handler: UIButton.ConfigurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.baseForegroundColor = FavorStyle.Color.white.value
+        button.configuration?.baseBackgroundColor = FavorStyle.Color.typo.value
+      case .disabled:
+        button.configuration?.baseForegroundColor = FavorStyle.Color.typo.value
+        button.configuration?.baseBackgroundColor = FavorStyle.Color.box1.value
+      default:
+        break
+      }
+    }
+    self.configurationUpdateHandler = handler
+  }
+  
 }
 
 // MARK: - UIButton Configuraiton
@@ -50,62 +67,6 @@ extension UIButton.Configuration {
     var font: UIFont {
       return .systemFont(ofSize: 18.0, weight: .bold)
     }
-    
   }
   
-  /// Pre-configured된 UIButton.Configuration에 따라 UIButton을 생성합니다.
-  /// - Parameters:
-  ///     - style: 버튼의 스타일 (large, small)
-  ///     - title: 버튼의 텍스트
-  ///     - image: 버튼의 이미지(아이콘)
-  static func makeButton(
-    with style: FavorButton,
-    title: String,
-    image: UIImage? = nil
-  ) -> UIButton.Configuration {
-    // Base
-    var configuration: UIButton.Configuration
-    switch style {
-    case .small, .large:
-      configuration = .filled()
-    case .plain:
-      configuration = .plain()
-    }
-    // Title
-    var titleAttr = AttributedString.init(title)
-    titleAttr.font = style.font
-    configuration.attributedTitle = titleAttr
-    configuration.titleAlignment = .center
-    // Image
-    configuration.image = image
-    configuration.imagePlacement = .leading
-    configuration.imagePadding = 8
-    // Layer
-    configuration.background.cornerRadius = style.cornerRadius
-    // Layout
-    configuration.contentInsets = NSDirectionalEdgeInsets(top: 14, leading: 14, bottom: 14, trailing: 14)
-    // Color
-    configuration.baseBackgroundColor = style.backgroundColor
-    configuration.baseForegroundColor = style.foregroundColor
-    
-    return configuration
-  }
-  
-  /// UIButton의 state에 따라 배경색과 텍스트 색을 바꿉니다.
-  /// - Parameters:
-  ///   - state: 교체할 버튼의 state
-  func updateState(to state: UIButton.State) -> UIButton.Configuration {
-    var config = self
-    switch state {
-    case .normal:
-      config.baseForegroundColor = FavorStyle.Color.white.value
-      config.baseBackgroundColor = FavorStyle.Color.typo.value
-    case .disabled:
-      config.baseForegroundColor = FavorStyle.Color.typo.value
-      config.baseBackgroundColor = FavorStyle.Color.box1.value
-    default:
-      break
-    }
-    return config
-  }
 }
