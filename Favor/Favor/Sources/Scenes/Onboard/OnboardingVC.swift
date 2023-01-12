@@ -22,17 +22,21 @@ final class OnboardingViewController: BaseViewController {
     return pc
   }()
   
-  
+  private lazy var collectionView: UICollectionView = {
+    let layout = UICollectionViewFlowLayout()
+    let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    
+    return cv
+  }()
   
   // MARK: - Setup
   
-  override func setupStyles() {
-    
-  }
+  override func setupStyles() {}
   
   override func setupLayouts() {
     [
-      pageControl
+      pageControl,
+      collectionView
     ].forEach {
       view.addSubview($0)
     }
@@ -42,6 +46,11 @@ final class OnboardingViewController: BaseViewController {
     pageControl.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalToSuperview().inset(66)
+    }
+    
+    collectionView.snp.makeConstraints { make in
+      make.leading.trailing.bottom.equalToSuperview()
+      make.top.equalTo(pageControl.snp.bottom)
     }
   }
 }
