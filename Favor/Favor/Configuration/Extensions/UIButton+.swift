@@ -79,11 +79,9 @@ extension UIButton.Configuration {
     }
     configuration.titleAlignment = .center
     // Image
-    if let image {
-      configuration.image = image
-      configuration.imagePlacement = .leading
-      configuration.imagePadding = 8
-    }
+    configuration.image = image
+    configuration.imagePlacement = .leading
+    configuration.imagePadding = 8
     // Layer
     configuration.background.cornerRadius = style.cornerRadius
     // Layout
