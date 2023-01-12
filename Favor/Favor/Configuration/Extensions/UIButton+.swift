@@ -11,23 +11,6 @@ import UIKit
 
 extension UIButton {
   
-  /// UIButton의 state에 따라 배경색과 텍스트 색을 바꾸는 `UpdateHandler`를 생성하고 할당합니다.
-  func makeUpdateHandler() {
-    let handler: UIButton.ConfigurationUpdateHandler = { button in
-      switch button.state {
-      case .normal:
-        button.configuration?.baseForegroundColor = FavorStyle.Color.white.value
-        button.configuration?.baseBackgroundColor = FavorStyle.Color.typo.value
-      case .disabled:
-        button.configuration?.baseForegroundColor = FavorStyle.Color.typo.value
-        button.configuration?.baseBackgroundColor = FavorStyle.Color.box1.value
-      default:
-        break
-      }
-    }
-    self.configurationUpdateHandler = handler
-  }
-  
 }
 
 // MARK: - UIButton Configuraiton
