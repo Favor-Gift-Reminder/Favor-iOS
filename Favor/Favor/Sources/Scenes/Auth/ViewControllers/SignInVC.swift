@@ -20,6 +20,11 @@ final class SignInViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
+  private lazy var idTextField = {
+    let textField = BaseTextField()
+    return textField
+  }()
+  
   // MARK: - Life Cycle
   
   // MARK: - Binding
@@ -31,5 +36,17 @@ final class SignInViewController: BaseViewController, View {
   // MARK: - Functions
   
   // MARK: - UI Setups
+  
+  override func setupLayouts() {
+    [self.idTextField].forEach {
+      self.view.addSubview($0)
+    }
+  }
+  
+  override func setupConstraints() {
+    self.idTextField.snp.makeConstraints { make in
+      make.center.equalToSuperview()
+    }
+  }
   
 }
