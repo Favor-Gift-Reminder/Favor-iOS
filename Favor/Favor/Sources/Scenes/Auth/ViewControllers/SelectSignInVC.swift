@@ -28,12 +28,14 @@ final class SelectSignInViewController: BaseViewController, View {
   
   private lazy var kakaoLoginButton = UIFactory.favorButton(
     with: .large,
-    title: "카카오로 로그인"
+    title: "카카오로 로그인",
+    image: UIImage(systemName: "message.fill")
   )
   
   private lazy var idLoginButton = UIFactory.favorButton(
     with: .large,
-    title: "내 아이디로 로그인"
+    title: "Apple로 로그인",
+    image: UIImage(systemName: "applelogo")
   )
   
   private lazy var signUpButton = UIFactory.favorButton(
