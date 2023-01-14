@@ -10,7 +10,6 @@
 		2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C565B296C24CB0067FC78 /* AuthReactor.swift */; };
 		2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardVC.swift */; };
-		2E306A7B296FFFB0007B7EFF /* BaseTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7A296FFFB0007B7EFF /* BaseTextField.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
 		2E635391295D906A00B23A14 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635390295D906A00B23A14 /* Differentiator */; };
@@ -49,9 +48,9 @@
 		2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED6296E8E1900048A3C /* GiftVC.swift */; };
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
 		2EE07EE1296EBE0C00048A3C /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EE07EE0296EBE0C00048A3C /* API-Info.plist */; };
-		E57F31432970398200E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F31422970398200E3D449 /* BaseView.swift */; };
 		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
 		2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */; };
+		E57F31432970398200E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F31422970398200E3D449 /* BaseView.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -61,7 +60,6 @@
 		2E1C565B296C24CB0067FC78 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
 		2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardVC.swift; sourceTree = "<group>"; };
-		2E306A7A296FFFB0007B7EFF /* BaseTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTextField.swift; sourceTree = "<group>"; };
 		2E76F58229601B75002FF001 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E76F58729601EF2002FF001 /* SplashReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReactor.swift; sourceTree = "<group>"; };
@@ -108,9 +106,9 @@
 		2EE07EDC296E8E4F00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EDE296E8E5600048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EE0296EBE0C00048A3C /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
-		E57F31422970398200E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInVC.swift; sourceTree = "<group>"; };
 		2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInReactor.swift; sourceTree = "<group>"; };
+		E57F31422970398200E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -571,7 +569,6 @@
 			isa = PBXGroup;
 			children = (
 				2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */,
-				2E306A7A296FFFB0007B7EFF /* BaseTextField.swift */,
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
 				2ED22DAC296F9E9400ED6221 /* UIFactory.swift */,
@@ -722,7 +719,6 @@
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */,
 				2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */,
-				2E306A7B296FFFB0007B7EFF /* BaseTextField.swift in Sources */,
 				2E76F58329601B75002FF001 /* TabBarCoordinator.swift in Sources */,
 				2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */,
 				2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */,

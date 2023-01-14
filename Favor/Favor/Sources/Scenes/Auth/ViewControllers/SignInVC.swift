@@ -21,7 +21,7 @@ final class SignInViewController: BaseViewController, View {
   // MARK: - UI Components
   
   private lazy var idTextField = {
-    let textField = BaseTextField()
+    let textField = UITextField()
     return textField
   }()
   
