@@ -50,10 +50,11 @@
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
 		E57F313F297000DB00E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313E297000DB00E3D449 /* BaseView.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
-		E5B1827C2974361400229C50 /* FavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* FavorButton.swift */; };
+		E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* LargeFavorButton.swift */; };
 		E5B1828329743D5400229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
 		E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */; };
 		E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */; };
+		E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* SmallFavorButton.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -111,10 +112,11 @@
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
 		E57F313E297000DB00E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
-		E5B1827B2974361400229C50 /* FavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorButton.swift; sourceTree = "<group>"; };
+		E5B1827B2974361400229C50 /* LargeFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeFavorButton.swift; sourceTree = "<group>"; };
 		E5B1827D297439CA00229C50 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
+		E5B1828629744D8400229C50 /* SmallFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButton.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -549,7 +551,8 @@
 				E57F313E297000DB00E3D449 /* BaseView.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
 				2ED22DAC296F9E9400ED6221 /* UIFactory.swift */,
-				E5B1827B2974361400229C50 /* FavorButton.swift */,
+				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
+				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -680,6 +683,7 @@
 				2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */,
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				2EE07EC9296E8D6200048A3C /* MyPageCoordinator.swift in Sources */,
+				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
 				2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */,
 				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
@@ -694,7 +698,7 @@
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
-				E5B1827C2974361400229C50 /* FavorButton.swift in Sources */,
+				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
