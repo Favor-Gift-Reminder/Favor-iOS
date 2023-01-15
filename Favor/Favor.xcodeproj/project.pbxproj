@@ -538,6 +538,7 @@
 				E57F313E297000DB00E3D449 /* BaseView.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
 				2ED22DAC296F9E9400ED6221 /* UIFactory.swift */,
+				E57F31422970398200E3D449 /* BaseView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -689,6 +690,7 @@
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
+				E57F31432970398200E3D449 /* BaseView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

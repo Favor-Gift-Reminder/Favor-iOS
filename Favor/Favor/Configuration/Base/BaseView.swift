@@ -6,7 +6,6 @@
 //
 
 /// UIView를 상속하는 Custom View를 구현할 때 필요한 프로토콜입니다
-/// 
 /// 명시적으로 init 메서드에 아래 세 가지 메서드를 호출해야합니다.
 protocol BaseView {
   
