@@ -16,8 +16,8 @@ final class OnboardingViewController: BaseViewController {
   private let pageControl: UIPageControl = {
     let pc = UIPageControl()
     pc.numberOfPages = 3
-    pc.pageIndicatorTintColor = FavorStyle.Color.box1.value
-    pc.currentPageIndicatorTintColor = FavorStyle.Color.main.value
+    pc.pageIndicatorTintColor = .favorColor(.box1)
+    pc.currentPageIndicatorTintColor = .favorColor(.main)
     
     return pc
   }()

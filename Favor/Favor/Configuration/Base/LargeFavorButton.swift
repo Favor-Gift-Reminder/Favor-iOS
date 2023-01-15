@@ -31,20 +31,20 @@ final class LargeFavorButton: UIButton {
     var config = UIButton.Configuration.filled()
     var container = AttributeContainer()
     container.font = .favorFont(.bold, size: 18)
-    config.attributedTitle = AttributedString(title, attributes: container)
     
     config.background.cornerRadius = 28
     
     switch style {
     case .white:
-      config.baseForegroundColor = .favorColor(.typo)
+      container.foregroundColor = .favorColor(.typo)
       config.baseBackgroundColor = .favorColor(.box1)
       
     case .black:
-      config.baseForegroundColor = .favorColor(.white)
+      container.foregroundColor = .favorColor(.white)
       config.baseBackgroundColor = .favorColor(.typo)
     }
     
+    config.attributedTitle = AttributedString(title, attributes: container)
     self.configuration = config
   }
 }

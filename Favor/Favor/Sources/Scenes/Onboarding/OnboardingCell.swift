@@ -17,7 +17,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   
   private let mainImageView: UIImageView = {
     let iv = UIImageView()
-    iv.backgroundColor = FavorStyle.Color.box1.value
+    iv.backgroundColor = .favorColor(.box1)
     
     return iv
   }()
