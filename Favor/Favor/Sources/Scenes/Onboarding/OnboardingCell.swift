@@ -44,7 +44,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
     return sv
   }()
   
-  let startBtn = UIFactory.favorButton(with: .large, title: "시작하기")
+  let startBtn = LargeFavorButton(with: .white, title: "다음")
   private let mainContainerView = UIView()
   
   // MARK: - Initialize
