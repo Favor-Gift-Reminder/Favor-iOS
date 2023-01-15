@@ -1,5 +1,5 @@
 //
-//  BaseTextField.swift
+//  FavorTextField.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/14.
@@ -13,7 +13,7 @@ enum MessageType {
   case error, info
 }
 
-class BaseTextField: UITextField, BaseView {
+class FavorTextField: UITextField, BaseView {
   
   // MARK: - Properties
   
@@ -233,7 +233,7 @@ class BaseTextField: UITextField, BaseView {
   // MARK: - Functions
   
   func addEditingChangedObserver() {
-    self.addTarget(self, action: #selector(BaseTextField.editingChanged), for: .editingChanged)
+    self.addTarget(self, action: #selector(FavorTextField.editingChanged), for: .editingChanged)
   }
   
   @objc func editingChanged() {
@@ -269,7 +269,7 @@ class BaseTextField: UITextField, BaseView {
 
 // MARK: - Privates
 
-private extension BaseTextField {
+private extension FavorTextField {
   
   // MARK: - Updates
   
