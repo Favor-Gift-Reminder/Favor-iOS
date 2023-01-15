@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FavorButton: UIButton {
+final class LargeFavorButton: UIButton {
   
   enum Style {
     case black
@@ -34,12 +34,14 @@ final class FavorButton: UIButton {
   
   private func setupConfiguration() {
     var config = UIButton.Configuration.filled()
+    var container = AttributeContainer()
+    // 폰트
     
-    switch style {
-    case .white:
-      
-    case .black:
-      
-    }
+//    switch style {
+//    case .white:
+//
+//    case .black:
+//
+//    }
   }
 }
