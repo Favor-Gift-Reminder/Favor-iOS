@@ -17,8 +17,7 @@ final class SelectSignInReactor: Reactor {
   var initialState: State
   
   enum Action {
-    case kakaoLoginButtonTap
-    case idLoginButtonTap
+    case emailLoginButtonTap
     case signUpButtonTap
   }
   
@@ -39,10 +38,7 @@ final class SelectSignInReactor: Reactor {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .kakaoLoginButtonTap:
-      os_log(.error, "KakaoSDK login service is not implemented yet.")
-      return Observable<Mutation>.empty()
-    case .idLoginButtonTap:
+    case .emailLoginButtonTap:
       self.coordinator?.showSignInFlow()
       return Observable<Mutation>.empty()
     case .signUpButtonTap:

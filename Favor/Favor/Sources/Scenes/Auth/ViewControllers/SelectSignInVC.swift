@@ -26,16 +26,9 @@ final class SelectSignInViewController: BaseViewController, View {
     $0.text = "Favor"
   }
   
-  private lazy var kakaoLoginButton = UIFactory.favorButton(
+  private lazy var emailLoginButton = UIFactory.favorButton(
     with: .large,
-    title: "카카오로 로그인",
-    image: UIImage(systemName: "message.fill")
-  )
-  
-  private lazy var idLoginButton = UIFactory.favorButton(
-    with: .large,
-    title: "Apple로 로그인",
-    image: UIImage(systemName: "applelogo")
+    title: "이메일로 로그인"
   )
   
   private lazy var signUpButton = UIFactory.favorButton(
@@ -45,8 +38,7 @@ final class SelectSignInViewController: BaseViewController, View {
   
   private lazy var vStack = UIStackView().then {
     $0.spacing = 8.0
-    $0.addArrangedSubview(self.kakaoLoginButton)
-    $0.addArrangedSubview(self.idLoginButton)
+    $0.addArrangedSubview(self.emailLoginButton)
     $0.addArrangedSubview(self.signUpButton)
     $0.axis = .vertical
   }
@@ -57,13 +49,9 @@ final class SelectSignInViewController: BaseViewController, View {
   
   func bind(reactor: SelectSignInReactor) {
     // Action
-    self.kakaoLoginButton.rx.tap
-      .map { Reactor.Action.kakaoLoginButtonTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
     
-    self.idLoginButton.rx.tap
-      .map { Reactor.Action.idLoginButtonTap }
+    self.emailLoginButton.rx.tap
+      .map { Reactor.Action.emailLoginButtonTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
