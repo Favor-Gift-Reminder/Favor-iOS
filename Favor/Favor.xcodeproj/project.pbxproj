@@ -50,7 +50,9 @@
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
 		E57F313F297000DB00E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313E297000DB00E3D449 /* BaseView.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
-		E5B1827E297439CA00229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
+		E5B1828329743D5400229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
+		E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */; };
+		E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -626,6 +628,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
+				E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */,
+				E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
 				E57F3139296FF48400E3D449 /* API-Info.plist in Resources */,
@@ -689,7 +693,7 @@
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */,
-				E5B1827E297439CA00229C50 /* UIFont+.swift in Sources */,
+				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */,
 				2E76F58329601B75002FF001 /* TabBarCoordinator.swift in Sources */,
 				2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */,
