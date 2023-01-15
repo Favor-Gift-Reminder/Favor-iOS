@@ -13,6 +13,8 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   
   // MARK: - Properties
   
+  static let identifier = "OnboardingCell"
+  
   private let mainImageView: UIImageView = {
     let iv = UIImageView()
     iv.backgroundColor = FavorStyle.Color.box1.value
@@ -22,6 +24,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   
   private let mainLabel: UILabel = {
     let lb = UILabel()
+    lb.text = "안녕하세요"
     
     return lb
   }()
@@ -35,12 +38,13 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
       sv.addArrangedSubview($0)
     }
     sv.spacing = 48
-    sv.axis = .horizontal
+    sv.axis = .vertical
+    sv.alignment = .center
     
     return sv
   }()
   
-  private let startBtn = UIFactory.favorButton(with: .large, title: "시작하기")
+  let startBtn = UIFactory.favorButton(with: .large, title: "시작하기")
   private let mainContainerView = UIView()
   
   // MARK: - Initialize
@@ -58,7 +62,8 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   
   // MARK: - Setup
   
-  func setupStyles() {}
+  func setupStyles() {
+  }
   
   func setupLayouts() {
     mainContainerView.addSubview(mainStack)
@@ -79,6 +84,10 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
     
     mainStack.snp.makeConstraints { make in
       make.center.equalToSuperview()
+    }
+    
+    mainImageView.snp.makeConstraints { make in
+      make.width.height.equalTo(100)
     }
     
     startBtn.snp.makeConstraints { make in
