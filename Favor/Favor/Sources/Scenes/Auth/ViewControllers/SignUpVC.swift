@@ -133,6 +133,17 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     reactor.state.asObservable()
+      .map { $0.isPasswordIdentical }
+      .subscribe(onNext: { isPasswordIdentical in
+        if isPasswordIdentical == false {
+          self.pwValidateTextField.updateMessage("패스워드가 다릅니다.", for: .error)
+        } else {
+          self.pwValidateTextField.updateMessage(nil, for: .info)
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.asObservable()
       .map { $0.isNextButtonEnabled }
       .subscribe(onNext: { isButtonEnabled in
         DispatchQueue.main.async {
