@@ -27,10 +27,10 @@ final class SignUpReactor: Reactor {
   enum Mutation {
     // Email
     case updateEmail(String)
-    case validateEmail(Bool)
+    case validateEmail(ValidateManager.EmailValidate)
     // Password
     case updatePassword(String)
-    case validatePassword(Bool)
+    case validatePassword(ValidateManager.PasswordValidate)
     // Check Password
     case updateCheckPassword(String)
     case validateCheckPassword(Bool)
@@ -39,10 +39,10 @@ final class SignUpReactor: Reactor {
   struct State {
     // Email
     var email: String = ""
-    var isEmailValid: Bool?
+    var isEmailValid: ValidateManager.EmailValidate?
     // Password
     var password: String = ""
-    var isPasswordValid: Bool?
+    var isPasswordValid: ValidateManager.PasswordValidate?
     // Check Password
     var checkPassword: String = ""
     var isPasswordIdentical: Bool?
@@ -62,17 +62,17 @@ final class SignUpReactor: Reactor {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailTextFieldUpdate(let email):
-      // TODO: - Email 확인
+      let emailValidate = ValidateManager.validate(email: email)
       return .concat([
         .just(.updateEmail(email)),
-        .just(.validateEmail(true)) // Email Validate result
+        .just(.validateEmail(emailValidate))
       ])
       
     case .passwordTextFieldUpdate(let password):
-      // TODO: - Password 확인
+      let passwordValidate = ValidateManager.validate(password: password)
       return .concat([
         .just(.updatePassword(password)),
-        .just(.validatePassword(true)) // Password Validate result
+        .just(.validatePassword(passwordValidate))
       ])
       
     case .checkPasswordTextFieldUpdate(let checkPassword):

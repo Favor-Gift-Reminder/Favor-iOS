@@ -47,9 +47,11 @@ enum ValidateManager {
     
     var description: String {
       switch self {
-      case .empty, .valid:
-        return ""
+      case .empty:
+        return "비밀번호를 입력해주세요."
       case .invalid:
+        return "올바르지 않은 비밀번호 형식입니다."
+      case .valid:
         return ""
       }
     }
