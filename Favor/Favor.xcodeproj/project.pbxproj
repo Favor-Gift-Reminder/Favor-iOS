@@ -52,6 +52,7 @@
 		E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */; };
 		E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */; };
 		E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* SmallFavorButton.swift */; };
+		E5B1828A2974D5DE00229C50 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = E5B182892974D5DE00229C50 /* .gitkeep */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -111,6 +112,7 @@
 		E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		E5B1828629744D8400229C50 /* SmallFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButton.swift; sourceTree = "<group>"; };
+		E5B182892974D5DE00229C50 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				E5B182892974D5DE00229C50 /* .gitkeep */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -630,6 +633,7 @@
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
 				E57F3139296FF48400E3D449 /* API-Info.plist in Resources */,
+				E5B1828A2974D5DE00229C50 /* .gitkeep in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
