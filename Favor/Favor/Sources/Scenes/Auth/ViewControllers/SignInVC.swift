@@ -22,6 +22,7 @@ final class SignInViewController: BaseViewController, View {
   
   private lazy var emailTextField: FavorTextField = {
     let textField = FavorTextField()
+    textField.delegate = self
     textField.placeholder = "이메일"
     textField.keyboardType = .emailAddress
     textField.returnKeyType = .next
@@ -32,6 +33,7 @@ final class SignInViewController: BaseViewController, View {
   
   private lazy var pwTextField: FavorTextField = {
     let textField = FavorTextField()
+    textField.delegate = self
     textField.placeholder = "비밀번호"
     textField.isSecureTextEntry = true
     return textField
@@ -107,6 +109,21 @@ final class SignInViewController: BaseViewController, View {
       make.top.equalTo(self.vStack.snp.bottom).offset(32)
       make.centerX.equalToSuperview()
     }
+  }
+  
+}
+
+// MARK: - TextField
+
+extension SignInViewController: UITextFieldDelegate {
+  
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    if textField == self.emailTextField {
+      self.pwTextField.becomeFirstResponder()
+    } else { // TODO: - 로그인 로직 구현하여 실행
+      self.pwTextField.resignFirstResponder()
+    }
+    return true
   }
   
 }
