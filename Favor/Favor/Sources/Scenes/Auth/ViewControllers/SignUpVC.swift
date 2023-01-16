@@ -101,6 +101,38 @@ final class SignUpViewController: BaseViewController, View {
     
     // State
     reactor.state.asObservable()
+      .map { $0.isEmailValid }
+      .distinctUntilChanged()
+      .skip(2)
+      .subscribe(onNext: { emailValidate in
+        switch emailValidate {
+        case .empty, .invalid:
+          self.emailTextField.updateMessage(emailValidate?.description, for: .error)
+        case .valid:
+          self.emailTextField.updateMessage(nil, for: .info)
+        default:
+          break
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.asObservable()
+      .map { $0.isPasswordValid }
+      .distinctUntilChanged()
+      .skip(2)
+      .subscribe(onNext: { passwordValidate in
+        switch passwordValidate {
+        case .empty, .invalid:
+          self.pwTextField.updateMessage(passwordValidate?.description, for: .error)
+        case .valid:
+          self.pwTextField.updateMessage(nil, for: .info)
+        default:
+          break
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.asObservable()
       .map { $0.isNextButtonEnabled }
       .subscribe(onNext: { isButtonEnabled in
         DispatchQueue.main.async {
