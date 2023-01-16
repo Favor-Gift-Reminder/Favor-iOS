@@ -25,6 +25,7 @@ final class SignUpViewController: BaseViewController, View {
     textField.placeholder = "이메일"
     textField.updateMessage("실제 사용하는 이메일을 입력해주세요.", for: .info)
     textField.keyboardType = .emailAddress
+    textField.autocapitalizationType = .none
     textField.becomeFirstResponder()
     return textField
   }()
@@ -35,6 +36,7 @@ final class SignUpViewController: BaseViewController, View {
     textField.placeholder = "비밀번호"
     textField.updateMessage("영문, 숫자 혼용 8자 이상", for: .info)
     textField.keyboardType = .asciiCapable
+    textField.autocapitalizationType = .none
     return textField
   }()
   
@@ -43,6 +45,7 @@ final class SignUpViewController: BaseViewController, View {
     textField.delegate = self
     textField.placeholder = "비밀번호 확인"
     textField.keyboardType = .asciiCapable
+    textField.autocapitalizationType = .none
     return textField
   }()
   
