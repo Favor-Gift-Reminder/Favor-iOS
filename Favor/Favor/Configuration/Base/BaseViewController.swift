@@ -56,4 +56,6 @@ class BaseViewController: UIViewController {
   /// }
   /// ```
   func setupStyles() { }
+  
+  func bind() { }
 }
