@@ -54,6 +54,7 @@
 		E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* SmallFavorButton.swift */; };
 		E5B1828A2974D5DE00229C50 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = E5B182892974D5DE00229C50 /* .gitkeep */; };
 		E5B182972974F54A00229C50 /* UpdateHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */; };
+		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECD295DAC79006B9245 /* Coordinator.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -114,6 +115,7 @@
 		E5B1828629744D8400229C50 /* SmallFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButton.swift; sourceTree = "<group>"; };
 		E5B182892974D5DE00229C50 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateHandlerManager.swift; sourceTree = "<group>"; };
+		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -564,6 +566,7 @@
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E57F313E297000DB00E3D449 /* BaseView.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
+				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -710,6 +713,7 @@
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
+				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */,
