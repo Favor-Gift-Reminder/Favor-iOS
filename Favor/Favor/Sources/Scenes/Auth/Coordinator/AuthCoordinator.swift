@@ -49,7 +49,10 @@ extension AuthCoordinator {
   
   /// 회원가입 정보 입력 후 프로필 설정을 진행하는 View입니다.
   func showSetProfileFlow() {
-    
+    let setProfileVC = SetProfileViewController()
+    setProfileVC.reactor = SetProfileReactor(coordinator: self)
+    setProfileVC.title = "프로필 생성"
+    self.navigationController.pushViewController(setProfileVC, animated: true)
   }
   
   /// 이용 약관 동의 View입니다.
