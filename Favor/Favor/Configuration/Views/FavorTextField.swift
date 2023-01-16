@@ -73,7 +73,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// Placeholder 텍스트의 색상
-  var placeholderColor: UIColor = FavorStyle.Color.detail.value {
+  var placeholderColor: UIColor = .favorColor(.detail) {
     didSet {
       self.updatePlaceholder()
     }
@@ -115,14 +115,14 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// 정보 메시지 색상
-  var infoMessageColor: UIColor? = FavorStyle.Color.box2.value {
+  var infoMessageColor: UIColor? = .favorColor(.box2) {
     didSet {
       self.updateColors()
     }
   }
   
   /// 에러 메시지 색상
-  var errorMessageColor: UIColor? = FavorStyle.Color.error.value {
+  var errorMessageColor: UIColor? = .red {
     didSet {
       self.updateColors()
     }
@@ -146,14 +146,14 @@ class FavorTextField: UITextField, BaseView {
   }()
   
   /// TextField의 밑줄 색상
-  var underlineColor: UIColor = FavorStyle.Color.box1.value {
+  var underlineColor: UIColor = .favorColor(.box1) {
     didSet {
       self.updateUnderlineView()
     }
   }
   
   /// TextField가 선택됐을 때의 밑줄 색상
-  var selectedUnderlineColor: UIColor = FavorStyle.Color.box2.value {
+  var selectedUnderlineColor: UIColor = .favorColor(.box2) {
     didSet {
       self.updateUnderlineView()
     }

@@ -26,14 +26,12 @@ final class SelectSignInViewController: BaseViewController, View {
     $0.text = "Favor"
   }
   
-  private lazy var emailLoginButton = UIFactory.favorButton(
-    with: .large,
-    title: "이메일로 로그인"
+  private lazy var emailLoginButton = LargeFavorButton(
+    with: .black, title: "이메일로 로그인"
   )
   
-  private lazy var signUpButton = UIFactory.favorButton(
-    with: .plain,
-    title: "신규 회원가입"
+  private lazy var signUpButton = LargeFavorButton(
+    with: .white, title: "신규 회원가입"
   )
   
   private lazy var vStack = UIStackView().then {

@@ -9,15 +9,13 @@ import UIKit
 
 import SnapKit
 
-final class OnboardingCell: UICollectionViewCell, BaseView {
+final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Properties
-  
-  static let identifier = "OnboardingCell"
-  
+
   private let mainImageView: UIImageView = {
     let iv = UIImageView()
-    iv.backgroundColor = FavorStyle.Color.box1.value
+    iv.backgroundColor = .favorColor(.box1)
     
     return iv
   }()
@@ -44,7 +42,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
     return sv
   }()
   
-  let startBtn = UIFactory.favorButton(with: .large, title: "시작하기")
+  let startBtn = LargeFavorButton(with: .white, title: "다음")
   private let mainContainerView = UIView()
   
   // MARK: - Initialize
@@ -59,11 +57,13 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+}
+
+// MARK: - Setup
+
+extension OnboardingCell: BaseView {
   
-  // MARK: - Setup
-  
-  func setupStyles() {
-  }
+  func setupStyles() {}
   
   func setupLayouts() {
     mainContainerView.addSubview(mainStack)

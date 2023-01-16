@@ -16,8 +16,8 @@ final class OnboardingViewController: BaseViewController {
   private let pageControl: UIPageControl = {
     let pc = UIPageControl()
     pc.numberOfPages = 3
-    pc.pageIndicatorTintColor = FavorStyle.Color.box1.value
-    pc.currentPageIndicatorTintColor = FavorStyle.Color.main.value
+    pc.pageIndicatorTintColor = .favorColor(.box1)
+    pc.currentPageIndicatorTintColor = .favorColor(.main)
     
     return pc
   }()
@@ -26,7 +26,7 @@ final class OnboardingViewController: BaseViewController {
     let cv = UICollectionView(frame: .zero, collectionViewLayout: onboardingLayout())
     cv.register(
       OnboardingCell.self,
-      forCellWithReuseIdentifier: OnboardingCell.identifier
+      forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier
     )
     cv.isScrollEnabled = false
     cv.showsHorizontalScrollIndicator = false
@@ -92,7 +92,7 @@ extension OnboardingViewController: UICollectionViewDataSource, UICollectionView
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
     guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: OnboardingCell.identifier,
+      withReuseIdentifier: OnboardingCell.reuseIdentifier,
       for: indexPath
     ) as? OnboardingCell else {
       return UICollectionViewCell()
