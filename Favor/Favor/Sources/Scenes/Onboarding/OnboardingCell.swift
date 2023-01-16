@@ -17,7 +17,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   
   private let mainImageView: UIImageView = {
     let iv = UIImageView()
-    iv.backgroundColor = FavorStyle.Color.box1.value
+    iv.backgroundColor = .favorColor(.box1)
     
     return iv
   }()
@@ -44,7 +44,7 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
     return sv
   }()
   
-  let startBtn = UIFactory.favorButton(with: .large, title: "시작하기")
+  let startBtn = LargeFavorButton(with: .white, title: "다음")
   private let mainContainerView = UIView()
   
   // MARK: - Initialize
