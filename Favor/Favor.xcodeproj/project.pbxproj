@@ -248,6 +248,8 @@
 		2EBB014E295E8C960072D158 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */,
+				E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */,
 				2EBB0162295E8E070072D158 /* .gitkeep */,
 			);
 			path = Fonts;
@@ -276,8 +278,6 @@
 			isa = PBXGroup;
 			children = (
 				2E7C30A4295D7C4500BAC43D /* Assets.xcassets */,
-				E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */,
-				E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */,
 			);
 			path = Assets;
 			sourceTree = "<group>";
