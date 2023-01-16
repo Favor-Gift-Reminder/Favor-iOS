@@ -9,12 +9,10 @@ import UIKit
 
 import SnapKit
 
-final class OnboardingCell: UICollectionViewCell, BaseView {
+final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Properties
-  
-  static let identifier = "OnboardingCell"
-  
+
   private let mainImageView: UIImageView = {
     let iv = UIImageView()
     iv.backgroundColor = .favorColor(.box1)
@@ -59,11 +57,13 @@ final class OnboardingCell: UICollectionViewCell, BaseView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+}
+
+// MARK: - Setup
+
+extension OnboardingCell: BaseView {
   
-  // MARK: - Setup
-  
-  func setupStyles() {
-  }
+  func setupStyles() {}
   
   func setupLayouts() {
     mainContainerView.addSubview(mainStack)

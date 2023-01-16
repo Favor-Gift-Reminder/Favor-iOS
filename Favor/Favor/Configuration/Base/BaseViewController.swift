@@ -19,6 +19,7 @@ class BaseViewController: UIViewController {
     setupLayouts()
     setupConstraints()
     setupStyles()
+    bind()
   }
 
   /// UI 프로퍼티를 view에 할당합니다.
@@ -56,4 +57,6 @@ class BaseViewController: UIViewController {
   /// }
   /// ```
   func setupStyles() { }
+  
+  func bind() { }
 }
