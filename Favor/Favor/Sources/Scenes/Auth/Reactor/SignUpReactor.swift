@@ -5,18 +5,49 @@
 //  Created by 이창준 on 2023/01/16.
 //
 
+import OSLog
+
 import ReactorKit
 
 final class SignUpReactor: Reactor {
-  typealias Action = NoAction
   
   // MARK: - Properties
   
   weak var coordinator: AuthCoordinator?
   var initialState: State
   
+  enum Action {
+    case emailTextFieldUpdate(String)
+    case passwordTextFieldUpdate(String)
+    case checkPasswordTextFieldUpdate(String)
+    case nextButtonTap
+    case returnKeyboardTap
+  }
+  
+  enum Mutation {
+    // Email
+    case updateEmail(String)
+    case validateEmail(Bool)
+    // Password
+    case updatePassword(String)
+    case validatePassword(Bool)
+    // Check Password
+    case updateCheckPassword(String)
+    case validateCheckPassword(Bool)
+  }
+  
   struct State {
-    
+    // Email
+    var email: String = ""
+    var isEmailValid: Bool?
+    // Password
+    var password: String = ""
+    var isPasswordValid: Bool?
+    // Check Password
+    var checkPassword: String = ""
+    var isPasswordIdentical: Bool?
+    // Button
+    var isNextButtonEnabled: Bool = false
   }
   
   // MARK: - Initializer
@@ -24,6 +55,67 @@ final class SignUpReactor: Reactor {
   init(coordinator: AuthCoordinator) {
     self.coordinator = coordinator
     self.initialState = State()
+  }
+  
+  // MARK: - Functions
+  
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .emailTextFieldUpdate(let email):
+      // TODO: - Email 확인
+      return .concat([
+        .just(.updateEmail(email)),
+        .just(.validateEmail(true)) // Email Validate result
+      ])
+      
+    case .passwordTextFieldUpdate(let password):
+      // TODO: - Password 확인
+      return .concat([
+        .just(.updatePassword(password)),
+        .just(.validatePassword(true)) // Password Validate result
+      ])
+      
+    case .checkPasswordTextFieldUpdate(let checkPassword):
+      // TODO: - Password 확인 확인
+      return .concat([
+        .just(.updateCheckPassword(checkPassword)),
+        .just(.validateCheckPassword(true)) // Check Password Validate result
+      ])
+      
+    case .nextButtonTap:
+      os_log(.info, "Next button tap.")
+      return Observable<Mutation>.empty()
+      
+    case .returnKeyboardTap:
+      os_log(.info, "Keyboard return tap.")
+      return Observable<Mutation>.empty()
+    }
+  }
+  
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+    
+    switch mutation {
+    case .updateEmail(let email):
+      newState.email = email
+      
+    case .validateEmail(let isEmailValid):
+      newState.isEmailValid = isEmailValid
+      
+    case .updatePassword(let password):
+      newState.password = password
+      
+    case .validatePassword(let isPasswordValid):
+      newState.isPasswordValid = isPasswordValid
+      
+    case .updateCheckPassword(let checkPassword):
+      newState.checkPassword = checkPassword
+      
+    case .validateCheckPassword(let isPasswordIdentical):
+      newState.isPasswordIdentical = isPasswordIdentical
+    }
+    
+    return newState
   }
   
 }

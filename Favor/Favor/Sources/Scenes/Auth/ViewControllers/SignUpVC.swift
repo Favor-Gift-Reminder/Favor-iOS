@@ -72,7 +72,44 @@ final class SignUpViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SignUpReactor) {
-    //
+    // Action
+    self.emailTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.emailTextFieldUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.pwTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.passwordTextFieldUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.pwValidateTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.checkPasswordTextFieldUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.nextButton.rx.tap
+      .map { Reactor.Action.returnKeyboardTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // State
+    reactor.state.asObservable()
+      .map { $0.isNextButtonEnabled }
+      .subscribe(onNext: { isButtonEnabled in
+        DispatchQueue.main.async {
+          self.nextButton.configurationUpdateHandler = { button in
+            button.isEnabled = (isButtonEnabled == true)
+          }
+        }
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
