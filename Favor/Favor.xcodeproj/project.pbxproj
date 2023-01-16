@@ -113,6 +113,7 @@
 		E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		E5B1828629744D8400229C50 /* SmallFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButton.swift; sourceTree = "<group>"; };
+		E5B1828D2974DE3E00229C50 /* .gitkeep.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = .gitkeep.md; path = Favor/Configuration/Extensions/.gitkeep.md; sourceTree = SOURCE_ROOT; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ECD295DAC79006B9245 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -268,6 +269,7 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				E5B1828D2974DE3E00229C50 /* .gitkeep.md */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
