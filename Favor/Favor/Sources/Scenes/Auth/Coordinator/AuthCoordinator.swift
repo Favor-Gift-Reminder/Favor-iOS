@@ -41,7 +41,10 @@ extension AuthCoordinator {
   
   /// 회원가입 화면을 담당하는 View입니다.
   func showSignUpFlow() {
-    os_log(.error, "Sign Up flow not yet implemented.")
+    let signUpVC = SignUpViewController()
+    signUpVC.reactor = SignUpReactor(coordinator: self)
+    signUpVC.title = "신규 가입"
+    self.navigationController.pushViewController(signUpVC, animated: true)
   }
   
   /// 회원가입 정보 입력 후 프로필 설정을 진행하는 View입니다.
