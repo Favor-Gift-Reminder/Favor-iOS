@@ -20,9 +20,26 @@ final class SignInViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  private lazy var idTextField = {
-    let textField = UITextField()
+  private lazy var emailTextField: FavorTextField = {
+    let textField = FavorTextField()
+    textField.placeholder = "이메일"
+    textField.becomeFirstResponder()
     return textField
+  }()
+  
+  private lazy var pwTextField: FavorTextField = {
+    let textField = FavorTextField()
+    textField.placeholder = "비밀번호"
+    return textField
+  }()
+  
+  private lazy var vStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+//    stackView.spacing = 32.0
+    stackView.addArrangedSubview(self.emailTextField)
+    stackView.addArrangedSubview(self.pwTextField)
+    return stackView
   }()
   
   // MARK: - Life Cycle
@@ -38,14 +55,17 @@ final class SignInViewController: BaseViewController, View {
   // MARK: - UI Setups
   
   override func setupLayouts() {
-    [self.idTextField].forEach {
+    [
+      self.vStack
+    ].forEach {
       self.view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    self.idTextField.snp.makeConstraints { make in
-      make.center.equalToSuperview()
+    self.vStack.snp.makeConstraints { make in
+      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(56)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
   }
   
