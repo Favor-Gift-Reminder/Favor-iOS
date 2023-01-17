@@ -7,6 +7,7 @@
 
 import OSLog
 
+import RxCocoa
 import ReactorKit
 
 final class SignUpReactor: Reactor {
@@ -34,18 +35,20 @@ final class SignUpReactor: Reactor {
     // Check Password
     case updateCheckPassword(String)
     case validateCheckPassword(Bool)
+    // Next Button
+    case validateNextButton(Bool)
   }
   
   struct State {
     // Email
     var email: String = ""
-    var isEmailValid: ValidateManager.EmailValidate?
+    var isEmailValid: ValidateManager.EmailValidate = .empty
     // Password
     var password: String = ""
-    var isPasswordValid: ValidateManager.PasswordValidate?
+    var isPasswordValid: ValidateManager.PasswordValidate = .empty
     // Check Password
     var checkPassword: String = ""
-    var isPasswordIdentical: Bool?
+    var isPasswordIdentical: Bool = false
     // Button
     var isNextButtonEnabled: Bool = false
   }
@@ -65,21 +68,24 @@ final class SignUpReactor: Reactor {
       let emailValidate = ValidateManager.validate(email: email)
       return .concat([
         .just(.updateEmail(email)),
-        .just(.validateEmail(emailValidate))
+        .just(.validateEmail(emailValidate)),
+        self.validate(input: emailValidate)
       ])
       
     case .passwordTextFieldUpdate(let password):
       let passwordValidate = ValidateManager.validate(password: password)
       return .concat([
         .just(.updatePassword(password)),
-        .just(.validatePassword(passwordValidate))
+        .just(.validatePassword(passwordValidate)),
+        self.validate(input: passwordValidate)
       ])
       
     case .checkPasswordTextFieldUpdate(let checkPassword):
       let isPasswordIdentical: Bool = (self.currentState.password == checkPassword) ? true: false
       return .concat([
         .just(.updateCheckPassword(checkPassword)),
-        .just(.validateCheckPassword(isPasswordIdentical))
+        .just(.validateCheckPassword(isPasswordIdentical)),
+        self.validate(input: isPasswordIdentical)
       ])
       
     case .nextButtonTap:
@@ -113,9 +119,46 @@ final class SignUpReactor: Reactor {
       
     case .validateCheckPassword(let isPasswordIdentical):
       newState.isPasswordIdentical = isPasswordIdentical
+      
+    case .validateNextButton(let isNextButtonEnabled):
+      newState.isNextButtonEnabled = isNextButtonEnabled
     }
     
     return newState
+  }
+  
+}
+
+private extension SignUpReactor {
+  
+  // FIXME: - 1. 비밀번호 확인의 초기값이 true로 바뀌는 현상
+  // FIXME: - 2. 이메일을 입력할 떄 invalid 값이 들어가도 error message가 표시되지 않는 현상
+  func validate<T>(input: T) -> Observable<SignUpReactor.Mutation> {
+    let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: self.currentState.isEmailValid)
+    let passwordValidate = BehaviorRelay<ValidateManager.PasswordValidate>(value: self.currentState.isPasswordValid)
+    let checkPasswordValidate = BehaviorRelay<Bool>(value: self.currentState.isPasswordIdentical)
+    
+    if T.self == ValidateManager.EmailValidate.self {
+      emailValidate.accept(input as! ValidateManager.EmailValidate)
+    } else if T.self == ValidateManager.PasswordValidate.self {
+      passwordValidate.accept(input as! ValidateManager.PasswordValidate)
+    } else {
+      checkPasswordValidate.accept(input as! Bool)
+    }
+    print(emailValidate.value, passwordValidate.value, checkPasswordValidate.value)
+    
+    return Observable.combineLatest(
+      emailValidate,
+      passwordValidate,
+      checkPasswordValidate,
+      resultSelector: { emailValidate, passwordValidate, checkPasswordValidate in
+        if emailValidate == .valid && passwordValidate == .valid && checkPasswordValidate == true {
+          return .validateNextButton(true)
+        } else {
+          return .validateNextButton(false)
+        }
+      }
+    )
   }
   
 }

@@ -110,11 +110,9 @@ final class SignUpViewController: BaseViewController, View {
       .subscribe(onNext: { emailValidate in
         switch emailValidate {
         case .empty, .invalid:
-          self.emailTextField.updateMessage(emailValidate?.description, for: .error)
+          self.emailTextField.updateMessage(emailValidate.description, for: .error)
         case .valid:
           self.emailTextField.updateMessage(nil, for: .info)
-        default:
-          break
         }
       })
       .disposed(by: self.disposeBag)
@@ -126,11 +124,9 @@ final class SignUpViewController: BaseViewController, View {
       .subscribe(onNext: { passwordValidate in
         switch passwordValidate {
         case .empty, .invalid:
-          self.pwTextField.updateMessage(passwordValidate?.description, for: .error)
+          self.pwTextField.updateMessage(passwordValidate.description, for: .error)
         case .valid:
           self.pwTextField.updateMessage(nil, for: .info)
-        default:
-          break
         }
       })
       .disposed(by: self.disposeBag)
@@ -148,6 +144,7 @@ final class SignUpViewController: BaseViewController, View {
     
     reactor.state.asObservable()
       .map { $0.isNextButtonEnabled }
+      .distinctUntilChanged()
       .subscribe(onNext: { isButtonEnabled in
         DispatchQueue.main.async {
           self.nextButton.configurationUpdateHandler = { button in
