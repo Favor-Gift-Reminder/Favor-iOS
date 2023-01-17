@@ -7,8 +7,8 @@
 
 import OSLog
 
-import RxCocoa
 import ReactorKit
+import RxCocoa
 
 final class SignUpReactor: Reactor {
   
