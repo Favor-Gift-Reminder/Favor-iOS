@@ -76,8 +76,7 @@ final class SignUpReactor: Reactor {
       ])
       
     case .checkPasswordTextFieldUpdate(let checkPassword):
-      // FIXME: - checkPassword가 변경되기 전에 Validation을 처리하여 발생하는 문제
-      let isPasswordIdentical: Bool = (self.currentState.password == self.currentState.checkPassword) ? true: false
+      let isPasswordIdentical: Bool = (self.currentState.password == checkPassword) ? true: false
       return .concat([
         .just(.updateCheckPassword(checkPassword)),
         .just(.validateCheckPassword(isPasswordIdentical))
