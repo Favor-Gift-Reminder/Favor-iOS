@@ -67,4 +67,27 @@ enum ValidateManager {
     return .valid
   }
   
+  enum CheckPasswordValidate {
+    case empty
+    case identical
+    case different
+    
+    var description: String {
+      switch self {
+      case .empty:
+        return "비밀번호를 한번 더 입력해주세요."
+      case .different:
+        return "비밀번호가 일치하지 않습니다."
+      case .identical:
+        return ""
+      }
+    }
+  }
+  
+  static func validate(checkPassword: String, to password: String) -> CheckPasswordValidate {
+    guard !checkPassword.isEmpty else { return .empty }
+    guard checkPassword == password else { return .different }
+    return .identical
+  }
+  
 }

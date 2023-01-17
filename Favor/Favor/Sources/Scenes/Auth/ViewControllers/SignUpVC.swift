@@ -134,9 +134,10 @@ final class SignUpViewController: BaseViewController, View {
     reactor.state.asObservable()
       .map { $0.isPasswordIdentical }
       .subscribe(onNext: { isPasswordIdentical in
-        if isPasswordIdentical == false {
-          self.pwValidateTextField.updateMessage("패스워드가 다릅니다.", for: .error)
-        } else {
+        switch isPasswordIdentical {
+        case .empty, .different:
+          self.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .error)
+        case .identical:
           self.pwValidateTextField.updateMessage(nil, for: .info)
         }
       })

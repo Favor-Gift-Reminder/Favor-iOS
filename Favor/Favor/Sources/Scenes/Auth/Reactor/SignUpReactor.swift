@@ -34,7 +34,7 @@ final class SignUpReactor: Reactor {
     case validatePassword(ValidateManager.PasswordValidate)
     // Check Password
     case updateCheckPassword(String)
-    case validateCheckPassword(Bool)
+    case validateCheckPassword(ValidateManager.CheckPasswordValidate)
     // Next Button
     case validateNextButton(Bool)
   }
@@ -48,7 +48,7 @@ final class SignUpReactor: Reactor {
     var isPasswordValid: ValidateManager.PasswordValidate = .empty
     // Check Password
     var checkPassword: String = ""
-    var isPasswordIdentical: Bool = false
+    var isPasswordIdentical: ValidateManager.CheckPasswordValidate = .empty
     // Button
     var isNextButtonEnabled: Bool = false
   }
@@ -81,7 +81,7 @@ final class SignUpReactor: Reactor {
       ])
       
     case .checkPasswordTextFieldUpdate(let checkPassword):
-      let isPasswordIdentical: Bool = (self.currentState.password == checkPassword) ? true: false
+      let isPasswordIdentical = ValidateManager.validate(checkPassword: checkPassword, to: self.currentState.password)
       return .concat([
         .just(.updateCheckPassword(checkPassword)),
         .just(.validateCheckPassword(isPasswordIdentical)),
@@ -136,14 +136,14 @@ private extension SignUpReactor {
   func validate<T>(input: T) -> Observable<SignUpReactor.Mutation> {
     let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: self.currentState.isEmailValid)
     let passwordValidate = BehaviorRelay<ValidateManager.PasswordValidate>(value: self.currentState.isPasswordValid)
-    let checkPasswordValidate = BehaviorRelay<Bool>(value: self.currentState.isPasswordIdentical)
+    let checkPasswordValidate = BehaviorRelay<ValidateManager.CheckPasswordValidate>(value: self.currentState.isPasswordIdentical)
     
     if T.self == ValidateManager.EmailValidate.self {
       emailValidate.accept(input as! ValidateManager.EmailValidate)
     } else if T.self == ValidateManager.PasswordValidate.self {
       passwordValidate.accept(input as! ValidateManager.PasswordValidate)
     } else {
-      checkPasswordValidate.accept(input as! Bool)
+      checkPasswordValidate.accept(input as! ValidateManager.CheckPasswordValidate)
     }
     print(emailValidate.value, passwordValidate.value, checkPasswordValidate.value)
     
@@ -152,7 +152,7 @@ private extension SignUpReactor {
       passwordValidate,
       checkPasswordValidate,
       resultSelector: { emailValidate, passwordValidate, checkPasswordValidate in
-        if emailValidate == .valid && passwordValidate == .valid && checkPasswordValidate == true {
+        if emailValidate == .valid && passwordValidate == .valid && checkPasswordValidate == .identical {
           return .validateNextButton(true)
         } else {
           return .validateNextButton(false)
