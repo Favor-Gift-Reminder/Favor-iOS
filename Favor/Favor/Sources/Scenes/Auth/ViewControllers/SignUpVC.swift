@@ -98,7 +98,7 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
-      .map { Reactor.Action.returnKeyboardTap }
+      .map { Reactor.Action.nextButtonTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     

@@ -89,7 +89,7 @@ final class SignUpReactor: Reactor {
       ])
       
     case .nextButtonTap:
-      os_log(.info, "Next button tap.")
+      self.coordinator?.showSetProfileFlow()
       return Observable<Mutation>.empty()
       
     case .returnKeyboardTap:
