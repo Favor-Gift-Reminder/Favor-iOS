@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
   typealias Reactor = SetProfileReactor
@@ -17,6 +18,56 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - Properties
   
   // MARK: - UI Components
+  
+  private lazy var profileImageButton: UIButton = {
+    let button = UIButton()
+    button.layer.cornerRadius = 120 / 2
+    button.backgroundColor = .favorColor(.box1)
+    button.setImage(UIImage(systemName: "person.fill"), for: .normal)
+    button.tintColor = .favorColor(.white)
+    return button
+  }()
+  
+  private lazy var plusImageView: UIButton = {
+    let button = UIButton()
+    button.setImage(UIImage(systemName: "plus"), for: .normal)
+    button.layer.cornerRadius = 24
+    button.backgroundColor = .favorColor(.box2)
+    button.tintColor = .favorColor(.white)
+    button.isUserInteractionEnabled = false
+    return button
+  }()
+  
+  private lazy var nameTextField: FavorTextField = {
+    let textField = FavorTextField()
+    textField.delegate = self
+    textField.placeholder = "이름"
+    textField.autocapitalizationType = .none
+    textField.becomeFirstResponder()
+    return textField
+  }()
+  
+  private lazy var idTextField: FavorTextField = {
+    let textField = FavorTextField()
+    textField.delegate = self
+    textField.placeholder = "유저 아이디"
+    textField.autocapitalizationType = .none
+    return textField
+  }()
+  
+  private lazy var vStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 50.0
+    stackView.addArrangedSubview(self.nameTextField)
+    stackView.addArrangedSubview(self.idTextField)
+    return stackView
+  }()
+  
+  private lazy var nextButton: LargeFavorButton = {
+    let button = LargeFavorButton(with: .white, title: "다음")
+    return button
+  }()
   
   // MARK: - Life Cycle
   
@@ -29,5 +80,50 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - Functions
   
   // MARK: - UI Setups
+  
+  override func setupLayouts() {
+    [
+      self.profileImageButton,
+      self.vStack,
+      self.nextButton
+    ].forEach {
+      self.view.addSubview($0)
+    }
+    
+    self.profileImageButton.addSubview(self.plusImageView)
+  }
+  
+  override func setupConstraints() {
+    self.profileImageButton.snp.makeConstraints { make in
+      make.width.height.equalTo(120)
+      make.centerX.equalToSuperview()
+      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(56)
+    }
+    
+    self.plusImageView.snp.makeConstraints { make in
+      make.width.height.equalTo(48)
+      make.bottom.trailing.equalToSuperview()
+    }
+    
+    self.vStack.snp.makeConstraints { make in
+      make.top.equalTo(self.profileImageButton.snp.bottom).offset(56)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    }
+    
+    self.nextButton.snp.makeConstraints { make in
+      make.top.equalTo(self.vStack.snp.bottom).offset(56)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    }
+  }
+  
+}
+
+// MARK: - TextField
+
+extension SetProfileViewController: UITextFieldDelegate {
+  
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    return true
+  }
   
 }
