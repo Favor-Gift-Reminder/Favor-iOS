@@ -81,6 +81,11 @@ final class SetProfileViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    self.nextButton.rx.tap
+      .map { Reactor.Action.nextButtonTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.asObservable()
       .map { $0.profileImage }

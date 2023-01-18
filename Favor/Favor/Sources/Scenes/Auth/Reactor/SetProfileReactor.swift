@@ -19,6 +19,7 @@ final class SetProfileReactor: Reactor {
   
   enum Action {
     case ProfileImageButtonTap
+    case nextButtonTap
   }
   
   enum Mutation {
@@ -43,6 +44,10 @@ final class SetProfileReactor: Reactor {
     switch action {
     case .ProfileImageButtonTap:
       self.coordinator?.presentImagePicker()
+      return Observable<Mutation>.empty()
+      
+    case .nextButtonTap:
+      self.coordinator?.showTermFlow()
       return Observable<Mutation>.empty()
     }
   }
