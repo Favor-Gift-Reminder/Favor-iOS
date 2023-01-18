@@ -74,7 +74,14 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SetProfileReactor) {
-    //
+    // Action
+    self.profileImageButton.rx.tap
+      .map { Reactor.Action.ProfileImageButtonTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // State
+    
   }
   
   // MARK: - Functions
