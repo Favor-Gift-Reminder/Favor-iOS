@@ -21,6 +21,7 @@ final class SetProfileViewController: BaseViewController, View {
   
   private lazy var profileImageButton: UIButton = {
     let button = UIButton()
+    button.clipsToBounds = true
     button.layer.cornerRadius = 120 / 2
     button.backgroundColor = .favorColor(.box1)
     button.setImage(UIImage(systemName: "person.fill"), for: .normal)
@@ -95,13 +96,12 @@ final class SetProfileViewController: BaseViewController, View {
   override func setupLayouts() {
     [
       self.profileImageButton,
+      self.plusImageView,
       self.vStack,
       self.nextButton
     ].forEach {
       self.view.addSubview($0)
     }
-    
-    self.profileImageButton.addSubview(self.plusImageView)
   }
   
   override func setupConstraints() {
@@ -113,7 +113,7 @@ final class SetProfileViewController: BaseViewController, View {
     
     self.plusImageView.snp.makeConstraints { make in
       make.width.height.equalTo(48)
-      make.bottom.trailing.equalToSuperview()
+      make.bottom.trailing.equalTo(self.profileImageButton)
     }
     
     self.vStack.snp.makeConstraints { make in
