@@ -52,6 +52,8 @@
 		2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D584297524660064E932 /* SetProfileVC.swift */; };
 		2EE0D587297524880064E932 /* SetProfileReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D586297524880064E932 /* SetProfileReactor.swift */; };
 		2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58829756A7F0064E932 /* ValidateManager.swift */; };
+		2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */; };
+		2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58C297832D20064E932 /* PHPickerManager.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -123,6 +125,8 @@
 		2EE0D584297524660064E932 /* SetProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileVC.swift; sourceTree = "<group>"; };
 		2EE0D586297524880064E932 /* SetProfileReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileReactor.swift; sourceTree = "<group>"; };
 		2EE0D58829756A7F0064E932 /* ValidateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateManager.swift; sourceTree = "<group>"; };
+		2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicManager.swift; sourceTree = "<group>"; };
+		2EE0D58C297832D20064E932 /* PHPickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerManager.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
@@ -615,6 +619,8 @@
 		E5B182912974F43E00229C50 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
+				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 				E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */,
 				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
 			);
@@ -762,6 +768,7 @@
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				2EE07EC9296E8D6200048A3C /* MyPageCoordinator.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
+				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
 				2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */,
@@ -769,6 +776,7 @@
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpReactor.swift in Sources */,
+				2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
