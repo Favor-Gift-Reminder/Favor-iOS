@@ -11,18 +11,18 @@ import UniformTypeIdentifiers
 final class CoreGraphicManager {
     
   /**
-   Downsample CGImage before decoding them into UIImage
+   CGImage를 다운샘플링 한 뒤 UIImage로 디코딩하여 반환합니다.
    - Parameters:
-      - url: URL of image.
-      - pointSize: Target size for resizing image.
-      - scale: Scale of the device (`UIScreen.main.scale`)
-   - Returns: `Data?` which can be decoded as image.
+      - url: 이미지(URL 타입).
+      - pointSize: 목표 이미지 크기.
+      - scale: 디바이스의 Scale (`UIScreen.main.scale`)
+   - Returns: `Data?` (UIImage로 Decodable).
    */
-  func downsample(at url: URL, to pointSize: CGSize, scale: CGFloat) -> Data? {
+  func downsample(at url: URL, toSize pointSize: CGSize, screenScale: CGFloat) -> Data? {
     let sourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
     guard let source = CGImageSourceCreateWithURL(url as CFURL, sourceOptions) else { return nil }
     
-    let maxDimensionInPixels = max(pointSize.width, pointSize.height) * scale
+    let maxDimensionInPixels = max(pointSize.width, pointSize.height) * screenScale
     let downsampleOptions = [
       kCGImageSourceCreateThumbnailFromImageAlways: true,
       kCGImageSourceShouldCacheImmediately: true,
