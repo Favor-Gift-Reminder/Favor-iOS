@@ -131,8 +131,6 @@ final class SignUpReactor: Reactor {
 
 private extension SignUpReactor {
   
-  // FIXME: - 1. 비밀번호 확인의 초기값이 true로 바뀌는 현상
-  // FIXME: - 2. 이메일을 입력할 떄 invalid 값이 들어가도 error message가 표시되지 않는 현상
   func validate<T>(input: T) -> Observable<SignUpReactor.Mutation> {
     let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: self.currentState.isEmailValid)
     let passwordValidate = BehaviorRelay<ValidateManager.PasswordValidate>(value: self.currentState.isPasswordValid)

@@ -106,7 +106,7 @@ final class SignUpViewController: BaseViewController, View {
     reactor.state.asObservable()
       .map { $0.isEmailValid }
       .distinctUntilChanged()
-      .skip(2)
+      .skip(1)
       .subscribe(onNext: { emailValidate in
         switch emailValidate {
         case .empty, .invalid:
@@ -120,7 +120,7 @@ final class SignUpViewController: BaseViewController, View {
     reactor.state.asObservable()
       .map { $0.isPasswordValid }
       .distinctUntilChanged()
-      .skip(2)
+      .skip(1)
       .subscribe(onNext: { passwordValidate in
         switch passwordValidate {
         case .empty, .invalid:
@@ -133,6 +133,8 @@ final class SignUpViewController: BaseViewController, View {
     
     reactor.state.asObservable()
       .map { $0.isPasswordIdentical }
+      .distinctUntilChanged()
+      .skip(1)
       .subscribe(onNext: { isPasswordIdentical in
         switch isPasswordIdentical {
         case .empty, .different:
