@@ -53,7 +53,9 @@ extension PHPickerManager: PHPickerViewControllerDelegate {
         if let error {
           os_log(.error, "\(error)")
         }
-        picker.dismiss(animated: true)
+        DispatchQueue.main.async {
+          picker.dismiss(animated: true)
+        }
       }
     }
   }
