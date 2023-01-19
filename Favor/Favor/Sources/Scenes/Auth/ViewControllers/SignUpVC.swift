@@ -103,7 +103,7 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state.asObservable()
+    reactor.state
       .map { $0.isEmailValid }
       .distinctUntilChanged()
       .skip(1)
@@ -117,7 +117,7 @@ final class SignUpViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.asObservable()
+    reactor.state
       .map { $0.isPasswordValid }
       .distinctUntilChanged()
       .skip(1)
@@ -131,7 +131,7 @@ final class SignUpViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.asObservable()
+    reactor.state
       .map { $0.isPasswordIdentical }
       .distinctUntilChanged()
       .skip(1)
@@ -145,7 +145,7 @@ final class SignUpViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.asObservable()
+    reactor.state
       .map { $0.isNextButtonEnabled }
       .distinctUntilChanged()
       .subscribe(onNext: { isButtonEnabled in
