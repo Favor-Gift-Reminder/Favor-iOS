@@ -22,19 +22,14 @@ final class AuthCoordinator: BaseCoordinator {
   // MARK: - Functions
   
   override func start() {
-    self.showSelectSignInFlow()
+    let selectSignInVC = SelectSignInViewController()
+    selectSignInVC.reactor = SelectSignInReactor(coordinator: self)
+    self.navigationController.pushViewController(selectSignInVC, animated: true)
   }
   
 }
 
 extension AuthCoordinator {
-  
-  /// 로그인 방법을 선택하는 View입니다.
-  func showSelectSignInFlow() {
-    let selectSignInVC = SelectSignInViewController()
-    selectSignInVC.reactor = SelectSignInReactor(coordinator: self)
-    self.navigationController.pushViewController(selectSignInVC, animated: true)
-  }
   
   /// 아이디로 로그인을 선택했을 때의 View입니다.
   func showSignInFlow() {
