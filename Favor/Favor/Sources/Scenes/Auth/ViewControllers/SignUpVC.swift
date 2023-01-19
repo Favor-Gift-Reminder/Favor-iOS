@@ -21,18 +21,15 @@ final class SignUpViewController: BaseViewController, View {
   
   private lazy var emailTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.delegate = self
     textField.placeholder = "이메일"
     textField.updateMessage("실제 사용하는 이메일을 입력해주세요.", for: .info)
     textField.keyboardType = .emailAddress
     textField.autocapitalizationType = .none
-    textField.becomeFirstResponder()
     return textField
   }()
   
   private lazy var pwTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.delegate = self
     textField.placeholder = "비밀번호"
     textField.updateMessage("영문, 숫자 혼용 8자 이상", for: .info)
     textField.keyboardType = .asciiCapable
@@ -42,7 +39,6 @@ final class SignUpViewController: BaseViewController, View {
   
   private lazy var pwValidateTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.delegate = self
     textField.placeholder = "비밀번호 확인"
     textField.keyboardType = .asciiCapable
     textField.autocapitalizationType = .none
@@ -76,11 +72,23 @@ final class SignUpViewController: BaseViewController, View {
   
   func bind(reactor: SignUpReactor) {
     // Action
+    Observable.just(())
+      .bind(with: self, onNext: { owner, _ in
+        owner.emailTextField.becomeFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+    
     self.emailTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
       .map { Reactor.Action.emailTextFieldUpdate($0) }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.emailTextField.rx.controlEvent(.editingDidEndOnExit)
+      .bind(with: self, onNext: { owner, _ in
+        owner.pwTextField.becomeFirstResponder()
+      })
       .disposed(by: self.disposeBag)
     
     self.pwTextField.rx.text
@@ -90,11 +98,23 @@ final class SignUpViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    self.pwTextField.rx.controlEvent(.editingDidEndOnExit)
+      .bind(with: self, onNext: { owner, _ in
+        owner.pwValidateTextField.becomeFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+    
     self.pwValidateTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
       .map { Reactor.Action.checkPasswordTextFieldUpdate($0) }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.pwValidateTextField.rx.controlEvent(.editingDidEndOnExit)
+      .bind(with: self, onNext: { owner, _ in
+        owner.pwValidateTextField.resignFirstResponder()
+      })
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
@@ -178,23 +198,6 @@ final class SignUpViewController: BaseViewController, View {
       make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(56)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
-  }
-  
-}
-
-// MARK: - TextField
-
-extension SignUpViewController: UITextFieldDelegate {
-  
-  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    if textField == self.emailTextField {
-      self.pwTextField.becomeFirstResponder()
-    } else if textField == self.pwTextField {
-      self.pwValidateTextField.becomeFirstResponder()
-    } else {
-      self.pwValidateTextField.resignFirstResponder()
-    }
-    return true
   }
   
 }

@@ -76,9 +76,27 @@ final class SetProfileViewController: BaseViewController, View {
   
   func bind(reactor: SetProfileReactor) {
     // Action
+    Observable.just(())
+      .bind(with: self, onNext: { owner, _ in
+        owner.nameTextField.becomeFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+    
     self.profileImageButton.rx.tap
       .map { Reactor.Action.ProfileImageButtonTap }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.nameTextField.rx.controlEvent(.editingDidEndOnExit)
+      .bind(with: self, onNext: { owner, _ in
+        owner.idTextField.becomeFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+    
+    self.idTextField.rx.controlEvent(.editingDidEndOnExit)
+      .bind(with: self, onNext: { owner, _ in
+        owner.idTextField.resignFirstResponder()
+      })
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
