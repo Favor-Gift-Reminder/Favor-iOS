@@ -162,7 +162,9 @@ final class SignUpViewController: BaseViewController, View {
   // MARK: - UI Setups
   
   override func setupLayouts() {
-    [self.vStack].forEach {
+    [
+      self.vStack
+    ].forEach {
       self.view.addSubview($0)
     }
   }
