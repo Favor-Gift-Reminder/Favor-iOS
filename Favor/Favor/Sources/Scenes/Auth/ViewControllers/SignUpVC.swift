@@ -150,10 +150,8 @@ final class SignUpViewController: BaseViewController, View {
       .map { $0.isNextButtonEnabled }
       .distinctUntilChanged()
       .subscribe(onNext: { isButtonEnabled in
-        DispatchQueue.main.async {
-          self.nextButton.configurationUpdateHandler = { button in
-            button.isEnabled = (isButtonEnabled == true)
-          }
+        self.nextButton.configurationUpdateHandler = { button in
+          button.isEnabled = (isButtonEnabled == true)
         }
       })
       .disposed(by: self.disposeBag)
