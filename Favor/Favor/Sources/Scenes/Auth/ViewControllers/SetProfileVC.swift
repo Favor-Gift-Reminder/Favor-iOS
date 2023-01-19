@@ -89,7 +89,10 @@ final class SetProfileViewController: BaseViewController, View {
     // State
     reactor.state
       .map { $0.profileImage }
-      .bind(to: self.profileImageButton.rx.image(for: .normal))
+      .asDriver(onErrorJustReturn: nil)
+      .drive(with: self, onNext: { owner, image in
+        owner.profileImageButton.setImage(image, for: .normal)
+      })
       .disposed(by: self.disposeBag)
     
   }

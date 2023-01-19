@@ -105,52 +105,55 @@ final class SignUpViewController: BaseViewController, View {
     // State
     reactor.state
       .map { $0.isEmailValid }
+      .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
       .skip(1)
-      .withUnretained(self)
-      .subscribe { owner, passwordValidate in
+      .drive(with: self, onNext: { owner, passwordValidate in
+        switch passwordValidate {
+        case .empty, .invalid:
+          owner.emailTextField.updateMessage(passwordValidate.description, for: .error)
+        case .valid:
+          owner.emailTextField.updateMessage(nil, for: .info)
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state
+      .map { $0.isPasswordValid }
+      .asDriver(onErrorJustReturn: .valid)
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, passwordValidate in
         switch passwordValidate {
         case .empty, .invalid:
           owner.pwTextField.updateMessage(passwordValidate.description, for: .error)
         case .valid:
           owner.pwTextField.updateMessage(nil, for: .info)
         }
-      }
-      .disposed(by: self.disposeBag)
-    
-    reactor.state
-      .map { $0.isPasswordValid }
-      .distinctUntilChanged()
-      .skip(1)
-      .subscribe(onNext: { passwordValidate in
-        switch passwordValidate {
-        case .empty, .invalid:
-          self.pwTextField.updateMessage(passwordValidate.description, for: .error)
-        case .valid:
-          self.pwTextField.updateMessage(nil, for: .info)
-        }
       })
       .disposed(by: self.disposeBag)
     
     reactor.state
       .map { $0.isPasswordIdentical }
+      .asDriver(onErrorJustReturn: .identical)
       .distinctUntilChanged()
       .skip(1)
-      .subscribe(onNext: { isPasswordIdentical in
+      .drive(with: self, onNext: { owner, isPasswordIdentical in
         switch isPasswordIdentical {
         case .empty, .different:
-          self.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .error)
+          owner.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .error)
         case .identical:
-          self.pwValidateTextField.updateMessage(nil, for: .info)
+          owner.pwValidateTextField.updateMessage(nil, for: .info)
         }
       })
       .disposed(by: self.disposeBag)
     
     reactor.state
       .map { $0.isNextButtonEnabled }
+      .asDriver(onErrorJustReturn: false)
       .distinctUntilChanged()
-      .subscribe(onNext: { isButtonEnabled in
-        self.nextButton.configurationUpdateHandler = { button in
+      .drive(with: self, onNext: { owner, isButtonEnabled in
+        owner.nextButton.configurationUpdateHandler = { button in
           button.isEnabled = (isButtonEnabled == true)
         }
       })
