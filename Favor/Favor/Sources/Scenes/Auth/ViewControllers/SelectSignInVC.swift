@@ -66,7 +66,10 @@ final class SelectSignInViewController: BaseViewController, View {
   // MARK: - UI Setups
   
   override func setupLayouts() {
-    [self.temporaryLogo, self.vStack].forEach {
+    [
+      self.temporaryLogo,
+      self.vStack
+    ].forEach {
       self.view.addSubview($0)
     }
   }
