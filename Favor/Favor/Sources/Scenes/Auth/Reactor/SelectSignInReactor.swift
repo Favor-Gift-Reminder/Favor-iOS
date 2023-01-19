@@ -13,7 +13,7 @@ final class SelectSignInReactor: Reactor {
   
   // MARK: - Properties
   
-  weak var coordinator: AuthCoordinator?
+  let coordinator: AuthCoordinator
   var initialState: State
   
   enum Action {
@@ -39,10 +39,10 @@ final class SelectSignInReactor: Reactor {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailLoginButtonTap:
-      self.coordinator?.showSignInFlow()
+      self.coordinator.showSignInFlow()
       return Observable<Mutation>.empty()
     case .signUpButtonTap:
-      self.coordinator?.showSignUpFlow()
+      self.coordinator.showSignUpFlow()
       return Observable<Mutation>.empty()
     }
   }

@@ -11,7 +11,7 @@ final class SignInReactor: Reactor {
   
   // MARK: - Properties
   
-  weak var coordinator: AuthCoordinator?
+  let coordinator: AuthCoordinator
   var initialState: State
   
   enum Action {

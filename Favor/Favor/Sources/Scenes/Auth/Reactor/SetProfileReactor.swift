@@ -13,7 +13,7 @@ final class SetProfileReactor: Reactor {
   
   // MARK: - Properties
   
-  weak var coordinator: AuthCoordinator?
+  let coordinator: AuthCoordinator
   var initialState: State
   let pickerManager: PHPickerManager
   
@@ -43,11 +43,11 @@ final class SetProfileReactor: Reactor {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .ProfileImageButtonTap:
-      self.coordinator?.presentImagePicker()
+      self.coordinator.presentImagePicker()
       return Observable<Mutation>.empty()
       
     case .nextButtonTap:
-      self.coordinator?.showTermFlow()
+      self.coordinator.showTermFlow()
       return Observable<Mutation>.empty()
     }
   }

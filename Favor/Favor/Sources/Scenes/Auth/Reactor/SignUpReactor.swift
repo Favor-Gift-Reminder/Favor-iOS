@@ -14,7 +14,7 @@ final class SignUpReactor: Reactor {
   
   // MARK: - Properties
   
-  weak var coordinator: AuthCoordinator?
+  let coordinator: AuthCoordinator
   var initialState: State
   
   enum Action {
@@ -89,7 +89,7 @@ final class SignUpReactor: Reactor {
       ])
       
     case .nextButtonTap:
-      self.coordinator?.showSetProfileFlow()
+      self.coordinator.showSetProfileFlow()
       return Observable<Mutation>.empty()
       
     case .returnKeyboardTap:
