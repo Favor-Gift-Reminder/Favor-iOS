@@ -11,7 +11,6 @@ import ReactorKit
 import SnapKit
 
 final class SignUpViewController: BaseViewController, View {
-  typealias Reactor = SignUpReactor
   
   // MARK: - Constants
   

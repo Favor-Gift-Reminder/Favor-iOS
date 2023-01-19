@@ -11,7 +11,6 @@ import ReactorKit
 import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
-  typealias Reactor = SetProfileReactor
   
   // MARK: - Constants
   
