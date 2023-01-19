@@ -44,7 +44,8 @@ final class SetProfileViewController: BaseViewController, View {
     textField.delegate = self
     textField.placeholder = "이름"
     textField.autocapitalizationType = .none
-    textField.becomeFirstResponder()
+    textField.enablesReturnKeyAutomatically = true
+    textField.returnKeyType = .next
     return textField
   }()
   
@@ -53,6 +54,8 @@ final class SetProfileViewController: BaseViewController, View {
     textField.delegate = self
     textField.placeholder = "유저 아이디"
     textField.autocapitalizationType = .none
+    textField.enablesReturnKeyAutomatically = true
+    textField.returnKeyType = .done
     return textField
   }()
   

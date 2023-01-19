@@ -24,6 +24,7 @@ final class SignInViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "이메일"
     textField.keyboardType = .emailAddress
+    textField.autocapitalizationType = .none
     textField.returnKeyType = .next
     textField.enablesReturnKeyAutomatically = true
     return textField
@@ -33,6 +34,8 @@ final class SignInViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
     textField.isSecureTextEntry = true
+    textField.enablesReturnKeyAutomatically = true
+    textField.returnKeyType = .done
     return textField
   }()
   
