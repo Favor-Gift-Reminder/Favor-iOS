@@ -107,14 +107,15 @@ final class SignUpViewController: BaseViewController, View {
       .map { $0.isEmailValid }
       .distinctUntilChanged()
       .skip(1)
-      .subscribe(onNext: { emailValidate in
-        switch emailValidate {
+      .withUnretained(self)
+      .subscribe { owner, passwordValidate in
+        switch passwordValidate {
         case .empty, .invalid:
-          self.emailTextField.updateMessage(emailValidate.description, for: .error)
+          owner.pwTextField.updateMessage(passwordValidate.description, for: .error)
         case .valid:
-          self.emailTextField.updateMessage(nil, for: .info)
+          owner.pwTextField.updateMessage(nil, for: .info)
         }
-      })
+      }
       .disposed(by: self.disposeBag)
     
     reactor.state
