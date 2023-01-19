@@ -120,9 +120,8 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.pwValidateTextField.rx.controlEvent(.editingDidEndOnExit)
-      .bind(with: self, onNext: { owner, _ in
-        owner.pwValidateTextField.resignFirstResponder()
-      })
+      .map { Reactor.Action.returnKeyboardTap }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap

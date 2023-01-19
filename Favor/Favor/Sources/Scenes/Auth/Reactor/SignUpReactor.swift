@@ -88,12 +88,8 @@ final class SignUpReactor: Reactor {
         self.validate(input: isPasswordIdentical)
       ])
       
-    case .nextButtonTap:
+    case .nextButtonTap, .returnKeyboardTap:
       self.coordinator.showSetProfileFlow()
-      return Observable<Mutation>.empty()
-      
-    case .returnKeyboardTap:
-      os_log(.info, "Keyboard return tap.")
       return Observable<Mutation>.empty()
     }
   }

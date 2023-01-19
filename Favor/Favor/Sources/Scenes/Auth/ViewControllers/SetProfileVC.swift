@@ -97,9 +97,8 @@ final class SetProfileViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.idTextField.rx.controlEvent(.editingDidEndOnExit)
-      .bind(with: self, onNext: { owner, _ in
-        owner.idTextField.resignFirstResponder()
-      })
+      .map { Reactor.Action.returnKeyboardTap }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap

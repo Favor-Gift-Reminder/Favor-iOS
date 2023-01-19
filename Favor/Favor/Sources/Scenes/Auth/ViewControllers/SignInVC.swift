@@ -97,9 +97,13 @@ final class SignInViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.pwTextField.rx.controlEvent(.editingDidEndOnExit)
-      .bind(with: self, onNext: { owner, _ in
-        owner.pwTextField.resignFirstResponder()
-      })
+      .map { Reactor.Action.returnKeyboardTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.loginButton.rx.tap
+      .map { Reactor.Action.loginButtonTap }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     // State
