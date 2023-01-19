@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
