@@ -263,11 +263,6 @@ class FavorTextField: UITextField, BaseView {
     self.messageType = messageType
   }
   
-  /// TextField 하단의 정보 메시지 색상을 `messageType`에 따라 변경합니다.
-  func updateMessageColor(to color: UIColor, for messageType: MessageType) {
-    
-  }
-  
 }
 
 // MARK: - Privates
