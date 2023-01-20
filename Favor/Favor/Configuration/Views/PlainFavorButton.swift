@@ -14,11 +14,16 @@ final class PlainFavorButton: UIButton {
     case small
   }
   
+  enum Icon {
+    case right
+    case bottom
+  }
+  
   // MARK: - Initializer
   
-  init(_ style: Style, title: String) {
+  init(_ style: Style, icon: Icon, title: String) {
     super.init(frame: .zero)
-    setupConfiguration(style, title: title)
+    setupConfiguration(style, icon: icon, title: title)
   }
   
   required init?(coder: NSCoder) {
@@ -27,7 +32,7 @@ final class PlainFavorButton: UIButton {
   
   // MARK: - Setup
   
-  private func setupConfiguration(_ style: Style, title: String) {
+  private func setupConfiguration(_ style: Style, icon: Icon, title: String) {
     var config = UIButton.Configuration.plain()
     
     var titleContainer = AttributeContainer()
@@ -41,8 +46,15 @@ final class PlainFavorButton: UIButton {
       titleContainer.font = .favorFont(.regular, size: 12)
     }
     
+    switch icon {
+    case .bottom:
+      config.image = UIImage(named: "ic_bottomArrow")
+
+    case .right:
+      config.image = UIImage(named: "ic_rightArrow")
+    }
+    
     config.attributedTitle = AttributedString(title, attributes: titleContainer)
-    config.image = UIImage(named: "ic_rightArrow")
     config.imagePadding = 8
     config.imagePlacement = .trailing
     
