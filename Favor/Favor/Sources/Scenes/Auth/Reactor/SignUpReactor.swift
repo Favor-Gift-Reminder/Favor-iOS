@@ -17,6 +17,11 @@ final class SignUpReactor: Reactor {
   let coordinator: AuthCoordinator
   var initialState: State
   
+  // Global States
+  let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: .empty)
+  let passwordValidate = BehaviorRelay<ValidateManager.PasswordValidate>(value: .empty)
+  let checkPasswordValidate = BehaviorRelay<ValidateManager.CheckPasswordValidate>(value: .empty)
+  
   enum Action {
     case emailTextFieldUpdate(String)
     case passwordTextFieldUpdate(String)
@@ -74,10 +79,13 @@ final class SignUpReactor: Reactor {
       
     case .passwordTextFieldUpdate(let password):
       let passwordValidate = ValidateManager.validate(password: password)
+      let isPasswordIdentical = ValidateManager.validate(checkPassword: self.currentState.checkPassword, to: password)
       return .concat([
         .just(.updatePassword(password)),
         .just(.validatePassword(passwordValidate)),
-        self.validate(input: passwordValidate)
+        .just(.validateCheckPassword(isPasswordIdentical)),
+        self.validate(input: passwordValidate),
+        self.validate(input: isPasswordIdentical)
       ])
       
     case .checkPasswordTextFieldUpdate(let checkPassword):
@@ -128,10 +136,6 @@ final class SignUpReactor: Reactor {
 private extension SignUpReactor {
   
   func validate<T>(input: T) -> Observable<SignUpReactor.Mutation> {
-    let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: self.currentState.isEmailValid)
-    let passwordValidate = BehaviorRelay<ValidateManager.PasswordValidate>(value: self.currentState.isPasswordValid)
-    let checkPasswordValidate = BehaviorRelay<ValidateManager.CheckPasswordValidate>(value: self.currentState.isPasswordIdentical)
-    
     if T.self == ValidateManager.EmailValidate.self {
       emailValidate.accept(input as! ValidateManager.EmailValidate)
     } else if T.self == ValidateManager.PasswordValidate.self {
@@ -139,7 +143,6 @@ private extension SignUpReactor {
     } else {
       checkPasswordValidate.accept(input as! ValidateManager.CheckPasswordValidate)
     }
-    print(emailValidate.value, passwordValidate.value, checkPasswordValidate.value)
     
     return Observable.combineLatest(
       emailValidate,
