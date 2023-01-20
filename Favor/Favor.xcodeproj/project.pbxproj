@@ -44,7 +44,6 @@
 		2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED2296E8DE600048A3C /* EventEditVC.swift */; };
 		2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED6296E8E1900048A3C /* GiftVC.swift */; };
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
-		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
 		2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */; };
 		2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
@@ -57,6 +56,7 @@
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
+		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -646,8 +646,8 @@
 			children = (
 				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
 				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
-				2E306A7E297290AB007B7EFF /* FavorTextField.swift */,
 				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				2E306A7E297290AB007B7EFF /* FavorTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";

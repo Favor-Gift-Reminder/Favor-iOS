@@ -29,8 +29,10 @@ final class SelectSignInViewController: BaseViewController, View {
     with: .black, title: "이메일로 로그인"
   )
   
-  private lazy var signUpButton = LargeFavorButton(
-    with: .white, title: "신규 회원가입"
+  private lazy var signUpButton = PlainFavorButton(
+    .large,
+    icon: .right,
+    title: "신규 회원가입"
   )
   
   private lazy var vStack = UIStackView().then {
@@ -77,11 +79,11 @@ final class SelectSignInViewController: BaseViewController, View {
     
     self.temporaryLogo.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.centerY.equalToSuperview().offset(-48)
+      make.centerY.equalToSuperview().inset(48)
     }
     
     self.vStack.snp.makeConstraints { make in
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(46)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
   }
