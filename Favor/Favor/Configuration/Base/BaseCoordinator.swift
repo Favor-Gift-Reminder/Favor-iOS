@@ -13,7 +13,7 @@ class BaseCoordinator: Coordinator {
 	
 	var childCoordinators: [any Coordinator]
 	var navigationController: UINavigationController
-	var parentCoordinator: Coordinator?
+	weak var parentCoordinator: Coordinator?
 
 	// MARK: - Initializer
 	
