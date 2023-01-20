@@ -153,7 +153,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// TextField가 선택됐을 때의 밑줄 색상
-  var selectedUnderlineColor: UIColor = .favorColor(.box2) {
+  var selectedUnderlineColor: UIColor = .favorColor(.box1) {
     didSet {
       self.updateUnderlineView()
     }
@@ -294,9 +294,9 @@ private extension FavorTextField {
   
   func updateUnderlineColor() {
     if !self.isEnabled {
-      self.underlineView.backgroundColor = .darkGray
+      self.underlineView.backgroundColor = self.underlineColor
     } else if self.hasMessage {
-      self.underlineView.backgroundColor = (self.messageType == .info) ? self.infoMessageColor : self.errorMessageColor
+      self.underlineView.backgroundColor = (self.messageType == .info) ? self.underlineColor : self.errorMessageColor
     } else {
       self.underlineView.backgroundColor = self.isEditingOrSelected ? self.selectedUnderlineColor : self.underlineColor
     }
