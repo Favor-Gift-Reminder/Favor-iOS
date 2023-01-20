@@ -106,6 +106,7 @@ final class SetProfileViewController: BaseViewController, View {
     
     // State
     reactor.state
+      .skip(1)
       .map { $0.profileImage }
       .asDriver(onErrorJustReturn: nil)
       .drive(with: self, onNext: { owner, image in
