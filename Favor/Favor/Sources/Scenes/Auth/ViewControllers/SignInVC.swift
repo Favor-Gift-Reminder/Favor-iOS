@@ -54,9 +54,15 @@ final class SignInViewController: BaseViewController, View {
     return stackView
   }()
   
-  private lazy var forgotEmailButton = PlainFavorButton(.large, icon: .right, title: "이메일 찾기")
+  private lazy var forgotEmailButton: PlainFavorButton = {
+    let button = PlainFavorButton(.large, icon: .right, title: "이메일 찾기")
+    return button
+  }()
   
-  private lazy var forgotPWButton = PlainFavorButton(.large, icon: .right, title: "비밀번호 찾기")
+  private lazy var forgotPWButton: PlainFavorButton = {
+    let button = PlainFavorButton(.large, icon: .right, title: "비밀번호 찾기")
+    return button
+  }()
   
   private lazy var hStack: UIStackView = {
     let stackView = UIStackView()

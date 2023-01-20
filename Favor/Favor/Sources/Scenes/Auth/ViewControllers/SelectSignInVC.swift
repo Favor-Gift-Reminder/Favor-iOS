@@ -20,27 +20,31 @@ final class SelectSignInViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  private lazy var temporaryLogo = UILabel().then {
-    $0.font = .systemFont(ofSize: 48, weight: .bold)
-    $0.text = "Favor"
-  }
+  private lazy var temporaryLogo: UILabel = {
+    let label = UILabel()
+    label.font = .systemFont(ofSize: 48, weight: .bold)
+    label.text = "Favor"
+    return label
+  }()
   
-  private lazy var emailLoginButton = LargeFavorButton(
-    with: .black, title: "이메일로 로그인"
-  )
+  private lazy var emailLoginButton: LargeFavorButton = {
+    let button = LargeFavorButton(with: .black, title: "이메일로 로그인")
+    return button
+  }()
   
-  private lazy var signUpButton = PlainFavorButton(
-    .large,
-    icon: .right,
-    title: "신규 회원가입"
-  )
+  private lazy var signUpButton: PlainFavorButton = {
+    let button = PlainFavorButton(.large, icon: .right, title: "신규 회원가입")
+    return button
+  }()
   
-  private lazy var vStack = UIStackView().then {
-    $0.spacing = 8.0
-    $0.addArrangedSubview(self.emailLoginButton)
-    $0.addArrangedSubview(self.signUpButton)
-    $0.axis = .vertical
-  }
+  private lazy var vStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.spacing = 8.0
+    stackView.addArrangedSubview(self.emailLoginButton)
+    stackView.addArrangedSubview(self.signUpButton)
+    stackView.axis = .vertical
+    return stackView
+  }()
   
   // MARK: - Life Cycle
   
