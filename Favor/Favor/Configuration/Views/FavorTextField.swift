@@ -209,7 +209,10 @@ class FavorTextField: UITextField, BaseView {
   }
   
   func setupLayouts() {
-    [self.underlineView, self.messageLabel].forEach {
+    [
+      self.underlineView,
+      self.messageLabel
+    ].forEach {
       self.addSubview($0)
     }
   }
