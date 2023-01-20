@@ -41,7 +41,6 @@ final class SetProfileViewController: BaseViewController, View {
   
   private lazy var nameTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.delegate = self
     textField.placeholder = "이름"
     textField.autocapitalizationType = .none
     textField.enablesReturnKeyAutomatically = true
@@ -51,7 +50,6 @@ final class SetProfileViewController: BaseViewController, View {
   
   private lazy var idTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.delegate = self
     textField.placeholder = "유저 아이디"
     textField.autocapitalizationType = .none
     textField.enablesReturnKeyAutomatically = true
@@ -153,16 +151,6 @@ final class SetProfileViewController: BaseViewController, View {
       make.top.equalTo(self.vStack.snp.bottom).offset(56)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
-  }
-  
-}
-
-// MARK: - TextField
-
-extension SetProfileViewController: UITextFieldDelegate {
-  
-  func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-    return true
   }
   
 }
