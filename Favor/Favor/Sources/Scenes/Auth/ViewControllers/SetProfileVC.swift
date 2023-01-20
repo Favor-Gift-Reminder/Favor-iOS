@@ -20,16 +20,23 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - UI Components
   
   private lazy var profileImageButton: UIButton = {
-    let button = UIButton()
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .favorColor(.box1)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = UIImage(named: "ic_person")?.withTintColor(.favorColor(.white))
+    
+    let button = UIButton(configuration: config)
     button.clipsToBounds = true
     button.layer.cornerRadius = 120 / 2
-    button.backgroundColor = .favorColor(.box1)
-    button.setImage(UIImage(systemName: "person.fill"), for: .normal)
-    button.tintColor = .favorColor(.white)
     return button
   }()
   
   private lazy var plusImageView: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .favorColor(.box2)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = UIImage(named: "ic_add")?.withTintColor(.favorColor(.white))
+    
     let button = UIButton()
     button.setImage(UIImage(systemName: "plus"), for: .normal)
     button.layer.cornerRadius = 24
