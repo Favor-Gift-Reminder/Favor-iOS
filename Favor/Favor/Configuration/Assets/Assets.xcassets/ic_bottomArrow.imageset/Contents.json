@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "Wire_Icon_화살표4.png",
+      "filename" : "Wire_Icon_화살표4.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "Wire_Icon_화살표4@2x.png",
+      "filename" : "Wire_Icon_화살표4@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "Wire_Icon_화살표4@3x.png",
+      "filename" : "Wire_Icon_화살표4@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
