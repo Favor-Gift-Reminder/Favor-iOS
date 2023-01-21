@@ -9,19 +9,20 @@ import UIKit
 
 final class PlainFavorButton: UIButton {
   
-  enum Style {
-    case large
-    case small
-  }
-  
   enum Icon {
     case right
     case bottom
   }
   
+  enum Style {
+    case main
+    case onboarding
+    case viewMore
+  }
+  
   // MARK: - Initializer
   
-  init(_ style: Style, icon: Icon, title: String) {
+  init(_ style: Style, title: String, icon: Icon = .right) {
     super.init(frame: .zero)
     setupConfiguration(style, icon: icon, title: title)
   }
@@ -32,30 +33,39 @@ final class PlainFavorButton: UIButton {
   
   // MARK: - Setup
   
-  private func setupConfiguration(_ style: Style, icon: Icon, title: String) {
+  private func setupConfiguration(
+    _ style: Style,
+    icon: Icon,
+    title: String
+  ) {
     var config = UIButton.Configuration.plain()
     
     var titleContainer = AttributeContainer()
     titleContainer.foregroundColor = .favorColor(.detail)
     
     switch style {
-    case .large:
-      titleContainer.font = .favorFont(.regular, size: 14)
+    case .main:
+      titleContainer.font = .favorFont(.regular, size: 16)
+      config.imagePadding = 4
       
-    case .small:
+      switch icon {
+      case .bottom:
+        config.image = UIImage(named: "ic_bottomArrow")
+
+      case .right:
+        config.image = UIImage(named: "ic_rightArrow")
+      }
+      
+    case .onboarding:
+      titleContainer.font = .favorFont(.regular, size: 14)
+      config.image = UIImage(named: "ic_rightArrow")
+      config.imagePadding = 8
+      
+    case .viewMore:
       titleContainer.font = .favorFont(.regular, size: 12)
     }
     
-    switch icon {
-    case .bottom:
-      config.image = UIImage(named: "ic_bottomArrow")
-
-    case .right:
-      config.image = UIImage(named: "ic_rightArrow")
-    }
-    
     config.attributedTitle = AttributedString(title, attributes: titleContainer)
-    config.imagePadding = 8
     config.imagePlacement = .trailing
     
     self.configuration = config
