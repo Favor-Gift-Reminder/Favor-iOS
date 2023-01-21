@@ -65,7 +65,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// Placeholder의 폰트
-  var placeholderFont: UIFont? = .systemFont(ofSize: 16, weight: .regular) {
+  var placeholderFont: UIFont? = .favorFont(.regular, size: 16.0) {
     didSet {
       self.updatePlaceholder()
       self.setNeedsDisplay()
@@ -102,7 +102,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// 메시지의 폰트
-  var messageFont: UIFont? = .systemFont(ofSize: 12, weight: .regular) {
+  var messageFont: UIFont? = .favorFont(.regular, size: 12) {
     didSet {
       self.updateMessageLabel()
       self.setNeedsDisplay()
@@ -206,6 +206,7 @@ class FavorTextField: UITextField, BaseView {
   func setupStyles() {
     self.borderStyle = .none
     self.updateColors()
+    self.font = .favorFont(.regular, size: 16.0)
   }
   
   func setupLayouts() {
@@ -303,7 +304,7 @@ private extension FavorTextField {
   }
   
   func updatePlaceholder() {
-    guard let placeholder, let font = self.placeholderFont ?? font else { return }
+    guard let placeholder, let font = self.placeholderFont ?? self.font else { return }
     
     let color = self.isEnabled ? self.placeholderColor : .darkGray
     self.attributedPlaceholder = NSAttributedString(
