@@ -54,18 +54,13 @@ final class SignInViewController: BaseViewController, View {
     return stackView
   }()
   
-  // TODO: - plain 버튼으로 변경
-  private lazy var forgotEmailButton: UIButton = {
-    let button = UIButton()
-    button.setTitle("이메일 찾기", for: .normal)
-    button.setTitleColor(.favorColor(.detail), for: .normal)
+  private lazy var forgotEmailButton: PlainFavorButton = {
+    let button = PlainFavorButton(.large, icon: .right, title: "이메일 찾기")
     return button
   }()
   
-  private lazy var forgotPWButton: UIButton = {
-    let button = UIButton()
-    button.setTitle("비밀번호 찾기", for: .normal)
-    button.setTitleColor(.favorColor(.detail), for: .normal)
+  private lazy var forgotPWButton: PlainFavorButton = {
+    let button = PlainFavorButton(.large, icon: .right, title: "비밀번호 찾기")
     return button
   }()
   

@@ -22,7 +22,7 @@ final class SignUpViewController: BaseViewController, View {
   private lazy var emailTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이메일"
-    textField.updateMessage("실제 사용하는 이메일을 입력해주세요.", for: .info)
+    textField.updateMessage(ValidateManager.EmailValidate.empty.description, for: .info)
     textField.keyboardType = .emailAddress
     textField.autocapitalizationType = .none
     textField.enablesReturnKeyAutomatically = true
@@ -33,7 +33,7 @@ final class SignUpViewController: BaseViewController, View {
   private lazy var pwTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
-    textField.updateMessage("영문, 숫자 혼용 8자 이상", for: .info)
+    textField.updateMessage(ValidateManager.PasswordValidate.empty.description, for: .info)
     textField.keyboardType = .asciiCapable
     textField.autocapitalizationType = .none
     textField.isSecureTextEntry = true
@@ -45,6 +45,7 @@ final class SignUpViewController: BaseViewController, View {
   private lazy var pwValidateTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호 확인"
+    textField.updateMessage(ValidateManager.CheckPasswordValidate.empty.description, for: .info)
     textField.keyboardType = .asciiCapable
     textField.autocapitalizationType = .none
     textField.isSecureTextEntry = true
@@ -135,12 +136,12 @@ final class SignUpViewController: BaseViewController, View {
       .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
       .skip(1)
-      .drive(with: self, onNext: { owner, passwordValidate in
-        switch passwordValidate {
+      .drive(with: self, onNext: { owner, emailValidate in
+        switch emailValidate {
         case .empty, .invalid:
-          owner.emailTextField.updateMessage(passwordValidate.description, for: .error)
+          owner.emailTextField.updateMessage(emailValidate.description, for: .error)
         case .valid:
-          owner.emailTextField.updateMessage(nil, for: .info)
+          owner.emailTextField.updateMessage(emailValidate.description, for: .info)
         }
       })
       .disposed(by: self.disposeBag)
@@ -155,7 +156,7 @@ final class SignUpViewController: BaseViewController, View {
         case .empty, .invalid:
           owner.pwTextField.updateMessage(passwordValidate.description, for: .error)
         case .valid:
-          owner.pwTextField.updateMessage(nil, for: .info)
+          owner.pwTextField.updateMessage(passwordValidate.description, for: .info)
         }
       })
       .disposed(by: self.disposeBag)
@@ -170,7 +171,7 @@ final class SignUpViewController: BaseViewController, View {
         case .empty, .different:
           owner.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .error)
         case .identical:
-          owner.pwValidateTextField.updateMessage(nil, for: .info)
+          owner.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .info)
         }
       })
       .disposed(by: self.disposeBag)
