@@ -148,40 +148,22 @@ class FavorTextField: UITextField, BaseView {
   /// TextField의 밑줄 색상
   var underlineColor: UIColor = .favorColor(.box1) {
     didSet {
-      self.updateUnderlineView()
+      self.updateUnderlineColor()
     }
   }
   
   /// TextField가 선택됐을 때의 밑줄 색상
   var selectedUnderlineColor: UIColor = .favorColor(.box1) {
     didSet {
-      self.updateUnderlineView()
+      self.updateUnderlineColor()
     }
   }
   
   /// TextField의 밑줄 두께
-  var underlineHeight: CGFloat = 1.0 {
-    didSet {
-      self.updateUnderlineView()
-      self.setNeedsDisplay()
-    }
-  }
-  
-  /// TextField가 선택됐을 때의 밑줄 두께
-  var selectedUnderlineHeight: CGFloat = 1.5 {
-    didSet {
-      self.updateUnderlineView()
-      self.setNeedsDisplay()
-    }
-  }
+  var underlineHeight: CGFloat = 1.0
   
   /// TextField의 텍스트와 밑줄 사이의 거리
-  var underlineSpacing: CGFloat = 16.0 {
-    didSet {
-      self.updateUnderlineView()
-      self.setNeedsDisplay()
-    }
-  }
+  var underlineSpacing: CGFloat = 16.0
   
   // MARK: - Initializer
   
@@ -275,22 +257,12 @@ private extension FavorTextField {
   /// UIControl 상태에 따라 TextField를 업데이트합니다.
   func updateControl(animated: Bool = false) {
     self.updateColors()
-    self.updateUnderlineView()
     self.updateMessageLabel(animated: animated)
   }
   
   func updateColors() {
     self.updateUnderlineColor()
     self.updateMessageLabelColor()
-  }
-  
-  func updateUnderlineView() {
-    let height = self.isEditingOrSelected ? self.selectedUnderlineHeight : self.underlineHeight
-    self.underlineView.snp.updateConstraints { make in
-      make.height.equalTo(height)
-    }
-    
-    self.updateUnderlineColor()
   }
   
   func updateUnderlineColor() {
