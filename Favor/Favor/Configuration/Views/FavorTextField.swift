@@ -114,6 +114,13 @@ class FavorTextField: UITextField, BaseView {
     self.messageText != nil && !(self.messageText ?? "").isEmpty
   }
   
+  /// 텍스트필드가 선택됐을 때 정보 메시지 색상
+  var selectedMessageColor: UIColor? = .favorColor(.typo) {
+    didSet {
+      self.updateColors()
+    }
+  }
+  
   /// 정보 메시지 색상
   var infoMessageColor: UIColor? = .favorColor(.box2) {
     didSet {
@@ -122,7 +129,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// 에러 메시지 색상
-  var errorMessageColor: UIColor? = .red {
+  var errorMessageColor: UIColor? = .favorColor(.main) {
     didSet {
       self.updateColors()
     }
@@ -153,7 +160,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// TextField가 선택됐을 때의 밑줄 색상
-  var selectedUnderlineColor: UIColor = .favorColor(.box1) {
+  var selectedUnderlineColor: UIColor = .favorColor(.typo) {
     didSet {
       self.updateUnderlineColor()
     }
@@ -260,18 +267,18 @@ private extension FavorTextField {
     self.updateMessageLabel(animated: animated)
   }
   
+  /// 밑줄과 메시지 텍스트 색상을 업데이트합니다.
   func updateColors() {
     self.updateUnderlineColor()
     self.updateMessageLabelColor()
   }
   
+  /// 메시지 타입(`error`, `info`)과 TextField 선택 여부에 따라 밑줄 색상을 업데이트합니다.
   func updateUnderlineColor() {
-    if !self.isEnabled {
-      self.underlineView.backgroundColor = self.underlineColor
-    } else if self.hasMessage {
-      self.underlineView.backgroundColor = (self.messageType == .info) ? self.underlineColor : self.errorMessageColor
+    if self.isEditingOrSelected {
+      self.underlineView.backgroundColor = (self.messageType == .info) ? self.selectedUnderlineColor : self.errorMessageColor
     } else {
-      self.underlineView.backgroundColor = self.isEditingOrSelected ? self.selectedUnderlineColor : self.underlineColor
+      self.underlineView.backgroundColor = (self.messageType == .info) ? self.underlineColor : self.errorMessageColor
     }
   }
   
@@ -318,13 +325,18 @@ private extension FavorTextField {
     }
   }
   
-  /// 메시지 타입(`error`, `info`)에 따라 메시지 텍스트 색상을 업데이트합니다.
+  /// 메시지 타입(`error`, `info`)과 TextField 선택 여부에 따라 메시지 텍스트 색상을 업데이트합니다.
+  /// - Editing:
+  ///   - invalid: `.favorColor(.main)`
+  ///   - valid: `.favorColor(.typo)`
+  /// - NotEditing:
+  ///   - invalid: `.favorColor(.main)`
+  ///   - valid: `.favorColor(.box2)`
   func updateMessageLabelColor() {
-    switch self.messageType {
-    case .info:
-      self.messageLabel.textColor = self.infoMessageColor
-    case .error:
-      self.messageLabel.textColor = self.errorMessageColor
+    if self.isEditingOrSelected {
+      self.messageLabel.textColor = (self.messageType == .info) ? self.selectedMessageColor : self.errorMessageColor
+    } else {
+      self.messageLabel.textColor = (self.messageType == .info) ? self.infoMessageColor : self.errorMessageColor
     }
   }
   
