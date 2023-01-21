@@ -135,10 +135,10 @@ final class SignUpViewController: BaseViewController, View {
       .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
       .skip(1)
-      .drive(with: self, onNext: { owner, passwordValidate in
-        switch passwordValidate {
+      .drive(with: self, onNext: { owner, emailValidate in
+        switch emailValidate {
         case .empty, .invalid:
-          owner.emailTextField.updateMessage(passwordValidate.description, for: .error)
+          owner.emailTextField.updateMessage(emailValidate.description, for: .error)
         case .valid:
           owner.emailTextField.updateMessage(nil, for: .info)
         }
