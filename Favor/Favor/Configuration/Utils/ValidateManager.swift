@@ -18,12 +18,10 @@ enum ValidateManager {
     
     var description: String? {
       switch self {
-      case .empty:
-        return "이메일을 입력해주세요."
-      case .invalid:
-        return "올바르지 않은 이메일 형식입니다."
+      case .empty, .invalid:
+        return "실제 사용하는 이메일을 입력해주세요."
       case .valid:
-        return nil
+        return "사용 가능한 이메일입니다."
       }
     }
   }
@@ -47,12 +45,10 @@ enum ValidateManager {
     
     var description: String {
       switch self {
-      case .empty:
-        return "비밀번호를 입력해주세요."
-      case .invalid:
-        return "올바르지 않은 비밀번호 형식입니다."
+      case .empty, .invalid:
+        return "영문, 숫자 혼용 8자 이상"
       case .valid:
-        return ""
+        return "사용 가능한 비밀번호입니다."
       }
     }
   }
@@ -75,11 +71,11 @@ enum ValidateManager {
     var description: String {
       switch self {
       case .empty:
-        return "비밀번호를 한번 더 입력해주세요."
+        return "비밀번호를 한 번 더 입력해주세요."
       case .different:
         return "비밀번호가 일치하지 않습니다."
       case .identical:
-        return ""
+        return "비밀번호가 일치합니다."
       }
     }
   }
