@@ -37,6 +37,22 @@ class FavorTextField: UITextField, BaseView {
     }
   }
   
+  /// TextField 오른쪽에 SecureEyeButton이 있는 지 여부 Boolean.
+  /// 일반적인 경우 TextField 초기화 시 한 번 설정합니다.
+  var isSecureField: Bool = false {
+    didSet {
+      self.updateControl()
+    }
+  }
+  
+  /// TextField에 입력된 내용 숨김/표시 여부 Boolean
+  var isTextHidden: Bool = true {
+    didSet {
+      self.updateTextVisibility()
+      self.secureEyeButton.setNeedsUpdateConfiguration()
+    }
+  }
+  
   // MARK: - Animation
   
   /// 메시지가 표현되는 애니메이션 시간
@@ -172,11 +188,21 @@ class FavorTextField: UITextField, BaseView {
   /// TextField의 텍스트와 밑줄 사이의 거리
   var underlineSpacing: CGFloat = 16.0
   
+  // MARK: - Secure Eye Button
+  
+  lazy var secureEyeButton = UIButton(
+    configuration: .plain(),
+    primaryAction: UIAction(handler: { _ in
+      self.isTextHidden.toggle()
+    })
+  )
+  
   // MARK: - Initializer
   
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupBaseTextField()
+    self.setupSecureEyeButton()
   }
   
   required init?(coder: NSCoder) {
@@ -190,18 +216,30 @@ class FavorTextField: UITextField, BaseView {
     self.addEditingChangedObserver()
   }
   
+  private func setupSecureEyeButton() {
+    self.secureEyeButton.configurationUpdateHandler = { button in
+      var config = button.configuration
+      let showIcon: UIImage? = UIImage(named: "ic_eye_small")?.withTintColor(.favorColor(.detail))
+      let hideIcon: UIImage? = UIImage(named: "ic_eye_closed_small")?.withTintColor(.favorColor(.detail))
+      config?.image = self.isTextHidden ? hideIcon : showIcon
+      button.configuration = config
+    }
+  }
+  
   // MARK: - Setup
   
   func setupStyles() {
     self.borderStyle = .none
     self.updateColors()
     self.font = .favorFont(.regular, size: 16.0)
+    self.autocapitalizationType = .none
   }
   
   func setupLayouts() {
     [
       self.underlineView,
-      self.messageLabel
+      self.messageLabel,
+      self.secureEyeButton
     ].forEach {
       self.addSubview($0)
     }
@@ -220,6 +258,11 @@ class FavorTextField: UITextField, BaseView {
       make.width.equalToSuperview()
       make.leading.trailing.equalToSuperview()
       make.height.equalTo(self.messageLabel.font.lineHeight)
+    }
+    
+    self.secureEyeButton.snp.makeConstraints { make in
+      make.bottom.trailing.equalToSuperview()
+      make.width.height.equalTo(24)
     }
   }
   
@@ -265,6 +308,7 @@ private extension FavorTextField {
   func updateControl(animated: Bool = false) {
     self.updateColors()
     self.updateMessageLabel(animated: animated)
+    self.updateSecureEye()
   }
   
   /// 밑줄과 메시지 텍스트 색상을 업데이트합니다.
@@ -289,8 +333,8 @@ private extension FavorTextField {
     self.attributedPlaceholder = NSAttributedString(
       string: placeholder,
       attributes: [
-        NSAttributedString.Key.foregroundColor: color,
-        NSAttributedString.Key.font: font
+        .foregroundColor: color,
+        .font: font
       ]
     )
   }
@@ -338,6 +382,18 @@ private extension FavorTextField {
     } else {
       self.messageLabel.textColor = (self.messageType == .info) ? self.infoMessageColor : self.errorMessageColor
     }
+  }
+  
+  /// 암호화 필드 여부에 따라 TextField 속성들을 업데이트합니다.
+  func updateSecureEye() {
+    self.isTextHidden = self.isSecureField
+    self.isSecureTextEntry = self.isSecureField
+    self.secureEyeButton.isHidden = !self.isSecureField
+  }
+  
+  /// 암호화 필드의 텍스트 숨김/표시 여부에 따라 텍스트를 숨김/표시 여부를 업데이트합니다.
+  func updateTextVisibility() {
+    self.isSecureTextEntry = self.isTextHidden
   }
   
 }
