@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		let navigationController = UINavigationController()
     
-    setupNavigationBarAppearance()
+    self.setupNavigationBarAppearance()
 		
 		self.window = UIWindow(windowScene: windowScene)
 		self.window?.rootViewController = navigationController
