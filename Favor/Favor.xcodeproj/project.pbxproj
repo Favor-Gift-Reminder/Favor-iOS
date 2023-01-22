@@ -192,7 +192,6 @@
 			children = (
 				2EE07EE5296EDCB100048A3C /* Coordinator */,
 				2EE07EE4296EDCA900048A3C /* Reactor */,
-				2EE07EE3296EDCA500048A3C /* Views */,
 				2EE07EE2296EDC9E00048A3C /* ViewControllers */,
 			);
 			path = Auth;
@@ -604,13 +603,6 @@
 				2EE0D58E29786C1C0064E932 /* TermVC.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		2EE07EE3296EDCA500048A3C /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		2EE07EE4296EDCA900048A3C /* Reactor */ = {
