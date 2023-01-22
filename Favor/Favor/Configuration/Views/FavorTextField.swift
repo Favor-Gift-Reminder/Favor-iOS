@@ -203,6 +203,7 @@ class FavorTextField: UITextField, BaseView {
     super.init(frame: frame)
     self.setupBaseTextField()
     self.setupSecureEyeButton()
+    self.updateControl()
   }
   
   required init?(coder: NSCoder) {
