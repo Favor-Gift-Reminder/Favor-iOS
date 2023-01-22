@@ -217,6 +217,8 @@ class FavorTextField: UITextField, BaseView {
   }
   
   private func setupSecureEyeButton() {
+    self.rightView = self.secureEyeButton
+    self.rightViewMode = .always
     self.secureEyeButton.configurationUpdateHandler = { button in
       var config = button.configuration
       let showIcon: UIImage? = UIImage(named: "ic_eye_small")?.withTintColor(.favorColor(.detail))
@@ -238,8 +240,7 @@ class FavorTextField: UITextField, BaseView {
   func setupLayouts() {
     [
       self.underlineView,
-      self.messageLabel,
-      self.secureEyeButton
+      self.messageLabel
     ].forEach {
       self.addSubview($0)
     }
@@ -261,7 +262,6 @@ class FavorTextField: UITextField, BaseView {
     }
     
     self.secureEyeButton.snp.makeConstraints { make in
-      make.bottom.trailing.equalToSuperview()
       make.width.height.equalTo(24)
     }
   }
