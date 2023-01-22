@@ -24,7 +24,7 @@ final class SignUpViewController: BaseViewController, View {
     textField.placeholder = "이메일"
     textField.updateMessage(ValidateManager.EmailValidate.empty.description, for: .info)
     textField.keyboardType = .emailAddress
-    textField.autocapitalizationType = .none
+    textField.textContentType = .emailAddress
     textField.enablesReturnKeyAutomatically = true
     textField.returnKeyType = .next
     return textField
@@ -34,9 +34,8 @@ final class SignUpViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
     textField.updateMessage(ValidateManager.PasswordValidate.empty.description, for: .info)
-    textField.keyboardType = .asciiCapable
-    textField.autocapitalizationType = .none
-    textField.isSecureTextEntry = true
+    textField.isSecureField = true
+    textField.textContentType = .newPassword
     textField.enablesReturnKeyAutomatically = true
     textField.returnKeyType = .next
     return textField
@@ -46,9 +45,9 @@ final class SignUpViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호 확인"
     textField.updateMessage(ValidateManager.CheckPasswordValidate.empty.description, for: .info)
+    textField.isSecureField = true
     textField.keyboardType = .asciiCapable
-    textField.autocapitalizationType = .none
-    textField.isSecureTextEntry = true
+    textField.textContentType = .password
     textField.enablesReturnKeyAutomatically = true
     textField.returnKeyType = .done
     return textField
