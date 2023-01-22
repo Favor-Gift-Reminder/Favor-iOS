@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C565B296C24CB0067FC78 /* AuthReactor.swift */; };
 		2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
+		2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7E297290AB007B7EFF /* FavorTextField.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
 		2E635391295D906A00B23A14 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635390295D906A00B23A14 /* Differentiator */; };
@@ -31,6 +31,8 @@
 		2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */; };
 		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
+		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
+		2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DB0296FF4D100ED6221 /* SignInReactor.swift */; };
 		2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EA1296C5F4B00048A3C /* SearchCoordinator.swift */; };
 		2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EA5296C605A00048A3C /* NewGiftCoordinator.swift */; };
 		2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EAF296E7BF700048A3C /* ReminderCoordinator.swift */; };
@@ -42,6 +44,18 @@
 		2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED2296E8DE600048A3C /* EventEditVC.swift */; };
 		2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED6296E8E1900048A3C /* GiftVC.swift */; };
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
+		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
+		2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */; };
+		2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
+		2EE0D58329751EEF0064E932 /* SignUpReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58229751EEF0064E932 /* SignUpReactor.swift */; };
+		2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D584297524660064E932 /* SetProfileVC.swift */; };
+		2EE0D587297524880064E932 /* SetProfileReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D586297524880064E932 /* SetProfileReactor.swift */; };
+		2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58829756A7F0064E932 /* ValidateManager.swift */; };
+		2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */; };
+		2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58C297832D20064E932 /* PHPickerManager.swift */; };
+		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
+		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
+		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
@@ -61,10 +75,20 @@
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		2EE0D59A297A9D670064E932 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E7C3090295D7C4300BAC43D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 2E7C3097295D7C4300BAC43D;
+			remoteInfo = Favor;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
-		2E1C565B296C24CB0067FC78 /* AuthReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthReactor.swift; sourceTree = "<group>"; };
 		2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
+		2E306A7E297290AB007B7EFF /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
 		2E76F58229601B75002FF001 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E76F58729601EF2002FF001 /* SplashReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashReactor.swift; sourceTree = "<group>"; };
@@ -85,6 +109,8 @@
 		2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCoordinator.swift; sourceTree = "<group>"; };
 		2ECC94C9296026A200B530F7 /* TabBarPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarPage.swift; sourceTree = "<group>"; };
 		2ECD69B329672CF000D00F8F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
+		2ED22DAE296FF4A900ED6221 /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
+		2ED22DB0296FF4D100ED6221 /* SignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInReactor.swift; sourceTree = "<group>"; };
 		2EE07EA1296C5F4B00048A3C /* SearchCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCoordinator.swift; sourceTree = "<group>"; };
 		2EE07EA5296C605A00048A3C /* NewGiftCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftCoordinator.swift; sourceTree = "<group>"; };
 		2EE07EAF296E7BF700048A3C /* ReminderCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCoordinator.swift; sourceTree = "<group>"; };
@@ -104,6 +130,19 @@
 		2EE07ED8296E8E3400048A3C /* ShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVC.swift; sourceTree = "<group>"; };
 		2EE07EDC296E8E4F00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07EDE296E8E5600048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInVC.swift; sourceTree = "<group>"; };
+		2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInReactor.swift; sourceTree = "<group>"; };
+		2EE0D58029751EBD0064E932 /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
+		2EE0D58229751EEF0064E932 /* SignUpReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpReactor.swift; sourceTree = "<group>"; };
+		2EE0D584297524660064E932 /* SetProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileVC.swift; sourceTree = "<group>"; };
+		2EE0D586297524880064E932 /* SetProfileReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileReactor.swift; sourceTree = "<group>"; };
+		2EE0D58829756A7F0064E932 /* ValidateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateManager.swift; sourceTree = "<group>"; };
+		2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicManager.swift; sourceTree = "<group>"; };
+		2EE0D58C297832D20064E932 /* PHPickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerManager.swift; sourceTree = "<group>"; };
+		2EE0D58E29786C1C0064E932 /* TermVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermVC.swift; sourceTree = "<group>"; };
+		2EE0D594297A9D670064E932 /* FavorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FavorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
+		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
@@ -138,14 +177,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2EE0D591297A9D670064E932 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		2E1C5659296C24AE0067FC78 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */,
-				2E1C565B296C24CB0067FC78 /* AuthReactor.swift */,
+				2EE07EE5296EDCB100048A3C /* Coordinator */,
+				2EE07EE4296EDCA900048A3C /* Reactor */,
+				2EE07EE2296EDC9E00048A3C /* ViewControllers */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -174,6 +221,7 @@
 			children = (
 				E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */,
 				2E7C309A295D7C4300BAC43D /* Favor */,
+				2EE0D595297A9D670064E932 /* FavorUITests */,
 				2E7C3099295D7C4300BAC43D /* Products */,
 			);
 			sourceTree = "<group>";
@@ -182,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				2E7C3098295D7C4300BAC43D /* Favor.app */,
+				2EE0D594297A9D670064E932 /* FavorUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -544,12 +593,53 @@
 			path = Reactor;
 			sourceTree = "<group>";
 		};
+		2EE07EE2296EDC9E00048A3C /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */,
+				2ED22DAE296FF4A900ED6221 /* SignInVC.swift */,
+				2EE0D58029751EBD0064E932 /* SignUpVC.swift */,
+				2EE0D584297524660064E932 /* SetProfileVC.swift */,
+				2EE0D58E29786C1C0064E932 /* TermVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EE07EE4296EDCA900048A3C /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+				2EE07EE8296EDE9700048A3C /* SelectSignInReactor.swift */,
+				2ED22DB0296FF4D100ED6221 /* SignInReactor.swift */,
+				2EE0D58229751EEF0064E932 /* SignUpReactor.swift */,
+				2EE0D586297524880064E932 /* SetProfileReactor.swift */,
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
+		2EE07EE5296EDCB100048A3C /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */,
+			);
+			path = Coordinator;
+			sourceTree = "<group>";
+		};
+		2EE0D595297A9D670064E932 /* FavorUITests */ = {
+			isa = PBXGroup;
+			children = (
+				2EE0D596297A9D670064E932 /* FavorUITests.swift */,
+				2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */,
+			);
+			path = FavorUITests;
+			sourceTree = "<group>";
+		};
 		E5B182902974F39C00229C50 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
 				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
 				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				2E306A7E297290AB007B7EFF /* FavorTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -557,7 +647,10 @@
 		E5B182912974F43E00229C50 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
+				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 				E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */,
+				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -604,6 +697,24 @@
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
 			productType = "com.apple.product-type.application";
 		};
+		2EE0D593297A9D670064E932 /* FavorUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2EE0D59C297A9D670064E932 /* Build configuration list for PBXNativeTarget "FavorUITests" */;
+			buildPhases = (
+				2EE0D590297A9D670064E932 /* Sources */,
+				2EE0D591297A9D670064E932 /* Frameworks */,
+				2EE0D592297A9D670064E932 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2EE0D59B297A9D670064E932 /* PBXTargetDependency */,
+			);
+			name = FavorUITests;
+			productName = FavorUITests;
+			productReference = 2EE0D594297A9D670064E932 /* FavorUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -611,11 +722,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1410;
+				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1410;
 				TargetAttributes = {
 					2E7C3097295D7C4300BAC43D = {
 						CreatedOnToolsVersion = 14.1;
+					};
+					2EE0D593297A9D670064E932 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = 2E7C3097295D7C4300BAC43D;
 					};
 				};
 			};
@@ -641,6 +756,7 @@
 			projectRoot = "";
 			targets = (
 				2E7C3097295D7C4300BAC43D /* Favor */,
+				2EE0D593297A9D670064E932 /* FavorUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -657,6 +773,13 @@
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
 				E57F3139296FF48400E3D449 /* API-Info.plist in Resources */,
 				E5B1828A2974D5DE00229C50 /* .gitkeep in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		2EE0D592297A9D670064E932 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -690,47 +813,76 @@
 			buildActionMask = 2147483647;
 			files = (
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
+				2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */,
+				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				E57F313F297000DB00E3D449 /* BaseView.swift in Sources */,
+				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,
 				2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */,
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
+				2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */,
 				2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */,
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
 				2EE07EC9296E8D6200048A3C /* MyPageCoordinator.swift in Sources */,
+				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
+				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
 				2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */,
 				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
+				2EE0D58329751EEF0064E932 /* SignUpReactor.swift in Sources */,
+				2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */,
 				2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
+				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */,
 				E5B182972974F54A00229C50 /* UpdateHandlerManager.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
-				2E1C565C296C24CB0067FC78 /* AuthReactor.swift in Sources */,
+				2EE0D587297524880064E932 /* SetProfileReactor.swift in Sources */,
 				E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */,
 				2E76F58329601B75002FF001 /* TabBarCoordinator.swift in Sources */,
 				2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */,
+				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
 				2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
+				2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */,
+				2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		2EE0D590297A9D670064E932 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */,
+				2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2EE0D59B297A9D670064E932 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 2E7C3097295D7C4300BAC43D /* Favor */;
+			targetProxy = 2EE0D59A297A9D670064E932 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */ = {
@@ -865,7 +1017,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 95JTZ6AP78;
+				DEVELOPMENT_TEAM = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -879,7 +1031,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.favor.Favor-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -897,7 +1049,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 95JTZ6AP78;
+				DEVELOPMENT_TEAM = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -911,7 +1063,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.favor.Favor-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -919,6 +1071,42 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		2EE0D59D297A9D670064E932 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XW996HTK32;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.favor.FavorUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Favor;
+			};
+			name = Debug;
+		};
+		2EE0D59E297A9D670064E932 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XW996HTK32;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.favor.FavorUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Favor;
 			};
 			name = Release;
 		};
@@ -939,6 +1127,15 @@
 			buildConfigurations = (
 				2E7C30AD295D7C4500BAC43D /* Debug */,
 				2E7C30AE295D7C4500BAC43D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2EE0D59C297A9D670064E932 /* Build configuration list for PBXNativeTarget "FavorUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2EE0D59D297A9D670064E932 /* Debug */,
+				2EE0D59E297A9D670064E932 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

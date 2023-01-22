@@ -7,6 +7,8 @@
 
 import UIKit
 
+import SnapKit
+
 final class LargeFavorButton: UIButton {
   
   enum Style {
@@ -19,6 +21,9 @@ final class LargeFavorButton: UIButton {
   init(with style: Style, title: String) {
     super.init(frame: .zero)
     setupConfiguration(with: style, title: title)
+    self.snp.makeConstraints { make in
+      make.height.equalTo(56.0)
+    }
   }
   
   required init?(coder: NSCoder) {
