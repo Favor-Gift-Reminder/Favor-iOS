@@ -48,7 +48,7 @@ private extension SceneDelegate {
       .font: UIFont.favorFont(.bold, size: 18)
     ]
     
-    appearance.backgroundColor = .favorColor(.background)
+    appearance.backgroundColor = .clear
     appearance.shadowColor = nil
         
     UINavigationBar.appearance().compactAppearance = appearance
