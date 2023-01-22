@@ -285,7 +285,7 @@ private extension FavorTextField {
   func updatePlaceholder() {
     guard let placeholder, let font = self.placeholderFont ?? self.font else { return }
     
-    let color = self.isEnabled ? self.placeholderColor : .darkGray
+    let color = self.isEnabled ? self.placeholderColor : .favorColor(.box1)
     self.attributedPlaceholder = NSAttributedString(
       string: placeholder,
       attributes: [
