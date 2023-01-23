@@ -37,6 +37,7 @@ enum UpdateHandlerManager {
     return handler
   }
   
+  /// `OnboardingVC`에서 사용하는 `UpdateHandler`입니다.
   static func onboardingHandler(_ index: Int) -> UIButton.ConfigurationUpdateHandler {
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       
