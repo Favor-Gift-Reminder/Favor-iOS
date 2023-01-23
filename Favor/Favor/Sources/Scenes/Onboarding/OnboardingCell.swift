@@ -13,14 +13,14 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Properties
 
-  private let mainImageView: UIImageView = {
+  private let imageView: UIImageView = {
     let iv = UIImageView()
     iv.backgroundColor = .favorColor(.box1)
     
     return iv
   }()
   
-  private let mainLabel: UILabel = {
+  private let label: UILabel = {
     let lb = UILabel()
     lb.text = "안녕하세요"
     
@@ -30,8 +30,8 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   private lazy var mainStack: UIStackView = {
     let sv = UIStackView()
     [
-      mainImageView,
-      mainLabel
+      imageView,
+      label
     ].forEach {
       sv.addArrangedSubview($0)
     }
@@ -41,9 +41,6 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
     
     return sv
   }()
-  
-  let startBtn = LargeFavorButton(with: .white, title: "다음")
-  private let mainContainerView = UIView()
   
   // MARK: - Initialize
   
@@ -66,34 +63,16 @@ extension OnboardingCell: BaseView {
   func setupStyles() {}
   
   func setupLayouts() {
-    mainContainerView.addSubview(mainStack)
-    
-    [
-      mainContainerView,
-      startBtn
-    ].forEach {
-      contentView.addSubview($0)
-    }
+    contentView.addSubview(mainStack)
   }
   
   func setupConstraints() {
-    mainContainerView.snp.makeConstraints { make in
-      make.top.leading.trailing.equalToSuperview()
-      make.bottom.equalTo(startBtn.snp.top)
-    }
-    
-    mainStack.snp.makeConstraints { make in
-      make.center.equalToSuperview()
-    }
-    
-    mainImageView.snp.makeConstraints { make in
+    imageView.snp.makeConstraints { make in
       make.width.height.equalTo(100)
     }
-    
-    startBtn.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.height.equalTo(56)
-      make.bottom.equalToSuperview().inset(53)
+
+    mainStack.snp.makeConstraints { make in
+      make.center.equalToSuperview()
     }
   }
 }
