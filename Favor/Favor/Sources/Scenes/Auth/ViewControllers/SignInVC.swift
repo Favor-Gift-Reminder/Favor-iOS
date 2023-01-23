@@ -55,12 +55,12 @@ final class SignInViewController: BaseViewController, View {
   }()
   
   private lazy var forgotEmailButton: PlainFavorButton = {
-    let button = PlainFavorButton(.large, icon: .right, title: "이메일 찾기")
+    let button = PlainFavorButton(.onboarding, title: "이메일 찾기")
     return button
   }()
   
   private lazy var forgotPWButton: PlainFavorButton = {
-    let button = PlainFavorButton(.large, icon: .right, title: "비밀번호 찾기")
+    let button = PlainFavorButton(.onboarding, title: "비밀번호 찾기")
     return button
   }()
   
