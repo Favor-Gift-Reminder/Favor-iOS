@@ -36,4 +36,25 @@ enum UpdateHandlerManager {
     }
     return handler
   }
+  
+  static func onboardingHandler(_ index: Int) -> UIButton.ConfigurationUpdateHandler {
+    let handler: UIButton.ConfigurationUpdateHandler = { button in
+      
+      var newContainer = AttributeContainer()
+      newContainer.font = .favorFont(.bold, size: 18)
+      
+      switch index {
+      case 0...1:
+        newContainer.foregroundColor = .favorColor(.typo)
+        button.configuration?.baseBackgroundColor = .favorColor(.box1)
+        button.configuration?.attributedTitle = AttributedString("다음", attributes: newContainer)
+      default:
+        newContainer.foregroundColor = .favorColor(.white)
+        button.configuration?.baseBackgroundColor = .favorColor(.typo)
+        button.configuration?.attributedTitle = AttributedString("계속하기", attributes: newContainer)
+      }
+    }
+    
+    return handler
+  }
 }
