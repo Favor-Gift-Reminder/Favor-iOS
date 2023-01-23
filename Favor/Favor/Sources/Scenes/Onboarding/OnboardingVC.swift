@@ -56,7 +56,12 @@ final class OnboardingViewController: BaseViewController {
     return section
   }()
   
-  private let continueButton = LargeFavorButton(with: .white, title: "다음")
+  private lazy var continueButton: LargeFavorButton = {
+    let btn = LargeFavorButton(with: .white, title: "다음")
+    btn.addTarget(self, action: #selector(didTapContinueButton), for: .touchUpInside)
+    
+    return btn
+  }()
   
   private var currentPage: Int = 0 {
     didSet {
@@ -98,6 +103,14 @@ final class OnboardingViewController: BaseViewController {
       make.leading.trailing.equalTo(view.layoutMarginsGuide)
       make.bottom.equalToSuperview().inset(53)
     }
+  }
+  
+  // MARK: - Selectors
+  
+  @objc
+  private func didTapContinueButton() {
+    let indexPath = IndexPath(row: self.currentPage + 1, section: 0)
+    self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
   }
 }
 
