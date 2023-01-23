@@ -50,11 +50,21 @@ final class OnboardingViewController: BaseViewController {
     // PageControl currentPage 반응 Closure
     section.visibleItemsInvalidationHandler = { _, offset, _ in
       let width = self.collectionView.frame.width
-      self.pageControl.currentPage = Int(offset.x / width)
+      self.currentPage = Int(offset.x / width)
     }
     
     return section
   }()
+  
+  private let continueButton = LargeFavorButton(with: .white, title: "다음")
+  
+  private var currentPage: Int = 0 {
+    didSet {
+      self.pageControl.currentPage = currentPage
+      let handler = UpdateHandlerManager.onboardingHandler(currentPage)
+      continueButton.configurationUpdateHandler = handler
+    }
+  }
   
   // MARK: - Setup
   
@@ -65,7 +75,8 @@ final class OnboardingViewController: BaseViewController {
   override func setupLayouts() {
     [
       pageControl,
-      collectionView
+      collectionView,
+      continueButton
     ].forEach {
       view.addSubview($0)
     }
@@ -78,8 +89,14 @@ final class OnboardingViewController: BaseViewController {
     }
     
     collectionView.snp.makeConstraints { make in
-      make.leading.trailing.bottom.equalToSuperview()
+      make.leading.trailing.equalToSuperview()
       make.top.equalTo(pageControl.snp.bottom)
+      make.bottom.equalTo(continueButton.snp.top)
+    }
+    
+    continueButton.snp.makeConstraints { make in
+      make.leading.trailing.equalTo(view.layoutMarginsGuide)
+      make.bottom.equalToSuperview().inset(53)
     }
   }
 }
@@ -96,10 +113,6 @@ extension OnboardingViewController: UICollectionViewDataSource, UICollectionView
       for: indexPath
     ) as? OnboardingCell else {
       return UICollectionViewCell()
-    }
-
-    if indexPath.row == 2 {
-      cell.startBtn.isHidden = false
     }
     
     return cell
