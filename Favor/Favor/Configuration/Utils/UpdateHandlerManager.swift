@@ -14,22 +14,21 @@ enum UpdateHandlerManager {
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       switch button.state {
       case .normal:
-        button.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attr in
-          var newAttr = attr
-          newAttr.foregroundColor = .favorColor(.white)
-          
-          return newAttr
-        }
-        button.configuration?.baseBackgroundColor = .favorColor(.typo)
+        self.updateAttributes(
+          button,
+          font: .favorFont(.bold, size: 18),
+          backgroundColor: .favorColor(.typo),
+          foregroundColor: .favorColor(.white)
+        )
         
       case .disabled:
-        button.configuration?.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { attr in
-          var newAttr = attr
-          newAttr.foregroundColor = .favorColor(.typo)
-          
-          return newAttr
-        }
-        button.configuration?.baseBackgroundColor = .favorColor(.box1)
+        self.updateAttributes(
+          button,
+          font: .favorFont(.bold, size: 18),
+          backgroundColor: .favorColor(.box1),
+          foregroundColor: .favorColor(.typo)
+        )
+        
       default:
         break
       }
@@ -43,7 +42,7 @@ enum UpdateHandlerManager {
       
       switch index {
       case 0...1:
-        updateAttributes(
+        self.updateAttributes(
           button,
           title: "다음",
           font: .favorFont(.bold, size: 18),
@@ -51,7 +50,7 @@ enum UpdateHandlerManager {
           foregroundColor: .favorColor(.typo)
         )
       default:
-        updateAttributes(
+        self.updateAttributes(
           button,
           title: "계속하기",
           font: .favorFont(.bold, size: 18),

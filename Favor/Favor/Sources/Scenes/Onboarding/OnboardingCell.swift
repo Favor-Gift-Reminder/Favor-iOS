@@ -46,9 +46,9 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    setupStyles()
-    setupLayouts()
-    setupConstraints()
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
   }
   
   required init?(coder: NSCoder) {
@@ -63,15 +63,15 @@ extension OnboardingCell: BaseView {
   func setupStyles() {}
   
   func setupLayouts() {
-    contentView.addSubview(self.mainStack)
+    self.contentView.addSubview(self.mainStack)
   }
   
   func setupConstraints() {
-    imageView.snp.makeConstraints { make in
+    self.imageView.snp.makeConstraints { make in
       make.width.height.equalTo(100)
     }
 
-    mainStack.snp.makeConstraints { make in
+    self.mainStack.snp.makeConstraints { make in
       make.center.equalToSuperview()
     }
   }
