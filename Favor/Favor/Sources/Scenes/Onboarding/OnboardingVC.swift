@@ -67,7 +67,7 @@ final class OnboardingViewController: BaseViewController {
     didSet {
       self.pageControl.currentPage = currentPage
       let handler = UpdateHandlerManager.onboardingHandler(currentPage)
-      continueButton.configurationUpdateHandler = handler
+      self.continueButton.configurationUpdateHandler = handler
     }
   }
   
@@ -79,27 +79,27 @@ final class OnboardingViewController: BaseViewController {
   
   override func setupLayouts() {
     [
-      pageControl,
-      collectionView,
-      continueButton
+      self.pageControl,
+      self.collectionView,
+      self.continueButton
     ].forEach {
       view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    pageControl.snp.makeConstraints { make in
+    self.pageControl.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalTo(view.safeAreaLayoutGuide).inset(66)
     }
     
-    collectionView.snp.makeConstraints { make in
+    self.collectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview()
       make.top.equalTo(pageControl.snp.bottom)
       make.bottom.equalTo(continueButton.snp.top)
     }
     
-    continueButton.snp.makeConstraints { make in
+    self.continueButton.snp.makeConstraints { make in
       make.leading.trailing.equalTo(view.layoutMarginsGuide)
       make.bottom.equalToSuperview().inset(53)
     }

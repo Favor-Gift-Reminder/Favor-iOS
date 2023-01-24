@@ -30,8 +30,8 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   private lazy var mainStack: UIStackView = {
     let sv = UIStackView()
     [
-      imageView,
-      label
+      self.imageView,
+      self.label
     ].forEach {
       sv.addArrangedSubview($0)
     }
@@ -63,7 +63,7 @@ extension OnboardingCell: BaseView {
   func setupStyles() {}
   
   func setupLayouts() {
-    contentView.addSubview(mainStack)
+    contentView.addSubview(self.mainStack)
   }
   
   func setupConstraints() {
