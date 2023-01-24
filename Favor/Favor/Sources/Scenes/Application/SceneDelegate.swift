@@ -48,6 +48,7 @@ private extension SceneDelegate {
       .font: UIFont.favorFont(.bold, size: 18)
     ]
     
+    appearance.configureWithTransparentBackground()
     appearance.backgroundColor = .clear
     appearance.shadowColor = nil
         
