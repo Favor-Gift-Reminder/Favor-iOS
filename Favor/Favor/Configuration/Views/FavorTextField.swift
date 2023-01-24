@@ -297,6 +297,15 @@ class FavorTextField: UITextField, BaseView {
     self.messageType = messageType
   }
   
+  func addLeftItem(item: UIView) {
+    item.snp.makeConstraints { make in
+      make.height.equalTo(24)
+      make.width.equalTo(28)
+    }
+    self.leftView = item
+    self.leftViewMode = .always
+  }
+  
 }
 
 // MARK: - Privates
