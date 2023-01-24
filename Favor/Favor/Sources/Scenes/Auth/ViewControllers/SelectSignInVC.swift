@@ -33,7 +33,7 @@ final class SelectSignInViewController: BaseViewController, View {
   }()
   
   private lazy var signUpButton: PlainFavorButton = {
-    let button = PlainFavorButton(.large, icon: .right, title: "신규 회원가입")
+    let button = PlainFavorButton(.onboarding, title: "신규 회원가입")
     return button
   }()
   
@@ -91,5 +91,4 @@ final class SelectSignInViewController: BaseViewController, View {
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
   }
-  
 }
