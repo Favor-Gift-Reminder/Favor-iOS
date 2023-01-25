@@ -15,20 +15,20 @@ enum TabBarPage: Int, CaseIterable {
     switch self {
     case .home:
       return UITabBarItem(
-        title: nil,
-        image: nil,
+        title: "홈",
+        image: UIImage(systemName: "house.fill"),
         selectedImage: nil
       )
     case .reminder:
       return UITabBarItem(
-        title: nil,
-        image: nil,
+        title: "리마인더",
+        image: UIImage(systemName: "bell.fill"),
         selectedImage: nil
       )
     case .myPage:
       return UITabBarItem(
-        title: nil,
-        image: nil,
+        title: "마이페이지",
+        image: UIImage(systemName: "person.circle.fill"),
         selectedImage: nil
       )
     }

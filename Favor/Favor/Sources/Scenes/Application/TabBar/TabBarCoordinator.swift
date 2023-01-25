@@ -10,6 +10,7 @@ import UIKit
 final class TabBarCoordinator: BaseCoordinator {
   
   // MARK: - Properties
+  
   var tabBarController: FavorTabBarController
   
   // MARK: - Initializer
@@ -52,11 +53,14 @@ private extension TabBarCoordinator {
     let tabNavController = UINavigationController()
     
     tabNavController.tabBarItem = page.tabBarItem
+    self.showTabCoordinator(of: page, to: tabNavController)
     return tabNavController
   }
   
   func setupTabBarController(with viewControllers: [UIViewController]) {
     self.tabBarController.setViewControllers(viewControllers, animated: true)
+    
+    self.navigationController.pushViewController(self.tabBarController, animated: true)
   }
   
   func showTabCoordinator(of page: TabBarPage, to tabNavController: UINavigationController) {
@@ -72,15 +76,15 @@ private extension TabBarCoordinator {
   
   // TODO: - TabBar VC들 붙여주기.
   func showHomeFlow(to tabNavController: UINavigationController) {
-    fatalError("showHomeFlow(to tabNavController:) method must be implemented.")
+    print("showHomeFlow(to tabNavController:) method must be implemented.")
   }
   
   func showReminderFlow(to tabNavController: UINavigationController) {
-    fatalError("showReminderFlow(to tabNavController:) method must be implemented.")
+    print("showReminderFlow(to tabNavController:) method must be implemented.")
   }
   
   func showMyPageFlow(to tabNavController: UINavigationController) {
-    fatalError("showMyPageFlow(to tabNavController:) method must be implemented.")
+    print("showMyPageFlow(to tabNavController:) method must be implemented.")
   }
   
 }

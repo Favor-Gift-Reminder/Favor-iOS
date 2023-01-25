@@ -16,8 +16,9 @@ final class AppCoordinator: BaseCoordinator {
 	// MARK: - Functions
 	
 	override func start() {
-    self.showOnboardFlow()
+//    self.showOnboardFlow()
 //    self.showAuthFlow()
+    self.showTabBarFlow()
 	}
 }
 
@@ -54,7 +55,18 @@ extension AppCoordinator {
 extension AppCoordinator: CoordinatorFinishDelegate {
   
   func coordinatorDidFinish(childCoordinator: some Coordinator) {
-    print("Fin.")
+    self.finish(childCoordinator: childCoordinator)
+    
+    self.navigationController.viewControllers.removeAll()
+    
+    switch childCoordinator.self {
+    case is AuthCoordinator:
+      self.showTabBarFlow()
+    case is TabBarCoordinator:
+      self.showAuthFlow()
+    default:
+      break
+    }
   }
   
 }
