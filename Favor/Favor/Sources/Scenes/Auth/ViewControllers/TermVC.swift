@@ -11,6 +11,10 @@ import SnapKit
 
 final class TermViewController: BaseViewController {
   
+  // MARK: - Properties
+  
+  var coordinator: AuthCoordinator?
+  
   // MARK: - UI Components
   
   private lazy var logoImage: UIImageView = {
@@ -31,8 +35,14 @@ final class TermViewController: BaseViewController {
   
   private lazy var startButton: LargeFavorButton = {
     let button = LargeFavorButton(with: .white, title: "시작하기")
+    button.addTarget(self, action: #selector(startButtonDidTap), for: .touchUpInside)
     return button
   }()
+  
+  @objc
+  private func startButtonDidTap() {
+    self.coordinator?.finish()
+  }
   
   // MARK: - UI Setups
   

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2E171164298035A400E34121 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E171163298035A400E34121 /* TabBarController.swift */; };
+		2E1711692980C90E00E34121 /* CoordinatorFinishDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1711682980C90E00E34121 /* CoordinatorFinishDelegate.swift */; };
 		2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
 		2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7E297290AB007B7EFF /* FavorTextField.swift */; };
@@ -88,6 +89,7 @@
 
 /* Begin PBXFileReference section */
 		2E171163298035A400E34121 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		2E1711682980C90E00E34121 /* CoordinatorFinishDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFinishDelegate.swift; sourceTree = "<group>"; };
 		2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		2E306A7E297290AB007B7EFF /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
@@ -189,6 +191,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2E1711672980C90100E34121 /* Delegate */ = {
+			isa = PBXGroup;
+			children = (
+				2E1711682980C90E00E34121 /* CoordinatorFinishDelegate.swift */,
+			);
+			path = Delegate;
+			sourceTree = "<group>";
+		};
 		2E1C5659296C24AE0067FC78 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
@@ -661,6 +671,7 @@
 		E5E28ECA295DAC15006B9245 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				2E1711672980C90100E34121 /* Delegate */,
 				2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */,
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E57F313E297000DB00E3D449 /* BaseView.swift */,
@@ -861,6 +872,7 @@
 				2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
 				2EE07EB0296E7BF700048A3C /* ReminderCoordinator.swift in Sources */,
+				2E1711692980C90E00E34121 /* CoordinatorFinishDelegate.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */,
