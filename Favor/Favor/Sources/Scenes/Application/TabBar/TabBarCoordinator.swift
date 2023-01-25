@@ -10,12 +10,12 @@ import UIKit
 final class TabBarCoordinator: BaseCoordinator {
   
   // MARK: - Properties
-  var tabBarController: UITabBarController
+  var tabBarController: FavorTabBarController
   
   // MARK: - Initializer
   
   override init(_ navigationController: UINavigationController) {
-    self.tabBarController = UITabBarController()
+    self.tabBarController = FavorTabBarController()
     super.init(navigationController)
   }
   
