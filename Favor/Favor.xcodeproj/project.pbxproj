@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		2E171164298035A400E34121 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E171163298035A400E34121 /* TabBarController.swift */; };
 		2E1711692980C90E00E34121 /* CoordinatorFinishDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1711682980C90E00E34121 /* CoordinatorFinishDelegate.swift */; };
+		2E17116B2981601C00E34121 /* BaseNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E17116A2981601C00E34121 /* BaseNavigationController.swift */; };
 		2E1C565E296C24E30067FC78 /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
 		2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7E297290AB007B7EFF /* FavorTextField.swift */; };
@@ -90,6 +91,7 @@
 /* Begin PBXFileReference section */
 		2E171163298035A400E34121 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2E1711682980C90E00E34121 /* CoordinatorFinishDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorFinishDelegate.swift; sourceTree = "<group>"; };
+		2E17116A2981601C00E34121 /* BaseNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNavigationController.swift; sourceTree = "<group>"; };
 		2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		2E306A7E297290AB007B7EFF /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
@@ -673,6 +675,7 @@
 			children = (
 				2E1711672980C90100E34121 /* Delegate */,
 				2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */,
+				2E17116A2981601C00E34121 /* BaseNavigationController.swift */,
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
 				E57F313E297000DB00E3D449 /* BaseView.swift */,
 				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
@@ -866,6 +869,7 @@
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileReactor.swift in Sources */,
 				E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */,
+				2E17116B2981601C00E34121 /* BaseNavigationController.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE07EA2296C5F4B00048A3C /* SearchCoordinator.swift in Sources */,
 				2E76F58329601B75002FF001 /* TabBarCoordinator.swift in Sources */,

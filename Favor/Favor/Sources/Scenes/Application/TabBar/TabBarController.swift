@@ -9,6 +9,8 @@ import UIKit
 
 final class FavorTabBarController: UITabBarController {
 
+  // MARK: - Life Cycle
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -16,6 +18,8 @@ final class FavorTabBarController: UITabBarController {
   }
 
 }
+
+// MARK: - Privates
 
 private extension FavorTabBarController {
   

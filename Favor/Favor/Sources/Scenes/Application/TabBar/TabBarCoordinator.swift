@@ -50,7 +50,7 @@ final class TabBarCoordinator: BaseCoordinator {
 private extension TabBarCoordinator {
   
   func createTabNavController(of page: TabBarPage) -> UINavigationController {
-    let tabNavController = UINavigationController()
+    let tabNavController = BaseNavigationController()
     
     tabNavController.tabBarItem = page.tabBarItem
     self.showTabCoordinator(of: page, to: tabNavController)
@@ -74,17 +74,19 @@ private extension TabBarCoordinator {
     }
   }
   
-  // TODO: - TabBar VC들 붙여주기.
   func showHomeFlow(to tabNavController: UINavigationController) {
-    print("showHomeFlow(to tabNavController:) method must be implemented.")
+    let homeCoordinator = HomeCoordinator(tabNavController)
+    self.start(childCoordinator: homeCoordinator)
   }
   
   func showReminderFlow(to tabNavController: UINavigationController) {
-    print("showReminderFlow(to tabNavController:) method must be implemented.")
+    let reminderCoordinator = ReminderCoordinator(tabNavController)
+    self.start(childCoordinator: reminderCoordinator)
   }
   
   func showMyPageFlow(to tabNavController: UINavigationController) {
-    print("showMyPageFlow(to tabNavController:) method must be implemented.")
+    let myPageCoordinator = MyPageCoordinator(tabNavController)
+    self.start(childCoordinator: myPageCoordinator)
   }
   
 }
