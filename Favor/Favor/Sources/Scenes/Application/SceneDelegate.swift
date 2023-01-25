@@ -14,9 +14,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
-		let navigationController = UINavigationController()
-    
-    self.setupNavigationBarAppearance()
+		let navigationController = BaseNavigationController()
 		
 		self.window = UIWindow(windowScene: windowScene)
 		self.window?.rootViewController = navigationController
@@ -25,34 +23,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		self.appCoordinator = AppCoordinator(navigationController)
 		self.appCoordinator?.start()
 	}
-}
-
-private extension SceneDelegate {
-  func setupNavigationBarAppearance() {
-    let appearance = UINavigationBarAppearance()
-    let backButtonAppearance = UIBarButtonItemAppearance()
-    
-    let leftArrowImage = UIImage(named: "ic_leftArrow")?
-      .withRenderingMode(.alwaysOriginal)
-      .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
-    
-    backButtonAppearance.normal.titleTextAttributes = [
-      .foregroundColor: UIColor.clear
-    ]
-    
-    appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
-    appearance.backButtonAppearance = backButtonAppearance
-    
-    appearance.titleTextAttributes = [
-      .foregroundColor: UIColor.favorColor(.typo),
-      .font: UIFont.favorFont(.bold, size: 18)
-    ]
-    
-    appearance.backgroundColor = .clear
-    appearance.shadowColor = nil
-        
-    UINavigationBar.appearance().compactAppearance = appearance
-    UINavigationBar.appearance().standardAppearance = appearance
-    UINavigationBar.appearance().scrollEdgeAppearance = appearance
-  }
 }
