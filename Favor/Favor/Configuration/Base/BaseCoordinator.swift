@@ -11,6 +11,7 @@ class BaseCoordinator: Coordinator {
 	
 	// MARK: - Properties
 	
+  weak var finishDelegate: CoordinatorFinishDelegate?
 	var childCoordinators: [any Coordinator]
 	var navigationController: UINavigationController
 	weak var parentCoordinator: Coordinator?
