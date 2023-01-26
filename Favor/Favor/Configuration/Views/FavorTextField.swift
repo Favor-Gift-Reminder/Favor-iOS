@@ -250,15 +250,13 @@ class FavorTextField: UITextField, BaseView {
   func setupConstraints() {
     self.underlineView.snp.makeConstraints { make in
       make.top.equalTo(self.snp.bottom).offset(self.underlineSpacing)
-      make.width.equalToSuperview()
-      make.leading.trailing.equalToSuperview()
+      make.width.leading.trailing.equalToSuperview()
       make.height.equalTo(self.underlineHeight)
     }
     
     self.messageLabel.snp.makeConstraints { make in
       make.top.equalTo(self.underlineView.snp.bottom).offset(self.messageLabelSpacing)
-      make.width.equalToSuperview()
-      make.leading.trailing.equalToSuperview()
+      make.width.leading.trailing.equalToSuperview()
       make.height.equalTo(self.messageLabel.font.lineHeight)
     }
     
@@ -297,13 +295,20 @@ class FavorTextField: UITextField, BaseView {
     self.messageType = messageType
   }
   
+  func addLeftItem(item: UIView) {
+    item.snp.makeConstraints { make in
+      make.height.equalTo(24)
+      make.width.equalTo(28)
+    }
+    self.leftView = item
+    self.leftViewMode = .always
+  }
+  
 }
 
 // MARK: - Privates
 
 private extension FavorTextField {
-  
-  // MARK: - Updates
   
   /// UIControl 상태에 따라 TextField를 업데이트합니다.
   func updateControl(animated: Bool = false) {
@@ -371,12 +376,6 @@ private extension FavorTextField {
   }
   
   /// 메시지 타입(`error`, `info`)과 TextField 선택 여부에 따라 메시지 텍스트 색상을 업데이트합니다.
-  /// - Editing:
-  ///   - invalid: `.favorColor(.main)`
-  ///   - valid: `.favorColor(.typo)`
-  /// - NotEditing:
-  ///   - invalid: `.favorColor(.main)`
-  ///   - valid: `.favorColor(.box2)`
   func updateMessageLabelColor() {
     if self.isEditingOrSelected {
       self.messageLabel.textColor = (self.messageType == .info) ? self.selectedMessageColor : self.errorMessageColor

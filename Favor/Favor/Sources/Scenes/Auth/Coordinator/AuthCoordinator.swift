@@ -63,6 +63,7 @@ extension AuthCoordinator {
   /// 이용 약관 동의 View입니다.
   func showTermFlow() {
     let termVC = TermViewController()
+    termVC.coordinator = self
     self.navigationController.pushViewController(termVC, animated: true)
   }
   

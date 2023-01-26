@@ -61,6 +61,15 @@ final class SetProfileViewController: BaseViewController, View {
     textField.autocapitalizationType = .none
     textField.enablesReturnKeyAutomatically = true
     textField.returnKeyType = .done
+    
+    let label = UILabel()
+    label.text = "@"
+    label.font = .favorFont(.regular, size: 16)
+    label.textColor = .favorColor(.detail)
+    label.textAlignment = .center
+    
+    textField.addLeftItem(item: label)
+    
     return textField
   }()
   

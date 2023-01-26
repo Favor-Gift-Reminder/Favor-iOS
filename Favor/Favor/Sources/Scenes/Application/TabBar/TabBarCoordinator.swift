@@ -10,12 +10,13 @@ import UIKit
 final class TabBarCoordinator: BaseCoordinator {
   
   // MARK: - Properties
-  var tabBarController: UITabBarController
+  
+  var tabBarController: FavorTabBarController
   
   // MARK: - Initializer
   
   override init(_ navigationController: UINavigationController) {
-    self.tabBarController = UITabBarController()
+    self.tabBarController = FavorTabBarController()
     super.init(navigationController)
   }
   
@@ -52,11 +53,14 @@ private extension TabBarCoordinator {
     let tabNavController = UINavigationController()
     
     tabNavController.tabBarItem = page.tabBarItem
+    self.showTabCoordinator(of: page, to: tabNavController)
     return tabNavController
   }
   
   func setupTabBarController(with viewControllers: [UIViewController]) {
     self.tabBarController.setViewControllers(viewControllers, animated: true)
+    
+    self.navigationController.pushViewController(self.tabBarController, animated: true)
   }
   
   func showTabCoordinator(of page: TabBarPage, to tabNavController: UINavigationController) {
@@ -70,17 +74,20 @@ private extension TabBarCoordinator {
     }
   }
   
-  // TODO: - TabBar VC들 붙여주기.
   func showHomeFlow(to tabNavController: UINavigationController) {
-    fatalError("showHomeFlow(to tabNavController:) method must be implemented.")
+    let homeCoordinator = HomeCoordinator(tabNavController)
+    homeCoordinator.navigationController.isNavigationBarHidden = false
+    self.start(childCoordinator: homeCoordinator)
   }
   
   func showReminderFlow(to tabNavController: UINavigationController) {
-    fatalError("showReminderFlow(to tabNavController:) method must be implemented.")
+    let reminderCoordinator = ReminderCoordinator(tabNavController)
+    self.start(childCoordinator: reminderCoordinator)
   }
   
   func showMyPageFlow(to tabNavController: UINavigationController) {
-    fatalError("showMyPageFlow(to tabNavController:) method must be implemented.")
+    let myPageCoordinator = MyPageCoordinator(tabNavController)
+    self.start(childCoordinator: myPageCoordinator)
   }
   
 }

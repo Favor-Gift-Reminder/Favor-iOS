@@ -12,8 +12,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
+    
+    self.setupNavigationBarAppearance()
+    
 		return true
-		
 	}
 
 	// MARK: UISceneSession Lifecycle
@@ -30,4 +32,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 	}
 
+}
+
+private extension AppDelegate {
+  func setupNavigationBarAppearance() {
+    let appearance = UINavigationBarAppearance()
+    let backButtonAppearance = UIBarButtonItemAppearance()
+    
+    let leftArrowImage = UIImage(named: "ic_leftArrow")?
+      .withRenderingMode(.alwaysOriginal)
+      .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
+    
+    backButtonAppearance.normal.titleTextAttributes = [
+      .foregroundColor: UIColor.clear
+    ]
+    
+    appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
+    appearance.backButtonAppearance = backButtonAppearance
+    
+    appearance.titleTextAttributes = [
+      .foregroundColor: UIColor.favorColor(.typo),
+      .font: UIFont.favorFont(.bold, size: 18)
+    ]
+    
+    appearance.configureWithTransparentBackground()
+    appearance.backgroundColor = .clear
+    appearance.shadowColor = nil
+        
+    UINavigationBar.appearance().compactAppearance = appearance
+    UINavigationBar.appearance().standardAppearance = appearance
+    UINavigationBar.appearance().scrollEdgeAppearance = appearance
+  }
 }
