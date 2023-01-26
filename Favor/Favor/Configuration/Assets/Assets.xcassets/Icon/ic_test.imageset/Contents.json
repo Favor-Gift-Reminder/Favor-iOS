@@ -1,0 +1,15 @@
+{
+  "images" : [
+    {
+      "filename" : "Wire_Icon_화살표1.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true
+  }
+}
