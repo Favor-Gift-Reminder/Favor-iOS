@@ -17,9 +17,25 @@ final class AppCoordinator: BaseCoordinator {
 	
 	override func start() {
 //    self.showOnboardFlow()
-//    self.showAuthFlow()
-    self.showTabBarFlow()
+    self.showAuthFlow()
+//    self.showTabBarFlow()
 	}
+  
+  override func finish(childCoordinator: some Coordinator) {
+    super.finish(childCoordinator: childCoordinator)
+    
+    self.navigationController.viewControllers.removeAll()
+    
+    switch childCoordinator.self {
+    case is AuthCoordinator:
+      self.showTabBarFlow()
+    case is TabBarCoordinator:
+      self.showAuthFlow()
+    default:
+      break
+    }
+  }
+  
 }
 
 extension AppCoordinator {
@@ -47,26 +63,6 @@ extension AppCoordinator {
   /// 로그인 / 회원가입 로직을 처리하는 View입니다. 최초 실행 시 온보딩 view에서 접근됩니다.
   func showAuthFlow() {
     let authCoordinator = AuthCoordinator(self.navigationController)
-    authCoordinator.finishDelegate = self
     self.start(childCoordinator: authCoordinator)
   }
-}
-
-extension AppCoordinator: CoordinatorFinishDelegate {
-  
-  func coordinatorDidFinish(childCoordinator: some Coordinator) {
-    self.finish(childCoordinator: childCoordinator)
-    
-    self.navigationController.viewControllers.removeAll()
-    
-    switch childCoordinator.self {
-    case is AuthCoordinator:
-      self.showTabBarFlow()
-    case is TabBarCoordinator:
-      self.showAuthFlow()
-    default:
-      break
-    }
-  }
-  
 }

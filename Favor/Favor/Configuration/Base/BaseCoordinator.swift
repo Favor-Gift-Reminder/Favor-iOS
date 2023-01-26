@@ -11,7 +11,6 @@ class BaseCoordinator: Coordinator {
 	
 	// MARK: - Properties
 	
-  weak var finishDelegate: CoordinatorFinishDelegate?
 	var childCoordinators: [any Coordinator]
 	var navigationController: UINavigationController
 	weak var parentCoordinator: Coordinator?
@@ -28,5 +27,13 @@ class BaseCoordinator: Coordinator {
 	func start() {
 		fatalError("start() method must be implemented.")
 	}
-	
+  
+  func finish() {
+    self.parentCoordinator?.finish(childCoordinator: self)
+  }
+  
+  /// Child Coordinator들의 컬렉션에서 인자로 받는 코디네이터를 제거합니다.
+  func finish(childCoordinator: some Coordinator) {
+    childCoordinators = childCoordinators.filter { $0 !== childCoordinator }
+  }
 }

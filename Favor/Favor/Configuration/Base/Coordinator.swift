@@ -9,7 +9,6 @@ import UIKit
 
 protocol Coordinator: AnyObject {
 
-  var finishDelegate: CoordinatorFinishDelegate? { get set }
   var navigationController: UINavigationController { get set }
   var childCoordinators: [any Coordinator] { get set }
   var parentCoordinator: Coordinator? { get set }
@@ -25,17 +24,5 @@ extension Coordinator {
     self.childCoordinators.append(childCoordinator)
     childCoordinator.parentCoordinator = self
     childCoordinator.start()
-  }
-  
-  /// 해당 Coordinator의 모든 Child들을 할당 해제한 뒤에 해당 Coordinator 또한 해제합니다.
-  /// 해당 Coordinator 해제는 delegate 패턴을 사용하여 이루어집니다.
-  func finish() {
-    self.childCoordinators.removeAll()
-    self.finishDelegate?.coordinatorDidFinish(childCoordinator: self)
-  }
-
-  /// Child Coordinator들의 컬렉션에서 인자로 받는 코디네이터를 제거합니다.
-  func finish(childCoordinator: some Coordinator) {
-    childCoordinators = childCoordinators.filter { $0 !== childCoordinator }
   }
 }
