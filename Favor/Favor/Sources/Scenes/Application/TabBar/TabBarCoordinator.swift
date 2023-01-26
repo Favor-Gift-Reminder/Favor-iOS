@@ -50,7 +50,7 @@ final class TabBarCoordinator: BaseCoordinator {
 private extension TabBarCoordinator {
   
   func createTabNavController(of page: TabBarPage) -> UINavigationController {
-    let tabNavController = BaseNavigationController()
+    let tabNavController = UINavigationController()
     
     tabNavController.tabBarItem = page.tabBarItem
     self.showTabCoordinator(of: page, to: tabNavController)
@@ -76,6 +76,7 @@ private extension TabBarCoordinator {
   
   func showHomeFlow(to tabNavController: UINavigationController) {
     let homeCoordinator = HomeCoordinator(tabNavController)
+    homeCoordinator.navigationController.isNavigationBarHidden = false
     self.start(childCoordinator: homeCoordinator)
   }
   
