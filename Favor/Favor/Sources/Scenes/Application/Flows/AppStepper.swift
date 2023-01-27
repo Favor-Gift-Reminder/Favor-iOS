@@ -16,17 +16,11 @@ class AppStepper: Stepper {
   let steps = PublishRelay<Step>()
   private let disposeBag = DisposeBag()
   
-  var initialStep: Step {
-  }
+  var initialStep: Step { return AppStep.authIsRequired }
   
   // MARK: - Initializer
   
-  init() { }
-  
-  // MARK: - Functions
-  
-  func readyToEmitSteps() {
-    //
+  init() {
+    // TODO: 사용자 환경에 따라서 initialStep 변경
   }
-  
 }
