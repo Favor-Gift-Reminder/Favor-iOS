@@ -28,5 +28,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.coordinator.coordinate(flow: appFlow, with: AppStepper())
     self.window?.makeKeyAndVisible()
 	}
-  
 }
