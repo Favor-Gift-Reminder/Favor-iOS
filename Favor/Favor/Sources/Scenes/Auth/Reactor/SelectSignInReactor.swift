@@ -8,8 +8,11 @@
 import OSLog
 
 import ReactorKit
+import RxFlow
+import RxRelay
 
-final class SelectSignInReactor: Reactor {
+final class SelectSignInReactor: Reactor, Stepper {
+  var steps = PublishRelay<Step>()
   
   // MARK: - Properties
   

@@ -58,6 +58,11 @@
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
+		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
+		2EE6B3992983DF3900CDBC81 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B3982983DF3900CDBC81 /* AppFlow.swift */; };
+		2EE6B39B2983E05100CDBC81 /* FavorStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B39A2983E05100CDBC81 /* FavorStep.swift */; };
+		2EE6B39D2983E64C00CDBC81 /* AppStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B39C2983E64C00CDBC81 /* AppStepper.swift */; };
+		2EE6B39F2983F12D00CDBC81 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
@@ -147,6 +152,10 @@
 		2EE0D594297A9D670064E932 /* FavorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FavorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
+		2EE6B39A2983E05100CDBC81 /* FavorStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorStep.swift; sourceTree = "<group>"; };
+		2EE6B39C2983E64C00CDBC81 /* AppStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStepper.swift; sourceTree = "<group>"; };
+		2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
@@ -171,6 +180,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
@@ -357,6 +367,9 @@
 				2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */,
 				2E7C309B295D7C4300BAC43D /* AppDelegate.swift */,
 				2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */,
+				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
+				2EE6B39C2983E64C00CDBC81 /* AppStepper.swift */,
+				2EE6B39A2983E05100CDBC81 /* FavorStep.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -633,6 +646,7 @@
 			isa = PBXGroup;
 			children = (
 				2E1C565D296C24E30067FC78 /* AuthCoordinator.swift */,
+				2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -706,6 +720,7 @@
 				2E63538D295D904000B23A14 /* Kingfisher */,
 				2E635390295D906A00B23A14 /* Differentiator */,
 				2E635392295D906A00B23A14 /* RxDataSources */,
+				2EE6B3962982EDA400CDBC81 /* RxFlow */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -764,6 +779,7 @@
 				2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */,
 				2E63538C295D904000B23A14 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */,
+				2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -833,8 +849,10 @@
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				E57F313F297000DB00E3D449 /* BaseView.swift in Sources */,
 				2E171164298035A400E34121 /* TabBarController.swift in Sources */,
+				2EE6B39D2983E64C00CDBC81 /* AppStepper.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2E76F58829601EF2002FF001 /* SplashReactor.swift in Sources */,
+				2EE6B39B2983E05100CDBC81 /* FavorStep.swift in Sources */,
 				2EE07EA6296C605A00048A3C /* NewGiftCoordinator.swift in Sources */,
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */,
@@ -851,6 +869,7 @@
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpReactor.swift in Sources */,
 				2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */,
+				2EE6B39F2983F12D00CDBC81 /* AuthFlow.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
@@ -860,6 +879,7 @@
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */,
 				E5B182972974F54A00229C50 /* UpdateHandlerManager.swift in Sources */,
+				2EE6B3992983DF3900CDBC81 /* AppFlow.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
@@ -1207,6 +1227,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxFlow";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1244,6 +1272,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		2EE6B3962982EDA400CDBC81 /* RxFlow */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */;
+			productName = RxFlow;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
