@@ -360,13 +360,11 @@
 		2EBB0152295E8CCA0072D158 /* Application */ = {
 			isa = PBXGroup;
 			children = (
+				E5CFF7292984042600E11D9A /* Flows */,
 				2E76F58629601EC3002FF001 /* Splash */,
 				2ECC94C82960268000B530F7 /* TabBar */,
-				2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */,
 				2E7C309B295D7C4300BAC43D /* AppDelegate.swift */,
 				2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */,
-				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
-				2EE6B39C2983E64C00CDBC81 /* AppStepper.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -677,6 +675,16 @@
 				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		E5CFF7292984042600E11D9A /* Flows */ = {
+			isa = PBXGroup;
+			children = (
+				2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */,
+				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
+				2EE6B39C2983E64C00CDBC81 /* AppStepper.swift */,
+			);
+			path = Flows;
 			sourceTree = "<group>";
 		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {

@@ -34,7 +34,6 @@ final class AppFlow: Flow {
       return self.navigateToAuth()
     }
   }
-  
 }
 
 private extension AppFlow {
