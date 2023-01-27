@@ -17,7 +17,6 @@ class AppStepper: Stepper {
   private let disposeBag = DisposeBag()
   
   var initialStep: Step {
-    FavorStep.signInIsRequired
   }
   
   // MARK: - Initializer

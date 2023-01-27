@@ -27,12 +27,7 @@ final class AppFlow: Flow {
   // MARK: - Navigate
   
   func navigate(to step: Step) -> FlowContributors {
-    guard let step = step as? FavorStep else { return .none }
-    
-    switch step {
-    case .signInIsRequired:
-      return self.navigateToAuth()
-    }
+    return .none
   }
 }
 
@@ -45,11 +40,6 @@ private extension AppFlow {
       self.rootViewController.pushViewController(root, animated: false)
     }
     
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: authFlow,
-        withNextStepper: OneStepper(withSingleStep: FavorStep.signInIsRequired)
-      )
-    )
+    return .none
   }
 }
