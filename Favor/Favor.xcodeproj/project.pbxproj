@@ -26,7 +26,6 @@
 		2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B0295D8DA400BAC43D /* ReactorKit */; };
 		2E7C30B4295D8DC200BAC43D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B3295D8DC200BAC43D /* Then */; };
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
-		2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */; };
 		2EBB0170295EBE6F0072D158 /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB016F295EBE6F0072D158 /* HomeVC.swift */; };
 		2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0171295EBF150072D158 /* HomeReactor.swift */; };
 		2EBB0175295EBF820072D158 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EBB0174295EBF820072D158 /* HomeCoordinator.swift */; };
@@ -111,7 +110,6 @@
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		2EBB016F295EBE6F0072D158 /* HomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		2EBB0171295EBF150072D158 /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		2EBB0174295EBF820072D158 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
@@ -682,7 +680,6 @@
 		E5CFF7292984042600E11D9A /* Flows */ = {
 			isa = PBXGroup;
 			children = (
-				2EBB016C295EAD3C0072D158 /* AppCoordinator.swift */,
 				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
 				E5CFF72A298404F700E11D9A /* AppStep.swift */,
 				2EE6B39C2983E64C00CDBC81 /* AppStepper.swift */,
@@ -872,7 +869,6 @@
 				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
 				E5E28ECE295DAC79006B9245 /* Coordinator.swift in Sources */,
 				2EBB0172295EBF150072D158 /* HomeReactor.swift in Sources */,
-				2EBB016D295EAD3C0072D158 /* AppCoordinator.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpReactor.swift in Sources */,

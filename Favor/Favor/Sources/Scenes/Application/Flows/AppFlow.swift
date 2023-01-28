@@ -13,7 +13,8 @@ final class AppFlow: Flow {
   
   // MARK: - Properties
   
-  var root: Presentable { self.rootViewController }
+  var window: UIWindow
+  var root: Presentable { self.window }
   
   private lazy var rootViewController: UINavigationController = {
     let navigationController = UINavigationController()
@@ -22,7 +23,10 @@ final class AppFlow: Flow {
   
   // MARK: - Initializer
   
-  init() { }
+  init(with window: UIWindow) {
+    self.window = window
+    self.window.rootViewController = self.rootViewController
+  }
   
   // MARK: - Navigate
   
@@ -31,11 +35,13 @@ final class AppFlow: Flow {
     
     switch step {
     case .onboardingIsRequired:
-      return .none
+      return self.navigateToOnboarding()
+      
     case .authIsRequired:
-      return .none
+      return self.navigateToAuth()
+      
     case .mainIsRequired:
-      return .none
+      return self.navigateToMain()
     }
   }
 }
