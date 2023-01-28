@@ -23,4 +23,8 @@ class AppStepper: Stepper {
   init() {
     // TODO: 사용자 환경에 따라서 initialStep 변경
   }
+  
+  func readyToEmitSteps() {
+    self.steps.accept(AppStep.authIsRequired)
+  }
 }

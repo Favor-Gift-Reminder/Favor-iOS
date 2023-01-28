@@ -13,19 +13,13 @@ final class AppFlow: Flow {
   
   // MARK: - Properties
   
-  var window: UIWindow
-  var root: Presentable { self.window }
-  
-  private lazy var rootViewController: UINavigationController = {
-    let navigationController = UINavigationController()
-    return navigationController
-  }()
+  var rootWindow: UIWindow
+  var root: Presentable { self.rootWindow }
   
   // MARK: - Initializer
   
   init(with window: UIWindow) {
-    self.window = window
-    self.window.rootViewController = self.rootViewController
+    self.rootWindow = window
   }
   
   // MARK: - Navigate
@@ -67,7 +61,7 @@ private extension AppFlow {
     let authFlow = AuthFlow()
     
     Flows.use(authFlow, when: .created) { [unowned self] root in
-      self.rootViewController.pushViewController(root, animated: false)
+      self.rootWindow.rootViewController = root
     }
     
     return .one(
@@ -82,7 +76,7 @@ private extension AppFlow {
     let mainFlow = AuthFlow()
     
     Flows.use(mainFlow, when: .created) { [unowned self] root in
-      self.rootViewController.pushViewController(root, animated: false)
+      self.rootWindow.rootViewController = root
     }
     
     return .one(
