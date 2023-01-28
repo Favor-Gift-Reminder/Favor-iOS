@@ -65,7 +65,7 @@ private extension AppFlow {
     return .one(
       flowContributor: .contribute(
         withNextPresentable: authFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.authIsRequired)
+        withNextStepper: OneStepper(withSingleStep: AuthStep.selectSignInIsRequired)
       )
     )
   }

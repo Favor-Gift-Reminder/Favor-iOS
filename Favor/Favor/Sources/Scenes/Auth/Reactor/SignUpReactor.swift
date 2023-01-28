@@ -9,12 +9,14 @@ import OSLog
 
 import ReactorKit
 import RxCocoa
+import RxFlow
 
-final class SignUpReactor: Reactor {
+final class SignUpReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
   var initialState: State
+  var steps = PublishRelay<Step>()
   
   // Global States
   let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: .empty)

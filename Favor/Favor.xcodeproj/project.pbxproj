@@ -208,7 +208,6 @@
 		2E1C5659296C24AE0067FC78 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				2EE07EE5296EDCB100048A3C /* Coordinator */,
 				2EE6B3A22984CE2F00CDBC81 /* Flows */,
 				2EE07EE4296EDCA900048A3C /* Reactor */,
 				2EE07EE2296EDC9E00048A3C /* ViewControllers */,
@@ -635,14 +634,6 @@
 			path = Reactor;
 			sourceTree = "<group>";
 		};
-		2EE07EE5296EDCB100048A3C /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
 		2EE0D595297A9D670064E932 /* FavorUITests */ = {
 			isa = PBXGroup;
 			children = (
@@ -655,6 +646,7 @@
 		2EE6B3A22984CE2F00CDBC81 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */,
 				2EE6B3A32984CE3F00CDBC81 /* AuthStep.swift */,
 			);
 			path = Flows;
