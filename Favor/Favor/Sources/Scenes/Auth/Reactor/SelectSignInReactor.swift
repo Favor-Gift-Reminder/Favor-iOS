@@ -16,7 +16,6 @@ final class SelectSignInReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
-  let coordinator: AuthCoordinator
   var initialState: State
   
   enum Action {
@@ -34,18 +33,17 @@ final class SelectSignInReactor: Reactor, Stepper {
   
   // MARK: - Initializer
   
-  init(coordinator: AuthCoordinator) {
-    self.coordinator = coordinator
+  init() {
     self.initialState = State()
   }
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailLoginButtonTap:
-      self.coordinator.showSignInFlow()
+//      self.coordinator.showSignInFlow()
       return Observable<Mutation>.empty()
     case .signUpButtonTap:
-      self.coordinator.showSignUpFlow()
+//      self.coordinator.showSignUpFlow()
       return Observable<Mutation>.empty()
     }
   }

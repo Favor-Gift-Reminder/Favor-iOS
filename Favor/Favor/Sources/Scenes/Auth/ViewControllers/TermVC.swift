@@ -13,8 +13,6 @@ final class TermViewController: BaseViewController {
   
   // MARK: - Properties
   
-  var coordinator: AuthCoordinator?
-  
   // MARK: - UI Components
   
   private lazy var logoImage: UIImageView = {
@@ -41,7 +39,7 @@ final class TermViewController: BaseViewController {
   
   @objc
   private func startButtonDidTap() {
-    self.coordinator?.finish()
+//    self.coordinator?.finish()
   }
   
   // MARK: - UI Setups
