@@ -7,20 +7,6 @@
 
 import UIKit
 
-import ReactorKit
-
-final class SplashViewController: BaseViewController, View {
-  typealias Reactor = SplashReactor
+final class SplashViewController: BaseViewController {
   
-  // MARK: - Setup
-  
-  override func setupStyles() {
-    self.view.backgroundColor = .systemBackground
-  }
-  
-  // MARK: - Binding
-  
-  func bind(reactor: SplashReactor) {
-    // TODO: - pre-fetch 로직 + 완료 시 coordinator 동작
-  }
 }

@@ -8,13 +8,15 @@
 import OSLog
 
 import ReactorKit
+import RxCocoa
+import RxFlow
 
-final class SelectSignInReactor: Reactor {
+final class SelectSignInReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
-  let coordinator: AuthCoordinator
   var initialState: State
+  var steps = PublishRelay<Step>()
   
   enum Action {
     case emailLoginButtonTap
@@ -31,18 +33,17 @@ final class SelectSignInReactor: Reactor {
   
   // MARK: - Initializer
   
-  init(coordinator: AuthCoordinator) {
-    self.coordinator = coordinator
+  init() {
     self.initialState = State()
   }
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailLoginButtonTap:
-      self.coordinator.showSignInFlow()
+      self.steps.accept(AuthStep.signInIsRequired)
       return Observable<Mutation>.empty()
     case .signUpButtonTap:
-      self.coordinator.showSignUpFlow()
+      self.steps.accept(AuthStep.signUpIsRequired)
       return Observable<Mutation>.empty()
     }
   }

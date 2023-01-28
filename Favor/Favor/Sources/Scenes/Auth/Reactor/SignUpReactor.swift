@@ -9,13 +9,14 @@ import OSLog
 
 import ReactorKit
 import RxCocoa
+import RxFlow
 
-final class SignUpReactor: Reactor {
+final class SignUpReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
-  let coordinator: AuthCoordinator
   var initialState: State
+  var steps = PublishRelay<Step>()
   
   // Global States
   let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: .empty)
@@ -60,8 +61,7 @@ final class SignUpReactor: Reactor {
   
   // MARK: - Initializer
   
-  init(coordinator: AuthCoordinator) {
-    self.coordinator = coordinator
+  init() {
     self.initialState = State()
   }
   
@@ -97,7 +97,7 @@ final class SignUpReactor: Reactor {
       ])
       
     case .nextButtonTap, .returnKeyboardTap:
-      self.coordinator.showSetProfileFlow()
+//      self.coordinator.showSetProfileFlow()
       return Observable<Mutation>.empty()
     }
   }
