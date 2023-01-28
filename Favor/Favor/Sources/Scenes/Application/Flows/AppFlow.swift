@@ -43,11 +43,9 @@ final class AppFlow: Flow {
 private extension AppFlow {
   
   func navigateToOnboarding() -> FlowContributors {
-    let onboardFlow = AuthFlow()
+    let onboardFlow = AuthFlow() // Onboard
     
-    Flows.use(onboardFlow, when: .created) { [unowned self] root in
-      self.rootViewController.pushViewController(root, animated: false)
-    }
+    // Onboard
     
     return .one(
       flowContributor: .contribute(
