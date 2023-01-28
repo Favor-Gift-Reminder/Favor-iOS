@@ -28,6 +28,9 @@ final class AppFlow: Flow {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
+    case .homeIsRequired:
+      return self.navigateToHome()
+      
     case .onboardingIsRequired:
       return self.navigateToOnboarding()
       
@@ -41,6 +44,21 @@ final class AppFlow: Flow {
 }
 
 private extension AppFlow {
+  
+  func navigateToHome() -> FlowContributors {
+    let homeFlow = HomeFlow()
+    
+    Flows.use(homeFlow, when: .created) { [unowned self] root in
+      self.rootWindow.rootViewController = root
+    }
+    
+    return .one(
+      flowContributor: .contribute(
+        withNextPresentable: homeFlow,
+        withNextStepper: OneStepper(withSingleStep: HomeStep.homeIsRequired)
+      )
+    )
+  }
   
   func navigateToOnboarding() -> FlowContributors {
     let onboardFlow = AuthFlow() // Onboard

@@ -10,7 +10,7 @@ import Foundation
 import RxFlow
 
 enum AppStep: Step {
-  
+  case homeIsRequired
   case onboardingIsRequired
   case authIsRequired
   case mainIsRequired

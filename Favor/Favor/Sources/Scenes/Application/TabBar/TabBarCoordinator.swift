@@ -75,9 +75,9 @@ private extension TabBarCoordinator {
   }
   
   func showHomeFlow(to tabNavController: UINavigationController) {
-    let homeCoordinator = HomeCoordinator(tabNavController)
-    homeCoordinator.navigationController.isNavigationBarHidden = false
-    self.start(childCoordinator: homeCoordinator)
+//    let homeCoordinator = HomeCoordinator(tabNavController)
+//    homeCoordinator.navigationController.isNavigationBarHidden = false
+//    self.start(childCoordinator: homeCoordinator)
   }
   
   func showReminderFlow(to tabNavController: UINavigationController) {

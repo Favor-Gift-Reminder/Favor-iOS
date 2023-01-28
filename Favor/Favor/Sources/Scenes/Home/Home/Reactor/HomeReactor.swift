@@ -7,12 +7,15 @@
 
 import ReactorKit
 
-final class HomeReactor: Reactor {
+import RxCocoa
+import RxFlow
+
+final class HomeReactor: Reactor, Stepper {
 	
 	// MARK: - Properties
 	
-	weak var coordinator: HomeCoordinator?
 	var initialState: State
+  var steps = PublishRelay<Step>()
 	
 	enum Action {
 		
@@ -24,8 +27,7 @@ final class HomeReactor: Reactor {
 	
 	// MARK: - Initializer
 	
-	init(coordinator: HomeCoordinator) {
-		self.coordinator = coordinator
+	init() {
 		self.initialState = State()
 	}
 	
