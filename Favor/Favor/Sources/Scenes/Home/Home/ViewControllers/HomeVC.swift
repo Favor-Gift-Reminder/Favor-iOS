@@ -41,7 +41,7 @@ final class HomeViewController: BaseViewController, View {
         return cell
       }
     },
-    configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+    configureSupplementaryView: { _, collectionView, kind, indexPath in
       guard let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         withReuseIdentifier: HeaderView.reuseIdentifier,
