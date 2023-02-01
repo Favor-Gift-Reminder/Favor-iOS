@@ -123,9 +123,6 @@ final class HomeViewController: BaseViewController, View {
 private extension HomeViewController {
   
   func setupCollectionView() -> UICollectionViewLayout {
-    let config = UICollectionViewCompositionalLayoutConfiguration()
-    config.interSectionSpacing = 32
-    
     let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
       // section 0: 다가오는 이벤트, section 1: 타임라인
       let columns: CGFloat = sectionIndex == 0 ? 1.0 : 2.0
@@ -155,7 +152,7 @@ private extension HomeViewController {
       
       let headerFooterSize = NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(44)
+        heightDimension: .absolute(74)
       )
       let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
         layoutSize: headerFooterSize,
@@ -165,7 +162,7 @@ private extension HomeViewController {
       section.boundarySupplementaryItems = [sectionHeader]
       
       return section
-    }, configuration: config)
+    })
     
     return layout
   }
