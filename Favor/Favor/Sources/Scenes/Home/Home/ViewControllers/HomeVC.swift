@@ -15,6 +15,10 @@ import SnapKit
 final class HomeViewController: BaseViewController, View {
 	typealias Reactor = HomeReactor
   typealias HomeDataSource = RxCollectionViewSectionedReloadDataSource<HomeSection>
+  
+  // MARK: - Constants
+  
+  let sectionHeaderElementKind = "SectionHeader"
 	
 	// MARK: - Properties
   
@@ -36,6 +40,14 @@ final class HomeViewController: BaseViewController, View {
         cell.reactor = reactor
         return cell
       }
+    },
+    configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+      guard let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        withReuseIdentifier: HeaderView.reuseIdentifier,
+        for: indexPath
+      ) as? HeaderView else { return UICollectionReusableView() }
+      return header
     }
   )
   
@@ -48,6 +60,7 @@ final class HomeViewController: BaseViewController, View {
     )
     collectionView.register(UpcomingCell.self, forCellWithReuseIdentifier: UpcomingCell.reuseIdentifier)
     collectionView.register(TimelineCell.self, forCellWithReuseIdentifier: TimelineCell.reuseIdentifier)
+    collectionView.register(HeaderView.self, forSupplementaryViewOfKind: self.sectionHeaderElementKind, withReuseIdentifier: HeaderView.reuseIdentifier)
     collectionView.backgroundColor = .clear
     return collectionView
   }()
@@ -126,6 +139,17 @@ private extension HomeViewController {
       
       let section = NSCollectionLayoutSection(group: group)
       section.interGroupSpacing = cellSpacing
+      
+      let headerFooterSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(44)
+      )
+      let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+        layoutSize: headerFooterSize,
+        elementKind: self.sectionHeaderElementKind,
+        alignment: .top
+      )
+      section.boundarySupplementaryItems = [sectionHeader]
       
       return section
     }
