@@ -269,9 +269,9 @@
 			children = (
 				2EBB0151295E8CAD0072D158 /* Assets */,
 				E5E28ECA295DAC15006B9245 /* Base */,
-				E5B182902974F39C00229C50 /* Views */,
 				2EBB0150295E8CA10072D158 /* Constants */,
 				E5B182912974F43E00229C50 /* Utils */,
+				E55CF7B4298A622B002940D1 /* Protocols */,
 				2EBB014F295E8C9B0072D158 /* Extensions */,
 				2EBB014E295E8C960072D158 /* Fonts */,
 			);
@@ -281,6 +281,7 @@
 		2EBB014A295E8C600072D158 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E5B182902974F39C00229C50 /* Views */,
 				2EBB014D295E8C880072D158 /* Models */,
 				2EBB014C295E8C820072D158 /* Network */,
 				2EBB014B295E8C770072D158 /* Scenes */,
@@ -652,6 +653,16 @@
 			path = Flows;
 			sourceTree = "<group>";
 		};
+		E55CF7B4298A622B002940D1 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
+				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
+				E57F313E297000DB00E3D449 /* BaseView.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		E5B182902974F39C00229C50 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -690,9 +701,6 @@
 				2E1711672980C90100E34121 /* Delegate */,
 				2EBB0176295EC0ED0072D158 /* BaseCoordinator.swift */,
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
-				E57F313E297000DB00E3D449 /* BaseView.swift */,
-				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
-				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
