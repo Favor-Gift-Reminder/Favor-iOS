@@ -1,5 +1,5 @@
 //
-//  ReminderCell.swift
+//  TimelineCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/31.
@@ -7,11 +7,14 @@
 
 import UIKit
 
-import SnapKit
+import ReactorKit
 
-final class ReminderCell: UICollectionViewCell, ReuseIdentifying {
+final class TimelineCell: UICollectionViewCell, ReuseIdentifying, View {
+  typealias Reactor = TimelineCellReactor
   
   // MARK: - Properties
+  
+  var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
@@ -33,16 +36,22 @@ final class ReminderCell: UICollectionViewCell, ReuseIdentifying {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - Setup
+  // MARK: - Binding
   
+  func bind(reactor: TimelineCellReactor) {
+    // State
+    reactor.state.map { $0.text }
+      .do(onNext: {
+        print("📝 Test text for timeline: \($0)")
+      })
+      .bind(to: self.testLabel.rx.text)
+      .disposed(by: self.disposeBag)
+  }
 }
 
-extension ReminderCell: BaseView {
-  
+extension TimelineCell: BaseView {
   func setupStyles() {
-    self.clipsToBounds = true
-    self.layer.cornerRadius = 24
-    self.backgroundColor = .magenta// .favorColor(.background)
+    self.backgroundColor = .systemTeal
   }
   
   func setupLayouts() {
@@ -58,5 +67,4 @@ extension ReminderCell: BaseView {
       make.center.equalToSuperview()
     }
   }
-  
 }

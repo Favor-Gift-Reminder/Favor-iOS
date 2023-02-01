@@ -14,41 +14,30 @@ import SnapKit
 
 final class HomeViewController: BaseViewController, View {
 	typealias Reactor = HomeReactor
+  typealias HomeDataSource = RxCollectionViewSectionedReloadDataSource<HomeSection>
 	
 	// MARK: - Properties
   
-  enum HomeSection: Int {
-    case upcoming
-    case timeline
-  }
-  
-  let dataSource = RxCollectionViewSectionedAnimatedDataSource<UpcomingSection>(
-    configureCell: { _, collectionView, indexPath, item in
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: ReminderCell.reuseIdentifier,
-        for: indexPath
-      ) as? ReminderCell else {
-        return UICollectionViewCell()
+  let dataSource: HomeDataSource = HomeDataSource(
+    configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
+      switch items {
+      case .upcomingCell(let reactor):
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: UpcomingCell.reuseIdentifier,
+          for: indexPath
+        ) as? UpcomingCell else { return UICollectionViewCell() }
+        cell.reactor = reactor
+        return cell
+      case .timelineCell(let reactor):
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: TimelineCell.reuseIdentifier,
+          for: indexPath
+        ) as? TimelineCell else { return UICollectionViewCell() }
+        cell.reactor = reactor
+        return cell
       }
-      cell.testLabel.text = item
-      return cell
     }
   )
-  
-  // TODO: ReactorKit 적용
-  // 초기값을 설정해주니 RxDataSources를 활용한 데이터 변경이 적용됐다.
-  
-  let mockSections = [
-    UpcomingSection(header: "one", items: ["1"])
-  ]
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    
-    Observable.just(self.mockSections)
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
-      .disposed(by: self.disposeBag)
-  }
   
   // MARK: - UI Components
   
@@ -57,10 +46,23 @@ final class HomeViewController: BaseViewController, View {
       frame: self.view.bounds,
       collectionViewLayout: self.setupCollectionView()
     )
-    collectionView.register(ReminderCell.self, forCellWithReuseIdentifier: ReminderCell.reuseIdentifier)
+    collectionView.register(UpcomingCell.self, forCellWithReuseIdentifier: UpcomingCell.reuseIdentifier)
+    collectionView.register(TimelineCell.self, forCellWithReuseIdentifier: TimelineCell.reuseIdentifier)
     collectionView.backgroundColor = .clear
     return collectionView
   }()
+  
+  // MARK: - Life Cycle
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    // FIXME: 초기값을 설정해줘야 Reactor에서의 값 변경 감지
+    let test = [HomeSection.upcoming([]), HomeSection.timeline([])]
+    Observable.just(test)
+      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
+  }
 	
 	// MARK: - Setup
   
@@ -84,13 +86,12 @@ final class HomeViewController: BaseViewController, View {
 	
   func bind(reactor: HomeReactor) {
     // Action
-    Observable.just(())
-      .map { Reactor.Action.viewDidLoad }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.sections }
+      .do(onNext: {
+        print("⬆️ Section: \($0)")
+      })
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
@@ -99,6 +100,39 @@ final class HomeViewController: BaseViewController, View {
 private extension HomeViewController {
   
   func setupCollectionView() -> UICollectionViewLayout {
+    let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
+      // section 0: 다가오는 이벤트, section 1: 타임라인
+      let columns: CGFloat = sectionIndex == 0 ? 1.0 : 2.0
+      let height: CGFloat = sectionIndex == 0 ? 95.0 : 165.0
+      let cellSpacing: CGFloat = sectionIndex == 0 ? 10.0 : 5.0
+
+      // Group.horizontal(layoutSize:,subitem:,count)에서 override
+      let itemSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0)
+      )
+      let item = NSCollectionLayoutItem(layoutSize: itemSize)
+      
+      let groupSize = NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .absolute(height)
+      )
+      let group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: groupSize,
+        subitem: item,
+        count: Int(columns)
+      )
+      group.interItemSpacing = .fixed(cellSpacing)
+      
+      let section = NSCollectionLayoutSection(group: group)
+      section.interGroupSpacing = cellSpacing
+      
+      return section
+    }
+    return layout
+  }
+  
+  func setupUpcomingLayout() -> UICollectionViewLayout {
     let itemSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1.0),
       heightDimension: .fractionalHeight(1.0)
@@ -107,7 +141,7 @@ private extension HomeViewController {
     
     let groupSize = NSCollectionLayoutSize(
       widthDimension: .fractionalWidth(1.0),
-      heightDimension: .estimated(95.0)
+      heightDimension: .absolute(95)
     )
     let group = {
       if #available(iOS 16.0, *) {

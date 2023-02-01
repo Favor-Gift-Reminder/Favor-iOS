@@ -18,32 +18,30 @@ final class HomeReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
 	
 	enum Action {
-		case viewDidLoad
+    
 	}
   
   enum Mutation {
-    case loadMockData([UpcomingSection])
+    
   }
 	
 	struct State {
-    var sections: [UpcomingSection] = []
+    var sections: [HomeSection]
 	}
 	
 	// MARK: - Initializer
 	
 	init() {
-		self.initialState = State()
+		self.initialState = State(
+      sections: HomeReactor.setupSections()
+    )
 	}
 	
 	// MARK: - Functions
 	
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewDidLoad:
-      let mockSections = [
-        UpcomingSection(header: "one", items: ["1", "2", "3"])
-      ]
-      return .just(.loadMockData(mockSections))
+      
     }
   }
   
@@ -51,11 +49,26 @@ final class HomeReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-    case .loadMockData(let sections):
-      print(sections)
-      newState.sections = sections
+      
     }
     
     return newState
   }
+}
+
+private extension HomeReactor {
+  
+  static func setupSections() -> [HomeSection] {
+    let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "1"))
+    let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "2"))
+    let upcomingSection = HomeSection.upcoming([upcomingOne, upcomingTwo])
+    
+    let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(text: "1"))
+    let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(text: "2"))
+    let timelineThree = HomeSectionItem.timelineCell(TimelineCellReactor(text: "3"))
+    let timelineSection = HomeSection.timeline([timelineOne, timelineTwo, timelineThree])
+    
+    return [upcomingSection, timelineSection]
+  }
+  
 }
