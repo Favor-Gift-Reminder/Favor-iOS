@@ -18,7 +18,7 @@ final class HomeViewController: BaseViewController, View {
   
   // MARK: - Constants
   
-  let sectionHeaderElementKind = "SectionHeader"
+  private let sectionHeaderElementKind = "SectionHeader"
 	
 	// MARK: - Properties
   
@@ -58,9 +58,19 @@ final class HomeViewController: BaseViewController, View {
       frame: self.view.bounds,
       collectionViewLayout: self.setupCollectionView()
     )
-    collectionView.register(UpcomingCell.self, forCellWithReuseIdentifier: UpcomingCell.reuseIdentifier)
-    collectionView.register(TimelineCell.self, forCellWithReuseIdentifier: TimelineCell.reuseIdentifier)
-    collectionView.register(HeaderView.self, forSupplementaryViewOfKind: self.sectionHeaderElementKind, withReuseIdentifier: HeaderView.reuseIdentifier)
+    collectionView.register(
+      UpcomingCell.self,
+      forCellWithReuseIdentifier: UpcomingCell.reuseIdentifier
+    )
+    collectionView.register(
+      TimelineCell.self,
+      forCellWithReuseIdentifier: TimelineCell.reuseIdentifier
+    )
+    collectionView.register(
+      HeaderView.self,
+      forSupplementaryViewOfKind: self.sectionHeaderElementKind,
+      withReuseIdentifier: HeaderView.reuseIdentifier
+    )
     collectionView.backgroundColor = .clear
     return collectionView
   }()
