@@ -123,7 +123,10 @@ final class HomeViewController: BaseViewController, View {
 private extension HomeViewController {
   
   func setupCollectionView() -> UICollectionViewLayout {
-    let layout = UICollectionViewCompositionalLayout { sectionIndex, _ in
+    let config = UICollectionViewCompositionalLayoutConfiguration()
+    config.interSectionSpacing = 32
+    
+    let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
       // section 0: 다가오는 이벤트, section 1: 타임라인
       let columns: CGFloat = sectionIndex == 0 ? 1.0 : 2.0
       let height: CGFloat = sectionIndex == 0 ? 95.0 : 165.0
