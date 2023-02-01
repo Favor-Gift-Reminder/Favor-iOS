@@ -61,6 +61,7 @@
 		2EE6B39F2983F12D00CDBC81 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */; };
 		2EE6B3A42984CE3F00CDBC81 /* AuthStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B3A32984CE3F00CDBC81 /* AuthStep.swift */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
+		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -152,6 +153,7 @@
 		2EE6B39E2983F12D00CDBC81 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		2EE6B3A32984CE3F00CDBC81 /* AuthStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthStep.swift; sourceTree = "<group>"; };
 		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
+		E55CF7B6298A644C002940D1 /* FTUXStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTUXStorage.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
@@ -270,7 +272,6 @@
 				2EBB0151295E8CAD0072D158 /* Assets */,
 				E5E28ECA295DAC15006B9245 /* Base */,
 				2EBB0150295E8CA10072D158 /* Constants */,
-				E5B182912974F43E00229C50 /* Utils */,
 				E55CF7B4298A622B002940D1 /* Protocols */,
 				2EBB014F295E8C9B0072D158 /* Extensions */,
 				2EBB014E295E8C960072D158 /* Fonts */,
@@ -281,6 +282,8 @@
 		2EBB014A295E8C600072D158 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				E55CF7B5298A6422002940D1 /* Storages */,
+				E5B182912974F43E00229C50 /* Utils */,
 				E5B182902974F39C00229C50 /* Views */,
 				2EBB014D295E8C880072D158 /* Models */,
 				2EBB014C295E8C820072D158 /* Network */,
@@ -663,6 +666,14 @@
 			path = Protocols;
 			sourceTree = "<group>";
 		};
+		E55CF7B5298A6422002940D1 /* Storages */ = {
+			isa = PBXGroup;
+			children = (
+				E55CF7B6298A644C002940D1 /* FTUXStorage.swift */,
+			);
+			path = Storages;
+			sourceTree = "<group>";
+		};
 		E5B182902974F39C00229C50 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -855,6 +866,7 @@
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */,
 				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
+				E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */,
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
