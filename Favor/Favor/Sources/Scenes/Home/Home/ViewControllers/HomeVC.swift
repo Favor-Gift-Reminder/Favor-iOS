@@ -162,43 +162,7 @@ private extension HomeViewController {
       section.boundarySupplementaryItems = [sectionHeader]
       
       return section
-    }
-    return layout
-  }
-  
-  func setupUpcomingLayout() -> UICollectionViewLayout {
-    let itemSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .fractionalHeight(1.0)
-    )
-    let item = NSCollectionLayoutItem(layoutSize: itemSize)
-    
-    let groupSize = NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .absolute(95)
-    )
-    let group = {
-      if #available(iOS 16.0, *) {
-        let group = NSCollectionLayoutGroup.vertical(
-          layoutSize: groupSize,
-          repeatingSubitem: item,
-          count: 3
-        )
-        return group
-      } else {
-        let group = NSCollectionLayoutGroup.vertical(
-          layoutSize: groupSize,
-          subitem: item,
-          count: 3
-        )
-        return group
-      }
-    }()
-    group.interItemSpacing = .fixed(10)
-    
-    let section = NSCollectionLayoutSection(group: group)
-    
-    let layout = UICollectionViewCompositionalLayout(section: section)
+    }, configuration: config)
     
     return layout
   }
