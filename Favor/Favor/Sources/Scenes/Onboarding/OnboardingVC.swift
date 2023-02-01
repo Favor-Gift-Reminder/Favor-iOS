@@ -8,8 +8,9 @@
 import UIKit
 
 import SnapKit
+import RxFlow
 
-final class OnboardingViewController: BaseViewController {
+final class OnboardingViewController: BaseViewController, Stepper {
   
   // MARK: - Properties
   
