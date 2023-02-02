@@ -183,7 +183,6 @@ private extension HeaderView {
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
     configuration.baseForegroundColor = .favorColor(.box2)
-    // FIXME: UIButton width
     configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     let handler: UIButton.ConfigurationUpdateHandler = { button in
