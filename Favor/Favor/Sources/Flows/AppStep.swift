@@ -10,10 +10,19 @@ import Foundation
 import RxFlow
 
 enum AppStep: Step {
-  case onboardingIsRequired
+  // MARK: - Auth
   case authIsRequired
-  case mainIsRequired
-  
-  case onboardingIsComplete
+  case signUpIsRequired
+  case signInIsRequired
+  case setProfileIsRequired
+  case termIsRequired
+
   case authIsComplete
+  
+  // MARK: - Onboarding
+  case onboardingIsRequired
+  case onboardingIsComplete
+  
+  // MARK: - Main
+  case mainIsRequired
 }
