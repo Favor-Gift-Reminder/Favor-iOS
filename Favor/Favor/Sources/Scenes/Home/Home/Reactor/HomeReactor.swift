@@ -5,8 +5,9 @@
 //  Created by 이창준 on 2022/12/30.
 //
 
-import ReactorKit
+import UIKit
 
+import ReactorKit
 import RxCocoa
 import RxFlow
 
@@ -18,7 +19,7 @@ final class HomeReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
 	
 	enum Action {
-    
+    case itemSelected(IndexPath)
 	}
   
   enum Mutation {
@@ -41,7 +42,9 @@ final class HomeReactor: Reactor, Stepper {
 	
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-      
+    case .itemSelected(let indexPath):
+      print(indexPath)
+      return .empty()
     }
   }
   

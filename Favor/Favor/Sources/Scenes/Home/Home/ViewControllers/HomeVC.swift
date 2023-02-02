@@ -110,6 +110,13 @@ final class HomeViewController: BaseViewController, View {
 	
   func bind(reactor: HomeReactor) {
     // Action
+    self.collectionView.rx.itemSelected
+      .do(onNext: {
+        print($0)
+      })
+      .map { Reactor.Action.itemSelected($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.sections }
