@@ -168,6 +168,5 @@ final class SetProfileViewController: BaseViewController, View {
       make.top.equalTo(self.vStack.snp.bottom).offset(56)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
-  }
-  
+  }  
 }

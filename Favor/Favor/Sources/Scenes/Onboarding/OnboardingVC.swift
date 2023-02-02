@@ -7,8 +7,10 @@
 
 import UIKit
 
-import SnapKit
+import RxCocoa
 import RxFlow
+import RxSwift
+import SnapKit
 
 final class OnboardingViewController: BaseViewController, Stepper {
   
@@ -71,6 +73,8 @@ final class OnboardingViewController: BaseViewController, Stepper {
       self.continueButton.configurationUpdateHandler = handler
     }
   }
+  
+  var steps = PublishRelay<Step>()
   
   // MARK: - Setup
   
