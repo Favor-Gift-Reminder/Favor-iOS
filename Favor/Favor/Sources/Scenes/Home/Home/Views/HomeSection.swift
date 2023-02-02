@@ -7,6 +7,10 @@
 
 import RxDataSources
 
+enum HomeSectionType: Int, CaseIterable {
+  case upcoming, timeline
+}
+
 enum HomeSectionItem {
   case upcomingCell(UpcomingCellReactor)
   case timelineCell(TimelineCellReactor)

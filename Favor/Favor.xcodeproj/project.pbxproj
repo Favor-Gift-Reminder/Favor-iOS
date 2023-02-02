@@ -18,6 +18,7 @@
 		2E5ECBBC29894FFF0000A60B /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5ECBBB29894FFF0000A60B /* TimelineCellReactor.swift */; };
 		2E5ECBBE298950A40000A60B /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5ECBBD298950A40000A60B /* TimelineCell.swift */; };
 		2E5ECBC0298AAEEB0000A60B /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5ECBBF298AAEEB0000A60B /* HeaderView.swift */; };
+		2E5ECBC2298BAEA70000A60B /* HeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5ECBC1298BAEA70000A60B /* HeaderReactor.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
 		2E635391295D906A00B23A14 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635390295D906A00B23A14 /* Differentiator */; };
@@ -110,6 +111,7 @@
 		2E5ECBBB29894FFF0000A60B /* TimelineCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
 		2E5ECBBD298950A40000A60B /* TimelineCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
 		2E5ECBBF298AAEEB0000A60B /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
+		2E5ECBC1298BAEA70000A60B /* HeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderReactor.swift; sourceTree = "<group>"; };
 		2E76F58229601B75002FF001 /* TabBarCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCoordinator.swift; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,6 +396,7 @@
 		2EBB0154295E8CEC0072D158 /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
+				2E5ECBC1298BAEA70000A60B /* HeaderReactor.swift */,
 				2EBB0171295EBF150072D158 /* HomeReactor.swift */,
 				2E5ECBBB29894FFF0000A60B /* TimelineCellReactor.swift */,
 				2E5ECBB929894F360000A60B /* UpcomingCellReactor.swift */,
@@ -882,6 +885,7 @@
 				2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */,
 				2EE07ED7296E8E1900048A3C /* GiftVC.swift in Sources */,
 				2EBB0177295EC0ED0072D158 /* BaseCoordinator.swift in Sources */,
+				2E5ECBC2298BAEA70000A60B /* HeaderReactor.swift in Sources */,
 				2EE07EC9296E8D6200048A3C /* MyPageCoordinator.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE6B3BC2985785300CDBC81 /* HomeFlow.swift in Sources */,
