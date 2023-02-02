@@ -116,6 +116,10 @@ final class OnboardingViewController: BaseViewController, Stepper {
   private func didTapContinueButton() {
     let indexPath = IndexPath(row: self.currentPage + 1, section: 0)
     self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    
+    if self.currentPage == 2 {
+      self.steps.accept(AppStep.onboardingIsComplete)
+    }
   }
 }
 

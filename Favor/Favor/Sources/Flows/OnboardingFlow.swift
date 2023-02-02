@@ -15,32 +15,19 @@ final class OnboardingFlow: Flow {
     return self.rootViewController
   }
   
-  private lazy var rootViewController: UINavigationController = {
-    let viewController = UINavigationController()
-    return viewController
-  }()
+  let rootViewController = OnboardingViewController()
   
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
     case .onboardingIsRequired:
-      return self.navigateToOnboarding()
-      
+      return .one(flowContributor: .contribute(withNext: self.rootViewController))
     case .onboardingIsComplete:
-      return .end(forwardToParentFlowWithStep: AppStep.authIsRequired)
+      return .end(forwardToParentFlowWithStep: AppStep.onboardingIsComplete)
       
     default:
       return .none
     }
-  }
-}
-
-private extension OnboardingFlow {
-  func navigateToOnboarding() -> FlowContributors {
-    let viewController = OnboardingViewController()
-    self.rootViewController.setViewControllers([viewController], animated: true)
-    
-    return .one(flowContributor: .contribute(withNext: viewController))
   }
 }

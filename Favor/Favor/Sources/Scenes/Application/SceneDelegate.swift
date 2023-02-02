@@ -22,9 +22,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     let window = UIWindow(windowScene: windowScene)
     self.window = window
     
-    let appFlow = AppFlow(with: window)
+    let appFlow = AppFlow()
     self.coordinator.coordinate(flow: appFlow, with: AppStepper())
-    self.window?.makeKeyAndVisible()
+    
+    Flows.use(appFlow, when: .created) { root in
+      window.rootViewController = root
+      window.makeKeyAndVisible()
+    }
 	}
 }
 

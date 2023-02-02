@@ -25,22 +25,28 @@ final class AuthFlow: Flow {
     
     switch step {
     case .authIsRequired:
-      return self.navigateToAuth()
+      return self.navigationToAuth()
       
     case .authIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.authIsComplete)
       
     case .signInIsRequired:
-      return self.pushToSignInVC()
+      return self.NavigationToSignIn()
       
     case .signUpIsRequired:
-      return self.pushToSignUpVC()
+      return self.NavigationToSignUp()
       
     case .setProfileIsRequired:
-      return self.pushToSetProfileVC()
+      return self.NavigationToSetProfile()
       
     case .termIsRequired:
-      return self.pushToTermVC()
+      return self.NavigationToTerm()
+      
+    case .onboardingIsRequired:
+      return .none
+      
+    case .onboardingIsComplete:
+      return .none
       
     default:
       return .none
@@ -49,10 +55,11 @@ final class AuthFlow: Flow {
 }
 
 private extension AuthFlow {
-  func navigateToAuth() -> FlowContributors {
+  func navigationToAuth() -> FlowContributors {
     let viewController = SelectSignInViewController()
     let reactor = SelectSignInReactor()
     viewController.reactor = reactor
+    self.rootViewController.setViewControllers([viewController], animated: true)
     
     return .one(flowContributor: .contribute(
       withNextPresentable: viewController,
@@ -60,7 +67,23 @@ private extension AuthFlow {
     ))
   }
   
-  func pushToSignInVC() -> FlowContributors {
+  func navigationToOnboarding() -> FlowContributors {
+    let onboardingFlow = OnboardingFlow()
+
+    Flows.use(onboardingFlow, when: .created) { [unowned self] root in
+      DispatchQueue.main.async {
+        root.modalPresentationStyle = .overFullScreen
+        self.rootViewController.present(root, animated: true)
+      }
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: onboardingFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.onboardingIsRequired)
+    ))
+  }
+  
+  func NavigationToSignIn() -> FlowContributors {
     let viewController = SignInViewController()
     let reactor = SignInReactor()
     viewController.reactor = reactor
@@ -69,7 +92,7 @@ private extension AuthFlow {
     return .none
   }
   
-  func pushToSignUpVC() -> FlowContributors {
+  func NavigationToSignUp() -> FlowContributors {
     let viewController = SignUpViewController()
     let reactor = SignUpReactor()
     viewController.reactor = reactor
@@ -78,7 +101,7 @@ private extension AuthFlow {
     return .none
   }
   
-  func pushToSetProfileVC() -> FlowContributors {
+  func NavigationToSetProfile() -> FlowContributors {
     let viewController = SetProfileViewController()
     let reactor = SetProfileReactor(pickerManager: PHPickerManager())
     viewController.reactor = reactor
@@ -87,7 +110,7 @@ private extension AuthFlow {
     return .none
   }
   
-  func pushToTermVC() -> FlowContributors {
+  func NavigationToTerm() -> FlowContributors {
     let viewController = TermViewController()
     self.rootViewController.pushViewController(viewController, animated: true)
     

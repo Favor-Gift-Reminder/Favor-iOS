@@ -12,17 +12,16 @@ import RxFlow
 enum AppStep: Step {
   // MARK: - Auth
   case authIsRequired
+  case authIsComplete
   case signUpIsRequired
   case signInIsRequired
   case setProfileIsRequired
   case termIsRequired
-
-  case authIsComplete
   
   // MARK: - Onboarding
   case onboardingIsRequired
   case onboardingIsComplete
   
   // MARK: - Main
-  case mainIsRequired
+  case dashBoardIsRequired
 }

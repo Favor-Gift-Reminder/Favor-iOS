@@ -39,8 +39,13 @@ final class SelectSignInReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    default: return .empty()
+    case .emailLoginButtonTap:
+      self.steps.accept(AppStep.signInIsRequired)
+      return .empty()
+      
+    case .signUpButtonTap:
+      self.steps.accept(AppStep.signUpIsRequired)
+      return .empty()
     }
   }
-  
 }
