@@ -82,15 +82,6 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   override init(frame: CGRect) {
     super.init(frame: frame)
-    
-    [
-      self.allButton,
-      self.getButton,
-      self.giveButton
-    ].forEach {
-      self.buttons.append($0)
-    }
-    
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
@@ -149,6 +140,14 @@ extension HeaderView: BaseView {
   }
   
   func setupLayouts() {
+    [ // FIXME: 별로 안좋은 방식 같은데 아이디어 생기면 수정할게..!
+      self.allButton,
+      self.getButton,
+      self.giveButton
+    ].forEach {
+      self.buttons.append($0)
+    }
+    
     [
       self.vStack,
       self.rightButton
