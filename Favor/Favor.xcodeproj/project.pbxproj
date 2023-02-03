@@ -53,6 +53,7 @@
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
 		E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C3298B5CDF002940D1 /* AppStpper.swift */; };
 		E55CF7C6298B8EBB002940D1 /* TabBarFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C5298B8EBB002940D1 /* TabBarFlow.swift */; };
+		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -135,6 +136,7 @@
 		E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		E55CF7C3298B5CDF002940D1 /* AppStpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStpper.swift; sourceTree = "<group>"; };
 		E55CF7C5298B8EBB002940D1 /* TabBarFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFlow.swift; sourceTree = "<group>"; };
+		E55CF7B6298A644C002940D1 /* FTUXStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTUXStorage.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
@@ -242,9 +244,8 @@
 			children = (
 				2EBB0151295E8CAD0072D158 /* Assets */,
 				E5E28ECA295DAC15006B9245 /* Base */,
-				E5B182902974F39C00229C50 /* Views */,
 				2EBB0150295E8CA10072D158 /* Constants */,
-				E5B182912974F43E00229C50 /* Utils */,
+				E55CF7B4298A622B002940D1 /* Protocols */,
 				2EBB014F295E8C9B0072D158 /* Extensions */,
 				2EBB014E295E8C960072D158 /* Fonts */,
 			);
@@ -255,6 +256,9 @@
 			isa = PBXGroup;
 			children = (
 				E55CF7B8298A705F002940D1 /* Flows */,
+				E55CF7B5298A6422002940D1 /* Storages */,
+				E5B182912974F43E00229C50 /* Utils */,
+				E5B182902974F39C00229C50 /* Views */,
 				2EBB014D295E8C880072D158 /* Models */,
 				2EBB014C295E8C820072D158 /* Network */,
 				2EBB014B295E8C770072D158 /* Scenes */,
@@ -583,6 +587,24 @@
 			path = Flows;
 			sourceTree = "<group>";
 		};
+		E55CF7B4298A622B002940D1 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E5E28ECD295DAC79006B9245 /* Coordinator.swift */,
+				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
+				E57F313E297000DB00E3D449 /* BaseView.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		E55CF7B5298A6422002940D1 /* Storages */ = {
+			isa = PBXGroup;
+			children = (
+				E55CF7B6298A644C002940D1 /* FTUXStorage.swift */,
+			);
+			path = Storages;
+			sourceTree = "<group>";
+		};
 		E5B182902974F39C00229C50 /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -609,8 +631,6 @@
 			isa = PBXGroup;
 			children = (
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
-				E57F313E297000DB00E3D449 /* BaseView.swift */,
-				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -765,6 +785,7 @@
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */,
 				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
+				E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */,
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
