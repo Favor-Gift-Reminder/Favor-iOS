@@ -27,6 +27,7 @@ final class UpcomingCellReactor: Reactor {
   
   // MARK: - Initializer
   
+  // TODO: 실제 데이터 매핑할 때 변경
   init(text: String) {
     self.initialState = State(
       text: text

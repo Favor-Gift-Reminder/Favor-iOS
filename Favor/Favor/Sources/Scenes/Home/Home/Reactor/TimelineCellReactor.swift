@@ -27,6 +27,7 @@ final class TimelineCellReactor: Reactor {
   
   // MARK: - Initializer
   
+  // TODO: 실제 Data 매핑할 떄 변경
   init(text: String) {
     self.initialState = State(
       text: text
