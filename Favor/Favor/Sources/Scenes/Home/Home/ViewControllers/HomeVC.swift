@@ -82,7 +82,6 @@ final class HomeViewController: BaseViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    // FIXME: 초기값을 설정해줘야 Reactor에서의 값 변경 감지
     let test = [HomeSection.upcoming([]), HomeSection.timeline([])]
     Observable.just(test)
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))

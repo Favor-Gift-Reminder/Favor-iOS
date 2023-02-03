@@ -154,7 +154,6 @@ extension HeaderView: BaseView {
   }
   
   func setupLayouts() {
-    // FIXME: 별로 안좋은 방식 같은데 아이디어 생기면 수정할게..!
     [
       self.allButton,
       self.getButton,

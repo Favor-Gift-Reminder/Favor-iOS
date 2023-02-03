@@ -47,16 +47,6 @@ final class HomeReactor: Reactor, Stepper {
       return .empty()
     }
   }
-  
-  func reduce(state: State, mutation: Mutation) -> State {
-    var newState = state
-    
-    switch mutation {
-      
-    }
-    
-    return newState
-  }
 }
 
 private extension HomeReactor {
