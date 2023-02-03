@@ -21,11 +21,13 @@ final class HomeFlow: Flow {
   }()
   
   func navigate(to step: Step) -> FlowContributors {
-    guard let step = step as? HomeStep else { return .none }
+    guard let step = step as? AppStep else { return .none }
     
     switch step {
     case .homeIsRequired:
       return self.navigateToHome()
+    default:
+      return .none
     }
   }
   
@@ -33,12 +35,10 @@ final class HomeFlow: Flow {
     let homeVC = HomeViewController()
     let homeReactor = HomeReactor()
     homeVC.reactor = homeReactor
-    self.rootViewController.pushViewController(homeVC, animated: true)
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: homeVC,
-        withNextStepper: homeReactor
-      )
-    )
+    self.rootViewController.setViewControllers([homeVC], animated: true)
+    return .one(flowContributor: .contribute(
+      withNextPresentable: homeVC,
+      withNextStepper: homeReactor
+    ))
   }
 }

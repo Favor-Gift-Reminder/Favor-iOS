@@ -18,6 +18,6 @@ final class AppStepper: Stepper {
   
   var initialStep: Step {
     // TODO: State에 따라서 Step 변경
-    return AppStep.authIsRequired
+    return AppStep.testIsRequired
   }
 }
