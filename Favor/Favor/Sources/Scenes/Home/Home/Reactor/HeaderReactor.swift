@@ -8,7 +8,6 @@
 import ReactorKit
 
 final class HeaderReactor: Reactor {
-  typealias isHidden = Bool
   
   // MARK: - Properties
   

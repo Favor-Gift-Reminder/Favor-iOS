@@ -13,7 +13,6 @@ import RxSwift
 import SnapKit
 
 final class HomeViewController: BaseViewController, View {
-	typealias Reactor = HomeReactor
   typealias HomeDataSource = RxCollectionViewSectionedReloadDataSource<HomeSection>
   
   // MARK: - Constants

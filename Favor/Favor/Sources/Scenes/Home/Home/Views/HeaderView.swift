@@ -11,7 +11,6 @@ import ReactorKit
 import SnapKit
 
 class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
-  typealias Reactor = HeaderReactor
   
   // MARK: - Properties
   

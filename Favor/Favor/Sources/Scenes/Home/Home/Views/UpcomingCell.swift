@@ -11,7 +11,6 @@ import ReactorKit
 import SnapKit
 
 final class UpcomingCell: UICollectionViewCell, ReuseIdentifying, View {
-  typealias Reactor = UpcomingCellReactor
   
   // MARK: - Properties
   

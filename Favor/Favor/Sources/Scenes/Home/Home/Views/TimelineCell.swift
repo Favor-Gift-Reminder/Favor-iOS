@@ -10,7 +10,6 @@ import UIKit
 import ReactorKit
 
 final class TimelineCell: UICollectionViewCell, ReuseIdentifying, View {
-  typealias Reactor = TimelineCellReactor
   
   // MARK: - Properties
   
