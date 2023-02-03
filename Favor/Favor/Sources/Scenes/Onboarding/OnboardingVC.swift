@@ -7,9 +7,12 @@
 
 import UIKit
 
+import RxCocoa
+import RxFlow
+import RxSwift
 import SnapKit
 
-final class OnboardingViewController: BaseViewController {
+final class OnboardingViewController: BaseViewController, Stepper {
   
   // MARK: - Properties
   
@@ -71,6 +74,8 @@ final class OnboardingViewController: BaseViewController {
     }
   }
   
+  var steps = PublishRelay<Step>()
+  
   // MARK: - Setup
   
   override func setupStyles() {
@@ -111,6 +116,10 @@ final class OnboardingViewController: BaseViewController {
   private func didTapContinueButton() {
     let indexPath = IndexPath(row: self.currentPage + 1, section: 0)
     self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+    
+    if self.currentPage == 2 {
+      self.steps.accept(AppStep.onboardingIsComplete)
+    }
   }
 }
 

@@ -12,9 +12,7 @@ import RxSwift
 import SnapKit
 import Then
 
-final class HomeViewController: BaseViewController, View {
-	typealias Reactor = HomeReactor
-	
+final class HomeViewController: BaseViewController {
 	// MARK: - Properties
 	
 	// MARK: - Setup
@@ -24,9 +22,4 @@ final class HomeViewController: BaseViewController, View {
 	}
 	
 	// MARK: - Binding
-	
-	func bind(reactor: HomeReactor) {
-		//
-	}
-	
 }

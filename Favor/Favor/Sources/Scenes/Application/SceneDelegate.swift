@@ -19,8 +19,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
     
-    self.enableNavigateLog()
-    self.navigateToApp(with: windowScene)
+    let window = UIWindow(windowScene: windowScene)
+    self.window = window
+    
+    let appFlow = AppFlow()
+    self.coordinator.coordinate(flow: appFlow, with: AppStepper())
+    
+    Flows.use(appFlow, when: .created) { root in
+      window.rootViewController = root
+      window.makeKeyAndVisible()
+    }
 	}
 }
 
@@ -30,16 +38,5 @@ private extension SceneDelegate {
     self.coordinator.rx.didNavigate.subscribe(onNext: { flow, step in
       print("➡️ Navigate to flow = \(flow) and step = \(step)")
     }).disposed(by: self.disposeBag)
-  }
-  
-  func navigateToApp(with windowScene: UIWindowScene) {
-    let window = UIWindow(windowScene: windowScene)
-    self.window = window
-    
-    let appFlow = AppFlow(with: window)
-    let appStepper = AppStepper()
-    
-    self.coordinator.coordinate(flow: appFlow, with: appStepper)
-    window.makeKeyAndVisible()
   }
 }
