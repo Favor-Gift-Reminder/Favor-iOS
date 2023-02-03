@@ -118,7 +118,22 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     // State
     reactor.state.map { $0.sectionType }
       .map { $0 == .upcoming }
-      .bind(to: self.hStack.rx.isHidden)
+      .asDriver(onErrorJustReturn: true)
+      .drive(with: self, onNext: { owner, isUpcoming in
+        // Header Title
+        owner.titleLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
+        // Filter Buttons
+        owner.hStack.isHidden = isUpcoming
+        // Right Button
+        owner.rightButton.configurationUpdateHandler = { button in
+          var config = button.configuration
+          config?.contentInsets = .zero
+          config?.baseForegroundColor = isUpcoming ? .favorColor(.detail) : .favorColor(.typo)
+          config?.title = isUpcoming ? "더보기" : nil
+          config?.image = isUpcoming ? nil : UIImage(named: "ic_filter")
+          button.configuration = config
+        }
+      })
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.selectedButtonIndex }
@@ -140,7 +155,8 @@ extension HeaderView: BaseView {
   }
   
   func setupLayouts() {
-    [ // FIXME: 별로 안좋은 방식 같은데 아이디어 생기면 수정할게..!
+    // FIXME: 별로 안좋은 방식 같은데 아이디어 생기면 수정할게..!
+    [
       self.allButton,
       self.getButton,
       self.giveButton
