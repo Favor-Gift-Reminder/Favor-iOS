@@ -41,7 +41,7 @@ final class AppFlow: Flow {
 
 private extension AppFlow {
   func navigationToDashBoardScreen() -> FlowContributors {
-    let dashBoardFlow = DashBoardFlow()
+    let dashBoardFlow = TabBarFlow()
     
     return .one(flowContributor: .contribute(
       withNextPresentable: dashBoardFlow,

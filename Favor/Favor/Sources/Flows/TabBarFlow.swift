@@ -1,5 +1,5 @@
 //
-//  DashBoardFlow.swift
+//  TabBarFlow.swift
 //  Favor
 //
 //  Created by 김응철 on 2023/02/02.
@@ -9,7 +9,7 @@ import UIKit
 
 import RxFlow
 
-final class DashBoardFlow: Flow {
+final class TabBarFlow: Flow {
   
   var root: Presentable { self.rootViewController }
   
@@ -27,7 +27,7 @@ final class DashBoardFlow: Flow {
   }
 }
 
-private extension DashBoardFlow {
+private extension TabBarFlow {
   func navigationToDashBoard() -> FlowContributors {
     let pages = TabBarPage.allCases
     let viewControllers = pages.map {
