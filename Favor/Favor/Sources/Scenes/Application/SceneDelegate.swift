@@ -42,5 +42,4 @@ private extension SceneDelegate {
     self.coordinator.coordinate(flow: appFlow, with: appStepper)
     window.makeKeyAndVisible()
   }
-  
 }
