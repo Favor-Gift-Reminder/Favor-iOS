@@ -73,6 +73,8 @@ final class HomeViewController: BaseViewController, View {
       withReuseIdentifier: HeaderView.reuseIdentifier
     )
     collectionView.backgroundColor = .clear
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.showsVerticalScrollIndicator = false
     return collectionView
   }()
   
