@@ -54,11 +54,14 @@ private extension HomeReactor {
   static func setupSections() -> [HomeSection] {
     let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "1"))
     let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "2"))
+    let emptyUpcoming = HomeSectionItem.emptyCell
+    // 배열이 비어있으면 emptyUpcoming으로 변환하여 반환
     let upcomingSection = HomeSection.upcoming([upcomingOne, upcomingTwo])
     
     let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(text: "1"))
     let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(text: "2"))
     let timelineThree = HomeSectionItem.timelineCell(TimelineCellReactor(text: "3"))
+    let emptyTimeline = HomeSectionItem.emptyCell
     let timelineSection = HomeSection.timeline([timelineOne, timelineTwo, timelineThree])
     
     return [upcomingSection, timelineSection]
