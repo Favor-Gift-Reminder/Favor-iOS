@@ -65,6 +65,7 @@ final class PlainFavorButton: UIButton {
       titleContainer.font = .favorFont(.regular, size: 12)
     }
     
+    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     config.attributedTitle = AttributedString(title, attributes: titleContainer)
     config.imagePlacement = .trailing
     
