@@ -163,7 +163,7 @@ private extension HomeViewController {
     })
   }
   
-  func sfd(sectionType: HomeSection) -> (NSCollectionLayoutSize, Int, CGFloat) {
+  func getSectionSize(sectionType: HomeSection) -> (NSCollectionLayoutSize, Int, CGFloat) {
     return (sectionType.cellSize, sectionType.columns, sectionType.spacing)
   }
   
@@ -173,7 +173,7 @@ private extension HomeViewController {
   ) -> NSCollectionLayoutSection {
     let (cellSize, columns, spacing) = (isEmpty == true)
     ? (.init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(305.0)), 1, 0)
-    : self.sfd(sectionType: sectionType)
+    : self.getSectionSize(sectionType: sectionType)
     
     // item
     let item = NSCollectionLayoutItem(
