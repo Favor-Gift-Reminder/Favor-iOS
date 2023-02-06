@@ -51,7 +51,7 @@ private extension AppDelegate {
     appearance.backButtonAppearance = backButtonAppearance
     
     appearance.titleTextAttributes = [
-      .foregroundColor: UIColor.favorColor(.typo),
+      .foregroundColor: UIColor.favorColor(.titleAndLine),
       .font: UIFont.favorFont(.bold, size: 18)
     ]
     

@@ -71,7 +71,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
   private lazy var rightButton: UIButton = {
     var configuration = UIButton.Configuration.plain()
     configuration.title = "버튼"
-    configuration.baseForegroundColor = .favorColor(.typo)
+    configuration.baseForegroundColor = .favorColor(.titleAndLine)
     
     let button = UIButton(configuration: configuration)
     return button
@@ -127,7 +127,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
         owner.rightButton.configurationUpdateHandler = { button in
           var config = button.configuration
           config?.contentInsets = .zero
-          config?.baseForegroundColor = isUpcoming ? .favorColor(.detail) : .favorColor(.typo)
+          config?.baseForegroundColor = isUpcoming ? .favorColor(.explain) : .favorColor(.titleAndLine)
           config?.title = isUpcoming ? "더보기" : nil
           config?.image = isUpcoming ? nil : UIImage(named: "ic_filter")
           button.configuration = config
@@ -195,17 +195,17 @@ private extension HeaderView {
     var attributedTitle = AttributedString(title)
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
-    configuration.baseForegroundColor = .favorColor(.box2)
+    configuration.baseForegroundColor = .favorColor(.line2)
     configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       switch button.state {
       case .selected:
         button.configuration?.baseBackgroundColor = .clear
-        button.configuration?.baseForegroundColor = .favorColor(.typo)
+        button.configuration?.baseForegroundColor = .favorColor(.titleAndLine)
       case .normal:
         button.configuration?.baseBackgroundColor = .clear
-        button.configuration?.baseForegroundColor = .favorColor(.box2)
+        button.configuration?.baseForegroundColor = .favorColor(.line2)
       default:
         break
       }

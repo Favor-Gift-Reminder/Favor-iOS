@@ -89,7 +89,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// Placeholder 텍스트의 색상
-  var placeholderColor: UIColor = .favorColor(.detail) {
+  var placeholderColor: UIColor = .favorColor(.explain) {
     didSet {
       self.updatePlaceholder()
     }
@@ -131,14 +131,14 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// 텍스트필드가 선택됐을 때 정보 메시지 색상
-  var selectedMessageColor: UIColor? = .favorColor(.typo) {
+  var selectedMessageColor: UIColor? = .favorColor(.titleAndLine) {
     didSet {
       self.updateColors()
     }
   }
   
   /// 정보 메시지 색상
-  var infoMessageColor: UIColor? = .favorColor(.box2) {
+  var infoMessageColor: UIColor? = .favorColor(.line2) {
     didSet {
       self.updateColors()
     }
@@ -169,14 +169,14 @@ class FavorTextField: UITextField, BaseView {
   }()
   
   /// TextField의 밑줄 색상
-  var underlineColor: UIColor = .favorColor(.box1) {
+  var underlineColor: UIColor = .favorColor(.line3) {
     didSet {
       self.updateUnderlineColor()
     }
   }
   
   /// TextField가 선택됐을 때의 밑줄 색상
-  var selectedUnderlineColor: UIColor = .favorColor(.typo) {
+  var selectedUnderlineColor: UIColor = .favorColor(.titleAndLine) {
     didSet {
       self.updateUnderlineColor()
     }
@@ -222,8 +222,8 @@ class FavorTextField: UITextField, BaseView {
     self.rightViewMode = .always
     self.secureEyeButton.configurationUpdateHandler = { button in
       var config = button.configuration
-      let showIcon: UIImage? = UIImage(named: "ic_eye_small")?.withTintColor(.favorColor(.detail))
-      let hideIcon: UIImage? = UIImage(named: "ic_eye_closed_small")?.withTintColor(.favorColor(.detail))
+      let showIcon: UIImage? = UIImage(named: "ic_eye_small")?.withTintColor(.favorColor(.explain))
+      let hideIcon: UIImage? = UIImage(named: "ic_eye_closed_small")?.withTintColor(.favorColor(.explain))
       config?.image = self.isTextHidden ? hideIcon : showIcon
       button.configuration = config
     }
@@ -335,7 +335,7 @@ private extension FavorTextField {
   func updatePlaceholder() {
     guard let placeholder, let font = self.placeholderFont ?? self.font else { return }
     
-    let color = self.isEnabled ? self.placeholderColor : .favorColor(.box1)
+    let color = self.isEnabled ? self.placeholderColor : .favorColor(.line3)
     self.attributedPlaceholder = NSAttributedString(
       string: placeholder,
       attributes: [

@@ -41,11 +41,11 @@ final class SmallFavorButton: UIButton {
     
     switch style {
     case .white:
-      config.baseBackgroundColor = .favorColor(.box1)
-      config.baseForegroundColor = .favorColor(.typo)
+      config.baseBackgroundColor = .favorColor(.line3)
+      config.baseForegroundColor = .favorColor(.titleAndLine)
       
     case .black:
-      config.baseBackgroundColor = .favorColor(.typo)
+      config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
     }
     

@@ -41,7 +41,7 @@ final class PlainFavorButton: UIButton {
     var config = UIButton.Configuration.plain()
     
     var titleContainer = AttributeContainer()
-    titleContainer.foregroundColor = .favorColor(.detail)
+    titleContainer.foregroundColor = .favorColor(.explain)
     
     switch style {
     case .main:
