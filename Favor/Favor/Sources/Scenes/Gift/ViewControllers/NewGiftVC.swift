@@ -21,19 +21,68 @@ final class NewGiftViewController: BaseViewController {
   
   private let contentsView: UIView = {
     let view = UIView()
-    view.backgroundColor = .white
+    view.backgroundColor = .favorColor(.background)
     
     return view
+  }()
+  
+  private let titleTextField: UITextField = {
+    let tf = UITextField()
+    let attributedPlaceholder = NSAttributedString(
+      string: "선물 이름 (최대 20자)",
+      attributes: [
+        .foregroundColor: UIColor.favorColor(.subtext),
+        .font: UIFont.favorFont(.regular, size: 16)
+      ]
+    )
+    tf.attributedPlaceholder = attributedPlaceholder
+    tf.font = .favorFont(.regular, size: 16)
+    tf.textColor = .favorColor(.titleAndLine)
+    
+    return tf
+  }()
+  
+  private lazy var addPictureCollectionView: UICollectionView = {
+    let layout = UICollectionViewFlowLayout()
+    layout.itemSize = CGSize(width: 110, height: 110)
+    
+    let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
+    cv.backgroundColor = .favorColor(.error)
+    
+    return cv
+  }()
+  
+  private let emotionStack: UIStackView = {
+    let sv = UIStackView()
+    ["🥹", "🥰", "🙂", "😐", "😰"].forEach {
+      sv.addArrangedSubview($0)
+    }
+    
+    return sv
   }()
   
   private lazy var giftReceivedButton = self.makeGiftButton("받은 선물")
   private lazy var giftGivenButton = self.makeGiftButton("준 선물")
   private lazy var titleLabel = self.makeTitleLabel("제목")
+  private lazy var titleLine = self.makeLine()
+  private lazy var categoryLabel = self.makeTitleLabel("카테고리")
+  private let categoryView = CategoryView()
+  private lazy var pictureLabel = self.makeTitleLabel("사진")
+  private lazy var friendLabel = self.makeTitleLabel("준 사람")
+  private let giverButton = PlainFavorButton(.main, title: "친구 선택")
+  private let receiverButton = PlainFavorButton(.main, title: "친구 선택")
+  private lazy var friendLine = self.makeLine()
+  private lazy var dateLabel = self.makeTitleLabel("날짜")
+  private let dateButton = PlainFavorButton(.main, title: "날짜 선택")
+  private lazy var dateLine = self.makeLine()
+  private lazy var emotionLabel = self.makeTitleLabel("감정 메모")
   
   // MARK: - Setup
   
   override func setupStyles() {
     self.giftReceivedButton.isSelected = true
+    self.view.backgroundColor = .favorColor(.background)
+    self.receiverButton.isHidden = true
   }
   
   override func setupLayouts() {
@@ -46,9 +95,13 @@ final class NewGiftViewController: BaseViewController {
     }
     
     [
-      self.giftReceivedButton,
-      self.giftGivenButton,
-      self.titleLabel
+      self.giftReceivedButton, self.giftGivenButton,
+      self.titleLabel, self.titleLine, self.titleTextField, self.titleLine,
+      self.categoryLabel, self.categoryView,
+      self.pictureLabel, self.addPictureCollectionView,
+      self.friendLabel, self.giverButton, self.receiverButton, self.friendLine,
+      self.dateLabel, self.dateButton, self.dateLine,
+      self.emotionLabel
     ].forEach {
       self.contentsView.addSubview($0)
     }
@@ -77,6 +130,85 @@ final class NewGiftViewController: BaseViewController {
       make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.giftReceivedButton.snp.bottom).offset(40)
     }
+    
+    self.titleLine.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+    }
+    
+    self.titleTextField.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.top.equalTo(titleLabel.snp.bottom).offset(16)
+    }
+    
+    self.titleLine.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.top.equalTo(titleTextField.snp.bottom).offset(16)
+      make.height.equalTo(1)
+    }
+    
+    self.categoryLabel.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.top.equalTo(titleLine.snp.bottom).offset(40)
+    }
+    
+    self.categoryView.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview()
+      make.width.equalTo(self.view.frame.width)
+      make.top.equalTo(categoryLabel.snp.bottom).offset(16)
+    }
+    
+    self.pictureLabel.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.categoryView.snp.bottom).offset(24)
+    }
+    
+    self.addPictureCollectionView.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.top.equalTo(self.pictureLabel.snp.bottom).offset(16)
+      make.height.equalTo(110)
+    }
+    
+    self.friendLabel.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.addPictureCollectionView.snp.bottom).offset(40)
+    }
+    
+    self.giverButton.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
+    }
+    
+    self.receiverButton.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
+    }
+    
+    self.friendLine.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.top.equalTo(self.giverButton.snp.bottom).offset(16)
+      make.height.equalTo(1)
+    }
+    
+    self.dateLabel.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.friendLine.snp.bottom).offset(40)
+    }
+    
+    self.dateButton.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.dateLabel.snp.bottom).offset(16)
+    }
+    
+    self.dateLine.snp.makeConstraints { make in
+      make.leading.trailing.equalToSuperview().inset(20)
+      make.top.equalTo(self.dateButton.snp.bottom).offset(16)
+      make.height.equalTo(1)
+    }
+    
+    self.emotionLabel.snp.makeConstraints { make in
+      make.leading.equalToSuperview().inset(20)
+      make.top.equalTo(self.dateLine.snp.bottom).offset(40)
+    }
   }
   
   // MARK: - Bind
@@ -102,7 +234,7 @@ private extension NewGiftViewController {
   
   func makeTitleLabel(_ title: String) -> UILabel {
     let lb = UILabel()
-    lb.textColor = .black
+    lb.textColor = .favorColor(.titleAndLine)
     lb.text = title
     lb.font = .favorFont(.bold, size: 18)
     
@@ -111,6 +243,7 @@ private extension NewGiftViewController {
   
   func makeLine() -> UIView {
     let view = UIView()
+    view.backgroundColor = .favorColor(.divider)
     
     return view
   }
@@ -124,4 +257,3 @@ struct NewGiftVC_PreView: PreviewProvider {
   }
 }
 #endif
-
