@@ -42,8 +42,7 @@ final class HomeReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .itemSelected(let indexPath):
-      print(indexPath)
+    case .itemSelected:
       return .empty()
     }
   }
@@ -53,14 +52,14 @@ private extension HomeReactor {
   
   // TODO: 데이터 바인딩 되면 수정 (데이터가 비어있으면 emptyCell로 변환하여 반환)
   static func setupSections() -> [HomeSection] {
-    let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "1"))
-    let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "2"))
+//    let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "1"))
+//    let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "2"))
     let emptyUpcoming = HomeSectionItem.emptyCell("이벤트가 없습니다.")
     let upcomingSection = HomeSection.upcoming([emptyUpcoming])
     
-    let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(text: "1"))
-    let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(text: "2"))
-    let timelineThree = HomeSectionItem.timelineCell(TimelineCellReactor(text: "3"))
+//    let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(text: "1"))
+//    let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(text: "2"))
+//    let timelineThree = HomeSectionItem.timelineCell(TimelineCellReactor(text: "3"))
     let emptyTimeline = HomeSectionItem.emptyCell("선물 기록이 없습니다.")
     let timelineSection = HomeSection.timeline([emptyTimeline])
     

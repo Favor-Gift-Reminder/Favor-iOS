@@ -18,7 +18,6 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Constants
   
   private let sectionHeaderElementKind = "SectionHeader"
-  private let sectionSpacing = 32.0 + 16.0 // top + bottom
 	
 	// MARK: - Properties
   
@@ -100,11 +99,7 @@ final class HomeViewController: BaseViewController, View {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    let test = [HomeSection.upcoming([]), HomeSection.timeline([])]
-    Observable.just(test)
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
-      .disposed(by: self.disposeBag)
+    self.setupCollectionView()
   }
 	
 	// MARK: - Setup
@@ -123,6 +118,12 @@ final class HomeViewController: BaseViewController, View {
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalToSuperview()
     }
+  }
+  
+  func setupCollectionView() {
+    Observable.just([])
+      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
   }
 	
 	// MARK: - Binding
