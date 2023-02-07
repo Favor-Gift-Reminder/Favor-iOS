@@ -129,7 +129,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
           config?.contentInsets = .zero
           config?.baseForegroundColor = isUpcoming ? .favorColor(.detail) : .favorColor(.typo)
           config?.title = isUpcoming ? "더보기" : nil
-          config?.image = isUpcoming ? nil : UIImage(named: "ic_filter")
+          config?.image = isUpcoming ? nil : UIImage(named: "ic_Filter")
           button.configuration = config
         }
       })
