@@ -11,6 +11,22 @@ import SnapKit
 
 final class EmptyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
   
+  // MARK: - Properties
+  
+  /// descriptionLabel에 들어갈 텍스트
+  var text: String = "Empty Cell" {
+    willSet {
+      self.descriptionLabel.text = newValue
+    }
+  }
+  
+  /// illustView에 들어갈 이미지
+  var image: UIImage? {
+    willSet {
+      self.illustView.image = newValue
+    }
+  }
+  
   // MARK: - UI Components
   
   private lazy var illustView: UIImageView = {
@@ -24,7 +40,7 @@ final class EmptyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
     label.font = .favorFont(.regular, size: 18)
     label.textColor = .favorColor(.detail)
     label.textAlignment = .center
-    label.text = "이벤트가 없습니다."
+    label.text = self.text
     return label
   }()
   

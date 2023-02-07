@@ -10,7 +10,7 @@ import UIKit
 import RxDataSources
 
 enum HomeSectionItem {
-  case emptyCell
+  case emptyCell(String, UIImage? = nil)
   case upcomingCell(UpcomingCellReactor)
   case timelineCell(TimelineCellReactor)
 }

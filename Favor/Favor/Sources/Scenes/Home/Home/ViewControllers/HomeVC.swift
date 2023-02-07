@@ -26,11 +26,13 @@ final class HomeViewController: BaseViewController, View {
     configureCell: { _, collectionView, indexPath, item -> UICollectionViewCell in
       switch item {
       // Empty
-      case .emptyCell:
+      case .emptyCell(let text, let image):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: EmptyCollectionViewCell.reuseIdentifier,
           for: indexPath
         ) as? EmptyCollectionViewCell else { return UICollectionViewCell() }
+        cell.text = text
+        cell.image = image
         return cell
         
       // 다가오는 이벤트
@@ -52,13 +54,13 @@ final class HomeViewController: BaseViewController, View {
         return cell
       }
     },
-    configureSupplementaryView: { ds, collectionView, kind, indexPath in
+    configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       guard let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         withReuseIdentifier: HeaderView.reuseIdentifier,
         for: indexPath
       ) as? HeaderView else { return UICollectionReusableView() }
-      let section = ds[indexPath.section]
+      let section = dataSource[indexPath.section]
       header.reactor = HeaderReactor(section: section)
       return header
     }
