@@ -17,6 +17,7 @@ final class SearchFlow: Flow {
   
   private lazy var rootViewController: UINavigationController = {
     let navigationController = UINavigationController()
+    navigationController.isNavigationBarHidden = true
     return navigationController
   }()
   
