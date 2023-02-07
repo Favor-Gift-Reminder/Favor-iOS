@@ -29,12 +29,16 @@ final class SearchViewController: BaseViewController, View {
   
   private lazy var searchBar: FavorSearchBar = {
     let searchBar = FavorSearchBar()
+    searchBar.height = 40
+    searchBar.placeholder = "선물, 유저 ID를 검색해보세요"
     return searchBar
   }()
   
   private lazy var searchStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
+    stackView.spacing = 26
+    stackView.alignment = .center
     [
       self.backButton,
       self.searchBar
@@ -73,9 +77,13 @@ final class SearchViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
+    self.backButton.snp.makeConstraints { make in
+      make.width.height.equalTo(48)
+    }
     self.searchStack.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.leading.equalTo(self.view.layoutMarginsGuide)
+      make.trailing.equalToSuperview().inset(6)
     }
   }
 }
