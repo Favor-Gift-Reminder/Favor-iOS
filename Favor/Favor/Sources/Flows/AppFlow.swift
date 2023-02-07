@@ -73,7 +73,7 @@ private extension AppFlow {
   
   /// UI Test를 위한 navigate 메서드
   func navigateToTest() -> FlowContributors {
-    let testFlow = HomeFlow() // Change to Test Flow here.
+    let testFlow = SearchFlow() // Change to Test Flow here.
     
     Flows.use(testFlow, when: .created) { [unowned self] root in
       DispatchQueue.main.async {
@@ -84,7 +84,7 @@ private extension AppFlow {
     
     return .one(flowContributor: .contribute(
       withNextPresentable: testFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired) // Change to Test Step here.
+      withNextStepper: OneStepper(withSingleStep: AppStep.searchIsRequired) // Change to Test Step here.
     ))
   }
 }
