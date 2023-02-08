@@ -116,7 +116,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming }
+      .map { $0 == .upcoming([]) }
       .asDriver(onErrorJustReturn: true)
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
