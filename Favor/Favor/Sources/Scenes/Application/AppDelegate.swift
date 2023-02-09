@@ -39,7 +39,7 @@ private extension AppDelegate {
     let appearance = UINavigationBarAppearance()
     let backButtonAppearance = UIBarButtonItemAppearance()
     
-    let leftArrowImage = UIImage(named: "ic_leftArrow")?
+    let leftArrowImage = UIImage(named: "ic_Left")?
       .withRenderingMode(.alwaysOriginal)
       .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
     

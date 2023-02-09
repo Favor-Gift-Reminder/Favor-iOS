@@ -116,7 +116,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming }
+      .map { $0 == .upcoming([]) }
       .asDriver(onErrorJustReturn: true)
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
@@ -129,7 +129,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
           config?.contentInsets = .zero
           config?.baseForegroundColor = isUpcoming ? .favorColor(.explain) : .favorColor(.titleAndLine)
           config?.title = isUpcoming ? "더보기" : nil
-          config?.image = isUpcoming ? nil : UIImage(named: "ic_filter")
+          config?.image = isUpcoming ? nil : UIImage(named: "ic_Filter")
           button.configuration = config
         }
       })

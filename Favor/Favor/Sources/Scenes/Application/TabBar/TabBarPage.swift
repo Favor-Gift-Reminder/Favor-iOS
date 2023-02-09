@@ -15,19 +15,19 @@ enum TabBarPage: Int, CaseIterable {
     case .home:
       return UITabBarItem(
         title: "홈",
-        image: UIImage(named: "ic_home"),
+        image: UIImage(named: "ic_Home"),
         selectedImage: nil
       )
     case .reminder:
       return UITabBarItem(
         title: "리마인더",
-        image: UIImage(named: "ic_notification"),
+        image: UIImage(named: "ic_Noti"),
         selectedImage: nil
       )
     case .myPage:
       return UITabBarItem(
         title: "마이페이지",
-        image: UIImage(named: "ic_person_circle"),
+        image: UIImage(named: "ic_Friend"),
         selectedImage: nil
       )
     }
