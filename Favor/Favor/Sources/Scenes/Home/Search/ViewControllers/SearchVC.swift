@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxGesture
 import SnapKit
 
 final class SearchViewController: BaseViewController, View {
@@ -100,6 +101,14 @@ final class SearchViewController: BaseViewController, View {
   
   func bind(reactor: SearchReactor) {
     // Action
+    self.view.rx.anyGesture(.tap())
+      .when(.recognized)
+      .asDriver(onErrorDriveWith: .empty())
+      .drive(with: self, onNext: { owner, _ in
+        owner.searchBar.searchTextField.resignFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+    
     self.backButton.rx.tap
       .map { Reactor.Action.backButtonDidTap }
       .bind(to: reactor.action)
