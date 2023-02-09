@@ -8,9 +8,13 @@
 import UIKit
 
 import RSKPlaceholderTextView
+import RxDataSources
+import RxSwift
 import SnapKit
 
 final class NewGiftViewController: BaseViewController {
+  
+  typealias DataSource = RxCollectionViewSectionedReloadDataSource<PickedPictureSection>
   
   // MARK: - Properties
   
@@ -43,14 +47,21 @@ final class NewGiftViewController: BaseViewController {
     return tf
   }()
   
-  private lazy var addPictureCollectionView: UICollectionView = {
+  private lazy var pickedPictureCollectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
+    layout.scrollDirection = .horizontal
     layout.itemSize = CGSize(width: 110, height: 110)
-    
     let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    cv.backgroundColor = .favorColor(.error)
-    
-    // MARK: - 레이아웃 추가
+    cv.backgroundColor = .favorColor(.background)
+    cv.showsHorizontalScrollIndicator = false
+    cv.register(
+      PickedPictureCell.self,
+      forCellWithReuseIdentifier: PickedPictureCell.reuseIdentifier
+    )
+    cv.register(
+      PickPictureCell.self,
+      forCellWithReuseIdentifier: PickPictureCell.reuseIdentifier
+    )
     
     return cv
   }()
@@ -108,6 +119,28 @@ final class NewGiftViewController: BaseViewController {
     return button
   }()
   
+  var dataSource = DataSource { dataSource, collectionView, indexPath, item in
+    switch item {
+    case .pick(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: PickPictureCell.reuseIdentifier,
+        for: indexPath
+      ) as? PickPictureCell else {
+        return UICollectionViewCell()
+      }
+      return cell
+      
+    case .picked(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: PickedPictureCell.reuseIdentifier,
+        for: indexPath
+      ) as? PickedPictureCell else {
+        return UICollectionViewCell()
+      }
+      return cell
+    }
+  }
+  
   private lazy var giftReceivedButton = self.makeGiftButton("받은 선물")
   private lazy var giftGivenButton = self.makeGiftButton("준 선물")
   private lazy var titleLabel = self.makeTitleLabel("제목")
@@ -130,6 +163,16 @@ final class NewGiftViewController: BaseViewController {
   private lazy var emotionButton5 = self.makeEmotionButton("🥹")
   private lazy var memoLine = self.makeLine()
   
+  // MARK: - LifeCycle
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    Observable.just(getMockSection())
+      .bind(to: self.pickedPictureCollectionView.rx.items(dataSource: dataSource))
+      .disposed(by: disposeBag)
+  }
+  
   // MARK: - Setup
   
   override func setupStyles() {
@@ -151,7 +194,7 @@ final class NewGiftViewController: BaseViewController {
       self.giftReceivedButton, self.giftGivenButton,
       self.titleLabel, self.titleLine, self.titleTextField, self.titleLine,
       self.categoryLabel, self.categoryView,
-      self.pictureLabel, self.addPictureCollectionView,
+      self.pictureLabel, self.pickedPictureCollectionView,
       self.friendLabel, self.giverButton, self.receiverButton, self.friendLine,
       self.dateLabel, self.dateButton, self.dateLine,
       self.emotionLabel, self.emotionStackView,
@@ -217,7 +260,7 @@ final class NewGiftViewController: BaseViewController {
       make.top.equalTo(self.categoryView.snp.bottom).offset(24)
     }
     
-    self.addPictureCollectionView.snp.makeConstraints { make in
+    self.pickedPictureCollectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
       make.top.equalTo(self.pictureLabel.snp.bottom).offset(16)
       make.height.equalTo(110)
@@ -225,7 +268,7 @@ final class NewGiftViewController: BaseViewController {
     
     self.friendLabel.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.addPictureCollectionView.snp.bottom).offset(40)
+      make.top.equalTo(self.pickedPictureCollectionView.snp.bottom).offset(40)
     }
     
     self.giverButton.snp.makeConstraints { make in
@@ -290,6 +333,24 @@ final class NewGiftViewController: BaseViewController {
   }
   
   // MARK: - Bind
+  func getMockSection() -> [PickedPictureSection] {
+    let pickItem = PickedPictureSectionItem.pick(.init(5))
+    let pickedPicture1 = PickedPictureSectionItem.picked(.init(UIImage()))
+    let pickedPicture2 = PickedPictureSectionItem.picked(.init(UIImage()))
+    let pickedPicture3 = PickedPictureSectionItem.picked(.init(UIImage()))
+    let pickedPicture4 = PickedPictureSectionItem.picked(.init(UIImage()))
+    
+    let itemInFirstSection = [pickItem, pickedPicture1, pickedPicture2, pickedPicture3, pickedPicture4]
+    let firstSection = PickedPictureSection(
+      original: PickedPictureSection(
+        original: .first(itemInFirstSection),
+        items: itemInFirstSection
+      ),
+      items: itemInFirstSection
+    )
+    
+    return [firstSection]
+  }
 }
 
 // MARK: - Helpers
