@@ -27,6 +27,8 @@ final class SearchFlow: Flow {
     switch step {
     case .searchIsRequired:
       return self.navigateToSearch()
+    case .searchResultIsRequired:
+      return self.navigateToSearchResult()
     default:
       return .none
     }
@@ -40,6 +42,17 @@ final class SearchFlow: Flow {
     return .one(flowContributor: .contribute(
       withNextPresentable: searchVC,
       withNextStepper: searchReactor
+    ))
+  }
+  
+  private func navigateToSearchResult() -> FlowContributors {
+    let searchResultVC = SearchResultViewController()
+    let searchResultReactor = SearchResultReactor()
+    searchResultVC.reactor = searchResultReactor
+    self.rootViewController.pushViewController(searchResultVC, animated: true)
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchResultVC,
+      withNextStepper: searchResultReactor
     ))
   }
 }

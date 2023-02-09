@@ -53,6 +53,7 @@ final class SearchReactor: Reactor, Stepper {
       return .just(.switchIsEditingTo(false))
       
     case .returnKeyDidTap:
+      self.steps.accept(AppStep.searchResultIsRequired)
       return .empty()
     }
   }

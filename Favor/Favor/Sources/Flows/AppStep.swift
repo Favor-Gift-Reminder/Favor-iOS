@@ -30,6 +30,7 @@ enum AppStep: Step {
   
   // MARK: - Search
   case searchIsRequired
+  case searchResultIsRequired
   
   // MARK: - Test
   case testIsRequired
