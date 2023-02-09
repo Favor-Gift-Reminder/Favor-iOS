@@ -19,9 +19,10 @@ final class SearchResultViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  required convenience init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+  private lazy var searchBar: FavorSearchBar = {
+    let searchBar = FavorSearchBar()
+    return searchBar
+  }()
   
   // MARK: - Life Cycle
   
@@ -35,4 +36,22 @@ final class SearchResultViewController: BaseViewController, View {
   
   // MARK: - UI Setups
   
+  override func setupStyles() {
+    super.setupStyles()
+  }
+  
+  override func setupLayouts() {
+    [
+      self.searchBar
+    ].forEach {
+      self.view.addSubview($0)
+    }
+  }
+  
+  override func setupConstraints() {
+    self.searchBar.snp.makeConstraints { make in
+      make.top.equalTo(self.view.safeAreaLayoutGuide)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    }
+  }
 }
