@@ -26,7 +26,6 @@
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
 		2EA38494298D7C5F0081499C /* HeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38491298D7C5F0081499C /* HeaderReactor.swift */; };
 		2EA3849A298D7C680081499C /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38495298D7C680081499C /* HomeSection.swift */; };
-		2EA3849B298D7C680081499C /* UpcomingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38496298D7C680081499C /* UpcomingSection.swift */; };
 		2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38497298D7C680081499C /* UpcomingCell.swift */; };
 		2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38498298D7C680081499C /* TimelineCell.swift */; };
 		2EA3849E298D7C680081499C /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38499298D7C680081499C /* HeaderView.swift */; };
@@ -38,6 +37,7 @@
 		2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B92992371C0081499C /* SearchFlow.swift */; };
 		2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BD299248200081499C /* FavorSearchBar.swift */; };
 		2EA384C029936BAD0081499C /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BF29936BAD0081499C /* String+.swift */; };
+		2EA384AC298E3B040081499C /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */; };
 		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
@@ -112,7 +112,6 @@
 		2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
 		2EA38491298D7C5F0081499C /* HeaderReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderReactor.swift; sourceTree = "<group>"; };
 		2EA38495298D7C680081499C /* HomeSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
-		2EA38496298D7C680081499C /* UpcomingSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingSection.swift; sourceTree = "<group>"; };
 		2EA38497298D7C680081499C /* UpcomingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingCell.swift; sourceTree = "<group>"; };
 		2EA38498298D7C680081499C /* TimelineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
 		2EA38499298D7C680081499C /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -124,6 +123,7 @@
 		2EA384B92992371C0081499C /* SearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFlow.swift; sourceTree = "<group>"; };
 		2EA384BD299248200081499C /* FavorSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSearchBar.swift; sourceTree = "<group>"; };
 		2EA384BF29936BAD0081499C /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -413,9 +413,8 @@
 			children = (
 				2EA38499298D7C680081499C /* HeaderView.swift */,
 				2EA38495298D7C680081499C /* HomeSection.swift */,
-				2EA38498298D7C680081499C /* TimelineCell.swift */,
 				2EA38497298D7C680081499C /* UpcomingCell.swift */,
-				2EA38496298D7C680081499C /* UpcomingSection.swift */,
+				2EA38498298D7C680081499C /* TimelineCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -668,6 +667,7 @@
 				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
 				2E306A7E297290AB007B7EFF /* FavorTextField.swift */,
+				2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -889,6 +889,7 @@
 				2EE0D587297524880064E932 /* SetProfileReactor.swift in Sources */,
 				E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
+				2EA384AC298E3B040081499C /* EmptyCollectionViewCell.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
 				E55CF7C6298B8EBB002940D1 /* TabBarFlow.swift in Sources */,
 				2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */,
