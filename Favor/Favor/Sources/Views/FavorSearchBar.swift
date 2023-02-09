@@ -117,7 +117,7 @@ class FavorSearchBar: UIView {
   func updateLeftItemVisibility(isHidden: Bool) {
     let duration = isHidden ? 0.3 : 0.4
     DispatchQueue.main.async {
-      UIView.animate(withDuration: duration) {
+      UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut) {
         self.leftItem.isHidden = isHidden
       }
     }
