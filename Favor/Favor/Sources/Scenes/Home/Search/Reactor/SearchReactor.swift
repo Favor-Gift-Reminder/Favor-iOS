@@ -20,6 +20,7 @@ final class SearchReactor: Reactor, Stepper {
     case backButtonDidTap
     case searchDidBegin
     case searchDidEnd
+    case returnKeyDidTap
   }
   
   enum Mutation {
@@ -50,6 +51,9 @@ final class SearchReactor: Reactor, Stepper {
       
     case .searchDidEnd:
       return .just(.switchIsEditingTo(false))
+      
+    case .returnKeyDidTap:
+      return .empty()
     }
   }
   

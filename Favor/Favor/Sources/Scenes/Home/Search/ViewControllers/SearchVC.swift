@@ -125,9 +125,11 @@ final class SearchViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.searchBar.searchTextField.rx.controlEvent([.editingDidEndOnExit])
-      .subscribe(onNext: {
+      .do(onNext: {
         self.searchBar.searchTextField.resignFirstResponder()
       })
+      .map { Reactor.Action.returnKeyDidTap }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     // State
