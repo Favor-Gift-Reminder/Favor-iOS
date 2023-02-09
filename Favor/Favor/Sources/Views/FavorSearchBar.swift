@@ -9,12 +9,19 @@ import UIKit
 
 import SnapKit
 
-class FavorSearchBar: UISearchBar {
+class FavorSearchBar: UIView {
   
   // MARK: - Properties
   
-  /// SearchBar 전체 높이
-  var height: CGFloat = 40.0
+  /// 왼쪽 버튼의 크기 (1:1 ratio)
+  var leftItemSize: CGFloat = 48.0 {
+    didSet {
+      self.updateLeftItem()
+    }
+  }
+  
+  /// SearchBar의 높이
+  var searchBarHeight: CGFloat = 40.0
   
   /// 왼쪽에 있는 아이콘의 이미지
   var leftItemImage: UIImage? = UIImage(named: "ic_Search") {
@@ -31,7 +38,7 @@ class FavorSearchBar: UISearchBar {
   }
   
   /// SearchBar에 내장되어 있는 TextField의 placeholder 텍스트
-  override var placeholder: String? {
+  var placeholder: String? {
     didSet {
       self.updateTextField()
     }
@@ -44,10 +51,49 @@ class FavorSearchBar: UISearchBar {
     }
   }
   
+  // MARK: - UI Components
+  
+  lazy var leftItem: UIButton = {
+    var configuration = UIButton.Configuration.plain()
+    configuration.baseForegroundColor = .favorColor(.typo)
+    configuration.image = UIImage(systemName: "chevron.backward")
+    
+    let button = UIButton(configuration: configuration)
+    return button
+  }()
+  
+  lazy var searchBar: UISearchBar = {
+    let searchBar = UISearchBar()
+    searchBar.searchBarStyle = .minimal
+    searchBar.backgroundColor = .clear
+    searchBar.searchTextField.backgroundColor = .favorColor(.background)
+    searchBar.searchTextField.clipsToBounds = true
+    searchBar.placeholder = "플레이스 홀더 메시지"
+    searchBar.autocapitalizationType = .none
+    return searchBar
+  }()
+  
+  private lazy var searchStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 18
+    stackView.alignment = .center
+    [
+      self.leftItem,
+      self.searchBar
+    ].forEach {
+      stackView.addArrangedSubview($0)
+    }
+    return stackView
+  }()
+  
   // MARK: - Initializer
   
   override init(frame: CGRect) {
     super.init(frame: frame)
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
     self.setupBaseSearchBar()
   }
   
@@ -56,18 +102,30 @@ class FavorSearchBar: UISearchBar {
   }
   
   private func setupBaseSearchBar() {
-    self.setupStyles()
-    self.setupLayouts()
-    self.setupConstraints()
     self.updateTextField()
     self.updateSearchItem()
   }
   
   // MARK: - Functions
   
+  func updateLeftItem() {
+    self.leftItem.snp.updateConstraints { make in
+      make.height.width.equalTo(self.leftItemSize)
+    }
+  }
+  
+  func updateLeftItemVisibility(isHidden: Bool) {
+    let duration = isHidden ? 0.3 : 0.4
+    DispatchQueue.main.async {
+      UIView.animate(withDuration: duration) {
+        self.leftItem.isHidden = isHidden
+      }
+    }
+  }
+  
   /// SearchBar에 내장되어 있는 TextField를 업데이트합니다.
   func updateTextField() {
-    self.searchTextField.layer.cornerRadius = self.cornerRadius
+    self.searchBar.searchTextField.layer.cornerRadius = self.cornerRadius
     
     let attributedString = NSAttributedString(
       string: self.placeholder ?? "",
@@ -76,13 +134,13 @@ class FavorSearchBar: UISearchBar {
         NSAttributedString.Key.font: UIFont.favorFont(.regular, size: 16)
       ]
     )
-    self.searchTextField.attributedPlaceholder = attributedString
-    self.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
+    self.searchBar.searchTextField.attributedPlaceholder = attributedString
+    self.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
   }
   
   func updateSearchItem() {
-    self.setImage(self.leftItemImage, for: .search, state: .normal)
-    self.setPositionAdjustment(UIOffset(horizontal: 16, vertical: 0), for: .search)
+    self.searchBar.setImage(self.leftItemImage, for: .search, state: .normal)
+    self.searchBar.setPositionAdjustment(UIOffset(horizontal: 16, vertical: 0), for: .search)
   }
 }
 
@@ -90,22 +148,27 @@ class FavorSearchBar: UISearchBar {
 
 extension FavorSearchBar: BaseView {
   func setupStyles() {
-    self.searchBarStyle = .minimal
-    self.backgroundColor = .clear
-    self.searchTextField.backgroundColor = .favorColor(.background)
-    self.searchTextField.clipsToBounds = true
-  }
-  
-  func setupLayouts() {
     //
   }
   
-  func setupConstraints() {
-    self.snp.makeConstraints { make in
-      make.height.equalTo(self.height)
+  func setupLayouts() {
+    [
+      self.searchStack
+    ].forEach {
+      self.addSubview($0)
     }
-    self.searchTextField.snp.makeConstraints { make in
+  }
+  
+  func setupConstraints() {
+    self.searchStack.snp.makeConstraints { make in
       make.edges.equalToSuperview()
+      make.height.equalTo(self.leftItemSize)
+    }
+    self.leftItem.snp.makeConstraints { make in
+      make.width.height.equalTo(self.leftItemSize)
+    }
+    self.searchBar.snp.makeConstraints { make in
+      make.height.equalTo(self.searchBarHeight)
     }
   }
 }

@@ -24,35 +24,12 @@ final class SearchViewController: BaseViewController, View {
   // MARK: - UI Components
   
   // SearchBar
-  private lazy var backButton: UIButton = {
-    var configuration = UIButton.Configuration.plain()
-    configuration.baseForegroundColor = .favorColor(.typo)
-    configuration.image = UIImage(systemName: "chevron.backward")
-    
-    let button = UIButton(configuration: configuration)
-    return button
-  }()
-  
   private lazy var searchBar: FavorSearchBar = {
     let searchBar = FavorSearchBar()
-    searchBar.height = 40
+    searchBar.searchBarHeight = 40
     searchBar.placeholder = "선물, 유저 ID를 검색해보세요"
-    searchBar.autocapitalizationType = .none
+    searchBar.searchBar.autocapitalizationType = .none
     return searchBar
-  }()
-  
-  private lazy var searchStack: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.spacing = 18
-    stackView.alignment = .center
-    [
-      self.backButton,
-      self.searchBar
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
-    return stackView
   }()
   
   // Gift Category
@@ -105,28 +82,23 @@ final class SearchViewController: BaseViewController, View {
       .when(.recognized)
       .asDriver(onErrorDriveWith: .empty())
       .drive(with: self, onNext: { owner, _ in
-        owner.searchBar.searchTextField.resignFirstResponder()
+        owner.searchBar.searchBar.searchTextField.resignFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
-    self.backButton.rx.tap
-      .map { Reactor.Action.backButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.searchBar.searchTextField.rx.controlEvent([.editingDidBegin])
+    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidBegin])
       .map { Reactor.Action.searchDidBegin }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchTextField.rx.controlEvent([.editingDidEnd])
+    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidEnd])
       .map { Reactor.Action.searchDidEnd }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchTextField.rx.controlEvent([.editingDidEndOnExit])
+    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidEndOnExit])
       .do(onNext: {
-        self.searchBar.searchTextField.resignFirstResponder()
+        self.searchBar.searchBar.searchTextField.resignFirstResponder()
       })
       .map { Reactor.Action.returnKeyDidTap }
       .bind(to: reactor.action)
@@ -136,12 +108,7 @@ final class SearchViewController: BaseViewController, View {
     reactor.state.map { $0.isEditing }
       .asDriver(onErrorJustReturn: false)
       .drive(with: self, onNext: { owner, isEditing in
-        let duration = isEditing ? 0.3 : 0.4
-        DispatchQueue.main.async {
-          UIView.animate(withDuration: duration) {
-            owner.backButton.isHidden = isEditing
-          }
-        }
+        owner.searchBar.updateLeftItemVisibility(isHidden: isEditing)
       })
       .disposed(by: self.disposeBag)
   }
@@ -156,7 +123,7 @@ final class SearchViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.searchStack,
+      self.searchBar,
       self.giftCategoryTitleLabel,
       self.giftCategoryButtonScrollView,
       self.emotionTitleLabel,
@@ -167,17 +134,13 @@ final class SearchViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
-    self.backButton.snp.makeConstraints { make in
-      make.width.height.equalTo(48)
-    }
-    self.searchStack.snp.makeConstraints { make in
+    self.searchBar.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
-      make.height.greaterThanOrEqualTo(48)
     }
     
     self.giftCategoryTitleLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.searchStack.snp.bottom).offset(56)
+      make.top.equalTo(self.searchBar.snp.bottom).offset(56)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
     self.giftCategoryButtonScrollView.snp.makeConstraints { make in
