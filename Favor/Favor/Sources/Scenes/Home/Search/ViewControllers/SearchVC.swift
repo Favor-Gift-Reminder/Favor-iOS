@@ -14,10 +14,14 @@ final class SearchViewController: BaseViewController, View {
   
   // MARK: - Constants
   
+  let giftCategories: [String] = ["가벼운 선물", "생일", "집들이", "시험", "승진", "졸업", "기타"]
+  let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
+  
   // MARK: - Properties
   
   // MARK: - UI Components
   
+  // SearchBar
   private lazy var backButton: UIButton = {
     var configuration = UIButton.Configuration.plain()
     configuration.baseForegroundColor = .favorColor(.typo)
@@ -48,6 +52,42 @@ final class SearchViewController: BaseViewController, View {
     return stackView
   }()
   
+  // Gift Category
+  private lazy var giftCategoryTitleLabel = self.makeTitleLabel(title: "선물 카테고리")
+  
+  private lazy var giftCategoryButtonStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 10
+    self.giftCategories.forEach {
+      stackView.addArrangedSubview(SmallFavorButton(.white, title: $0))
+    }
+    return stackView
+  }()
+  
+  private lazy var giftCategoryButtonScrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+    scrollView.showsHorizontalScrollIndicator = false
+    scrollView.showsVerticalScrollIndicator = false
+    scrollView.contentInset = .init(top: 0, left: 20, bottom: 0, right: 20)
+    scrollView.addSubview(self.giftCategoryButtonStack)
+    return scrollView
+  }()
+  
+  // Emotion
+  private lazy var emotionTitleLabel = self.makeTitleLabel(title: "선물 기록")
+  
+  private lazy var emotionButtonStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 34
+    stackView.distribution = .equalSpacing
+    self.emotions.forEach {
+      stackView.addArrangedSubview(self.makeEmojiButton(emoji: $0))
+    }
+    return stackView
+  }()
+  
   // MARK: - Life Cycle
   
   override func viewDidLoad() {
@@ -70,7 +110,11 @@ final class SearchViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.searchStack
+      self.searchStack,
+      self.giftCategoryTitleLabel,
+      self.giftCategoryButtonScrollView,
+      self.emotionTitleLabel,
+      self.emotionButtonStack
     ].forEach {
       self.view.addSubview($0)
     }
@@ -85,5 +129,49 @@ final class SearchViewController: BaseViewController, View {
       make.leading.equalTo(self.view.layoutMarginsGuide)
       make.trailing.equalToSuperview().inset(6)
     }
+    
+    self.giftCategoryTitleLabel.snp.makeConstraints { make in
+      make.top.equalTo(self.searchStack.snp.bottom).offset(56)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    }
+    self.giftCategoryButtonScrollView.snp.makeConstraints { make in
+      make.top.equalTo(self.giftCategoryTitleLabel.snp.bottom).offset(16)
+      make.leading.trailing.equalToSuperview()
+      make.height.equalTo(32)
+    }
+    self.giftCategoryButtonStack.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+      make.height.equalToSuperview()
+    }
+    
+    self.emotionTitleLabel.snp.makeConstraints { make in
+      make.top.equalTo(self.giftCategoryButtonScrollView.snp.bottom).offset(56)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    }
+    self.emotionButtonStack.snp.makeConstraints { make in
+      make.top.equalTo(self.emotionTitleLabel.snp.bottom).offset(16)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.height.equalTo(40)
+    }
+  }
+}
+
+// MARK: - Privates
+
+private extension SearchViewController {
+  func makeTitleLabel(title: String) -> UILabel {
+    let label = UILabel()
+    label.layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 0)
+    label.font = .favorFont(.bold, size: 18)
+    label.textColor = .favorColor(.typo)
+    label.text = title
+    return label
+  }
+  
+  func makeEmojiButton(emoji: String) -> UIButton {
+    let button = UIButton()
+    button.contentMode = .center
+    button.setImage(emoji.emojiToImage(size: .init(width: 40, height: 40)), for: .normal)
+    return button
   }
 }
