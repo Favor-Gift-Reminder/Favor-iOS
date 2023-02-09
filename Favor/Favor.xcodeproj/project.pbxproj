@@ -32,12 +32,13 @@
 		2EA384A0298D7C960081499C /* HomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA3849F298D7C960081499C /* HomeVC.swift */; };
 		2EA384A2298D7CC10081499C /* HomeReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384A1298D7CC10081499C /* HomeReactor.swift */; };
 		2EA384A9298D7E900081499C /* HomeFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384A7298D7E900081499C /* HomeFlow.swift */; };
+		2EA384AC298E3B040081499C /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */; };
 		2EA384B6299234770081499C /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B5299234770081499C /* SearchVC.swift */; };
 		2EA384B8299235990081499C /* SearchReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B7299235990081499C /* SearchReactor.swift */; };
 		2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B92992371C0081499C /* SearchFlow.swift */; };
 		2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BD299248200081499C /* FavorSearchBar.swift */; };
 		2EA384C029936BAD0081499C /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BF29936BAD0081499C /* String+.swift */; };
-		2EA384AC298E3B040081499C /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */; };
+		2EC371F8299521AD00D1007B /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC371F7299521AD00D1007B /* RxGesture */; };
 		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
@@ -118,12 +119,12 @@
 		2EA3849F298D7C960081499C /* HomeVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeVC.swift; sourceTree = "<group>"; };
 		2EA384A1298D7CC10081499C /* HomeReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeReactor.swift; sourceTree = "<group>"; };
 		2EA384A7298D7E900081499C /* HomeFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeFlow.swift; sourceTree = "<group>"; };
+		2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		2EA384B5299234770081499C /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		2EA384B7299235990081499C /* SearchReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchReactor.swift; sourceTree = "<group>"; };
 		2EA384B92992371C0081499C /* SearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFlow.swift; sourceTree = "<group>"; };
 		2EA384BD299248200081499C /* FavorSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSearchBar.swift; sourceTree = "<group>"; };
 		2EA384BF29936BAD0081499C /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
-		2EA384AB298E3B040081499C /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -189,6 +190,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
+				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
@@ -717,6 +719,7 @@
 				2E635390295D906A00B23A14 /* Differentiator */,
 				2E635392295D906A00B23A14 /* RxDataSources */,
 				2EE6B3962982EDA400CDBC81 /* RxFlow */,
+				2EC371F7299521AD00D1007B /* RxGesture */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -776,6 +779,7 @@
 				2E63538C295D904000B23A14 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */,
 				2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */,
+				2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -839,7 +843,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EA384B8299235990081499C /* SearchReactor.swift in Sources */,
-				2EA3849B298D7C680081499C /* UpcomingSection.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2EA384A9298D7E900081499C /* HomeFlow.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */,
@@ -1229,6 +1232,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxFlow";
@@ -1274,6 +1285,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		2EC371F7299521AD00D1007B /* RxGesture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */;
+			productName = RxGesture;
 		};
 		2EE6B3962982EDA400CDBC81 /* RxFlow */ = {
 			isa = XCSwiftPackageProductDependency;
