@@ -41,7 +41,7 @@ final class SearchViewController: BaseViewController, View {
   private lazy var searchStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
-    stackView.spacing = 26
+    stackView.spacing = 18
     stackView.alignment = .center
     [
       self.backButton,
@@ -126,8 +126,7 @@ final class SearchViewController: BaseViewController, View {
     }
     self.searchStack.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.leading.equalTo(self.view.layoutMarginsGuide)
-      make.trailing.equalToSuperview().inset(6)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
     
     self.giftCategoryTitleLabel.snp.makeConstraints { make in
