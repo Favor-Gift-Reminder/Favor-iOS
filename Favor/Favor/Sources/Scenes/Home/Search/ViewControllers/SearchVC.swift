@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 
 final class SearchViewController: BaseViewController, View {
@@ -35,6 +36,7 @@ final class SearchViewController: BaseViewController, View {
     let searchBar = FavorSearchBar()
     searchBar.height = 40
     searchBar.placeholder = "선물, 유저 ID를 검색해보세요"
+    searchBar.autocapitalizationType = .none
     return searchBar
   }()
   
@@ -97,7 +99,40 @@ final class SearchViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SearchReactor) {
-    //
+    // Action
+    self.backButton.rx.tap
+      .map { Reactor.Action.backButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.searchBar.searchTextField.rx.controlEvent([.editingDidBegin])
+      .map { Reactor.Action.searchDidBegin }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.searchBar.searchTextField.rx.controlEvent([.editingDidEnd])
+      .map { Reactor.Action.searchDidEnd }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.searchBar.searchTextField.rx.controlEvent([.editingDidEndOnExit])
+      .subscribe(onNext: {
+        self.searchBar.searchTextField.resignFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+    
+    // State
+    reactor.state.map { $0.isEditing }
+      .asDriver(onErrorJustReturn: false)
+      .drive(with: self, onNext: { owner, isEditing in
+        let duration = isEditing ? 0.3 : 0.4
+        DispatchQueue.main.async {
+          UIView.animate(withDuration: duration) {
+            owner.backButton.isHidden = isEditing
+          }
+        }
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
@@ -127,6 +162,7 @@ final class SearchViewController: BaseViewController, View {
     self.searchStack.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.height.greaterThanOrEqualTo(48)
     }
     
     self.giftCategoryTitleLabel.snp.makeConstraints { make in
