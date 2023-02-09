@@ -24,10 +24,4 @@ enum AppStep: Step {
   
   // MARK: - Main
   case dashBoardIsRequired
-  
-  // MARK: - Home
-  case homeIsRequired
-  
-  // MARK: - Test
-  case testIsRequired
 }

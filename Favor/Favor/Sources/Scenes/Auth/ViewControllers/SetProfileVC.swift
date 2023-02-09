@@ -23,7 +23,7 @@ final class SetProfileViewController: BaseViewController, View {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_Friend")?.withTintColor(.favorColor(.white))
+    config.image = UIImage(named: "ic_person")?.withTintColor(.favorColor(.white))
     
     let button = UIButton(configuration: config)
     button.clipsToBounds = true
@@ -35,9 +35,10 @@ final class SetProfileViewController: BaseViewController, View {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_Add")?.withTintColor(.favorColor(.white))
+    config.image = UIImage(named: "ic_add")?.withTintColor(.favorColor(.white))
     
-    let button = UIButton(configuration: config)
+    let button = UIButton()
+    button.setImage(UIImage(systemName: "plus"), for: .normal)
     button.layer.cornerRadius = 24
     button.backgroundColor = .favorColor(.line2)
     button.tintColor = .favorColor(.white)

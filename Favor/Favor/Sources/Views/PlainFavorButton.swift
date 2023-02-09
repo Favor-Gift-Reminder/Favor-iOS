@@ -50,15 +50,15 @@ final class PlainFavorButton: UIButton {
       
       switch icon {
       case .bottom:
-        config.image = UIImage(named: "ic_Down")
+        config.image = UIImage(named: "ic_bottomArrow")
 
       case .right:
-        config.image = UIImage(named: "ic_Right")
+        config.image = UIImage(named: "ic_rightArrow")
       }
       
     case .onboarding:
       titleContainer.font = .favorFont(.regular, size: 14)
-      config.image = UIImage(named: "ic_Right")
+      config.image = UIImage(named: "ic_rightArrow")
       config.imagePadding = 8
       
     case .viewMore:

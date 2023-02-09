@@ -222,8 +222,8 @@ class FavorTextField: UITextField, BaseView {
     self.rightViewMode = .always
     self.secureEyeButton.configurationUpdateHandler = { button in
       var config = button.configuration
-      let showIcon: UIImage? = UIImage(named: "ic_Show")?.withTintColor(.favorColor(.detail))
-      let hideIcon: UIImage? = UIImage(named: "ic_Hide")?.withTintColor(.favorColor(.detail))
+      let showIcon: UIImage? = UIImage(named: "ic_eye_small")?.withTintColor(.favorColor(.explain))
+      let hideIcon: UIImage? = UIImage(named: "ic_eye_closed_small")?.withTintColor(.favorColor(.explain))
       config?.image = self.isTextHidden ? hideIcon : showIcon
       button.configuration = config
     }
