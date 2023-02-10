@@ -17,7 +17,7 @@ enum UpdateHandlerManager {
         self.updateAttributes(
           button,
           font: .favorFont(.bold, size: 18),
-          backgroundColor: .favorColor(.typo),
+          backgroundColor: .favorColor(.titleAndLine),
           foregroundColor: .favorColor(.white)
         )
         
@@ -25,8 +25,8 @@ enum UpdateHandlerManager {
         self.updateAttributes(
           button,
           font: .favorFont(.bold, size: 18),
-          backgroundColor: .favorColor(.box1),
-          foregroundColor: .favorColor(.typo)
+          backgroundColor: .favorColor(.line3),
+          foregroundColor: .favorColor(.titleAndLine)
         )
         
       default:
@@ -46,15 +46,15 @@ enum UpdateHandlerManager {
           button,
           title: "다음",
           font: .favorFont(.bold, size: 18),
-          backgroundColor: .favorColor(.box1),
-          foregroundColor: .favorColor(.typo)
+          backgroundColor: .favorColor(.line3),
+          foregroundColor: .favorColor(.titleAndLine)
         )
       default:
         self.updateAttributes(
           button,
           title: "계속하기",
           font: .favorFont(.bold, size: 18),
-          backgroundColor: .favorColor(.typo),
+          backgroundColor: .favorColor(.titleAndLine),
           foregroundColor: .favorColor(.white)
         )
       }

@@ -33,8 +33,6 @@ final class AppFlow: Flow {
       return self.navigationToAuthScreen()
     case .dashBoardIsRequired:
       return self.navigationToDashBoardScreen()
-    case .testIsRequired:
-      return self.navigateToTest()
     default:
       return .none
     }
@@ -69,22 +67,5 @@ private extension AppFlow {
   
   func navigateToDashBoard() -> FlowContributors {
     return .none
-  }
-  
-  /// UI Test를 위한 navigate 메서드
-  func navigateToTest() -> FlowContributors {
-    let testFlow = HomeFlow() // Change to Test Flow here.
-    
-    Flows.use(testFlow, when: .created) { [unowned self] root in
-      DispatchQueue.main.async {
-        root.modalPresentationStyle = .overFullScreen
-        self.rootViewController.present(root, animated: false)
-      }
-    }
-    
-    return .one(flowContributor: .contribute(
-      withNextPresentable: testFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired) // Change to Test Step here.
-    ))
   }
 }

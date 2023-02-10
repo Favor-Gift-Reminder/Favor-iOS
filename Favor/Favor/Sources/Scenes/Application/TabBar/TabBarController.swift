@@ -24,7 +24,7 @@ final class FavorTabBarController: UITabBarController {
 private extension FavorTabBarController {
   
   func setupTabBar() {
-    self.tabBar.tintColor = .favorColor(.typo)
+    self.tabBar.tintColor = .favorColor(.titleAndLine)
     self.tabBar.backgroundColor = .favorColor(.white)
     
     self.tabBar.layer.cornerRadius = 24

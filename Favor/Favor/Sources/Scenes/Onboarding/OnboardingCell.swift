@@ -15,7 +15,7 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
 
   private let imageView: UIImageView = {
     let iv = UIImageView()
-    iv.backgroundColor = .favorColor(.box1)
+    iv.backgroundColor = .favorColor(.line3)
     
     return iv
   }()

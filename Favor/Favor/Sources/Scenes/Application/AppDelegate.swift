@@ -39,7 +39,7 @@ private extension AppDelegate {
     let appearance = UINavigationBarAppearance()
     let backButtonAppearance = UIBarButtonItemAppearance()
     
-    let leftArrowImage = UIImage(named: "ic_Left")?
+    let leftArrowImage = UIImage(named: "ic_leftArrow")?
       .withRenderingMode(.alwaysOriginal)
       .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
     
@@ -51,7 +51,7 @@ private extension AppDelegate {
     appearance.backButtonAppearance = backButtonAppearance
     
     appearance.titleTextAttributes = [
-      .foregroundColor: UIColor.favorColor(.typo),
+      .foregroundColor: UIColor.favorColor(.titleAndLine),
       .font: UIFont.favorFont(.bold, size: 18)
     ]
     

@@ -41,12 +41,12 @@ final class LargeFavorButton: UIButton {
     
     switch style {
     case .white:
-      container.foregroundColor = .favorColor(.typo)
-      config.baseBackgroundColor = .favorColor(.box1)
+      container.foregroundColor = .favorColor(.titleAndLine)
+      config.baseBackgroundColor = .favorColor(.line3)
       
     case .black:
       container.foregroundColor = .favorColor(.white)
-      config.baseBackgroundColor = .favorColor(.typo)
+      config.baseBackgroundColor = .favorColor(.titleAndLine)
     }
     
     config.attributedTitle = AttributedString(title, attributes: container)
