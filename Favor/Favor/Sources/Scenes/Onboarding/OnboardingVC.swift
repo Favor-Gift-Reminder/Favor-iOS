@@ -19,7 +19,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   private let pageControl: UIPageControl = {
     let pc = UIPageControl()
     pc.numberOfPages = 3
-    pc.pageIndicatorTintColor = .favorColor(.box1)
+    pc.pageIndicatorTintColor = .favorColor(.line3)
     pc.currentPageIndicatorTintColor = .favorColor(.main)
     
     return pc

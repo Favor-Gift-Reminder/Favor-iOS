@@ -25,13 +25,13 @@ final class HeaderReactor: Reactor {
   }
   
   struct State {
-    var sectionType: HomeSection
+    var sectionType: HomeSectionType?
     var selectedButtonIndex: Int = 0
   }
   
   // MARK: - Initializer
   
-  init(section: HomeSection) {
+  init(section: HomeSectionType?) {
     self.initialState = State(sectionType: section)
   }
   

@@ -33,8 +33,6 @@ final class AppFlow: Flow {
       return self.navigationToAuthScreen()
     case .dashBoardIsRequired:
       return self.navigationToDashBoardScreen()
-    case .testIsRequired:
-      return self.navigateToTest()
     default:
       return .none
     }

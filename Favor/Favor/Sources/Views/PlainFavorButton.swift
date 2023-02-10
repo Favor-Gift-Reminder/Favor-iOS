@@ -41,7 +41,7 @@ final class PlainFavorButton: UIButton {
     var config = UIButton.Configuration.plain()
     
     var titleContainer = AttributeContainer()
-    titleContainer.foregroundColor = .favorColor(.detail)
+    titleContainer.foregroundColor = .favorColor(.explain)
     
     switch style {
     case .main:
@@ -50,21 +50,22 @@ final class PlainFavorButton: UIButton {
       
       switch icon {
       case .bottom:
-        config.image = UIImage(named: "ic_Down")
+        config.image = UIImage(named: "ic_bottomArrow")
 
       case .right:
-        config.image = UIImage(named: "ic_Right")
+        config.image = UIImage(named: "ic_rightArrow")
       }
       
     case .onboarding:
       titleContainer.font = .favorFont(.regular, size: 14)
-      config.image = UIImage(named: "ic_Right")
+      config.image = UIImage(named: "ic_rightArrow")
       config.imagePadding = 8
       
     case .viewMore:
       titleContainer.font = .favorFont(.regular, size: 12)
     }
     
+    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     config.attributedTitle = AttributedString(title, attributes: titleContainer)
     config.imagePlacement = .trailing
     
