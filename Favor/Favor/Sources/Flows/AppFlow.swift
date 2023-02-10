@@ -68,4 +68,21 @@ private extension AppFlow {
   func navigateToDashBoard() -> FlowContributors {
     return .none
   }
+  
+  /// UI Test를 위한 navigate 메서드
+  func navigateToTest() -> FlowContributors {
+    let testFlow = SearchFlow() // Change to Test Flow here.
+    
+    Flows.use(testFlow, when: .created) { [unowned self] root in
+      DispatchQueue.main.async {
+        root.modalPresentationStyle = .overFullScreen
+        self.rootViewController.present(root, animated: false)
+      }
+    }
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: testFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.searchIsRequired) // Change to Test Step here.
+    ))
+  }
 }
