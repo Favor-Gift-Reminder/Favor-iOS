@@ -47,7 +47,7 @@ class FavorSearchBar: UIView {
   }
   
   /// placeholder 텍스트의 색상
-  var placeholderColor: UIColor = .favorColor(.detail) {
+  var placeholderColor: UIColor = .favorColor(.explain) {
     didSet {
       self.updateTextField()
     }
@@ -57,7 +57,7 @@ class FavorSearchBar: UIView {
   
   lazy var leftItem: UIButton = {
     var configuration = UIButton.Configuration.plain()
-    configuration.baseForegroundColor = .favorColor(.typo)
+    configuration.baseForegroundColor = .favorColor(.icon)
     configuration.image = UIImage(systemName: "chevron.backward")
     
     let button = UIButton(configuration: configuration)

@@ -177,7 +177,7 @@ private extension SearchViewController {
     let label = UILabel()
     label.layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 0)
     label.font = .favorFont(.bold, size: 18)
-    label.textColor = .favorColor(.typo)
+    label.textColor = .favorColor(.titleAndLine)
     label.text = title
     return label
   }
