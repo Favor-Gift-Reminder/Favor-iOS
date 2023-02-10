@@ -7,6 +7,28 @@
 
 import UIKit
 
-final class MyPageViewController: BaseViewController {
+import ReactorKit
+import SnapKit
+
+final class MyPageViewController: BaseViewController, View {
+  
+  // MARK: - Constants
+  
+  // MARK: - Properties
+  
+  // MARK: - UI Components
+  
+  // MARK: - Life Cycle
+  
+  // MARK: - Binding
+  
+  func bind(reactor: MyPageReactor) {
+    //
+  }
+  
+  // MARK: - Functions
+  
+  // MARK: - UI Setups
+  
   
 }
