@@ -17,6 +17,7 @@ final class SearchReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
+    case backButtonDidTap
     case searchDidBegin
     case searchDidEnd
     case returnKeyDidTap
@@ -41,6 +42,10 @@ final class SearchReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .backButtonDidTap:
+      print("Back Button Did Tap")
+      return .empty()
+      
     case .searchDidBegin:
       return .just(.switchIsEditingTo(true))
       

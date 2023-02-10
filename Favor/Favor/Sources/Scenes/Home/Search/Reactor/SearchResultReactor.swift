@@ -17,7 +17,7 @@ final class SearchResultReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
-    
+    case backButtonDidTap
   }
   
   enum Mutation {
@@ -37,5 +37,21 @@ final class SearchResultReactor: Reactor, Stepper {
   
   // MARK: - Functions
   
-
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .backButtonDidTap:
+      print("Back Button Did Tap")
+      return .empty()
+    }
+  }
+  
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+    
+    switch mutation {
+      
+    }
+    
+    return newState
+  }
 }

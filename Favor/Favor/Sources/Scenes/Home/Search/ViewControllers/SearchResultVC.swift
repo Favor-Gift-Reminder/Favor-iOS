@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import RxGesture
 import RxSwift
 import SnapKit
 
@@ -29,7 +30,20 @@ final class SearchResultViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SearchResultReactor) {
-    //
+    // Action
+    self.view.rx.screenEdgePanGesture()
+      .skip(1)
+      .asDriver(onErrorDriveWith: .empty())
+      .drive(with: self, onNext: { owner, _ in
+        print("Pan Gesture")
+        owner.navigationController?.popViewController(animated: true)
+      })
+      .disposed(by: self.disposeBag)
+    
+    self.searchBar.rx.leftItemDidTap
+      .map { Reactor.Action.backButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions

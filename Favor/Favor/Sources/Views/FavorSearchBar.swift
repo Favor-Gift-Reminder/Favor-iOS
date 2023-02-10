@@ -7,6 +7,8 @@
 
 import UIKit
 
+import ReactorKit
+import RxCocoa
 import SnapKit
 
 class FavorSearchBar: UIView {
@@ -170,5 +172,12 @@ extension FavorSearchBar: BaseView {
     self.searchBar.snp.makeConstraints { make in
       make.height.equalTo(self.searchBarHeight)
     }
+  }
+}
+
+extension Reactive where Base: FavorSearchBar {
+  var leftItemDidTap: ControlEvent<()> {
+    let source = base.leftItem.rx.tap
+    return ControlEvent(events: source)
   }
 }

@@ -86,6 +86,11 @@ final class SearchViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
+    self.searchBar.rx.leftItemDidTap
+      .map { Reactor.Action.backButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidBegin])
       .map { Reactor.Action.searchDidBegin }
       .bind(to: reactor.action)
