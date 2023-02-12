@@ -25,13 +25,15 @@ final class MyPageReactor: Reactor, Stepper {
   }
   
   struct State {
-    
+    var sections: [MyPageSection]
   }
   
   // MARK: - Initializer
   
   init() {
-    self.initialState = State()
+    self.initialState = State(
+      sections: []
+    )
   }
   
   
