@@ -19,16 +19,36 @@ final class MyPageViewController: BaseViewController, View {
   // MARK: - Properties
   
   let dataSource = MyPageDataSource(
-    configureCell: { dataSource, collectionView, indexPath, items -> UICollectionViewCell in
+    configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
       switch items {
       case .giftCount:
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: GiftCountCell.reuseIdentifier,
+          for: indexPath
+        ) as? GiftCountCell else { return UICollectionViewCell() }
+        // cell.reactor = reactor
+        return cell
       case .newProfile:
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: NewProfileCell.reuseIdentifier,
+          for: indexPath
+        ) as? NewProfileCell else { return UICollectionViewCell() }
+        // cell.reactor = reactor
+        return cell
       case .favor:
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: FavorCell.reuseIdentifier,
+          for: indexPath
+        ) as? FavorCell else { return UICollectionViewCell() }
+        // cell.reactor = reactor
+        return cell
       case .anniversary:
-        return UICollectionViewCell()
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: AnniversaryCell.reuseIdentifier,
+          for: indexPath
+        ) as? AnniversaryCell else { return UICollectionViewCell() }
+        // cell.reactor = reactor
+        return cell
       }
     }
   )
@@ -37,8 +57,24 @@ final class MyPageViewController: BaseViewController, View {
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
-      frame: .zero,
-      collectionViewLayout: self.setupCollectionView()
+      frame: self.view.bounds,
+      collectionViewLayout: self.setupCollectionViewLayout()
+    )
+    collectionView.register(
+      GiftCountCell.self,
+      forCellWithReuseIdentifier: GiftCountCell.reuseIdentifier
+    )
+    collectionView.register(
+      NewProfileCell.self,
+      forCellWithReuseIdentifier: NewProfileCell.reuseIdentifier
+    )
+    collectionView.register(
+      FavorCell.self,
+      forCellWithReuseIdentifier: FavorCell.reuseIdentifier
+    )
+    collectionView.register(
+      AnniversaryCell.self,
+      forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
     )
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
@@ -47,6 +83,11 @@ final class MyPageViewController: BaseViewController, View {
   }()
   
   // MARK: - Life Cycle
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.setupCollectionView()
+  }
   
   // MARK: - Binding
   
@@ -85,12 +126,18 @@ final class MyPageViewController: BaseViewController, View {
       make.bottom.equalToSuperview()
     }
   }
+  
+  private func setupCollectionView() {
+    Observable.just([])
+      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
+  }
 }
 
 // MARK: - CollectionView
 
 private extension MyPageViewController {
-  func setupCollectionView() -> UICollectionViewLayout {
+  func setupCollectionViewLayout() -> UICollectionViewLayout {
     
     // 새 프로필
     // 취향
