@@ -51,6 +51,9 @@ final class MyPageViewController: BaseViewController, View {
         return cell
       }
     }
+    , configureSupplementaryView: { _, _, _, _ in
+      return MyPageHeaderView()
+    }
   )
   
   // MARK: - UI Components
@@ -137,13 +140,55 @@ final class MyPageViewController: BaseViewController, View {
 // MARK: - CollectionView
 
 private extension MyPageViewController {
-  func setupCollectionViewLayout() -> UICollectionViewLayout {
+  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    return .init(sectionProvider: { [weak self] sectionIndex, _ in
+      guard
+        let sectionType = self?.dataSource[sectionIndex]
+      else { fatalError("Fatal error occured while setting up section datas.") }
+      return self?.createCollectionViewLayout(sectionType: sectionType)
+    })
+  }
+  
+  func createCollectionViewLayout(
+    sectionType: MyPageSection
+  ) -> NSCollectionLayoutSection {
+    // Item
+    let item = NSCollectionLayoutItem(
+      layoutSize: .init(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0)
+      )
+    )
     
-    // 새 프로필
-    // 취향
-    // 기념일
-    // 친구 (?)
+    // Group
+    var group: NSCollectionLayoutGroup
+    if #available(iOS 16.0, *) {
+      group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: .init(
+          widthDimension: sectionType.cellSize.widthDimension,
+          heightDimension: sectionType.cellSize.heightDimension
+        ),
+        repeatingSubitem: item,
+        count: sectionType.columns
+      )
+    } else {
+      group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: .init(
+          widthDimension: sectionType.cellSize.widthDimension,
+          heightDimension: sectionType.cellSize.heightDimension
+        ),
+        subitem: item,
+        count: sectionType.columns
+      )
+    }
+    group.interItemSpacing = .fixed(sectionType.spacing)
     
-    return UICollectionViewFlowLayout()
+    // Section
+    let section = NSCollectionLayoutSection(group: group)
+    section.contentInsets = sectionType.sectionInset
+    section.interGroupSpacing = sectionType.spacing
+    section.orthogonalScrollingBehavior = sectionType.orthogonalScrollingBehavior
+    
+    return section
   }
 }

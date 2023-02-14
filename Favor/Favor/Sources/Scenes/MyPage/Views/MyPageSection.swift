@@ -81,6 +81,13 @@ extension MyPageSection {
     }
   }
   
+  var sectionInset: NSDirectionalEdgeInsets {
+    switch self {
+    case .giftCount: return .init(top: 30, leading: 20, bottom: 70, trailing: 20)
+    default: return .init(top: 0, leading: 0, bottom: 40, trailing: 0)
+    }
+  }
+  
   var spacing: CGFloat {
     switch self {
     case .giftCount: return 72.0
@@ -96,6 +103,24 @@ extension MyPageSection {
     case .newProfile: return 1
     case .favor: return 3
     case .anniversary: return 1
+    }
+  }
+  
+  var direction: CollectionViewLayoutDirection {
+    switch self {
+    case .giftCount: return .horizontal
+    case .newProfile: return .horizontal
+    case .favor: return .horizontal
+    case .anniversary: return .vertical
+    }
+  }
+  
+  var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
+    switch self {
+    case .giftCount: return .none
+    case .newProfile: return .groupPaging
+    case .favor: return .none
+    case .anniversary: return .none
     }
   }
 }
