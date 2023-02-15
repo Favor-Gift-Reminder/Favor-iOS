@@ -10,7 +10,7 @@ import UIKit
 import RxDataSources
 
 enum MyPageSectionItem {
-  case giftCount(GiftCountCellReactor)
+  case giftCount(GiftStatCellReactor)
   case newProfile(NewProfileCellReactor)
   case favor(FavorCellReactor)
   case anniversary(AnniversaryCellReactor)

@@ -25,9 +25,9 @@ final class MyPageViewController: BaseViewController, View {
       switch items {
       case .giftCount(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: GiftCountCell.reuseIdentifier,
+          withReuseIdentifier: GiftStatCell.reuseIdentifier,
           for: indexPath
-        ) as? GiftCountCell else { return UICollectionViewCell() }
+        ) as? GiftStatCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         return cell
       case .newProfile(let reactor):
@@ -73,8 +73,8 @@ final class MyPageViewController: BaseViewController, View {
       collectionViewLayout: self.setupCollectionViewLayout()
     )
     collectionView.register(
-      GiftCountCell.self,
-      forCellWithReuseIdentifier: GiftCountCell.reuseIdentifier
+      GiftStatCell.self,
+      forCellWithReuseIdentifier: GiftStatCell.reuseIdentifier
     )
     collectionView.register(
       NewProfileCell.self,

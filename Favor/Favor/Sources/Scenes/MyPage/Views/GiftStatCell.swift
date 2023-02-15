@@ -1,5 +1,5 @@
 //
-//  GiftCountCell.swift
+//  GiftStatCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -10,7 +10,7 @@ import UIKit
 import ReactorKit
 import SnapKit
 
-final class GiftCountCell: UICollectionViewCell, ReuseIdentifying, View {
+final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Properties
   
@@ -47,7 +47,7 @@ final class GiftCountCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Bind
   
-  func bind(reactor: GiftCountCellReactor) {
+  func bind(reactor: GiftStatCellReactor) {
     // Action
     
     // State
@@ -57,7 +57,7 @@ final class GiftCountCell: UICollectionViewCell, ReuseIdentifying, View {
 
 // MARK: - Setup
 
-extension GiftCountCell: BaseView {
+extension GiftStatCell: BaseView {
   func setupStyles() {
     // TODO: 배경색 변경
     self.backgroundColor = .magenta
