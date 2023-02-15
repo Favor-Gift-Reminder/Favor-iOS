@@ -52,6 +52,7 @@ extension MyPageSection: SectionModelType {
     }
   }
   
+  // TODO: Reactor에 포함하여 주입
   var headerTitle: String? {
     switch self {
     case .giftCount: return nil
