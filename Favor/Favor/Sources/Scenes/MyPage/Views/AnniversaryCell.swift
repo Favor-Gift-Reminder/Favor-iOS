@@ -17,6 +17,43 @@ class AnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
+  private lazy var iconImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .center
+    imageView.image = UIImage(named: "ic_Congrat")
+    return imageView
+  }()
+  
+  private lazy var titleLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.bold, size: 18)
+    label.textColor = .favorColor(.titleAndLine)
+    label.textAlignment = .left
+    label.text = "기념일"
+    return label
+  }()
+  
+  private lazy var dateLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.regular, size: 16)
+    label.textColor = .favorColor(.titleAndLine)
+    label.text = "2000. 1. 1"
+    return label
+  }()
+  
+  private lazy var vStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 8
+    [
+      self.titleLabel,
+      self.dateLabel
+    ].forEach {
+      stackView.addArrangedSubview($0)
+    }
+    return stackView
+  }()
+  
   // MARK: - Initializer
   
   override init(frame: CGRect) {
@@ -44,15 +81,29 @@ class AnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
 
 extension AnniversaryCell: BaseView {
   func setupStyles() {
-    // TODO: 배경색 변경
-    self.backgroundColor = .purple
+    self.backgroundColor = .favorColor(.divider)
+    self.layer.cornerRadius = 24
+    self.clipsToBounds = true
   }
   
   func setupLayouts() {
-    //
+    [
+      self.iconImageView,
+      self.vStack
+    ].forEach {
+      self.addSubview($0)
+    }
   }
   
   func setupConstraints() {
-    //
+    self.iconImageView.snp.makeConstraints { make in
+      make.height.width.equalTo(40)
+      make.leading.equalToSuperview().inset(32)
+      make.centerY.equalToSuperview()
+    }
+    self.vStack.snp.makeConstraints { make in
+      make.leading.equalTo(self.iconImageView.snp.trailing).offset(20)
+      make.centerY.equalToSuperview()
+    }
   }
 }
