@@ -23,7 +23,7 @@ final class MyPageViewController: BaseViewController, View {
   let dataSource = MyPageDataSource(
     configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
       switch items {
-      case .giftCount(let reactor):
+      case .giftStat(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: GiftStatCell.reuseIdentifier,
           for: indexPath
@@ -206,7 +206,7 @@ private extension MyPageViewController {
     
     let sectionItem = self.dataSource[sectionIndex]
     switch sectionItem {
-    case .giftCount:
+    case .giftStat:
       break
     case .newProfile, .favor, .anniversary:
       section.boundarySupplementaryItems.append(self.createHeader())

@@ -10,14 +10,14 @@ import UIKit
 import RxDataSources
 
 enum MyPageSectionItem {
-  case giftCount(GiftStatCellReactor)
+  case giftStat(GiftStatCellReactor)
   case newProfile(NewProfileCellReactor)
   case favor(FavorCellReactor)
   case anniversary(AnniversaryCellReactor)
 }
 
 enum MyPageSection {
-  case giftCount([MyPageSectionItem])
+  case giftStat([MyPageSectionItem])
   case newProfile([MyPageSectionItem])
   case favor([MyPageSectionItem])
   case anniversary([MyPageSectionItem])
@@ -28,7 +28,7 @@ extension MyPageSection: SectionModelType {
   
   var items: [MyPageSectionItem] {
     switch self {
-    case .giftCount(let items):
+    case .giftStat(let items):
       return items
     case .newProfile(let items):
       return items
@@ -41,8 +41,8 @@ extension MyPageSection: SectionModelType {
   
   init(original: MyPageSection, items: [MyPageSectionItem]) {
     switch original {
-    case .giftCount:
-      self = .giftCount(items)
+    case .giftStat:
+      self = .giftStat(items)
     case .newProfile:
       self = .newProfile(items)
     case .favor:
@@ -55,7 +55,7 @@ extension MyPageSection: SectionModelType {
   // TODO: Section 데이터에 주입
   var headerTitle: String? {
     switch self {
-    case .giftCount: return nil
+    case .giftStat: return nil
     case .newProfile: return "새 프로필"
     case .favor: return "취향"
     case .anniversary: return "기념일"
@@ -68,9 +68,9 @@ extension MyPageSection: SectionModelType {
 extension MyPageSection {
   var cellSize: NSCollectionLayoutSize {
     switch self {
-    case .giftCount:
+    case .giftStat:
       return .init(
-        widthDimension: .estimated(59),
+        widthDimension: .fractionalWidth(1.0),
         heightDimension: .estimated(61)
       )
     case .newProfile:
@@ -93,14 +93,14 @@ extension MyPageSection {
   
   var sectionInset: NSDirectionalEdgeInsets {
     switch self {
-    case .giftCount: return .init(top: 30, leading: 20, bottom: 40, trailing: 20)
+    case .giftStat: return .init(top: 30, leading: 20, bottom: 40, trailing: 20)
     default: return .init(top: 0, leading: 0, bottom: 40, trailing: 0)
     }
   }
   
   var spacing: CGFloat {
     switch self {
-    case .giftCount: return 72.0
+    case .giftStat: return 0.0
     case .newProfile: return 8.0
     case .favor: return 10.0
     case .anniversary: return 10.0
@@ -109,7 +109,7 @@ extension MyPageSection {
   
   var columns: Int {
     switch self {
-    case .giftCount: return 3
+    case .giftStat: return 1
     case .newProfile: return 1
     case .favor: return 3
     case .anniversary: return 1
@@ -118,7 +118,7 @@ extension MyPageSection {
   
   var direction: CollectionViewLayoutDirection {
     switch self {
-    case .giftCount: return .horizontal
+    case .giftStat: return .horizontal
     case .newProfile: return .horizontal
     case .favor: return .horizontal
     case .anniversary: return .vertical
@@ -127,7 +127,7 @@ extension MyPageSection {
   
   var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
     switch self {
-    case .giftCount: return .none
+    case .giftStat: return .none
     case .newProfile: return .groupPaging
     case .favor: return .none
     case .anniversary: return .none
