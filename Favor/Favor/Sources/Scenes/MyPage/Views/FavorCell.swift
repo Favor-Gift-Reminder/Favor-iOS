@@ -17,6 +17,8 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
+  private lazy var button = SmallFavorButton(.black, title: "#태그")
+  
   // MARK: - Initializer
   
   override init(frame: CGRect) {
@@ -44,15 +46,20 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
 
 extension FavorCell: BaseView {
   func setupStyles() {
-    // TODO: 배경색 변경
-    self.backgroundColor = .orange
+    //
   }
   
   func setupLayouts() {
-    //
+    [
+      self.button
+    ].forEach {
+      self.addSubview($0)
+    }
   }
   
   func setupConstraints() {
-    //
+    self.button.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
   }
 }
