@@ -49,6 +49,11 @@
 		2EC939E72998C6D100C8C47F /* AnniversaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */; };
 		2EC939E92998D11A00C8C47F /* CollectionViewLayoutDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E82998D11A00C8C47F /* CollectionViewLayoutDirection.swift */; };
 		2EC939EB299A7D4300C8C47F /* MyPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* MyPageHeaderView.swift */; };
+		2EC939EF299BB10D00C8C47F /* MyPageHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EE299BB10D00C8C47F /* MyPageHeaderReactor.swift */; };
+		2EC939F1299CF67E00C8C47F /* GiftCountCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* GiftCountCellReactor.swift */; };
+		2EC939F3299CF6A300C8C47F /* NewProfileCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */; };
+		2EC939F5299CF6C400C8C47F /* FavorCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */; };
+		2EC939F7299CF6E800C8C47F /* AnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */; };
 		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
@@ -155,6 +160,11 @@
 		2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryCell.swift; sourceTree = "<group>"; };
 		2EC939E82998D11A00C8C47F /* CollectionViewLayoutDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayoutDirection.swift; sourceTree = "<group>"; };
 		2EC939EA299A7D4300C8C47F /* MyPageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderView.swift; sourceTree = "<group>"; };
+		2EC939EE299BB10D00C8C47F /* MyPageHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderReactor.swift; sourceTree = "<group>"; };
+		2EC939F0299CF67E00C8C47F /* GiftCountCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftCountCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProfileCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryCellReactor.swift; sourceTree = "<group>"; };
 		2ECC94C9296026A200B530F7 /* TabBarPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarPage.swift; sourceTree = "<group>"; };
 		2ECD69B329672CF000D00F8F /* UIColor+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+.swift"; sourceTree = "<group>"; };
 		2ED22DAE296FF4A900ED6221 /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
@@ -595,7 +605,12 @@
 		2EE07EC0296E8D3700048A3C /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
+				2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */,
+				2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */,
+				2EC939F0299CF67E00C8C47F /* GiftCountCellReactor.swift */,
 				2EC939DA29967F1900C8C47F /* MyPageReactor.swift */,
+				2EC939EE299BB10D00C8C47F /* MyPageHeaderReactor.swift */,
+				2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -926,6 +941,7 @@
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpReactor.swift in Sources */,
 				2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */,
+				2EC939EF299BB10D00C8C47F /* MyPageHeaderReactor.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageReactor.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
@@ -954,6 +970,8 @@
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2EA384C029936BAD0081499C /* String+.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
+				2EC939F3299CF6A300C8C47F /* NewProfileCellReactor.swift in Sources */,
+				2EC939F5299CF6C400C8C47F /* FavorCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
@@ -964,10 +982,12 @@
 				2EC939DF2998B80200C8C47F /* MyPageSection.swift in Sources */,
 				E55CF7C6298B8EBB002940D1 /* TabBarFlow.swift in Sources */,
 				2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */,
+				2EC939F1299CF67E00C8C47F /* GiftCountCellReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
+				2EC939F7299CF6E800C8C47F /* AnniversaryCellReactor.swift in Sources */,
 				2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */,
 				2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,

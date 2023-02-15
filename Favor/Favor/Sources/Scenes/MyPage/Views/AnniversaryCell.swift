@@ -7,7 +7,13 @@
 
 import UIKit
 
-class AnniversaryCell: UICollectionViewCell, ReuseIdentifying {
+import ReactorKit
+
+class AnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
+  
+  // MARK: - Properties
+  
+  var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
@@ -26,7 +32,12 @@ class AnniversaryCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Bind
   
-  // TODO: reactor 주입하고 데이터 바인딩
+  func bind(reactor: AnniversaryCellReactor) {
+    // Action
+    
+    // State
+    
+  }
 }
 
 // MARK: - Setup

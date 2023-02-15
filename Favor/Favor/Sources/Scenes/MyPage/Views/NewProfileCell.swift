@@ -7,7 +7,13 @@
 
 import UIKit
 
-class NewProfileCell: UICollectionViewCell, ReuseIdentifying {
+import ReactorKit
+
+class NewProfileCell: UICollectionViewCell, ReuseIdentifying, View {
+  
+  // MARK: - Properties
+  
+  var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
@@ -26,7 +32,12 @@ class NewProfileCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Bind
   
-  // TODO: reactor 주입하고 데이터 바인딩
+  func bind(reactor: NewProfileCellReactor) {
+    // Action
+    
+    // State
+    
+  }
 }
 
 // MARK: - Setup

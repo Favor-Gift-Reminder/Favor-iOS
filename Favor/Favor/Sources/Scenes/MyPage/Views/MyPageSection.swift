@@ -10,10 +10,10 @@ import UIKit
 import RxDataSources
 
 enum MyPageSectionItem {
-  case giftCount
-  case newProfile
-  case favor
-  case anniversary
+  case giftCount(GiftCountCellReactor)
+  case newProfile(NewProfileCellReactor)
+  case favor(FavorCellReactor)
+  case anniversary(AnniversaryCellReactor)
 }
 
 enum MyPageSection {
@@ -51,6 +51,15 @@ extension MyPageSection: SectionModelType {
       self = .anniversary(items)
     }
   }
+  
+  var headerTitle: String? {
+    switch self {
+    case .giftCount: return nil
+    case .newProfile: return "새 프로필"
+    case .favor: return "취향"
+    case .anniversary: return "기념일"
+    }
+  }
 }
 
 // MARK: - UI Constants
@@ -60,7 +69,7 @@ extension MyPageSection {
     switch self {
     case .giftCount:
       return .init(
-        widthDimension: .estimated(46),
+        widthDimension: .estimated(59),
         heightDimension: .estimated(61)
       )
     case .newProfile:
@@ -83,7 +92,7 @@ extension MyPageSection {
   
   var sectionInset: NSDirectionalEdgeInsets {
     switch self {
-    case .giftCount: return .init(top: 30, leading: 20, bottom: 70, trailing: 20)
+    case .giftCount: return .init(top: 30, leading: 20, bottom: 40, trailing: 20)
     default: return .init(top: 0, leading: 0, bottom: 40, trailing: 0)
     }
   }

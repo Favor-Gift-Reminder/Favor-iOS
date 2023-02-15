@@ -7,9 +7,14 @@
 
 import UIKit
 
+import ReactorKit
 import SnapKit
 
-final class GiftCountCell: UICollectionViewCell, ReuseIdentifying {
+final class GiftCountCell: UICollectionViewCell, ReuseIdentifying, View {
+  
+  // MARK: - Properties
+  
+  var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
@@ -32,8 +37,8 @@ final class GiftCountCell: UICollectionViewCell, ReuseIdentifying {
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
-    self.setupLayouts()
-    self.setupConstraints()
+//    self.setupLayouts()
+//    self.setupConstraints()
   }
   
   required init?(coder: NSCoder) {
@@ -42,7 +47,12 @@ final class GiftCountCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Bind
   
-  // TODO: reactor 주입하고 데이터 바인딩
+  func bind(reactor: GiftCountCellReactor) {
+    // Action
+    
+    // State
+    
+  }
 }
 
 // MARK: - Setup

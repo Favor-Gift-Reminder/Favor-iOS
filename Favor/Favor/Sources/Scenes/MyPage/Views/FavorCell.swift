@@ -7,7 +7,13 @@
 
 import UIKit
 
-class FavorCell: UICollectionViewCell, ReuseIdentifying {
+import ReactorKit
+
+class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
+  
+  // MARK: - Properties
+  
+  var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
@@ -26,7 +32,12 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying {
   
   // MARK: - Bind
   
-  // TODO: reactor 주입하고 데이터 바인딩
+  func bind(reactor: FavorCellReactor) {
+    // Action
+    
+    // State
+    
+  }
 }
 
 // MARK: - Setup

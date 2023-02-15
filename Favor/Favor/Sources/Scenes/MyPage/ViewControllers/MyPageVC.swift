@@ -16,43 +16,52 @@ final class MyPageViewController: BaseViewController, View {
   
   // MARK: - Constants
   
+  private let sectionHeaderElementKind = "SectionHeader"
+  
   // MARK: - Properties
   
   let dataSource = MyPageDataSource(
     configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
       switch items {
-      case .giftCount:
+      case .giftCount(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: GiftCountCell.reuseIdentifier,
           for: indexPath
         ) as? GiftCountCell else { return UICollectionViewCell() }
-        // cell.reactor = reactor
+        cell.reactor = reactor
         return cell
-      case .newProfile:
+      case .newProfile(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: NewProfileCell.reuseIdentifier,
           for: indexPath
         ) as? NewProfileCell else { return UICollectionViewCell() }
-        // cell.reactor = reactor
+        cell.reactor = reactor
         return cell
-      case .favor:
+      case .favor(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: FavorCell.reuseIdentifier,
           for: indexPath
         ) as? FavorCell else { return UICollectionViewCell() }
-        // cell.reactor = reactor
+        cell.reactor = reactor
         return cell
-      case .anniversary:
+      case .anniversary(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: AnniversaryCell.reuseIdentifier,
           for: indexPath
         ) as? AnniversaryCell else { return UICollectionViewCell() }
-        // cell.reactor = reactor
+        cell.reactor = reactor
         return cell
       }
     }
-    , configureSupplementaryView: { _, _, _, _ in
-      return MyPageHeaderView()
+    , configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+      guard let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        withReuseIdentifier: MyPageHeaderView.reuseIdentifier,
+        for: indexPath
+      ) as? MyPageHeaderView else { return UICollectionReusableView() }
+      let section = dataSource[indexPath.section]
+      header.reactor = MyPageHeaderReactor(section: section)
+      return header
     }
   )
   
@@ -78,6 +87,11 @@ final class MyPageViewController: BaseViewController, View {
     collectionView.register(
       AnniversaryCell.self,
       forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
+    )
+    collectionView.register(
+      MyPageHeaderView.self,
+      forSupplementaryViewOfKind: self.sectionHeaderElementKind,
+      withReuseIdentifier: MyPageHeaderView.reuseIdentifier
     )
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
@@ -145,12 +159,13 @@ private extension MyPageViewController {
       guard
         let sectionType = self?.dataSource[sectionIndex]
       else { fatalError("Fatal error occured while setting up section datas.") }
-      return self?.createCollectionViewLayout(sectionType: sectionType)
+      return self?.createCollectionViewLayout(sectionType: sectionType, sectionIndex: sectionIndex)
     })
   }
   
   func createCollectionViewLayout(
-    sectionType: MyPageSection
+    sectionType: MyPageSection,
+    sectionIndex: Int
   ) -> NSCollectionLayoutSection {
     // Item
     let item = NSCollectionLayoutItem(
@@ -189,6 +204,23 @@ private extension MyPageViewController {
     section.interGroupSpacing = sectionType.spacing
     section.orthogonalScrollingBehavior = sectionType.orthogonalScrollingBehavior
     
+    let sectionItem = self.dataSource[sectionIndex]
+    switch sectionItem {
+    case .giftCount:
+      break
+    case .newProfile, .favor, .anniversary:
+      section.boundarySupplementaryItems.append(self.createHeader())
+    }
+    
     return section
+  }
+  
+  func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(40)),
+      elementKind: self.sectionHeaderElementKind,
+      alignment: .top
+    )
+    return sectionHeader
   }
 }
