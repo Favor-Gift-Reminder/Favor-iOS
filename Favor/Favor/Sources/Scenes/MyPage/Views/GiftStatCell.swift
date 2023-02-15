@@ -18,18 +18,50 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
-  private lazy var countLabel: UILabel = {
-    let label = UILabel()
-    label.textAlignment = .center
-    label.font = .favorFont(.bold, size: 22)
-    return label
+  private lazy var hStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.distribution = .equalSpacing
+    return stackView
   }()
   
-  private lazy var titleLabel: UILabel = {
-    let label = UILabel()
-    label.textAlignment = .center
-    label.font = .favorFont(.regular, size: 16)
-    return label
+  private lazy var totalGiftCountLabel: UILabel = self.makeCountLabel()
+  private lazy var totalGiftTitleLabel: UILabel = self.makeTitleLabel(title: "총 선물")
+  private lazy var totalGiftStack: UIStackView = {
+    let stack = self.makeGiftStackView()
+    [
+      self.totalGiftCountLabel,
+      self.totalGiftTitleLabel
+    ].forEach {
+      stack.addArrangedSubview($0)
+    }
+    return stack
+  }()
+  
+  private lazy var receivedGiftCountLabel: UILabel = self.makeCountLabel()
+  private lazy var receivedGiftTItleLabel: UILabel = self.makeTitleLabel(title: "받은 선물")
+  private lazy var receivedGiftStack: UIStackView = {
+    let stack = self.makeGiftStackView()
+    [
+      self.receivedGiftCountLabel,
+      self.receivedGiftTItleLabel
+    ].forEach {
+      stack.addArrangedSubview($0)
+    }
+    return stack
+  }()
+  
+  private lazy var givenGiftCountLabel: UILabel = self.makeCountLabel()
+  private lazy var givenGiftTitleLabel: UILabel = self.makeTitleLabel(title: "준 선물")
+  private lazy var givenGiftStack: UIStackView = {
+    let stack = self.makeGiftStackView()
+    [
+      self.givenGiftCountLabel,
+      self.givenGiftTitleLabel
+    ].forEach {
+      stack.addArrangedSubview($0)
+    }
+    return stack
   }()
   
   // MARK: - Initializer
@@ -37,8 +69,8 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
-//    self.setupLayouts()
-//    self.setupConstraints()
+    self.setupLayouts()
+    self.setupConstraints()
   }
   
   required init?(coder: NSCoder) {
@@ -59,28 +91,56 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
 
 extension GiftStatCell: BaseView {
   func setupStyles() {
-    // TODO: 배경색 변경
-    self.backgroundColor = .magenta
+    //
   }
   
   func setupLayouts() {
     [
-      self.countLabel,
-      self.titleLabel
+      self.hStack
     ].forEach {
       self.addSubview($0)
+    }
+    
+    [
+      self.totalGiftStack,
+      self.receivedGiftStack,
+      self.givenGiftStack
+    ].forEach {
+      self.hStack.addArrangedSubview($0)
     }
   }
   
   func setupConstraints() {
-    self.countLabel.snp.makeConstraints { make in
-      make.top.centerX.equalToSuperview()
-      make.leading.trailing.equalToSuperview()
+    self.hStack.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
     }
-    self.titleLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.countLabel.snp.bottom).offset(16)
-      make.leading.trailing.equalToSuperview()
-      make.bottom.equalToSuperview()
-    }
+  }
+}
+
+// MARK: - Privates
+
+private extension GiftStatCell {
+  func makeGiftStackView() -> UIStackView {
+    let vStack = UIStackView()
+    vStack.axis = .vertical
+    vStack.spacing = 16
+    
+    return vStack
+  }
+  
+  func makeCountLabel() -> UILabel {
+    let label = UILabel()
+    label.font = .favorFont(.bold, size: 22)
+    label.textAlignment = .center
+    label.text = "-1"
+    return label
+  }
+  
+  func makeTitleLabel(title: String) -> UILabel {
+    let label = UILabel()
+    label.font = .favorFont(.regular, size: 16)
+    label.textAlignment = .center
+    label.text = title
+    return label
   }
 }
