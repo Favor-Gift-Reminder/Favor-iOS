@@ -36,7 +36,7 @@ extension LargeFavorButton: BaseView {
   func setupStyles() {
     var container = AttributeContainer()
     container.font = .favorFont(.bold, size: 18)
-    self.configuration = largeFavorButtonType.configuration
+    self.configuration = self.largeFavorButtonType.configuration
     self.configuration?.attributedTitle = AttributedString(
       self.title,
       attributes: container

@@ -21,23 +21,20 @@ enum LargeFavorButtonType {
     case .main:
       config.baseBackgroundColor = .favorColor(.main)
       config.baseForegroundColor = .favorColor(.white)
-      return config
     case .main2:
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.main)
-      return config
     case .dark1:
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
-      return config
     case .dark2:
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.subtext)
-      return config
     case .gray:
       config.baseBackgroundColor = .favorColor(.divider)
       config.baseForegroundColor = .favorColor(.explain)
-      return config
     }
+    
+    return config
   }
 }
