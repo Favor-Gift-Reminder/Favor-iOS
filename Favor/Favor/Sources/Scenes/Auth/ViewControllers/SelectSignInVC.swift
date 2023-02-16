@@ -45,8 +45,8 @@ final class SelectSignInViewController: BaseViewController, View {
     stackView.axis = .vertical
     return stackView
   }()
-  
-  private let smallFavorButton = SmallFavorButton(with: .dark_like(title: "취향"))
+
+  private let switchh = FavorSwitch()
   
   // MARK: - Life Cycle
   
@@ -76,7 +76,7 @@ final class SelectSignInViewController: BaseViewController, View {
     [
       self.temporaryLogo,
       self.vStack,
-      self.smallFavorButton
+      self.switchh
     ].forEach {
       self.view.addSubview($0)
     }
@@ -94,8 +94,9 @@ final class SelectSignInViewController: BaseViewController, View {
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
     
-    self.smallFavorButton.snp.makeConstraints { make in
-      make.center.equalToSuperview()
+    self.switchh.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.top.equalTo(self.temporaryLogo.snp.bottom)
     }
   }
 }

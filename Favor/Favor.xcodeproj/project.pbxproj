@@ -82,6 +82,7 @@
 		E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */; };
 		E5626120299DD37200D14020 /* SmallFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562611F299DD37200D14020 /* SmallFavorButtonType.swift */; };
 		E5626122299E3EDA00D14020 /* PlainFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */; };
+		E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626123299E5E0100D14020 /* FavorSwitch.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -187,6 +188,7 @@
 		E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeFavorButtonType.swift; sourceTree = "<group>"; };
 		E562611F299DD37200D14020 /* SmallFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButtonType.swift; sourceTree = "<group>"; };
 		E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButtonType.swift; sourceTree = "<group>"; };
+		E5626123299E5E0100D14020 /* FavorSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSwitch.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
@@ -705,6 +707,7 @@
 				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
 				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
 				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
 				2E306A7E297290AB007B7EFF /* FavorTextField.swift */,
 				E56260F029908F0100D14020 /* CategoryView.swift */,
@@ -954,6 +957,7 @@
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
 				2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */,
 				2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */,
+				E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
