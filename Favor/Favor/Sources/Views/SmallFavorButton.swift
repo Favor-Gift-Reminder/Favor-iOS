@@ -30,9 +30,13 @@ final class SmallFavorButton: UIButton {
   }
 }
 
+// MARK: - SETUP
+
 extension SmallFavorButton: BaseView {
   func setupStyles() {
     self.configuration = self.smallFavorButtonType.configuration
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 10)
+    self.setPreferredSymbolConfiguration(imageConfig, forImageIn: .normal)
   }
   
   func setupLayouts() {}

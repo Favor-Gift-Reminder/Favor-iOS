@@ -30,7 +30,7 @@ enum SmallFavorButtonType {
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.main)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = UIImage(named: "ic_add")
+      config.image = UIImage(named: "ic_add_small")
     case .main2(let title):
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.button)
@@ -39,11 +39,12 @@ enum SmallFavorButtonType {
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = UIImage(named: "ic_add")
+      config.image = UIImage(named: "ic_add_small")
     case .dark_like(let title):
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.icon)
       config.baseForegroundColor = .favorColor(.white)
+      config.image = UIImage(named: "ic_like_small")
     case .gray(let title):
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.button)
@@ -52,6 +53,7 @@ enum SmallFavorButtonType {
       config.attributedTitle = AttributedString(userName, attributes: container)
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.titleAndLine)
+      config.image = UIImage(named: "ic_user")
     case .gray_emoji:
       config.baseBackgroundColor = .favorColor(.button)
     }

@@ -46,6 +46,8 @@ final class SelectSignInViewController: BaseViewController, View {
     return stackView
   }()
   
+  private let smallFavorButton = SmallFavorButton(with: .dark_like(title: "취향"))
+  
   // MARK: - Life Cycle
   
   // MARK: - Binding
@@ -73,7 +75,8 @@ final class SelectSignInViewController: BaseViewController, View {
   override func setupLayouts() {
     [
       self.temporaryLogo,
-      self.vStack
+      self.vStack,
+      self.smallFavorButton
     ].forEach {
       self.view.addSubview($0)
     }
@@ -89,6 +92,10 @@ final class SelectSignInViewController: BaseViewController, View {
     self.vStack.snp.makeConstraints { make in
       make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(46)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    }
+    
+    self.smallFavorButton.snp.makeConstraints { make in
+      make.center.equalToSuperview()
     }
   }
 }
