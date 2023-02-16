@@ -46,7 +46,7 @@ final class SelectSignInViewController: BaseViewController, View {
     return stackView
   }()
 
-  private let switchh = FavorSwitch()
+  private let favorBtn = SmallFavorButton(with: .main(title: "안녕하세요"))
   
   // MARK: - Life Cycle
   
@@ -76,14 +76,13 @@ final class SelectSignInViewController: BaseViewController, View {
     [
       self.temporaryLogo,
       self.vStack,
-      self.switchh
+      self.favorBtn
     ].forEach {
       self.view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    
     self.temporaryLogo.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.centerY.equalToSuperview().inset(48)
@@ -94,7 +93,7 @@ final class SelectSignInViewController: BaseViewController, View {
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
     
-    self.switchh.snp.makeConstraints { make in
+    self.favorBtn.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalTo(self.temporaryLogo.snp.bottom)
     }
