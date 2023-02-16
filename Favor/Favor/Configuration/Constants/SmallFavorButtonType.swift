@@ -30,7 +30,7 @@ enum SmallFavorButtonType {
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.main)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = UIImage(named: "ic_add_small")
+      config.image = UIImage(named: "ic_add")?.withRenderingMode(.alwaysTemplate)
     case .main2(let title):
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.button)
@@ -39,12 +39,12 @@ enum SmallFavorButtonType {
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = UIImage(named: "ic_add_small")
+      config.image = UIImage(named: "ic_add")?.withRenderingMode(.alwaysTemplate)
     case .dark_like(let title):
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.icon)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = UIImage(named: "ic_like_small")
+      config.image = UIImage(named: "ic_like")?.withTintColor(.favorColor(.white))
     case .gray(let title):
       config.attributedTitle = AttributedString(title, attributes: container)
       config.baseBackgroundColor = .favorColor(.button)
@@ -53,10 +53,16 @@ enum SmallFavorButtonType {
       config.attributedTitle = AttributedString(userName, attributes: container)
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.titleAndLine)
-      config.image = UIImage(named: "ic_user")
+      config.image = UIImage(named: "ic_user")?.withTintColor(.favorColor(.white))
     case .gray_emoji:
       config.baseBackgroundColor = .favorColor(.button)
     }
+    let newSize = CGSize(width: 12, height: 12)
+    UIGraphicsBeginImageContext(newSize)
+    config.image?.draw(in: CGRect(x: 0, y: 0, width: 12, height: 12))
+    let newImage = UIGraphicsGetImageFromCurrentImageContext()
+    config.image = newImage
+    UIGraphicsEndImageContext()
     
     return config
   }

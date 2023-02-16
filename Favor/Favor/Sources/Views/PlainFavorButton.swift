@@ -9,66 +9,56 @@ import UIKit
 
 final class PlainFavorButton: UIButton {
   
-  enum Icon {
-    case right
-    case bottom
-  }
+  // MARK: - PROPERTIES
   
-  enum Style {
-    case main
-    case onboarding
-    case viewMore
-  }
+  private let plainFavorButtonType: PlainFavorButtonType
+  private let title: String
+
+  // MARK: - INITIALIZER
   
-  // MARK: - Initializer
-  
-  init(_ style: Style, title: String, icon: Icon = .right) {
+  init(with plainFavorButtonType: PlainFavorButtonType, title: String) {
+    self.plainFavorButtonType = plainFavorButtonType
+    self.title = title
     super.init(frame: .zero)
-    setupConfiguration(style, icon: icon, title: title)
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  // MARK: - Setup
-  
-  private func setupConfiguration(
-    _ style: Style,
-    icon: Icon,
-    title: String
-  ) {
-    var config = UIButton.Configuration.plain()
-    
-    var titleContainer = AttributeContainer()
-    titleContainer.foregroundColor = .favorColor(.explain)
-    
-    switch style {
-    case .main:
-      titleContainer.font = .favorFont(.regular, size: 16)
-      config.imagePadding = 4
-      
-      switch icon {
-      case .bottom:
-        config.image = UIImage(named: "ic_bottomArrow")
+}
 
-      case .right:
-        config.image = UIImage(named: "ic_rightArrow")
+// MARK: - SETUP
+
+extension PlainFavorButton: BaseView {
+  func setupStyles() {
+    var container = AttributeContainer()
+    var config = UIButton.Configuration.plain()
+    config.imagePadding = 8
+    config.imagePlacement = .trailing
+    switch self.plainFavorButtonType {
+    case .log_in:
+      container.font = .favorFont(.regular, size: 14)
+    case .more:
+      container.font = .favorFont(.regular, size: 12)
+    case .main(let isRight):
+      container.font = .favorFont(.regular, size: 16)
+      if isRight {
+        // TODO: 이미지 추가
+      } else {
+        // TODO: 이미지 추가
       }
-      
-    case .onboarding:
-      titleContainer.font = .favorFont(.regular, size: 14)
-      config.image = UIImage(named: "ic_rightArrow")
-      config.imagePadding = 8
-      
-    case .viewMore:
-      titleContainer.font = .favorFont(.regular, size: 12)
     }
     
-    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-    config.attributedTitle = AttributedString(title, attributes: titleContainer)
-    config.imagePlacement = .trailing
-    
+    config.attributedTitle = AttributedString(
+      self.title,
+      attributes: container
+    )
     self.configuration = config
   }
+  
+  func setupLayouts() {}
+  func setupConstraints() {}
 }

@@ -47,7 +47,7 @@ extension LargeFavorButton: BaseView {
   
   func setupConstraints() {
     self.snp.makeConstraints { make in
-      make.height.equalTo(56)      
+      make.height.equalTo(56)
     }
   }
 }
