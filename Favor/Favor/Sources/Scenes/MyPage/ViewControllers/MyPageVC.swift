@@ -139,8 +139,7 @@ final class MyPageViewController: BaseViewController, View {
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
-      make.bottom.equalToSuperview()
+      make.leading.trailing.bottom.equalToSuperview()
     }
   }
   

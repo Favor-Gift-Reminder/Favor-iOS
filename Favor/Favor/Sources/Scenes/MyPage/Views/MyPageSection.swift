@@ -93,8 +93,8 @@ extension MyPageSection {
   
   var sectionInset: NSDirectionalEdgeInsets {
     switch self {
-    case .giftStat: return .init(top: 30, leading: 20, bottom: 40, trailing: 20)
-    default: return .init(top: 0, leading: 0, bottom: 40, trailing: 0)
+    case .giftStat: return .init(top: 30, leading: 40, bottom: 40, trailing: 40)
+    default: return .init(top: 0, leading: 20, bottom: 40, trailing: 20)
     }
   }
   
