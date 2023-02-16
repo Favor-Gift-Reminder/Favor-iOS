@@ -1,5 +1,5 @@
 //
-//  MyPageHeaderView.swift
+//  MyPageSectionHeaderView.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/13.
@@ -10,7 +10,7 @@ import UIKit
 import ReactorKit
 import SnapKit
 
-final class MyPageHeaderView: UICollectionReusableView, ReuseIdentifying, View {
+final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   // MARK: - Properties
   
@@ -40,7 +40,7 @@ final class MyPageHeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   // MARK: - Binding
   
-  func bind(reactor: MyPageHeaderReactor) {
+  func bind(reactor: MyPageSectionHeaderReactor) {
     // Action
     
     // State
@@ -52,7 +52,7 @@ final class MyPageHeaderView: UICollectionReusableView, ReuseIdentifying, View {
   }
 }
 
-extension MyPageHeaderView: BaseView {
+extension MyPageSectionHeaderView: BaseView {
   func setupStyles() {
     //
   }

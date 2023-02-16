@@ -56,11 +56,11 @@ final class MyPageViewController: BaseViewController, View {
     , configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       guard let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
-        withReuseIdentifier: MyPageHeaderView.reuseIdentifier,
+        withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
         for: indexPath
-      ) as? MyPageHeaderView else { return UICollectionReusableView() }
+      ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
       let section = dataSource[indexPath.section]
-      header.reactor = MyPageHeaderReactor(section: section)
+      header.reactor = MyPageSectionHeaderReactor(section: section)
       return header
     }
   )
@@ -89,9 +89,9 @@ final class MyPageViewController: BaseViewController, View {
       forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
     )
     collectionView.register(
-      MyPageHeaderView.self,
+      MyPageSectionHeaderView.self,
       forSupplementaryViewOfKind: self.sectionHeaderElementKind,
-      withReuseIdentifier: MyPageHeaderView.reuseIdentifier
+      withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier
     )
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
