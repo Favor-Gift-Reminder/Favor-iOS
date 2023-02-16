@@ -22,6 +22,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .equalSpacing
+    stackView.spacing = 72
     return stackView
   }()
   
@@ -112,7 +113,8 @@ extension GiftStatCell: BaseView {
   
   func setupConstraints() {
     self.hStack.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.top.bottom.equalToSuperview()
+      make.centerX.equalToSuperview()
     }
   }
 }

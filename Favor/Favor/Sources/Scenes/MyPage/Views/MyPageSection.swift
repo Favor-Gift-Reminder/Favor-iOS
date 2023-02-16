@@ -52,6 +52,12 @@ extension MyPageSection: SectionModelType {
     }
   }
   
+  var headerElementKind: String {
+    switch self {
+    default: return "SectionHeader"
+    }
+  }
+  
   // TODO: Section 데이터에 주입
   var headerTitle: String? {
     switch self {
@@ -66,6 +72,16 @@ extension MyPageSection: SectionModelType {
 // MARK: - UI Constants
 
 extension MyPageSection {
+  var headerSize: NSCollectionLayoutSize {
+    switch self {
+    default:
+      return .init(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(40)
+      )
+    }
+  }
+  
   var cellSize: NSCollectionLayoutSize {
     switch self {
     case .giftStat:
@@ -93,7 +109,7 @@ extension MyPageSection {
   
   var sectionInset: NSDirectionalEdgeInsets {
     switch self {
-    case .giftStat: return .init(top: 30, leading: 40, bottom: 40, trailing: 40)
+    case .giftStat: return .init(top: 30, leading: 0, bottom: 40, trailing: 0)
     default: return .init(top: 0, leading: 20, bottom: 40, trailing: 20)
     }
   }
@@ -127,10 +143,8 @@ extension MyPageSection {
   
   var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
     switch self {
-    case .giftStat: return .none
     case .newProfile: return .groupPaging
-    case .favor: return .none
-    case .anniversary: return .none
+    default: return .none
     }
   }
 }

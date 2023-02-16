@@ -16,6 +16,7 @@ final class MyPageViewController: BaseViewController, View {
   
   // MARK: - Constants
   
+  private let backgroundElementKind = "BackgroundView"
   private let sectionHeaderElementKind = "SectionHeader"
   
   // MARK: - Properties
@@ -67,11 +68,18 @@ final class MyPageViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
+  private lazy var headerView: MyPageHeaderView = {
+    let headerView = MyPageHeaderView()
+    return headerView
+  }()
+  
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: self.view.bounds,
       collectionViewLayout: self.setupCollectionViewLayout()
     )
+    
+    // CollectionViewCell
     collectionView.register(
       GiftStatCell.self,
       forCellWithReuseIdentifier: GiftStatCell.reuseIdentifier
@@ -88,14 +96,18 @@ final class MyPageViewController: BaseViewController, View {
       AnniversaryCell.self,
       forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
     )
+    
+    // SupplementaryView
     collectionView.register(
       MyPageSectionHeaderView.self,
       forSupplementaryViewOfKind: self.sectionHeaderElementKind,
       withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier
     )
+    
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
+    collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
   
@@ -130,6 +142,7 @@ final class MyPageViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
+      self.headerView,
       self.collectionView
     ].forEach {
       self.view.addSubview($0)
@@ -137,8 +150,12 @@ final class MyPageViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
+    self.headerView.snp.makeConstraints { make in
+      make.top.leading.trailing.equalToSuperview()
+      make.height.equalTo(333)
+    }
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide)
+      make.top.equalTo(self.headerView.snp.bottom).inset(30)
       make.leading.trailing.bottom.equalToSuperview()
     }
   }
@@ -154,12 +171,14 @@ final class MyPageViewController: BaseViewController, View {
 
 private extension MyPageViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    return .init(sectionProvider: { [weak self] sectionIndex, _ in
+    let layout = UICollectionViewCompositionalLayout.init(sectionProvider: { [weak self] sectionIndex, _ in
       guard
         let sectionType = self?.dataSource[sectionIndex]
       else { fatalError("Fatal error occured while setting up section datas.") }
       return self?.createCollectionViewLayout(sectionType: sectionType, sectionIndex: sectionIndex)
     })
+    layout.register(BackgroundView.self, forDecorationViewOfKind: self.backgroundElementKind)
+    return layout
   }
   
   func createCollectionViewLayout(
@@ -204,20 +223,21 @@ private extension MyPageViewController {
     section.orthogonalScrollingBehavior = sectionType.orthogonalScrollingBehavior
     
     let sectionItem = self.dataSource[sectionIndex]
-    switch sectionItem {
+    switch sectionType {
     case .giftStat:
-      break
-    case .newProfile, .favor, .anniversary:
-      section.boundarySupplementaryItems.append(self.createHeader())
+      let backgroundView = NSCollectionLayoutDecorationItem.background(elementKind: self.backgroundElementKind)
+      section.decorationItems.append(backgroundView)
+    default:
+      section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
     }
     
     return section
   }
   
-  func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+  func createHeader(section: MyPageSection) -> NSCollectionLayoutBoundarySupplementaryItem {
     let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(40)),
-      elementKind: self.sectionHeaderElementKind,
+      layoutSize: section.headerSize,
+      elementKind: section.headerElementKind,
       alignment: .top
     )
     return sectionHeader
