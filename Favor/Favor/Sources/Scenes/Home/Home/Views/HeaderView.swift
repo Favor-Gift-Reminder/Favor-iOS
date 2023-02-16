@@ -18,7 +18,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
-  private lazy var titleLabel: UILabel = {
+  private lazy var descriptionLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 22.0)
     label.text = "헤더 타이틀"
@@ -63,7 +63,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 16
-    stackView.addArrangedSubview(self.titleLabel)
+    stackView.addArrangedSubview(self.descriptionLabel)
     stackView.addArrangedSubview(self.hStack)
     return stackView
   }()
@@ -116,11 +116,11 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming }
+      .map { $0 == .upcoming([]) }
       .asDriver(onErrorJustReturn: true)
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
-        owner.titleLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
+        owner.descriptionLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
         // Filter Buttons
         owner.hStack.isHidden = isUpcoming
         // Right Button
@@ -129,7 +129,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
           config?.contentInsets = .zero
           config?.baseForegroundColor = isUpcoming ? .favorColor(.explain) : .favorColor(.titleAndLine)
           config?.title = isUpcoming ? "더보기" : nil
-          config?.image = isUpcoming ? nil : UIImage(named: "ic_filter")
+          config?.image = isUpcoming ? nil : UIImage(named: "ic_Filter")
           button.configuration = config
         }
       })
@@ -177,7 +177,7 @@ extension HeaderView: BaseView {
     }
     
     self.rightButton.snp.makeConstraints { make in
-      make.centerY.equalTo(self.titleLabel.snp.centerY)
+      make.centerY.equalTo(self.descriptionLabel.snp.centerY)
       make.trailing.equalToSuperview()
     }
     
@@ -195,7 +195,7 @@ private extension HeaderView {
     var attributedTitle = AttributedString(title)
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
-    configuration.baseForegroundColor = .favorColor(.line2)
+    configuration.baseForegroundColor = .favorColor(.titleAndLine)
     configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     let handler: UIButton.ConfigurationUpdateHandler = { button in
@@ -205,7 +205,7 @@ private extension HeaderView {
         button.configuration?.baseForegroundColor = .favorColor(.titleAndLine)
       case .normal:
         button.configuration?.baseBackgroundColor = .clear
-        button.configuration?.baseForegroundColor = .favorColor(.line2)
+        button.configuration?.baseForegroundColor = .favorColor(.explain)
       default:
         break
       }

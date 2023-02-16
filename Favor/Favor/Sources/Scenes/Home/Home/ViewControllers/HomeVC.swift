@@ -18,12 +18,23 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Constants
   
   private let sectionHeaderElementKind = "SectionHeader"
-	
-	// MARK: - Properties
+  
+  // MARK: - Properties
   
   let dataSource: HomeDataSource = HomeDataSource(
-    configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
-      switch items {
+    configureCell: { _, collectionView, indexPath, item -> UICollectionViewCell in
+      switch item {
+      // Empty
+      case .emptyCell(let text, let image):
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: EmptyCollectionViewCell.reuseIdentifier,
+          for: indexPath
+        ) as? EmptyCollectionViewCell else { return UICollectionViewCell() }
+        cell.text = text
+        cell.image = image
+        return cell
+        
+      // 다가오는 이벤트
       case .upcomingCell(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: UpcomingCell.reuseIdentifier,
@@ -31,6 +42,8 @@ final class HomeViewController: BaseViewController, View {
         ) as? UpcomingCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         return cell
+        
+      // 타임라인
       case .timelineCell(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: TimelineCell.reuseIdentifier,
@@ -40,13 +53,14 @@ final class HomeViewController: BaseViewController, View {
         return cell
       }
     },
-    configureSupplementaryView: { _, collectionView, kind, indexPath in
+    configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       guard let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         withReuseIdentifier: HeaderView.reuseIdentifier,
         for: indexPath
       ) as? HeaderView else { return UICollectionReusableView() }
-      header.reactor = HeaderReactor(section: HomeSectionType(rawValue: indexPath.section))
+      let section = dataSource[indexPath.section]
+      header.reactor = HeaderReactor(section: section)
       return header
     }
   )
@@ -56,7 +70,7 @@ final class HomeViewController: BaseViewController, View {
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: self.view.bounds,
-      collectionViewLayout: self.setupCollectionView()
+      collectionViewLayout: self.setupCollectionViewLayout()
     )
     collectionView.register(
       UpcomingCell.self,
@@ -65,6 +79,10 @@ final class HomeViewController: BaseViewController, View {
     collectionView.register(
       TimelineCell.self,
       forCellWithReuseIdentifier: TimelineCell.reuseIdentifier
+    )
+    collectionView.register(
+      EmptyCollectionViewCell.self,
+      forCellWithReuseIdentifier: EmptyCollectionViewCell.reuseIdentifier
     )
     collectionView.register(
       HeaderView.self,
@@ -81,14 +99,10 @@ final class HomeViewController: BaseViewController, View {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    let test = [HomeSection.upcoming([]), HomeSection.timeline([])]
-    Observable.just(test)
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
-      .disposed(by: self.disposeBag)
+    self.setupCollectionView()
   }
-	
-	// MARK: - Setup
+  
+  // MARK: - Setup
   
   override func setupLayouts() {
     [
@@ -105,9 +119,15 @@ final class HomeViewController: BaseViewController, View {
       make.bottom.equalToSuperview()
     }
   }
-	
-	// MARK: - Binding
-	
+  
+  func setupCollectionView() {
+    Observable.just([])
+      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
+  }
+  
+  // MARK: - Binding
+  
   func bind(reactor: HomeReactor) {
     // Action
     self.collectionView.rx.itemSelected
@@ -130,51 +150,82 @@ final class HomeViewController: BaseViewController, View {
 
 private extension HomeViewController {
   
-  func setupCollectionView() -> UICollectionViewLayout {
-    let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
-      // section 0: 다가오는 이벤트, section 1: 타임라인
-      let sectionType: HomeSectionType = HomeSectionType(rawValue: sectionIndex) ?? .upcoming
-      let columns: CGFloat = sectionType == .upcoming ? 1.0 : 2.0
-      let height: CGFloat = sectionType == .upcoming ? 95.0 : 165.0
-      let cellSpacing: CGFloat = sectionType == .upcoming ? 10.0 : 5.0
-      let headerHeight: CGFloat = sectionType == .upcoming ? 74 : 111
-
-      // Group.horizontal(layoutSize:,subitem:,count)에서 override
-      let itemSize = NSCollectionLayoutSize(
+  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    return .init(sectionProvider: { [weak self] sectionIndex, _ in
+      guard
+        let sectionType = self?.dataSource[sectionIndex],
+        let sectionItem = self?.dataSource[sectionIndex].items.first
+      else { fatalError("Fatal error occured while setting up section datas.") }
+      
+      switch sectionItem {
+      case .emptyCell:
+        return self?.createCollectionViewLayout(sectionType: sectionType, isEmpty: true)
+      default:
+        return self?.createCollectionViewLayout(sectionType: sectionType)
+      }
+    })
+  }
+  
+  func getSectionSize(sectionType: HomeSection) -> (NSCollectionLayoutSize, Int, CGFloat) {
+    return (sectionType.cellSize, sectionType.columns, sectionType.spacing)
+  }
+  
+  func createCollectionViewLayout(
+    sectionType: HomeSection,
+    isEmpty: Bool = false
+  ) -> NSCollectionLayoutSection {
+    let (cellSize, columns, spacing) = (isEmpty == true)
+    ? (.init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(305.0)), 1, 0)
+    : self.getSectionSize(sectionType: sectionType)
+    
+    // item
+    let item = NSCollectionLayoutItem(
+      layoutSize: .init(
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .fractionalHeight(1.0)
       )
-      let item = NSCollectionLayoutItem(layoutSize: itemSize)
-      
-      let groupSize = NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .absolute(height)
-      )
-      let group = NSCollectionLayoutGroup.horizontal(
-        layoutSize: groupSize,
-        subitem: item,
-        count: Int(columns)
-      )
-      group.interItemSpacing = .fixed(cellSpacing)
-      
-      let section = NSCollectionLayoutSection(group: group)
-      section.interGroupSpacing = cellSpacing
-      
-      let headerFooterSize = NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(headerHeight)
-      )
-      let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-        layoutSize: headerFooterSize,
-        elementKind: self.sectionHeaderElementKind,
-        alignment: .top
-      )
-      section.boundarySupplementaryItems = [sectionHeader]
-      
-      return section
-    })
+    )
     
-    return layout
+    // group
+    var group: NSCollectionLayoutGroup
+    if #available(iOS 16.0, *) {
+      group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: .init(
+          widthDimension: cellSize.widthDimension,
+          heightDimension: cellSize.heightDimension
+        ),
+        repeatingSubitem: item,
+        count: columns
+      )
+    } else {
+      group = NSCollectionLayoutGroup.horizontal(
+        layoutSize: .init(
+          widthDimension: cellSize.widthDimension,
+          heightDimension: cellSize.heightDimension
+        ),
+        subitem: item,
+        count: columns
+      )
+    }
+    group.interItemSpacing = .fixed(spacing)
+    
+    // section
+    let section = NSCollectionLayoutSection(group: group)
+    section.interGroupSpacing = spacing
+    
+    // header
+    section.boundarySupplementaryItems = [self.createHeader(sectionType: sectionType)]
+    
+    return section
   }
   
+  // 헤더
+  func createHeader(sectionType: HomeSection) -> NSCollectionLayoutBoundarySupplementaryItem {
+    let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: sectionType.headerHeight),
+      elementKind: self.sectionHeaderElementKind,
+      alignment: .top
+    )
+    return sectionHeader
+  }
 }
