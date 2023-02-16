@@ -79,6 +79,7 @@
 		E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610529948B4C00D14020 /* PickPictureCellReactor.swift */; };
 		E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */; };
 		E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610E299497C000D14020 /* NewGiftViewReactor.swift */; };
+		E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -181,6 +182,7 @@
 		E562610529948B4C00D14020 /* PickPictureCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickPictureCellReactor.swift; sourceTree = "<group>"; };
 		E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureCellReactor.swift; sourceTree = "<group>"; };
 		E562610E299497C000D14020 /* NewGiftViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftViewReactor.swift; sourceTree = "<group>"; };
+		E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeFavorButtonType.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
@@ -384,6 +386,7 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */,
 				E5B182892974D5DE00229C50 /* .gitkeep */,
 			);
 			path = Constants;
@@ -892,6 +895,7 @@
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
+				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,

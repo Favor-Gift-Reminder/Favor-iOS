@@ -28,7 +28,7 @@ final class SelectSignInViewController: BaseViewController, View {
   }()
   
   private lazy var emailLoginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .black, title: "이메일로 로그인")
+    let button = LargeFavorButton(with: .main, title: "이메일로 로그인")
     return button
   }()
   
