@@ -92,7 +92,8 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
 
 extension GiftStatCell: BaseView {
   func setupStyles() {
-    //
+    self.backgroundColor = .favorColor(.background)
+    self.round(corners: [.topLeft, .topRight], radius: 24)
   }
   
   func setupLayouts() {
