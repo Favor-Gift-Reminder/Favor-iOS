@@ -30,6 +30,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   private lazy var totalGiftTitleLabel: UILabel = self.makeTitleLabel(title: "총 선물")
   private lazy var totalGiftStack: UIStackView = {
     let stack = self.makeGiftStackView()
+    stack.distribution = .fillProportionally
     [
       self.totalGiftCountLabel,
       self.totalGiftTitleLabel
@@ -43,6 +44,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   private lazy var receivedGiftTItleLabel: UILabel = self.makeTitleLabel(title: "받은 선물")
   private lazy var receivedGiftStack: UIStackView = {
     let stack = self.makeGiftStackView()
+    stack.distribution = .fillProportionally
     [
       self.receivedGiftCountLabel,
       self.receivedGiftTItleLabel
@@ -56,6 +58,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   private lazy var givenGiftTitleLabel: UILabel = self.makeTitleLabel(title: "준 선물")
   private lazy var givenGiftStack: UIStackView = {
     let stack = self.makeGiftStackView()
+    stack.distribution = .fillProportionally
     [
       self.givenGiftCountLabel,
       self.givenGiftTitleLabel
@@ -114,7 +117,8 @@ extension GiftStatCell: BaseView {
   
   func setupConstraints() {
     self.hStack.snp.makeConstraints { make in
-      make.top.bottom.equalToSuperview()
+      make.top.equalToSuperview().inset(30)
+      make.bottom.equalToSuperview()
       make.centerX.equalToSuperview()
     }
   }

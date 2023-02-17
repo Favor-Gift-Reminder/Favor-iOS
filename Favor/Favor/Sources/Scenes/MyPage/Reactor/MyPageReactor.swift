@@ -55,7 +55,6 @@ final class MyPageReactor: Reactor, Stepper {
     switch mutation {
     case .updateCurrentOffset(let offset):
       newState.currentOffset = offset
-      print(newState.currentOffset)
     }
     
     return newState
@@ -66,6 +65,8 @@ final class MyPageReactor: Reactor, Stepper {
 
 private extension MyPageReactor {
   static func setupMockSection() -> [MyPageSection] {
+    let headerSection = MyPageSection.header([])
+    
     let giftCount = MyPageSectionItem.giftStat(GiftStatCellReactor())
     let giftCountSection = MyPageSection.giftStat([giftCount])
     
@@ -83,6 +84,6 @@ private extension MyPageReactor {
     let anniversary3 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
     let anniversarySection = MyPageSection.anniversary([anniversary1, anniversary2, anniversary3])
     
-    return [giftCountSection, newProfileSection, favorSection, anniversarySection]
+    return [headerSection, giftCountSection, newProfileSection, favorSection, anniversarySection]
   }
 }

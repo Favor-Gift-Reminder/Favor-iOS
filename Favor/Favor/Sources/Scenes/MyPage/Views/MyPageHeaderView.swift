@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 
-final class MyPageHeaderView: UIView, ReuseIdentifying, View {
+final class MyPageHeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   // MARK: - Constants
   
@@ -21,7 +21,8 @@ final class MyPageHeaderView: UIView, ReuseIdentifying, View {
   
   private lazy var backgroundImageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.backgroundColor = .systemBlue
+//    imageView.contentMode = .scaleAspectFill
+    imageView.image = UIImage(named: "MyPagePlaceholder")
     return imageView
   }()
   
@@ -55,7 +56,7 @@ final class MyPageHeaderView: UIView, ReuseIdentifying, View {
 
 extension MyPageHeaderView: BaseView {
   func setupStyles() {
-    self.backgroundColor = .magenta
+    
   }
   
   func setupLayouts() {

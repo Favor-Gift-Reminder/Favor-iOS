@@ -17,6 +17,7 @@ final class MyPageViewController: BaseViewController, View {
   // MARK: - Constants
   
   private let backgroundElementKind = "BackgroundView"
+  private let headerElementKind = "MyPageHeader"
   private let sectionHeaderElementKind = "SectionHeader"
   
   // MARK: - Properties
@@ -24,12 +25,20 @@ final class MyPageViewController: BaseViewController, View {
   let dataSource = MyPageDataSource(
     configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
       switch items {
+      case .header:
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: MyPageHeaderCell.reuseIdentifier,
+          for: indexPath
+        ) as? MyPageHeaderCell else { return UICollectionViewCell() }
+        cell.layer.zPosition = 0
+        return cell
       case .giftStat(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: GiftStatCell.reuseIdentifier,
           for: indexPath
         ) as? GiftStatCell else { return UICollectionViewCell() }
         cell.reactor = reactor
+        cell.layer.zPosition = 1
         return cell
       case .newProfile(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
@@ -55,23 +64,30 @@ final class MyPageViewController: BaseViewController, View {
       }
     }
     , configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-      guard let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
-        for: indexPath
-      ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
-      let section = dataSource[indexPath.section]
-      header.reactor = MyPageSectionHeaderReactor(section: section)
-      return header
+      switch indexPath.section {
+      case 0:
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+          ofKind: kind,
+          withReuseIdentifier: MyPageHeaderView.reuseIdentifier,
+          for: indexPath
+        ) as? MyPageHeaderView else { return UICollectionReusableView() }
+//        let section = dataSource[indexPath.section]
+        header.reactor = MyPageHeaderReactor()
+        return header
+      default:
+        guard let header = collectionView.dequeueReusableSupplementaryView(
+          ofKind: kind,
+          withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
+          for: indexPath
+        ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
+        let section = dataSource[indexPath.section]
+        header.reactor = MyPageSectionHeaderReactor(section: section)
+        return header
+      }
     }
   )
   
   // MARK: - UI Components
-  
-  private lazy var headerView: MyPageHeaderView = {
-    let headerView = MyPageHeaderView()
-    return headerView
-  }()
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
@@ -80,6 +96,10 @@ final class MyPageViewController: BaseViewController, View {
     )
     
     // CollectionViewCell
+    collectionView.register(
+      MyPageHeaderCell.self,
+      forCellWithReuseIdentifier: MyPageHeaderCell.reuseIdentifier
+    )
     collectionView.register(
       GiftStatCell.self,
       forCellWithReuseIdentifier: GiftStatCell.reuseIdentifier
@@ -98,6 +118,11 @@ final class MyPageViewController: BaseViewController, View {
     )
     
     // SupplementaryView
+    collectionView.register(
+      MyPageHeaderView.self,
+      forSupplementaryViewOfKind: self.headerElementKind,
+      withReuseIdentifier: MyPageHeaderView.reuseIdentifier
+    )
     collectionView.register(
       MyPageSectionHeaderView.self,
       forSupplementaryViewOfKind: self.sectionHeaderElementKind,
@@ -122,19 +147,6 @@ final class MyPageViewController: BaseViewController, View {
   
   func bind(reactor: MyPageReactor) {
     // Action
-    self.headerView.rx.anyGesture(.tap())
-      .subscribe(onNext: { _ in
-        print("Tap")
-      })
-      .disposed(by: self.disposeBag)
-    
-    self.collectionView.rx.contentOffset
-      .do(onNext: {
-        print($0)
-      })
-      .map { Reactor.Action.offsetDidChanged($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.sections }
@@ -155,7 +167,6 @@ final class MyPageViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.headerView,
       self.collectionView
     ].forEach {
       self.view.addSubview($0)
@@ -163,13 +174,8 @@ final class MyPageViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
-    self.headerView.snp.makeConstraints { make in
-      make.top.leading.trailing.equalToSuperview()
-      make.height.equalTo(333)
-    }
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.headerView.snp.bottom).inset(30)
-      make.leading.trailing.bottom.equalToSuperview()
+      make.edges.equalToSuperview()
     }
   }
   
@@ -237,11 +243,8 @@ private extension MyPageViewController {
     
     let sectionItem = self.dataSource[sectionIndex]
     switch sectionType {
-    case .giftStat:
-      let backgroundView = NSCollectionLayoutDecorationItem.background(elementKind: self.backgroundElementKind)
-      section.decorationItems.append(backgroundView)
-    default:
-      section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
+    case .giftStat: break
+    default: section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
     }
     
     return section

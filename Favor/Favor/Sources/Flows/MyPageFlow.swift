@@ -24,13 +24,13 @@ final class MyPageFlow: Flow {
     
     switch step {
     case .myPageIsRequired:
-      return self.navigateToSearch()
+      return self.navigateToMyPage()
     default:
       return .none
     }
   }
   
-  private func navigateToSearch() -> FlowContributors {
+  private func navigateToMyPage() -> FlowContributors {
     let myPageVC = MyPageViewController()
     let myPageReactor = MyPageReactor()
     myPageVC.reactor = myPageReactor
