@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/02/10.
 //
 
+import UIKit
+
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -17,15 +19,16 @@ final class MyPageReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
-    
+    case offsetDidChanged(CGPoint)
   }
   
   enum Mutation {
-    
+    case updateCurrentOffset(CGPoint)
   }
   
   struct State {
     var sections: [MyPageSection]
+    var currentOffset: CGPoint = .zero
   }
   
   // MARK: - Initializer
@@ -39,7 +42,24 @@ final class MyPageReactor: Reactor, Stepper {
   
   // MARK: - Functions
   
-
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .offsetDidChanged(let offset):
+      return .just(.updateCurrentOffset(offset))
+    }
+  }
+  
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+    
+    switch mutation {
+    case .updateCurrentOffset(let offset):
+      newState.currentOffset = offset
+      print(newState.currentOffset)
+    }
+    
+    return newState
+  }
 }
 
 // MARK: - Privates

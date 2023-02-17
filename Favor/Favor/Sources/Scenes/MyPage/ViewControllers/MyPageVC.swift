@@ -122,6 +122,19 @@ final class MyPageViewController: BaseViewController, View {
   
   func bind(reactor: MyPageReactor) {
     // Action
+    self.headerView.rx.anyGesture(.tap())
+      .subscribe(onNext: { _ in
+        print("Tap")
+      })
+      .disposed(by: self.disposeBag)
+    
+    self.collectionView.rx.contentOffset
+      .do(onNext: {
+        print($0)
+      })
+      .map { Reactor.Action.offsetDidChanged($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.sections }
