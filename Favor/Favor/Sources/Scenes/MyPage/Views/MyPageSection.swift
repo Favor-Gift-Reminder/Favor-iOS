@@ -89,7 +89,7 @@ extension MyPageSection {
     default:
       return .init(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(40)
+        heightDimension: .absolute(40)
       )
     }
   }
@@ -99,27 +99,27 @@ extension MyPageSection {
     case .header:
       return .init(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(60)
+        heightDimension: .absolute(60)
       )
     case .giftStat:
       return .init(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(91)
+        heightDimension: .absolute(91)
       )
     case .newProfile:
       return .init(
-        widthDimension: .estimated(250),
-        heightDimension: .estimated(262)
+        widthDimension: .absolute(250),
+        heightDimension: .absolute(262)
       )
     case .favor:
       return .init(
         widthDimension: .estimated(60),
-        heightDimension: .estimated(32)
+        heightDimension: .absolute(32)
       )
     case .anniversary:
       return .init(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(95)
+        heightDimension: .absolute(95)
       )
     }
   }
