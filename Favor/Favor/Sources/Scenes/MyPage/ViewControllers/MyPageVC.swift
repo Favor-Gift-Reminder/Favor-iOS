@@ -68,7 +68,7 @@ final class MyPageViewController: BaseViewController, View {
       switch indexPath.section {
       case 0:
         guard let header = collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
+          ofKind: UICollectionView.elementKindSectionHeader,
           withReuseIdentifier: MyPageHeaderView.reuseIdentifier,
           for: indexPath
         ) as? MyPageHeaderView else { return UICollectionReusableView() }
@@ -120,7 +120,7 @@ final class MyPageViewController: BaseViewController, View {
     // SupplementaryView
     collectionView.register(
       MyPageHeaderView.self,
-      forSupplementaryViewOfKind: self.headerElementKind,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
       withReuseIdentifier: MyPageHeaderView.reuseIdentifier
     )
     collectionView.register(

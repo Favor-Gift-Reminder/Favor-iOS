@@ -60,7 +60,7 @@ extension MyPageSection: SectionModelType {
   
   var headerElementKind: String {
     switch self {
-    case .header: return "MyPageHeader"
+    case .header: return UICollectionView.elementKindSectionHeader
     default: return "SectionHeader"
     }
   }
