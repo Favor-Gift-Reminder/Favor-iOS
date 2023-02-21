@@ -18,7 +18,6 @@ final class MyPageViewController: BaseViewController, View {
   
   // TODO: 전역적 Constants 분리
   private let backgroundElementKind = "BackgroundView"
-  private let headerElementKind = "MyPageHeader"
   private let sectionHeaderElementKind = "SectionHeader"
   
   // MARK: - Properties
@@ -180,10 +179,10 @@ final class MyPageViewController: BaseViewController, View {
     Observable.just([])
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
-    
+
     self.collectionView.rx.contentOffset
-      .subscribe(onNext: {
-        print($0)
+      .subscribe(onNext: { offset in
+
       })
       .disposed(by: self.disposeBag)
   }
