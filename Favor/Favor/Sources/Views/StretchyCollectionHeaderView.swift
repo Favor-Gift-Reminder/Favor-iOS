@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-class StretchyCollectionHeaderView: UICollectionReusableView {
+class StretchyCollectionHeaderView: UICollectionReusableView, BaseView {
 
   // MARK: - Constants
 
@@ -58,9 +58,9 @@ class StretchyCollectionHeaderView: UICollectionReusableView {
 //      make.height.equalTo(Constant.headerHeight + height)
 //    }
   }
-}
 
-extension StretchyCollectionHeaderView: BaseView {
+  // MARK: - UI Setup
+  
   func setupStyles() {
     //
   }
