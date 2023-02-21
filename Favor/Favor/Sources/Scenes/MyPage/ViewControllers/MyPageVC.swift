@@ -146,7 +146,6 @@ final class MyPageViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: MyPageReactor) {
-    print("bind")
     // Action
     
     // State
@@ -178,7 +177,6 @@ final class MyPageViewController: BaseViewController, View {
   }
   
   private func setupCollectionView() {
-    print("Setup collectionview")
     Observable.just([])
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
@@ -250,25 +248,6 @@ private extension MyPageViewController {
     switch sectionType {
     case .giftStat: break
     default: section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
-    }
-    
-    section.visibleItemsInvalidationHandler = { [weak self] items, offset, env in
-      guard let collectionView = self?.collectionView else { return }
-      items.forEach { item in
-//        self.collectionView.bounces = offset.y > 0
-        if item.representedElementKind == self?.headerElementKind {
-          guard
-            let itemElementKind = item.representedElementKind,
-            collectionView.numberOfSections > 0 // guard empty CollectionView
-          else { return }
-
-          guard let header = self?.dataSource.collectionView(
-            collectionView,
-            viewForSupplementaryElementOfKind: itemElementKind,
-            at: item.indexPath
-          ) as? MyPageHeaderView else { return }
-        }
-      }
     }
     
     return section
