@@ -249,6 +249,29 @@ private extension MyPageViewController {
     case .giftStat: break
     default: section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
     }
+
+    section.visibleItemsInvalidationHandler = { [weak self] visibleItems, contentOffset, environment in
+      guard let collectionView = self?.collectionView else { return }
+      visibleItems.forEach { item in
+        if item.representedElementKind == UICollectionView.elementKindSectionHeader {
+          guard
+            let itemElementKind = item.representedElementKind,
+            collectionView.numberOfSections > 0 // guard empty CollectionView
+          else { return }
+
+          guard let header = self?.dataSource.collectionView(
+            collectionView,
+            viewForSupplementaryElementOfKind: itemElementKind,
+            at: item.indexPath
+          ) as? MyPageHeaderView else { return }
+
+          header.scrollViewDidScroll(
+            contentOffset: contentOffset,
+            contentInset: environment.container.contentInsets
+          )
+        }
+      }
+    }
     
     return section
   }
