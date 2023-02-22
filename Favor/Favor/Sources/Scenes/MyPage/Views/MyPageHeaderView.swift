@@ -86,7 +86,7 @@ final class MyPageHeaderView: UIView, View {
   }
 }
 
-// MARK: - UI Setup
+// MARK: - Setup
 
 extension MyPageHeaderView: BaseView {
   func setupStyles() {

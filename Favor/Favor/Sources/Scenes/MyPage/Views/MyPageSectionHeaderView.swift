@@ -52,6 +52,8 @@ final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying,
   }
 }
 
+// MARK: - Setup
+
 extension MyPageSectionHeaderView: BaseView {
   func setupStyles() {
     //

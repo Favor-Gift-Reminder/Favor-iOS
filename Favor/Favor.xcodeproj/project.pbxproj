@@ -39,7 +39,6 @@
 		2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BD299248200081499C /* FavorSearchBar.swift */; };
 		2EA384C029936BAD0081499C /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BF29936BAD0081499C /* String+.swift */; };
 		2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3AE92299E3E2700D31541 /* BackgroundView.swift */; };
-		2EB6D81929A4BFC4001C28BF /* MyPageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB6D81829A4BFC4001C28BF /* MyPageHeaderCell.swift */; };
 		2EC371F8299521AD00D1007B /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC371F7299521AD00D1007B /* RxGesture */; };
 		2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371F92995262D00D1007B /* SearchResultVC.swift */; };
 		2EC371FC2995266B00D1007B /* SearchResultReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371FB2995266B00D1007B /* SearchResultReactor.swift */; };
@@ -152,7 +151,6 @@
 		2EA384BD299248200081499C /* FavorSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSearchBar.swift; sourceTree = "<group>"; };
 		2EA384BF29936BAD0081499C /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		2EB3AE92299E3E2700D31541 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
-		2EB6D81829A4BFC4001C28BF /* MyPageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderCell.swift; sourceTree = "<group>"; };
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -606,7 +604,6 @@
 				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
 				2EC939E22998C63200C8C47F /* NewProfileCell.swift */,
 				2EC939E42998C68900C8C47F /* FavorCell.swift */,
-				2EB6D81829A4BFC4001C28BF /* MyPageHeaderCell.swift */,
 				2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */,
 				2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */,
 			);
@@ -965,7 +962,6 @@
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EC371FC2995266B00D1007B /* SearchResultReactor.swift in Sources */,
-				2EB6D81929A4BFC4001C28BF /* MyPageHeaderCell.swift in Sources */,
 				E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */,
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,

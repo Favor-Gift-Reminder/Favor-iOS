@@ -23,6 +23,8 @@ final class BackgroundView: UICollectionReusableView, ReuseIdentifying {
   }
 }
 
+// MARK: - Setup
+
 extension BackgroundView: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.background)

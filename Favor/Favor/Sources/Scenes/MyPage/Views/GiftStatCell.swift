@@ -28,45 +28,24 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   
   private lazy var totalGiftCountLabel: UILabel = self.makeCountLabel()
   private lazy var totalGiftTitleLabel: UILabel = self.makeTitleLabel(title: "총 선물")
-  private lazy var totalGiftStack: UIStackView = {
-    let stack = self.makeGiftStackView()
-    stack.distribution = .fillProportionally
-    [
-      self.totalGiftCountLabel,
-      self.totalGiftTitleLabel
-    ].forEach {
-      stack.addArrangedSubview($0)
-    }
-    return stack
-  }()
+  private lazy var totalGiftStack: UIStackView = self.makeGiftItem(
+    countLabel: self.totalGiftCountLabel,
+    titleLabel: self.totalGiftTitleLabel
+  )
   
   private lazy var receivedGiftCountLabel: UILabel = self.makeCountLabel()
   private lazy var receivedGiftTItleLabel: UILabel = self.makeTitleLabel(title: "받은 선물")
-  private lazy var receivedGiftStack: UIStackView = {
-    let stack = self.makeGiftStackView()
-    stack.distribution = .fillProportionally
-    [
-      self.receivedGiftCountLabel,
-      self.receivedGiftTItleLabel
-    ].forEach {
-      stack.addArrangedSubview($0)
-    }
-    return stack
-  }()
+  private lazy var receivedGiftStack: UIStackView = self.makeGiftItem(
+    countLabel: self.receivedGiftCountLabel,
+    titleLabel: self.receivedGiftTItleLabel
+  )
   
   private lazy var givenGiftCountLabel: UILabel = self.makeCountLabel()
   private lazy var givenGiftTitleLabel: UILabel = self.makeTitleLabel(title: "준 선물")
-  private lazy var givenGiftStack: UIStackView = {
-    let stack = self.makeGiftStackView()
-    stack.distribution = .fillProportionally
-    [
-      self.givenGiftCountLabel,
-      self.givenGiftTitleLabel
-    ].forEach {
-      stack.addArrangedSubview($0)
-    }
-    return stack
-  }()
+  private lazy var givenGiftStack: UIStackView = self.makeGiftItem(
+    countLabel: self.givenGiftCountLabel,
+    titleLabel: self.givenGiftTitleLabel
+  )
   
   // MARK: - Initializer
   
@@ -127,11 +106,22 @@ extension GiftStatCell: BaseView {
 // MARK: - Privates
 
 private extension GiftStatCell {
+  func makeGiftItem(countLabel: UILabel, titleLabel: UILabel) -> UIStackView {
+    let stackView = self.makeGiftStackView()
+    [
+      countLabel,
+      titleLabel
+    ].forEach {
+      stackView.addArrangedSubview($0)
+    }
+    return stackView
+  }
+
   func makeGiftStackView() -> UIStackView {
     let vStack = UIStackView()
     vStack.axis = .vertical
     vStack.spacing = 16
-    
+    vStack.distribution = .fillProportionally
     return vStack
   }
   

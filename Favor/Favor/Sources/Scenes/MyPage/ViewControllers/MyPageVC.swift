@@ -175,11 +175,10 @@ final class MyPageViewController: BaseViewController, View {
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
 
-    self.collectionView.rx.setDelegate(self).disposed(by: self.disposeBag)
-
     self.collectionView.rx.contentOffset
-      .subscribe(onNext: { offset in
-
+      .skip(1)
+      .bind(with: self, onNext: { owner, offset in
+        owner.updateHeaderConstraintAndOpacity(offset: offset)
       })
       .disposed(by: self.disposeBag)
   }
@@ -187,8 +186,8 @@ final class MyPageViewController: BaseViewController, View {
 
 // MARK: - CollectionView
 
-extension MyPageViewController: UICollectionViewDelegate {
-  private func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+private extension MyPageViewController {
+  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     // Layout
     let layout = UICollectionViewCompositionalLayout.init(sectionProvider: { [weak self] sectionIndex, _ in
       guard
@@ -201,7 +200,7 @@ extension MyPageViewController: UICollectionViewDelegate {
     return layout
   }
   
-  private func createCollectionViewLayout(
+  func createCollectionViewLayout(
     sectionType: MyPageSection,
     sectionIndex: Int
   ) -> NSCollectionLayoutSection {
@@ -256,7 +255,7 @@ extension MyPageViewController: UICollectionViewDelegate {
     return section
   }
   
-  private func createHeader(section: MyPageSection) -> NSCollectionLayoutBoundarySupplementaryItem {
+  func createHeader(section: MyPageSection) -> NSCollectionLayoutBoundarySupplementaryItem {
     return NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: section.headerSize,
       elementKind: UICollectionView.elementKindSectionHeader,
@@ -264,11 +263,10 @@ extension MyPageViewController: UICollectionViewDelegate {
     )
   }
 
-  func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//    print(scrollView.contentOffset.y)
-    let remainingTopSpace = abs(scrollView.contentOffset.y) + Metric.collectionViewCovereringHeaderHeight
-    let isScrollViewBelowTopOfScreen = scrollView.contentOffset.y < 0
-    let isScrollViewExceedingHeaderBottom = scrollView.contentOffset.y > -Metric.headerHeight
+  func updateHeaderConstraintAndOpacity(offset: CGPoint) {
+    let remainingTopSpace = abs(offset.y) + Metric.collectionViewCovereringHeaderHeight
+    let isScrollViewBelowTopOfScreen = offset.y < 0
+    let isScrollViewExceedingHeaderBottom = offset.y > -Metric.headerHeight
 
     if isScrollViewExceedingHeaderBottom, isScrollViewBelowTopOfScreen {
       self.collectionView.contentInset = UIEdgeInsets(
