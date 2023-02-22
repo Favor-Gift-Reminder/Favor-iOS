@@ -56,6 +56,13 @@ final class MyPageViewController: BaseViewController, View {
         ) as? AnniversaryCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         return cell
+      case .friend(let reactor):
+        guard let cell = collectionView.dequeueReusableCell(
+          withReuseIdentifier: FriendCell.reuseIdentifier,
+          for: indexPath
+        ) as? FriendCell else { return UICollectionViewCell() }
+        cell.reactor = reactor
+        return cell
       }
     }
     , configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -101,6 +108,10 @@ final class MyPageViewController: BaseViewController, View {
       AnniversaryCell.self,
       forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
     )
+    collectionView.register(
+      FriendCell.self,
+      forCellWithReuseIdentifier: FriendCell.reuseIdentifier
+    )
     
     // SupplementaryView
     collectionView.register(
@@ -119,7 +130,6 @@ final class MyPageViewController: BaseViewController, View {
       bottom: .zero,
       right: .zero
     )
-    collectionView.layer.zPosition = 1
     return collectionView
   }()
   

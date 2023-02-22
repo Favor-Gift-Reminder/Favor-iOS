@@ -14,6 +14,7 @@ enum MyPageSectionItem {
   case newProfile(NewProfileCellReactor)
   case favor(FavorCellReactor)
   case anniversary(AnniversaryCellReactor)
+  case friend(FriendCellReactor)
 }
 
 enum MyPageSection {
@@ -21,6 +22,7 @@ enum MyPageSection {
   case newProfile([MyPageSectionItem])
   case favor([MyPageSectionItem])
   case anniversary([MyPageSectionItem])
+  case friend([MyPageSectionItem])
 }
 
 extension MyPageSection: SectionModelType {
@@ -36,6 +38,8 @@ extension MyPageSection: SectionModelType {
       return items
     case .anniversary(let items):
       return items
+    case .friend(let items):
+      return items
     }
   }
   
@@ -49,16 +53,25 @@ extension MyPageSection: SectionModelType {
       self = .favor(items)
     case .anniversary:
       self = .anniversary(items)
+    case .friend:
+      self = .friend(items)
     }
   }
-  
-  // TODO: Section 데이터에 주입
+
   var headerTitle: String? {
     switch self {
     case .giftStat: return nil
     case .newProfile: return "새 프로필"
     case .favor: return "취향"
     case .anniversary: return "기념일"
+    case .friend: return "친구"
+    }
+  }
+
+  var headerRightItemTitle: String? {
+    switch self {
+    case .friend: return "전체보기"
+    default: return nil
     }
   }
 }
@@ -95,6 +108,11 @@ extension MyPageSection {
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .absolute(95)
       )
+    case .friend:
+      return NSCollectionLayoutSize(
+        widthDimension: .absolute(60),
+        heightDimension: .absolute(85)
+      )
     }
   }
   
@@ -111,6 +129,7 @@ extension MyPageSection {
     case .newProfile: return 8.0
     case .favor: return 10.0
     case .anniversary: return 10.0
+    case .friend: return 26.0
     }
   }
   
@@ -124,6 +143,7 @@ extension MyPageSection {
   var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
     switch self {
     case .newProfile: return .groupPaging
+    case .friend: return .continuous
     default: return .none
     }
   }

@@ -81,7 +81,14 @@ private extension MyPageReactor {
     let anniversary2 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
     let anniversary3 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
     let anniversarySection = MyPageSection.anniversary([anniversary1, anniversary2, anniversary3])
+
+    let friend1 = MyPageSectionItem.friend(FriendCellReactor())
+    let friend2 = MyPageSectionItem.friend(FriendCellReactor())
+    let friend3 = MyPageSectionItem.friend(FriendCellReactor())
+    let friend4 = MyPageSectionItem.friend(FriendCellReactor())
+    let friend5 = MyPageSectionItem.friend(FriendCellReactor())
+    let friendSection = MyPageSection.friend([friend1, friend2, friend3, friend4, friend5])
     
-    return [giftCountSection, newProfileSection, favorSection, anniversarySection]
+    return [giftCountSection, newProfileSection, favorSection, anniversarySection, friendSection]
   }
 }

@@ -24,6 +24,14 @@ final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying,
     label.text = "헤더 타이틀"
     return label
   }()
+
+  private lazy var rightButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.baseForegroundColor = .favorColor(.explain)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
   
   // MARK: - Initializer
   
@@ -47,6 +55,15 @@ final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying,
     reactor.state.map { $0.sectionType }
       .bind(with: self, onNext: { owner, sectionType in
         owner.headerTitle.text = sectionType.headerTitle
+
+        if let buttonTitle = sectionType.headerRightItemTitle {
+          var titleContainer = AttributeContainer()
+          titleContainer.foregroundColor = .favorColor(.explain)
+          titleContainer.font = .favorFont(.regular, size: 12)
+          owner.rightButton.configuration?.attributedTitle = AttributedString(buttonTitle, attributes: titleContainer)
+        } else {
+          owner.rightButton.isHidden = true
+        }
       })
       .disposed(by: self.disposeBag)
   }
@@ -61,7 +78,8 @@ extension MyPageSectionHeaderView: BaseView {
   
   func setupLayouts() {
     [
-      self.headerTitle
+      self.headerTitle,
+      self.rightButton
     ].forEach {
       self.addSubview($0)
     }
@@ -70,6 +88,11 @@ extension MyPageSectionHeaderView: BaseView {
   func setupConstraints() {
     self.headerTitle.snp.makeConstraints { make in
       make.top.leading.trailing.equalToSuperview()
+    }
+
+    self.rightButton.snp.makeConstraints { make in
+      make.centerY.equalTo(self.headerTitle.snp.centerY)
+      make.trailing.equalToSuperview()
     }
   }
 }

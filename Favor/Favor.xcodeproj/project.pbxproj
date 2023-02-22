@@ -304,6 +304,29 @@
 			path = CollectionViewCellReactors;
 			sourceTree = "<group>";
 		};
+		2E6C90B629A61ED400AF963A /* Edit */ = {
+			isa = PBXGroup;
+			children = (
+				2E6C90B929A61F0900AF963A /* Reactor */,
+				2E6C90B829A61EFA00AF963A /* ViewControllers */,
+			);
+			path = Edit;
+			sourceTree = "<group>";
+		};
+		2E6C90B829A61EFA00AF963A /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2E6C90B929A61F0900AF963A /* Reactor */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reactor;
+			sourceTree = "<group>";
+		};
 		2E76F58629601EC3002FF001 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
@@ -607,6 +630,7 @@
 		2EE07EBD296E8D2300048A3C /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				2E6C90B629A61ED400AF963A /* Edit */,
 				2EE07EC0296E8D3700048A3C /* Reactor */,
 				2EE07EBF296E8D3300048A3C /* Views */,
 				2EE07EBE296E8D2D00048A3C /* ViewControllers */,
