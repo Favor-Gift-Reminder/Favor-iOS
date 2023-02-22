@@ -95,7 +95,6 @@
 		E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */; };
 		E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* SmallFavorButton.swift */; };
 		E5B1828A2974D5DE00229C50 /* .gitkeep in Resources */ = {isa = PBXBuildFile; fileRef = E5B182892974D5DE00229C50 /* .gitkeep */; };
-		E5B182972974F54A00229C50 /* UpdateHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */; };
 		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
@@ -202,7 +201,6 @@
 		E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		E5B1828629744D8400229C50 /* SmallFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButton.swift; sourceTree = "<group>"; };
 		E5B182892974D5DE00229C50 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateHandlerManager.swift; sourceTree = "<group>"; };
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
@@ -724,7 +722,6 @@
 			children = (
 				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
 				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
-				E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */,
 				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
 			);
 			path = Utils;
@@ -933,7 +930,6 @@
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				E5626120299DD37200D14020 /* SmallFavorButtonType.swift in Sources */,
-				E5B182972974F54A00229C50 /* UpdateHandlerManager.swift in Sources */,
 				2EE6B3992983DF3900CDBC81 /* AppFlow.swift in Sources */,
 				E56260F129908F0100D14020 /* CategoryView.swift in Sources */,
 				2EC939ED299B705C00C8C47F /* EmptyCollectionViewCell.swift in Sources */,

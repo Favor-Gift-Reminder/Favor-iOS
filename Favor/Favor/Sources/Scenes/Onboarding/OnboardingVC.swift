@@ -69,8 +69,6 @@ final class OnboardingViewController: BaseViewController, Stepper {
   private var currentPage: Int = 0 {
     didSet {
       self.pageControl.currentPage = currentPage
-      let handler = UpdateHandlerManager.onboardingHandler(currentPage)
-      self.continueButton.configurationUpdateHandler = handler
     }
   }
   
