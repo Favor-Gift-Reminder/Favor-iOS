@@ -10,12 +10,12 @@ import UIKit
 enum SmallFavorButtonType {
   case main(String, imageName: String)
   case main2(String)
-  case dark1(String, imageName: String)
-  case dark_like(String)
+  case dark(String, imageName: String)
+  case darkWithHeart(String)
   case gray(String)
-  case gray_user(String)
+  case grayWithUser(String)
   // TODO: 이모지 열거형 연관괎으로 추가하기
-  case gray_emoji
+  case grayWithEmoji
   
   var configuration: UIButton.Configuration {
     var config = UIButton.Configuration.filled()
@@ -40,12 +40,12 @@ enum SmallFavorButtonType {
       titleString = title
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.main)
-    case let .dark1(title, imageName):
+    case let .dark(title, imageName):
       titleString = title
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
       config.image = UIImage(named: imageName)
-    case .dark_like(let title):
+    case .darkWithHeart(let title):
       titleString = title
       config.baseBackgroundColor = .favorColor(.icon)
       config.baseForegroundColor = .favorColor(.white)
@@ -54,12 +54,12 @@ enum SmallFavorButtonType {
       titleString = title
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.subtext)
-    case .gray_user(let userName):
+    case .grayWithUser(let userName):
       titleString = userName
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.titleAndLine)
       config.image = UIImage(named: "ic_friend_small")
-    case .gray_emoji:
+    case .grayWithEmoji:
       titleString = ""
       config.baseBackgroundColor = .favorColor(.button)
     }

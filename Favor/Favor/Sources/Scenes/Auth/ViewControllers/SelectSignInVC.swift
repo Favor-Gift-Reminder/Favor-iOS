@@ -33,7 +33,7 @@ final class SelectSignInViewController: BaseViewController, View {
   }()
   
   private lazy var signUpButton: PlainFavorButton = {
-    let button = PlainFavorButton(with: .log_in("신규 회원가입"))
+    let button = PlainFavorButton(with: .logIn("신규 회원가입"))
     return button
   }()
   

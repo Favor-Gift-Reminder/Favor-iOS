@@ -8,7 +8,7 @@
 import UIKit
 
 enum PlainFavorButtonType {
-  case log_in(String)
+  case logIn(String)
   case more(String)
   case main(String, isRight: Bool)
   
@@ -21,7 +21,7 @@ enum PlainFavorButtonType {
     config.baseForegroundColor = .favorColor(.subtext)
     
     switch self {
-    case .log_in(let title):
+    case .logIn(let title):
       titleString = title
       config.image = UIImage(named: "ic_right_gray")
       titleContainer.font = .favorFont(.regular, size: 16)
