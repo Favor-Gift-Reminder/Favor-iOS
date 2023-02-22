@@ -25,7 +25,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// TextField가 highlighted되야 하는 상태 여부 Boolean (Editing or Selected)
-  var isEditingOrSelected: Bool {
+  private var isEditingOrSelected: Bool {
     super.isEditing || self.isSelected
   }
   
@@ -39,14 +39,14 @@ class FavorTextField: UITextField, BaseView {
   
   /// TextField 오른쪽에 SecureEyeButton이 있는 지 여부 Boolean.
   /// 일반적인 경우 TextField 초기화 시 한 번 설정합니다.
-  var isSecureField: Bool = false {
+  public var isSecureField: Bool = false {
     didSet {
       self.updateControl()
     }
   }
   
   /// TextField에 입력된 내용 숨김/표시 여부 Boolean
-  var isTextHidden: Bool = true {
+  private var isTextHidden: Bool = true {
     didSet {
       self.updateTextVisibility()
       self.secureEyeButton.setNeedsUpdateConfiguration()
@@ -56,10 +56,10 @@ class FavorTextField: UITextField, BaseView {
   // MARK: - Animation
   
   /// 메시지가 표현되는 애니메이션 시간
-  var fadeInDuration: TimeInterval = 0.2
+  public var fadeInDuration: TimeInterval = 0.2
   
   /// 메시지가 사라질 때 애니메이션 시간
-  var fadeOutDuration: TimeInterval = 0.3
+  public var fadeOutDuration: TimeInterval = 0.3
   
   // MARK: - Text
   
@@ -81,7 +81,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// Placeholder의 폰트
-  var placeholderFont: UIFont? = .favorFont(.regular, size: 16.0) {
+  public var placeholderFont: UIFont? = .favorFont(.regular, size: 16.0) {
     didSet {
       self.updatePlaceholder()
       self.setNeedsDisplay()
@@ -89,7 +89,7 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// Placeholder 텍스트의 색상
-  var placeholderColor: UIColor = .favorColor(.explain) {
+  public var placeholderColor: UIColor = .favorColor(.explain) {
     didSet {
       self.updatePlaceholder()
     }
@@ -98,27 +98,27 @@ class FavorTextField: UITextField, BaseView {
   // MARK: - Message Label
   
   /// TextField 하단에 표시되는 정보 Label
-  var messageLabel: UILabel = {
+  private var messageLabel: UILabel = {
     let messageLabel = UILabel()
     return messageLabel
   }()
   
   /// `messageLabel`로 출력될 String
-  var messageText: String? {
+  public var messageText: String? {
     didSet {
       self.updateControl(animated: true)
     }
   }
   
   /// 메시지의 타입 (`info`, `error`)
-  var messageType: MessageType = .info {
+  public var messageType: MessageType = .info {
     didSet {
       self.updateControl(animated: true)
     }
   }
   
   /// 메시지의 폰트
-  var messageFont: UIFont? = .favorFont(.regular, size: 12) {
+  public var messageFont: UIFont? = .favorFont(.regular, size: 12) {
     didSet {
       self.updateMessageLabel()
       self.setNeedsDisplay()
@@ -126,33 +126,33 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// 메시지가 있는 지의 Boolean
-  var hasMessage: Bool {
+  private var hasMessage: Bool {
     self.messageText != nil && !(self.messageText ?? "").isEmpty
   }
   
   /// 텍스트필드가 선택됐을 때 정보 메시지 색상
-  var selectedMessageColor: UIColor? = .favorColor(.titleAndLine) {
+  public var selectedMessageColor: UIColor? = .favorColor(.titleAndLine) {
     didSet {
       self.updateColors()
     }
   }
   
   /// 정보 메시지 색상
-  var infoMessageColor: UIColor? = .favorColor(.line2) {
+  public var infoMessageColor: UIColor? = .favorColor(.line2) {
     didSet {
       self.updateColors()
     }
   }
   
   /// 에러 메시지 색상
-  var errorMessageColor: UIColor? = .favorColor(.main) {
+  public var errorMessageColor: UIColor? = .favorColor(.main) {
     didSet {
       self.updateColors()
     }
   }
   
   /// 메시지와 밑줄 사이의 간격
-  var messageLabelSpacing: CGFloat = 8.0 {
+  public var messageLabelSpacing: CGFloat = 8.0 {
     didSet {
       self.updateMessageLabel()
       self.setNeedsDisplay()
@@ -162,35 +162,35 @@ class FavorTextField: UITextField, BaseView {
   // MARK: - Underline
   
   /// TextField의 하단에 깔리는 밑줄 View
-  var underlineView: UIView = {
+  private var underlineView: UIView = {
     let underlineView = UIView()
     underlineView.isUserInteractionEnabled = false
     return underlineView
   }()
   
   /// TextField의 밑줄 색상
-  var underlineColor: UIColor = .favorColor(.line3) {
+  public var underlineColor: UIColor = .favorColor(.line3) {
     didSet {
       self.updateUnderlineColor()
     }
   }
   
   /// TextField가 선택됐을 때의 밑줄 색상
-  var selectedUnderlineColor: UIColor = .favorColor(.titleAndLine) {
+  public var selectedUnderlineColor: UIColor = .favorColor(.titleAndLine) {
     didSet {
       self.updateUnderlineColor()
     }
   }
   
   /// TextField의 밑줄 두께
-  var underlineHeight: CGFloat = 1.0
+  public var underlineHeight: CGFloat = 1.0
   
   /// TextField의 텍스트와 밑줄 사이의 거리
-  var underlineSpacing: CGFloat = 16.0
+  public var underlineSpacing: CGFloat = 16.0
   
   // MARK: - Secure Eye Button
   
-  lazy var secureEyeButton = UIButton(
+  public lazy var secureEyeButton = UIButton(
     configuration: .plain(),
     primaryAction: UIAction(handler: { _ in
       self.isTextHidden.toggle()
@@ -267,11 +267,12 @@ class FavorTextField: UITextField, BaseView {
   
   // MARK: - Functions
   
-  func addEditingChangedObserver() {
+  private func addEditingChangedObserver() {
     self.addTarget(self, action: #selector(FavorTextField.editingChanged), for: .editingChanged)
   }
-  
-  @objc func editingChanged() {
+
+  @objc
+  func editingChanged() {
     self.updateControl(animated: true)
   }
   
@@ -290,12 +291,12 @@ class FavorTextField: UITextField, BaseView {
   }
   
   /// TextField 하단의 정보 메시지 레이블을 수정합니다.
-  func updateMessage(_ message: String?, for messageType: MessageType) {
+  public func updateMessage(_ message: String?, for messageType: MessageType) {
     self.messageText = message
     self.messageType = messageType
   }
   
-  func addLeftItem(item: UIView) {
+  public func addLeftItem(item: UIView) {
     item.snp.makeConstraints { make in
       make.height.equalTo(24)
       make.width.equalTo(28)
