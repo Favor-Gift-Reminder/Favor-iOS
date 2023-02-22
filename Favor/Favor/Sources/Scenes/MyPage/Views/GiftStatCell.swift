@@ -118,7 +118,7 @@ extension GiftStatCell: BaseView {
   func setupConstraints() {
     self.hStack.snp.makeConstraints { make in
       make.top.equalToSuperview().inset(30)
-      make.bottom.equalToSuperview()
+      make.bottom.equalToSuperview().inset(40)
       make.centerX.equalToSuperview()
     }
   }

@@ -65,8 +65,6 @@ final class MyPageReactor: Reactor, Stepper {
 
 private extension MyPageReactor {
   static func setupMockSection() -> [MyPageSection] {
-    let headerSection = MyPageSection.header([])
-    
     let giftCount = MyPageSectionItem.giftStat(GiftStatCellReactor())
     let giftCountSection = MyPageSection.giftStat([giftCount])
     
@@ -84,6 +82,6 @@ private extension MyPageReactor {
     let anniversary3 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
     let anniversarySection = MyPageSection.anniversary([anniversary1, anniversary2, anniversary3])
     
-    return [headerSection, giftCountSection, newProfileSection, favorSection, anniversarySection]
+    return [giftCountSection, newProfileSection, favorSection, anniversarySection]
   }
 }

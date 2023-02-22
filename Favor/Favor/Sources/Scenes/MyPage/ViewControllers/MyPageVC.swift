@@ -15,23 +15,18 @@ final class MyPageViewController: BaseViewController, View {
   typealias MyPageDataSource = RxCollectionViewSectionedReloadDataSource<MyPageSection>
   
   // MARK: - Constants
-  
-  // TODO: 전역적 Constants 분리
-  private let backgroundElementKind = "BackgroundView"
-  private let sectionHeaderElementKind = "SectionHeader"
+
+  private enum Metric {
+    static let headerHeight = 333.0
+    /// 헤더와 컬렉션뷰가 겹치는 높이
+    static let collectionViewCovereringHeaderHeight = 30.0
+  }
   
   // MARK: - Properties
   
   let dataSource = MyPageDataSource(
     configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
       switch items {
-      case .header:
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: MyPageHeaderCell.reuseIdentifier,
-          for: indexPath
-        ) as? MyPageHeaderCell else { return UICollectionViewCell() }
-        cell.layer.zPosition = 0
-        return cell
       case .giftStat(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
           withReuseIdentifier: GiftStatCell.reuseIdentifier,
@@ -64,30 +59,25 @@ final class MyPageViewController: BaseViewController, View {
       }
     }
     , configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-      switch indexPath.section {
-      case 0:
-        guard let header = collectionView.dequeueReusableSupplementaryView(
-          ofKind: UICollectionView.elementKindSectionHeader,
-          withReuseIdentifier: MyPageHeaderView.reuseIdentifier,
-          for: indexPath
-        ) as? MyPageHeaderView else { return UICollectionReusableView() }
-        header.reactor = MyPageHeaderReactor()
-        return header
-      default:
-        guard let header = collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
-          for: indexPath
-        ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
-        let section = dataSource[indexPath.section]
-        header.reactor = MyPageSectionHeaderReactor(section: section)
-        return header
-      }
+      guard let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
+        for: indexPath
+      ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
+      let section = dataSource[indexPath.section]
+      header.reactor = MyPageSectionHeaderReactor(section: section)
+      return header
     }
   )
   
   // MARK: - UI Components
-  
+
+  private lazy var headerView: MyPageHeaderView = {
+    let headerView = MyPageHeaderView()
+    headerView.layer.zPosition = 0
+    return headerView
+  }()
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: self.view.bounds,
@@ -95,10 +85,6 @@ final class MyPageViewController: BaseViewController, View {
     )
     
     // CollectionViewCell
-    collectionView.register(
-      MyPageHeaderCell.self,
-      forCellWithReuseIdentifier: MyPageHeaderCell.reuseIdentifier
-    )
     collectionView.register(
       GiftStatCell.self,
       forCellWithReuseIdentifier: GiftStatCell.reuseIdentifier
@@ -118,13 +104,8 @@ final class MyPageViewController: BaseViewController, View {
     
     // SupplementaryView
     collectionView.register(
-      MyPageHeaderView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: MyPageHeaderView.reuseIdentifier
-    )
-    collectionView.register(
       MyPageSectionHeaderView.self,
-      forSupplementaryViewOfKind: self.sectionHeaderElementKind,
+      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
       withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier
     )
     
@@ -132,6 +113,13 @@ final class MyPageViewController: BaseViewController, View {
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInsetAdjustmentBehavior = .never
+    collectionView.contentInset = UIEdgeInsets(
+      top: Metric.headerHeight - Metric.collectionViewCovereringHeaderHeight,
+      left: .zero,
+      bottom: .zero,
+      right: .zero
+    )
+    collectionView.layer.zPosition = 1
     return collectionView
   }()
   
@@ -163,6 +151,7 @@ final class MyPageViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
+      self.headerView,
       self.collectionView
     ].forEach {
       self.view.addSubview($0)
@@ -170,6 +159,12 @@ final class MyPageViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
+    self.headerView.snp.makeConstraints { make in
+      make.top.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(Metric.headerHeight)
+    }
+
     self.collectionView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
@@ -179,6 +174,8 @@ final class MyPageViewController: BaseViewController, View {
     Observable.just([])
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
+
+    self.collectionView.rx.setDelegate(self).disposed(by: self.disposeBag)
 
     self.collectionView.rx.contentOffset
       .subscribe(onNext: { offset in
@@ -190,19 +187,21 @@ final class MyPageViewController: BaseViewController, View {
 
 // MARK: - CollectionView
 
-private extension MyPageViewController {
-  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+extension MyPageViewController: UICollectionViewDelegate {
+  private func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    // Layout
     let layout = UICollectionViewCompositionalLayout.init(sectionProvider: { [weak self] sectionIndex, _ in
       guard
         let sectionType = self?.dataSource[sectionIndex]
       else { fatalError("Fatal error occured while setting up section datas.") }
       return self?.createCollectionViewLayout(sectionType: sectionType, sectionIndex: sectionIndex)
     })
-    layout.register(BackgroundView.self, forDecorationViewOfKind: self.backgroundElementKind)
+    // Background
+    layout.register(BackgroundView.self, forDecorationViewOfKind: BackgroundView.reuseIdentifier)
     return layout
   }
   
-  func createCollectionViewLayout(
+  private func createCollectionViewLayout(
     sectionType: MyPageSection,
     sectionIndex: Int
   ) -> NSCollectionLayoutSection {
@@ -242,45 +241,57 @@ private extension MyPageViewController {
     section.contentInsets = sectionType.sectionInset
     section.interGroupSpacing = sectionType.spacing
     section.orthogonalScrollingBehavior = sectionType.orthogonalScrollingBehavior
-    
+
+    // Header & Background
     let sectionItem = self.dataSource[sectionIndex]
     switch sectionType {
     case .giftStat: break
-    default: section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
-    }
-
-    section.visibleItemsInvalidationHandler = { [weak self] visibleItems, contentOffset, environment in
-      guard let collectionView = self?.collectionView else { return }
-      visibleItems.forEach { item in
-        if item.representedElementKind == UICollectionView.elementKindSectionHeader {
-          guard
-            let itemElementKind = item.representedElementKind,
-            collectionView.numberOfSections > 0 // guard empty CollectionView
-          else { return }
-
-          guard let header = self?.dataSource.collectionView(
-            collectionView,
-            viewForSupplementaryElementOfKind: itemElementKind,
-            at: item.indexPath
-          ) as? MyPageHeaderView else { return }
-
-          header.scrollViewDidScroll(
-            contentOffset: contentOffset,
-            contentInset: environment.container.contentInsets
-          )
-        }
-      }
+    default:
+      section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
+      section.decorationItems = [
+        NSCollectionLayoutDecorationItem.background(elementKind: BackgroundView.reuseIdentifier)
+      ]
     }
     
     return section
   }
   
-  func createHeader(section: MyPageSection) -> NSCollectionLayoutBoundarySupplementaryItem {
-    let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
+  private func createHeader(section: MyPageSection) -> NSCollectionLayoutBoundarySupplementaryItem {
+    return NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: section.headerSize,
-      elementKind: section.headerElementKind,
+      elementKind: UICollectionView.elementKindSectionHeader,
       alignment: .top
     )
-    return sectionHeader
+  }
+
+  func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//    print(scrollView.contentOffset.y)
+    let remainingTopSpace = abs(scrollView.contentOffset.y) + Metric.collectionViewCovereringHeaderHeight
+    let isScrollViewBelowTopOfScreen = scrollView.contentOffset.y < 0
+    let isScrollViewExceedingHeaderBottom = scrollView.contentOffset.y > -Metric.headerHeight
+
+    if isScrollViewExceedingHeaderBottom, isScrollViewBelowTopOfScreen {
+      self.collectionView.contentInset = UIEdgeInsets(
+        top: remainingTopSpace,
+        left: .zero,
+        bottom: .zero,
+        right: .zero
+      )
+      self.headerView.snp.updateConstraints { make in
+        make.height.equalTo(remainingTopSpace)
+      }
+      self.headerView.updateBackgroundAlpha(to: remainingTopSpace / Metric.headerHeight)
+    } else if !isScrollViewBelowTopOfScreen {
+      self.collectionView.contentInset = .zero
+      self.headerView.snp.updateConstraints { make in
+        make.height.equalTo(0)
+      }
+      self.headerView.updateBackgroundAlpha(to: 0)
+    } else {
+      self.headerView.snp.updateConstraints { make in
+        make.height.equalTo(remainingTopSpace)
+      }
+      self.headerView.updateBackgroundAlpha(to: 1)
+    }
   }
 }

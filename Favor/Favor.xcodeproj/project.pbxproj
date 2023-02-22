@@ -39,7 +39,6 @@
 		2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BD299248200081499C /* FavorSearchBar.swift */; };
 		2EA384C029936BAD0081499C /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BF29936BAD0081499C /* String+.swift */; };
 		2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3AE92299E3E2700D31541 /* BackgroundView.swift */; };
-		2EB6D81729A4A659001C28BF /* StretchyCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB6D81629A4A659001C28BF /* StretchyCollectionHeaderView.swift */; };
 		2EB6D81929A4BFC4001C28BF /* MyPageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB6D81829A4BFC4001C28BF /* MyPageHeaderCell.swift */; };
 		2EC371F8299521AD00D1007B /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC371F7299521AD00D1007B /* RxGesture */; };
 		2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371F92995262D00D1007B /* SearchResultVC.swift */; };
@@ -51,7 +50,6 @@
 		2EC939E32998C63200C8C47F /* NewProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E22998C63200C8C47F /* NewProfileCell.swift */; };
 		2EC939E52998C68900C8C47F /* FavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E42998C68900C8C47F /* FavorCell.swift */; };
 		2EC939E72998C6D100C8C47F /* AnniversaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */; };
-		2EC939E92998D11A00C8C47F /* CollectionViewLayoutDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E82998D11A00C8C47F /* CollectionViewLayoutDirection.swift */; };
 		2EC939EB299A7D4300C8C47F /* MyPageSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */; };
 		2EC939EF299BB10D00C8C47F /* MyPageSectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderReactor.swift */; };
 		2EC939F1299CF67E00C8C47F /* GiftStatCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* GiftStatCellReactor.swift */; };
@@ -154,7 +152,6 @@
 		2EA384BD299248200081499C /* FavorSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSearchBar.swift; sourceTree = "<group>"; };
 		2EA384BF29936BAD0081499C /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		2EB3AE92299E3E2700D31541 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
-		2EB6D81629A4A659001C28BF /* StretchyCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyCollectionHeaderView.swift; sourceTree = "<group>"; };
 		2EB6D81829A4BFC4001C28BF /* MyPageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderCell.swift; sourceTree = "<group>"; };
 		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -168,7 +165,6 @@
 		2EC939E22998C63200C8C47F /* NewProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProfileCell.swift; sourceTree = "<group>"; };
 		2EC939E42998C68900C8C47F /* FavorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorCell.swift; sourceTree = "<group>"; };
 		2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryCell.swift; sourceTree = "<group>"; };
-		2EC939E82998D11A00C8C47F /* CollectionViewLayoutDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewLayoutDirection.swift; sourceTree = "<group>"; };
 		2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionHeaderView.swift; sourceTree = "<group>"; };
 		2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionHeaderReactor.swift; sourceTree = "<group>"; };
 		2EC939F0299CF67E00C8C47F /* GiftStatCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftStatCellReactor.swift; sourceTree = "<group>"; };
@@ -421,7 +417,6 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				2EC939E82998D11A00C8C47F /* CollectionViewLayoutDirection.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -752,7 +747,6 @@
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
 				2E306A7E297290AB007B7EFF /* FavorTextField.swift */,
 				E56260F029908F0100D14020 /* CategoryView.swift */,
-				2EB6D81629A4A659001C28BF /* StretchyCollectionHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -974,7 +968,6 @@
 				2EB6D81929A4BFC4001C28BF /* MyPageHeaderCell.swift in Sources */,
 				E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */,
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
-				2EC939E92998D11A00C8C47F /* CollectionViewLayoutDirection.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				E5B182972974F54A00229C50 /* UpdateHandlerManager.swift in Sources */,
 				2EE6B3992983DF3900CDBC81 /* AppFlow.swift in Sources */,
@@ -992,7 +985,6 @@
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* NewProfileCellReactor.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* FavorCellReactor.swift in Sources */,
-				2EB6D81729A4A659001C28BF /* StretchyCollectionHeaderView.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,

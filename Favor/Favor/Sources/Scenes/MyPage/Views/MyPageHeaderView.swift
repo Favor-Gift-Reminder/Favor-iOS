@@ -10,7 +10,7 @@ import UIKit
 import ReactorKit
 import SnapKit
 
-final class MyPageHeaderView: StretchyCollectionHeaderView, ReuseIdentifying, View {
+final class MyPageHeaderView: UIView, View {
   
   // MARK: - Constants
   
@@ -19,6 +19,13 @@ final class MyPageHeaderView: StretchyCollectionHeaderView, ReuseIdentifying, Vi
   var disposeBag = DisposeBag()
   
   // MARK: - UI Components
+
+  private lazy var backgroundImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = UIImage(named: "MyPageHeaderPlaceholder")
+    imageView.contentMode = .scaleAspectFill
+    return imageView
+  }()
 
   private lazy var profileImageView: UIImageView = {
     let imageView = UIImageView()
@@ -49,6 +56,19 @@ final class MyPageHeaderView: StretchyCollectionHeaderView, ReuseIdentifying, Vi
     stackView.spacing = 10
     return stackView
   }()
+
+  // MARK: - Initializer
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - Binding
   
@@ -60,17 +80,22 @@ final class MyPageHeaderView: StretchyCollectionHeaderView, ReuseIdentifying, Vi
   }
   
   // MARK: - Functions
-  
-  // MARK: - UI Setups
 
-  override func setupStyles() {
-    super.setupStyles()
+  func updateBackgroundAlpha(to alpha: CGFloat) {
+    self.backgroundImageView.alpha = alpha
+  }
+}
+
+// MARK: - UI Setup
+
+extension MyPageHeaderView: BaseView {
+  func setupStyles() {
+    //
   }
 
-  override func setupLayouts() {
-    super.setupLayouts()
-
+  func setupLayouts() {
     [
+      self.backgroundImageView,
       self.profileImageView,
       self.profileStackView
     ].forEach {
@@ -85,14 +110,17 @@ final class MyPageHeaderView: StretchyCollectionHeaderView, ReuseIdentifying, Vi
     }
   }
 
-  override func setupConstraints() {
-    super.setupConstraints()
+  func setupConstraints() {
+    self.backgroundImageView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
 
     self.profileImageView.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.bottom.equalToSuperview().inset(58)
       make.width.height.equalTo(60)
     }
+    
     self.profileStackView.snp.makeConstraints { make in
       make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
       make.centerY.equalTo(self.profileImageView.snp.centerY)

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BackgroundView: UICollectionReusableView {
+final class BackgroundView: UICollectionReusableView, ReuseIdentifying {
   
   // MARK: - Initializer
   
@@ -26,7 +26,6 @@ final class BackgroundView: UICollectionReusableView {
 extension BackgroundView: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.background)
-    self.layer.cornerRadius = 24
   }
   
   func setupLayouts() {
