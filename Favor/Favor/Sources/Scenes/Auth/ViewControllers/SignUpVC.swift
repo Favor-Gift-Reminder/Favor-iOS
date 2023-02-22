@@ -54,7 +54,7 @@ final class SignUpViewController: BaseViewController, View {
   }()
   
   private lazy var nextButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .white, title: "다음")
+    let button = LargeFavorButton(with: .main("다음"))
     button.isEnabled = false
     return button
   }()

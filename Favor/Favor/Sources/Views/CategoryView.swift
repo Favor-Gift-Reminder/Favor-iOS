@@ -13,13 +13,13 @@ final class CategoryView: UIScrollView {
   
   // MARK: - Properties
   
-  private let lightGiftButton = SmallFavorButton(.white, title: "가벼운 선물")
-  private let birthButton = SmallFavorButton(.white, title: "생일")
-  private let houseWarmingButton = SmallFavorButton(.white, title: "집들이")
-  private let testButton = SmallFavorButton(.white, title: "시험")
-  private let promotionButton = SmallFavorButton(.white, title: "승진")
-  private let graduationButton = SmallFavorButton(.white, title: "졸업")
-  private let etcButton = SmallFavorButton(.white, title: "기타")
+  private let lightGiftButton = SmallFavorButton(with: .mainWithIcon("가벼운 선물", imageName: ""))
+  private let birthButton = SmallFavorButton(with: .mainWithIcon("생일", imageName: ""))
+  private let houseWarmingButton = SmallFavorButton(with: .mainWithIcon("집들이", imageName: ""))
+  private let testButton = SmallFavorButton(with: .mainWithIcon("시험", imageName: ""))
+  private let promotionButton = SmallFavorButton(with: .mainWithIcon("승진", imageName: ""))
+  private let graduationButton = SmallFavorButton(with: .mainWithIcon("졸업", imageName: ""))
+  private let etcButton = SmallFavorButton(with: .mainWithIcon("기타", imageName: ""))
   
   private let contentsView: UIView = {
     let view = UIView()

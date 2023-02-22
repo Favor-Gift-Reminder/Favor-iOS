@@ -11,45 +11,35 @@ import SnapKit
 
 final class LargeFavorButton: UIButton {
   
-  enum Style {
-    case black
-    case white
-  }
+  // MARK: - PROPERTIES
   
-  // MARK: - Initializer
+  private let largeFavorButtonType: LargeFavorButtonType
   
-  init(with style: Style, title: String) {
+  // MARK: - INITIALIZER
+  
+  init(with largeFavorButtonType: LargeFavorButtonType) {
+    self.largeFavorButtonType = largeFavorButtonType
     super.init(frame: .zero)
-    setupConfiguration(with: style, title: title)
-    self.snp.makeConstraints { make in
-      make.height.equalTo(56.0)
-    }
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+}
+
+extension LargeFavorButton: BaseView {
+  func setupStyles() {
+    self.configuration = self.largeFavorButtonType.configuration
+  }
   
-  // MARK: - Setup
+  func setupLayouts() {}
   
-  private func setupConfiguration(with style: Style, title: String) {
-    var config = UIButton.Configuration.filled()
-    var container = AttributeContainer()
-    container.font = .favorFont(.bold, size: 18)
-    
-    config.background.cornerRadius = 28
-    
-    switch style {
-    case .white:
-      container.foregroundColor = .favorColor(.titleAndLine)
-      config.baseBackgroundColor = .favorColor(.line3)
-      
-    case .black:
-      container.foregroundColor = .favorColor(.white)
-      config.baseBackgroundColor = .favorColor(.titleAndLine)
+  func setupConstraints() {
+    self.snp.makeConstraints { make in
+      make.height.equalTo(56)
     }
-    
-    config.attributedTitle = AttributedString(title, attributes: container)
-    self.configuration = config
   }
 }

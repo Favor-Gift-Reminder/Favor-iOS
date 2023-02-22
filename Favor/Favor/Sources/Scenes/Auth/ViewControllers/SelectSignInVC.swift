@@ -28,12 +28,12 @@ final class SelectSignInViewController: BaseViewController, View {
   }()
   
   private lazy var emailLoginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .black, title: "이메일로 로그인")
+    let button = LargeFavorButton(with: .main("이메일로 로그인"))
     return button
   }()
   
   private lazy var signUpButton: PlainFavorButton = {
-    let button = PlainFavorButton(.onboarding, title: "신규 회원가입")
+    let button = PlainFavorButton(with: .logIn("신규 회원가입"))
     return button
   }()
   
@@ -45,7 +45,7 @@ final class SelectSignInViewController: BaseViewController, View {
     stackView.axis = .vertical
     return stackView
   }()
-  
+
   // MARK: - Life Cycle
   
   // MARK: - Binding
@@ -73,14 +73,13 @@ final class SelectSignInViewController: BaseViewController, View {
   override func setupLayouts() {
     [
       self.temporaryLogo,
-      self.vStack
+      self.vStack,
     ].forEach {
       self.view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    
     self.temporaryLogo.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.centerY.equalToSuperview().inset(48)

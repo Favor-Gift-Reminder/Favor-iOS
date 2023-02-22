@@ -395,5 +395,4 @@ private extension FavorTextField {
   func updateTextVisibility() {
     self.isSecureTextEntry = self.isTextHidden
   }
-  
 }
