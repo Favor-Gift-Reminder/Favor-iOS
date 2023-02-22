@@ -46,11 +46,11 @@ final class SelectSignInViewController: BaseViewController, View {
     return stackView
   }()
 
-  private let favorBtn = SmallFavorButton(with: .main(title: "안녕하세요"))
+  private let favorBtn = SmallFavorButton(with: .main("안녕하세요", imageName: ""))
   
-  private let FavorButton = LargeFavorButton(with: .main("로그인"))
+  private let FavorButton = LargeFavorButton(with: .main("안녕하세요"))
   
-  private let sdfsd = SmallFavorButton(with: .main(title: "로그인"))
+  private let sdfsd = SmallFavorButton(with: .main("로그인", imageName: ""))
   
   // MARK: - Life Cycle
   

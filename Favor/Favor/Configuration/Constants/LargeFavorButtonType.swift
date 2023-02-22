@@ -8,11 +8,11 @@
 import UIKit
 
 enum LargeFavorButtonType {
-  case main(_ title: String)
-  case main2(_ title: String)
-  case dark1(_ title: String)
-  case dark2(_ title: String)
-  case gray(_ title: String)
+  case main(String)
+  case main2(String)
+  case dark1(String)
+  case dark2(String)
+  case gray(String)
   
   var configuration: UIButton.Configuration {
     var config = UIButton.Configuration.filled()
