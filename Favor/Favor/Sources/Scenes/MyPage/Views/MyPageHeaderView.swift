@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 
 final class MyPageHeaderView: UIView, View {
@@ -27,11 +28,13 @@ final class MyPageHeaderView: UIView, View {
     return imageView
   }()
 
-  private lazy var profileImageView: UIImageView = {
-    let imageView = UIImageView()
-    imageView.backgroundColor = .systemBlue
-    imageView.layer.cornerRadius = 30
-    return imageView
+  fileprivate lazy var profileImageButton: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .systemBlue
+    config.background.cornerRadius = 30
+
+    let button = UIButton(configuration: config)
+    return button
   }()
 
   private lazy var nameLabel: UILabel = {
@@ -96,7 +99,7 @@ extension MyPageHeaderView: BaseView {
   func setupLayouts() {
     [
       self.backgroundImageView,
-      self.profileImageView,
+      self.profileImageButton,
       self.profileStackView
     ].forEach {
       self.addSubview($0)
@@ -115,15 +118,15 @@ extension MyPageHeaderView: BaseView {
       make.edges.equalToSuperview()
     }
 
-    self.profileImageView.snp.makeConstraints { make in
+    self.profileImageButton.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.bottom.equalToSuperview().inset(58)
       make.width.height.equalTo(60)
     }
     
     self.profileStackView.snp.makeConstraints { make in
-      make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
-      make.centerY.equalTo(self.profileImageView.snp.centerY)
+      make.leading.equalTo(self.profileImageButton.snp.trailing).offset(16)
+      make.centerY.equalTo(self.profileImageButton.snp.centerY)
     }
   }
 }

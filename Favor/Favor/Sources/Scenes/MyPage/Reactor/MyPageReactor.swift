@@ -19,16 +19,15 @@ final class MyPageReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
-    case offsetDidChanged(CGPoint)
+    case profileDidTap
   }
   
   enum Mutation {
-    case updateCurrentOffset(CGPoint)
+
   }
   
   struct State {
     var sections: [MyPageSection]
-    var currentOffset: CGPoint = .zero
   }
   
   // MARK: - Initializer
@@ -44,8 +43,9 @@ final class MyPageReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .offsetDidChanged(let offset):
-      return .just(.updateCurrentOffset(offset))
+    case .profileDidTap:
+      self.steps.accept(AppStep.editMyPageIsRequired)
+      return .empty()
     }
   }
   
@@ -53,8 +53,7 @@ final class MyPageReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-    case .updateCurrentOffset(let offset):
-      newState.currentOffset = offset
+
     }
     
     return newState

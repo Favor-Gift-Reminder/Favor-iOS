@@ -25,6 +25,8 @@ final class MyPageFlow: Flow {
     switch step {
     case .myPageIsRequired:
       return self.navigateToMyPage()
+    case .editMyPageIsRequired:
+      return self.navigateToEditMyPage()
     default:
       return .none
     }
@@ -38,6 +40,17 @@ final class MyPageFlow: Flow {
     return .one(flowContributor: .contribute(
       withNextPresentable: myPageVC,
       withNextStepper: myPageReactor
+    ))
+  }
+
+  private func navigateToEditMyPage() -> FlowContributors {
+    let editMyPageVC = EditMyPageViewController()
+    let editMyPageReactor = EditMyPageReactor()
+    editMyPageVC.reactor = editMyPageReactor
+    self.rootViewController.pushViewController(editMyPageVC, animated: true)
+    return .one(flowContributor: .contribute(
+      withNextPresentable: editMyPageVC,
+      withNextStepper: editMyPageReactor
     ))
   }
 }

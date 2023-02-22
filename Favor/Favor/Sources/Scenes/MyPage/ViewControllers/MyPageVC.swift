@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxDataSources
+import RxGesture
 import SnapKit
 
 final class MyPageViewController: BaseViewController, View {
@@ -79,6 +80,27 @@ final class MyPageViewController: BaseViewController, View {
   
   // MARK: - UI Components
 
+  private lazy var tempNav: UIView = {
+    let view = UIView()
+    let backgroundView = UIView()
+    view.addSubview(backgroundView)
+    backgroundView.backgroundColor = .favorColor(.icon)
+    backgroundView.layer.opacity = 0.1
+    backgroundView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+    return view
+  }()
+
+  private lazy var tempEditButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = UIImage(named: "ic_Edit")
+    config.baseForegroundColor = .favorColor(.icon)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
+
   private lazy var headerView: MyPageHeaderView = {
     let headerView = MyPageHeaderView()
     headerView.layer.zPosition = 0
@@ -144,6 +166,10 @@ final class MyPageViewController: BaseViewController, View {
   
   func bind(reactor: MyPageReactor) {
     // Action
+    self.tempEditButton.rx.tap
+      .map { Reactor.Action.profileDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.sections }
@@ -152,7 +178,7 @@ final class MyPageViewController: BaseViewController, View {
   }
   
   // MARK: - Functions
-  
+
   // MARK: - UI Setups
   
   override func setupStyles() {
@@ -162,13 +188,27 @@ final class MyPageViewController: BaseViewController, View {
   override func setupLayouts() {
     [
       self.headerView,
-      self.collectionView
+      self.collectionView,
+      self.tempNav
     ].forEach {
       self.view.addSubview($0)
     }
+
+    self.tempNav.addSubview(self.tempEditButton)
   }
   
   override func setupConstraints() {
+    self.tempNav.snp.makeConstraints { make in
+      make.top.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(84)
+    }
+
+    self.tempEditButton.snp.makeConstraints { make in
+      make.trailing.equalToSuperview().offset(-20)
+      make.bottom.equalToSuperview().offset(-9)
+      make.height.width.equalTo(38)
+    }
+
     self.headerView.snp.makeConstraints { make in
       make.top.equalToSuperview()
       make.directionalHorizontalEdges.equalToSuperview()
