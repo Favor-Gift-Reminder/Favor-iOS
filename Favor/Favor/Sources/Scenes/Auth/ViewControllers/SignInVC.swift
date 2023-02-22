@@ -40,7 +40,7 @@ final class SignInViewController: BaseViewController, View {
   }()
   
   private lazy var loginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main, title: "시작하기")
+    let button = LargeFavorButton(with: .main("시작하기"))
     return button
   }()
   

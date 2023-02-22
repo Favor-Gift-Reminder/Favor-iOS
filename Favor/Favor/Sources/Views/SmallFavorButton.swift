@@ -17,7 +17,7 @@ final class SmallFavorButton: UIButton {
   
   // MARK: - INITIALIZER
   
-  init(with smallFavorButtonType: SmallFavorButtonType) {
+  init(with smallFavorButtonType: SmallFavorButtonType, title: String = "") {
     self.smallFavorButtonType = smallFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()
@@ -27,6 +27,8 @@ final class SmallFavorButton: UIButton {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+    
+    
   }
 }
 

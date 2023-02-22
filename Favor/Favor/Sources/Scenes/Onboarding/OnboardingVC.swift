@@ -60,7 +60,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   }()
   
   private lazy var continueButton: LargeFavorButton = {
-    let btn = LargeFavorButton(with: .main, title: "다음")
+    let btn = LargeFavorButton(with: .main("다음"))
     btn.addTarget(self, action: #selector(didTapContinueButton), for: .touchUpInside)
     
     return btn

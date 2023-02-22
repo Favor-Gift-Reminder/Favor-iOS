@@ -28,7 +28,7 @@ final class SelectSignInViewController: BaseViewController, View {
   }()
   
   private lazy var emailLoginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main, title: "이메일로 로그인")
+    let button = LargeFavorButton(with: .main("이메일로 로그인"))
     return button
   }()
   
@@ -47,6 +47,10 @@ final class SelectSignInViewController: BaseViewController, View {
   }()
 
   private let favorBtn = SmallFavorButton(with: .main(title: "안녕하세요"))
+  
+  private let FavorButton = LargeFavorButton(with: .main("로그인"))
+  
+  private let sdfsd = SmallFavorButton(with: .main(title: "로그인"))
   
   // MARK: - Life Cycle
   

@@ -8,32 +8,44 @@
 import UIKit
 
 enum LargeFavorButtonType {
-  case main
-  case main2
-  case dark1
-  case dark2
-  case gray
+  case main(_ title: String)
+  case main2(_ title: String)
+  case dark1(_ title: String)
+  case dark2(_ title: String)
+  case gray(_ title: String)
   
   var configuration: UIButton.Configuration {
     var config = UIButton.Configuration.filled()
+    let titleString: String
     config.background.cornerRadius = 64
     switch self {
-    case .main:
+    case .main(let title):
       config.baseBackgroundColor = .favorColor(.main)
       config.baseForegroundColor = .favorColor(.white)
-    case .main2:
+      titleString = title
+    case .main2(let title):
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.main)
-    case .dark1:
+      titleString = title
+    case .dark1(let title):
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
-    case .dark2:
+      titleString = title
+    case .dark2(let title):
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.subtext)
-    case .gray:
+      titleString = title
+    case .gray(let title):
       config.baseBackgroundColor = .favorColor(.divider)
       config.baseForegroundColor = .favorColor(.explain)
+      titleString = title
     }
+    var container = AttributeContainer()
+    container.font = .favorFont(.bold, size: 18)
+    config.attributedTitle = AttributedString(
+      titleString,
+      attributes: container
+    )
     
     return config
   }

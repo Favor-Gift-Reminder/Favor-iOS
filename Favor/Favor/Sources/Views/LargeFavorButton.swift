@@ -14,13 +14,11 @@ final class LargeFavorButton: UIButton {
   // MARK: - PROPERTIES
   
   private let largeFavorButtonType: LargeFavorButtonType
-  private let title: String
   
   // MARK: - INITIALIZER
   
-  init(with largeFavorButtonType: LargeFavorButtonType, title: String) {
+  init(with largeFavorButtonType: LargeFavorButtonType) {
     self.largeFavorButtonType = largeFavorButtonType
-    self.title = title
     super.init(frame: .zero)
     self.setupStyles()
     self.setupLayouts()
@@ -34,13 +32,7 @@ final class LargeFavorButton: UIButton {
 
 extension LargeFavorButton: BaseView {
   func setupStyles() {
-    var container = AttributeContainer()
-    container.font = .favorFont(.bold, size: 18)
     self.configuration = self.largeFavorButtonType.configuration
-    self.configuration?.attributedTitle = AttributedString(
-      self.title,
-      attributes: container
-    )
   }
   
   func setupLayouts() {}

@@ -32,7 +32,7 @@ final class TermViewController: BaseViewController {
   }()
   
   private lazy var startButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main, title: "시작하기")
+    let button = LargeFavorButton(with: .main("시작하기"))
     button.addTarget(self, action: #selector(startButtonDidTap), for: .touchUpInside)
     return button
   }()
