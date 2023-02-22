@@ -8,9 +8,9 @@
 import UIKit
 
 enum SmallFavorButtonType {
-  case main(String, imageName: String)
-  case main2(String)
-  case dark(String, imageName: String)
+  case mainWithIcon(String, imageName: String)
+  case main(String)
+  case darkWithIcon(String, imageName: String)
   case darkWithHeart(String)
   case gray(String)
   case grayWithUser(String)
@@ -31,16 +31,16 @@ enum SmallFavorButtonType {
     )
     
     switch self {
-    case let .main(title, imageName):
+    case let .mainWithIcon(title, imageName):
       titleString = title
       config.baseBackgroundColor = .favorColor(.main)
       config.baseForegroundColor = .favorColor(.white)
       config.image = UIImage(named: imageName)
-    case .main2(let title):
+    case .main(let title):
       titleString = title
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.main)
-    case let .dark(title, imageName):
+    case let .darkWithIcon(title, imageName):
       titleString = title
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
