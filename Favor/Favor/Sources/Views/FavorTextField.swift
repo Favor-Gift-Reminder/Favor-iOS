@@ -13,7 +13,7 @@ enum MessageType {
   case error, info
 }
 
-class FavorTextField: UITextField, BaseView {
+class FavorTextField: UITextField {
   
   // MARK: - Properties
   
@@ -229,42 +229,6 @@ class FavorTextField: UITextField, BaseView {
     }
   }
   
-  // MARK: - Setup
-  
-  func setupStyles() {
-    self.borderStyle = .none
-    self.updateColors()
-    self.font = .favorFont(.regular, size: 16.0)
-    self.autocapitalizationType = .none
-  }
-  
-  func setupLayouts() {
-    [
-      self.underlineView,
-      self.messageLabel
-    ].forEach {
-      self.addSubview($0)
-    }
-  }
-  
-  func setupConstraints() {
-    self.underlineView.snp.makeConstraints { make in
-      make.top.equalTo(self.snp.bottom).offset(self.underlineSpacing)
-      make.width.leading.trailing.equalToSuperview()
-      make.height.equalTo(self.underlineHeight)
-    }
-    
-    self.messageLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.underlineView.snp.bottom).offset(self.messageLabelSpacing)
-      make.width.leading.trailing.equalToSuperview()
-      make.height.equalTo(self.messageLabel.font.lineHeight)
-    }
-    
-    self.secureEyeButton.snp.makeConstraints { make in
-      make.width.height.equalTo(24)
-    }
-  }
-  
   // MARK: - Functions
   
   private func addEditingChangedObserver() {
@@ -305,6 +269,44 @@ class FavorTextField: UITextField, BaseView {
     self.leftViewMode = .always
   }
   
+}
+
+// MARK: - Setup
+
+extension FavorTextField: BaseView {
+  func setupStyles() {
+    self.borderStyle = .none
+    self.updateColors()
+    self.font = .favorFont(.regular, size: 16.0)
+    self.autocapitalizationType = .none
+  }
+
+  func setupLayouts() {
+    [
+      self.underlineView,
+      self.messageLabel
+    ].forEach {
+      self.addSubview($0)
+    }
+  }
+
+  func setupConstraints() {
+    self.underlineView.snp.makeConstraints { make in
+      make.top.equalTo(self.snp.bottom).offset(self.underlineSpacing)
+      make.width.leading.trailing.equalToSuperview()
+      make.height.equalTo(self.underlineHeight)
+    }
+
+    self.messageLabel.snp.makeConstraints { make in
+      make.top.equalTo(self.underlineView.snp.bottom).offset(self.messageLabelSpacing)
+      make.width.leading.trailing.equalToSuperview()
+      make.height.equalTo(self.messageLabel.font.lineHeight)
+    }
+
+    self.secureEyeButton.snp.makeConstraints { make in
+      make.width.height.equalTo(24)
+    }
+  }
 }
 
 // MARK: - Privates
@@ -396,5 +398,4 @@ private extension FavorTextField {
   func updateTextVisibility() {
     self.isSecureTextEntry = self.isTextHidden
   }
-  
 }
