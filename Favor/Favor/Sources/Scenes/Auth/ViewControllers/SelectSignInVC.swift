@@ -46,12 +46,6 @@ final class SelectSignInViewController: BaseViewController, View {
     return stackView
   }()
 
-  private let favorBtn = SmallFavorButton(with: .main("안녕하세요", imageName: ""))
-  
-  private let FavorButton = LargeFavorButton(with: .main("안녕하세요"))
-  
-  private let sdfsd = SmallFavorButton(with: .main("로그인", imageName: ""))
-  
   // MARK: - Life Cycle
   
   // MARK: - Binding
@@ -80,7 +74,6 @@ final class SelectSignInViewController: BaseViewController, View {
     [
       self.temporaryLogo,
       self.vStack,
-      self.favorBtn
     ].forEach {
       self.view.addSubview($0)
     }
@@ -95,11 +88,6 @@ final class SelectSignInViewController: BaseViewController, View {
     self.vStack.snp.makeConstraints { make in
       make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(46)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
-    }
-    
-    self.favorBtn.snp.makeConstraints { make in
-      make.centerX.equalToSuperview()
-      make.top.equalTo(self.temporaryLogo.snp.bottom)
     }
   }
 }
