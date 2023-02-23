@@ -45,26 +45,30 @@ final class EditMyPageViewController: BaseViewController, View {
 
   private lazy var nameTextField: FavorTextField = {
     let textField = FavorTextField()
+    textField.titleLabelText = "이름"
     textField.placeholder = "이름"
+    textField.updateMessageLabel("이름을 입력", state: .normal, animated: false)
     return textField
   }()
-  private lazy var nameTextFieldSection = self.makeTextFieldSection(title: "이름", textField: self.nameTextField)
 
   private lazy var idTextField: FavorTextField = {
     let textField = FavorTextField()
+    textField.textField.keyboardType = .asciiCapable
+    textField.titleLabelText = "ID"
     textField.placeholder = "@ID1234"
+    textField.isSecureField = true
     return textField
   }()
-  private lazy var idTextFieldSection = self.makeTextFieldSection(title: "ID", textField: self.idTextField)
 
   private lazy var textFieldStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 40
     stackView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    stackView.isLayoutMarginsRelativeArrangement = true
     [
-      self.nameTextFieldSection,
-      self.idTextFieldSection
+      self.nameTextField,
+      self.idTextField
     ].forEach {
       stackView.addArrangedSubview($0)
     }
@@ -77,6 +81,12 @@ final class EditMyPageViewController: BaseViewController, View {
 
   func bind(reactor: EditMyPageReactor) {
     // Action
+    self.nameTextField.rx.textIsEditing
+      .filter { $0 != nil }
+      .subscribe(with: self, onNext: { _, text in
+        print(text)
+      })
+      .disposed(by: self.disposeBag)
 
     // State
 
@@ -88,6 +98,13 @@ final class EditMyPageViewController: BaseViewController, View {
 
   override func setupStyles() {
     super.setupStyles()
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+      self.nameTextField.updateMessageLabel("", state: .normal)
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+      self.nameTextField.updateMessageLabel("erer", state: .error)
+    }
   }
 
   override func setupLayouts() {
@@ -128,26 +145,5 @@ final class EditMyPageViewController: BaseViewController, View {
     self.scrollView.snp.makeConstraints { make in
       make.bottom.equalTo(self.textFieldStackView.snp.bottom)
     }
-  }
-}
-
-// MARK: - Privates
-
-private extension EditMyPageViewController {
-  func makeTextFieldSection(title: String, textField: FavorTextField) -> UIStackView {
-    let headerLabel = UILabel()
-    headerLabel.font = .favorFont(.bold, size: 18)
-    headerLabel.text = title
-
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.spacing = 16
-    [
-      headerLabel,
-      textField
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
-    return stackView
   }
 }
