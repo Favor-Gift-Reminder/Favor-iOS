@@ -22,34 +22,43 @@ final class SignUpViewController: BaseViewController, View {
   private lazy var emailTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이메일"
-    textField.updateMessage(ValidateManager.EmailValidate.empty.description, for: .info)
-    textField.keyboardType = .emailAddress
-    textField.textContentType = .emailAddress
-    textField.enablesReturnKeyAutomatically = true
-    textField.returnKeyType = .next
+    textField.updateMessageLabel(
+      ValidateManager.EmailValidate.empty.description,
+      state: .normal,
+      animated: false
+    )
+    textField.textField.keyboardType = .emailAddress
+    textField.textField.textContentType = .emailAddress
+    textField.textField.returnKeyType = .next
     return textField
   }()
   
   private lazy var pwTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
-    textField.updateMessage(ValidateManager.PasswordValidate.empty.description, for: .info)
+    textField.updateMessageLabel(
+      ValidateManager.PasswordValidate.empty.description,
+      state: .normal,
+      animated: false
+    )
     textField.isSecureField = true
-    textField.textContentType = .newPassword
-    textField.enablesReturnKeyAutomatically = true
-    textField.returnKeyType = .next
+    textField.textField.textContentType = .newPassword
+    textField.textField.returnKeyType = .next
     return textField
   }()
   
   private lazy var pwValidateTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호 확인"
-    textField.updateMessage(ValidateManager.CheckPasswordValidate.empty.description, for: .info)
+    textField.updateMessageLabel(
+      ValidateManager.CheckPasswordValidate.empty.description,
+      state: .normal,
+      animated: false
+    )
     textField.isSecureField = true
-    textField.keyboardType = .asciiCapable
-    textField.textContentType = .password
-    textField.enablesReturnKeyAutomatically = true
-    textField.returnKeyType = .done
+    textField.textField.keyboardType = .asciiCapable
+    textField.textField.textContentType = .password
+    textField.textField.returnKeyType = .done
     return textField
   }()
   
@@ -93,7 +102,7 @@ final class SignUpViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.emailTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.emailTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwTextField.becomeFirstResponder()
       })
@@ -106,7 +115,7 @@ final class SignUpViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.pwTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.pwTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwValidateTextField.becomeFirstResponder()
       })
@@ -119,7 +128,7 @@ final class SignUpViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.pwValidateTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.pwValidateTextField.rx.editingDidEndOnExit
       .map { Reactor.Action.returnKeyboardTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -138,9 +147,15 @@ final class SignUpViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, emailValidate in
         switch emailValidate {
         case .empty, .invalid:
-          owner.emailTextField.updateMessage(emailValidate.description, for: .error)
+          owner.emailTextField.updateMessageLabel(
+            emailValidate.description,
+            state: .error
+          )
         case .valid:
-          owner.emailTextField.updateMessage(emailValidate.description, for: .info)
+          owner.emailTextField.updateMessageLabel(
+            emailValidate.description,
+            state: .normal
+          )
         }
       })
       .disposed(by: self.disposeBag)
@@ -153,9 +168,15 @@ final class SignUpViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, passwordValidate in
         switch passwordValidate {
         case .empty, .invalid:
-          owner.pwTextField.updateMessage(passwordValidate.description, for: .error)
+          owner.pwTextField.updateMessageLabel(
+            passwordValidate.description,
+            state: .error
+          )
         case .valid:
-          owner.pwTextField.updateMessage(passwordValidate.description, for: .info)
+          owner.pwTextField.updateMessageLabel(
+            passwordValidate.description,
+            state: .normal
+          )
         }
       })
       .disposed(by: self.disposeBag)
@@ -168,9 +189,15 @@ final class SignUpViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, isPasswordIdentical in
         switch isPasswordIdentical {
         case .empty, .different:
-          owner.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .error)
+          owner.pwValidateTextField.updateMessageLabel(
+            isPasswordIdentical.description,
+            state: .error
+          )
         case .identical:
-          owner.pwValidateTextField.updateMessage(isPasswordIdentical.description, for: .info)
+          owner.pwValidateTextField.updateMessageLabel(
+            isPasswordIdentical.description,
+            state: .normal
+          )
         }
       })
       .disposed(by: self.disposeBag)

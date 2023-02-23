@@ -44,7 +44,7 @@ class NewProfileCell: UICollectionViewCell, ReuseIdentifying, View {
     return label
   }()
   
-  private lazy var goButton = SmallFavorButton(.black, title: "바로가기")
+  private lazy var goButton = SmallFavorButton(with: .gray("바로가기"))
   
   // MARK: - Initializer
   

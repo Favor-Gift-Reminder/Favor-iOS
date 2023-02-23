@@ -17,7 +17,7 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
-  private lazy var button = SmallFavorButton(.black, title: "#태그")
+  private lazy var button = SmallFavorButton(with: .gray("#태그"))
   
   // MARK: - Initializer
   
