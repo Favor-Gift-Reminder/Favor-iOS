@@ -49,25 +49,21 @@ final class SetProfileViewController: BaseViewController, View {
   private lazy var nameTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이름"
-    textField.autocapitalizationType = .none
-    textField.enablesReturnKeyAutomatically = true
-    textField.returnKeyType = .next
+    textField.textField.returnKeyType = .next
     return textField
   }()
   
   private lazy var idTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "유저 아이디"
-    textField.autocapitalizationType = .none
-    textField.enablesReturnKeyAutomatically = true
-    textField.returnKeyType = .done
+    textField.textField.returnKeyType = .done
     
     let label = UILabel()
     label.text = "@"
     label.font = .favorFont(.regular, size: 16)
     label.textColor = .favorColor(.explain)
     label.textAlignment = .center
-    
+
     textField.addLeftItem(item: label)
     
     return textField
@@ -104,13 +100,13 @@ final class SetProfileViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.nameTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.nameTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.idTextField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
-    self.idTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.idTextField.rx.editingDidEndOnExit
       .map { Reactor.Action.returnKeyboardTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
