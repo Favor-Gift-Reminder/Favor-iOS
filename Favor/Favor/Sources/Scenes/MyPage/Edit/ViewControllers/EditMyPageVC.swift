@@ -81,8 +81,8 @@ final class EditMyPageViewController: BaseViewController, View {
 
   func bind(reactor: EditMyPageReactor) {
     // Action
-    self.nameTextField.rx.text
-      .orEmpty
+    self.nameTextField.rx.textIsEditing
+      .filter { $0 != nil }
       .subscribe(with: self, onNext: { _, text in
         print(text)
       })
@@ -98,6 +98,13 @@ final class EditMyPageViewController: BaseViewController, View {
 
   override func setupStyles() {
     super.setupStyles()
+
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+      self.nameTextField.updateMessageLabel("", state: .normal)
+    }
+    DispatchQueue.main.asyncAfter(deadline: .now() + 4) {
+      self.nameTextField.updateMessageLabel("erer", state: .error)
+    }
   }
 
   override func setupLayouts() {
