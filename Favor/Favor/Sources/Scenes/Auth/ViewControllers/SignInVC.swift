@@ -37,7 +37,7 @@ final class SignInViewController: BaseViewController, View {
   }()
   
   private lazy var loginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .white, title: "시작하기")
+    let button = LargeFavorButton(with: .main("시작하기"))
     return button
   }()
   
@@ -52,12 +52,12 @@ final class SignInViewController: BaseViewController, View {
   }()
   
   private lazy var forgotEmailButton: PlainFavorButton = {
-    let button = PlainFavorButton(.onboarding, title: "이메일 찾기")
+    let button = PlainFavorButton(with: .logIn("이메일 찾기"))
     return button
   }()
   
   private lazy var forgotPWButton: PlainFavorButton = {
-    let button = PlainFavorButton(.onboarding, title: "비밀번호 찾기")
+    let button = PlainFavorButton(with: .logIn("비밀번호 찾기"))
     return button
   }()
   

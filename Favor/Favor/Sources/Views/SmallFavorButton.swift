@@ -7,48 +7,45 @@
 
 import UIKit
 
+import SnapKit
+
 final class SmallFavorButton: UIButton {
   
-  enum Style {
-    case black
-    case white
-  }
+  // MARK: - PROPERTIES
   
-  // MARK: - Initializer
+  private let smallFavorButtonType: SmallFavorButtonType
   
-  init(_ with: Style, title: String, image: UIImage? = nil) {
+  // MARK: - INITIALIZER
+  
+  init(with smallFavorButtonType: SmallFavorButtonType, title: String = "") {
+    self.smallFavorButtonType = smallFavorButtonType
     super.init(frame: .zero)
-    setupConfiguration(with, title: title, image: image)
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+    
+    
+  }
+}
+
+// MARK: - SETUP
+
+extension SmallFavorButton: BaseView {
+  func setupStyles() {
+    self.configuration = self.smallFavorButtonType.configuration
+    let imageConfig = UIImage.SymbolConfiguration(pointSize: 10)
+    self.setPreferredSymbolConfiguration(imageConfig, forImageIn: .normal)
   }
   
-  // MARK: - Setup
+  func setupLayouts() {}
   
-  private func setupConfiguration(_ style: Style, title: String, image: UIImage?) {
-    var config = UIButton.Configuration.filled()
-    var container = AttributeContainer()
-    container.font = .favorFont(.bold, size: 12)
-    config.attributedTitle = AttributedString(title, attributes: container)
-    
-    config.image = image
-    config.imagePadding = 8
-    config.imagePlacement = .leading
-    
-    config.background.cornerRadius = 12
-    
-    switch style {
-    case .white:
-      config.baseBackgroundColor = .favorColor(.line3)
-      config.baseForegroundColor = .favorColor(.titleAndLine)
-      
-    case .black:
-      config.baseBackgroundColor = .favorColor(.titleAndLine)
-      config.baseForegroundColor = .favorColor(.white)
+  func setupConstraints() {
+    self.snp.makeConstraints { make in
+      make.height.equalTo(32)
     }
-    
-    self.configuration = config
   }
 }

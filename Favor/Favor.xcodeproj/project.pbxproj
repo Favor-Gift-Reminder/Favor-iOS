@@ -32,7 +32,6 @@
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
 		2EA38494298D7C5F0081499C /* HeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38491298D7C5F0081499C /* HeaderReactor.swift */; };
 		2EA3849A298D7C680081499C /* HomeSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38495298D7C680081499C /* HomeSection.swift */; };
-		2EA3849B298D7C680081499C /* UpcomingSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38496298D7C680081499C /* UpcomingSection.swift */; };
 		2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38497298D7C680081499C /* UpcomingCell.swift */; };
 		2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38498298D7C680081499C /* TimelineCell.swift */; };
 		2EA3849E298D7C680081499C /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38499298D7C680081499C /* HeaderView.swift */; };
@@ -101,6 +100,11 @@
 		E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610529948B4C00D14020 /* PickPictureCellReactor.swift */; };
 		E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */; };
 		E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610E299497C000D14020 /* NewGiftViewReactor.swift */; };
+		E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */; };
+		E5626120299DD37200D14020 /* SmallFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562611F299DD37200D14020 /* SmallFavorButtonType.swift */; };
+		E5626122299E3EDA00D14020 /* PlainFavorButtonType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */; };
+		E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626123299E5E0100D14020 /* FavorSwitch.swift */; };
+		E5626126299E64F300D14020 /* FavorDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5626125299E64F300D14020 /* FavorDivider.swift */; };
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -149,7 +153,6 @@
 		2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
 		2EA38491298D7C5F0081499C /* HeaderReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderReactor.swift; sourceTree = "<group>"; };
 		2EA38495298D7C680081499C /* HomeSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HomeSection.swift; sourceTree = "<group>"; };
-		2EA38496298D7C680081499C /* UpcomingSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingSection.swift; sourceTree = "<group>"; };
 		2EA38497298D7C680081499C /* UpcomingCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingCell.swift; sourceTree = "<group>"; };
 		2EA38498298D7C680081499C /* TimelineCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCell.swift; sourceTree = "<group>"; };
 		2EA38499298D7C680081499C /* HeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
@@ -222,6 +225,11 @@
 		E562610529948B4C00D14020 /* PickPictureCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickPictureCellReactor.swift; sourceTree = "<group>"; };
 		E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureCellReactor.swift; sourceTree = "<group>"; };
 		E562610E299497C000D14020 /* NewGiftViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftViewReactor.swift; sourceTree = "<group>"; };
+		E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeFavorButtonType.swift; sourceTree = "<group>"; };
+		E562611F299DD37200D14020 /* SmallFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButtonType.swift; sourceTree = "<group>"; };
+		E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButtonType.swift; sourceTree = "<group>"; };
+		E5626123299E5E0100D14020 /* FavorSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSwitch.swift; sourceTree = "<group>"; };
+		E5626125299E64F300D14020 /* FavorDivider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorDivider.swift; sourceTree = "<group>"; };
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
@@ -482,6 +490,10 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */,
+				E562611F299DD37200D14020 /* SmallFavorButtonType.swift */,
+				E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */,
+				E5B182892974D5DE00229C50 /* .gitkeep */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -531,7 +543,6 @@
 				2EA38495298D7C680081499C /* HomeSection.swift */,
 				2EA38498298D7C680081499C /* TimelineCell.swift */,
 				2EA38497298D7C680081499C /* UpcomingCell.swift */,
-				2EA38496298D7C680081499C /* UpcomingSection.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -803,6 +814,8 @@
 				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
 				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
 				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
+				E5626125299E64F300D14020 /* FavorDivider.swift */,
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
 				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
 				E56260F029908F0100D14020 /* CategoryView.swift */,
@@ -816,7 +829,6 @@
 			children = (
 				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
 				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
-				E5B182962974F54A00229C50 /* UpdateHandlerManager.swift */,
 				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
 			);
 			path = Utils;
@@ -997,13 +1009,16 @@
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
 				E57F313F297000DB00E3D449 /* BaseView.swift in Sources */,
 				2E171164298035A400E34121 /* TabBarController.swift in Sources */,
+				E5626122299E3EDA00D14020 /* PlainFavorButtonType.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,
 				2EC939E72998C6D100C8C47F /* AnniversaryCell.swift in Sources */,
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* SelectSignInReactor.swift in Sources */,
+				E5626126299E64F300D14020 /* FavorDivider.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* GiftStatCell.swift in Sources */,
+				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
@@ -1036,6 +1051,10 @@
 				2EE6B3992983DF3900CDBC81 /* AppFlow.swift in Sources */,
 				E56260F129908F0100D14020 /* CategoryView.swift in Sources */,
 				2E3668C6299FA6F4001FC283 /* UIView+.swift in Sources */,
+				E5626120299DD37200D14020 /* SmallFavorButtonType.swift in Sources */,
+				2EE6B3992983DF3900CDBC81 /* AppFlow.swift in Sources */,
+				E56260F129908F0100D14020 /* CategoryView.swift in Sources */,
+				2EC939ED299B705C00C8C47F /* EmptyCollectionViewCell.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
@@ -1070,6 +1089,8 @@
 				2EC939F7299CF6E800C8C47F /* AnniversaryCellReactor.swift in Sources */,
 				2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */,
 				2E306A7F297290AB007B7EFF /* OldFavorTextField.swift in Sources */,
+				2E306A7F297290AB007B7EFF /* FavorTextField.swift in Sources */,
+				E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -39,6 +39,18 @@ final class OnboardingViewController: BaseViewController, Stepper {
     return cv
   }()
   
+  private lazy var loginButton: UIButton = {
+    let btn = LargeFavorButton(with: .main("로그인"))
+    btn.configurationUpdateHandler = {
+      switch $0.state {
+      case .selected:
+        $0.configuration = LargeFavorButtonType.gray("선택 되었습니다.").configuration
+      default:
+        $0.configuration = LargeFavorButtonType.main("로그인").configuration
+      }
+    }
+  }()
+  
   private lazy var onboardingSection: NSCollectionLayoutSection = {
     let size = NSCollectionLayoutSize(
       widthDimension: .absolute(view.frame.width),
@@ -60,7 +72,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   }()
   
   private lazy var continueButton: LargeFavorButton = {
-    let btn = LargeFavorButton(with: .white, title: "다음")
+    let btn = LargeFavorButton(with: .main("다음"))
     btn.addTarget(self, action: #selector(didTapContinueButton), for: .touchUpInside)
     
     return btn
@@ -69,8 +81,6 @@ final class OnboardingViewController: BaseViewController, Stepper {
   private var currentPage: Int = 0 {
     didSet {
       self.pageControl.currentPage = currentPage
-      let handler = UpdateHandlerManager.onboardingHandler(currentPage)
-      self.continueButton.configurationUpdateHandler = handler
     }
   }
   
@@ -79,7 +89,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   // MARK: - Setup
   
   override func setupStyles() {
-    view.backgroundColor = .white
+    self.view.backgroundColor = .white
   }
   
   override func setupLayouts() {
@@ -88,7 +98,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
       self.collectionView,
       self.continueButton
     ].forEach {
-      view.addSubview($0)
+      self.view.addSubview($0)
     }
   }
   
