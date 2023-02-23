@@ -243,31 +243,36 @@ private extension MyPageViewController {
       guard
         let sectionType = self?.dataSource[sectionIndex]
       else { fatalError("Fatal error occured while setting up section datas.") }
-      return self?.createCollectionViewLayout(sectionType: sectionType, sectionIndex: sectionIndex)
+      return self?.createCollectionViewLayoutSection(sectionType: sectionType, sectionIndex: sectionIndex)
     })
     // Background
     layout.register(BackgroundView.self, forDecorationViewOfKind: BackgroundView.reuseIdentifier)
     return layout
   }
   
-  func createCollectionViewLayout(
+  func createCollectionViewLayoutSection(
     sectionType: MyPageSection,
     sectionIndex: Int
   ) -> NSCollectionLayoutSection {
+    let isHorizontalScrollable = sectionType.widthStretchingDirection == .horizontal
+
     // Item
     let item = NSCollectionLayoutItem(
       layoutSize: .init(
-        widthDimension: .fractionalWidth(1.0),
+        widthDimension: isHorizontalScrollable ? sectionType.cellSize.widthDimension : .fractionalWidth(1.0),
         heightDimension: .fractionalHeight(1.0)
       )
     )
     
     // Group
     var group: NSCollectionLayoutGroup
+    var widthDimension: NSCollectionLayoutDimension {
+      isHorizontalScrollable ? .fractionalWidth(1.0) : sectionType.cellSize.widthDimension
+    }
     if #available(iOS 16.0, *) {
       group = NSCollectionLayoutGroup.horizontal(
         layoutSize: .init(
-          widthDimension: sectionType.cellSize.widthDimension,
+          widthDimension: widthDimension,
           heightDimension: sectionType.cellSize.heightDimension
         ),
         repeatingSubitem: item,
@@ -276,7 +281,7 @@ private extension MyPageViewController {
     } else {
       group = NSCollectionLayoutGroup.horizontal(
         layoutSize: .init(
-          widthDimension: sectionType.cellSize.widthDimension,
+          widthDimension: widthDimension,
           heightDimension: sectionType.cellSize.heightDimension
         ),
         subitem: item,
