@@ -135,7 +135,7 @@ extension MyPageSection {
   
   var columns: Int {
     switch self {
-    case .favor: return 3
+    case .favor: return 5
     default: return 1
     }
   }
@@ -145,6 +145,13 @@ extension MyPageSection {
     case .newProfile: return .groupPaging
     case .friend: return .continuous
     default: return .none
+    }
+  }
+  
+  var widthStretchingDirection: ScrollDirection {
+    switch self {
+    case .favor: return .horizontal
+    default: return .vertical
     }
   }
 }

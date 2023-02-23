@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import SnapKit
 
 class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
   
@@ -17,7 +18,7 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
-  private lazy var button = SmallFavorButton(with: .gray("#태그"))
+  private lazy var button = SmallFavorButton(with: .darkWithHeart("취향"))
   
   // MARK: - Initializer
   
