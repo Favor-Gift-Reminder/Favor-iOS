@@ -192,7 +192,8 @@ class FavorTextField: UIView {
 
   // MARK: - Functions
 
-  func updateMessageLabel(_ text: String, state: MessageState? = nil, animated: Bool = true) {
+  func updateMessageLabel(_ text: String?, state: MessageState? = nil, animated: Bool = true) {
+    guard let text else { return }
     let updateClosure = {
       self.messageLabelText = text
       if let messageState = state {
@@ -216,6 +217,15 @@ class FavorTextField: UIView {
       })
       self.messageLabelAnimator?.startAnimation()
     }
+  }
+
+  func addLeftItem(item: UIView) {
+    item.snp.makeConstraints { make in
+      make.height.equalTo(24)
+      make.width.equalTo(28)
+    }
+    self.textField.leftView = item
+    self.textField.leftViewMode = .always
   }
 }
 
@@ -352,8 +362,16 @@ private extension FavorTextField {
 // MARK: - ReactorKit
 
 extension Reactive where Base: FavorTextField {
-  var textIsEditing: ControlEvent<String?> {
+  var text: ControlProperty<String?> {
     let source = base.textField.rx.text
+    let bindingObserver = Binder(self.base) { (favorTextField, text: String?) in
+      favorTextField.textField.text = text
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
+  }
+
+  var editingDidEndOnExit: ControlEvent<()> {
+    let source = base.textField.rx.controlEvent(.editingDidEndOnExit)
     return ControlEvent(events: source)
   }
 }
