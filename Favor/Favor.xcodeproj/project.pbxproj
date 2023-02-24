@@ -442,6 +442,7 @@
 			children = (
 				2E6EBFB529A9364C00A924B9 /* Common */,
 				2EBB0152295E8CCA0072D158 /* Application */,
+				E5B182902974F39C00229C50 /* Common */,
 				2ECC94C82960268000B530F7 /* TabBar */,
 				2E76F58629601EC3002FF001 /* Splash */,
 				2E1C5659296C24AE0067FC78 /* Auth */,
@@ -665,6 +666,8 @@
 				2E00561B29A7E720006CF302 /* FavorSelectionSection.swift */,
 				2E00562629A9220D006CF302 /* NewAnniversarySection.swift */,
 				2EE07EC0296E8D3700048A3C /* Reactors */,
+				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
+				2EE07EC0296E8D3700048A3C /* Reactor */,
 				2EE07EBF296E8D3300048A3C /* Views */,
 				2EE07EBE296E8D2D00048A3C /* ViewControllers */,
 			);
@@ -686,7 +689,6 @@
 			children = (
 				2E6C90B229A607C300AF963A /* Cells */,
 				2EB3AE92299E3E2700D31541 /* BackgroundView.swift */,
-				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
 				2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */,
 				2E00561D29A8B131006CF302 /* MyPageSectionFooterView.swift */,
 				2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */,
@@ -700,6 +702,7 @@
 				2E6C90B329A607E100AF963A /* CellReactors */,
 				2E6C90BD29A623E000AF963A /* EditMyPageReactor.swift */,
 				2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */,
+				2EC939DA29967F1900C8C47F /* MyPageReactor.swift */,
 				2EC939FA299E163800C8C47F /* MyPageHeaderReactor.swift */,
 				2EC939DA29967F1900C8C47F /* MyPageReactor.swift */,
 				2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderReactor.swift */,
@@ -778,6 +781,38 @@
 			path = FavorUITests;
 			sourceTree = "<group>";
 		};
+		E517803729A8E88A0011C220 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		E517803829A8E8CD0011C220 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E517803729A8E88A0011C220 /* Cells */,
+				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
+				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
+				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
+				E5626125299E64F300D14020 /* FavorDivider.swift */,
+				2EA384BD299248200081499C /* FavorSearchBar.swift */,
+				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
+				E56260F029908F0100D14020 /* CategoryView.swift */,
+				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
+				2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E517803929A8E8DD0011C220 /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
 		E55CF7B4298A622B002940D1 /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
@@ -816,6 +851,15 @@
 				E562610329939E8800D14020 /* PickedPictureSection.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		E5B182902974F39C00229C50 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				E517803929A8E8DD0011C220 /* Reactors */,
+				E517803829A8E8CD0011C220 /* Views */,
+			);
+			path = Common;
 			sourceTree = "<group>";
 		};
 		E5B182912974F43E00229C50 /* Utils */ = {
