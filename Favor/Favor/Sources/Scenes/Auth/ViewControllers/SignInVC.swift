@@ -23,19 +23,16 @@ final class SignInViewController: BaseViewController, View {
   private lazy var emailTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이메일"
-    textField.keyboardType = .emailAddress
-    textField.autocapitalizationType = .none
-    textField.returnKeyType = .next
-    textField.enablesReturnKeyAutomatically = true
+    textField.textField.keyboardType = .emailAddress
+    textField.textField.returnKeyType = .next
     return textField
   }()
   
   private lazy var pwTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
-    textField.isSecureTextEntry = true
-    textField.enablesReturnKeyAutomatically = true
-    textField.returnKeyType = .done
+    textField.isSecureField = true
+    textField.textField.returnKeyType = .done
     return textField
   }()
   
@@ -85,13 +82,13 @@ final class SignInViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    self.emailTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.emailTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwTextField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
-    self.pwTextField.rx.controlEvent(.editingDidEndOnExit)
+    self.pwTextField.rx.editingDidEndOnExit
       .map { Reactor.Action.returnKeyboardTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
