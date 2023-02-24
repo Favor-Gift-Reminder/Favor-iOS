@@ -12,13 +12,20 @@ import RxDataSources
 import SnapKit
 
 final class EditMyPageViewController: BaseViewController, View {
-  typealias SelectFavorDataSource = RxCollectionViewSectionedReloadDataSource<SelectFavorSection>
+  typealias FavorSelectionDataSource = RxCollectionViewSectionedReloadDataSource<FavorSelectionSection>
+  typealias NewAnniversaryDataSource = RxCollectionViewSectionedReloadDataSource<NewAnniversarySection>
 
   // MARK: - Constants
 
+  enum ElementKind {
+    static let favorSelectionHeaderElementKind = "favor_selection_header"
+    static let favorSelectionFooterElementKind = "favor_selection_footer"
+    static let newAnniversaryHeaderElementKind = "new_anniversary_header"
+  }
+
   // MARK: - Properties
 
-  let dataSource = SelectFavorDataSource(
+  let favorSelectionDataSource = FavorSelectionDataSource(
     configureCell: { _, collectionView, indexPath, reactor in
       guard let cell = collectionView.dequeueReusableCell(
         withReuseIdentifier: FavorCell.reuseIdentifier,
@@ -28,7 +35,7 @@ final class EditMyPageViewController: BaseViewController, View {
       return cell
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       switch kind {
-      case UICollectionView.elementKindSectionHeader:
+      case ElementKind.favorSelectionHeaderElementKind:
         guard let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
@@ -36,7 +43,7 @@ final class EditMyPageViewController: BaseViewController, View {
         ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
         header.reactor = MyPageSectionHeaderReactor(title: dataSource.sectionModels[indexPath.item].header)
         return header
-      case UICollectionView.elementKindSectionFooter:
+      case ElementKind.favorSelectionFooterElementKind:
         guard let footer = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           withReuseIdentifier: MyPageSectionFooterView.reuseIdentifier,
@@ -49,6 +56,22 @@ final class EditMyPageViewController: BaseViewController, View {
       }
     }
   )
+
+  let newAnniversaryDataSource = NewAnniversaryDataSource(configureCell: { _, collectionView, indexPath, reactor in
+    guard let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: AnniversaryCell.reuseIdentifier,
+      for: indexPath
+    ) as? AnniversaryCell else { return UICollectionViewCell() }
+    cell.reactor = reactor
+    return cell
+  }, configureSupplementaryView: { _, collectionView, kind, indexPath in
+    guard let header = collectionView.dequeueReusableSupplementaryView(
+      ofKind: kind,
+      withReuseIdentifier: NewAnniversaryHeaderView.reuseIdentifier,
+      for: indexPath
+    ) as? NewAnniversaryHeaderView else { return UICollectionReusableView() }
+    return header
+  })
 
   // MARK: - UI Components
 
@@ -110,7 +133,7 @@ final class EditMyPageViewController: BaseViewController, View {
   private lazy var favorSelectionCollectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
-      collectionViewLayout: self.setupCollectionViewLayout()
+      collectionViewLayout: self.setupFavorSelectionCollectionViewLayout()
     )
 
     // CollectionView Cell
@@ -122,17 +145,43 @@ final class EditMyPageViewController: BaseViewController, View {
     // Header
     collectionView.register(
       MyPageSectionHeaderView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+      forSupplementaryViewOfKind: ElementKind.favorSelectionHeaderElementKind,
       withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier
     )
     // Footer
     collectionView.register(
       MyPageSectionFooterView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+      forSupplementaryViewOfKind: ElementKind.favorSelectionFooterElementKind,
       withReuseIdentifier: MyPageSectionFooterView.reuseIdentifier
     )
 
     collectionView.backgroundColor = .clear
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.showsVerticalScrollIndicator = false
+    return collectionView
+  }()
+
+  private lazy var newAnniversaryCollectionView: UICollectionView = {
+    let collectionView = UICollectionView(
+      frame: .zero,
+      collectionViewLayout: self.setupNewAnniversaryCollectionViewLayout()
+    )
+
+    // CollectionView Cell
+    collectionView.register(
+      AnniversaryCell.self,
+      forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
+    )
+
+    // Header
+    collectionView.register(
+      NewAnniversaryHeaderView.self,
+      forSupplementaryViewOfKind: ElementKind.newAnniversaryHeaderElementKind,
+      withReuseIdentifier: NewAnniversaryHeaderView.reuseIdentifier
+    )
+
+    collectionView.backgroundColor = .clear
+    collectionView.isScrollEnabled = false
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     return collectionView
@@ -157,12 +206,12 @@ final class EditMyPageViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.sections }
-      .do {
-        print($0)
-      }
-      .asObservable()
-      .bind(to: self.favorSelectionCollectionView.rx.items(dataSource: self.dataSource))
+    reactor.state.map { $0.favorSelectionSections }
+      .bind(to: self.favorSelectionCollectionView.rx.items(dataSource: self.favorSelectionDataSource))
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.newAnniversarySections }
+      .bind(to: self.newAnniversaryCollectionView.rx.items(dataSource: self.newAnniversaryDataSource))
       .disposed(by: self.disposeBag)
   }
 
@@ -181,7 +230,8 @@ final class EditMyPageViewController: BaseViewController, View {
       self.backgroundImageButton,
       self.profileImageButton,
       self.textFieldStackView,
-      self.favorSelectionCollectionView
+      self.favorSelectionCollectionView,
+      self.newAnniversaryCollectionView
     ].forEach {
       self.scrollView.addSubview($0)
     }
@@ -217,8 +267,15 @@ final class EditMyPageViewController: BaseViewController, View {
       make.height.equalTo(232)
     }
 
+    self.newAnniversaryCollectionView.snp.makeConstraints { make in
+      make.top.equalTo(self.favorSelectionCollectionView.snp.bottom).offset(40)
+      make.width.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(445)
+    }
+
     self.scrollView.snp.makeConstraints { make in
-      make.bottom.equalTo(self.favorSelectionCollectionView.snp.bottom)
+      make.bottom.equalTo(self.newAnniversaryCollectionView.snp.bottom)
     }
   }
 }
@@ -226,15 +283,15 @@ final class EditMyPageViewController: BaseViewController, View {
 // MARK: - Privates
 
 private extension EditMyPageViewController {
-  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+  func setupFavorSelectionCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     // Layout
     let layout = UICollectionViewCompositionalLayout.init(sectionProvider: { [weak self] sectionIndex, _ in
-      return self?.createCollectionViewLayoutSection(sectionIndex: sectionIndex)
+      return self?.createFavorSelectionCollectionViewSection(sectionIndex: sectionIndex)
     })
     return layout
   }
 
-  func createCollectionViewLayoutSection(sectionIndex: Int) -> NSCollectionLayoutSection {
+  func createFavorSelectionCollectionViewSection(sectionIndex: Int) -> NSCollectionLayoutSection {
     // Item
     let item = NSCollectionLayoutItem(
       layoutSize: NSCollectionLayoutSize(
@@ -272,31 +329,80 @@ private extension EditMyPageViewController {
     section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
 
     // Header
-    section.boundarySupplementaryItems.append(self.createHeader())
-    section.boundarySupplementaryItems.append(self.createFooter())
+    section.boundarySupplementaryItems.append(self.createFavorSelectionHeader())
+    section.boundarySupplementaryItems.append(self.createFavorSelectionFooter())
 
     return section
   }
 
-  func createHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+  func createFavorSelectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
     return NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .estimated(40)
       ),
-      elementKind: UICollectionView.elementKindSectionHeader,
+      elementKind: ElementKind.favorSelectionHeaderElementKind,
       alignment: .top
     )
   }
 
-  func createFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
+  func createFavorSelectionFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
     return NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .estimated(39)
       ),
-      elementKind: UICollectionView.elementKindSectionFooter,
+      elementKind: ElementKind.favorSelectionFooterElementKind,
       alignment: .bottom
+    )
+  }
+
+  func setupNewAnniversaryCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    let layout = UICollectionViewCompositionalLayout.init(sectionProvider: { [weak self] _, _ in
+      return self?.createNewAnniversaryCollectionViewSection()
+    })
+    return layout
+  }
+
+  func createNewAnniversaryCollectionViewSection() -> NSCollectionLayoutSection {
+    // Item
+    let item = NSCollectionLayoutItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0)
+      )
+    )
+
+    // Group
+    let group = self.createCompositionalGroup(
+      direction: .horizontal,
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(95)
+      ),
+      subItem: item,
+      count: 1
+    )
+
+    // Section
+    let section = NSCollectionLayoutSection(group: group)
+    section.interGroupSpacing = 10
+    section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+
+    // Header
+    section.boundarySupplementaryItems.append(self.createNewAnniversaryHeader())
+
+    return section
+  }
+
+  func createNewAnniversaryHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
+    return NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(140)
+      ),
+      elementKind: ElementKind.newAnniversaryHeaderElementKind,
+      alignment: .top
     )
   }
 

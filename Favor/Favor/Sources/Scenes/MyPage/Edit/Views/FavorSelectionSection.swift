@@ -1,5 +1,5 @@
 //
-//  SelectFavorSection.swift
+//  FavorSelectionSection.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/24.
@@ -7,15 +7,15 @@
 
 import RxDataSources
 
-struct SelectFavorSection {
+struct FavorSelectionSection {
   var header: String
   var items: [Item]
 }
 
-extension SelectFavorSection: SectionModelType {
+extension FavorSelectionSection: SectionModelType {
   typealias Item = FavorCellReactor
 
-  init(original: SelectFavorSection, items: [FavorCellReactor]) {
+  init(original: FavorSelectionSection, items: [Item]) {
     self = original
     self.items = items
   }

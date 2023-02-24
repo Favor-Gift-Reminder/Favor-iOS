@@ -21,11 +21,13 @@ final class EditMyPageReactor: Reactor, Stepper {
   }
 
   enum Mutation {
-    case updateDataSource
+    case updateFavorSelectionDataSource
+    case updateNewAnniversaryDataSource
   }
 
   struct State {
-    var sections: [SelectFavorSection] = []
+    var favorSelectionSections: [FavorSelectionSection] = []
+    var newAnniversarySections: [NewAnniversarySection] = []
   }
 
   // MARK: - Initializer
@@ -40,7 +42,10 @@ final class EditMyPageReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      return .just(.updateDataSource)
+      return .concat([
+        .just(.updateFavorSelectionDataSource),
+        .just(.updateNewAnniversaryDataSource)
+      ])
     }
   }
 
@@ -48,8 +53,11 @@ final class EditMyPageReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
-    case .updateDataSource:
-      newState.sections = self.setupMockSection()
+    case .updateFavorSelectionDataSource:
+      newState.favorSelectionSections = self.setupFavorSelectionMockSection()
+
+    case .updateNewAnniversaryDataSource:
+      newState.newAnniversarySections = self.setupNewAnniversaryMockSection()
     }
 
     return newState
@@ -59,14 +67,23 @@ final class EditMyPageReactor: Reactor, Stepper {
 // MARK: - Temporaries
 
 private extension EditMyPageReactor {
-  func setupMockSection() -> [SelectFavorSection] {
-
-    var items: [SelectFavorSection.Item] = []
+  func setupFavorSelectionMockSection() -> [FavorSelectionSection] {
+    var items: [FavorSelectionSection.Item] = []
     (0..<18).forEach { _ in
       items.append(FavorCellReactor())
     }
-    let selectFavorSection = SelectFavorSection(header: "취향", items: items)
+    let favorSelectionSection = FavorSelectionSection(header: "취향", items: items)
 
-    return [selectFavorSection]
+    return [favorSelectionSection]
+  }
+
+  func setupNewAnniversaryMockSection() -> [NewAnniversarySection] {
+    var items: [NewAnniversarySection.Item] = []
+    (0..<3).forEach { _ in
+      items.append(AnniversaryCellReactor())
+    }
+    let newAnniversarySection = NewAnniversarySection(header: "기념일", items: items)
+
+    return [newAnniversarySection]
   }
 }
