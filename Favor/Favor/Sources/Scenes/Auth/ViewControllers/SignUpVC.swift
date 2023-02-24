@@ -87,7 +87,7 @@ final class SignUpViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SignUpReactor) {
+  func bind(reactor: SignUpViewReactor) {
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in

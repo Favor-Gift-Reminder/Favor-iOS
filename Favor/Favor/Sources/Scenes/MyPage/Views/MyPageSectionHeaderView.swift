@@ -48,7 +48,7 @@ final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying,
   
   // MARK: - Binding
   
-  func bind(reactor: MyPageSectionHeaderReactor) {
+  func bind(reactor: MyPageSectionHeaderViewReactor) {
     // Action
     
     // State

@@ -29,7 +29,7 @@ final class SearchResultViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SearchResultReactor) {
+  func bind(reactor: SearchResultViewReactor) {
     // Action
     self.view.rx.screenEdgePanGesture()
       .skip(1)

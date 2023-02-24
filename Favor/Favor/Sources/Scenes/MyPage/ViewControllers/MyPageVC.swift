@@ -73,7 +73,7 @@ final class MyPageViewController: BaseViewController, View {
         for: indexPath
       ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
       let section = dataSource[indexPath.section]
-      header.reactor = MyPageSectionHeaderReactor(section: section)
+      header.reactor = MyPageSectionHeaderViewReactor(section: section)
       return header
     }
   )
@@ -164,7 +164,7 @@ final class MyPageViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: MyPageReactor) {
+  func bind(reactor: MyPageViewReactor) {
     // Action
     self.tempEditButton.rx.tap
       .map { Reactor.Action.profileDidTap }

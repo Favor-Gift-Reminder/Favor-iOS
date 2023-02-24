@@ -36,7 +36,7 @@ final class SearchFlow: Flow {
   
   private func navigateToSearch() -> FlowContributors {
     let searchVC = SearchViewController()
-    let searchReactor = SearchReactor()
+    let searchReactor = SearchViewReactor()
     searchVC.reactor = searchReactor
     self.rootViewController.setViewControllers([searchVC], animated: true)
     return .one(flowContributor: .contribute(
@@ -47,7 +47,7 @@ final class SearchFlow: Flow {
   
   private func navigateToSearchResult() -> FlowContributors {
     let searchResultVC = SearchResultViewController()
-    let searchResultReactor = SearchResultReactor()
+    let searchResultReactor = SearchResultViewReactor()
     searchResultVC.reactor = searchResultReactor
     self.rootViewController.pushViewController(searchResultVC, animated: true)
     return .one(flowContributor: .contribute(

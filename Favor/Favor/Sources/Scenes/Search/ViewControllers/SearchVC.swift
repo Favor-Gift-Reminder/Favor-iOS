@@ -76,7 +76,7 @@ final class SearchViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SearchReactor) {
+  func bind(reactor: SearchViewReactor) {
     // Action
     self.view.rx.anyGesture(.tap())
       .when(.recognized)

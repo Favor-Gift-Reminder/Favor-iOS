@@ -1,5 +1,5 @@
 //
-//  MyPageReactor.swift
+//  MyPageViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/10.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class MyPageReactor: Reactor, Stepper {
+final class MyPageViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
@@ -34,7 +34,7 @@ final class MyPageReactor: Reactor, Stepper {
   
   init() {
     self.initialState = State(
-      sections: MyPageReactor.setupMockSection()
+      sections: MyPageViewReactor.setupMockSection()
     )
   }
   
@@ -62,7 +62,7 @@ final class MyPageReactor: Reactor, Stepper {
 
 // MARK: - Temporaries
 
-extension MyPageReactor {
+extension MyPageViewReactor {
   static func setupMockSection() -> [MyPageSection] {
     let giftCount = MyPageSectionItem.giftStat(GiftStatCellReactor())
     let giftCountSection = MyPageSection.giftStat([giftCount])

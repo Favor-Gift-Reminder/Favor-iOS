@@ -92,7 +92,7 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   // MARK: - Binding
   
-  func bind(reactor: HeaderReactor) {
+  func bind(reactor: HeaderViewReactor) {
     // Action
     self.allButton.rx.tap
       .map { Reactor.Action.allButtonDidTap }

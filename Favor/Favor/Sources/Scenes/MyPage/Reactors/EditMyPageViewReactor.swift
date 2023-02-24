@@ -1,5 +1,5 @@
 //
-//  EditMyPageReactor.swift
+//  EditMyPageViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/22.
@@ -9,7 +9,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class EditMyPageReactor: Reactor, Stepper {
+final class EditMyPageViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
 
@@ -66,7 +66,7 @@ final class EditMyPageReactor: Reactor, Stepper {
 
 // MARK: - Temporaries
 
-private extension EditMyPageReactor {
+private extension EditMyPageViewReactor {
   func setupFavorSelectionMockSection() -> [FavorSelectionSection] {
     var items: [FavorSelectionSection.Item] = []
     (0..<18).forEach { _ in

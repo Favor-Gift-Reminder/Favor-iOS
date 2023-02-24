@@ -1,15 +1,17 @@
 //
-//  SearchResultReactor.swift
+//  SelectSignInViewReactor.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/02/09.
+//  Created by 이창준 on 2023/01/11.
 //
+
+import OSLog
 
 import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class SearchResultReactor: Reactor, Stepper {
+final class SelectSignInViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
@@ -17,7 +19,8 @@ final class SearchResultReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
-    case backButtonDidTap
+    case emailLoginButtonTap
+    case signUpButtonTap
   }
   
   enum Mutation {
@@ -34,24 +37,15 @@ final class SearchResultReactor: Reactor, Stepper {
     self.initialState = State()
   }
   
-  
-  // MARK: - Functions
-  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .backButtonDidTap:
-      print("Back Button Did Tap")
+    case .emailLoginButtonTap:
+      self.steps.accept(AppStep.signInIsRequired)
+      return .empty()
+      
+    case .signUpButtonTap:
+      self.steps.accept(AppStep.signUpIsRequired)
       return .empty()
     }
-  }
-  
-  func reduce(state: State, mutation: Mutation) -> State {
-    var newState = state
-    
-    switch mutation {
-      
-    }
-    
-    return newState
   }
 }

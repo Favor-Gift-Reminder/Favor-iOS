@@ -1,5 +1,5 @@
 //
-//  SignUpReactor.swift
+//  SignUpViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/16.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class SignUpReactor: Reactor, Stepper {
+final class SignUpViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
@@ -133,9 +133,9 @@ final class SignUpReactor: Reactor, Stepper {
   
 }
 
-private extension SignUpReactor {
+private extension SignUpViewReactor {
   
-  func validate<T>(input: T) -> Observable<SignUpReactor.Mutation> {
+  func validate<T>(input: T) -> Observable<SignUpViewReactor.Mutation> {
     if T.self == ValidateManager.EmailValidate.self {
       emailValidate.accept(input as! ValidateManager.EmailValidate)
     } else if T.self == ValidateManager.PasswordValidate.self {

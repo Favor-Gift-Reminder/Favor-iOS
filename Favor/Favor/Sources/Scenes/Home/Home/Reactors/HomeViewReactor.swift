@@ -1,5 +1,5 @@
 //
-//  HomeReactor.swift
+//  HomeViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2022/12/30.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class HomeReactor: Reactor, Stepper {
+final class HomeViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
@@ -34,7 +34,7 @@ final class HomeReactor: Reactor, Stepper {
   
   init() {
     self.initialState = State(
-      sections: HomeReactor.setupSections()
+      sections: HomeViewReactor.setupSections()
     )
   }
   
@@ -48,7 +48,7 @@ final class HomeReactor: Reactor, Stepper {
   }
 }
 
-private extension HomeReactor {
+private extension HomeViewReactor {
   
   // TODO: 데이터 바인딩 되면 수정 (데이터가 비어있으면 emptyCell로 변환하여 반환)
   static func setupSections() -> [HomeSection] {

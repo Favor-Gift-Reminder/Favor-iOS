@@ -41,7 +41,7 @@ final class EditMyPageViewController: BaseViewController, View {
           withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
           for: indexPath
         ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
-        header.reactor = MyPageSectionHeaderReactor(title: dataSource.sectionModels[indexPath.item].header)
+        header.reactor = MyPageSectionHeaderViewReactor(title: dataSource.sectionModels[indexPath.item].header)
         return header
       case ElementKind.favorSelectionFooterElementKind:
         guard let footer = collectionView.dequeueReusableSupplementaryView(
@@ -191,7 +191,7 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Binding
 
-  func bind(reactor: EditMyPageReactor) {
+  func bind(reactor: EditMyPageViewReactor) {
     // Action
     Observable.just(())
       .map { Reactor.Action.viewDidLoad }

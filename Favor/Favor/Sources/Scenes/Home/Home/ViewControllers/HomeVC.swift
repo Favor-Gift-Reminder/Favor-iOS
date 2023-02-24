@@ -60,7 +60,7 @@ final class HomeViewController: BaseViewController, View {
         for: indexPath
       ) as? HeaderView else { return UICollectionReusableView() }
       let section = dataSource[indexPath.section]
-      header.reactor = HeaderReactor(section: section)
+      header.reactor = HeaderViewReactor(section: section)
       return header
     }
   )
@@ -128,7 +128,7 @@ final class HomeViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: HomeReactor) {
+  func bind(reactor: HomeViewReactor) {
     // Action
     self.collectionView.rx.itemSelected
       .do(onNext: {

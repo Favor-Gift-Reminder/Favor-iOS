@@ -1,15 +1,15 @@
 //
-//  SearchReactor.swift
+//  SearchResultViewReactor.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/02/07.
+//  Created by 이창준 on 2023/02/09.
 //
 
 import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class SearchReactor: Reactor, Stepper {
+final class SearchResultViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
@@ -18,17 +18,14 @@ final class SearchReactor: Reactor, Stepper {
   
   enum Action {
     case backButtonDidTap
-    case searchDidBegin
-    case searchDidEnd
-    case returnKeyDidTap
   }
   
   enum Mutation {
-    case switchIsEditingTo(Bool)
+    
   }
   
   struct State {
-    var isEditing: Bool = false
+    
   }
   
   // MARK: - Initializer
@@ -45,16 +42,6 @@ final class SearchReactor: Reactor, Stepper {
     case .backButtonDidTap:
       print("Back Button Did Tap")
       return .empty()
-      
-    case .searchDidBegin:
-      return .just(.switchIsEditingTo(true))
-      
-    case .searchDidEnd:
-      return .just(.switchIsEditingTo(false))
-      
-    case .returnKeyDidTap:
-      self.steps.accept(AppStep.searchResultIsRequired)
-      return .empty()
     }
   }
   
@@ -62,8 +49,7 @@ final class SearchReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-    case .switchIsEditingTo(let isEditing):
-      newState.isEditing = isEditing
+      
     }
     
     return newState

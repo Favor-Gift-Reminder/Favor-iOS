@@ -1,5 +1,5 @@
 //
-//  SetProfileReactor.swift
+//  SetProfileViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/16.
@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 
-final class SetProfileReactor: Reactor {
+final class SetProfileViewReactor: Reactor {
   
   // MARK: - Properties
   

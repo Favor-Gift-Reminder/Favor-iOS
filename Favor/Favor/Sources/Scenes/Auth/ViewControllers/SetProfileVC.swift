@@ -87,7 +87,7 @@ final class SetProfileViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SetProfileReactor) {
+  func bind(reactor: SetProfileViewReactor) {
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in

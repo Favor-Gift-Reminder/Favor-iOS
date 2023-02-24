@@ -1,5 +1,5 @@
 //
-//  MyPageHeaderReactor.swift
+//  MyPageHeaderViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/16.
@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class MyPageHeaderReactor: Reactor {
+final class MyPageHeaderViewReactor: Reactor {
   
   // MARK: - Properties
   

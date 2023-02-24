@@ -1,5 +1,5 @@
 //
-//  HeaderReactor.swift
+//  HeaderViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/02.
@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class HeaderReactor: Reactor {
+final class HeaderViewReactor: Reactor {
   
   // MARK: - Properties
   
