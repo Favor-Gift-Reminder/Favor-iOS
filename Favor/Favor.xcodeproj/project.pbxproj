@@ -306,19 +306,20 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		2E6C90B229A607C300AF963A /* CollectionViewCells */ = {
+		2E6C90B229A607C300AF963A /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */,
 				2EC939E02998BEAD00C8C47F /* GiftStatCell.swift */,
 				2EC939E42998C68900C8C47F /* FavorCell.swift */,
 				2EC939E22998C63200C8C47F /* NewProfileCell.swift */,
 				2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */,
 				2E6C90B029A607BD00AF963A /* FriendCell.swift */,
 			);
-			path = CollectionViewCells;
+			path = Cells;
 			sourceTree = "<group>";
 		};
-		2E6C90B329A607E100AF963A /* CollectionViewCellReactors */ = {
+		2E6C90B329A607E100AF963A /* CellReactors */ = {
 			isa = PBXGroup;
 			children = (
 				2EC939F0299CF67E00C8C47F /* GiftStatCellReactor.swift */,
@@ -327,42 +328,30 @@
 				2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */,
 				2E6C90B429A607FA00AF963A /* FriendCellReactor.swift */,
 			);
-			path = CollectionViewCellReactors;
+			path = CellReactors;
 			sourceTree = "<group>";
 		};
-		2E6C90B629A61ED400AF963A /* Edit */ = {
+		2E6EBFB529A9364C00A924B9 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				2E6C90B929A61F0900AF963A /* Reactor */,
-				2E6C90BA29A61F2400AF963A /* Views */,
-				2E6C90B829A61EFA00AF963A /* ViewControllers */,
+				2E6EBFB629A9365200A924B9 /* Views */,
 			);
-			path = Edit;
+			path = Common;
 			sourceTree = "<group>";
 		};
-		2E6C90B829A61EFA00AF963A /* ViewControllers */ = {
+		2E6EBFB629A9365200A924B9 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		2E6C90B929A61F0900AF963A /* Reactor */ = {
-			isa = PBXGroup;
-			children = (
-				2E6C90BD29A623E000AF963A /* EditMyPageReactor.swift */,
-				2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */,
-			);
-			path = Reactor;
-			sourceTree = "<group>";
-		};
-		2E6C90BA29A61F2400AF963A /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				2E00561B29A7E720006CF302 /* FavorSelectionSection.swift */,
-				2E00562629A9220D006CF302 /* NewAnniversarySection.swift */,
-				2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */,
+				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
+				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
+				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
+				E5626125299E64F300D14020 /* FavorDivider.swift */,
+				2EA384BD299248200081499C /* FavorSearchBar.swift */,
+				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
+				E56260F029908F0100D14020 /* CategoryView.swift */,
+				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
+				2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -441,7 +430,6 @@
 				E55CF7B8298A705F002940D1 /* Flows */,
 				E55CF7B5298A6422002940D1 /* Storages */,
 				E5B182912974F43E00229C50 /* Utils */,
-				E5B182902974F39C00229C50 /* Views */,
 				2EBB014D295E8C880072D158 /* Models */,
 				2EBB014C295E8C820072D158 /* Network */,
 				2EBB014B295E8C770072D158 /* Scenes */,
@@ -452,6 +440,7 @@
 		2EBB014B295E8C770072D158 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				2E6EBFB529A9364C00A924B9 /* Common */,
 				2EBB0152295E8CCA0072D158 /* Application */,
 				2ECC94C82960268000B530F7 /* TabBar */,
 				2E76F58629601EC3002FF001 /* Splash */,
@@ -673,8 +662,9 @@
 		2EE07EBD296E8D2300048A3C /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
-				2E6C90B629A61ED400AF963A /* Edit */,
-				2EE07EC0296E8D3700048A3C /* Reactor */,
+				2E00561B29A7E720006CF302 /* FavorSelectionSection.swift */,
+				2E00562629A9220D006CF302 /* NewAnniversarySection.swift */,
+				2EE07EC0296E8D3700048A3C /* Reactors */,
 				2EE07EBF296E8D3300048A3C /* Views */,
 				2EE07EBE296E8D2D00048A3C /* ViewControllers */,
 			);
@@ -684,6 +674,7 @@
 		2EE07EBE296E8D2D00048A3C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */,
 				2EE07ECA296E8D8400048A3C /* MyPageVC.swift */,
 				2EE07ECC296E8D9A00048A3C /* SettingVC.swift */,
 			);
@@ -693,7 +684,7 @@
 		2EE07EBF296E8D3300048A3C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				2E6C90B229A607C300AF963A /* CollectionViewCells */,
+				2E6C90B229A607C300AF963A /* Cells */,
 				2EB3AE92299E3E2700D31541 /* BackgroundView.swift */,
 				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
 				2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */,
@@ -703,15 +694,17 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		2EE07EC0296E8D3700048A3C /* Reactor */ = {
+		2EE07EC0296E8D3700048A3C /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				2E6C90B329A607E100AF963A /* CollectionViewCellReactors */,
-				2EC939DA29967F1900C8C47F /* MyPageReactor.swift */,
+				2E6C90B329A607E100AF963A /* CellReactors */,
+				2E6C90BD29A623E000AF963A /* EditMyPageReactor.swift */,
+				2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */,
 				2EC939FA299E163800C8C47F /* MyPageHeaderReactor.swift */,
+				2EC939DA29967F1900C8C47F /* MyPageReactor.swift */,
 				2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderReactor.swift */,
 			);
-			path = Reactor;
+			path = Reactors;
 			sourceTree = "<group>";
 		};
 		2EE07ED4296E8DFF00048A3C /* Gift */ = {
@@ -823,23 +816,6 @@
 				E562610329939E8800D14020 /* PickedPictureSection.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		E5B182902974F39C00229C50 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
-				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
-				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
-				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
-				E5626125299E64F300D14020 /* FavorDivider.swift */,
-				2EA384BD299248200081499C /* FavorSearchBar.swift */,
-				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
-				E56260F029908F0100D14020 /* CategoryView.swift */,
-				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
-				2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		E5B182912974F43E00229C50 /* Utils */ = {
