@@ -446,8 +446,8 @@
 				2E76F58629601EC3002FF001 /* Splash */,
 				2E1C5659296C24AE0067FC78 /* Auth */,
 				2EE07ED4296E8DFF00048A3C /* Gift */,
-				2EE07EA3296C602100048A3C /* NewGift */,
 				2EE07EB9296E8CC700048A3C /* Home */,
+				2EE07EA3296C602100048A3C /* NewGift */,
 				2EE07E9F296C5F1D00048A3C /* Search */,
 				2EE07EBD296E8D2300048A3C /* MyPage */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
@@ -638,8 +638,7 @@
 				2EBB0155295E8CFD0072D158 /* Views */,
 				2EBB0156295E8D0A0072D158 /* ViewControllers */,
 			);
-			name = Home;
-			path = Home/Home;
+			path = Home;
 			sourceTree = "<group>";
 		};
 		2EE07EBA296E8CE600048A3C /* ViewControllers */ = {
