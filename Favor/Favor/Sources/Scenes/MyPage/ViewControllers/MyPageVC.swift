@@ -206,7 +206,7 @@ final class MyPageViewController: BaseViewController, View {
     self.tempEditButton.snp.makeConstraints { make in
       make.trailing.equalToSuperview().offset(-20)
       make.bottom.equalToSuperview().offset(-9)
-      make.height.width.equalTo(38)
+      make.height.width.equalTo(39)
     }
 
     self.headerView.snp.makeConstraints { make in
