@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00561929A7E40F006CF302 /* ScrollDirection.swift */; };
+		2E00561C29A7E720006CF302 /* SelectFavorSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00561B29A7E720006CF302 /* SelectFavorSection.swift */; };
+		2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00561D29A8B131006CF302 /* MyPageSectionFooterView.swift */; };
 		2E11C2FF29A7AB29004B5C4A /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */; };
 		2E171164298035A400E34121 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E171163298035A400E34121 /* TabBarController.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
@@ -133,6 +136,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2E00561929A7E40F006CF302 /* ScrollDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollDirection.swift; sourceTree = "<group>"; };
+		2E00561B29A7E720006CF302 /* SelectFavorSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFavorSection.swift; sourceTree = "<group>"; };
+		2E00561D29A8B131006CF302 /* MyPageSectionFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionFooterView.swift; sourceTree = "<group>"; };
 		2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		2E171163298035A400E34121 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
@@ -347,6 +353,7 @@
 		2E6C90BA29A61F2400AF963A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2E00561B29A7E720006CF302 /* SelectFavorSection.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -493,6 +500,7 @@
 				E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */,
 				E562611F299DD37200D14020 /* SmallFavorButtonType.swift */,
 				E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */,
+				2E00561929A7E40F006CF302 /* ScrollDirection.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -680,6 +688,7 @@
 				2EB3AE92299E3E2700D31541 /* BackgroundView.swift */,
 				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
 				2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */,
+				2E00561D29A8B131006CF302 /* MyPageSectionFooterView.swift */,
 				2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */,
 			);
 			path = Views;
@@ -993,6 +1002,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EA384B8299235990081499C /* SearchReactor.swift in Sources */,
+				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* NewProfileCell.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInReactor.swift in Sources */,
@@ -1038,9 +1048,11 @@
 				E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */,
 				2EA384A2298D7CC10081499C /* HomeReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
+				2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
+				2E00561C29A7E720006CF302 /* SelectFavorSection.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EC371FC2995266B00D1007B /* SearchResultReactor.swift in Sources */,
 				E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */,

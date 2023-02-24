@@ -173,6 +173,9 @@ final class MyPageViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.sections }
+      .do(onNext: {
+        print($0)
+      })
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }

@@ -53,10 +53,11 @@ final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying,
     
     // State
     reactor.state.map { $0.sectionType }
+      .filter { $0 != nil }
       .bind(with: self, onNext: { owner, sectionType in
-        owner.headerTitle.text = sectionType.headerTitle
+        owner.headerTitle.text = sectionType?.headerTitle
 
-        if let buttonTitle = sectionType.headerRightItemTitle {
+        if let buttonTitle = sectionType?.headerRightItemTitle {
           var titleContainer = AttributeContainer()
           titleContainer.foregroundColor = .favorColor(.explain)
           titleContainer.font = .favorFont(.regular, size: 12)
@@ -64,6 +65,14 @@ final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying,
         } else {
           owner.rightButton.isHidden = true
         }
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.title }
+      .filter { $0 != nil }
+      .asDriver(onErrorJustReturn: "")
+      .drive(with: self, onNext: { owner, title in
+        owner.headerTitle.text = title
       })
       .disposed(by: self.disposeBag)
   }

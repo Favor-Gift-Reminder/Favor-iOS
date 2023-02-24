@@ -60,9 +60,9 @@ final class MyPageReactor: Reactor, Stepper {
   }
 }
 
-// MARK: - Privates
+// MARK: - Temporaries
 
-private extension MyPageReactor {
+extension MyPageReactor {
   static func setupMockSection() -> [MyPageSection] {
     let giftCount = MyPageSectionItem.giftStat(GiftStatCellReactor())
     let giftCountSection = MyPageSection.giftStat([giftCount])

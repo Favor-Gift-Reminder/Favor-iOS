@@ -22,7 +22,8 @@ final class MyPageSectionHeaderReactor: Reactor {
   }
   
   struct State {
-    var sectionType: MyPageSection
+    var title: String?
+    var sectionType: MyPageSection?
   }
   
   // MARK: - Initializer
@@ -30,6 +31,12 @@ final class MyPageSectionHeaderReactor: Reactor {
   init(section: MyPageSection) {
     self.initialState = State(
       sectionType: section
+    )
+  }
+
+  init(title: String) {
+    self.initialState = State(
+      title: title
     )
   }
   
