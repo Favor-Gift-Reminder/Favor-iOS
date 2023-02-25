@@ -104,6 +104,10 @@ final class SignInViewController: BaseViewController, View {
   // MARK: - Functions
   
   // MARK: - UI Setups
+
+  override func setupStyles() {
+    super.setupStyles()
+  }
   
   override func setupLayouts() {
     [
