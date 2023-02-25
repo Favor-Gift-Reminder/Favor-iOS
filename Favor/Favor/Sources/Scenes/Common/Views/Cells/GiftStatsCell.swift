@@ -1,5 +1,5 @@
 //
-//  GiftStatCell.swift
+//  GiftStatsCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -10,7 +10,7 @@ import UIKit
 import ReactorKit
 import SnapKit
 
-final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
+final class GiftStatsCell: UICollectionViewCell, ReuseIdentifying, View {
 
   // MARK: - Constants
 
@@ -32,27 +32,12 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
     stackView.spacing = Metric.threeItemsSpacing
     return stackView
   }()
-  
-  private lazy var totalGiftCountLabel: UILabel = self.makeCountLabel()
-  private lazy var totalGiftTitleLabel: UILabel = self.makeTitleLabel(title: "총 선물")
-  private lazy var totalGiftStack: UIStackView = self.makeGiftItem(
-    countLabel: self.totalGiftCountLabel,
-    titleLabel: self.totalGiftTitleLabel
-  )
-  
-  private lazy var receivedGiftCountLabel: UILabel = self.makeCountLabel()
-  private lazy var receivedGiftTItleLabel: UILabel = self.makeTitleLabel(title: "받은 선물")
-  private lazy var receivedGiftStack: UIStackView = self.makeGiftItem(
-    countLabel: self.receivedGiftCountLabel,
-    titleLabel: self.receivedGiftTItleLabel
-  )
-  
-  private lazy var givenGiftCountLabel: UILabel = self.makeCountLabel()
-  private lazy var givenGiftTitleLabel: UILabel = self.makeTitleLabel(title: "준 선물")
-  private lazy var givenGiftStack: UIStackView = self.makeGiftItem(
-    countLabel: self.givenGiftCountLabel,
-    titleLabel: self.givenGiftTitleLabel
-  )
+
+  private lazy var totalStack: UIStackView = self.makeGiftStackItem(title: "총 선물")
+
+  private lazy var receivedStack: UIStackView = self.makeGiftStackItem(title: "받은 선물")
+
+  private lazy var givenGiftStack: UIStackView = self.makeGiftStackItem(title: "준 선물")
   
   // MARK: - Initializer
   
@@ -69,7 +54,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Bind
   
-  func bind(reactor: GiftStatCellReactor) {
+  func bind(reactor: GiftStatsCellReactor) {
     // Action
     
     // State
@@ -79,7 +64,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
 
 // MARK: - Setup
 
-extension GiftStatCell: BaseView {
+extension GiftStatsCell: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.background)
     self.round(corners: [.topLeft, .topRight], radius: 24)
@@ -91,10 +76,11 @@ extension GiftStatCell: BaseView {
     ].forEach {
       self.addSubview($0)
     }
-    
+
+    // TODO: Stack을 넣고 뺴는 로직 필요
     [
-      self.totalGiftStack,
-      self.receivedGiftStack,
+      self.totalStack,
+      self.receivedStack,
       self.givenGiftStack
     ].forEach {
       self.hStack.addArrangedSubview($0)
@@ -115,9 +101,11 @@ extension GiftStatCell: BaseView {
 
 // MARK: - Privates
 
-private extension GiftStatCell {
-  func makeGiftItem(countLabel: UILabel, titleLabel: UILabel) -> UIStackView {
+private extension GiftStatsCell {
+  func makeGiftStackItem(title: String) -> UIStackView {
     let stackView = self.makeGiftStackView()
+    let countLabel = self.makeCountLabel()
+    let titleLabel = self.makeTitleLabel(title: title)
     [
       countLabel,
       titleLabel

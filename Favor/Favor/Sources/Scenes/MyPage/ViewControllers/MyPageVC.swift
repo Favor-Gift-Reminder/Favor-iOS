@@ -28,11 +28,11 @@ final class MyPageViewController: BaseViewController, View {
   let dataSource = MyPageDataSource(
     configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
       switch items {
-      case .giftStat(let reactor):
+      case .giftStats(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: GiftStatCell.reuseIdentifier,
+          withReuseIdentifier: GiftStatsCell.reuseIdentifier,
           for: indexPath
-        ) as? GiftStatCell else { return UICollectionViewCell() }
+        ) as? GiftStatsCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         cell.layer.zPosition = 1
         return cell
@@ -115,8 +115,8 @@ final class MyPageViewController: BaseViewController, View {
     
     // CollectionViewCell
     collectionView.register(
-      GiftStatCell.self,
-      forCellWithReuseIdentifier: GiftStatCell.reuseIdentifier
+      GiftStatsCell.self,
+      forCellWithReuseIdentifier: GiftStatsCell.reuseIdentifier
     )
     collectionView.register(
       NewProfileCell.self,
@@ -302,7 +302,7 @@ private extension MyPageViewController {
     // Header & Background
     let sectionItem = self.dataSource[sectionIndex]
     switch sectionType {
-    case .giftStat: break
+    case .giftStats: break
     default:
       section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
       section.decorationItems = [

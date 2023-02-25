@@ -10,7 +10,7 @@ import UIKit
 import RxDataSources
 
 enum MyPageSectionItem {
-  case giftStat(GiftStatCellReactor)
+  case giftStats(GiftStatsCellReactor)
   case newProfile(NewProfileCellReactor)
   case favor(FavorCellReactor)
   case anniversary(AnniversaryCellReactor)
@@ -18,7 +18,7 @@ enum MyPageSectionItem {
 }
 
 enum MyPageSection {
-  case giftStat([MyPageSectionItem])
+  case giftStats([MyPageSectionItem])
   case newProfile([MyPageSectionItem])
   case favor([MyPageSectionItem])
   case anniversary([MyPageSectionItem])
@@ -30,7 +30,7 @@ extension MyPageSection: SectionModelType {
   
   var items: [MyPageSectionItem] {
     switch self {
-    case .giftStat(let items):
+    case .giftStats(let items):
       return items
     case .newProfile(let items):
       return items
@@ -45,8 +45,8 @@ extension MyPageSection: SectionModelType {
   
   init(original: MyPageSection, items: [MyPageSectionItem]) {
     switch original {
-    case .giftStat:
-      self = .giftStat(items)
+    case .giftStats:
+      self = .giftStats(items)
     case .newProfile:
       self = .newProfile(items)
     case .favor:
@@ -60,7 +60,7 @@ extension MyPageSection: SectionModelType {
 
   var headerTitle: String? {
     switch self {
-    case .giftStat: return nil
+    case .giftStats: return nil
     case .newProfile: return "새 프로필"
     case .favor: return "취향"
     case .anniversary: return "기념일"
@@ -88,7 +88,7 @@ extension MyPageSection {
   
   var cellSize: NSCollectionLayoutSize {
     switch self {
-    case .giftStat:
+    case .giftStats:
       return .init(
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .absolute(131)
@@ -118,14 +118,14 @@ extension MyPageSection {
   
   var sectionInset: NSDirectionalEdgeInsets {
     switch self {
-    case .giftStat: return .zero
+    case .giftStats: return .zero
     default: return .init(top: 0, leading: 20, bottom: 40, trailing: 20)
     }
   }
   
   var spacing: CGFloat {
     switch self {
-    case .giftStat: return .zero
+    case .giftStats: return .zero
     case .newProfile: return 8.0
     case .favor: return 10.0
     case .anniversary: return 10.0

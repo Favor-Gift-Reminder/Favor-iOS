@@ -64,8 +64,8 @@ final class MyPageViewReactor: Reactor, Stepper {
 
 extension MyPageViewReactor {
   static func setupMockSection() -> [MyPageSection] {
-    let giftCount = MyPageSectionItem.giftStat(GiftStatCellReactor())
-    let giftCountSection = MyPageSection.giftStat([giftCount])
+    let giftCount = MyPageSectionItem.giftStats(GiftStatsCellReactor())
+    let giftCountSection = MyPageSection.giftStats([giftCount])
     
     let newProfile1 = MyPageSectionItem.newProfile(NewProfileCellReactor())
     let newProfile2 = MyPageSectionItem.newProfile(NewProfileCellReactor())

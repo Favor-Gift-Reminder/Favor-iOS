@@ -1,5 +1,5 @@
 //
-//  GiftStatCellReactor.swift
+//  GiftStatsCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class GiftStatCellReactor: Reactor {
+final class GiftStatsCellReactor: Reactor {
   
   // MARK: - Properties
   
