@@ -15,6 +15,10 @@ import Then
 final class SignInViewController: BaseViewController, View {
   
   // MARK: - Constants
+
+  private enum Metric {
+    static let sectionSpacing = 56.0
+  }
   
   // MARK: - Properties
   
@@ -28,45 +32,30 @@ final class SignInViewController: BaseViewController, View {
     return textField
   }()
   
-  private lazy var pwTextField: FavorTextField = {
+  private lazy var passwordTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
     textField.isSecureField = true
     textField.textField.returnKeyType = .done
     return textField
   }()
-  
-  private lazy var loginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main("시작하기"))
-    return button
-  }()
-  
-  private lazy var vStack: UIStackView = {
+
+  private lazy var textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 72.0
-    stackView.addArrangedSubview(self.emailTextField)
-    stackView.addArrangedSubview(self.pwTextField)
-    stackView.addArrangedSubview(self.loginButton)
+    stackView.spacing = 32
     return stackView
   }()
   
-  private lazy var forgotEmailButton: PlainFavorButton = {
-    let button = PlainFavorButton(with: .logIn("이메일 찾기"))
-    return button
-  }()
+  private lazy var signInButton = LargeFavorButton(with: .main("로그인"))
   
-  private lazy var forgotPWButton: PlainFavorButton = {
-    let button = PlainFavorButton(with: .logIn("비밀번호 찾기"))
-    return button
-  }()
-  
-  private lazy var hStack: UIStackView = {
+  private lazy var findPasswordButton = PlainFavorButton(with: .logIn("비밀번호 찾기"))
+
+  private lazy var buttonStack: UIStackView = {
     let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.spacing = 16.0
-    stackView.addArrangedSubview(self.forgotEmailButton)
-    stackView.addArrangedSubview(self.forgotPWButton)
+    stackView.axis = .vertical
+    stackView.spacing = 32
+    stackView.contentMode = .center
     return stackView
   }()
   
@@ -77,28 +66,37 @@ final class SignInViewController: BaseViewController, View {
   func bind(reactor: SignInReactor) {
     // Action
     Observable.just(())
-      .bind(with: self, onNext: { owner, _ in
-        owner.emailTextField.becomeFirstResponder()
+      .asDriver(onErrorJustReturn: ())
+      .drive(with: self, onNext: { owner, _ in
+        owner.emailTextField.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
-    
+
     self.emailTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
-        owner.pwTextField.becomeFirstResponder()
+        owner.passwordTextField.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
-    self.pwTextField.rx.editingDidEndOnExit
-      .map { Reactor.Action.returnKeyboardTap }
-      .bind(to: reactor.action)
+    self.passwordTextField.rx.editingDidEndOnExit
+      .asDriver(onErrorJustReturn: ())
+      .drive(with: self, onNext: { owner, _ in
+        owner.passwordTextField.textField.resignFirstResponder()
+      })
       .disposed(by: self.disposeBag)
     
-    self.loginButton.rx.tap
-      .map { Reactor.Action.loginButtonTap }
+    self.signInButton.rx.tap
+      .map { Reactor.Action.signInButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.findPasswordButton.rx.tap
+      .map { Reactor.Action.findPasswordButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     // State
+
   }
   
   // MARK: - Functions
@@ -111,22 +109,36 @@ final class SignInViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.vStack,
-      self.hStack
+      self.emailTextField,
+      self.passwordTextField
+    ].forEach {
+      self.textFieldStack.addArrangedSubview($0)
+    }
+
+    [
+      self.signInButton,
+      self.findPasswordButton
+    ].forEach {
+      self.buttonStack.addArrangedSubview($0)
+    }
+
+    [
+      self.textFieldStack,
+      self.buttonStack
     ].forEach {
       self.view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    self.vStack.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+    self.textFieldStack.snp.makeConstraints { make in
+      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(Metric.sectionSpacing)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
-    
-    self.hStack.snp.makeConstraints { make in
-      make.top.equalTo(self.vStack.snp.bottom).offset(32)
-      make.centerX.equalToSuperview()
+
+    self.buttonStack.snp.makeConstraints { make in
+      make.top.equalTo(self.textFieldStack.snp.bottom).offset(Metric.sectionSpacing)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }
   

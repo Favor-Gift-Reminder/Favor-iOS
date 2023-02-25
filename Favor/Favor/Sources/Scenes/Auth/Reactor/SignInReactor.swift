@@ -6,6 +6,7 @@
 //
 
 import OSLog
+import UIKit
 
 import ReactorKit
 
@@ -16,16 +17,19 @@ final class SignInReactor: Reactor {
   var initialState: State
   
   enum Action {
-    case loginButtonTap
-    case returnKeyboardTap
+    case viewDidLoad
+    case emailDidEndOnExit
+    case passwordDidEndOnExit
+    case signInButtonDidTap
+    case findPasswordButtonDidTap
   }
   
   enum Mutation {
-    
+
   }
   
   struct State {
-    
+
   }
   
   // MARK: - Initializer
@@ -38,10 +42,31 @@ final class SignInReactor: Reactor {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .loginButtonTap, .returnKeyboardTap:
-      os_log(.error, "Login logic should be implemented.")
-      return Observable<Mutation>.empty()
+    case .viewDidLoad:
+      os_log(.debug, "View did load.")
+      return .empty()
+    case .emailDidEndOnExit:
+      os_log(.debug, "Email TextField did end on exit.")
+      return .empty()
+    case .passwordDidEndOnExit:
+      os_log(.debug, "Password TextField did end on exit.")
+      return .empty()
+    case .signInButtonDidTap:
+      os_log(.debug, "Sign in button did tap.")
+      return .empty()
+    case .findPasswordButtonDidTap:
+      os_log(.debug, "Find password button did tap.")
+      return .empty()
     }
   }
-  
+
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+
+    switch mutation {
+      
+    }
+
+    return newState
+  }
 }
