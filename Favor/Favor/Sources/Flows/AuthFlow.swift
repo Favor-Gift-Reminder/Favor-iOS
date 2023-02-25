@@ -57,7 +57,7 @@ final class AuthFlow: Flow {
 private extension AuthFlow {
   func navigationToAuth() -> FlowContributors {
     let viewController = SelectSignInViewController()
-    let reactor = SelectSignInReactor()
+    let reactor = SelectSignInViewReactor()
     viewController.reactor = reactor
     self.rootViewController.setViewControllers([viewController], animated: true)
     
@@ -85,7 +85,7 @@ private extension AuthFlow {
   
   func NavigationToSignIn() -> FlowContributors {
     let viewController = SignInViewController()
-    let reactor = SignInReactor()
+    let reactor = SignInViewReactor()
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
@@ -94,7 +94,7 @@ private extension AuthFlow {
   
   func NavigationToSignUp() -> FlowContributors {
     let viewController = SignUpViewController()
-    let reactor = SignUpReactor()
+    let reactor = SignUpViewReactor()
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
@@ -103,7 +103,7 @@ private extension AuthFlow {
   
   func NavigationToSetProfile() -> FlowContributors {
     let viewController = SetProfileViewController()
-    let reactor = SetProfileReactor(pickerManager: PHPickerManager())
+    let reactor = SetProfileViewReactor(pickerManager: PHPickerManager())
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     

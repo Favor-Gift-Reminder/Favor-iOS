@@ -50,7 +50,7 @@ final class SelectSignInViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SelectSignInReactor) {
+  func bind(reactor: SelectSignInViewReactor) {
     // Action
     
     self.emailLoginButton.rx.tap
