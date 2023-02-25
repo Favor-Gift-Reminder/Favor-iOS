@@ -310,10 +310,6 @@
 			isa = PBXGroup;
 			children = (
 				2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */,
-				2EC939E02998BEAD00C8C47F /* GiftStatCell.swift */,
-				2EC939E42998C68900C8C47F /* FavorCell.swift */,
-				2EC939E22998C63200C8C47F /* NewProfileCell.swift */,
-				2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */,
 				2E6C90B029A607BD00AF963A /* FriendCell.swift */,
 			);
 			path = Cells;
@@ -322,10 +318,6 @@
 		2E6C90B329A607E100AF963A /* CellReactors */ = {
 			isa = PBXGroup;
 			children = (
-				2EC939F0299CF67E00C8C47F /* GiftStatCellReactor.swift */,
-				2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */,
-				2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */,
-				2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */,
 				2E6C90B429A607FA00AF963A /* FriendCellReactor.swift */,
 			);
 			path = CellReactors;
@@ -351,6 +343,17 @@
 			children = (
 				2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */,
 				2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */,
+			);
+			path = CellReactors;
+			sourceTree = "<group>";
+		};
+		2E6EBFB829A9B01700A924B9 /* CellReactors */ = {
+			isa = PBXGroup;
+			children = (
+				2EC939F0299CF67E00C8C47F /* GiftStatCellReactor.swift */,
+				2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */,
+				2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */,
+				2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */,
 			);
 			path = CellReactors;
 			sourceTree = "<group>";
@@ -772,6 +775,10 @@
 		E517803729A8E88A0011C220 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				2EC939E02998BEAD00C8C47F /* GiftStatCell.swift */,
+				2EC939E42998C68900C8C47F /* FavorCell.swift */,
+				2EC939E22998C63200C8C47F /* NewProfileCell.swift */,
+				2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -797,6 +804,7 @@
 		E517803929A8E8DD0011C220 /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
+				2E6EBFB829A9B01700A924B9 /* CellReactors */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
