@@ -17,7 +17,7 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Constants
 
-  enum ElementKind {
+  private enum ElementKind {
     static let favorSelectionHeaderElementKind = "favor_selection_header"
     static let favorSelectionFooterElementKind = "favor_selection_footer"
     static let newAnniversaryHeaderElementKind = "new_anniversary_header"
