@@ -328,32 +328,26 @@ private extension EditMyPageViewController {
     section.orthogonalScrollingBehavior = .continuousGroupLeadingBoundary
 
     // Header
-    section.boundarySupplementaryItems.append(self.createFavorSelectionHeader())
-    section.boundarySupplementaryItems.append(self.createFavorSelectionFooter())
+    section.boundarySupplementaryItems.append(contentsOf: [
+      CompositionalLayoutFactory.shared.make(
+        .header,
+        layoutSize: NSCollectionLayoutSize(
+          widthDimension: .fractionalWidth(1.0),
+          heightDimension: .estimated(40)
+        ),
+        kind: ElementKind.favorSelectionHeaderElementKind
+      ),
+      CompositionalLayoutFactory.shared.make(
+        .footer,
+        layoutSize: NSCollectionLayoutSize(
+          widthDimension: .fractionalWidth(1.0),
+          heightDimension: .estimated(39)
+        ),
+        kind: ElementKind.favorSelectionFooterElementKind
+      )
+    ])
 
     return section
-  }
-
-  func createFavorSelectionHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
-    return NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(40)
-      ),
-      elementKind: ElementKind.favorSelectionHeaderElementKind,
-      alignment: .top
-    )
-  }
-
-  func createFavorSelectionFooter() -> NSCollectionLayoutBoundarySupplementaryItem {
-    return NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(39)
-      ),
-      elementKind: ElementKind.favorSelectionFooterElementKind,
-      alignment: .bottom
-    )
   }
 
   func setupNewAnniversaryCollectionViewLayout() -> UICollectionViewCompositionalLayout {
@@ -389,19 +383,17 @@ private extension EditMyPageViewController {
     section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
 
     // Header
-    section.boundarySupplementaryItems.append(self.createNewAnniversaryHeader())
+    section.boundarySupplementaryItems.append(
+      CompositionalLayoutFactory.shared.make(
+        .header,
+        layoutSize: NSCollectionLayoutSize(
+          widthDimension: .fractionalWidth(1.0),
+          heightDimension: .estimated(140)
+        ),
+        kind: ElementKind.newAnniversaryHeaderElementKind
+      )
+    )
 
     return section
-  }
-
-  func createNewAnniversaryHeader() -> NSCollectionLayoutBoundarySupplementaryItem {
-    return NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(140)
-      ),
-      elementKind: ElementKind.newAnniversaryHeaderElementKind,
-      alignment: .top
-    )
   }
 }

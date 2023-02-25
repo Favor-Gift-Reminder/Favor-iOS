@@ -16,6 +16,12 @@ final class CompositionalLayoutFactory {
     return Static.instance
   }
 
+  /// CompositionalLayout을 사용하는 CollectionView에서 적용되는 Group 객체를 생성합니다.
+  /// - Parameters:
+  ///   - direction: 그룹이 정렬되는 방향
+  ///   - layoutSize: 그룹의 크기
+  ///   - subItem: 그룹을 구성하는 CompositionalItem
+  ///   - count: subItem의 개수
   func makeCompositionalGroup(
     direction: UICollectionView.ScrollDirection,
     layoutSize: NSCollectionLayoutSize,
@@ -59,5 +65,27 @@ final class CompositionalLayoutFactory {
       }
     }
     return group
+  }
+
+  enum BoundarySupplementaryItemType {
+    case header, footer
+  }
+
+  /// CompositionalLayout을 사용하는 CollectionView에서 적용되는 헤더/푸터 객체를 생성합니다.
+  /// - Parameters:
+  ///   - layoutSize: 헤더/푸터의 크기
+  ///   - kind: 헤더/푸터를 식별하기 위한 ElementKind
+  ///   - type: 헤더/푸터 선택 (`.header`, `.footer`)
+  func make(
+    _ type: BoundarySupplementaryItemType,
+    layoutSize: NSCollectionLayoutSize,
+    kind: String
+  ) -> NSCollectionLayoutBoundarySupplementaryItem {
+    let alignment: NSRectAlignment = (type == .header) ? .top : .bottom
+    return NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: layoutSize,
+      elementKind: kind,
+      alignment: alignment
+    )
   }
 }
