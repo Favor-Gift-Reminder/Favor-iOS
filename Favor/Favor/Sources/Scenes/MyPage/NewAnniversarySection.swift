@@ -13,7 +13,7 @@ struct NewAnniversarySection {
 }
 
 extension NewAnniversarySection: SectionModelType {
-  typealias Item = AnniversaryCellReactor
+  typealias Item = FavorAnniversaryCellReactor
 
   init(original: NewAnniversarySection, items: [Item]) {
     self = original

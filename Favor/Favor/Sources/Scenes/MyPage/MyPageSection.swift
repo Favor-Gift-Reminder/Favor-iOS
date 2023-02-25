@@ -13,7 +13,7 @@ enum MyPageSectionItem {
   case giftStats(GiftStatsCellReactor)
   case setupProfile(FavorSetupProfileCellReactor)
   case prefers(FavorPrefersCellReactor)
-  case anniversary(AnniversaryCellReactor)
+  case anniversary(FavorAnniversaryCellReactor)
   case friend(FriendCellReactor)
 }
 

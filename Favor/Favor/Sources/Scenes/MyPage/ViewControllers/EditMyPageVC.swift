@@ -59,9 +59,9 @@ final class EditMyPageViewController: BaseViewController, View {
 
   let newAnniversaryDataSource = NewAnniversaryDataSource(configureCell: { _, collectionView, indexPath, reactor in
     guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: AnniversaryCell.reuseIdentifier,
+      withReuseIdentifier: FavorAnniversaryCell.reuseIdentifier,
       for: indexPath
-    ) as? AnniversaryCell else { return UICollectionViewCell() }
+    ) as? FavorAnniversaryCell else { return UICollectionViewCell() }
     cell.reactor = reactor
     return cell
   }, configureSupplementaryView: { _, collectionView, kind, indexPath in
@@ -169,8 +169,8 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // CollectionView Cell
     collectionView.register(
-      AnniversaryCell.self,
-      forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
+      FavorAnniversaryCell.self,
+      forCellWithReuseIdentifier: FavorAnniversaryCell.reuseIdentifier
     )
 
     // Header

@@ -1,5 +1,5 @@
 //
-//  AnniversaryCell.swift
+//  FavorAnniversaryCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 
-class AnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
+class FavorAnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Properties
   
@@ -69,7 +69,7 @@ class AnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Bind
   
-  func bind(reactor: AnniversaryCellReactor) {
+  func bind(reactor: FavorAnniversaryCellReactor) {
     // Action
     
     // State
@@ -79,7 +79,7 @@ class AnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
 
 // MARK: - Setup
 
-extension AnniversaryCell: BaseView {
+extension FavorAnniversaryCell: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.divider)
     self.layer.cornerRadius = 24

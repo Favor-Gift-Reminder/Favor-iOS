@@ -80,7 +80,7 @@ private extension EditMyPageViewReactor {
   func setupNewAnniversaryMockSection() -> [NewAnniversarySection] {
     var items: [NewAnniversarySection.Item] = []
     (0..<3).forEach { _ in
-      items.append(AnniversaryCellReactor())
+      items.append(FavorAnniversaryCellReactor())
     }
     let newAnniversarySection = NewAnniversarySection(header: "기념일", items: items)
 

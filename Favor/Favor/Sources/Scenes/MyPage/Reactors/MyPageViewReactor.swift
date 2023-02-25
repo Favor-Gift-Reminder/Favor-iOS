@@ -76,9 +76,9 @@ extension MyPageViewReactor {
     let favor3 = MyPageSectionItem.prefers(FavorPrefersCellReactor())
     let favorSection = MyPageSection.prefers([favor1, favor2, favor3])
     
-    let anniversary1 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
-    let anniversary2 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
-    let anniversary3 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
+    let anniversary1 = MyPageSectionItem.anniversary(FavorAnniversaryCellReactor())
+    let anniversary2 = MyPageSectionItem.anniversary(FavorAnniversaryCellReactor())
+    let anniversary3 = MyPageSectionItem.anniversary(FavorAnniversaryCellReactor())
     let anniversarySection = MyPageSection.anniversary([anniversary1, anniversary2, anniversary3])
 
     let friend1 = MyPageSectionItem.friend(FriendCellReactor())

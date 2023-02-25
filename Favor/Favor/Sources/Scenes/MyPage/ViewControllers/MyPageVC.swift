@@ -50,9 +50,9 @@ final class MyPageViewController: BaseViewController, View {
       return cell
     case .anniversary(let reactor):
       guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: AnniversaryCell.reuseIdentifier,
+        withReuseIdentifier: FavorAnniversaryCell.reuseIdentifier,
         for: indexPath
-      ) as? AnniversaryCell else { return UICollectionViewCell() }
+      ) as? FavorAnniversaryCell else { return UICollectionViewCell() }
       cell.reactor = reactor
       return cell
     case .friend(let reactor):
@@ -119,8 +119,8 @@ final class MyPageViewController: BaseViewController, View {
       forCellWithReuseIdentifier: FavorPrefersCell.reuseIdentifier
     )
     collectionView.register(
-      AnniversaryCell.self,
-      forCellWithReuseIdentifier: AnniversaryCell.reuseIdentifier
+      FavorAnniversaryCell.self,
+      forCellWithReuseIdentifier: FavorAnniversaryCell.reuseIdentifier
     )
     collectionView.register(
       FriendCell.self,
