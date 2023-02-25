@@ -11,6 +11,13 @@ import ReactorKit
 import SnapKit
 
 final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let twoItemsSpacing = 120.0
+    static let threeItemsSpacing = 72.0
+  }
   
   // MARK: - Properties
   
@@ -22,7 +29,7 @@ final class GiftStatCell: UICollectionViewCell, ReuseIdentifying, View {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .equalSpacing
-    stackView.spacing = 72
+    stackView.spacing = Metric.threeItemsSpacing
     return stackView
   }()
   
@@ -100,6 +107,9 @@ extension GiftStatCell: BaseView {
       make.bottom.equalToSuperview().inset(40)
       make.centerX.equalToSuperview()
     }
+
+    let numberOfItems = self.hStack.arrangedSubviews.count
+    self.hStack.spacing = (numberOfItems == 2) ? Metric.twoItemsSpacing : Metric.threeItemsSpacing
   }
 }
 
