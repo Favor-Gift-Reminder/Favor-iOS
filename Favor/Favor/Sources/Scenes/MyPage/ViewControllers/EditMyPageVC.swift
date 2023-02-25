@@ -301,7 +301,7 @@ private extension EditMyPageViewController {
     )
 
     // Group
-    let innerGroup = self.createCompositionalGroup(
+    let innerGroup = CompositionalLayoutFactory.shared.makeCompositionalGroup(
       direction: .horizontal,
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
@@ -310,9 +310,8 @@ private extension EditMyPageViewController {
       subItem: item,
       count: 6
     )
-    innerGroup.interItemSpacing = .fixed(10)
 
-    let outerGroup = self.createCompositionalGroup(
+    let outerGroup = CompositionalLayoutFactory.shared.makeCompositionalGroup(
       direction: .vertical,
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
@@ -374,7 +373,7 @@ private extension EditMyPageViewController {
     )
 
     // Group
-    let group = self.createCompositionalGroup(
+    let group = CompositionalLayoutFactory.shared.makeCompositionalGroup(
       direction: .horizontal,
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
@@ -404,46 +403,5 @@ private extension EditMyPageViewController {
       elementKind: ElementKind.newAnniversaryHeaderElementKind,
       alignment: .top
     )
-  }
-
-  func createCompositionalGroup(
-    direction: ScrollDirection,
-    layoutSize: NSCollectionLayoutSize,
-    subItem: NSCollectionLayoutItem,
-    count: Int
-  ) -> NSCollectionLayoutGroup {
-    var group: NSCollectionLayoutGroup
-    if #available(iOS 16.0, *) {
-      switch direction {
-      case .vertical:
-        group = NSCollectionLayoutGroup.vertical(
-          layoutSize: layoutSize,
-          repeatingSubitem: subItem,
-          count: count
-        )
-      case .horizontal:
-        group = NSCollectionLayoutGroup.horizontal(
-          layoutSize: layoutSize,
-          repeatingSubitem: subItem,
-          count: count
-        )
-      }
-    } else {
-      switch direction {
-      case .horizontal:
-        group = NSCollectionLayoutGroup.horizontal(
-          layoutSize: layoutSize,
-          subitem: subItem,
-          count: count
-        )
-      case .vertical:
-        group = NSCollectionLayoutGroup.vertical(
-          layoutSize: layoutSize,
-          subitem: subItem,
-          count: count
-        )
-      }
-    }
-    return group
   }
 }

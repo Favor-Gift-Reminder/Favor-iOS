@@ -255,29 +255,18 @@ private extension MyPageViewController {
     )
     
     // Group
-    var group: NSCollectionLayoutGroup
     var widthDimension: NSCollectionLayoutDimension {
       isHorizontalScrollable ? .fractionalWidth(1.0) : sectionType.cellSize.widthDimension
     }
-    if #available(iOS 16.0, *) {
-      group = NSCollectionLayoutGroup.horizontal(
-        layoutSize: .init(
-          widthDimension: widthDimension,
-          heightDimension: sectionType.cellSize.heightDimension
-        ),
-        repeatingSubitem: item,
-        count: sectionType.columns
-      )
-    } else {
-      group = NSCollectionLayoutGroup.horizontal(
-        layoutSize: .init(
-          widthDimension: widthDimension,
-          heightDimension: sectionType.cellSize.heightDimension
-        ),
-        subitem: item,
-        count: sectionType.columns
-      )
-    }
+    let group = CompositionalLayoutFactory.shared.makeCompositionalGroup(
+      direction: .horizontal,
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: widthDimension,
+        heightDimension: sectionType.cellSize.heightDimension
+      ),
+      subItem: item,
+      count: sectionType.columns
+    )
     group.interItemSpacing = .fixed(sectionType.spacing)
     
     // Section
