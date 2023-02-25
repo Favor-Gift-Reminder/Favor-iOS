@@ -71,10 +71,10 @@ extension MyPageViewReactor {
     let newProfile2 = MyPageSectionItem.newProfile(NewProfileCellReactor())
     let newProfileSection = MyPageSection.newProfile([newProfile1, newProfile2])
     
-    let favor1 = MyPageSectionItem.favor(FavorCellReactor())
-    let favor2 = MyPageSectionItem.favor(FavorCellReactor())
-    let favor3 = MyPageSectionItem.favor(FavorCellReactor())
-    let favorSection = MyPageSection.favor([favor1, favor2, favor3])
+    let favor1 = MyPageSectionItem.prefers(FavorPrefersCellReactor())
+    let favor2 = MyPageSectionItem.prefers(FavorPrefersCellReactor())
+    let favor3 = MyPageSectionItem.prefers(FavorPrefersCellReactor())
+    let favorSection = MyPageSection.prefers([favor1, favor2, favor3])
     
     let anniversary1 = MyPageSectionItem.anniversary(AnniversaryCellReactor())
     let anniversary2 = MyPageSectionItem.anniversary(AnniversaryCellReactor())

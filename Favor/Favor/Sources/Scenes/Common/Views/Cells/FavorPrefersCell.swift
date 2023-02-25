@@ -1,5 +1,5 @@
 //
-//  FavorCell.swift
+//  FavorPrefersCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -10,7 +10,7 @@ import UIKit
 import ReactorKit
 import SnapKit
 
-class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
+class FavorPrefersCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Properties
   
@@ -35,7 +35,7 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FavorCellReactor) {
+  func bind(reactor: FavorPrefersCellReactor) {
     // Action
     
     // State
@@ -45,7 +45,7 @@ class FavorCell: UICollectionViewCell, ReuseIdentifying, View {
 
 // MARK: - Setup
 
-extension FavorCell: BaseView {
+extension FavorPrefersCell: BaseView {
   func setupStyles() {
     //
   }

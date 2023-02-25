@@ -1,5 +1,5 @@
 //
-//  GiftStatsCell.swift
+//  FavorGiftStatsCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -10,7 +10,7 @@ import UIKit
 import ReactorKit
 import SnapKit
 
-final class GiftStatsCell: UICollectionViewCell, ReuseIdentifying, View {
+final class FavorGiftStatsCell: UICollectionViewCell, ReuseIdentifying, View {
 
   // MARK: - Constants
 
@@ -64,7 +64,7 @@ final class GiftStatsCell: UICollectionViewCell, ReuseIdentifying, View {
 
 // MARK: - Setup
 
-extension GiftStatsCell: BaseView {
+extension FavorGiftStatsCell: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.background)
     self.round(corners: [.topLeft, .topRight], radius: 24)
@@ -101,7 +101,7 @@ extension GiftStatsCell: BaseView {
 
 // MARK: - Privates
 
-private extension GiftStatsCell {
+private extension FavorGiftStatsCell {
   func makeGiftStackItem(title: String) -> UIStackView {
     let stackView = self.makeGiftStackView()
     let countLabel = self.makeCountLabel()

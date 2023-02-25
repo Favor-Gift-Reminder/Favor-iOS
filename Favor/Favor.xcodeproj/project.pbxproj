@@ -56,15 +56,15 @@
 		2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DA29967F1900C8C47F /* MyPageViewReactor.swift */; };
 		2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DC299684C000C8C47F /* MyPageFlow.swift */; };
 		2EC939DF2998B80200C8C47F /* MyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DE2998B80200C8C47F /* MyPageSection.swift */; };
-		2EC939E12998BEAD00C8C47F /* GiftStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E02998BEAD00C8C47F /* GiftStatsCell.swift */; };
+		2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E02998BEAD00C8C47F /* FavorGiftStatsCell.swift */; };
 		2EC939E32998C63200C8C47F /* NewProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E22998C63200C8C47F /* NewProfileCell.swift */; };
-		2EC939E52998C68900C8C47F /* FavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E42998C68900C8C47F /* FavorCell.swift */; };
+		2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E42998C68900C8C47F /* FavorPrefersCell.swift */; };
 		2EC939E72998C6D100C8C47F /* AnniversaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */; };
 		2EC939EB299A7D4300C8C47F /* MyPageSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */; };
 		2EC939EF299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift */; };
 		2EC939F1299CF67E00C8C47F /* GiftStatsCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* GiftStatsCellReactor.swift */; };
 		2EC939F3299CF6A300C8C47F /* NewProfileCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */; };
-		2EC939F5299CF6C400C8C47F /* FavorCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */; };
+		2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */; };
 		2EC939F7299CF6E800C8C47F /* AnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */; };
 		2EC939F9299E160B00C8C47F /* MyPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */; };
 		2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939FA299E163800C8C47F /* MyPageHeaderViewReactor.swift */; };
@@ -185,15 +185,15 @@
 		2EC939DA29967F1900C8C47F /* MyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewReactor.swift; sourceTree = "<group>"; };
 		2EC939DC299684C000C8C47F /* MyPageFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageFlow.swift; sourceTree = "<group>"; };
 		2EC939DE2998B80200C8C47F /* MyPageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSection.swift; sourceTree = "<group>"; };
-		2EC939E02998BEAD00C8C47F /* GiftStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftStatsCell.swift; sourceTree = "<group>"; };
+		2EC939E02998BEAD00C8C47F /* FavorGiftStatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorGiftStatsCell.swift; sourceTree = "<group>"; };
 		2EC939E22998C63200C8C47F /* NewProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProfileCell.swift; sourceTree = "<group>"; };
-		2EC939E42998C68900C8C47F /* FavorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorCell.swift; sourceTree = "<group>"; };
+		2EC939E42998C68900C8C47F /* FavorPrefersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorPrefersCell.swift; sourceTree = "<group>"; };
 		2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryCell.swift; sourceTree = "<group>"; };
 		2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionHeaderView.swift; sourceTree = "<group>"; };
 		2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2EC939F0299CF67E00C8C47F /* GiftStatsCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftStatsCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewProfileCellReactor.swift; sourceTree = "<group>"; };
-		2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorPrefersCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderView.swift; sourceTree = "<group>"; };
 		2EC939FA299E163800C8C47F /* MyPageHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderViewReactor.swift; sourceTree = "<group>"; };
@@ -351,7 +351,7 @@
 			isa = PBXGroup;
 			children = (
 				2EC939F0299CF67E00C8C47F /* GiftStatsCellReactor.swift */,
-				2EC939F4299CF6C400C8C47F /* FavorCellReactor.swift */,
+				2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */,
 				2EC939F2299CF6A300C8C47F /* NewProfileCellReactor.swift */,
 				2EC939F6299CF6E800C8C47F /* AnniversaryCellReactor.swift */,
 			);
@@ -775,8 +775,8 @@
 		E517803729A8E88A0011C220 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				2EC939E02998BEAD00C8C47F /* GiftStatsCell.swift */,
-				2EC939E42998C68900C8C47F /* FavorCell.swift */,
+				2EC939E02998BEAD00C8C47F /* FavorGiftStatsCell.swift */,
+				2EC939E42998C68900C8C47F /* FavorPrefersCell.swift */,
 				2EC939E22998C63200C8C47F /* NewProfileCell.swift */,
 				2EC939E62998C6D100C8C47F /* AnniversaryCell.swift */,
 			);
@@ -1044,7 +1044,7 @@
 				2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */,
 				E5626126299E64F300D14020 /* FavorDivider.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
-				2EC939E12998BEAD00C8C47F /* GiftStatsCell.swift in Sources */,
+				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
 				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
@@ -1089,13 +1089,13 @@
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
-				2EC939E52998C68900C8C47F /* FavorCell.swift in Sources */,
+				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
 				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2EA384C029936BAD0081499C /* String+.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* NewProfileCellReactor.swift in Sources */,
-				2EC939F5299CF6C400C8C47F /* FavorCellReactor.swift in Sources */,
+				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,

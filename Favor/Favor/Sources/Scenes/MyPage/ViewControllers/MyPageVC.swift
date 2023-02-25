@@ -30,9 +30,9 @@ final class MyPageViewController: BaseViewController, View {
       switch items {
       case .giftStats(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: GiftStatsCell.reuseIdentifier,
+          withReuseIdentifier: FavorGiftStatsCell.reuseIdentifier,
           for: indexPath
-        ) as? GiftStatsCell else { return UICollectionViewCell() }
+        ) as? FavorGiftStatsCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         cell.layer.zPosition = 1
         return cell
@@ -45,9 +45,9 @@ final class MyPageViewController: BaseViewController, View {
         return cell
       case .favor(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: FavorCell.reuseIdentifier,
+          withReuseIdentifier: FavorPrefersCell.reuseIdentifier,
           for: indexPath
-        ) as? FavorCell else { return UICollectionViewCell() }
+        ) as? FavorPrefersCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         return cell
       case .anniversary(let reactor):
@@ -115,16 +115,16 @@ final class MyPageViewController: BaseViewController, View {
     
     // CollectionViewCell
     collectionView.register(
-      GiftStatsCell.self,
-      forCellWithReuseIdentifier: GiftStatsCell.reuseIdentifier
+      FavorGiftStatsCell.self,
+      forCellWithReuseIdentifier: FavorGiftStatsCell.reuseIdentifier
     )
     collectionView.register(
       NewProfileCell.self,
       forCellWithReuseIdentifier: NewProfileCell.reuseIdentifier
     )
     collectionView.register(
-      FavorCell.self,
-      forCellWithReuseIdentifier: FavorCell.reuseIdentifier
+      FavorPrefersCell.self,
+      forCellWithReuseIdentifier: FavorPrefersCell.reuseIdentifier
     )
     collectionView.register(
       AnniversaryCell.self,

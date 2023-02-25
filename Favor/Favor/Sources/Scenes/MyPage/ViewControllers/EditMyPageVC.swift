@@ -28,9 +28,9 @@ final class EditMyPageViewController: BaseViewController, View {
   let favorSelectionDataSource = FavorSelectionDataSource(
     configureCell: { _, collectionView, indexPath, reactor in
       guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FavorCell.reuseIdentifier,
+        withReuseIdentifier: FavorPrefersCell.reuseIdentifier,
         for: indexPath
-      ) as? FavorCell else { return UICollectionViewCell() }
+      ) as? FavorPrefersCell else { return UICollectionViewCell() }
       cell.reactor = reactor
       return cell
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -138,8 +138,8 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // CollectionView Cell
     collectionView.register(
-      FavorCell.self,
-      forCellWithReuseIdentifier: FavorCell.reuseIdentifier
+      FavorPrefersCell.self,
+      forCellWithReuseIdentifier: FavorPrefersCell.reuseIdentifier
     )
 
     // Header

@@ -12,7 +12,7 @@ import RxDataSources
 enum MyPageSectionItem {
   case giftStats(GiftStatsCellReactor)
   case newProfile(NewProfileCellReactor)
-  case favor(FavorCellReactor)
+  case prefers(FavorPrefersCellReactor)
   case anniversary(AnniversaryCellReactor)
   case friend(FriendCellReactor)
 }
@@ -20,7 +20,7 @@ enum MyPageSectionItem {
 enum MyPageSection {
   case giftStats([MyPageSectionItem])
   case newProfile([MyPageSectionItem])
-  case favor([MyPageSectionItem])
+  case prefers([MyPageSectionItem])
   case anniversary([MyPageSectionItem])
   case friend([MyPageSectionItem])
 }
@@ -34,7 +34,7 @@ extension MyPageSection: SectionModelType {
       return items
     case .newProfile(let items):
       return items
-    case .favor(let items):
+    case .prefers(let items):
       return items
     case .anniversary(let items):
       return items
@@ -49,8 +49,8 @@ extension MyPageSection: SectionModelType {
       self = .giftStats(items)
     case .newProfile:
       self = .newProfile(items)
-    case .favor:
-      self = .favor(items)
+    case .prefers:
+      self = .prefers(items)
     case .anniversary:
       self = .anniversary(items)
     case .friend:
@@ -62,7 +62,7 @@ extension MyPageSection: SectionModelType {
     switch self {
     case .giftStats: return nil
     case .newProfile: return "새 프로필"
-    case .favor: return "취향"
+    case .prefers: return "취향"
     case .anniversary: return "기념일"
     case .friend: return "친구"
     }
@@ -98,7 +98,7 @@ extension MyPageSection {
         widthDimension: .absolute(250),
         heightDimension: .absolute(262)
       )
-    case .favor:
+    case .prefers:
       return .init(
         widthDimension: .estimated(60),
         heightDimension: .absolute(32)
@@ -127,7 +127,7 @@ extension MyPageSection {
     switch self {
     case .giftStats: return .zero
     case .newProfile: return 8.0
-    case .favor: return 10.0
+    case .prefers: return 10.0
     case .anniversary: return 10.0
     case .friend: return 26.0
     }
@@ -135,7 +135,7 @@ extension MyPageSection {
   
   var columns: Int {
     switch self {
-    case .favor: return 5
+    case .prefers: return 5
     default: return 1
     }
   }
@@ -150,7 +150,7 @@ extension MyPageSection {
   
   var widthStretchingDirection: ScrollDirection {
     switch self {
-    case .favor: return .horizontal
+    case .prefers: return .horizontal
     default: return .vertical
     }
   }
