@@ -10,17 +10,17 @@ import UIKit
 import RxDataSources
 
 enum MyPageSectionItem {
-  case giftStat(GiftStatCellReactor)
-  case newProfile(NewProfileCellReactor)
-  case favor(FavorCellReactor)
-  case anniversary(AnniversaryCellReactor)
+  case giftStats(GiftStatsCellReactor)
+  case setupProfile(FavorSetupProfileCellReactor)
+  case prefers(FavorPrefersCellReactor)
+  case anniversary(FavorAnniversaryCellReactor)
   case friend(FriendCellReactor)
 }
 
 enum MyPageSection {
-  case giftStat([MyPageSectionItem])
-  case newProfile([MyPageSectionItem])
-  case favor([MyPageSectionItem])
+  case giftStats([MyPageSectionItem])
+  case setupProfile([MyPageSectionItem])
+  case prefers([MyPageSectionItem])
   case anniversary([MyPageSectionItem])
   case friend([MyPageSectionItem])
 }
@@ -30,11 +30,11 @@ extension MyPageSection: SectionModelType {
   
   var items: [MyPageSectionItem] {
     switch self {
-    case .giftStat(let items):
+    case .giftStats(let items):
       return items
-    case .newProfile(let items):
+    case .setupProfile(let items):
       return items
-    case .favor(let items):
+    case .prefers(let items):
       return items
     case .anniversary(let items):
       return items
@@ -45,12 +45,12 @@ extension MyPageSection: SectionModelType {
   
   init(original: MyPageSection, items: [MyPageSectionItem]) {
     switch original {
-    case .giftStat:
-      self = .giftStat(items)
-    case .newProfile:
-      self = .newProfile(items)
-    case .favor:
-      self = .favor(items)
+    case .giftStats:
+      self = .giftStats(items)
+    case .setupProfile:
+      self = .setupProfile(items)
+    case .prefers:
+      self = .prefers(items)
     case .anniversary:
       self = .anniversary(items)
     case .friend:
@@ -60,9 +60,9 @@ extension MyPageSection: SectionModelType {
 
   var headerTitle: String? {
     switch self {
-    case .giftStat: return nil
-    case .newProfile: return "새 프로필"
-    case .favor: return "취향"
+    case .giftStats: return nil
+    case .setupProfile: return "새 프로필"
+    case .prefers: return "취향"
     case .anniversary: return "기념일"
     case .friend: return "친구"
     }
@@ -88,17 +88,17 @@ extension MyPageSection {
   
   var cellSize: NSCollectionLayoutSize {
     switch self {
-    case .giftStat:
+    case .giftStats:
       return .init(
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .absolute(131)
       )
-    case .newProfile:
+    case .setupProfile:
       return .init(
         widthDimension: .absolute(250),
         heightDimension: .absolute(262)
       )
-    case .favor:
+    case .prefers:
       return .init(
         widthDimension: .estimated(60),
         heightDimension: .absolute(32)
@@ -118,16 +118,16 @@ extension MyPageSection {
   
   var sectionInset: NSDirectionalEdgeInsets {
     switch self {
-    case .giftStat: return .zero
+    case .giftStats: return .zero
     default: return .init(top: 0, leading: 20, bottom: 40, trailing: 20)
     }
   }
   
   var spacing: CGFloat {
     switch self {
-    case .giftStat: return .zero
-    case .newProfile: return 8.0
-    case .favor: return 10.0
+    case .giftStats: return .zero
+    case .setupProfile: return 8.0
+    case .prefers: return 10.0
     case .anniversary: return 10.0
     case .friend: return 26.0
     }
@@ -135,16 +135,23 @@ extension MyPageSection {
   
   var columns: Int {
     switch self {
-    case .favor: return 3
+    case .prefers: return 5
     default: return 1
     }
   }
   
   var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
     switch self {
-    case .newProfile: return .groupPaging
+    case .setupProfile: return .groupPaging
     case .friend: return .continuous
     default: return .none
+    }
+  }
+  
+  var widthStretchingDirection: ScrollDirection {
+    switch self {
+    case .prefers: return .horizontal
+    default: return .vertical
     }
   }
 }

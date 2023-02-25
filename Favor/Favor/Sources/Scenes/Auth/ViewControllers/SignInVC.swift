@@ -63,7 +63,7 @@ final class SignInViewController: BaseViewController, View {
   
   // MARK: - Binding
   
-  func bind(reactor: SignInReactor) {
+  func bind(reactor: SignInViewReactor) {
     // Action
     Observable.just(())
       .asDriver(onErrorJustReturn: ())

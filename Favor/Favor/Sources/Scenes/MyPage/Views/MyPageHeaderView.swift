@@ -75,7 +75,7 @@ final class MyPageHeaderView: UIView, View {
   
   // MARK: - Binding
   
-  func bind(reactor: MyPageHeaderReactor) {
+  func bind(reactor: MyPageHeaderViewReactor) {
     // Action
     
     // State

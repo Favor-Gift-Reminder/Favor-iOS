@@ -34,7 +34,7 @@ final class MyPageFlow: Flow {
   
   private func navigateToMyPage() -> FlowContributors {
     let myPageVC = MyPageViewController()
-    let myPageReactor = MyPageReactor()
+    let myPageReactor = MyPageViewReactor()
     myPageVC.reactor = myPageReactor
     self.rootViewController.setViewControllers([myPageVC], animated: true)
     return .one(flowContributor: .contribute(
@@ -45,7 +45,7 @@ final class MyPageFlow: Flow {
 
   private func navigateToEditMyPage() -> FlowContributors {
     let editMyPageVC = EditMyPageViewController()
-    let editMyPageReactor = EditMyPageReactor()
+    let editMyPageReactor = EditMyPageViewReactor()
     editMyPageVC.reactor = editMyPageReactor
     self.rootViewController.pushViewController(editMyPageVC, animated: true)
     return .one(flowContributor: .contribute(
