@@ -280,21 +280,19 @@ private extension MyPageViewController {
     switch sectionType {
     case .giftStats: break
     default:
-      section.boundarySupplementaryItems.append(self.createHeader(section: sectionItem))
+      section.boundarySupplementaryItems.append(
+        CompositionalLayoutFactory.shared.make(
+          .header,
+          layoutSize: sectionType.headerSize,
+          kind: UICollectionView.elementKindSectionHeader
+        )
+      )
       section.decorationItems = [
         NSCollectionLayoutDecorationItem.background(elementKind: BackgroundView.reuseIdentifier)
       ]
     }
     
     return section
-  }
-  
-  func createHeader(section: MyPageSection) -> NSCollectionLayoutBoundarySupplementaryItem {
-    return NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: section.headerSize,
-      elementKind: UICollectionView.elementKindSectionHeader,
-      alignment: .top
-    )
   }
 
   func updateHeaderConstraintAndOpacity(offset: CGPoint) {
