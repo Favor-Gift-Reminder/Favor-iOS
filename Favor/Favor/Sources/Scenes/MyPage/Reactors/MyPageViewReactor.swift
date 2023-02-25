@@ -67,9 +67,9 @@ extension MyPageViewReactor {
     let giftCount = MyPageSectionItem.giftStats(GiftStatsCellReactor())
     let giftCountSection = MyPageSection.giftStats([giftCount])
     
-    let newProfile1 = MyPageSectionItem.newProfile(NewProfileCellReactor())
-    let newProfile2 = MyPageSectionItem.newProfile(NewProfileCellReactor())
-    let newProfileSection = MyPageSection.newProfile([newProfile1, newProfile2])
+    let newProfile1 = MyPageSectionItem.setupProfile(FavorSetupProfileCellReactor())
+    let newProfile2 = MyPageSectionItem.setupProfile(FavorSetupProfileCellReactor())
+    let newProfileSection = MyPageSection.setupProfile([newProfile1, newProfile2])
     
     let favor1 = MyPageSectionItem.prefers(FavorPrefersCellReactor())
     let favor2 = MyPageSectionItem.prefers(FavorPrefersCellReactor())

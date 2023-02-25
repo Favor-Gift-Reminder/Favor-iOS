@@ -38,9 +38,9 @@ final class MyPageViewController: BaseViewController, View {
         return cell
       case .newProfile(let reactor):
         guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: NewProfileCell.reuseIdentifier,
+          withReuseIdentifier: FavorSetupProfileCell.reuseIdentifier,
           for: indexPath
-        ) as? NewProfileCell else { return UICollectionViewCell() }
+        ) as? FavorSetupProfileCell else { return UICollectionViewCell() }
         cell.reactor = reactor
         return cell
       case .favor(let reactor):
@@ -119,8 +119,8 @@ final class MyPageViewController: BaseViewController, View {
       forCellWithReuseIdentifier: FavorGiftStatsCell.reuseIdentifier
     )
     collectionView.register(
-      NewProfileCell.self,
-      forCellWithReuseIdentifier: NewProfileCell.reuseIdentifier
+      FavorSetupProfileCell.self,
+      forCellWithReuseIdentifier: FavorSetupProfileCell.reuseIdentifier
     )
     collectionView.register(
       FavorPrefersCell.self,

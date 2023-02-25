@@ -1,5 +1,5 @@
 //
-//  NewProfileCell.swift
+//  FavorSetupProfileCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 
-class NewProfileCell: UICollectionViewCell, ReuseIdentifying, View {
+class FavorSetupProfileCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Properties
   
@@ -61,7 +61,7 @@ class NewProfileCell: UICollectionViewCell, ReuseIdentifying, View {
   
   // MARK: - Bind
   
-  func bind(reactor: NewProfileCellReactor) {
+  func bind(reactor: FavorSetupProfileCellReactor) {
     // Action
     
     // State
@@ -71,7 +71,7 @@ class NewProfileCell: UICollectionViewCell, ReuseIdentifying, View {
 
 // MARK: - Setup
 
-extension NewProfileCell: BaseView {
+extension FavorSetupProfileCell: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.divider)
     self.layer.cornerRadius = 8

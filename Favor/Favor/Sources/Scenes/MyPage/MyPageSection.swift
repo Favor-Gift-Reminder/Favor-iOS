@@ -11,7 +11,7 @@ import RxDataSources
 
 enum MyPageSectionItem {
   case giftStats(GiftStatsCellReactor)
-  case newProfile(NewProfileCellReactor)
+  case setupProfile(FavorSetupProfileCellReactor)
   case prefers(FavorPrefersCellReactor)
   case anniversary(AnniversaryCellReactor)
   case friend(FriendCellReactor)
@@ -19,7 +19,7 @@ enum MyPageSectionItem {
 
 enum MyPageSection {
   case giftStats([MyPageSectionItem])
-  case newProfile([MyPageSectionItem])
+  case setupProfile([MyPageSectionItem])
   case prefers([MyPageSectionItem])
   case anniversary([MyPageSectionItem])
   case friend([MyPageSectionItem])
@@ -32,7 +32,7 @@ extension MyPageSection: SectionModelType {
     switch self {
     case .giftStats(let items):
       return items
-    case .newProfile(let items):
+    case .setupProfile(let items):
       return items
     case .prefers(let items):
       return items
@@ -47,8 +47,8 @@ extension MyPageSection: SectionModelType {
     switch original {
     case .giftStats:
       self = .giftStats(items)
-    case .newProfile:
-      self = .newProfile(items)
+    case .setupProfile:
+      self = .setupProfile(items)
     case .prefers:
       self = .prefers(items)
     case .anniversary:
@@ -61,7 +61,7 @@ extension MyPageSection: SectionModelType {
   var headerTitle: String? {
     switch self {
     case .giftStats: return nil
-    case .newProfile: return "새 프로필"
+    case .setupProfile: return "새 프로필"
     case .prefers: return "취향"
     case .anniversary: return "기념일"
     case .friend: return "친구"
@@ -93,7 +93,7 @@ extension MyPageSection {
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .absolute(131)
       )
-    case .newProfile:
+    case .setupProfile:
       return .init(
         widthDimension: .absolute(250),
         heightDimension: .absolute(262)
@@ -126,7 +126,7 @@ extension MyPageSection {
   var spacing: CGFloat {
     switch self {
     case .giftStats: return .zero
-    case .newProfile: return 8.0
+    case .setupProfile: return 8.0
     case .prefers: return 10.0
     case .anniversary: return 10.0
     case .friend: return 26.0
@@ -142,7 +142,7 @@ extension MyPageSection {
   
   var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
     switch self {
-    case .newProfile: return .groupPaging
+    case .setupProfile: return .groupPaging
     case .friend: return .continuous
     default: return .none
     }
