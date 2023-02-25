@@ -24,60 +24,56 @@ final class MyPageViewController: BaseViewController, View {
   }
   
   // MARK: - Properties
-  
-  let dataSource = MyPageDataSource(
-    configureCell: { _, collectionView, indexPath, items -> UICollectionViewCell in
-      switch items {
-      case .giftStats(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: FavorGiftStatsCell.reuseIdentifier,
-          for: indexPath
-        ) as? FavorGiftStatsCell else { return UICollectionViewCell() }
-        cell.reactor = reactor
-        cell.layer.zPosition = 1
-        return cell
-      case .newProfile(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: FavorSetupProfileCell.reuseIdentifier,
-          for: indexPath
-        ) as? FavorSetupProfileCell else { return UICollectionViewCell() }
-        cell.reactor = reactor
-        return cell
-      case .favor(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: FavorPrefersCell.reuseIdentifier,
-          for: indexPath
-        ) as? FavorPrefersCell else { return UICollectionViewCell() }
-        cell.reactor = reactor
-        return cell
-      case .anniversary(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: AnniversaryCell.reuseIdentifier,
-          for: indexPath
-        ) as? AnniversaryCell else { return UICollectionViewCell() }
-        cell.reactor = reactor
-        return cell
-      case .friend(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: FriendCell.reuseIdentifier,
-          for: indexPath
-        ) as? FriendCell else { return UICollectionViewCell() }
-        cell.reactor = reactor
-        return cell
-      }
-    }
-    , configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-      guard let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
+
+  let dataSource = MyPageDataSource(configureCell: { _, collectionView, indexPath, items in
+    switch items {
+    case .giftStats(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: FavorGiftStatsCell.reuseIdentifier,
         for: indexPath
-      ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
-      let section = dataSource[indexPath.section]
-      header.reactor = MyPageSectionHeaderViewReactor(section: section)
-      return header
+      ) as? FavorGiftStatsCell else { return UICollectionViewCell() }
+      cell.reactor = reactor
+      return cell
+    case .setupProfile(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: FavorSetupProfileCell.reuseIdentifier,
+        for: indexPath
+      ) as? FavorSetupProfileCell else { return UICollectionViewCell() }
+      cell.reactor = reactor
+      return cell
+    case .prefers(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: FavorPrefersCell.reuseIdentifier,
+        for: indexPath
+      ) as? FavorPrefersCell else { return UICollectionViewCell() }
+      cell.reactor = reactor
+      return cell
+    case .anniversary(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: AnniversaryCell.reuseIdentifier,
+        for: indexPath
+      ) as? AnniversaryCell else { return UICollectionViewCell() }
+      cell.reactor = reactor
+      return cell
+    case .friend(let reactor):
+      guard let cell = collectionView.dequeueReusableCell(
+        withReuseIdentifier: FriendCell.reuseIdentifier,
+        for: indexPath
+      ) as? FriendCell else { return UICollectionViewCell() }
+      cell.reactor = reactor
+      return cell
     }
-  )
-  
+  }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+    guard let header = collectionView.dequeueReusableSupplementaryView(
+      ofKind: kind,
+      withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
+      for: indexPath
+    ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
+    let section = dataSource[indexPath.section]
+    header.reactor = MyPageSectionHeaderViewReactor(section: section)
+    return header
+  })
+
   // MARK: - UI Components
 
   private lazy var tempNav: UIView = {
@@ -101,11 +97,7 @@ final class MyPageViewController: BaseViewController, View {
     return button
   }()
 
-  private lazy var headerView: MyPageHeaderView = {
-    let headerView = MyPageHeaderView()
-    headerView.layer.zPosition = 0
-    return headerView
-  }()
+  private lazy var headerView = MyPageHeaderView()
 
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
@@ -173,9 +165,6 @@ final class MyPageViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.sections }
-      .do(onNext: {
-        print($0)
-      })
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
@@ -243,9 +232,7 @@ private extension MyPageViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     // Layout
     let layout = UICollectionViewCompositionalLayout.init(sectionProvider: { [weak self] sectionIndex, _ in
-      guard
-        let sectionType = self?.dataSource[sectionIndex]
-      else { fatalError("Fatal error occured while setting up section datas.") }
+      guard let sectionType = self?.dataSource[sectionIndex] else { fatalError("Failed getting dataSource.") }
       return self?.createCollectionViewLayoutSection(sectionType: sectionType, sectionIndex: sectionIndex)
     })
     // Background
