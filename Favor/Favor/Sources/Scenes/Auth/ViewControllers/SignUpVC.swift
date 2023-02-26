@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxKeyboard
 import SnapKit
 
 final class SignUpViewController: BaseViewController, View {
@@ -16,12 +17,23 @@ final class SignUpViewController: BaseViewController, View {
   // MARK: - Constants
 
   private enum Metric {
+    static let topSpacing = 56.0
     static let textFieldSpacing = 32.0
+    static let bottomSpacing = 32.0
   }
   
   // MARK: - Properties
   
   // MARK: - UI Components
+
+  private lazy var scrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+//    scrollView.isPagingEnabled = false
+//    scrollView.isScrollEnabled = false
+    scrollView.showsVerticalScrollIndicator = false
+    scrollView.showsHorizontalScrollIndicator = false
+    return scrollView
+  }()
   
   private lazy var emailTextField: FavorTextField = {
     let textField = FavorTextField()
@@ -72,7 +84,7 @@ final class SignUpViewController: BaseViewController, View {
     return button
   }()
   
-  private lazy var vStack: UIStackView = {
+  private lazy var textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = Metric.textFieldSpacing
@@ -89,8 +101,19 @@ final class SignUpViewController: BaseViewController, View {
   // MARK: - Life Cycle
   
   // MARK: - Binding
-  
+
   func bind(reactor: SignUpViewReactor) {
+    // Keyboard
+    RxKeyboard.instance.visibleHeight
+      .skip(1)
+      .drive(with: self, onNext: { owner, visibleHeight in
+        owner.nextButton.snp.updateConstraints { make in
+          make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
+        }
+        owner.view.layoutIfNeeded()
+      })
+      .disposed(by: self.disposeBag)
+
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in
@@ -223,24 +246,34 @@ final class SignUpViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.vStack,
+      self.scrollView,
       self.nextButton
     ].forEach {
       self.view.addSubview($0)
     }
+
+    [
+      self.textFieldStack
+    ].forEach {
+      self.scrollView.addSubview($0)
+    }
   }
   
   override func setupConstraints() {
-    
-    self.vStack.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(56)
+    self.scrollView.snp.makeConstraints { make in
+      make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
 
+    self.textFieldStack.snp.makeConstraints { make in
+      make.top.equalToSuperview().offset(Metric.topSpacing)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.width.equalToSuperview()
+    }
+
     self.nextButton.snp.makeConstraints { make in
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
+      make.bottom.equalToSuperview().offset(-Metric.bottomSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }
-  
 }
