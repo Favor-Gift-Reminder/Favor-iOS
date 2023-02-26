@@ -14,6 +14,10 @@ import SnapKit
 final class SignUpViewController: BaseViewController, View {
   
   // MARK: - Constants
+
+  private enum Metric {
+    static let textFieldSpacing = 32.0
+  }
   
   // MARK: - Properties
   
@@ -23,7 +27,7 @@ final class SignUpViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "이메일"
     textField.updateMessageLabel(
-      ValidateManager.EmailValidate.empty.description,
+      AuthValidationManager(type: .email).description(for: .empty),
       state: .normal,
       animated: false
     )
@@ -37,7 +41,7 @@ final class SignUpViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호"
     textField.updateMessageLabel(
-      ValidateManager.PasswordValidate.empty.description,
+      AuthValidationManager(type: .password).description(for: .empty),
       state: .normal,
       animated: false
     )
@@ -51,7 +55,7 @@ final class SignUpViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "비밀번호 확인"
     textField.updateMessageLabel(
-      ValidateManager.CheckPasswordValidate.empty.description,
+      AuthValidationManager(type: .confirmPassword).description(for: .empty),
       state: .normal,
       animated: false
     )
@@ -71,12 +75,11 @@ final class SignUpViewController: BaseViewController, View {
   private lazy var vStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 72.0
+    stackView.spacing = Metric.textFieldSpacing
     [
       self.emailTextField,
       self.pwTextField,
-      self.pwValidateTextField,
-      self.nextButton
+      self.pwValidateTextField
     ].forEach {
       stackView.addArrangedSubview($0)
     }
@@ -98,7 +101,7 @@ final class SignUpViewController: BaseViewController, View {
     self.emailTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
-      .map { Reactor.Action.emailTextFieldUpdate($0) }
+      .map { Reactor.Action.emailTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -111,7 +114,7 @@ final class SignUpViewController: BaseViewController, View {
     self.pwTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
-      .map { Reactor.Action.passwordTextFieldUpdate($0) }
+      .map { Reactor.Action.passwordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -124,86 +127,82 @@ final class SignUpViewController: BaseViewController, View {
     self.pwValidateTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
-      .map { Reactor.Action.checkPasswordTextFieldUpdate($0) }
+      .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.pwValidateTextField.rx.editingDidEndOnExit
-      .map { Reactor.Action.returnKeyboardTap }
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
-      .map { Reactor.Action.nextButtonTap }
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state
-      .map { $0.isEmailValid }
+    reactor.state.map { $0.emailValidationResult }
       .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
       .skip(1)
-      .drive(with: self, onNext: { owner, emailValidate in
-        switch emailValidate {
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
         case .empty, .invalid:
           owner.emailTextField.updateMessageLabel(
-            emailValidate.description,
+            AuthValidationManager(type: .email).description(for: validationResult),
             state: .error
           )
         case .valid:
           owner.emailTextField.updateMessageLabel(
-            emailValidate.description,
+            AuthValidationManager(type: .email).description(for: validationResult),
             state: .normal
           )
         }
       })
       .disposed(by: self.disposeBag)
-    
-    reactor.state
-      .map { $0.isPasswordValid }
+
+    reactor.state.map { $0.passwordValidationResult }
       .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
       .skip(1)
-      .drive(with: self, onNext: { owner, passwordValidate in
-        switch passwordValidate {
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
         case .empty, .invalid:
           owner.pwTextField.updateMessageLabel(
-            passwordValidate.description,
+            AuthValidationManager(type: .password).description(for: validationResult),
             state: .error
           )
         case .valid:
           owner.pwTextField.updateMessageLabel(
-            passwordValidate.description,
+            AuthValidationManager(type: .password).description(for: validationResult),
             state: .normal
           )
         }
       })
       .disposed(by: self.disposeBag)
-    
-    reactor.state
-      .map { $0.isPasswordIdentical }
-      .asDriver(onErrorJustReturn: .identical)
+
+    reactor.state.map { $0.confirmPasswordValidationResult }
+      .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
       .skip(1)
-      .drive(with: self, onNext: { owner, isPasswordIdentical in
-        switch isPasswordIdentical {
-        case .empty, .different:
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
           owner.pwValidateTextField.updateMessageLabel(
-            isPasswordIdentical.description,
+            AuthValidationManager(type: .confirmPassword).description(for: validationResult),
             state: .error
           )
-        case .identical:
+        case .valid:
           owner.pwValidateTextField.updateMessageLabel(
-            isPasswordIdentical.description,
+            AuthValidationManager(type: .confirmPassword).description(for: validationResult),
             state: .normal
           )
         }
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state
-      .map { $0.isNextButtonEnabled }
+    reactor.state.map { $0.isNextButtonEnabled }
       .asDriver(onErrorJustReturn: false)
       .distinctUntilChanged()
       .drive(with: self, onNext: { owner, isButtonEnabled in
@@ -217,10 +216,15 @@ final class SignUpViewController: BaseViewController, View {
   // MARK: - Functions
   
   // MARK: - UI Setups
+
+  override func setupStyles() {
+    super.setupStyles()
+  }
   
   override func setupLayouts() {
     [
-      self.vStack
+      self.vStack,
+      self.nextButton
     ].forEach {
       self.view.addSubview($0)
     }
@@ -229,8 +233,13 @@ final class SignUpViewController: BaseViewController, View {
   override func setupConstraints() {
     
     self.vStack.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(56)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+    }
+
+    self.nextButton.snp.makeConstraints { make in
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }
   
