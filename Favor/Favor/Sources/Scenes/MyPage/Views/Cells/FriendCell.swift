@@ -8,9 +8,10 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 import SnapKit
 
-final class FriendCell: UICollectionViewCell, ReuseIdentifying, View {
+final class FriendCell: UICollectionViewCell, Reusable, View {
 
   // MARK: - Constants
 

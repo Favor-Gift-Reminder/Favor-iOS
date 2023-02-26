@@ -8,9 +8,10 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 import SnapKit
 
-class FavorPrefersCell: UICollectionViewCell, ReuseIdentifying, View {
+class FavorPrefersCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   

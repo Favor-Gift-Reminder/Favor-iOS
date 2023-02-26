@@ -8,9 +8,10 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 import SnapKit
 
-final class MyPageSectionHeaderView: UICollectionReusableView, ReuseIdentifying, View {
+final class MyPageSectionHeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   
