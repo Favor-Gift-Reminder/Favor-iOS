@@ -7,6 +7,8 @@
 
 import UIKit
 
+import RealmSwift
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -14,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		// Override point for customization after application launch.
     
     self.setupNavigationBarAppearance()
+
+    let realm = try! Realm()
+    print("Realm is located at:", realm.configuration.fileURL!)
     
 		return true
 	}

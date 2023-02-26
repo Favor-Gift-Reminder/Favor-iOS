@@ -92,6 +92,9 @@
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
+		2EE3BA7A29AB5A75004FDCC9 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7929AB5A75004FDCC9 /* Realm */; };
+		2EE3BA7C29AB5A75004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7B29AB5A75004FDCC9 /* RealmSwift */; };
+		2EE3BA7F29AB5AF6004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7E29AB5AF6004FDCC9 /* RxRealm */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
@@ -265,6 +268,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2EE3BA7C29AB5A75004FDCC9 /* RealmSwift in Frameworks */,
+				2EE3BA7A29AB5A75004FDCC9 /* Realm in Frameworks */,
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
@@ -273,6 +278,7 @@
 				2E7C30B4295D8DC200BAC43D /* Then in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
 				2E635391295D906A00B23A14 /* Differentiator in Frameworks */,
+				2EE3BA7F29AB5AF6004FDCC9 /* RxRealm in Frameworks */,
 				E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */,
 				2E63538E295D904000B23A14 /* Kingfisher in Frameworks */,
 			);
@@ -890,6 +896,9 @@
 				2EE6B3962982EDA400CDBC81 /* RxFlow */,
 				2EC371F7299521AD00D1007B /* RxGesture */,
 				E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */,
+				2EE3BA7929AB5A75004FDCC9 /* Realm */,
+				2EE3BA7B29AB5A75004FDCC9 /* RealmSwift */,
+				2EE3BA7E29AB5AF6004FDCC9 /* RxRealm */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -951,6 +960,8 @@
 				2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */,
 				2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */,
 				E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */,
+				2EE3BA7829AB5A75004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				2EE3BA7D29AB5AF6004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1450,6 +1461,22 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		2EE3BA7829AB5A75004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.36.0;
+			};
+		};
+		2EE3BA7D29AB5AF6004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxRealm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.5;
+			};
+		};
 		2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxFlow";
@@ -1508,6 +1535,21 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */;
 			productName = RxGesture;
+		};
+		2EE3BA7929AB5A75004FDCC9 /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EE3BA7829AB5A75004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		2EE3BA7B29AB5A75004FDCC9 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EE3BA7829AB5A75004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
+		2EE3BA7E29AB5AF6004FDCC9 /* RxRealm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EE3BA7D29AB5AF6004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */;
+			productName = RxRealm;
 		};
 		2EE6B3962982EDA400CDBC81 /* RxFlow */ = {
 			isa = XCSwiftPackageProductDependency;
