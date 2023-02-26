@@ -93,6 +93,7 @@
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
 		2EE3BA7229AA51BC004FDCC9 /* AuthValidationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */; };
 		2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */; };
+		2EE3BA7729AB241E004FDCC9 /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7629AB241E004FDCC9 /* RxKeyboard */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
@@ -268,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
+				2EE3BA7729AB241E004FDCC9 /* RxKeyboard in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
@@ -893,6 +895,7 @@
 				2EE6B3962982EDA400CDBC81 /* RxFlow */,
 				2EC371F7299521AD00D1007B /* RxGesture */,
 				E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */,
+				2EE3BA7629AB241E004FDCC9 /* RxKeyboard */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -954,6 +957,7 @@
 				2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */,
 				2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */,
 				E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */,
+				2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1454,6 +1458,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxFlow";
@@ -1512,6 +1524,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */;
 			productName = RxGesture;
+		};
+		2EE3BA7629AB241E004FDCC9 /* RxKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */;
+			productName = RxKeyboard;
 		};
 		2EE6B3962982EDA400CDBC81 /* RxFlow */ = {
 			isa = XCSwiftPackageProductDependency;
