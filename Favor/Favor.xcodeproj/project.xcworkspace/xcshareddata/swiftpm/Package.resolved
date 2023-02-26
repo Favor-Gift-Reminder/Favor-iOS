@@ -61,6 +61,12 @@
       "state" : {
         "revision" : "4d55ba88e78ed427eae439e7c15fac2372f95c64",
         "version" : "10.36.0"
+      "identity" : "reusable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/Reusable",
+      "state" : {
+        "revision" : "18674709421360e210c2ecd4e8e08b217d4ea61d",
+        "version" : "4.1.2"
       }
     },
     {

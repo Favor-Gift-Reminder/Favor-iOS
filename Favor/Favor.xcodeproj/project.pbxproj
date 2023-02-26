@@ -95,6 +95,7 @@
 		2EE3BA7A29AB5A75004FDCC9 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7929AB5A75004FDCC9 /* Realm */; };
 		2EE3BA7C29AB5A75004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7B29AB5A75004FDCC9 /* RealmSwift */; };
 		2EE3BA7F29AB5AF6004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA7E29AB5AF6004FDCC9 /* RxRealm */; };
+		2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA6F29A9D7D4004FDCC9 /* Reusable */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
@@ -281,6 +282,7 @@
 				2EE3BA7F29AB5AF6004FDCC9 /* RxRealm in Frameworks */,
 				E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */,
 				2E63538E295D904000B23A14 /* Kingfisher in Frameworks */,
+				2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -899,6 +901,7 @@
 				2EE3BA7929AB5A75004FDCC9 /* Realm */,
 				2EE3BA7B29AB5A75004FDCC9 /* RealmSwift */,
 				2EE3BA7E29AB5AF6004FDCC9 /* RxRealm */,
+				2EE3BA6F29A9D7D4004FDCC9 /* Reusable */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -962,6 +965,7 @@
 				E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */,
 				2EE3BA7829AB5A75004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				2EE3BA7D29AB5AF6004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */,
+				2EE3BA6E29A9D7D3004FDCC9 /* XCRemoteSwiftPackageReference "Reusable" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1475,6 +1479,12 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.5;
+		2EE3BA6E29A9D7D3004FDCC9 /* XCRemoteSwiftPackageReference "Reusable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AliSoftware/Reusable";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
 			};
 		};
 		2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */ = {
@@ -1550,6 +1560,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2EE3BA7D29AB5AF6004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */;
 			productName = RxRealm;
+		2EE3BA6F29A9D7D4004FDCC9 /* Reusable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EE3BA6E29A9D7D3004FDCC9 /* XCRemoteSwiftPackageReference "Reusable" */;
+			productName = Reusable;
 		};
 		2EE6B3962982EDA400CDBC81 /* RxFlow */ = {
 			isa = XCSwiftPackageProductDependency;

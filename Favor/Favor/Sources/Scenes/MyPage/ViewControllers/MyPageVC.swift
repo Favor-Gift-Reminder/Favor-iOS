@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 import RxDataSources
 import RxGesture
 import SnapKit
@@ -28,47 +29,31 @@ final class MyPageViewController: BaseViewController, View {
   let dataSource = MyPageDataSource(configureCell: { _, collectionView, indexPath, items in
     switch items {
     case .giftStats(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FavorGiftStatsCell.reuseIdentifier,
-        for: indexPath
-      ) as? FavorGiftStatsCell else { return UICollectionViewCell() }
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorGiftStatsCell
       cell.reactor = reactor
       return cell
     case .setupProfile(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FavorSetupProfileCell.reuseIdentifier,
-        for: indexPath
-      ) as? FavorSetupProfileCell else { return UICollectionViewCell() }
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorSetupProfileCell
       cell.reactor = reactor
       return cell
     case .prefers(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FavorPrefersCell.reuseIdentifier,
-        for: indexPath
-      ) as? FavorPrefersCell else { return UICollectionViewCell() }
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorPrefersCell
       cell.reactor = reactor
       return cell
     case .anniversary(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FavorAnniversaryCell.reuseIdentifier,
-        for: indexPath
-      ) as? FavorAnniversaryCell else { return UICollectionViewCell() }
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorAnniversaryCell
       cell.reactor = reactor
       return cell
     case .friend(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FriendCell.reuseIdentifier,
-        for: indexPath
-      ) as? FriendCell else { return UICollectionViewCell() }
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendCell
       cell.reactor = reactor
       return cell
     }
   }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-    guard let header = collectionView.dequeueReusableSupplementaryView(
+    let header = collectionView.dequeueReusableSupplementaryView(
       ofKind: kind,
-      withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
       for: indexPath
-    ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
+    ) as MyPageSectionHeaderView
     let section = dataSource[indexPath.section]
     header.reactor = MyPageSectionHeaderViewReactor(section: section)
     return header
@@ -106,32 +91,16 @@ final class MyPageViewController: BaseViewController, View {
     )
     
     // CollectionViewCell
-    collectionView.register(
-      FavorGiftStatsCell.self,
-      forCellWithReuseIdentifier: FavorGiftStatsCell.reuseIdentifier
-    )
-    collectionView.register(
-      FavorSetupProfileCell.self,
-      forCellWithReuseIdentifier: FavorSetupProfileCell.reuseIdentifier
-    )
-    collectionView.register(
-      FavorPrefersCell.self,
-      forCellWithReuseIdentifier: FavorPrefersCell.reuseIdentifier
-    )
-    collectionView.register(
-      FavorAnniversaryCell.self,
-      forCellWithReuseIdentifier: FavorAnniversaryCell.reuseIdentifier
-    )
-    collectionView.register(
-      FriendCell.self,
-      forCellWithReuseIdentifier: FriendCell.reuseIdentifier
-    )
+    collectionView.register(cellType: FavorGiftStatsCell.self)
+    collectionView.register(cellType: FavorSetupProfileCell.self)
+    collectionView.register(cellType: FavorPrefersCell.self)
+    collectionView.register(cellType: FavorAnniversaryCell.self)
+    collectionView.register(cellType: FriendCell.self)
     
     // SupplementaryView
     collectionView.register(
-      MyPageSectionHeaderView.self,
-      forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-      withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier
+      supplementaryViewType: MyPageSectionHeaderView.self,
+      ofKind: UICollectionView.elementKindSectionHeader
     )
     
     collectionView.backgroundColor = .clear

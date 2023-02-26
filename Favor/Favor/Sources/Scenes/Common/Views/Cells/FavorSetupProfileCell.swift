@@ -8,8 +8,9 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 
-class FavorSetupProfileCell: UICollectionViewCell, ReuseIdentifying, View {
+class FavorSetupProfileCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   
