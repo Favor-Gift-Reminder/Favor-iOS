@@ -46,6 +46,15 @@
       }
     },
     {
+      "identity" : "reusable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/AliSoftware/Reusable",
+      "state" : {
+        "revision" : "18674709421360e210c2ecd4e8e08b217d4ea61d",
+        "version" : "4.1.2"
+      }
+    },
+    {
       "identity" : "rskplaceholdertextview",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ruslanskorb/RSKPlaceholderTextView.git",

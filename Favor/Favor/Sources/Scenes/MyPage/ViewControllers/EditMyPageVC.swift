@@ -8,6 +8,7 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 import RxDataSources
 import SnapKit
 
@@ -27,28 +28,23 @@ final class EditMyPageViewController: BaseViewController, View {
 
   let favorSelectionDataSource = FavorSelectionDataSource(
     configureCell: { _, collectionView, indexPath, reactor in
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: FavorPrefersCell.reuseIdentifier,
-        for: indexPath
-      ) as? FavorPrefersCell else { return UICollectionViewCell() }
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorPrefersCell
       cell.reactor = reactor
       return cell
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       switch kind {
       case ElementKind.favorSelectionHeaderElementKind:
-        guard let header = collectionView.dequeueReusableSupplementaryView(
+        let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
-          withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier,
           for: indexPath
-        ) as? MyPageSectionHeaderView else { return UICollectionReusableView() }
+        ) as MyPageSectionHeaderView
         header.reactor = MyPageSectionHeaderViewReactor(title: dataSource.sectionModels[indexPath.item].header)
         return header
       case ElementKind.favorSelectionFooterElementKind:
-        guard let footer = collectionView.dequeueReusableSupplementaryView(
+        let footer = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
-          withReuseIdentifier: MyPageSectionFooterView.reuseIdentifier,
           for: indexPath
-        ) as? MyPageSectionFooterView else { return UICollectionReusableView() }
+        ) as MyPageSectionFooterView
         footer.setupDescription("최대 5개까지 선택할 수 있습니다.")
         return footer
       default:
@@ -144,15 +140,13 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // Header
     collectionView.register(
-      MyPageSectionHeaderView.self,
-      forSupplementaryViewOfKind: ElementKind.favorSelectionHeaderElementKind,
-      withReuseIdentifier: MyPageSectionHeaderView.reuseIdentifier
+      supplementaryViewType: MyPageSectionHeaderView.self,
+      ofKind: ElementKind.favorSelectionHeaderElementKind
     )
     // Footer
     collectionView.register(
-      MyPageSectionFooterView.self,
-      forSupplementaryViewOfKind: ElementKind.favorSelectionFooterElementKind,
-      withReuseIdentifier: MyPageSectionFooterView.reuseIdentifier
+      supplementaryViewType: MyPageSectionFooterView.self,
+      ofKind: ElementKind.favorSelectionFooterElementKind
     )
 
     collectionView.backgroundColor = .clear
@@ -175,9 +169,8 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // Header
     collectionView.register(
-      NewAnniversaryHeaderView.self,
-      forSupplementaryViewOfKind: ElementKind.newAnniversaryHeaderElementKind,
-      withReuseIdentifier: NewAnniversaryHeaderView.reuseIdentifier
+      supplementaryViewType: NewAnniversaryHeaderView.self,
+      ofKind: ElementKind.newAnniversaryHeaderElementKind
     )
 
     collectionView.backgroundColor = .clear
@@ -275,7 +268,7 @@ final class EditMyPageViewController: BaseViewController, View {
     }
 
     self.scrollView.snp.makeConstraints { make in
-      make.bottom.equalTo(self.newAnniversaryCollectionView.snp.bottom)
+      make.bottom.equalTo(self.newAnniversaryCollectionView.snp.bottom).offset(40)
     }
   }
 }
@@ -310,6 +303,7 @@ private extension EditMyPageViewController {
       subItem: item,
       count: 6
     )
+    innerGroup.interItemSpacing = .fixed(10)
 
     let outerGroup = CompositionalLayoutFactory.shared.makeCompositionalGroup(
       direction: .vertical,

@@ -7,9 +7,10 @@
 
 import UIKit
 
+import Reusable
 import SnapKit
 
-final class MyPageSectionFooterView: UICollectionReusableView, ReuseIdentifying {
+final class MyPageSectionFooterView: UICollectionReusableView, Reusable {
 
   // MARK: - UI Components
 

@@ -8,8 +8,9 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 
-class FavorAnniversaryCell: UICollectionViewCell, ReuseIdentifying, View {
+class FavorAnniversaryCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   
