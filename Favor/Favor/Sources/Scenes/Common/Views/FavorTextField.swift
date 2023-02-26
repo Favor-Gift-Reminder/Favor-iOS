@@ -340,6 +340,9 @@ private extension FavorTextField {
     container.foregroundColor = self.placeholderColor
     container.font = self.placeholderFont
     self.textField.attributedPlaceholder = NSAttributedString(AttributedString(placeholder, attributes: container))
+
+    // TextField
+    self.textField.font = self.textFieldFont
   }
 
   /// 상단에 표시되는 타이틀 Label을 업데이트합니다.
