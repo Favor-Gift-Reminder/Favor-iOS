@@ -80,6 +80,16 @@ final class SignUpViewController: BaseViewController, View {
   
   private lazy var nextButton: LargeFavorButton = {
     let button = LargeFavorButton(with: .main("다음"))
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration = LargeFavorButtonType.main("다음").configuration
+      case .disabled:
+        button.configuration = LargeFavorButtonType.gray("다음").configuration
+      default:
+        break
+      }
+    }
     button.isEnabled = false
     return button
   }()
