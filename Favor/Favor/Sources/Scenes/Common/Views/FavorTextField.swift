@@ -15,15 +15,9 @@ class FavorTextField: UIView {
 
   // MARK: - Properties
 
-  /// TextField가 선택되었는지의 Boolean
-  public var isSelected: Bool {
-    get { self.textField.isSelected }
-    set { self.textField.isSelected = newValue }
-  }
-
   /// TextField가 highlighted되야 하는 상태 여부 Boolean (Editing or Selected)
-  private var isEditingOrSelected: Bool {
-    self.textField.isEditing || self.isSelected
+  private var isEditingOrSelected: Bool = false {
+    didSet { self.updateColor() }
   }
 
   /// TextField 오른쪽에 SecureEyeButton이 있는지 여부 Boolean
@@ -133,6 +127,7 @@ class FavorTextField: UIView {
     textField.enablesReturnKeyAutomatically = true
     textField.autocapitalizationType = .none
     textField.rightViewMode = .always
+    textField.delegate = self
     return textField
   }()
 
@@ -243,6 +238,16 @@ class FavorTextField: UIView {
   }
 }
 
+extension FavorTextField: UITextFieldDelegate {
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    self.isEditingOrSelected = true
+  }
+
+  func textFieldDidEndEditing(_ textField: UITextField) {
+    self.isEditingOrSelected = false
+  }
+}
+
 extension FavorTextField: BaseView {
   func setupStyles() {
     //
@@ -314,10 +319,10 @@ extension FavorTextField: BaseView {
 private extension FavorTextField {
   /// 모든 프로퍼티와 UI 요소를 업데이트합니다.
   func updateControl() {
-    self.updateColor()
     self.updateTextField()
     self.updateTitleLabel()
     self.updateMessageLabel()
+    self.updateColor()
   }
 
   /// 프로퍼티와 상태에 따라 색상을 업데이트합니다.
