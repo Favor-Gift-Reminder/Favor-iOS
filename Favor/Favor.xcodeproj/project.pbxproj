@@ -150,7 +150,6 @@
 		2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
 		2E171163298035A400E34121 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
-		2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldFavorTextField.swift; sourceTree = "<group>"; };
 		2E3668C5299FA6F4001FC283 /* UIView+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+.swift"; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* FriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCellReactor.swift; sourceTree = "<group>"; };
@@ -792,7 +791,6 @@
 				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
 				E5626125299E64F300D14020 /* FavorDivider.swift */,
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
-				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
 				E56260F029908F0100D14020 /* CategoryView.swift */,
 				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
 				2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */,
