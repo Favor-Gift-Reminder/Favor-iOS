@@ -227,6 +227,20 @@ class FavorTextField: UIView {
     self.textField.leftView = item
     self.textField.leftViewMode = .always
   }
+
+  /// First Responder 지정을 TextField에 전달합니다.
+  @discardableResult
+  override func becomeFirstResponder() -> Bool {
+    super.becomeFirstResponder()
+    return self.textField.becomeFirstResponder()
+  }
+
+  /// First Responder 지정 해제를 TextField에 전달합니다.
+  @discardableResult
+  override func resignFirstResponder() -> Bool {
+    super.resignFirstResponder()
+    return self.textField.resignFirstResponder()
+  }
 }
 
 extension FavorTextField: BaseView {
