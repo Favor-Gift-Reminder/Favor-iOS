@@ -85,13 +85,14 @@
 		2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */; };
 		2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D584297524660064E932 /* SetProfileVC.swift */; };
 		2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D586297524880064E932 /* SetProfileViewReactor.swift */; };
-		2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58829756A7F0064E932 /* ValidateManager.swift */; };
 		2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */; };
 		2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58C297832D20064E932 /* PHPickerManager.swift */; };
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
+		2EE3BA7229AA51BC004FDCC9 /* AuthValidationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */; };
+		2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
@@ -216,7 +217,6 @@
 		2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewReactor.swift; sourceTree = "<group>"; };
 		2EE0D584297524660064E932 /* SetProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileVC.swift; sourceTree = "<group>"; };
 		2EE0D586297524880064E932 /* SetProfileViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileViewReactor.swift; sourceTree = "<group>"; };
-		2EE0D58829756A7F0064E932 /* ValidateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateManager.swift; sourceTree = "<group>"; };
 		2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreGraphicManager.swift; sourceTree = "<group>"; };
 		2EE0D58C297832D20064E932 /* PHPickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerManager.swift; sourceTree = "<group>"; };
 		2EE0D58E29786C1C0064E932 /* TermVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermVC.swift; sourceTree = "<group>"; };
@@ -224,6 +224,8 @@
 		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
+		2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthValidationManager.swift; sourceTree = "<group>"; };
+		2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthType.swift; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
 		E55CF7B6298A644C002940D1 /* FTUXStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTUXStorage.swift; sourceTree = "<group>"; };
@@ -486,6 +488,7 @@
 		2EBB0150295E8CA10072D158 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
+				2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */,
 				E562611D299DCE2E00D14020 /* LargeFavorButtonType.swift */,
 				E562611F299DD37200D14020 /* SmallFavorButtonType.swift */,
 				E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */,
@@ -849,7 +852,7 @@
 			children = (
 				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
 				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
-				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
+				2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1037,11 +1040,13 @@
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,
 				2EC939E72998C6D100C8C47F /* FavorAnniversaryCell.swift in Sources */,
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
+				2EE3BA7229AA51BC004FDCC9 /* AuthValidationManager.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */,
 				E5626126299E64F300D14020 /* FavorDivider.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
 				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
+				2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
@@ -1109,7 +1114,6 @@
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */,
-				2EE0D58929756A7F0064E932 /* ValidateManager.swift in Sources */,
 				E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 				2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */,
