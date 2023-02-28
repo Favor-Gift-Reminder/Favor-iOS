@@ -57,7 +57,7 @@ class BaseViewController: UIViewController {
   /// }
   /// ```
   func setupStyles() {
-    self.view.backgroundColor = .favorColor(.background)
+    self.view.backgroundColor = .favorColor(.white)
     self.view.directionalLayoutMargins = NSDirectionalEdgeInsets(
       top: 0, leading: 20.0, bottom: 0, trailing: 20.0
     )
