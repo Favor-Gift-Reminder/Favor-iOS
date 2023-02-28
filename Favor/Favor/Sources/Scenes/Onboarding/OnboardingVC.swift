@@ -86,10 +86,6 @@ final class OnboardingViewController: BaseViewController, Stepper {
   
   // MARK: - SETUP
   
-  override func setupStyles() {
-    self.view.backgroundColor = .white
-  }
-  
   override func setupLayouts() {
     [
       self.pageControl,
@@ -108,12 +104,12 @@ final class OnboardingViewController: BaseViewController, Stepper {
     
     self.collectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview()
-      make.top.equalTo(pageControl.snp.bottom)
-      make.bottom.equalTo(startButton.snp.top)
+      make.top.equalTo(self.pageControl.snp.bottom)
+      make.bottom.equalTo(self.startButton.snp.top)
     }
     
     self.startButton.snp.makeConstraints { make in
-      make.leading.trailing.equalTo(view.layoutMarginsGuide)
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
     }
   }
