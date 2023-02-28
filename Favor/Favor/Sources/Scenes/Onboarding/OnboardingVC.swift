@@ -20,7 +20,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
     let pc = UIPageControl()
     pc.numberOfPages = 3
     pc.pageIndicatorTintColor = .favorColor(.line3)
-    pc.currentPageIndicatorTintColor = .favorColor(.main)
+    pc.currentPageIndicatorTintColor = .favorColor(.icon)
     
     return pc
   }()
@@ -39,16 +39,19 @@ final class OnboardingViewController: BaseViewController, Stepper {
     return cv
   }()
   
-  private lazy var loginButton: UIButton = {
-    let btn = LargeFavorButton(with: .main("로그인"))
+  private lazy var startButton: UIButton = {
+    let btn = LargeFavorButton(with: .main("시작하기"))
+    btn.isEnabled = false
     btn.configurationUpdateHandler = {
       switch $0.state {
-      case .selected:
-        $0.configuration = LargeFavorButtonType.gray("선택 되었습니다.").configuration
+      case .disabled:
+        $0.configuration = LargeFavorButtonType.gray("시작하기").configuration
       default:
-        $0.configuration = LargeFavorButtonType.main("로그인").configuration
+        $0.configuration = LargeFavorButtonType.main("시작하기").configuration
       }
     }
+    
+    return btn
   }()
   
   private lazy var onboardingSection: NSCollectionLayoutSection = {
@@ -56,7 +59,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
       widthDimension: .absolute(view.frame.width),
       heightDimension: .absolute(collectionView.frame.height)
     )
-
+    
     let item = NSCollectionLayoutItem(layoutSize: size)
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
     let section = NSCollectionLayoutSection(group: group)
@@ -71,16 +74,10 @@ final class OnboardingViewController: BaseViewController, Stepper {
     return section
   }()
   
-  private lazy var continueButton: LargeFavorButton = {
-    let btn = LargeFavorButton(with: .main("다음"))
-    btn.addTarget(self, action: #selector(didTapContinueButton), for: .touchUpInside)
-    
-    return btn
-  }()
-  
   private var currentPage: Int = 0 {
     didSet {
       self.pageControl.currentPage = currentPage
+      self.startButton.isEnabled = self.currentPage == 2 ? true : false
     }
   }
   
@@ -96,7 +93,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
     [
       self.pageControl,
       self.collectionView,
-      self.continueButton
+      self.startButton
     ].forEach {
       self.view.addSubview($0)
     }
@@ -111,10 +108,10 @@ final class OnboardingViewController: BaseViewController, Stepper {
     self.collectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview()
       make.top.equalTo(pageControl.snp.bottom)
-      make.bottom.equalTo(continueButton.snp.top)
+      make.bottom.equalTo(startButton.snp.top)
     }
     
-    self.continueButton.snp.makeConstraints { make in
+    self.startButton.snp.makeConstraints { make in
       make.leading.trailing.equalTo(view.layoutMarginsGuide)
       make.bottom.equalToSuperview().inset(53)
     }

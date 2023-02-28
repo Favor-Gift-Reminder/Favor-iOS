@@ -68,7 +68,7 @@ extension OnboardingCell: BaseView {
   
   func setupConstraints() {
     self.imageView.snp.makeConstraints { make in
-      make.width.height.equalTo(100)
+      make.width.height.equalTo(180)
     }
 
     self.mainStack.snp.makeConstraints { make in
