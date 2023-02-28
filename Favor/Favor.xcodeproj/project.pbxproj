@@ -500,7 +500,6 @@
 				E562611F299DD37200D14020 /* SmallFavorButtonType.swift */,
 				E5626121299E3EDA00D14020 /* PlainFavorButtonType.swift */,
 				2E00561929A7E40F006CF302 /* ScrollDirection.swift */,
-				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -858,6 +857,7 @@
 		E5B182912974F43E00229C50 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
 				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
