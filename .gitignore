@@ -6,6 +6,7 @@
 
 *.plist
 !Info.plist
+!IDEWorkspaceChecks.plist
 
 ### Carthage ###
 # Carthage
