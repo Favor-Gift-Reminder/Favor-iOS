@@ -84,7 +84,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   private let slides = OnboardingSlide.slides()
   var steps = PublishRelay<Step>()
   
-  // MARK: - Setup
+  // MARK: - SETUP
   
   override func setupStyles() {
     self.view.backgroundColor = .white
@@ -115,18 +115,6 @@ final class OnboardingViewController: BaseViewController, Stepper {
     self.startButton.snp.makeConstraints { make in
       make.leading.trailing.equalTo(view.layoutMarginsGuide)
       make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
-    }
-  }
-  
-  // MARK: - Selectors
-  
-  @objc
-  private func didTapContinueButton() {
-    let indexPath = IndexPath(row: self.currentPage + 1, section: 0)
-    self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    
-    if self.currentPage == 2 {
-      self.steps.accept(AppStep.onboardingIsComplete)
     }
   }
 }
