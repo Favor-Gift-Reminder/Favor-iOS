@@ -66,7 +66,7 @@ extension OnboardingCell: BaseView {
   func configure(with slide: OnboardingSlide) {
     let attributedText = NSMutableAttributedString(string: slide.text)
     let paragraphStyle = NSMutableParagraphStyle()
-    paragraphStyle.lineSpacing = 4 // 줄간격을 10으로 설정합니다.
+    paragraphStyle.lineSpacing = 4
     paragraphStyle.alignment = .center
     attributedText.addAttribute(
       .paragraphStyle,
