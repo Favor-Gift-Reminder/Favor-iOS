@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Reusable
 import RxCocoa
 import RxFlow
 import RxSwift
@@ -14,7 +15,7 @@ import SnapKit
 
 final class OnboardingViewController: BaseViewController, Stepper {
   
-  // MARK: - Properties
+  // MARK: - UI COMPONENTS
   
   private let pageControl: UIPageControl = {
     let pc = UIPageControl()
@@ -27,10 +28,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   
   private lazy var collectionView: UICollectionView = {
     let cv = UICollectionView(frame: .zero, collectionViewLayout: onboardingLayout())
-    cv.register(
-      OnboardingCell.self,
-      forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier
-    )
+    cv.register(cellType: OnboardingCell.self)
     cv.isScrollEnabled = false
     cv.showsHorizontalScrollIndicator = false
     cv.dataSource = self
@@ -74,6 +72,8 @@ final class OnboardingViewController: BaseViewController, Stepper {
     return section
   }()
   
+  // MARK: - PROPERTIES
+  
   private var currentPage: Int = 0 {
     didSet {
       self.pageControl.currentPage = currentPage
@@ -81,6 +81,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
     }
   }
   
+  private let slides = OnboardingSlide.slides()
   var steps = PublishRelay<Step>()
   
   // MARK: - Setup
@@ -102,7 +103,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   override func setupConstraints() {
     self.pageControl.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.top.equalTo(view.safeAreaLayoutGuide).inset(66)
+      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(32)
     }
     
     self.collectionView.snp.makeConstraints { make in
@@ -113,7 +114,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
     
     self.startButton.snp.makeConstraints { make in
       make.leading.trailing.equalTo(view.layoutMarginsGuide)
-      make.bottom.equalToSuperview().inset(53)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
     }
   }
   
@@ -137,12 +138,8 @@ extension OnboardingViewController: UICollectionViewDataSource, UICollectionView
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: OnboardingCell.reuseIdentifier,
-      for: indexPath
-    ) as? OnboardingCell else {
-      return UICollectionViewCell()
-    }
+    let cell = collectionView.dequeueReusableCell(for: indexPath) as OnboardingCell
+    cell.configure(with: self.slides[indexPath.row])
     
     return cell
   }
@@ -151,7 +148,7 @@ extension OnboardingViewController: UICollectionViewDataSource, UICollectionView
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 3
+    return self.slides.count
   }
   
   private func onboardingLayout() -> UICollectionViewCompositionalLayout {

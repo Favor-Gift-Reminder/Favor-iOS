@@ -7,26 +7,28 @@
 
 import UIKit
 
+import Reusable
 import SnapKit
 
-final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
+final class OnboardingCell: UICollectionViewCell, Reusable {
   
-  // MARK: - Properties
+  // MARK: - UI COMPONENTS
 
   private let imageView: UIImageView = {
     let iv = UIImageView()
-    iv.backgroundColor = .favorColor(.line3)
+    iv.backgroundColor = .favorColor(.card)
     
     return iv
   }()
   
   private let label: UILabel = {
     let lb = UILabel()
-    lb.text = "안녕하세요"
+    lb.numberOfLines = 2
+    lb.textAlignment = .center
     
     return lb
   }()
-    
+  
   private lazy var mainStack: UIStackView = {
     let sv = UIStackView()
     [
@@ -35,7 +37,7 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
     ].forEach {
       sv.addArrangedSubview($0)
     }
-    sv.spacing = 48
+    sv.spacing = 32
     sv.axis = .vertical
     sv.alignment = .center
     
@@ -56,9 +58,24 @@ final class OnboardingCell: UICollectionViewCell, ReuseIdentifying {
   }
 }
 
-// MARK: - Setup
+// MARK: - SETUP
 
 extension OnboardingCell: BaseView {
+  
+  /// 명시적으로 호출되어야 합니다.
+  func configure(with slide: OnboardingSlide) {
+    let attributedText = NSMutableAttributedString(string: slide.text)
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.lineSpacing = 4 // 줄간격을 10으로 설정합니다.
+    paragraphStyle.alignment = .center
+    attributedText.addAttribute(
+      .paragraphStyle,
+      value: paragraphStyle,
+      range: NSRange(location: 0, length: attributedText.length)
+    )
+    self.label.attributedText = attributedText
+    self.imageView.image = slide.image
+  }
   
   func setupStyles() {}
   
