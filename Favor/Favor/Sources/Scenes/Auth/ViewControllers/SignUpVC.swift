@@ -41,6 +41,7 @@ final class SignUpViewController: BaseViewController, View {
       state: .normal,
       animated: false
     )
+    textField.textField.autocorrectionType = .no
     textField.textField.keyboardType = .emailAddress
     textField.textField.textContentType = .emailAddress
     textField.textField.returnKeyType = .next
@@ -127,35 +128,49 @@ final class SignUpViewController: BaseViewController, View {
         owner.emailTextField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
-    
+
+    // Email TextField
     self.emailTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
       .map { Reactor.Action.emailTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
+
+    self.emailTextField.rx.editingDidBegin
+      .bind(with: self, onNext: { owner, _ in
+        owner.scrollView.scroll(to: .zero)
+      })
+      .disposed(by: self.disposeBag)
     
     self.emailTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwTextField.becomeFirstResponder()
-        owner.scrollView.scroll(to: self.pwTextField.frame.height)
+        owner.scrollView.scroll(to: self.pwTextField.frame.maxY - Metric.topSpacing)
       })
       .disposed(by: self.disposeBag)
-    
+
+    // Password TextField
     self.pwTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
       .map { Reactor.Action.passwordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
+
+    self.pwTextField.rx.editingDidBegin
+      .bind(with: self, onNext: { owner, _ in
+        owner.scrollView.scroll(to: owner.pwTextField.frame.maxY - Metric.topSpacing)
+      })
+      .disposed(by: self.disposeBag)
     
     self.pwTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwValidateTextField.becomeFirstResponder()
-        owner.scrollView.scroll(to: self.pwValidateTextField.frame.height)
       })
       .disposed(by: self.disposeBag)
-    
+
+    // Password Validation TextField
     self.pwValidateTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
@@ -265,11 +280,7 @@ final class SignUpViewController: BaseViewController, View {
       self.view.addSubview($0)
     }
 
-    [
-      self.textFieldStack
-    ].forEach {
-      self.scrollView.addSubview($0)
-    }
+    self.scrollView.addSubview(self.textFieldStack)
   }
   
   override func setupConstraints() {
