@@ -42,7 +42,6 @@ final class SignUpViewReactor: Reactor, Stepper {
     case updateConfirmPasswordValidationResult(ValidationResult)
     // Next Button
     case validateNextButton(Bool)
-    case acceptNewFlow
   }
   
   struct State {
@@ -106,7 +105,10 @@ final class SignUpViewReactor: Reactor, Stepper {
       
     case .nextFlowRequested:
       os_log(.debug, "Next button or return key from keyboard did tap.")
-      return self.currentState.isNextButtonEnabled ? .just(.acceptNewFlow) : .empty()
+      if self.currentState.isNextButtonEnabled {
+        self.steps.accept(AppStep.setProfileIsRequired)
+      }
+      return .empty()
     }
   }
 
@@ -122,9 +124,7 @@ final class SignUpViewReactor: Reactor, Stepper {
           return .validateNextButton(false)
         }
       })
-    return .concat([
-      Observable.of(mutation, combineValidationsMutation).merge()
-    ])
+    return Observable.of(mutation, combineValidationsMutation).merge()
   }
   
   func reduce(state: State, mutation: Mutation) -> State {
@@ -151,9 +151,6 @@ final class SignUpViewReactor: Reactor, Stepper {
       
     case .validateNextButton(let isNextButtonEnabled):
       newState.isNextButtonEnabled = isNextButtonEnabled
-
-    case .acceptNewFlow:
-      self.steps.accept(AppStep.authIsComplete)
     }
     
     return newState

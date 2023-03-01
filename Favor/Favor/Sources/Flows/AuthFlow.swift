@@ -87,9 +87,12 @@ private extension AuthFlow {
     let viewController = SignInViewController()
     let reactor = SignInViewReactor()
     viewController.title = "로그인"
+    viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController, withNextStepper: reactor)
+    )
   }
   
   func NavigationToSignUp() -> FlowContributors {
@@ -98,7 +101,10 @@ private extension AuthFlow {
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
   }
   
   func NavigationToSetProfile() -> FlowContributors {
@@ -107,7 +113,10 @@ private extension AuthFlow {
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
   }
   
   func NavigationToTerm() -> FlowContributors {

@@ -8,13 +8,16 @@
 import UIKit
 
 import ReactorKit
+import RxCocoa
+import RxFlow
 
-final class SetProfileViewReactor: Reactor {
+final class SetProfileViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
   var initialState: State
   let pickerManager: PHPickerManager
+  var steps = PublishRelay<Step>()
   
   enum Action {
     case ProfileImageButtonTap

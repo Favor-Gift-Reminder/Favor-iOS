@@ -9,12 +9,15 @@ import OSLog
 import UIKit
 
 import ReactorKit
+import RxCocoa
+import RxFlow
 
-final class SignInViewReactor: Reactor {
+final class SignInViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
   var initialState: State
+  var steps = PublishRelay<Step>()
   
   enum Action {
     case viewDidLoad
