@@ -99,7 +99,6 @@
 		2EE3BA8D29AE15A8004FDCC9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */; };
 		2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */; };
 		2EE3BA9129AE5049004FDCC9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9029AE5049004FDCC9 /* User.swift */; };
-		2EE3BA9329AE505C004FDCC9 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9229AE505C004FDCC9 /* UserDTO.swift */; };
 		2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */; };
 		2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */; };
 		2EE3BAA329AF021F004FDCC9 /* Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BAA229AF021F004FDCC9 /* Gift.swift */; };
@@ -238,7 +237,6 @@
 		2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
 		2EE3BA9029AE5049004FDCC9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		2EE3BA9229AE505C004FDCC9 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
 		2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
 		2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 		2EE3BAA229AF021F004FDCC9 /* Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gift.swift; sourceTree = "<group>"; };
@@ -573,7 +571,6 @@
 			isa = PBXGroup;
 			children = (
 				2EBB016A295EA9DA0072D158 /* README.md */,
-				2EE3BA9229AE505C004FDCC9 /* UserDTO.swift */,
 			);
 			path = DataMapping;
 			sourceTree = "<group>";
@@ -1098,7 +1095,6 @@
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
-				2EE3BA9329AE505C004FDCC9 /* UserDTO.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
 				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
