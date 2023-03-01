@@ -28,8 +28,6 @@ final class SignUpViewController: BaseViewController, View {
 
   private lazy var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
-//    scrollView.isPagingEnabled = false
-//    scrollView.isScrollEnabled = false
     scrollView.showsVerticalScrollIndicator = false
     scrollView.showsHorizontalScrollIndicator = false
     return scrollView
@@ -141,6 +139,7 @@ final class SignUpViewController: BaseViewController, View {
     self.emailTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwTextField.becomeFirstResponder()
+        owner.scrollView.scroll(to: self.pwTextField.frame.height)
       })
       .disposed(by: self.disposeBag)
     
@@ -154,6 +153,7 @@ final class SignUpViewController: BaseViewController, View {
     self.pwTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.pwValidateTextField.becomeFirstResponder()
+        owner.scrollView.scroll(to: self.pwValidateTextField.frame.height)
       })
       .disposed(by: self.disposeBag)
     
@@ -165,6 +165,10 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.pwValidateTextField.rx.editingDidEndOnExit
+      .do(onNext: { [weak self] _ in
+        self?.scrollView.scroll(to: .zero)
+      })
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
