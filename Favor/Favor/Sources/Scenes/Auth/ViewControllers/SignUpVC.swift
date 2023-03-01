@@ -41,7 +41,6 @@ final class SignUpViewController: BaseViewController, View {
       state: .normal,
       animated: false
     )
-    textField.textField.autocorrectionType = .no
     textField.textField.keyboardType = .emailAddress
     textField.textField.textContentType = .emailAddress
     textField.textField.returnKeyType = .next

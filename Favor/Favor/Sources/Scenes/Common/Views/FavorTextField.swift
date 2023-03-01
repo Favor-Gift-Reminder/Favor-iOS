@@ -124,6 +124,7 @@ class FavorTextField: UIView {
   public lazy var textField: UITextField = {
     let textField = UITextField()
     textField.borderStyle = .none
+    textField.autocorrectionType = .no
     textField.enablesReturnKeyAutomatically = true
     textField.autocapitalizationType = .none
     textField.rightViewMode = .always
