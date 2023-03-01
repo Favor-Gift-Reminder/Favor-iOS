@@ -97,6 +97,13 @@
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE3BA8D29AE15A8004FDCC9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */; };
+		2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */; };
+		2EE3BA9129AE5049004FDCC9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9029AE5049004FDCC9 /* User.swift */; };
+		2EE3BA9329AE505C004FDCC9 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9229AE505C004FDCC9 /* UserDTO.swift */; };
+		2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */; };
+		2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */; };
+		2EE3BAA329AF021F004FDCC9 /* Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BAA229AF021F004FDCC9 /* Gift.swift */; };
+		2EE3BAA529AF0226004FDCC9 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BAA429AF0226004FDCC9 /* Reminder.swift */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
@@ -182,7 +189,6 @@
 		2EA384BD299248200081499C /* FavorSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSearchBar.swift; sourceTree = "<group>"; };
 		2EA384BF29936BAD0081499C /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
 		2EB3AE92299E3E2700D31541 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
-		2EBB0160295E8DFC0072D158 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EBB016A295EA9DA0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EC371F92995262D00D1007B /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
@@ -230,6 +236,13 @@
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
+		2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
+		2EE3BA9029AE5049004FDCC9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		2EE3BA9229AE505C004FDCC9 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
+		2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
+		2EE3BAA229AF021F004FDCC9 /* Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gift.swift; sourceTree = "<group>"; };
+		2EE3BAA429AF0226004FDCC9 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
 		E55CF7B6298A644C002940D1 /* FTUXStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTUXStorage.swift; sourceTree = "<group>"; };
@@ -458,7 +471,10 @@
 		2EBB014C295E8C820072D158 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				2EE3BA9C29AE5C2F004FDCC9 /* APIs */,
 				2EBB015D295E8DDC0072D158 /* DataMapping */,
+				2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */,
+				2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -466,7 +482,9 @@
 		2EBB014D295E8C880072D158 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2EBB0160295E8DFC0072D158 /* .gitkeep */,
+				2EE3BA9029AE5049004FDCC9 /* User.swift */,
+				2EE3BAA229AF021F004FDCC9 /* Gift.swift */,
+				2EE3BAA429AF0226004FDCC9 /* Reminder.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -484,6 +502,7 @@
 			isa = PBXGroup;
 			children = (
 				2EBB0164295E8E1B0072D158 /* README.md */,
+				2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */,
 				2ECD69B329672CF000D00F8F /* UIColor+.swift */,
 				E5B1827D297439CA00229C50 /* UIFont+.swift */,
 				2E3668C5299FA6F4001FC283 /* UIView+.swift */,
@@ -554,6 +573,7 @@
 			isa = PBXGroup;
 			children = (
 				2EBB016A295EA9DA0072D158 /* README.md */,
+				2EE3BA9229AE505C004FDCC9 /* UserDTO.swift */,
 			);
 			path = DataMapping;
 			sourceTree = "<group>";
@@ -774,6 +794,21 @@
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Factories;
+			sourceTree = "<group>";
+		};
+		2EE3BA9C29AE5C2F004FDCC9 /* APIs */ = {
+			isa = PBXGroup;
+			children = (
+				2EE3BA9D29AE5C48004FDCC9 /* User */,
+			);
+			path = APIs;
+			sourceTree = "<group>";
+		};
+		2EE3BA9D29AE5C48004FDCC9 /* User */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = User;
 			sourceTree = "<group>";
 		};
 		E517803729A8E88A0011C220 /* Cells */ = {
@@ -1063,6 +1098,7 @@
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
+				2EE3BA9329AE505C004FDCC9 /* UserDTO.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
 				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
@@ -1082,6 +1118,8 @@
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */,
+				2EE3BAA329AF021F004FDCC9 /* Gift.swift in Sources */,
+				2EE3BA9129AE5049004FDCC9 /* User.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
@@ -1099,12 +1137,15 @@
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
+				2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */,
 				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
 				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
 				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2EA384C029936BAD0081499C /* String+.swift in Sources */,
+				2EE3BAA529AF0226004FDCC9 /* Reminder.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
+				2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
@@ -1113,6 +1154,7 @@
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
 				E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */,
+				2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */,
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
