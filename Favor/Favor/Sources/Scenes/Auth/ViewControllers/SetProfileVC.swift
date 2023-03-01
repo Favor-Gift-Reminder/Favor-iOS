@@ -14,6 +14,11 @@ import SnapKit
 final class SetProfileViewController: BaseViewController, View {
   
   // MARK: - Constants
+
+  private enum Metric {
+    static let topSpacing = 56.0
+    static let textFieldSpacing = 32.0
+  }
   
   // MARK: - Properties
   
@@ -23,11 +28,10 @@ final class SetProfileViewController: BaseViewController, View {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_person")?.withTintColor(.favorColor(.white))
+    config.image = UIImage(named: "ic_Friend")?.withTintColor(.favorColor(.white))
+    config.background.cornerRadius = 120 / 2
     
     let button = UIButton(configuration: config)
-    button.clipsToBounds = true
-    button.layer.cornerRadius = 120 / 2
     return button
   }()
   
@@ -36,12 +40,9 @@ final class SetProfileViewController: BaseViewController, View {
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
     config.image = UIImage(named: "ic_add")?.withTintColor(.favorColor(.white))
+    config.background.cornerRadius = 24
     
-    let button = UIButton()
-    button.setImage(UIImage(systemName: "plus"), for: .normal)
-    button.layer.cornerRadius = 24
-    button.backgroundColor = .favorColor(.line2)
-    button.tintColor = .favorColor(.white)
+    let button = UIButton(configuration: config)
     button.isUserInteractionEnabled = false
     return button
   }()
@@ -49,6 +50,7 @@ final class SetProfileViewController: BaseViewController, View {
   private lazy var nameTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이름"
+    textField.textField.keyboardType = .namePhonePad
     textField.textField.returnKeyType = .next
     return textField
   }()
@@ -56,6 +58,7 @@ final class SetProfileViewController: BaseViewController, View {
   private lazy var idTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "유저 아이디"
+    textField.textField.keyboardType = .asciiCapable
     textField.textField.returnKeyType = .done
     
     let label = UILabel()
@@ -63,18 +66,15 @@ final class SetProfileViewController: BaseViewController, View {
     label.font = .favorFont(.regular, size: 16)
     label.textColor = .favorColor(.explain)
     label.textAlignment = .center
-    
     textField.addLeftItem(item: label)
     
     return textField
   }()
   
-  private lazy var vStack: UIStackView = {
+  private lazy var textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 50.0
-    stackView.addArrangedSubview(self.nameTextField)
-    stackView.addArrangedSubview(self.idTextField)
+    stackView.spacing = Metric.textFieldSpacing
     return stackView
   }()
   
@@ -122,7 +122,7 @@ final class SetProfileViewController: BaseViewController, View {
       .map { $0.profileImage }
       .asDriver(onErrorJustReturn: nil)
       .drive(with: self, onNext: { owner, image in
-        owner.profileImageButton.setImage(image, for: .normal)
+        owner.profileImageButton.configuration?.image = image
       })
       .disposed(by: self.disposeBag)
     
@@ -136,10 +136,17 @@ final class SetProfileViewController: BaseViewController, View {
     [
       self.profileImageButton,
       self.plusImageView,
-      self.vStack,
+      self.textFieldStack,
       self.nextButton
     ].forEach {
       self.view.addSubview($0)
+    }
+
+    [
+      self.nameTextField,
+      self.idTextField
+    ].forEach {
+      self.textFieldStack.addArrangedSubview($0)
     }
   }
   
@@ -147,7 +154,7 @@ final class SetProfileViewController: BaseViewController, View {
     self.profileImageButton.snp.makeConstraints { make in
       make.width.height.equalTo(120)
       make.centerX.equalToSuperview()
-      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(56)
+      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
     }
     
     self.plusImageView.snp.makeConstraints { make in
@@ -155,14 +162,14 @@ final class SetProfileViewController: BaseViewController, View {
       make.bottom.trailing.equalTo(self.profileImageButton)
     }
     
-    self.vStack.snp.makeConstraints { make in
+    self.textFieldStack.snp.makeConstraints { make in
       make.top.equalTo(self.profileImageButton.snp.bottom).offset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     
     self.nextButton.snp.makeConstraints { make in
-      make.top.equalTo(self.vStack.snp.bottom).offset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }  
 }

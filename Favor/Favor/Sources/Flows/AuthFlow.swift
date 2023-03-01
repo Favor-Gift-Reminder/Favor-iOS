@@ -110,6 +110,7 @@ private extension AuthFlow {
   func NavigationToSetProfile() -> FlowContributors {
     let viewController = SetProfileViewController()
     let reactor = SetProfileViewReactor(pickerManager: PHPickerManager())
+    viewController.title = "프로필 작성"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
