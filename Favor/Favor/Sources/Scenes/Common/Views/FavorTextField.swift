@@ -156,9 +156,7 @@ class FavorTextField: UIView {
 
     let button = UIButton(
       configuration: config,
-      primaryAction: UIAction(handler: { _ in
-        self.isTextSecured?.toggle()
-      })
+      primaryAction: UIAction(handler: { _ in self.isTextSecured?.toggle() })
     )
     button.configurationUpdateHandler = { button in
       guard let isTextSecured = self.isTextSecured else { return }
@@ -249,9 +247,7 @@ extension FavorTextField: UITextFieldDelegate {
 }
 
 extension FavorTextField: BaseView {
-  func setupStyles() {
-    //
-  }
+  func setupStyles() { }
 
   func setupLayouts() {
     [
@@ -288,7 +284,7 @@ extension FavorTextField: BaseView {
 
     self.textFieldContainerView.snp.makeConstraints { make in
       make.top.equalTo(self.textField.snp.top)
-      make.horizontalEdges.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.underlineView.snp.bottom)
     }
 
@@ -394,6 +390,11 @@ extension Reactive where Base: FavorTextField {
 
   var editingDidEndOnExit: ControlEvent<()> {
     let source = base.textField.rx.controlEvent(.editingDidEndOnExit)
+    return ControlEvent(events: source)
+  }
+
+  var editingDidBegin: ControlEvent<()> {
+    let source = base.textField.rx.controlEvent(.editingDidBegin)
     return ControlEvent(events: source)
   }
 }
