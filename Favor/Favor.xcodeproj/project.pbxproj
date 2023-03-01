@@ -98,11 +98,8 @@
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE3BA8D29AE15A8004FDCC9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */; };
 		2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */; };
-		2EE3BA9129AE5049004FDCC9 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9029AE5049004FDCC9 /* User.swift */; };
 		2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */; };
 		2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */; };
-		2EE3BAA329AF021F004FDCC9 /* Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BAA229AF021F004FDCC9 /* Gift.swift */; };
-		2EE3BAA529AF0226004FDCC9 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BAA429AF0226004FDCC9 /* Reminder.swift */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
@@ -236,11 +233,10 @@
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
-		2EE3BA9029AE5049004FDCC9 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
 		2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
-		2EE3BAA229AF021F004FDCC9 /* Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gift.swift; sourceTree = "<group>"; };
-		2EE3BAA429AF0226004FDCC9 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
+		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		2EE3BAAB29AF1679004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
 		E55CF7B6298A644C002940D1 /* FTUXStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTUXStorage.swift; sourceTree = "<group>"; };
@@ -480,9 +476,7 @@
 		2EBB014D295E8C880072D158 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2EE3BA9029AE5049004FDCC9 /* User.swift */,
-				2EE3BAA229AF021F004FDCC9 /* Gift.swift */,
-				2EE3BAA429AF0226004FDCC9 /* Reminder.swift */,
+				2EE3BAA829AF11E5004FDCC9 /* README.md */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -796,16 +790,9 @@
 		2EE3BA9C29AE5C2F004FDCC9 /* APIs */ = {
 			isa = PBXGroup;
 			children = (
-				2EE3BA9D29AE5C48004FDCC9 /* User */,
+				2EE3BAAB29AF1679004FDCC9 /* README.md */,
 			);
 			path = APIs;
-			sourceTree = "<group>";
-		};
-		2EE3BA9D29AE5C48004FDCC9 /* User */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = User;
 			sourceTree = "<group>";
 		};
 		E517803729A8E88A0011C220 /* Cells */ = {
@@ -1114,8 +1101,6 @@
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */,
-				2EE3BAA329AF021F004FDCC9 /* Gift.swift in Sources */,
-				2EE3BA9129AE5049004FDCC9 /* User.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
@@ -1139,7 +1124,6 @@
 				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2EA384C029936BAD0081499C /* String+.swift in Sources */,
-				2EE3BAA529AF0226004FDCC9 /* Reminder.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
