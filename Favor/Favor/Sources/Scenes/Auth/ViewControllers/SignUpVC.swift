@@ -118,7 +118,6 @@ final class SignUpViewController: BaseViewController, View {
         owner.nextButton.snp.updateConstraints { make in
           make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
         }
-        owner.view.layoutIfNeeded()
       })
       .disposed(by: self.disposeBag)
 
