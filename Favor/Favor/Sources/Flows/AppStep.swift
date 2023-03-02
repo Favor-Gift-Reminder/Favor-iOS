@@ -18,7 +18,7 @@ enum AppStep: Step {
   case signUpIsRequired
   case signInIsRequired
   case setProfileIsRequired
-  case termIsRequired
+  case termIsRequired(String)
   
   // MARK: - Onboarding
   case onboardingIsRequired

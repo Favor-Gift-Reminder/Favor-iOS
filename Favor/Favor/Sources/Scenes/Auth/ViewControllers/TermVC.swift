@@ -7,21 +7,26 @@
 
 import UIKit
 
+import ReactorKit
+import RxCocoa
 import SnapKit
 
-final class TermViewController: BaseViewController {
-  
+final class TermViewController: BaseViewController, View {
+
+
+  // MARK: - Constants
+
   // MARK: - Properties
-  
+
   // MARK: - UI Components
-  
+
   private lazy var logoImage: UIImageView = {
     let imageView = UIImageView()
     imageView.image = UIImage(systemName: "app.gift.fill")
     imageView.tintColor = .favorColor(.black)
     return imageView
   }()
-  
+
   private lazy var welcomeLabel: UILabel = {
     let label = UILabel()
     label.numberOfLines = 2
@@ -30,17 +35,29 @@ final class TermViewController: BaseViewController {
     label.text = "이름 님\n환영합니다"
     return label
   }()
-  
+
   private lazy var startButton: LargeFavorButton = {
     let button = LargeFavorButton(with: .main("시작하기"))
-    button.addTarget(self, action: #selector(startButtonDidTap), for: .touchUpInside)
     return button
   }()
-  
-  @objc
-  private func startButtonDidTap() {
-//    self.coordinator?.finish()
+
+  // MARK: - Life Cycle
+
+  // MARK: - Binding
+
+  func bind(reactor: TermViewReactor) {
+    // Action
+
+    // State
+    reactor.state.map { $0.userName }
+      .bind(with: self, onNext: { owner, userName in
+        print(userName)
+        owner.welcomeLabel.text = "\(userName) 님\n환영합니다"
+      })
+      .disposed(by: self.disposeBag)
   }
+
+  // MARK: - Functions
   
   // MARK: - UI Setups
   

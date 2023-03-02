@@ -33,6 +33,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   
   enum Mutation {
     case updateProfileImage(UIImage?)
+    case updateUserName(String)
     case updateNameValidationResult(Bool)
     case updateIDValidationResult(ValidationResult)
     case validateNextButton(Bool)
@@ -40,6 +41,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   
   struct State {
     var profileImage: UIImage?
+    var userName: String = ""
     var nameValidationResult: Bool = true
     var idValidationResult: ValidationResult = .empty
     var isNextButtonEnabled: Bool = false
@@ -63,7 +65,10 @@ final class SetProfileViewReactor: Reactor, Stepper {
     case .nameTextFieldDidUpdate(let name):
       os_log(.debug, "Name TextField did update: \(name)")
       self.isNameEmpty.accept(name.isEmpty)
-      return .just(.updateNameValidationResult(name.isEmpty))
+      return .concat([
+        .just(.updateNameValidationResult(name.isEmpty)),
+        .just(.updateUserName(name))
+      ])
 
     case .idTextFieldDidUpdate(let id):
       os_log(.debug, "ID TextField did update: \(id)")
@@ -72,7 +77,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
       return .just(.updateIDValidationResult(idValidationResult))
       
     case .nextFlowRequested:
-      self.steps.accept(AppStep.termIsRequired)
+      self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
       return Observable<Mutation>.empty()
     }
   }
@@ -101,6 +106,9 @@ final class SetProfileViewReactor: Reactor, Stepper {
     switch mutation {
     case .updateProfileImage(let image):
       newState.profileImage = image
+
+    case .updateUserName(let userName):
+      newState.userName = userName
 
     case .updateNameValidationResult(let isNameValid):
       newState.nameValidationResult = isNameValid

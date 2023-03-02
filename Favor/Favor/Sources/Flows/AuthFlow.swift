@@ -39,8 +39,8 @@ final class AuthFlow: Flow {
     case .setProfileIsRequired:
       return self.navigationToSetProfile()
       
-    case .termIsRequired:
-      return self.navigationToTerm()
+    case .termIsRequired(let userName):
+      return self.navigationToTerm(with: userName)
       
     case .onboardingIsRequired:
       return .none
@@ -123,11 +123,16 @@ private extension AuthFlow {
     )
   }
   
-  func navigationToTerm() -> FlowContributors {
+  func navigationToTerm(with userName: String) -> FlowContributors {
     let viewController = TermViewController()
+    let reactor = TermViewReactor(with: userName)
+    viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
   }
 
   func presentPHPicker(manager: PHPickerManager) -> FlowContributors {
