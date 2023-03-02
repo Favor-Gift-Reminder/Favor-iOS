@@ -16,6 +16,12 @@ final class TermViewController: BaseViewController, View {
 
   // MARK: - Constants
 
+  private enum Metric {
+    static let topSpacing = 56.0
+    static let tableViewSpacing = 16.0
+    static let bottomSpacing = 32.0
+  }
+
   // MARK: - Properties
 
   // MARK: - UI Components
@@ -36,8 +42,14 @@ final class TermViewController: BaseViewController, View {
     return label
   }()
 
+  private lazy var termTableView: UITableView = {
+    let tableView = UITableView(frame: .zero, style: .plain)
+    return tableView
+  }()
+
   private lazy var startButton: LargeFavorButton = {
     let button = LargeFavorButton(with: .main("시작하기"))
+    button.isEnabled = false
     return button
   }()
 
@@ -65,6 +77,7 @@ final class TermViewController: BaseViewController, View {
     [
       self.logoImage,
       self.welcomeLabel,
+      self.termTableView,
       self.startButton
     ].forEach {
       self.view.addSubview($0)
@@ -75,17 +88,22 @@ final class TermViewController: BaseViewController, View {
     self.logoImage.snp.makeConstraints { make in
       make.width.height.equalTo(70)
       make.centerX.equalToSuperview()
-      make.top.equalTo(self.view.layoutMarginsGuide).offset(56)
+      make.top.equalTo(self.view.layoutMarginsGuide).inset(Metric.topSpacing)
     }
     
     self.welcomeLabel.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalTo(self.logoImage.snp.bottom).offset(28)
     }
+
+    self.termTableView.snp.makeConstraints { make in
+      make.bottom.equalTo(self.startButton.snp.top).offset(56)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+    }
     
     self.startButton.snp.makeConstraints { make in
-      make.bottom.equalToSuperview().inset(53)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalToSuperview().offset(Metric.bottomSpacing)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }
   
