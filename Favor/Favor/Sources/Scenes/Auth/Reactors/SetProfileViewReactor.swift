@@ -59,11 +59,12 @@ final class SetProfileViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .profileImageButtonDidTap:
+      os_log(.debug, "Choose profile image button did tap.")
       self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
       return Observable<Mutation>.empty()
 
     case .nameTextFieldDidUpdate(let name):
-      os_log(.debug, "Name TextField did update: \(name)")
+      os_log(.debug, "Name TextField did update: \(name).")
       self.isNameEmpty.accept(name.isEmpty)
       return .concat([
         .just(.updateNameValidationResult(name.isEmpty)),
@@ -71,14 +72,17 @@ final class SetProfileViewReactor: Reactor, Stepper {
       ])
 
     case .idTextFieldDidUpdate(let id):
-      os_log(.debug, "ID TextField did update: \(id)")
+      os_log(.debug, "ID TextField did update: \(id).")
       let idValidationResult = AuthValidationManager(type: .id).validate(id)
       self.idValidate.accept(idValidationResult)
       return .just(.updateIDValidationResult(idValidationResult))
       
     case .nextFlowRequested:
-      self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
-      return Observable<Mutation>.empty()
+      os_log(.debug, "Next button or return key from keyboard did tap.")
+      if self.currentState.isNextButtonEnabled {
+        self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
+      }
+      return .empty()
     }
   }
   
