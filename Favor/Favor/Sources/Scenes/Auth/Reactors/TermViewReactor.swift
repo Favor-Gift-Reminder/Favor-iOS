@@ -7,6 +7,7 @@
 
 import ReactorKit
 import RxCocoa
+import RxDataSources
 import RxFlow
 
 final class TermViewReactor: Reactor, Stepper {
@@ -15,6 +16,14 @@ final class TermViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
+
+  let dataSource = RxTableViewSectionedReloadDataSource<TermSection>(
+    configureCell: { _, tableView, indexPath, item in
+      let cell = tableView.dequeueReusableCell(for: indexPath) as AcceptTermCell
+      cell.bind(terms: item)
+      return cell
+    }
+  )
 
   enum Action {
     case viewDidLoad

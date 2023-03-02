@@ -84,7 +84,7 @@ private extension AppFlow {
     
     return .one(flowContributor: .contribute(
       withNextPresentable: testFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.setProfileIsRequired) // Change to Test Step here.
+      withNextStepper: OneStepper(withSingleStep: AppStep.termIsRequired("창준")) // Change to Test Step here.
     ))
   }
 }
