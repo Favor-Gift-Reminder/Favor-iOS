@@ -41,7 +41,7 @@ extension PHPickerManager: PHPickerViewControllerDelegate {
     if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
       itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, error in
         if let url {
-          let targetSize = CGSize(width: 120.0, height: 120.0)
+          let targetSize = CGSize(width: 80, height: 80)
           guard let downsampledImageData = cg.downsample(
             at: url,
             toSize: targetSize,
