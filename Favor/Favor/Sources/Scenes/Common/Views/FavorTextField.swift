@@ -71,6 +71,12 @@ class FavorTextField: UIView {
   /// TextField의 텍스트와 밑줄 사이의 거리
   public var underlineSpacing: CGFloat = 16.0
 
+  /// TextField 하단에 위치하는 메세지가 존재하는지 여부 Boolean
+  /// 해당 값의 여부에 따라 `FavorTextField` 전체적인 `frame`의 차이가 있음
+  public var hasMessage: Bool = true {
+    didSet { self.updateMessageLabel() }
+  }
+
   /// TextField 하단에 위치하는 메시지 Label의 String
   public var messageLabelText: String = "" {
     didSet { self.updateMessageLabel() }
@@ -119,6 +125,13 @@ class FavorTextField: UIView {
   public var fadeOutDuration: TimeInterval = 0.3
 
   // MARK: - UI Components
+
+  private lazy var stackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 12
+    return stackView
+  }()
 
   /// 메인 컴포넌트
   public lazy var textField: UITextField = {
@@ -260,12 +273,14 @@ extension FavorTextField: BaseView {
 
     self.messageLabelContainer.addSubview(self.messageLabel)
 
+    self.addSubview(self.stackView)
+
     [
       self.titleLabel,
       self.textFieldContainerView,
       self.messageLabelContainer
     ].forEach {
-      self.addSubview($0)
+      self.stackView.addArrangedSubview($0)
     }
 
     self.textField.rightView = self.secureEyeButton
@@ -289,24 +304,12 @@ extension FavorTextField: BaseView {
       make.bottom.equalTo(self.underlineView.snp.bottom)
     }
 
-    self.titleLabel.snp.makeConstraints { make in
-      make.bottom.equalTo(self.textFieldContainerView.snp.top).offset(-16)
-      make.directionalHorizontalEdges.equalToSuperview()
-    }
-
-    self.messageLabelContainer.snp.makeConstraints { make in
-      make.top.equalTo(self.textFieldContainerView.snp.bottom).offset(12)
-      make.directionalHorizontalEdges.equalToSuperview()
-      make.height.equalTo(14).priority(.medium)
+    self.stackView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
     }
 
     self.messageLabel.snp.makeConstraints { make in
       make.edges.equalToSuperview()
-    }
-
-    self.snp.makeConstraints { make in
-      make.top.equalTo(self.titleLabel.snp.top)
-      make.bottom.equalTo(self.messageLabelContainer.snp.bottom)
     }
   }
 }
@@ -358,6 +361,7 @@ private extension FavorTextField {
 
   /// TextField 하단의 메시지 인스턴스의 프로퍼티를 업데이트합니다.
   func updateMessageLabel() {
+    self.messageLabelContainer.isHidden = self.hasMessage ? false : true
     self.isMessageEmpty = self.messageLabelText.isEmpty
     self.messageLabel.text = self.messageLabelText
     self.messageLabel.font = self.messageLabelFont
