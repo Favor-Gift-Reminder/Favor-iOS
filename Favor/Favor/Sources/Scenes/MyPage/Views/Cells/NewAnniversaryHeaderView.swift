@@ -8,9 +8,10 @@
 import UIKit
 
 import ReactorKit
+import Reusable
 import SnapKit
 
-final class NewAnniversaryHeaderView: UICollectionReusableView, ReuseIdentifying, View {
+final class NewAnniversaryHeaderView: UICollectionReusableView, Reusable, View {
 
   // MARK: - Constants
 

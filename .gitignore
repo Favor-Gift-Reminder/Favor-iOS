@@ -1,7 +1,12 @@
-API-Info.plist
-
 # Created by https://www.toptal.com/developers/gitignore/api/swift,macos,xcode,swiftpackagemanager,cocoapods,carthage,firebase
 # Edit at https://www.toptal.com/developers/gitignore?templates=swift,macos,xcode,swiftpackagemanager,cocoapods,carthage,firebase
+
+### Secret Files ###
+# plist files
+
+*.plist
+!Info.plist
+!IDEWorkspaceChecks.plist
 
 ### Carthage ###
 # Carthage

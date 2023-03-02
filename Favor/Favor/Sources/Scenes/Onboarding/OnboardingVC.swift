@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Reusable
 import RxCocoa
 import RxFlow
 import RxSwift
@@ -14,23 +15,20 @@ import SnapKit
 
 final class OnboardingViewController: BaseViewController, Stepper {
   
-  // MARK: - Properties
+  // MARK: - UI COMPONENTS
   
   private let pageControl: UIPageControl = {
     let pc = UIPageControl()
     pc.numberOfPages = 3
     pc.pageIndicatorTintColor = .favorColor(.line3)
-    pc.currentPageIndicatorTintColor = .favorColor(.main)
+    pc.currentPageIndicatorTintColor = .favorColor(.icon)
     
     return pc
   }()
   
   private lazy var collectionView: UICollectionView = {
     let cv = UICollectionView(frame: .zero, collectionViewLayout: onboardingLayout())
-    cv.register(
-      OnboardingCell.self,
-      forCellWithReuseIdentifier: OnboardingCell.reuseIdentifier
-    )
+    cv.register(cellType: OnboardingCell.self)
     cv.isScrollEnabled = false
     cv.showsHorizontalScrollIndicator = false
     cv.dataSource = self
@@ -39,16 +37,19 @@ final class OnboardingViewController: BaseViewController, Stepper {
     return cv
   }()
   
-  private lazy var loginButton: UIButton = {
-    let btn = LargeFavorButton(with: .main("로그인"))
+  private lazy var startButton: UIButton = {
+    let btn = LargeFavorButton(with: .main("시작하기"))
+    btn.isEnabled = false
     btn.configurationUpdateHandler = {
       switch $0.state {
-      case .selected:
-        $0.configuration = LargeFavorButtonType.gray("선택 되었습니다.").configuration
+      case .disabled:
+        $0.configuration = LargeFavorButtonType.gray("시작하기").configuration
       default:
-        $0.configuration = LargeFavorButtonType.main("로그인").configuration
+        $0.configuration = LargeFavorButtonType.main("시작하기").configuration
       }
     }
+    
+    return btn
   }()
   
   private lazy var onboardingSection: NSCollectionLayoutSection = {
@@ -56,7 +57,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
       widthDimension: .absolute(view.frame.width),
       heightDimension: .absolute(collectionView.frame.height)
     )
-
+    
     let item = NSCollectionLayoutItem(layoutSize: size)
     let group = NSCollectionLayoutGroup.horizontal(layoutSize: size, subitems: [item])
     let section = NSCollectionLayoutSection(group: group)
@@ -71,32 +72,25 @@ final class OnboardingViewController: BaseViewController, Stepper {
     return section
   }()
   
-  private lazy var continueButton: LargeFavorButton = {
-    let btn = LargeFavorButton(with: .main("다음"))
-    btn.addTarget(self, action: #selector(didTapContinueButton), for: .touchUpInside)
-    
-    return btn
-  }()
+  // MARK: - PROPERTIES
   
   private var currentPage: Int = 0 {
     didSet {
       self.pageControl.currentPage = currentPage
+      self.startButton.isEnabled = self.currentPage == 2 ? true : false
     }
   }
   
+  private let slides = OnboardingSlide.slides()
   var steps = PublishRelay<Step>()
   
-  // MARK: - Setup
-  
-  override func setupStyles() {
-    self.view.backgroundColor = .white
-  }
+  // MARK: - SETUP
   
   override func setupLayouts() {
     [
       self.pageControl,
       self.collectionView,
-      self.continueButton
+      self.startButton
     ].forEach {
       self.view.addSubview($0)
     }
@@ -105,30 +99,18 @@ final class OnboardingViewController: BaseViewController, Stepper {
   override func setupConstraints() {
     self.pageControl.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.top.equalTo(view.safeAreaLayoutGuide).inset(66)
+      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(32)
     }
     
     self.collectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview()
-      make.top.equalTo(pageControl.snp.bottom)
-      make.bottom.equalTo(continueButton.snp.top)
+      make.top.equalTo(self.pageControl.snp.bottom)
+      make.bottom.equalTo(self.startButton.snp.top)
     }
     
-    self.continueButton.snp.makeConstraints { make in
-      make.leading.trailing.equalTo(view.layoutMarginsGuide)
-      make.bottom.equalToSuperview().inset(53)
-    }
-  }
-  
-  // MARK: - Selectors
-  
-  @objc
-  private func didTapContinueButton() {
-    let indexPath = IndexPath(row: self.currentPage + 1, section: 0)
-    self.collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-    
-    if self.currentPage == 2 {
-      self.steps.accept(AppStep.onboardingIsComplete)
+    self.startButton.snp.makeConstraints { make in
+      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
     }
   }
 }
@@ -140,12 +122,8 @@ extension OnboardingViewController: UICollectionViewDataSource, UICollectionView
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: OnboardingCell.reuseIdentifier,
-      for: indexPath
-    ) as? OnboardingCell else {
-      return UICollectionViewCell()
-    }
+    let cell = collectionView.dequeueReusableCell(for: indexPath) as OnboardingCell
+    cell.configure(with: self.slides[indexPath.row])
     
     return cell
   }
@@ -154,7 +132,7 @@ extension OnboardingViewController: UICollectionViewDataSource, UICollectionView
     _ collectionView: UICollectionView,
     numberOfItemsInSection section: Int
   ) -> Int {
-    return 3
+    return self.slides.count
   }
   
   private func onboardingLayout() -> UICollectionViewCompositionalLayout {
