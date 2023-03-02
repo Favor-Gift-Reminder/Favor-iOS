@@ -73,6 +73,7 @@
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
 		2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */; };
+		2ED712EF29B0C53B004369F7 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2ED712EE29B0C53B004369F7 /* RxRealm */; };
 		2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */; };
 		2ED8CB4729B0C30400E7B547 /* TermCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8CB4629B0C30400E7B547 /* TermCell.swift */; };
 		2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECA296E8D8400048A3C /* MyPageVC.swift */; };
@@ -279,6 +280,7 @@
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
+				2ED712EF29B0C53B004369F7 /* RxRealm in Frameworks */,
 				2E7C30B4295D8DC200BAC43D /* Then in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
 				2E635391295D906A00B23A14 /* Differentiator in Frameworks */,
@@ -911,6 +913,7 @@
 				2EC371F7299521AD00D1007B /* RxGesture */,
 				E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */,
 				2EE3BA7629AB241E004FDCC9 /* RxKeyboard */,
+				2ED712EE29B0C53B004369F7 /* RxRealm */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -973,6 +976,7 @@
 				2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */,
 				E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */,
 				2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
+				2ED712ED29B0C53B004369F7 /* XCRemoteSwiftPackageReference "RxRealm" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1476,6 +1480,14 @@
 				minimumVersion = 4.0.0;
 			};
 		};
+		2ED712ED29B0C53B004369F7 /* XCRemoteSwiftPackageReference "RxRealm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxRealm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.5;
+			};
+		};
 		2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
@@ -1542,6 +1554,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */;
 			productName = RxGesture;
+		};
+		2ED712EE29B0C53B004369F7 /* RxRealm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2ED712ED29B0C53B004369F7 /* XCRemoteSwiftPackageReference "RxRealm" */;
+			productName = RxRealm;
 		};
 		2EE3BA7629AB241E004FDCC9 /* RxKeyboard */ = {
 			isa = XCSwiftPackageProductDependency;
