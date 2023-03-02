@@ -74,6 +74,7 @@ final class SetProfileViewController: BaseViewController, View {
     textField.placeholder = "유저 아이디"
     textField.textField.keyboardType = .asciiCapable
     textField.textField.returnKeyType = .done
+    textField.updateMessageLabel(AuthValidationManager(type: .id).description(for: .empty), animated: false)
     
     let label = UILabel()
     label.text = "@"
@@ -124,7 +125,14 @@ final class SetProfileViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.profileImageButton.rx.tap
-      .map { Reactor.Action.ProfileImageButtonTap }
+      .map { Reactor.Action.profileImageButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.nameTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.nameTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -140,30 +148,62 @@ final class SetProfileViewController: BaseViewController, View {
         owner.scrollView.scroll(to: owner.idTextField.frame.maxY)
       })
       .disposed(by: self.disposeBag)
+
+    self.idTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.idTextFieldDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     self.idTextField.rx.editingDidEndOnExit
       .do(onNext: { [weak self] _ in
         self?.scrollView.scroll(to: .zero)
       })
-      .map { Reactor.Action.returnKeyboardTap }
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
-      .map { Reactor.Action.nextButtonTap }
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state
+    reactor.state.map { $0.profileImage }
       .skip(1)
-      .map { $0.profileImage }
       .asDriver(onErrorJustReturn: nil)
       .drive(with: self, onNext: { owner, image in
         owner.profileImageButton.configuration?.image = image
       })
       .disposed(by: self.disposeBag)
-    
+
+    reactor.state.map { $0.idValidationResult }
+      .asDriver(onErrorJustReturn: .valid)
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.idTextField.updateMessageLabel(
+            AuthValidationManager(type: .id).description(for: validationResult),
+            state: .error
+          )
+        case .valid:
+          owner.idTextField.updateMessageLabel(
+            AuthValidationManager(type: .id).description(for: .valid),
+            state: .normal
+          )
+        }
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isNextButtonEnabled }
+      .asDriver(onErrorJustReturn: false)
+      .drive(with: self, onNext: { owner, isEnabled in
+        owner.nextButton.isEnabled = isEnabled
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
