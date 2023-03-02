@@ -227,11 +227,10 @@ class FavorTextField: UIView {
   }
 
   func addLeftItem(item: UIView) {
-    item.snp.makeConstraints { make in
-      make.height.equalTo(24)
-      make.width.equalTo(28)
-    }
     self.textField.leftView = item
+    self.textField.leftView?.snp.makeConstraints { make in
+      make.height.width.equalTo(24)
+    }
     self.textField.leftViewMode = .always
   }
 

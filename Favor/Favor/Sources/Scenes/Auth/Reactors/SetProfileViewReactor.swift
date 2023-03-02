@@ -45,7 +45,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .ProfileImageButtonTap:
-//      self.coordinator.presentImagePicker()
+      self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
       return Observable<Mutation>.empty()
       
     case .nextButtonTap, .returnKeyboardTap:

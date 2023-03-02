@@ -31,22 +31,25 @@ final class AuthFlow: Flow {
       return .end(forwardToParentFlowWithStep: AppStep.authIsComplete)
       
     case .signInIsRequired:
-      return self.NavigationToSignIn()
+      return self.navigationToSignIn()
       
     case .signUpIsRequired:
-      return self.NavigationToSignUp()
+      return self.navigationToSignUp()
       
     case .setProfileIsRequired:
-      return self.NavigationToSetProfile()
+      return self.navigationToSetProfile()
       
     case .termIsRequired:
-      return self.NavigationToTerm()
+      return self.navigationToTerm()
       
     case .onboardingIsRequired:
       return .none
       
     case .onboardingIsComplete:
       return .none
+
+    case .imagePickerIsRequired(let manager):
+      return self.presentPHPicker(manager: manager)
       
     default:
       return .none
@@ -83,7 +86,7 @@ private extension AuthFlow {
     ))
   }
   
-  func NavigationToSignIn() -> FlowContributors {
+  func navigationToSignIn() -> FlowContributors {
     let viewController = SignInViewController()
     let reactor = SignInViewReactor()
     viewController.title = "로그인"
@@ -95,7 +98,7 @@ private extension AuthFlow {
     )
   }
   
-  func NavigationToSignUp() -> FlowContributors {
+  func navigationToSignUp() -> FlowContributors {
     let viewController = SignUpViewController()
     let reactor = SignUpViewReactor()
     viewController.reactor = reactor
@@ -107,7 +110,7 @@ private extension AuthFlow {
     )
   }
   
-  func NavigationToSetProfile() -> FlowContributors {
+  func navigationToSetProfile() -> FlowContributors {
     let viewController = SetProfileViewController()
     let reactor = SetProfileViewReactor(pickerManager: PHPickerManager())
     viewController.title = "프로필 작성"
@@ -120,10 +123,15 @@ private extension AuthFlow {
     )
   }
   
-  func NavigationToTerm() -> FlowContributors {
+  func navigationToTerm() -> FlowContributors {
     let viewController = TermViewController()
     self.rootViewController.pushViewController(viewController, animated: true)
     
+    return .none
+  }
+
+  func presentPHPicker(manager: PHPickerManager) -> FlowContributors {
+    manager.presentPHPicker(at: self.rootViewController)
     return .none
   }
 }

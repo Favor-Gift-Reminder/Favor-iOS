@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxKeyboard
 import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
@@ -17,21 +18,33 @@ final class SetProfileViewController: BaseViewController, View {
 
   private enum Metric {
     static let topSpacing = 56.0
+    static let profileImageSize = 120.0
+    static let plusImageSize = 48.0
     static let textFieldSpacing = 32.0
+    static let bottomSpacing = 32.0
   }
   
   // MARK: - Properties
   
   // MARK: - UI Components
+
+  private lazy var scrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+    scrollView.showsHorizontalScrollIndicator = false
+    scrollView.showsVerticalScrollIndicator = false
+    return scrollView
+  }()
   
   private lazy var profileImageButton: UIButton = {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
     config.image = UIImage(named: "ic_Friend")?.withTintColor(.favorColor(.white))
-    config.background.cornerRadius = 120 / 2
+    config.background.imageContentMode = .scaleAspectFill
     
     let button = UIButton(configuration: config)
+    button.clipsToBounds = true
+    button.layer.cornerRadius = Metric.profileImageSize / 2
     return button
   }()
   
@@ -40,7 +53,7 @@ final class SetProfileViewController: BaseViewController, View {
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
     config.image = UIImage(named: "ic_add")?.withTintColor(.favorColor(.white))
-    config.background.cornerRadius = 24
+    config.background.cornerRadius = Metric.plusImageSize / 2
     
     let button = UIButton(configuration: config)
     button.isUserInteractionEnabled = false
@@ -50,6 +63,7 @@ final class SetProfileViewController: BaseViewController, View {
   private lazy var nameTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이름"
+    textField.hasMessage = false
     textField.textField.keyboardType = .namePhonePad
     textField.textField.returnKeyType = .next
     return textField
@@ -80,6 +94,7 @@ final class SetProfileViewController: BaseViewController, View {
   
   private lazy var nextButton: LargeFavorButton = {
     let button = LargeFavorButton(with: .main("다음"))
+    button.isEnabled = false
     return button
   }()
   
@@ -88,6 +103,19 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SetProfileViewReactor) {
+    // Keyboard
+    RxKeyboard.instance.visibleHeight
+      .skip(1)
+      .drive(with: self, onNext: { owner, visibleHeight in
+        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
+          owner.nextButton.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
+          }
+          self.view.layoutIfNeeded()
+        }.startAnimation()
+      })
+      .disposed(by: self.disposeBag)
+
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in
@@ -103,10 +131,20 @@ final class SetProfileViewController: BaseViewController, View {
     self.nameTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.idTextField.becomeFirstResponder()
+        owner.scrollView.scroll(to: owner.idTextField.frame.maxY)
+      })
+      .disposed(by: self.disposeBag)
+
+    self.idTextField.rx.editingDidBegin
+      .bind(with: self, onNext: { owner, _ in
+        owner.scrollView.scroll(to: owner.idTextField.frame.maxY)
       })
       .disposed(by: self.disposeBag)
     
     self.idTextField.rx.editingDidEndOnExit
+      .do(onNext: { [weak self] _ in
+        self?.scrollView.scroll(to: .zero)
+      })
       .map { Reactor.Action.returnKeyboardTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -134,12 +172,18 @@ final class SetProfileViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.profileImageButton,
-      self.plusImageView,
-      self.textFieldStack,
+      self.scrollView,
       self.nextButton
     ].forEach {
       self.view.addSubview($0)
+    }
+
+    [
+      self.profileImageButton,
+      self.plusImageView,
+      self.textFieldStack
+    ].forEach {
+      self.scrollView.addSubview($0)
     }
 
     [
@@ -151,25 +195,31 @@ final class SetProfileViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
+    self.scrollView.snp.makeConstraints { make in
+      make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+    }
+
     self.profileImageButton.snp.makeConstraints { make in
-      make.width.height.equalTo(120)
+      make.width.height.equalTo(Metric.profileImageSize)
       make.centerX.equalToSuperview()
-      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
+      make.top.equalToSuperview().inset(Metric.topSpacing)
     }
     
     self.plusImageView.snp.makeConstraints { make in
-      make.width.height.equalTo(48)
+      make.width.height.equalTo(Metric.plusImageSize)
       make.bottom.trailing.equalTo(self.profileImageButton)
     }
     
     self.textFieldStack.snp.makeConstraints { make in
       make.top.equalTo(self.profileImageButton.snp.bottom).offset(56)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.width.equalToSuperview()
     }
     
     self.nextButton.snp.makeConstraints { make in
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalToSuperview().offset(Metric.bottomSpacing)
     }
   }  
 }

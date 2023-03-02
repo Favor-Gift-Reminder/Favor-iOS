@@ -115,9 +115,12 @@ final class SignUpViewController: BaseViewController, View {
     RxKeyboard.instance.visibleHeight
       .skip(1)
       .drive(with: self, onNext: { owner, visibleHeight in
-        owner.nextButton.snp.updateConstraints { make in
-          make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
-        }
+        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
+          owner.nextButton.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
+          }
+          self.view.layoutIfNeeded()
+        }.startAnimation()
       })
       .disposed(by: self.disposeBag)
 

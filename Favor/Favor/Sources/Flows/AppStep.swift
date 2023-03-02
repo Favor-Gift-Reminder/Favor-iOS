@@ -10,6 +10,8 @@ import Foundation
 import RxFlow
 
 enum AppStep: Step {
+  case imagePickerIsRequired(PHPickerManager)
+
   // MARK: - Auth
   case authIsRequired
   case authIsComplete
