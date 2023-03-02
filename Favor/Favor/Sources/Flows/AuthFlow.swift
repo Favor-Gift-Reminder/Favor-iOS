@@ -101,6 +101,7 @@ private extension AuthFlow {
   func navigationToSignUp() -> FlowContributors {
     let viewController = SignUpViewController()
     let reactor = SignUpViewReactor()
+    viewController.title = "회원가입"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
