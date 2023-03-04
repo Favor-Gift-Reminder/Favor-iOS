@@ -26,6 +26,7 @@
 		2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */; };
 		2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */; };
 		2E6C90C029A6783D00AF963A /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BF29A6783D00AF963A /* FavorTextField.swift */; };
+		2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E6E86F729B3974C00C7AF69 /* Term-Info.plist */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
@@ -147,7 +148,6 @@
 		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
 		E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */; };
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
-		E5B61F3729B38E750031046C /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5B61F3629B38E750031046C /* Term-Info.plist */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -179,6 +179,7 @@
 		2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageVC.swift; sourceTree = "<group>"; };
 		2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageViewReactor.swift; sourceTree = "<group>"; };
 		2E6C90BF29A6783D00AF963A /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
+		2E6E86F729B3974C00C7AF69 /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7C309B295D7C4300BAC43D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -298,7 +299,6 @@
 		E5B1828629744D8400229C50 /* FavorSmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSmallButton.swift; sourceTree = "<group>"; };
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+.swift"; sourceTree = "<group>"; };
-		E5B61F3629B38E750031046C /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Term-Info.plist"; path = "../../../../Term-Info.plist"; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -450,7 +450,7 @@
 				2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */,
 				2E7C30A9295D7C4500BAC43D /* Info.plist */,
 				E57F3138296FF48400E3D449 /* API-Info.plist */,
-				E5B61F3629B38E750031046C /* Term-Info.plist */,
+				2E6E86F729B3974C00C7AF69 /* Term-Info.plist */,
 			);
 			path = Favor;
 			sourceTree = "<group>";
@@ -1068,8 +1068,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */,
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
-				E5B61F3729B38E750031046C /* Term-Info.plist in Resources */,
 				E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */,
 				E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
