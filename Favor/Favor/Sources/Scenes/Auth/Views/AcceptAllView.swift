@@ -7,6 +7,8 @@
 
 import UIKit
 
+import RxCocoa
+import RxSwift
 import SnapKit
 
 final class AcceptAllView: UIView {
@@ -14,13 +16,6 @@ final class AcceptAllView: UIView {
   // MARK: - Constants
 
   // MARK: - Properties
-
-  var isChecked: Bool = false {
-    didSet {
-      let image = self.isChecked ? "checkmark.square.fill" : "checkmark.square"
-      self.checkButton.configuration?.image = UIImage(systemName: image)
-    }
-  }
 
   // MARK: - UI Components
 
@@ -38,8 +33,11 @@ final class AcceptAllView: UIView {
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 14)
+    label.text = "약관 전체동의"
     return label
   }()
+
+  lazy var button = UIButton()
 
   // MARK: - Initializer
 
@@ -56,6 +54,10 @@ final class AcceptAllView: UIView {
 
   // MARK: - Functions
 
+  public func updateCheckButton(isAllAccepted: Bool) {
+    let image = isAllAccepted ? "checkmark.square.fill" : "checkmark.square"
+    self.checkButton.configuration?.image = UIImage(systemName: image)
+  }
 }
 
 // MARK: - UI Setup
@@ -70,7 +72,8 @@ extension AcceptAllView: BaseView {
   func setupLayouts() {
     [
       self.checkButton,
-      self.titleLabel
+      self.titleLabel,
+      self.button
     ].forEach {
       self.addSubview($0)
     }
@@ -87,5 +90,16 @@ extension AcceptAllView: BaseView {
       make.centerY.equalToSuperview()
       make.trailing.equalToSuperview()
     }
+
+    self.button.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+  }
+}
+
+extension Reactive where Base: AcceptAllView {
+  var tap: ControlEvent<()> {
+    let source = base.button.rx.tap
+    return ControlEvent(events: source)
   }
 }

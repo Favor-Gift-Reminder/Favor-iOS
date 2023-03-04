@@ -16,13 +16,6 @@ final class AcceptTermCell: UITableViewCell, Reusable {
 
   // MARK: - Properties
 
-  var isChecked: Bool = false {
-    didSet {
-      let image = self.isChecked ? "checkmark.square.fill" : "checkmark.square"
-      self.checkButton.configuration?.image = UIImage(systemName: image)
-    }
-  }
-
   // MARK: - UI Components
 
   private lazy var checkButton: UIButton = {
@@ -64,6 +57,8 @@ final class AcceptTermCell: UITableViewCell, Reusable {
 
   public func bind(terms: Terms) {
     self.titleLabel.text = terms.title
+    let image = terms.isAccepted ? "checkmark.square.fill" : "checkmark.square"
+    self.checkButton.configuration?.image = UIImage(systemName: image)
   }
 
   // MARK: - Functions

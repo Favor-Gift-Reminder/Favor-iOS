@@ -5,7 +5,10 @@
 //  Created by 이창준 on 2023/03/02.
 //
 
+import Foundation
+
 import ReactorKit
+import Reusable
 import RxCocoa
 import RxDataSources
 import RxFlow
@@ -27,15 +30,23 @@ final class TermViewReactor: Reactor, Stepper {
 
   enum Action {
     case viewDidLoad
+    case acceptAllDidTap
+    case itemSelected(IndexPath)
   }
 
   enum Mutation {
-    case updateTermSection
+    case setupTermSection
+    case checkIfAllAccepted
+    case toggleAllTerms
+    case updateTermSection(IndexPath)
+    case validateNextButton
   }
 
   struct State {
     var userName: String
+    var isAllAccepted: Bool = false
     var termSections: [TermSection] = []
+    var isNextButtonEnabled: Bool = false
   }
 
   // MARK: - Initializer
@@ -52,7 +63,20 @@ final class TermViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      return .just(.updateTermSection)
+      return .just(.setupTermSection)
+
+    case .acceptAllDidTap:
+      return .concat([
+        .just(.toggleAllTerms),
+        .just(.validateNextButton)
+      ])
+
+    case .itemSelected(let indexPath):
+      return .concat([
+        .just(.updateTermSection(indexPath)),
+        .just(.checkIfAllAccepted),
+        .just(.validateNextButton)
+      ])
     }
   }
 
@@ -60,8 +84,35 @@ final class TermViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
-    case .updateTermSection:
+    case .setupTermSection:
       newState.termSections = self.setupTermSection()
+
+    case .checkIfAllAccepted:
+      newState.isAllAccepted = true
+      for section in newState.termSections {
+        for term in section.items where !term.isAccepted {
+          newState.isAllAccepted = false
+        }
+      }
+
+    case .toggleAllTerms:
+      newState.isAllAccepted.toggle()
+      for section in 0 ..< newState.termSections.count {
+        for row in 0 ..< newState.termSections[section].items.count {
+          newState.termSections[section].items[row].isAccepted = newState.isAllAccepted
+        }
+      }
+
+    case .updateTermSection(let indexPath):
+      newState.termSections[indexPath.section].items[indexPath.row].isAccepted.toggle()
+
+    case .validateNextButton:
+      newState.isNextButtonEnabled = true
+      for section in newState.termSections {
+        for term in section.items where term.isRequired && !term.isAccepted {
+          newState.isNextButtonEnabled = false
+        }
+      }
     }
 
     return newState

@@ -76,14 +76,14 @@ final class TermViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.acceptAllView.rx.tap
+      .map { Reactor.Action.acceptAllDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.termTableView.rx.itemSelected
-      .bind(with: self, onNext: { owner, indexPath in
-        owner.termTableView.deselectRow(at: indexPath, animated: false)
-        guard let cell = owner.termTableView.cellForRow(
-          at: indexPath
-        ) as? AcceptTermCell else { return }
-        cell.isChecked.toggle()
-      })
+      .map { Reactor.Action.itemSelected($0) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     // State
@@ -93,8 +93,21 @@ final class TermViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
+    reactor.state.map { $0.isAllAccepted }
+      .bind(with: self, onNext: { owner, isAccepted in
+        owner.acceptAllView.updateCheckButton(isAllAccepted: isAccepted)
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.termSections }
       .bind(to: self.termTableView.rx.items(dataSource: reactor.dataSource))
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isNextButtonEnabled }
+      .asDriver(onErrorJustReturn: false)
+      .drive(with: self, onNext: { owner, isEnabled in
+        owner.startButton.isEnabled = isEnabled
+      })
       .disposed(by: self.disposeBag)
   }
 
