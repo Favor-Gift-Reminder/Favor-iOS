@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class GiftStatsCellReactor: Reactor {
+final class FavorGiftStatsCellReactor: Reactor {
   
   // MARK: - Properties
   
@@ -31,8 +31,5 @@ final class GiftStatsCellReactor: Reactor {
     self.initialState = State()
   }
   
-  
   // MARK: - Functions
-  
-
 }

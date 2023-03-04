@@ -78,8 +78,8 @@ final class SetProfileViewController: BaseViewController, View {
     return stackView
   }()
   
-  private lazy var nextButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main("다음"))
+  private lazy var nextButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main("다음"))
     return button
   }()
   

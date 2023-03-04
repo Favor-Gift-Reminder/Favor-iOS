@@ -14,26 +14,22 @@ import OSLog
 ///   ```
 class APIManager {
   private typealias JSON = [String: Any]
-
-  // MARK: - Properties
-
-  static let mock = APIManager(.mock)
-
+  
+  enum HeaderType {
+    case json
+    case multiPart
+  }
+  
   private enum ServerType: String {
     case mock = "MockServer"
     case v1 = "Deployed_v1"
   }
 
+  // MARK: - Properties
+
+  static let mock = APIManager(.mock)
   private var type: ServerType
-
-  // MARK: - Initializer
-
-  private init(_ type: ServerType) {
-    self.type = type
-  }
-
-  // MARK: - Functions
-
+  
   /// plist 파일에 포함된 API의 BaseURL입니다.
   /// URL 끝에 '/'가 없습니다. Path를 작성할 때 `/user`와 같이 작성해주세요.
   var baseURL: String {
@@ -59,5 +55,30 @@ class APIManager {
       fatalError("plist file doesn't have value with key 'BaseURL'.")
     }
     return value
+  }
+
+  // MARK: - Initializer
+
+  private init(_ type: ServerType) {
+    self.type = type
+  }
+}
+
+// MARK: - TYPE METHODS
+
+extension APIManager {
+  static func decode<T: Decodable>(_ data: Data) -> T {
+    let decoder = JSONDecoder()
+    guard let responseModel = try? decoder.decode(T.self, from: data) else {
+      fatalError("Decode Error")
+    }
+    return responseModel
+  }
+
+  static func header(for header: HeaderType) -> [String: String] {
+    switch header {
+    case .json: return ["Content-Type": "application/json"]
+    case .multiPart: return ["Content-Type": "multipart/form-data"]
+    }
   }
 }

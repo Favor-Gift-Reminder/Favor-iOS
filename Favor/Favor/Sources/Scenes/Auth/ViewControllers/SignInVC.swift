@@ -36,8 +36,8 @@ final class SignInViewController: BaseViewController, View {
     return textField
   }()
   
-  private lazy var loginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main("시작하기"))
+  private lazy var loginButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main("시작하기"))
     return button
   }()
   
@@ -51,13 +51,13 @@ final class SignInViewController: BaseViewController, View {
     return stackView
   }()
   
-  private lazy var forgotEmailButton: PlainFavorButton = {
-    let button = PlainFavorButton(with: .logIn("이메일 찾기"))
+  private lazy var forgotEmailButton: FavorPlainButton = {
+    let button = FavorPlainButton(with: .logIn("이메일 찾기"))
     return button
   }()
   
-  private lazy var forgotPWButton: PlainFavorButton = {
-    let button = PlainFavorButton(with: .logIn("비밀번호 찾기"))
+  private lazy var forgotPWButton: FavorPlainButton = {
+    let button = FavorPlainButton(with: .logIn("비밀번호 찾기"))
     return button
   }()
   

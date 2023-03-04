@@ -13,7 +13,7 @@
 		2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */; };
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562629A9220D006CF302 /* NewAnniversarySection.swift */; };
-		2E11C2FF29A7AB29004B5C4A /* EmptyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */; };
+		2E11C2FF29A7AB29004B5C4A /* FavorEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E11C2FE29A7AB29004B5C4A /* FavorEmptyCell.swift */; };
 		2E171164298035A400E34121 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E171163298035A400E34121 /* TabBarController.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
 		2E3668C6299FA6F4001FC283 /* UIView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3668C5299FA6F4001FC283 /* UIView+.swift */; };
@@ -61,14 +61,14 @@
 		2EC939E72998C6D100C8C47F /* FavorAnniversaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E62998C6D100C8C47F /* FavorAnniversaryCell.swift */; };
 		2EC939EB299A7D4300C8C47F /* MyPageSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */; };
 		2EC939EF299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift */; };
-		2EC939F1299CF67E00C8C47F /* GiftStatsCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* GiftStatsCellReactor.swift */; };
+		2EC939F1299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift */; };
 		2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F2299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift */; };
 		2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */; };
 		2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift */; };
 		2EC939F9299E160B00C8C47F /* MyPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* MyPageHeaderView.swift */; };
 		2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939FA299E163800C8C47F /* MyPageHeaderViewReactor.swift */; };
 		2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B3982983DF3900CDBC81 /* AppFlow.swift */; };
-		2ECB681529A9CAD600F4C1F3 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260F029908F0100D14020 /* CategoryView.swift */; };
+		2ECB681529A9CAD600F4C1F3 /* FavorCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260F029908F0100D14020 /* FavorCategoryView.swift */; };
 		2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECC94C9296026A200B530F7 /* TabBarPage.swift */; };
 		2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ECD69B329672CF000D00F8F /* UIColor+.swift */; };
 		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
@@ -97,11 +97,10 @@
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE3BA8D29AE15A8004FDCC9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */; };
-		2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */; };
 		2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */; };
 		2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
-		E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* PlainFavorButton.swift */; };
+		E51AB858297A8BE200955301 /* FavorPlainButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51AB857297A8BE200955301 /* FavorPlainButton.swift */; };
 		E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B6298A644C002940D1 /* FTUXStorage.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
@@ -125,12 +124,14 @@
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
 		E57F313F297000DB00E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313E297000DB00E3D449 /* BaseView.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
-		E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* LargeFavorButton.swift */; };
+		E5B1827C2974361400229C50 /* FavorLargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* FavorLargeButton.swift */; };
 		E5B1828329743D5400229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
 		E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */; };
 		E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */; };
-		E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* SmallFavorButton.swift */; };
+		E5B1828729744D8400229C50 /* FavorSmallButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* FavorSmallButton.swift */; };
 		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
+		E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */; };
+		E5B61F3529B37F260031046C /* OldFavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -153,7 +154,7 @@
 		2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderView.swift; sourceTree = "<group>"; };
 		2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2E00562629A9220D006CF302 /* NewAnniversarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversarySection.swift; sourceTree = "<group>"; };
-		2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyCollectionViewCell.swift; sourceTree = "<group>"; };
+		2E11C2FE29A7AB29004B5C4A /* FavorEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorEmptyCell.swift; sourceTree = "<group>"; };
 		2E171163298035A400E34121 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OldFavorTextField.swift; sourceTree = "<group>"; };
@@ -198,7 +199,7 @@
 		2EC939E62998C6D100C8C47F /* FavorAnniversaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorAnniversaryCell.swift; sourceTree = "<group>"; };
 		2EC939EA299A7D4300C8C47F /* MyPageSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionHeaderView.swift; sourceTree = "<group>"; };
 		2EC939EE299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageSectionHeaderViewReactor.swift; sourceTree = "<group>"; };
-		2EC939F0299CF67E00C8C47F /* GiftStatsCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftStatsCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F0299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorGiftStatsCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F2299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSetupProfileCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorPrefersCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F6299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorAnniversaryCellReactor.swift; sourceTree = "<group>"; };
@@ -232,20 +233,19 @@
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
-		2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
 		2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
 		2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE3BAAB29AF1679004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
-		E51AB857297A8BE200955301 /* PlainFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlainFavorButton.swift; sourceTree = "<group>"; };
+		E51AB857297A8BE200955301 /* FavorPlainButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorPlainButton.swift; sourceTree = "<group>"; };
 		E55CF7B6298A644C002940D1 /* FTUXStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FTUXStorage.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		E55CF7C3298B5CDF002940D1 /* AppStpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStpper.swift; sourceTree = "<group>"; };
 		E55CF7C5298B8EBB002940D1 /* TabBarFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFlow.swift; sourceTree = "<group>"; };
 		E56260EE298F4D4F00D14020 /* NewGiftVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftVC.swift; sourceTree = "<group>"; };
-		E56260F029908F0100D14020 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		E56260F029908F0100D14020 /* FavorCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorCategoryView.swift; sourceTree = "<group>"; };
 		E56260FD299249BD00D14020 /* PickedPictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureCell.swift; sourceTree = "<group>"; };
 		E562610129934B4E00D14020 /* PickPictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickPictureCell.swift; sourceTree = "<group>"; };
 		E562610329939E8800D14020 /* PickedPictureSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureSection.swift; sourceTree = "<group>"; };
@@ -262,12 +262,13 @@
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
 		E57F313E297000DB00E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
-		E5B1827B2974361400229C50 /* LargeFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LargeFavorButton.swift; sourceTree = "<group>"; };
+		E5B1827B2974361400229C50 /* FavorLargeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorLargeButton.swift; sourceTree = "<group>"; };
 		E5B1827D297439CA00229C50 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
 		E5B1828129743A8B00229C50 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
-		E5B1828629744D8400229C50 /* SmallFavorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SmallFavorButton.swift; sourceTree = "<group>"; };
+		E5B1828629744D8400229C50 /* FavorSmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSmallButton.swift; sourceTree = "<group>"; };
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
+		E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+.swift"; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -353,7 +354,7 @@
 		2E6EBFB829A9B01700A924B9 /* CellReactors */ = {
 			isa = PBXGroup;
 			children = (
-				2EC939F0299CF67E00C8C47F /* GiftStatsCellReactor.swift */,
+				2EC939F0299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift */,
 				2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */,
 				2EC939F2299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift */,
 				2EC939F6299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift */,
@@ -422,7 +423,6 @@
 				2EBB0151295E8CAD0072D158 /* Assets */,
 				E5E28ECA295DAC15006B9245 /* Base */,
 				2EBB0150295E8CA10072D158 /* Constants */,
-				E55CF7B4298A622B002940D1 /* Protocols */,
 				2EBB014F295E8C9B0072D158 /* Extensions */,
 				2EBB014E295E8C960072D158 /* Fonts */,
 			);
@@ -432,13 +432,13 @@
 		2EBB014A295E8C600072D158 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				2EE3BA6B29A9CC30004FDCC9 /* Factories */,
 				E55CF7B8298A705F002940D1 /* Flows */,
 				E55CF7B5298A6422002940D1 /* Storages */,
 				E5B182912974F43E00229C50 /* Utils */,
 				2EBB014D295E8C880072D158 /* Models */,
 				2EBB014C295E8C820072D158 /* Network */,
 				2EBB014B295E8C770072D158 /* Scenes */,
+				E5B61F3429B37ED90031046C /* Deprecated */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -465,10 +465,9 @@
 		2EBB014C295E8C820072D158 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 				2EE3BA9C29AE5C2F004FDCC9 /* APIs */,
 				2EBB015D295E8DDC0072D158 /* DataMapping */,
-				2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */,
-				2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -500,6 +499,7 @@
 				2E3668C5299FA6F4001FC283 /* UIView+.swift */,
 				E57F313A296FF4AB00E3D449 /* Preview.swift */,
 				2EA384BF29936BAD0081499C /* String+.swift */,
+				E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -762,8 +762,8 @@
 		2EE07EE4296EDCA900048A3C /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */,
+				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */,
 				2EE0D586297524880064E932 /* SetProfileViewReactor.swift */,
 			);
@@ -777,14 +777,6 @@
 				2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */,
 			);
 			path = FavorUITests;
-			sourceTree = "<group>";
-		};
-		2EE3BA6B29A9CC30004FDCC9 /* Factories */ = {
-			isa = PBXGroup;
-			children = (
-				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
-			);
-			path = Factories;
 			sourceTree = "<group>";
 		};
 		2EE3BA9C29AE5C2F004FDCC9 /* APIs */ = {
@@ -802,6 +794,7 @@
 				2EC939E42998C68900C8C47F /* FavorPrefersCell.swift */,
 				2EC939E22998C63200C8C47F /* FavorSetupProfileCell.swift */,
 				2EC939E62998C6D100C8C47F /* FavorAnniversaryCell.swift */,
+				2E11C2FE29A7AB29004B5C4A /* FavorEmptyCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -810,16 +803,15 @@
 			isa = PBXGroup;
 			children = (
 				E517803729A8E88A0011C220 /* Cells */,
-				E5B1827B2974361400229C50 /* LargeFavorButton.swift */,
-				E5B1828629744D8400229C50 /* SmallFavorButton.swift */,
-				E51AB857297A8BE200955301 /* PlainFavorButton.swift */,
+				E5B1827B2974361400229C50 /* FavorLargeButton.swift */,
+				E5B1828629744D8400229C50 /* FavorSmallButton.swift */,
+				E51AB857297A8BE200955301 /* FavorPlainButton.swift */,
 				E5626123299E5E0100D14020 /* FavorSwitch.swift */,
 				E5626125299E64F300D14020 /* FavorDivider.swift */,
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
-				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
-				E56260F029908F0100D14020 /* CategoryView.swift */,
+				E56260F029908F0100D14020 /* FavorCategoryView.swift */,
 				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
-				2E11C2FE29A7AB29004B5C4A /* EmptyCollectionViewCell.swift */,
+				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -830,15 +822,6 @@
 				2E6EBFB829A9B01700A924B9 /* CellReactors */,
 			);
 			path = Reactors;
-			sourceTree = "<group>";
-		};
-		E55CF7B4298A622B002940D1 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
-				E57F313E297000DB00E3D449 /* BaseView.swift */,
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		E55CF7B5298A6422002940D1 /* Storages */ = {
@@ -876,7 +859,6 @@
 		E5B182912974F43E00229C50 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
 				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 				2EE0D58829756A7F0064E932 /* ValidateManager.swift */,
@@ -884,10 +866,21 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		E5B61F3429B37ED90031046C /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
+				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
+			);
+			path = Deprecated;
+			sourceTree = "<group>";
+		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
 			isa = PBXGroup;
 			children = (
 				E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */,
+				E57F313E297000DB00E3D449 /* BaseView.swift */,
+				2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1049,12 +1042,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2ECB681529A9CAD600F4C1F3 /* CategoryView.swift in Sources */,
+				2ECB681529A9CAD600F4C1F3 /* FavorCategoryView.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
+				E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
@@ -1062,13 +1056,14 @@
 				E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */,
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
 				2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */,
+				E5B61F3529B37F260031046C /* OldFavorTextField.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
 				E57F313F297000DB00E3D449 /* BaseView.swift in Sources */,
 				2E171164298035A400E34121 /* TabBarController.swift in Sources */,
-				2E11C2FF29A7AB29004B5C4A /* EmptyCollectionViewCell.swift in Sources */,
+				2E11C2FF29A7AB29004B5C4A /* FavorEmptyCell.swift in Sources */,
 				E5626122299E3EDA00D14020 /* PlainFavorButtonType.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,
@@ -1084,7 +1079,7 @@
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
-				E5B1828729744D8400229C50 /* SmallFavorButton.swift in Sources */,
+				E5B1828729744D8400229C50 /* FavorSmallButton.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
@@ -1121,7 +1116,7 @@
 				2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */,
 				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
 				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
-				E5B1827C2974361400229C50 /* LargeFavorButton.swift in Sources */,
+				E5B1827C2974361400229C50 /* FavorLargeButton.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2EA384C029936BAD0081499C /* String+.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
@@ -1133,8 +1128,7 @@
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
-				E51AB858297A8BE200955301 /* PlainFavorButton.swift in Sources */,
-				2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */,
+				E51AB858297A8BE200955301 /* FavorPlainButton.swift in Sources */,
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
@@ -1143,7 +1137,7 @@
 				E55CF7C6298B8EBB002940D1 /* TabBarFlow.swift in Sources */,
 				2EA384BE299248200081499C /* FavorSearchBar.swift in Sources */,
 				2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */,
-				2EC939F1299CF67E00C8C47F /* GiftStatsCellReactor.swift in Sources */,
+				2EC939F1299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift in Sources */,
 				2E6C90C029A6783D00AF963A /* FavorTextField.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,

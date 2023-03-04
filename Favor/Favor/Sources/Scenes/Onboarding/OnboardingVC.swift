@@ -38,7 +38,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   }()
   
   private lazy var startButton: UIButton = {
-    let btn = LargeFavorButton(with: .main("시작하기"))
+    let btn = FavorLargeButton(with: .main("시작하기"))
     btn.isEnabled = false
     btn.configurationUpdateHandler = {
       switch $0.state {

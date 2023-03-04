@@ -19,7 +19,7 @@ class FavorPrefersCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - UI Components
   
-  private lazy var button = SmallFavorButton(with: .darkWithHeart("취향"))
+  private lazy var button = FavorSmallButton(with: .darkWithHeart("취향"))
   
   // MARK: - Initializer
   

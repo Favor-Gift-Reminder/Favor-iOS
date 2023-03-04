@@ -27,9 +27,9 @@ final class HomeViewController: BaseViewController, View {
       // Empty
       case .emptyCell(let text, let image):
         guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: EmptyCollectionViewCell.reuseIdentifier,
+          withReuseIdentifier: FavorEmptyCell.reuseIdentifier,
           for: indexPath
-        ) as? EmptyCollectionViewCell else { return UICollectionViewCell() }
+        ) as? FavorEmptyCell else { return UICollectionViewCell() }
         cell.text = text
         cell.image = image
         return cell
@@ -81,8 +81,8 @@ final class HomeViewController: BaseViewController, View {
       forCellWithReuseIdentifier: TimelineCell.reuseIdentifier
     )
     collectionView.register(
-      EmptyCollectionViewCell.self,
-      forCellWithReuseIdentifier: EmptyCollectionViewCell.reuseIdentifier
+      FavorEmptyCell.self,
+      forCellWithReuseIdentifier: FavorEmptyCell.reuseIdentifier
     )
     collectionView.register(
       HeaderView.self,

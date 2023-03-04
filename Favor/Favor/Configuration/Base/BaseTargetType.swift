@@ -17,4 +17,8 @@ extension BaseTargetType {
   }
 
   var sampleData: Data { Data() }
+  
+  var headers: [String : String]? {
+    return APIManager.header(for: .json)
+  }
 }
