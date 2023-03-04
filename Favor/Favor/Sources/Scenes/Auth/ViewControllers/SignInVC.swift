@@ -39,7 +39,7 @@ final class SignInViewController: BaseViewController, View {
     textField.textField.returnKeyType = .done
     return textField
   }()
-
+  
   private lazy var textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical

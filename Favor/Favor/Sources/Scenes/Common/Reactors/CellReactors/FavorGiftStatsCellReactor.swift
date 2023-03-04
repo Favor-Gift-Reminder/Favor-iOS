@@ -31,8 +31,6 @@ final class FavorGiftStatsCellReactor: Reactor {
     self.initialState = State()
   }
   
-  
   // MARK: - Functions
-  
 
 }

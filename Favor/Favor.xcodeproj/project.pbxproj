@@ -112,7 +112,6 @@
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE3BA8D29AE15A8004FDCC9 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */; };
-		2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */; };
 		2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */; };
 		2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */; };
 		2EE3BAAD29AF1A3A004FDCC9 /* UIScrollView+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BAAC29AF1A3A004FDCC9 /* UIScrollView+.swift */; };
@@ -147,6 +146,8 @@
 		E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */; };
 		E5B1828729744D8400229C50 /* FavorSmallButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* FavorSmallButton.swift */; };
 		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
+		E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */; };
+		E5B61F3529B37F260031046C /* OldFavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -261,7 +262,6 @@
 		2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthValidationManager.swift; sourceTree = "<group>"; };
 		2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthType.swift; sourceTree = "<group>"; };
 		2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
-		2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Networkable.swift; sourceTree = "<group>"; };
 		2EE3BA9429AE54A1004FDCC9 /* BaseTargetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTargetType.swift; sourceTree = "<group>"; };
 		2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Encodable+.swift"; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -298,6 +298,7 @@
 		E5B1828229743A8C00229C50 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		E5B1828629744D8400229C50 /* FavorSmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSmallButton.swift; sourceTree = "<group>"; };
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
+		E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+.swift"; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -485,7 +486,6 @@
 				2EBB0151295E8CAD0072D158 /* Assets */,
 				E5E28ECA295DAC15006B9245 /* Base */,
 				2EBB0150295E8CA10072D158 /* Constants */,
-				E55CF7B4298A622B002940D1 /* Protocols */,
 				2EBB014F295E8C9B0072D158 /* Extensions */,
 				2EBB014E295E8C960072D158 /* Fonts */,
 			);
@@ -502,6 +502,7 @@
 				2EBB014C295E8C820072D158 /* Network */,
 				2EBB014B295E8C770072D158 /* Scenes */,
 				2E6E86F229B389F100C7AF69 /* Deprecated */,
+				E5B61F3429B37ED90031046C /* Deprecated */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -528,6 +529,7 @@
 		2EBB014C295E8C820072D158 /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 				2EE3BA9C29AE5C2F004FDCC9 /* APIs */,
 				2EBB015D295E8DDC0072D158 /* DataMapping */,
 				2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */,
@@ -564,6 +566,7 @@
 				2E3668C5299FA6F4001FC283 /* UIView+.swift */,
 				E57F313A296FF4AB00E3D449 /* Preview.swift */,
 				2EA384BF29936BAD0081499C /* String+.swift */,
+				E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -841,6 +844,7 @@
 				2E6E86F129B3894500C7AF69 /* Password */,
 				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */,
+				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */,
 				2EE0D586297524880064E932 /* SetProfileViewReactor.swift */,
 				2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */,
@@ -889,6 +893,7 @@
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
 				E56260F029908F0100D14020 /* FavorCategoryView.swift */,
 				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
+				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -943,12 +948,20 @@
 		E5B182912974F43E00229C50 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
 				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 				2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */,
 			);
 			path = Utils;
+			sourceTree = "<group>";
+		};
+		E5B61F3429B37ED90031046C /* Deprecated */ = {
+			isa = PBXGroup;
+			children = (
+				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
+				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
+			);
+			path = Deprecated;
 			sourceTree = "<group>";
 		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
@@ -1131,6 +1144,7 @@
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
+				E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
@@ -1140,6 +1154,7 @@
 				2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */,
 				2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */,
 				2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */,
+				E5B61F3529B37F260031046C /* OldFavorTextField.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
