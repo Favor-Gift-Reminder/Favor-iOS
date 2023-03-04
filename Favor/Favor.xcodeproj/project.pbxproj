@@ -27,6 +27,7 @@
 		2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */; };
 		2E6C90C029A6783D00AF963A /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BF29A6783D00AF963A /* FavorTextField.swift */; };
 		2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E6E86F729B3974C00C7AF69 /* Term-Info.plist */; };
+		2E6E86F629B3942900C7AF69 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E6E86F529B3942900C7AF69 /* Term-Info.plist */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
@@ -180,6 +181,7 @@
 		2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageViewReactor.swift; sourceTree = "<group>"; };
 		2E6C90BF29A6783D00AF963A /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
 		2E6E86F729B3974C00C7AF69 /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
+		2E6E86F529B3942900C7AF69 /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7C309B295D7C4300BAC43D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				2E7C30A9295D7C4500BAC43D /* Info.plist */,
 				E57F3138296FF48400E3D449 /* API-Info.plist */,
 				2E6E86F729B3974C00C7AF69 /* Term-Info.plist */,
+				2E6E86F529B3942900C7AF69 /* Term-Info.plist */,
 			);
 			path = Favor;
 			sourceTree = "<group>";
@@ -1070,6 +1073,7 @@
 			files = (
 				2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */,
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
+				2E6E86F629B3942900C7AF69 /* Term-Info.plist in Resources */,
 				E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */,
 				E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
