@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxKeyboard
 import SnapKit
 
 final class NewPasswordViewController: BaseViewController, View {
@@ -61,6 +62,16 @@ final class NewPasswordViewController: BaseViewController, View {
 
   private lazy var doneButton: LargeFavorButton = {
     let button = LargeFavorButton(with: .main("변경하기"))
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration = LargeFavorButtonType.main("다음").configuration
+      case .disabled:
+        button.configuration = LargeFavorButtonType.gray("다음").configuration
+      default:
+        break
+      }
+    }
     button.isEnabled = false
     return button
   }()
@@ -70,6 +81,19 @@ final class NewPasswordViewController: BaseViewController, View {
   // MARK: - Binding
 
   func bind(reactor: NewPasswordViewReactor) {
+    // Keyboard
+    RxKeyboard.instance.visibleHeight
+      .skip(1)
+      .drive(with: self, onNext: { owner, visibleHeight in
+        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
+          owner.doneButton.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
+          }
+          self.view.layoutIfNeeded()
+        }.startAnimation()
+      })
+      .disposed(by: self.disposeBag)
+
     // Action
     Observable.just(())
       .asDriver(onErrorRecover: { _ in return .never()})
@@ -78,11 +102,23 @@ final class NewPasswordViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
+    self.newPasswordTextField.rx.text
+      .orEmpty
+      .map { Reactor.Action.passwordTextFieldDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.newPasswordTextField.rx.editingDidEndOnExit
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, _ in
         owner.pwValidateTextField.becomeFirstResponder()
       })
+      .disposed(by: self.disposeBag)
+
+    self.pwValidateTextField.rx.text
+      .orEmpty
+      .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.pwValidateTextField.rx.editingDidEndOnExit
@@ -94,7 +130,52 @@ final class NewPasswordViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.passwordValidationResult }
+      .asDriver(onErrorJustReturn: .valid)
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.newPasswordTextField.updateMessageLabel(
+            AuthValidationManager(type: .password).description(for: validationResult),
+            state: .error
+          )
+        case .valid:
+          owner.newPasswordTextField.updateMessageLabel(
+            AuthValidationManager(type: .password).description(for: validationResult),
+            state: .normal
+          )
+        }
+      })
+      .disposed(by: self.disposeBag)
 
+    reactor.state.map { $0.confirmPasswordValidationResult }
+      .asDriver(onErrorJustReturn: .valid)
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.pwValidateTextField.updateMessageLabel(
+            AuthValidationManager(type: .confirmPassword).description(for: validationResult),
+            state: .error
+          )
+        case .valid:
+          owner.pwValidateTextField.updateMessageLabel(
+            AuthValidationManager(type: .confirmPassword).description(for: validationResult),
+            state: .normal
+          )
+        }
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isDoneButtonEnabled }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, isEnabled in
+        owner.doneButton.isEnabled = isEnabled
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -106,13 +187,11 @@ final class NewPasswordViewController: BaseViewController, View {
   }
 
   override func setupLayouts() {
-    self.view.addSubview(self.scrollView)
-
     [
-      self.textFieldStackView,
+      self.scrollView,
       self.doneButton
     ].forEach {
-      self.scrollView.addSubview($0)
+      self.view.addSubview($0)
     }
 
     [
@@ -121,6 +200,8 @@ final class NewPasswordViewController: BaseViewController, View {
     ].forEach {
       self.textFieldStackView.addArrangedSubview($0)
     }
+
+    self.scrollView.addSubview(self.textFieldStackView)
   }
 
   override func setupConstraints() {
