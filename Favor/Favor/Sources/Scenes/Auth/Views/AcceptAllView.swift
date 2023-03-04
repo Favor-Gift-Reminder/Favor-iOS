@@ -37,7 +37,7 @@ final class AcceptAllView: UIView {
     return label
   }()
 
-  lazy var button = UIButton()
+  fileprivate lazy var button = UIButton()
 
   // MARK: - Initializer
 
