@@ -73,7 +73,8 @@ final class SignInViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.emailTextField.rx.editingDidEndOnExit
-      .bind(with: self, onNext: { owner, _ in
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
         owner.passwordTextField.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
@@ -98,7 +99,12 @@ final class SignInViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
-
+    reactor.state.map { $0.isSignInButtonEnabled }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, isEnabled in
+        owner.signInButton.isEnabled = isEnabled
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
