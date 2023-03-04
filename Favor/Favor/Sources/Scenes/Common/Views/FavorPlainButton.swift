@@ -1,5 +1,5 @@
 //
-//  PlainFavorButton.swift
+//  FavorPlainButton.swift
 //  Favor
 //
 //  Created by 김응철 on 2023/01/20.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PlainFavorButton: UIButton {
+final class FavorPlainButton: UIButton {
   
   // MARK: - PROPERTIES
   
@@ -30,7 +30,7 @@ final class PlainFavorButton: UIButton {
 
 // MARK: - SETUP
 
-extension PlainFavorButton: BaseView {
+extension FavorPlainButton: BaseView {
   func setupStyles() {
     self.configuration = self.plainFavorButtonType.configuration
   }

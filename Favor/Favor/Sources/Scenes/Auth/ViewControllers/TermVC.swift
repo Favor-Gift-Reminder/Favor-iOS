@@ -28,7 +28,7 @@ final class TermViewController: BaseViewController, View {
 
   let dataSource = RxTableViewSectionedReloadDataSource<TermSection>(
     configureCell: { _, tableView, indexPath, item in
-      let cell = tableView.dequeueReusableCell(for: indexPath) as AcceptTermCell
+      let cell = tableView.dequeueReusableCell(for: indexPath) as TermCell
       cell.bind(terms: item)
       return cell
     }
@@ -52,11 +52,11 @@ final class TermViewController: BaseViewController, View {
     return label
   }()
 
-  private lazy var acceptAllView = AcceptAllView()
+  private lazy var acceptAllView = TermAcceptAllView()
 
-  private lazy var termTableView: SelfSizingTableView = {
-    let tableView = SelfSizingTableView(frame: .zero, style: .plain)
-    tableView.register(cellType: AcceptTermCell.self)
+  private lazy var termTableView: TermTableView = {
+    let tableView = TermTableView(frame: .zero, style: .plain)
+    tableView.register(cellType: TermCell.self)
     tableView.showsVerticalScrollIndicator = false
     tableView.showsHorizontalScrollIndicator = false
     tableView.isScrollEnabled = false
@@ -65,8 +65,8 @@ final class TermViewController: BaseViewController, View {
     return tableView
   }()
 
-  private lazy var startButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main("시작하기"))
+  private lazy var startButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main("시작하기"))
     button.isEnabled = false
     return button
   }()

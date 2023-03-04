@@ -1,5 +1,5 @@
 //
-//  SmallFavorButton.swift
+//  FavorSmallButton.swift
 //  Favor
 //
 //  Created by 김응철 on 2023/01/16.
@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class SmallFavorButton: UIButton {
+final class FavorSmallButton: UIButton {
   
   // MARK: - PROPERTIES
   
@@ -32,7 +32,7 @@ final class SmallFavorButton: UIButton {
 
 // MARK: - SETUP
 
-extension SmallFavorButton: BaseView {
+extension FavorSmallButton: BaseView {
   func setupStyles() {
     self.configuration = self.smallFavorButtonType.configuration
     let imageConfig = UIImage.SymbolConfiguration(pointSize: 10)

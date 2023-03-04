@@ -60,8 +60,8 @@ final class NewPasswordViewController: BaseViewController, View {
     return stackView
   }()
 
-  private lazy var doneButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main("변경하기"))
+  private lazy var doneButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main("변경하기"))
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:

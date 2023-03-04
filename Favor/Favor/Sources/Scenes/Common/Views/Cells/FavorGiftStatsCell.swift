@@ -55,7 +55,7 @@ final class FavorGiftStatsCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: GiftStatsCellReactor) {
+  func bind(reactor: FavorGiftStatsCellReactor) {
     // Action
     
     // State

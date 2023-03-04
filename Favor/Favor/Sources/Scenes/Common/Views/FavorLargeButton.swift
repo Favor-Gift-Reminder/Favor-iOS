@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class LargeFavorButton: UIButton {
+final class FavorLargeButton: UIButton {
   
   // MARK: - PROPERTIES
   
@@ -30,7 +30,7 @@ final class LargeFavorButton: UIButton {
   }
 }
 
-extension LargeFavorButton: BaseView {
+extension FavorLargeButton: BaseView {
   func setupStyles() {
     self.configuration = self.largeFavorButtonType.configuration
   }

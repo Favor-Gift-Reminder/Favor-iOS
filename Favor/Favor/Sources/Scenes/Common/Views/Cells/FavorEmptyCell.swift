@@ -1,5 +1,5 @@
 //
-//  EmptyCollectionViewCell.swift
+//  FavorEmptyCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/04.
@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class EmptyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
+final class FavorEmptyCell: UICollectionViewCell, ReuseIdentifying {
 
   // MARK: - Properties
 
@@ -65,7 +65,7 @@ final class EmptyCollectionViewCell: UICollectionViewCell, ReuseIdentifying {
 
 // MARK: - Setup
 
-extension EmptyCollectionViewCell: BaseView {
+extension FavorEmptyCell: BaseView {
   func setupStyles() {
     //
   }

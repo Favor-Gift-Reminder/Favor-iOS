@@ -27,13 +27,13 @@ final class SelectSignInViewController: BaseViewController, View {
     return label
   }()
   
-  private lazy var emailLoginButton: LargeFavorButton = {
-    let button = LargeFavorButton(with: .main("이메일로 로그인"))
+  private lazy var emailLoginButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main("이메일로 로그인"))
     return button
   }()
   
-  private lazy var signUpButton: PlainFavorButton = {
-    let button = PlainFavorButton(with: .logIn("신규 회원가입"))
+  private lazy var signUpButton: FavorPlainButton = {
+    let button = FavorPlainButton(with: .logIn("신규 회원가입"))
     return button
   }()
   
