@@ -79,14 +79,16 @@ final class SignInViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.passwordTextField.rx.editingDidEndOnExit
-      .asDriver(onErrorJustReturn: ())
-      .drive(with: self, onNext: { owner, _ in
-        owner.passwordTextField.textField.resignFirstResponder()
+      .do(onNext: {
+        self.passwordTextField.resignFirstResponder()
       })
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
+      .map { Reactor.Action.nextFlowRequested }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.signInButton.rx.tap
-      .map { Reactor.Action.signInButtonDidTap }
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 

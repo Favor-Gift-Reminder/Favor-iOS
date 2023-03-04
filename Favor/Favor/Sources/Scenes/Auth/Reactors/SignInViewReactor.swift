@@ -23,7 +23,7 @@ final class SignInViewReactor: Reactor, Stepper {
     case viewDidLoad
     case emailDidEndOnExit
     case passwordDidEndOnExit
-    case signInButtonDidTap
+    case nextFlowRequested
     case findPasswordButtonDidTap
   }
   
@@ -54,7 +54,7 @@ final class SignInViewReactor: Reactor, Stepper {
     case .passwordDidEndOnExit:
       os_log(.debug, "Password TextField did end on exit.")
       return .empty()
-    case .signInButtonDidTap:
+    case .nextFlowRequested:
       os_log(.debug, "Sign in button did tap.")
       return .empty()
     case .findPasswordButtonDidTap:

@@ -59,11 +59,19 @@ final class FindPasswordViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.textField.rx.editingDidEndOnExit
+      .do(onNext: {
+        self.textField.resignFirstResponder()
+      })
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.nextButton.rx.tap
+      .do(onNext: {
+        self.textField.resignFirstResponder()
+      })
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
