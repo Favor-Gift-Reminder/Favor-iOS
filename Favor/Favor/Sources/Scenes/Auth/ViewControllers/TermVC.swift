@@ -26,6 +26,14 @@ final class TermViewController: BaseViewController, View {
 
   // MARK: - Properties
 
+  let dataSource = RxTableViewSectionedReloadDataSource<TermSection>(
+    configureCell: { _, tableView, indexPath, item in
+      let cell = tableView.dequeueReusableCell(for: indexPath) as AcceptTermCell
+      cell.bind(terms: item)
+      return cell
+    }
+  )
+
   // MARK: - UI Components
 
   private lazy var logoImage: UIImageView = {
@@ -100,7 +108,7 @@ final class TermViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.termSections }
-      .bind(to: self.termTableView.rx.items(dataSource: reactor.dataSource))
+      .bind(to: self.termTableView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isNextButtonEnabled }

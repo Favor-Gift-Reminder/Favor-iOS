@@ -12,4 +12,7 @@ struct Terms {
   let isRequired: Bool
   /// 동의 / 미동의 여부
   var isAccepted: Bool = false
+  /// URL
+  let url: String
+  let index: Int
 }

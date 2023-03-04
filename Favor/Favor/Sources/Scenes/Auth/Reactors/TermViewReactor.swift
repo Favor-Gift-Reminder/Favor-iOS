@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 import ReactorKit
 import Reusable
@@ -19,14 +20,6 @@ final class TermViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-
-  let dataSource = RxTableViewSectionedReloadDataSource<TermSection>(
-    configureCell: { _, tableView, indexPath, item in
-      let cell = tableView.dequeueReusableCell(for: indexPath) as AcceptTermCell
-      cell.bind(terms: item)
-      return cell
-    }
-  )
 
   enum Action {
     case viewDidLoad
@@ -44,8 +37,8 @@ final class TermViewReactor: Reactor, Stepper {
 
   struct State {
     var userName: String
-    var isAllAccepted: Bool = false
     var termSections: [TermSection] = []
+    var isAllAccepted: Bool = false
     var isNextButtonEnabled: Bool = false
   }
 
@@ -123,12 +116,40 @@ final class TermViewReactor: Reactor, Stepper {
 
 private extension TermViewReactor {
   func setupTermSection() -> [TermSection] {
-    let terms = [
-      Terms(title: "페이버 운영약관 동의 (필수)", isRequired: true),
-      Terms(title: "개인정보 수집 및 이용 동의 (필수)", isRequired: true),
-      Terms(title: "이벤트 정보 수신 (선택)", isRequired: false)
-    ]
-    let termSection = TermSection(items: terms)
+    typealias JSON = [String: Any]
+
+    guard let filePath = Bundle.main.path(forResource: "Term-Info", ofType: "plist") else {
+      fatalError("Couldn't find the 'Term-Info.plist' file.")
+    }
+
+    var terms: JSON = [:]
+    do {
+      var plistRAW: Data
+      if #available(iOS 16.0, *) {
+        plistRAW = try Data(contentsOf: URL(filePath: filePath))
+      } else {
+        plistRAW = try NSData(contentsOfFile: filePath) as Data
+      }
+      terms = try PropertyListSerialization.propertyList(from: plistRAW, format: nil) as! JSON
+    } catch {
+      os_log(.error, "\(error)")
+    }
+
+    var decodedTerms: [Terms] = []
+    terms.forEach { term in
+      guard
+        let value = term.value as? JSON,
+        let title = value["Title"] as? String,
+        let isRequired = value["Required"] as? Bool,
+        let url = value["URL"] as? String,
+        let index = value["Index"] as? Int
+      else { return }
+
+      let term = Terms(title: title, isRequired: isRequired, url: url, index: index)
+      decodedTerms.append(term)
+    }
+
+    let termSection = TermSection(items: decodedTerms.sorted(by: { $0.index < $1.index }))
     return [termSection]
   }
 }

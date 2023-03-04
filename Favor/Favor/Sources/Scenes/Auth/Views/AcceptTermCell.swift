@@ -8,6 +8,8 @@
 import UIKit
 
 import Reusable
+import RxCocoa
+import RxSwift
 import SnapKit
 
 final class AcceptTermCell: UITableViewCell, Reusable {
@@ -15,6 +17,9 @@ final class AcceptTermCell: UITableViewCell, Reusable {
   // MARK: - Constants
 
   // MARK: - Properties
+
+  var disposeBag = DisposeBag()
+  var url: String?
 
   // MARK: - UI Components
 
@@ -35,7 +40,7 @@ final class AcceptTermCell: UITableViewCell, Reusable {
     return label
   }()
 
-  private lazy var openDetailButton: PlainFavorButton = {
+  fileprivate lazy var openDetailButton: PlainFavorButton = {
     let button = PlainFavorButton(with: .more("보기"))
     return button
   }()
@@ -47,6 +52,18 @@ final class AcceptTermCell: UITableViewCell, Reusable {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+
+    self.openDetailButton.rx.tap
+      .asDriver(onErrorRecover: {_ in return .never()})
+      .drive(with: self, onNext: { owner, tap in
+        guard
+          let urlString = owner.url,
+          let url = URL(string: urlString)
+        else { return }
+
+        UIApplication.shared.open(url)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   required init?(coder: NSCoder) {
@@ -59,6 +76,7 @@ final class AcceptTermCell: UITableViewCell, Reusable {
     self.titleLabel.text = terms.title
     let image = terms.isAccepted ? "checkmark.square.fill" : "checkmark.square"
     self.checkButton.configuration?.image = UIImage(systemName: image)
+    self.url = terms.url
   }
 
   // MARK: - Functions
