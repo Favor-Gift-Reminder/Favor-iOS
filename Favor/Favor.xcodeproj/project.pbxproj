@@ -77,7 +77,6 @@
 		2ED326AF29B0EE16001963D0 /* TermTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326AE29B0EE16001963D0 /* TermTableView.swift */; };
 		2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B429B0F6EB001963D0 /* Terms.swift */; };
 		2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B629B0F98C001963D0 /* TermAcceptAllView.swift */; };
-		2ED326B929B2DEC7001963D0 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2ED326B829B2DEC7001963D0 /* Term-Info.plist */; };
 		2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BA29B2F765001963D0 /* FindPasswordVC.swift */; };
 		2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
 		2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C029B327AA001963D0 /* ValidateEmailCodeVC.swift */; };
@@ -147,7 +146,8 @@
 		E5B1828729744D8400229C50 /* FavorSmallButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1828629744D8400229C50 /* FavorSmallButton.swift */; };
 		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
 		E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */; };
-		E5B61F3529B37F260031046C /* OldFavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */; };
+		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E5B61F3729B38E750031046C /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5B61F3629B38E750031046C /* Term-Info.plist */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
@@ -228,7 +228,6 @@
 		2ED326AE29B0EE16001963D0 /* TermTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermTableView.swift; sourceTree = "<group>"; };
 		2ED326B429B0F6EB001963D0 /* Terms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terms.swift; sourceTree = "<group>"; };
 		2ED326B629B0F98C001963D0 /* TermAcceptAllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermAcceptAllView.swift; sourceTree = "<group>"; };
-		2ED326B829B2DEC7001963D0 /* Term-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2ED326BA29B2F765001963D0 /* FindPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordVC.swift; sourceTree = "<group>"; };
 		2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewReactor.swift; sourceTree = "<group>"; };
 		2ED326C029B327AA001963D0 /* ValidateEmailCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailCodeVC.swift; sourceTree = "<group>"; };
@@ -299,6 +298,7 @@
 		E5B1828629744D8400229C50 /* FavorSmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSmallButton.swift; sourceTree = "<group>"; };
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+.swift"; sourceTree = "<group>"; };
+		E5B61F3629B38E750031046C /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Term-Info.plist"; path = "../../../../Term-Info.plist"; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -395,15 +395,6 @@
 			path = Password;
 			sourceTree = "<group>";
 		};
-		2E6E86F229B389F100C7AF69 /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
-				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
-			);
-			path = Deprecated;
-			sourceTree = "<group>";
-		};
 		2E6EBFB729A9395900A924B9 /* CellReactors */ = {
 			isa = PBXGroup;
 			children = (
@@ -459,7 +450,7 @@
 				2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */,
 				2E7C30A9295D7C4500BAC43D /* Info.plist */,
 				E57F3138296FF48400E3D449 /* API-Info.plist */,
-				2ED326B829B2DEC7001963D0 /* Term-Info.plist */,
+				E5B61F3629B38E750031046C /* Term-Info.plist */,
 			);
 			path = Favor;
 			sourceTree = "<group>";
@@ -501,7 +492,6 @@
 				2EBB014D295E8C880072D158 /* Models */,
 				2EBB014C295E8C820072D158 /* Network */,
 				2EBB014B295E8C770072D158 /* Scenes */,
-				2E6E86F229B389F100C7AF69 /* Deprecated */,
 				E5B61F3429B37ED90031046C /* Deprecated */,
 			);
 			path = Sources;
@@ -532,7 +522,6 @@
 				2EE3BA8C29AE15A8004FDCC9 /* APIManager.swift */,
 				2EE3BA9C29AE5C2F004FDCC9 /* APIs */,
 				2EBB015D295E8DDC0072D158 /* DataMapping */,
-				2EE3BA8E29AE4F4D004FDCC9 /* Networkable.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -842,7 +831,6 @@
 			isa = PBXGroup;
 			children = (
 				2E6E86F129B3894500C7AF69 /* Password */,
-				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */,
 				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */,
@@ -893,7 +881,6 @@
 				2EA384BD299248200081499C /* FavorSearchBar.swift */,
 				E56260F029908F0100D14020 /* FavorCategoryView.swift */,
 				2E6C90BF29A6783D00AF963A /* FavorTextField.swift */,
-				2E306A7E297290AB007B7EFF /* OldFavorTextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -904,13 +891,6 @@
 				2E6EBFB829A9B01700A924B9 /* CellReactors */,
 			);
 			path = Reactors;
-			sourceTree = "<group>";
-		};
-		E55CF7B4298A622B002940D1 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Protocols;
 			sourceTree = "<group>";
 		};
 		E55CF7B5298A6422002940D1 /* Storages */ = {
@@ -1088,8 +1068,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2ED326B929B2DEC7001963D0 /* Term-Info.plist in Resources */,
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
+				E5B61F3729B38E750031046C /* Term-Info.plist in Resources */,
 				E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */,
 				E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
@@ -1154,7 +1134,7 @@
 				2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */,
 				2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */,
 				2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */,
-				E5B61F3529B37F260031046C /* OldFavorTextField.swift in Sources */,
+				E5B61F3529B37F260031046C /* (null) in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
@@ -1235,7 +1215,6 @@
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
 				E51AB858297A8BE200955301 /* FavorPlainButton.swift in Sources */,
-				2EE3BA8F29AE4F4D004FDCC9 /* Networkable.swift in Sources */,
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
