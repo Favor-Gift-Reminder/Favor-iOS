@@ -25,6 +25,7 @@ final class TermViewReactor: Reactor, Stepper {
     case viewDidLoad
     case acceptAllDidTap
     case itemSelected(IndexPath)
+    case nextFlowRequested
   }
 
   enum Mutation {
@@ -70,6 +71,13 @@ final class TermViewReactor: Reactor, Stepper {
         .just(.checkIfAllAccepted),
         .just(.validateNextButton)
       ])
+      
+    case .nextFlowRequested:
+      os_log(.debug, "Next button did tap.")
+      if self.currentState.isNextButtonEnabled {
+//        self.steps.accept(AppStep.authIsComplete)
+      }
+      return .empty()
     }
   }
 

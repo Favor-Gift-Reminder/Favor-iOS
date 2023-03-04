@@ -94,6 +94,11 @@ final class TermViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.startButton.rx.tap
+      .map { Reactor.Action.nextFlowRequested }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.userName }
       .bind(with: self, onNext: { owner, userName in
