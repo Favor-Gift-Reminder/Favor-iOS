@@ -15,15 +15,9 @@ class FavorTextField: UIView {
 
   // MARK: - Properties
 
-  /// TextField가 선택되었는지의 Boolean
-  public var isSelected: Bool {
-    get { self.textField.isSelected }
-    set { self.textField.isSelected = newValue }
-  }
-
   /// TextField가 highlighted되야 하는 상태 여부 Boolean (Editing or Selected)
-  private var isEditingOrSelected: Bool {
-    self.textField.isEditing || self.isSelected
+  private var isEditingOrSelected: Bool = false {
+    didSet { self.updateColor() }
   }
 
   /// TextField 오른쪽에 SecureEyeButton이 있는지 여부 Boolean
@@ -77,6 +71,12 @@ class FavorTextField: UIView {
   /// TextField의 텍스트와 밑줄 사이의 거리
   public var underlineSpacing: CGFloat = 16.0
 
+  /// TextField 하단에 위치하는 메세지가 존재하는지 여부 Boolean
+  /// 해당 값의 여부에 따라 `FavorTextField` 전체적인 `frame`의 차이가 있음
+  public var hasMessage: Bool = true {
+    didSet { self.updateMessageLabel() }
+  }
+
   /// TextField 하단에 위치하는 메시지 Label의 String
   public var messageLabelText: String = "" {
     didSet { self.updateMessageLabel() }
@@ -126,13 +126,22 @@ class FavorTextField: UIView {
 
   // MARK: - UI Components
 
+  private lazy var stackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 12
+    return stackView
+  }()
+
   /// 메인 컴포넌트
   public lazy var textField: UITextField = {
     let textField = UITextField()
     textField.borderStyle = .none
+    textField.autocorrectionType = .no
     textField.enablesReturnKeyAutomatically = true
     textField.autocapitalizationType = .none
     textField.rightViewMode = .always
+    textField.delegate = self
     return textField
   }()
 
@@ -161,9 +170,7 @@ class FavorTextField: UIView {
 
     let button = UIButton(
       configuration: config,
-      primaryAction: UIAction(handler: { _ in
-        self.isTextSecured?.toggle()
-      })
+      primaryAction: UIAction(handler: { _ in self.isTextSecured?.toggle() })
     )
     button.configurationUpdateHandler = { button in
       guard let isTextSecured = self.isTextSecured else { return }
@@ -220,19 +227,40 @@ class FavorTextField: UIView {
   }
 
   func addLeftItem(item: UIView) {
-    item.snp.makeConstraints { make in
-      make.height.equalTo(24)
-      make.width.equalTo(28)
-    }
     self.textField.leftView = item
+    self.textField.leftView?.snp.makeConstraints { make in
+      make.height.width.equalTo(24)
+    }
     self.textField.leftViewMode = .always
+  }
+
+  /// First Responder 지정을 TextField에 전달합니다.
+  @discardableResult
+  override func becomeFirstResponder() -> Bool {
+    super.becomeFirstResponder()
+    return self.textField.becomeFirstResponder()
+  }
+
+  /// First Responder 지정 해제를 TextField에 전달합니다.
+  @discardableResult
+  override func resignFirstResponder() -> Bool {
+    super.resignFirstResponder()
+    return self.textField.resignFirstResponder()
+  }
+}
+
+extension FavorTextField: UITextFieldDelegate {
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    self.isEditingOrSelected = true
+  }
+
+  func textFieldDidEndEditing(_ textField: UITextField) {
+    self.isEditingOrSelected = false
   }
 }
 
 extension FavorTextField: BaseView {
-  func setupStyles() {
-    //
-  }
+  func setupStyles() { }
 
   func setupLayouts() {
     [
@@ -244,12 +272,14 @@ extension FavorTextField: BaseView {
 
     self.messageLabelContainer.addSubview(self.messageLabel)
 
+    self.addSubview(self.stackView)
+
     [
       self.titleLabel,
       self.textFieldContainerView,
       self.messageLabelContainer
     ].forEach {
-      self.addSubview($0)
+      self.stackView.addArrangedSubview($0)
     }
 
     self.textField.rightView = self.secureEyeButton
@@ -269,28 +299,16 @@ extension FavorTextField: BaseView {
 
     self.textFieldContainerView.snp.makeConstraints { make in
       make.top.equalTo(self.textField.snp.top)
-      make.horizontalEdges.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.underlineView.snp.bottom)
     }
 
-    self.titleLabel.snp.makeConstraints { make in
-      make.bottom.equalTo(self.textFieldContainerView.snp.top).offset(-16)
-      make.directionalHorizontalEdges.equalToSuperview()
-    }
-
-    self.messageLabelContainer.snp.makeConstraints { make in
-      make.top.equalTo(self.textFieldContainerView.snp.bottom).offset(12)
-      make.directionalHorizontalEdges.equalToSuperview()
-      make.height.equalTo(14).priority(.medium)
+    self.stackView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
     }
 
     self.messageLabel.snp.makeConstraints { make in
       make.edges.equalToSuperview()
-    }
-
-    self.snp.makeConstraints { make in
-      make.top.equalTo(self.titleLabel.snp.top)
-      make.bottom.equalTo(self.messageLabelContainer.snp.bottom)
     }
   }
 }
@@ -300,10 +318,10 @@ extension FavorTextField: BaseView {
 private extension FavorTextField {
   /// 모든 프로퍼티와 UI 요소를 업데이트합니다.
   func updateControl() {
-    self.updateColor()
     self.updateTextField()
     self.updateTitleLabel()
     self.updateMessageLabel()
+    self.updateColor()
   }
 
   /// 프로퍼티와 상태에 따라 색상을 업데이트합니다.
@@ -326,6 +344,7 @@ private extension FavorTextField {
     container.foregroundColor = self.placeholderColor
     container.font = self.placeholderFont
     self.textField.attributedPlaceholder = NSAttributedString(AttributedString(placeholder, attributes: container))
+    self.textField.font = self.textFieldFont
   }
 
   /// 상단에 표시되는 타이틀 Label을 업데이트합니다.
@@ -341,6 +360,7 @@ private extension FavorTextField {
 
   /// TextField 하단의 메시지 인스턴스의 프로퍼티를 업데이트합니다.
   func updateMessageLabel() {
+    self.messageLabelContainer.isHidden = self.hasMessage ? false : true
     self.isMessageEmpty = self.messageLabelText.isEmpty
     self.messageLabel.text = self.messageLabelText
     self.messageLabel.font = self.messageLabelFont
@@ -372,6 +392,11 @@ extension Reactive where Base: FavorTextField {
 
   var editingDidEndOnExit: ControlEvent<()> {
     let source = base.textField.rx.controlEvent(.editingDidEndOnExit)
+    return ControlEvent(events: source)
+  }
+
+  var editingDidBegin: ControlEvent<()> {
+    let source = base.textField.rx.controlEvent(.editingDidBegin)
     return ControlEvent(events: source)
   }
 }

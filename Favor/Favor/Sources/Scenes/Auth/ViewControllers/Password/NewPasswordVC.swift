@@ -1,8 +1,8 @@
 //
-//  SignUpVC.swift
+//  NewPasswordVC.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/01/16.
+//  Created by 이창준 on 2023/03/04.
 //
 
 import UIKit
@@ -12,18 +12,17 @@ import RxCocoa
 import RxKeyboard
 import SnapKit
 
-final class SignUpViewController: BaseViewController, View {
-  
+final class NewPasswordViewController: BaseViewController, View {
+
   // MARK: - Constants
 
   private enum Metric {
     static let topSpacing = 56.0
-    static let textFieldSpacing = 32.0
     static let bottomSpacing = 32.0
   }
-  
+
   // MARK: - Properties
-  
+
   // MARK: - UI Components
 
   private lazy var scrollView: UIScrollView = {
@@ -32,53 +31,37 @@ final class SignUpViewController: BaseViewController, View {
     scrollView.showsHorizontalScrollIndicator = false
     return scrollView
   }()
-  
-  private lazy var emailTextField: FavorTextField = {
+
+  private lazy var newPasswordTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "이메일"
-    textField.updateMessageLabel(
-      AuthValidationManager(type: .email).description(for: .empty),
-      state: .normal,
-      animated: false
-    )
-    textField.textField.keyboardType = .emailAddress
-    textField.textField.textContentType = .emailAddress
-    textField.textField.returnKeyType = .next
-    return textField
-  }()
-  
-  private lazy var pwTextField: FavorTextField = {
-    let textField = FavorTextField()
-    textField.placeholder = "비밀번호"
-    textField.updateMessageLabel(
-      AuthValidationManager(type: .password).description(for: .empty),
-      state: .normal,
-      animated: false
-    )
+    textField.placeholder = "새 비밀번호"
+    textField.updateMessageLabel("영문, 숫자 혼용 6자 이상")
     textField.isSecureField = true
     textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .next
     return textField
   }()
-  
+
   private lazy var pwValidateTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "비밀번호 확인"
-    textField.updateMessageLabel(
-      AuthValidationManager(type: .confirmPassword).description(for: .empty),
-      state: .normal,
-      animated: false
-    )
+    textField.placeholder = "새 비밀번호 확인"
     textField.isSecureField = true
     textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .done
     return textField
   }()
-  
-  private lazy var nextButton: FavorLargeButton = {
-    let button = FavorLargeButton(with: .main("다음"))
+
+  private lazy var textFieldStackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 32
+    return stackView
+  }()
+
+  private lazy var doneButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main("변경하기"))
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
@@ -92,32 +75,18 @@ final class SignUpViewController: BaseViewController, View {
     button.isEnabled = false
     return button
   }()
-  
-  private lazy var textFieldStack: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.spacing = Metric.textFieldSpacing
-    [
-      self.emailTextField,
-      self.pwTextField,
-      self.pwValidateTextField
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
-    return stackView
-  }()
-  
+
   // MARK: - Life Cycle
-  
+
   // MARK: - Binding
 
-  func bind(reactor: SignUpViewReactor) {
+  func bind(reactor: NewPasswordViewReactor) {
     // Keyboard
     RxKeyboard.instance.visibleHeight
       .skip(1)
       .drive(with: self, onNext: { owner, visibleHeight in
         UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
-          owner.nextButton.snp.updateConstraints { make in
+          owner.doneButton.snp.updateConstraints { make in
             make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
           }
           self.view.layoutIfNeeded()
@@ -127,95 +96,40 @@ final class SignUpViewController: BaseViewController, View {
 
     // Action
     Observable.just(())
-      .bind(with: self, onNext: { owner, _ in
-        owner.emailTextField.becomeFirstResponder()
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.newPasswordTextField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
 
-    // Email TextField
-    self.emailTextField.rx.text
+    self.newPasswordTextField.rx.text
       .orEmpty
-      .distinctUntilChanged()
-      .map { Reactor.Action.emailTextFieldDidUpdate($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.emailTextField.rx.editingDidBegin
-      .bind(with: self, onNext: { owner, _ in
-        owner.scrollView.scroll(to: .zero)
-      })
-      .disposed(by: self.disposeBag)
-    
-    self.emailTextField.rx.editingDidEndOnExit
-      .bind(with: self, onNext: { owner, _ in
-        owner.pwTextField.becomeFirstResponder()
-        owner.scrollView.scroll(to: self.pwTextField.frame.maxY - Metric.topSpacing)
-      })
-      .disposed(by: self.disposeBag)
-
-    // Password TextField
-    self.pwTextField.rx.text
-      .orEmpty
-      .distinctUntilChanged()
       .map { Reactor.Action.passwordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.pwTextField.rx.editingDidBegin
-      .bind(with: self, onNext: { owner, _ in
-        owner.scrollView.scroll(to: owner.pwTextField.frame.maxY - Metric.topSpacing)
-      })
-      .disposed(by: self.disposeBag)
-    
-    self.pwTextField.rx.editingDidEndOnExit
-      .bind(with: self, onNext: { owner, _ in
+    self.newPasswordTextField.rx.editingDidEndOnExit
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
         owner.pwValidateTextField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
 
-    // Password Validation TextField
     self.pwValidateTextField.rx.text
       .orEmpty
-      .distinctUntilChanged()
       .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-    
+
     self.pwValidateTextField.rx.editingDidEndOnExit
-      .do(onNext: { [weak self] _ in
-        self?.scrollView.scroll(to: .zero)
+      .do(onNext: { _ in
+        self.pwValidateTextField.resignFirstResponder()
       })
-      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.nextButton.rx.tap
-      .map { Reactor.Action.nextFlowRequested }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    // State
-    reactor.state.map { $0.emailValidationResult }
-      .asDriver(onErrorJustReturn: .valid)
-      .distinctUntilChanged()
-      .skip(1)
-      .drive(with: self, onNext: { owner, validationResult in
-        switch validationResult {
-        case .empty, .invalid:
-          owner.emailTextField.updateMessageLabel(
-            AuthValidationManager(type: .email).description(for: validationResult),
-            state: .error
-          )
-        case .valid:
-          owner.emailTextField.updateMessageLabel(
-            AuthValidationManager(type: .email).description(for: validationResult),
-            state: .normal
-          )
-        }
-      })
       .disposed(by: self.disposeBag)
 
+    // State
     reactor.state.map { $0.passwordValidationResult }
       .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
@@ -223,12 +137,12 @@ final class SignUpViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, validationResult in
         switch validationResult {
         case .empty, .invalid:
-          owner.pwTextField.updateMessageLabel(
+          owner.newPasswordTextField.updateMessageLabel(
             AuthValidationManager(type: .password).description(for: validationResult),
             state: .error
           )
         case .valid:
-          owner.pwTextField.updateMessageLabel(
+          owner.newPasswordTextField.updateMessageLabel(
             AuthValidationManager(type: .password).description(for: validationResult),
             state: .normal
           )
@@ -255,50 +169,54 @@ final class SignUpViewController: BaseViewController, View {
         }
       })
       .disposed(by: self.disposeBag)
-    
-    reactor.state.map { $0.isNextButtonEnabled }
-      .asDriver(onErrorJustReturn: false)
-      .distinctUntilChanged()
-      .drive(with: self, onNext: { owner, isButtonEnabled in
-        owner.nextButton.configurationUpdateHandler = { button in
-          button.isEnabled = (isButtonEnabled == true)
-        }
+
+    reactor.state.map { $0.isDoneButtonEnabled }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, isEnabled in
+        owner.doneButton.isEnabled = isEnabled
       })
       .disposed(by: self.disposeBag)
   }
-  
+
   // MARK: - Functions
-  
+
   // MARK: - UI Setups
 
   override func setupStyles() {
     super.setupStyles()
   }
-  
+
   override func setupLayouts() {
     [
       self.scrollView,
-      self.nextButton
+      self.doneButton
     ].forEach {
       self.view.addSubview($0)
     }
 
-    self.scrollView.addSubview(self.textFieldStack)
+    [
+      self.newPasswordTextField,
+      self.pwValidateTextField
+    ].forEach {
+      self.textFieldStackView.addArrangedSubview($0)
+    }
+
+    self.scrollView.addSubview(self.textFieldStackView)
   }
-  
+
   override func setupConstraints() {
     self.scrollView.snp.makeConstraints { make in
       make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
 
-    self.textFieldStack.snp.makeConstraints { make in
+    self.textFieldStackView.snp.makeConstraints { make in
       make.top.equalToSuperview().offset(Metric.topSpacing)
       make.directionalHorizontalEdges.equalToSuperview()
       make.width.equalToSuperview()
     }
 
-    self.nextButton.snp.makeConstraints { make in
+    self.doneButton.snp.makeConstraints { make in
       make.bottom.equalToSuperview().offset(-Metric.bottomSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }

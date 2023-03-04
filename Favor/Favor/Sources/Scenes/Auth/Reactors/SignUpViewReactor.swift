@@ -19,28 +19,27 @@ final class SignUpViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   // Global States
-  let emailValidate = BehaviorRelay<ValidateManager.EmailValidate>(value: .empty)
-  let passwordValidate = BehaviorRelay<ValidateManager.PasswordValidate>(value: .empty)
-  let checkPasswordValidate = BehaviorRelay<ValidateManager.CheckPasswordValidate>(value: .empty)
+  let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
+  let passwordValidate = BehaviorRelay<ValidationResult>(value: .empty)
+  let confirmPasswordValidate = BehaviorRelay<ValidationResult>(value: .empty)
   
   enum Action {
-    case emailTextFieldUpdate(String)
-    case passwordTextFieldUpdate(String)
-    case checkPasswordTextFieldUpdate(String)
-    case nextButtonTap
-    case returnKeyboardTap
+    case emailTextFieldDidUpdate(String)
+    case passwordTextFieldDidUpdate(String)
+    case confirmPasswordTextFieldDidUpdate(String)
+    case nextFlowRequested
   }
   
   enum Mutation {
     // Email
     case updateEmail(String)
-    case validateEmail(ValidateManager.EmailValidate)
+    case updateEmailValidationResult(ValidationResult)
     // Password
     case updatePassword(String)
-    case validatePassword(ValidateManager.PasswordValidate)
+    case updatePasswordValidationResult(ValidationResult)
     // Check Password
-    case updateCheckPassword(String)
-    case validateCheckPassword(ValidateManager.CheckPasswordValidate)
+    case updateConfirmPassword(String)
+    case updateConfirmPasswordValidationResult(ValidationResult)
     // Next Button
     case validateNextButton(Bool)
   }
@@ -48,13 +47,13 @@ final class SignUpViewReactor: Reactor, Stepper {
   struct State {
     // Email
     var email: String = ""
-    var isEmailValid: ValidateManager.EmailValidate = .empty
+    var emailValidationResult: ValidationResult = .empty
     // Password
     var password: String = ""
-    var isPasswordValid: ValidateManager.PasswordValidate = .empty
+    var passwordValidationResult: ValidationResult = .empty
     // Check Password
-    var checkPassword: String = ""
-    var isPasswordIdentical: ValidateManager.CheckPasswordValidate = .empty
+    var confirmPassword: String = ""
+    var confirmPasswordValidationResult: ValidationResult = .empty
     // Button
     var isNextButtonEnabled: Bool = false
   }
@@ -69,37 +68,63 @@ final class SignUpViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .emailTextFieldUpdate(let email):
-      let emailValidate = ValidateManager.validate(email: email)
+    case .emailTextFieldDidUpdate(let email):
+      os_log(.debug, "Email TextField did update: \(email)")
+      let emailValidationResult = AuthValidationManager(type: .email).validate(email)
+      self.emailValidate.accept(emailValidationResult)
       return .concat([
         .just(.updateEmail(email)),
-        .just(.validateEmail(emailValidate)),
-        self.validate(input: emailValidate)
+        .just(.updateEmailValidationResult(emailValidationResult))
       ])
       
-    case .passwordTextFieldUpdate(let password):
-      let passwordValidate = ValidateManager.validate(password: password)
-      let isPasswordIdentical = ValidateManager.validate(checkPassword: self.currentState.checkPassword, to: password)
+    case .passwordTextFieldDidUpdate(let password):
+      os_log(.debug, "Password TextField did update: \( password)")
+      let passwordValidationResult = AuthValidationManager(type: .password).validate(password)
+      self.passwordValidate.accept(passwordValidationResult)
+      let confirmPasswordValidationResult = AuthValidationManager(type: .confirmPassword).confirm(
+        password,
+        with: self.currentState.confirmPassword
+      )
       return .concat([
         .just(.updatePassword(password)),
-        .just(.validatePassword(passwordValidate)),
-        .just(.validateCheckPassword(isPasswordIdentical)),
-        self.validate(input: passwordValidate),
-        self.validate(input: isPasswordIdentical)
+        .just(.updatePasswordValidationResult(passwordValidationResult)),
+        .just(.updateConfirmPasswordValidationResult(confirmPasswordValidationResult))
       ])
       
-    case .checkPasswordTextFieldUpdate(let checkPassword):
-      let isPasswordIdentical = ValidateManager.validate(checkPassword: checkPassword, to: self.currentState.password)
+    case .confirmPasswordTextFieldDidUpdate(let confirmPassword):
+      os_log(.debug, "Confirm Password TextField did update: \(confirmPassword)")
+      let confirmPasswordValidationResult = AuthValidationManager(type: .confirmPassword).confirm(
+        confirmPassword,
+        with: self.currentState.password
+      )
+      self.confirmPasswordValidate.accept(confirmPasswordValidationResult)
       return .concat([
-        .just(.updateCheckPassword(checkPassword)),
-        .just(.validateCheckPassword(isPasswordIdentical)),
-        self.validate(input: isPasswordIdentical)
+        .just(.updateConfirmPassword(confirmPassword)),
+        .just(.updateConfirmPasswordValidationResult(confirmPasswordValidationResult))
       ])
       
-    case .nextButtonTap, .returnKeyboardTap:
-//      self.coordinator.showSetProfileFlow()
-      return Observable<Mutation>.empty()
+    case .nextFlowRequested:
+      os_log(.debug, "Next button or return key from keyboard did tap.")
+      if self.currentState.isNextButtonEnabled {
+        self.steps.accept(AppStep.setProfileIsRequired)
+      }
+      return .empty()
     }
+  }
+
+  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+    let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
+      self.emailValidate,
+      self.passwordValidate,
+      self.confirmPasswordValidate,
+      resultSelector: { emailValidate, passwordValidate, confirmPasswordValidate in
+        if emailValidate == .valid && passwordValidate == .valid && confirmPasswordValidate == .valid {
+          return .validateNextButton(true)
+        } else {
+          return .validateNextButton(false)
+        }
+      })
+    return Observable.of(mutation, combineValidationsMutation).merge()
   }
   
   func reduce(state: State, mutation: Mutation) -> State {
@@ -109,20 +134,20 @@ final class SignUpViewReactor: Reactor, Stepper {
     case .updateEmail(let email):
       newState.email = email
       
-    case .validateEmail(let isEmailValid):
-      newState.isEmailValid = isEmailValid
+    case .updateEmailValidationResult(let isEmailValid):
+      newState.emailValidationResult = isEmailValid
       
     case .updatePassword(let password):
       newState.password = password
       
-    case .validatePassword(let isPasswordValid):
-      newState.isPasswordValid = isPasswordValid
+    case .updatePasswordValidationResult(let isPasswordValid):
+      newState.passwordValidationResult = isPasswordValid
       
-    case .updateCheckPassword(let checkPassword):
-      newState.checkPassword = checkPassword
+    case .updateConfirmPassword(let checkPassword):
+      newState.confirmPassword = checkPassword
       
-    case .validateCheckPassword(let isPasswordIdentical):
-      newState.isPasswordIdentical = isPasswordIdentical
+    case .updateConfirmPasswordValidationResult(let isPasswordIdentical):
+      newState.confirmPasswordValidationResult = isPasswordIdentical
       
     case .validateNextButton(let isNextButtonEnabled):
       newState.isNextButtonEnabled = isNextButtonEnabled
@@ -130,32 +155,4 @@ final class SignUpViewReactor: Reactor, Stepper {
     
     return newState
   }
-  
-}
-
-private extension SignUpViewReactor {
-  
-  func validate<T>(input: T) -> Observable<SignUpViewReactor.Mutation> {
-    if T.self == ValidateManager.EmailValidate.self {
-      emailValidate.accept(input as! ValidateManager.EmailValidate)
-    } else if T.self == ValidateManager.PasswordValidate.self {
-      passwordValidate.accept(input as! ValidateManager.PasswordValidate)
-    } else {
-      checkPasswordValidate.accept(input as! ValidateManager.CheckPasswordValidate)
-    }
-    
-    return Observable.combineLatest(
-      emailValidate,
-      passwordValidate,
-      checkPasswordValidate,
-      resultSelector: { emailValidate, passwordValidate, checkPasswordValidate in
-        if emailValidate == .valid && passwordValidate == .valid && checkPasswordValidate == .identical {
-          return .validateNextButton(true)
-        } else {
-          return .validateNextButton(false)
-        }
-      }
-    )
-  }
-  
 }

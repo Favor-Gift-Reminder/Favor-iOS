@@ -1,5 +1,5 @@
 //
-//  EmptyCollectionViewCell.swift
+//  FavorEmptyCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/04.

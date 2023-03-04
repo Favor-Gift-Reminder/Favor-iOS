@@ -39,7 +39,7 @@ final class SelectSignInViewController: BaseViewController, View {
   
   private lazy var vStack: UIStackView = {
     let stackView = UIStackView()
-    stackView.spacing = 8.0
+    stackView.spacing = 32
     stackView.addArrangedSubview(self.emailLoginButton)
     stackView.addArrangedSubview(self.signUpButton)
     stackView.axis = .vertical
@@ -86,7 +86,7 @@ final class SelectSignInViewController: BaseViewController, View {
     }
     
     self.vStack.snp.makeConstraints { make in
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(46)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(16)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }
   }

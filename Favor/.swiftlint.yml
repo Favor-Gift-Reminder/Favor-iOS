@@ -25,6 +25,10 @@ indentation_width:
   indentation_width: 2
   include_comments: false
 
+file_length:
+  warning: 400
+  ignore_comment_only_lines: true
+
 opt_in_rules:
   - indentation_width                   
   - closure_end_indentation

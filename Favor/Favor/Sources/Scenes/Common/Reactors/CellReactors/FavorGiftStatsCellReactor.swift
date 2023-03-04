@@ -1,5 +1,5 @@
 //
-//  GiftStatsCellReactor.swift
+//  FavorGiftStatsCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
@@ -32,4 +32,5 @@ final class FavorGiftStatsCellReactor: Reactor {
   }
   
   // MARK: - Functions
+
 }

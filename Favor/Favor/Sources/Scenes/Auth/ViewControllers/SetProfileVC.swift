@@ -9,25 +9,42 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxKeyboard
 import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
   
   // MARK: - Constants
+
+  private enum Metric {
+    static let topSpacing = 56.0
+    static let profileImageSize = 120.0
+    static let plusImageSize = 48.0
+    static let textFieldSpacing = 32.0
+    static let bottomSpacing = 32.0
+  }
   
   // MARK: - Properties
   
   // MARK: - UI Components
+
+  private lazy var scrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+    scrollView.showsHorizontalScrollIndicator = false
+    scrollView.showsVerticalScrollIndicator = false
+    return scrollView
+  }()
   
   private lazy var profileImageButton: UIButton = {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_person")?.withTintColor(.favorColor(.white))
+    config.image = UIImage(named: "ic_Friend")?.withTintColor(.favorColor(.white))
+    config.background.imageContentMode = .scaleAspectFill
     
     let button = UIButton(configuration: config)
     button.clipsToBounds = true
-    button.layer.cornerRadius = 120 / 2
+    button.layer.cornerRadius = Metric.profileImageSize / 2
     return button
   }()
   
@@ -36,12 +53,9 @@ final class SetProfileViewController: BaseViewController, View {
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
     config.image = UIImage(named: "ic_add")?.withTintColor(.favorColor(.white))
+    config.background.cornerRadius = Metric.plusImageSize / 2
     
-    let button = UIButton()
-    button.setImage(UIImage(systemName: "plus"), for: .normal)
-    button.layer.cornerRadius = 24
-    button.backgroundColor = .favorColor(.line2)
-    button.tintColor = .favorColor(.white)
+    let button = UIButton(configuration: config)
     button.isUserInteractionEnabled = false
     return button
   }()
@@ -49,6 +63,8 @@ final class SetProfileViewController: BaseViewController, View {
   private lazy var nameTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이름"
+    textField.hasMessage = false
+    textField.textField.keyboardType = .namePhonePad
     textField.textField.returnKeyType = .next
     return textField
   }()
@@ -56,30 +72,30 @@ final class SetProfileViewController: BaseViewController, View {
   private lazy var idTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "유저 아이디"
+    textField.textField.keyboardType = .asciiCapable
     textField.textField.returnKeyType = .done
+    textField.updateMessageLabel(AuthValidationManager(type: .id).description(for: .empty), animated: false)
     
     let label = UILabel()
     label.text = "@"
     label.font = .favorFont(.regular, size: 16)
     label.textColor = .favorColor(.explain)
     label.textAlignment = .center
-    
     textField.addLeftItem(item: label)
     
     return textField
   }()
   
-  private lazy var vStack: UIStackView = {
+  private lazy var textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
-    stackView.spacing = 50.0
-    stackView.addArrangedSubview(self.nameTextField)
-    stackView.addArrangedSubview(self.idTextField)
+    stackView.spacing = Metric.textFieldSpacing
     return stackView
   }()
   
   private lazy var nextButton: FavorLargeButton = {
     let button = FavorLargeButton(with: .main("다음"))
+    button.isEnabled = false
     return button
   }()
   
@@ -88,6 +104,19 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SetProfileViewReactor) {
+    // Keyboard
+    RxKeyboard.instance.visibleHeight
+      .skip(1)
+      .drive(with: self, onNext: { owner, visibleHeight in
+        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
+          owner.nextButton.snp.updateConstraints { make in
+            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
+          }
+          self.view.layoutIfNeeded()
+        }.startAnimation()
+      })
+      .disposed(by: self.disposeBag)
+
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in
@@ -96,36 +125,85 @@ final class SetProfileViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.profileImageButton.rx.tap
-      .map { Reactor.Action.ProfileImageButtonTap }
+      .map { Reactor.Action.profileImageButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.nameTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.nameTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nameTextField.rx.editingDidEndOnExit
       .bind(with: self, onNext: { owner, _ in
         owner.idTextField.becomeFirstResponder()
+        owner.scrollView.scroll(to: owner.idTextField.frame.maxY)
       })
+      .disposed(by: self.disposeBag)
+
+    self.idTextField.rx.editingDidBegin
+      .bind(with: self, onNext: { owner, _ in
+        owner.scrollView.scroll(to: owner.idTextField.frame.maxY)
+      })
+      .disposed(by: self.disposeBag)
+
+    self.idTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.idTextFieldDidUpdate($0) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.idTextField.rx.editingDidEndOnExit
-      .map { Reactor.Action.returnKeyboardTap }
+      .do(onNext: { [weak self] _ in
+        self?.scrollView.scroll(to: .zero)
+      })
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
-      .map { Reactor.Action.nextButtonTap }
+      .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state
+    reactor.state.map { $0.profileImage }
       .skip(1)
-      .map { $0.profileImage }
       .asDriver(onErrorJustReturn: nil)
       .drive(with: self, onNext: { owner, image in
-        owner.profileImageButton.setImage(image, for: .normal)
+        owner.profileImageButton.configuration?.image = image
       })
       .disposed(by: self.disposeBag)
-    
+
+    reactor.state.map { $0.idValidationResult }
+      .asDriver(onErrorJustReturn: .valid)
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.idTextField.updateMessageLabel(
+            AuthValidationManager(type: .id).description(for: validationResult),
+            state: .error
+          )
+        case .valid:
+          owner.idTextField.updateMessageLabel(
+            AuthValidationManager(type: .id).description(for: .valid),
+            state: .normal
+          )
+        }
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isNextButtonEnabled }
+      .asDriver(onErrorJustReturn: false)
+      .drive(with: self, onNext: { owner, isEnabled in
+        owner.nextButton.isEnabled = isEnabled
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
@@ -134,35 +212,54 @@ final class SetProfileViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.profileImageButton,
-      self.plusImageView,
-      self.vStack,
+      self.scrollView,
       self.nextButton
     ].forEach {
       self.view.addSubview($0)
     }
+
+    [
+      self.profileImageButton,
+      self.plusImageView,
+      self.textFieldStack
+    ].forEach {
+      self.scrollView.addSubview($0)
+    }
+
+    [
+      self.nameTextField,
+      self.idTextField
+    ].forEach {
+      self.textFieldStack.addArrangedSubview($0)
+    }
   }
   
   override func setupConstraints() {
+    self.scrollView.snp.makeConstraints { make in
+      make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+    }
+
     self.profileImageButton.snp.makeConstraints { make in
-      make.width.height.equalTo(120)
+      make.width.height.equalTo(Metric.profileImageSize)
       make.centerX.equalToSuperview()
-      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(56)
+      make.top.equalToSuperview().inset(Metric.topSpacing)
     }
     
     self.plusImageView.snp.makeConstraints { make in
-      make.width.height.equalTo(48)
+      make.width.height.equalTo(Metric.plusImageSize)
       make.bottom.trailing.equalTo(self.profileImageButton)
     }
     
-    self.vStack.snp.makeConstraints { make in
+    self.textFieldStack.snp.makeConstraints { make in
       make.top.equalTo(self.profileImageButton.snp.bottom).offset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.width.equalToSuperview()
     }
     
     self.nextButton.snp.makeConstraints { make in
-      make.top.equalTo(self.vStack.snp.bottom).offset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalToSuperview().offset(Metric.bottomSpacing)
     }
   }  
 }

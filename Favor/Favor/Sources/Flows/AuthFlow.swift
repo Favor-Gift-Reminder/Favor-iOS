@@ -31,22 +31,34 @@ final class AuthFlow: Flow {
       return .end(forwardToParentFlowWithStep: AppStep.authIsComplete)
       
     case .signInIsRequired:
-      return self.NavigationToSignIn()
+      return self.navigationToSignIn()
+
+    case .findPasswordIsRequired:
+      return self.navigateToFindPassword()
+
+    case .validateEmailCodeIsRequired(let email):
+      return self.navigateToValidateEmailCode(with: email)
+
+    case .newPasswordIsRequired:
+      return self.navigateToNewPassword()
       
     case .signUpIsRequired:
-      return self.NavigationToSignUp()
+      return self.navigationToSignUp()
       
     case .setProfileIsRequired:
-      return self.NavigationToSetProfile()
+      return self.navigationToSetProfile()
       
-    case .termIsRequired:
-      return self.NavigationToTerm()
+    case .termIsRequired(let userName):
+      return self.navigationToTerm(with: userName)
       
     case .onboardingIsRequired:
       return .none
       
     case .onboardingIsComplete:
       return .none
+
+    case .imagePickerIsRequired(let manager):
+      return self.presentPHPicker(manager: manager)
       
     default:
       return .none
@@ -83,37 +95,98 @@ private extension AuthFlow {
     ))
   }
   
-  func NavigationToSignIn() -> FlowContributors {
+  func navigationToSignIn() -> FlowContributors {
     let viewController = SignInViewController()
     let reactor = SignInViewReactor()
+    viewController.title = "로그인"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func navigateToFindPassword() -> FlowContributors {
+    let viewController = FindPasswordViewController()
+    let reactor = FindPasswordViewReactor()
+    viewController.title = "비밀번호 찾기"
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func navigateToValidateEmailCode(with email: String) -> FlowContributors {
+    let viewController = ValidateEmailCodeViewController()
+    let reactor = ValidateEmailCodeViewReactor(with: email)
+    viewController.title = "비밀번호 찾기"
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func navigateToNewPassword() -> FlowContributors {
+    let viewController = NewPasswordViewController()
+    let reactor = NewPasswordViewReactor()
+    viewController.title = "비밀번호 변경"
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
   }
   
-  func NavigationToSignUp() -> FlowContributors {
+  func navigationToSignUp() -> FlowContributors {
     let viewController = SignUpViewController()
     let reactor = SignUpViewReactor()
+    viewController.title = "회원가입"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
   }
   
-  func NavigationToSetProfile() -> FlowContributors {
+  func navigationToSetProfile() -> FlowContributors {
     let viewController = SetProfileViewController()
     let reactor = SetProfileViewReactor(pickerManager: PHPickerManager())
+    viewController.title = "프로필 작성"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
   }
   
-  func NavigationToTerm() -> FlowContributors {
+  func navigationToTerm(with userName: String) -> FlowContributors {
     let viewController = TermViewController()
+    let reactor = TermViewReactor(with: userName)
+    viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func presentPHPicker(manager: PHPickerManager) -> FlowContributors {
+    manager.presentPHPicker(at: self.rootViewController)
     return .none
   }
 }

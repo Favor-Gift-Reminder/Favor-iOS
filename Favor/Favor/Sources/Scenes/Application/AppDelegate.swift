@@ -44,22 +44,22 @@ private extension AppDelegate {
     let appearance = UINavigationBarAppearance()
     let backButtonAppearance = UIBarButtonItemAppearance()
     
-    let leftArrowImage = UIImage(named: "ic_leftArrow")?
+    let leftArrowImage = UIImage(named: "ic_Left")?
       .withRenderingMode(.alwaysOriginal)
-      .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 0))
-    
+      .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0))
+
     backButtonAppearance.normal.titleTextAttributes = [
       .foregroundColor: UIColor.clear
     ]
-    
+
     appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
     appearance.backButtonAppearance = backButtonAppearance
     
     appearance.titleTextAttributes = [
-      .foregroundColor: UIColor.favorColor(.titleAndLine),
+      .foregroundColor: UIColor.favorColor(.icon),
       .font: UIFont.favorFont(.bold, size: 18)
     ]
-    
+
     appearance.configureWithTransparentBackground()
     appearance.backgroundColor = .clear
     appearance.shadowColor = nil
