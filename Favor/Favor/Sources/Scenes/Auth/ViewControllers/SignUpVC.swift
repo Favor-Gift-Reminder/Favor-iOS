@@ -56,6 +56,7 @@ final class SignUpViewController: BaseViewController, View {
       animated: false
     )
     textField.isSecureField = true
+    textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .next
     return textField
@@ -71,7 +72,7 @@ final class SignUpViewController: BaseViewController, View {
     )
     textField.isSecureField = true
     textField.textField.keyboardType = .asciiCapable
-    textField.textField.textContentType = .password
+    textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .done
     return textField
   }()

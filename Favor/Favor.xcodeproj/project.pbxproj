@@ -78,6 +78,12 @@
 		2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B429B0F6EB001963D0 /* Terms.swift */; };
 		2ED326B729B0F98C001963D0 /* AcceptAllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B629B0F98C001963D0 /* AcceptAllView.swift */; };
 		2ED326B929B2DEC7001963D0 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2ED326B829B2DEC7001963D0 /* Term-Info.plist */; };
+		2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BA29B2F765001963D0 /* FindPasswordVC.swift */; };
+		2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
+		2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C029B327AA001963D0 /* ValidateEmailCodeVC.swift */; };
+		2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C229B327DE001963D0 /* ValidateEmailCodeViewReactor.swift */; };
+		2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C429B32C0C001963D0 /* NewPasswordVC.swift */; };
+		2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C629B32C32001963D0 /* NewPasswordViewReactor.swift */; };
 		2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */; };
 		2ED8CB4729B0C30400E7B547 /* AcceptTermCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8CB4629B0C30400E7B547 /* AcceptTermCell.swift */; };
 		2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECA296E8D8400048A3C /* MyPageVC.swift */; };
@@ -222,6 +228,12 @@
 		2ED326B429B0F6EB001963D0 /* Terms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terms.swift; sourceTree = "<group>"; };
 		2ED326B629B0F98C001963D0 /* AcceptAllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptAllView.swift; sourceTree = "<group>"; };
 		2ED326B829B2DEC7001963D0 /* Term-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
+		2ED326BA29B2F765001963D0 /* FindPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordVC.swift; sourceTree = "<group>"; };
+		2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordViewReactor.swift; sourceTree = "<group>"; };
+		2ED326C029B327AA001963D0 /* ValidateEmailCodeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailCodeVC.swift; sourceTree = "<group>"; };
+		2ED326C229B327DE001963D0 /* ValidateEmailCodeViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidateEmailCodeViewReactor.swift; sourceTree = "<group>"; };
+		2ED326C429B32C0C001963D0 /* NewPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordVC.swift; sourceTree = "<group>"; };
+		2ED326C629B32C32001963D0 /* NewPasswordViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewReactor.swift; sourceTree = "<group>"; };
 		2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermViewReactor.swift; sourceTree = "<group>"; };
 		2ED8CB4629B0C30400E7B547 /* AcceptTermCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcceptTermCell.swift; sourceTree = "<group>"; };
 		2EE07EB1296E8C1F00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
@@ -786,6 +798,9 @@
 			children = (
 				2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */,
 				2ED22DAE296FF4A900ED6221 /* SignInVC.swift */,
+				2ED326BA29B2F765001963D0 /* FindPasswordVC.swift */,
+				2ED326C029B327AA001963D0 /* ValidateEmailCodeVC.swift */,
+				2ED326C429B32C0C001963D0 /* NewPasswordVC.swift */,
 				2EE0D58029751EBD0064E932 /* SignUpVC.swift */,
 				2EE0D584297524660064E932 /* SetProfileVC.swift */,
 				2EE0D58E29786C1C0064E932 /* TermVC.swift */,
@@ -798,6 +813,9 @@
 			children = (
 				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */,
+				2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */,
+				2ED326C229B327DE001963D0 /* ValidateEmailCodeViewReactor.swift */,
+				2ED326C629B32C32001963D0 /* NewPasswordViewReactor.swift */,
 				2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */,
 				2EE0D586297524880064E932 /* SetProfileViewReactor.swift */,
 				2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */,
@@ -1090,8 +1108,10 @@
 				2ECB681529A9CAD600F4C1F3 /* CategoryView.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
+				2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */,
 				2ED326B729B0F98C001963D0 /* AcceptAllView.swift in Sources */,
 				2ED8CB4729B0C30400E7B547 /* AcceptTermCell.swift in Sources */,
+				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
@@ -1101,6 +1121,8 @@
 				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
 				E55CF7B7298A644C002940D1 /* FTUXStorage.swift in Sources */,
 				E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */,
+				2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */,
+				2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */,
 				2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */,
 				2ECD69B429672CF000D00F8F /* UIColor+.swift in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
@@ -1123,6 +1145,7 @@
 				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
 				2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
+				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
@@ -1173,6 +1196,7 @@
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
+				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,

@@ -59,6 +59,7 @@ final class SignInViewReactor: Reactor, Stepper {
       return .empty()
     case .findPasswordButtonDidTap:
       os_log(.debug, "Find password button did tap.")
+      self.steps.accept(AppStep.findPasswordIsRequired)
       return .empty()
     }
   }

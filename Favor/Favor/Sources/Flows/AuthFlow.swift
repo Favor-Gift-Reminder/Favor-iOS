@@ -32,6 +32,15 @@ final class AuthFlow: Flow {
       
     case .signInIsRequired:
       return self.navigationToSignIn()
+
+    case .findPasswordIsRequired:
+      return self.navigateToFindPassword()
+
+    case .validateEmailCodeIsRequired(let email):
+      return self.navigateToValidateEmailCode(with: email)
+
+    case .newPasswordIsRequired:
+      return self.navigateToNewPassword()
       
     case .signUpIsRequired:
       return self.navigationToSignUp()
@@ -94,7 +103,47 @@ private extension AuthFlow {
     self.rootViewController.pushViewController(viewController, animated: true)
     
     return .one(flowContributor: .contribute(
-      withNextPresentable: viewController, withNextStepper: reactor)
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func navigateToFindPassword() -> FlowContributors {
+    let viewController = FindPasswordViewController()
+    let reactor = FindPasswordViewReactor()
+    viewController.title = "비밀번호 찾기"
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func navigateToValidateEmailCode(with email: String) -> FlowContributors {
+    let viewController = ValidateEmailCodeViewController()
+    let reactor = ValidateEmailCodeViewReactor(with: email)
+    viewController.title = "비밀번호 찾기"
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
+    )
+  }
+
+  func navigateToNewPassword() -> FlowContributors {
+    let viewController = NewPasswordViewController()
+    let reactor = NewPasswordViewReactor()
+    viewController.title = "비밀번호 변경"
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor)
     )
   }
   
