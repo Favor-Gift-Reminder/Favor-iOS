@@ -96,7 +96,10 @@ final class SignInViewReactor: Reactor, Stepper {
       self.emailValidate,
       self.passwordValidate,
       resultSelector: { emailValidate, passwordValidate in
-        if emailValidate == .valid && passwordValidate == .valid {
+        if [
+          emailValidate,
+          passwordValidate
+        ].allSatisfy({ $0 == .valid }) {
           os_log(.debug, "Sign-In button became validate.")
           return .validateSignInButton(true)
         } else {

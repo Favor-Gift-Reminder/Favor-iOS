@@ -118,7 +118,11 @@ final class SignUpViewReactor: Reactor, Stepper {
       self.passwordValidate,
       self.confirmPasswordValidate,
       resultSelector: { emailValidate, passwordValidate, confirmPasswordValidate in
-        if emailValidate == .valid && passwordValidate == .valid && confirmPasswordValidate == .valid {
+        if [
+          emailValidate,
+          passwordValidate,
+          confirmPasswordValidate
+        ].allSatisfy({ $0 == .valid }) {
           return .validateNextButton(true)
         } else {
           return .validateNextButton(false)
