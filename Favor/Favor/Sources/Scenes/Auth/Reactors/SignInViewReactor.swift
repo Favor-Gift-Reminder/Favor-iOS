@@ -26,9 +26,7 @@ final class SignInViewReactor: Reactor, Stepper {
   enum Action {
     case viewDidLoad
     case emailDidUpdate(String)
-    case emailDidEndOnExit
     case passwordDidUpdate(String)
-    case passwordDidEndOnExit
     case nextFlowRequested
     case findPasswordButtonDidTap
   }
@@ -66,26 +64,20 @@ final class SignInViewReactor: Reactor, Stepper {
     case .emailDidUpdate(let email):
       os_log(.debug, "Email TextField did update: \(email)")
       let emailVaildate = AuthValidationManager(type: .email).validate(email)
+      self.emailValidate.accept(emailVaildate)
       return .concat([
         .just(.updatePassword(email)),
         .just(.updateEmailValidationResult(emailVaildate))
       ])
 
-    case .emailDidEndOnExit:
-      os_log(.debug, "Email TextField did end on exit.")
-      return .empty()
-
     case .passwordDidUpdate(let password):
       os_log(.debug, "Password TextField did update: \(password)")
       let passwordValidate = AuthValidationManager(type: .password).validate(password)
+      self.passwordValidate.accept(passwordValidate)
       return .concat([
         .just(.updatePassword(password)),
         .just(.updatePasswordValidationResult(passwordValidate))
       ])
-
-    case .passwordDidEndOnExit:
-      os_log(.debug, "Password TextField did end on exit.")
-      return .empty()
 
     case .nextFlowRequested:
       os_log(.debug, "Sign in button did tap.")
@@ -96,6 +88,22 @@ final class SignInViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.findPasswordIsRequired)
       return .empty()
     }
+  }
+
+  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+    // Global State의 Validation Result들을 합친 Mutation
+    let combineValidationMutation: Observable<Mutation> = .combineLatest(
+      self.emailValidate,
+      self.passwordValidate,
+      resultSelector: { emailValidate, passwordValidate in
+        if emailValidate == .valid && passwordValidate == .valid {
+          os_log(.debug, "Sign-In button became validate.")
+          return .validateSignInButton(true)
+        } else {
+          return .validateSignInButton(false)
+        }
+      })
+    return Observable.of(mutation, combineValidationMutation).merge()
   }
 
   func reduce(state: State, mutation: Mutation) -> State {

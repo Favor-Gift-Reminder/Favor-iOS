@@ -113,7 +113,7 @@ final class SignUpViewReactor: Reactor, Stepper {
   }
 
   func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
+    let combineValidationsMutation: Observable<Mutation> = .combineLatest(
       self.emailValidate,
       self.passwordValidate,
       self.confirmPasswordValidate,

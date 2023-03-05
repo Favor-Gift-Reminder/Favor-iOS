@@ -72,11 +72,25 @@ final class SignInViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
+    self.emailTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.emailDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.emailTextField.rx.editingDidEndOnExit
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, _ in
         owner.passwordTextField.textField.becomeFirstResponder()
       })
+      .disposed(by: self.disposeBag)
+
+    self.passwordTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.passwordDidUpdate($0) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.passwordTextField.rx.editingDidEndOnExit
