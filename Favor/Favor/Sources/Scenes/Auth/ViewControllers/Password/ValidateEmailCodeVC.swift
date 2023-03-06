@@ -53,26 +53,26 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
     self.emailCodeTextField.rx.text
       .orEmpty
-      .map { $0.count }
+      .distinctUntilChanged()
+      .observe(on: MainScheduler.asyncInstance)
       .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, count in
+      .drive(with: self, onNext: { owner, code in
         let currentInput = owner.emailCodeTextField.textField.text
-        if count > 6 {
-          owner.emailCodeTextField.textField.text = String(currentInput?.dropLast() ?? "")
+        let trimmedCurrentInput = currentInput?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if code.count > 6 {
+          owner.emailCodeTextField.textField.text = String(trimmedCurrentInput?.dropLast() ?? "")
+        }
+        if code.count == 6 {
+          owner.emailCodeTextField.resignFirstResponder()
+          DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            reactor.action.onNext(.nextFlowRequested)
+          }
         }
       })
       .disposed(by: self.disposeBag)
 
-    self.emailCodeTextField.rx.text
-      .orEmpty
-      .do(onNext: {
-        self.nextButton.isEnabled = $0.count == 6 ? true : false
-      })
-      .map { Reactor.Action.emailCodeTextFieldDidUpdate($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
     self.nextButton.rx.tap
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)

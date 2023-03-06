@@ -85,6 +85,7 @@ final class NewPasswordViewController: BaseViewController, View {
     // Keyboard
     RxKeyboard.instance.visibleHeight
       .skip(1)
+      .filter { _ in self.doneButton.superview != nil }
       .drive(with: self, onNext: { owner, visibleHeight in
         UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
           owner.doneButton.snp.updateConstraints { make in
