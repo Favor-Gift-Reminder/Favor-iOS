@@ -103,6 +103,8 @@
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
+		2EE3691B29B6344700134760 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3691A29B6344700134760 /* HapticManager.swift */; };
+		2EE3691D29B634F300134760 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3691C29B634F300134760 /* UIButton+.swift */; };
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
 		2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA6F29A9D7D4004FDCC9 /* Reusable */; };
 		2EE3BA7229AA51BC004FDCC9 /* AuthValidationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */; };
@@ -258,6 +260,8 @@
 		2EE0D594297A9D670064E932 /* FavorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FavorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2EE3691A29B6344700134760 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
+		2EE3691C29B634F300134760 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthValidationManager.swift; sourceTree = "<group>"; };
 		2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthType.swift; sourceTree = "<group>"; };
@@ -549,6 +553,7 @@
 			children = (
 				2EBB0164295E8E1B0072D158 /* README.md */,
 				2EE3BA9629AE55D2004FDCC9 /* Encodable+.swift */,
+				2EE3691C29B634F300134760 /* UIButton+.swift */,
 				2ECD69B329672CF000D00F8F /* UIColor+.swift */,
 				E5B1827D297439CA00229C50 /* UIFont+.swift */,
 				2EE3BAAC29AF1A3A004FDCC9 /* UIScrollView+.swift */,
@@ -928,9 +933,10 @@
 		E5B182912974F43E00229C50 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
-				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 				2EE3BA7129AA51BC004FDCC9 /* AuthValidationManager.swift */,
+				2EE0D58A29781F920064E932 /* CoreGraphicManager.swift */,
+				2EE3691A29B6344700134760 /* HapticManager.swift */,
+				2EE0D58C297832D20064E932 /* PHPickerManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1157,6 +1163,7 @@
 				2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
+				2EE3691D29B634F300134760 /* UIButton+.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
@@ -1177,6 +1184,7 @@
 				E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */,
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
+				2EE3691B29B6344700134760 /* HapticManager.swift in Sources */,
 				2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
