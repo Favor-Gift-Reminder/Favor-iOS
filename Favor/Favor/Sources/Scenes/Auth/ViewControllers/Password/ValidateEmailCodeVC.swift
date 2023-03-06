@@ -28,6 +28,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
     textField.placeholder = "인증 코드"
     textField.updateMessageLabel("example@naver.com으로 전송된 6자리 코드를 입력하세요.")
     textField.textField.keyboardType = .asciiCapableNumberPad
+    textField.textField.textContentType = .oneTimeCode
     return textField
   }()
 

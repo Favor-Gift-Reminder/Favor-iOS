@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxGesture
 import SnapKit
 
 final class FindPasswordViewController: BaseViewController, View {
@@ -74,6 +75,14 @@ final class FindPasswordViewController: BaseViewController, View {
       .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.view.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+      })
       .disposed(by: self.disposeBag)
 
     // State

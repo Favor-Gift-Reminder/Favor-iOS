@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxGesture
 import SnapKit
 import Then
 
@@ -110,6 +111,14 @@ final class SignInViewController: BaseViewController, View {
     self.findPasswordButton.rx.tap
       .map { Reactor.Action.findPasswordButtonDidTap }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.view.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+      })
       .disposed(by: self.disposeBag)
     
     // State

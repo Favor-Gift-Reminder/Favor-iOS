@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxGesture
 import RxKeyboard
 import SnapKit
 
@@ -56,7 +57,6 @@ final class SignUpViewController: BaseViewController, View {
       animated: false
     )
     textField.isSecureField = true
-    textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .next
     return textField
@@ -71,7 +71,6 @@ final class SignUpViewController: BaseViewController, View {
       animated: false
     )
     textField.isSecureField = true
-    textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .done
     return textField
@@ -193,6 +192,15 @@ final class SignUpViewController: BaseViewController, View {
     self.nextButton.rx.tap
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.scrollView.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+        owner.scrollView.scroll(to: .zero)
+      })
       .disposed(by: self.disposeBag)
     
     // State
