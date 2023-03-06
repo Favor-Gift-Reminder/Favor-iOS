@@ -23,8 +23,8 @@ jobs:
       
     - name: Create secret file
       env:
-          API_SECRET: ${{ secrets.API_SECRET }}
-          TERM_SECRET: ${{ secrets.TERM_SECRET }}
+        API_SECRET: ${{ secrets.API_SECRET }}
+        TERM_SECRET: ${{ secrets.TERM_SECRET }}
       run: |
         echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/API-Info.plist
         echo $TERM_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/Term-Info.plist
