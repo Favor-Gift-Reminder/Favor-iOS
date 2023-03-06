@@ -69,6 +69,7 @@ final class NewPasswordViewReactor: Reactor, Stepper {
         password,
         with: self.currentState.confirmPassword
       )
+      self.confirmPasswordValidate.accept(confirmPasswordValidate)
       return .concat([
         .just(.updatePassword(password)),
         .just(.updatePasswordValidationResult(passwordValidate)),

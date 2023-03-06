@@ -85,6 +85,7 @@ final class SignUpViewReactor: Reactor, Stepper {
         password,
         with: self.currentState.confirmPassword
       )
+      self.confirmPasswordValidate.accept(confirmPasswordValidationResult)
       return .concat([
         .just(.updatePassword(password)),
         .just(.updatePasswordValidationResult(passwordValidationResult)),
