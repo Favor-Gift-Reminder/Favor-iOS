@@ -74,7 +74,7 @@ final class SetProfileViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "유저 아이디"
     textField.textField.keyboardType = .asciiCapable
-    textField.textField.textContentType = .username
+    textField.textField.textContentType = .nickname
     textField.textField.returnKeyType = .done
     textField.updateMessageLabel(
       AuthValidationManager(type: .id).description(for: .empty),
