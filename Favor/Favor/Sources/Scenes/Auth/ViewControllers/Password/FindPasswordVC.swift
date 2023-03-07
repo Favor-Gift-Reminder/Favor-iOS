@@ -41,17 +41,15 @@ final class FindPasswordViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.textField.becomeFirstResponder()
+  }
+
   // MARK: - Binding
 
   func bind(reactor: FindPasswordViewReactor) {
     // Action
-    Observable.just(())
-      .asDriver(onErrorRecover: {_ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.textField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
     self.textField.rx.text
       .orEmpty
       .distinctUntilChanged()

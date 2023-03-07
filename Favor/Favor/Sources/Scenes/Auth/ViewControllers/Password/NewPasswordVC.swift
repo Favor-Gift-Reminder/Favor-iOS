@@ -78,17 +78,15 @@ final class NewPasswordViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.newPasswordTextField.becomeFirstResponder()
+  }
+
   // MARK: - Binding
 
   func bind(reactor: NewPasswordViewReactor) {
     // Action
-    Observable.just(())
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.newPasswordTextField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
     self.newPasswordTextField.rx.text
       .orEmpty
       .map { Reactor.Action.passwordTextFieldDidUpdate($0) }

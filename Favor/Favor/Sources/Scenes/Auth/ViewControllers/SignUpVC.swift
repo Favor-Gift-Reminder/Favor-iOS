@@ -95,17 +95,15 @@ final class SignUpViewController: BaseViewController, View {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = Metric.textFieldSpacing
-    [
-      self.emailTextField,
-      self.pwTextField,
-      self.pwValidateTextField
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
     return stackView
   }()
   
   // MARK: - Life Cycle
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.emailTextField.becomeFirstResponder()
+  }
   
   // MARK: - Binding
 
@@ -281,6 +279,14 @@ final class SignUpViewController: BaseViewController, View {
       self.nextButton
     ].forEach {
       self.view.addSubview($0)
+    }
+
+    [
+      self.emailTextField,
+      self.pwTextField,
+      self.pwValidateTextField
+    ].forEach {
+      self.textFieldStack.addArrangedSubview($0)
     }
 
     self.scrollView.addSubview(self.textFieldStack)

@@ -61,18 +61,16 @@ final class SignInViewController: BaseViewController, View {
   }()
   
   // MARK: - Life Cycle
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.emailTextField.becomeFirstResponder()
+  }
   
   // MARK: - Binding
   
   func bind(reactor: SignInViewReactor) {
     // Action
-    Observable.just(())
-      .asDriver(onErrorJustReturn: ())
-      .drive(with: self, onNext: { owner, _ in
-        owner.emailTextField.textField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
     self.emailTextField.rx.text
       .orEmpty
       .distinctUntilChanged()

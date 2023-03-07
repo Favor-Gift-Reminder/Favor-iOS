@@ -104,17 +104,21 @@ final class SetProfileViewController: BaseViewController, View {
   }()
   
   // MARK: - Life Cycle
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.view.layoutIfNeeded()
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.nameTextField.becomeFirstResponder()
+  }
   
   // MARK: - Binding
   
   func bind(reactor: SetProfileViewReactor) {
     // Action
-    Observable.just(())
-      .bind(with: self, onNext: { owner, _ in
-        owner.nameTextField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-    
     self.profileImageButton.rx.tap
       .map { Reactor.Action.profileImageButtonDidTap }
       .bind(to: reactor.action)

@@ -40,17 +40,15 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.emailCodeTextField.becomeFirstResponder()
+  }
+
   // MARK: - Binding
 
   func bind(reactor: ValidateEmailCodeViewReactor) {
     // Action
-    Observable.just(())
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.emailCodeTextField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
     self.emailCodeTextField.rx.text
       .orEmpty
       .distinctUntilChanged()
