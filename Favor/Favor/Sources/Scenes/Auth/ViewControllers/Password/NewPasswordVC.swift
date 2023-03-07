@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
-import RxKeyboard
+import RxGesture
 import SnapKit
 
 final class NewPasswordViewController: BaseViewController, View {
@@ -78,30 +78,15 @@ final class NewPasswordViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.newPasswordTextField.becomeFirstResponder()
+  }
+
   // MARK: - Binding
 
   func bind(reactor: NewPasswordViewReactor) {
-    // Keyboard
-    RxKeyboard.instance.visibleHeight
-      .skip(1)
-      .drive(with: self, onNext: { owner, visibleHeight in
-        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
-          owner.doneButton.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
-          }
-          self.view.layoutIfNeeded()
-        }.startAnimation()
-      })
-      .disposed(by: self.disposeBag)
-
     // Action
-    Observable.just(())
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.newPasswordTextField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
     self.newPasswordTextField.rx.text
       .orEmpty
       .map { Reactor.Action.passwordTextFieldDidUpdate($0) }
@@ -127,6 +112,15 @@ final class NewPasswordViewController: BaseViewController, View {
       })
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.scrollView.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+        owner.scrollView.scroll(to: .zero)
+      })
       .disposed(by: self.disposeBag)
 
     // State
@@ -217,8 +211,8 @@ final class NewPasswordViewController: BaseViewController, View {
     }
 
     self.doneButton.snp.makeConstraints { make in
-      make.bottom.equalToSuperview().offset(-Metric.bottomSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-Metric.bottomSpacing)
     }
   }
 }

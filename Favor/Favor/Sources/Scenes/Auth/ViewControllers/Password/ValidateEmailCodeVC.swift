@@ -28,6 +28,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
     textField.placeholder = "인증 코드"
     textField.updateMessageLabel("example@naver.com으로 전송된 6자리 코드를 입력하세요.")
     textField.textField.keyboardType = .asciiCapableNumberPad
+    textField.textField.textContentType = .oneTimeCode
     return textField
   }()
 
@@ -39,39 +40,37 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.emailCodeTextField.becomeFirstResponder()
+  }
+
   // MARK: - Binding
 
   func bind(reactor: ValidateEmailCodeViewReactor) {
     // Action
-    Observable.just(())
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.emailCodeTextField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
     self.emailCodeTextField.rx.text
       .orEmpty
-      .map { $0.count }
+      .distinctUntilChanged()
+      .observe(on: MainScheduler.asyncInstance)
       .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, count in
+      .drive(with: self, onNext: { owner, code in
         let currentInput = owner.emailCodeTextField.textField.text
-        if count > 6 {
-          owner.emailCodeTextField.textField.text = String(currentInput?.dropLast() ?? "")
+        let trimmedCurrentInput = currentInput?.trimmingCharacters(in: .whitespacesAndNewlines)
+        if code.count > 6 {
+          owner.emailCodeTextField.textField.text = String(trimmedCurrentInput?.dropLast() ?? "")
+        }
+        if code.count == 6 {
+          owner.emailCodeTextField.resignFirstResponder()
+          DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            reactor.action.onNext(.nextFlowRequested)
+          }
         }
       })
       .disposed(by: self.disposeBag)
 
-    self.emailCodeTextField.rx.text
-      .orEmpty
-      .do(onNext: {
-        self.nextButton.isEnabled = $0.count == 6 ? true : false
-      })
-      .map { Reactor.Action.emailCodeTextFieldDidUpdate($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
     self.nextButton.rx.tap
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)

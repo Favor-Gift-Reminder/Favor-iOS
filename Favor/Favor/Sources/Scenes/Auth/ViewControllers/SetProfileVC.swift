@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
-import RxKeyboard
+import RxGesture
 import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
@@ -52,7 +52,7 @@ final class SetProfileViewController: BaseViewController, View {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_add")?.withTintColor(.favorColor(.white))
+    config.image = UIImage(named: "ic_Add")?.withTintColor(.favorColor(.white))
     config.background.cornerRadius = Metric.plusImageSize / 2
     
     let button = UIButton(configuration: config)
@@ -64,7 +64,7 @@ final class SetProfileViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "이름"
     textField.hasMessage = false
-    textField.textField.keyboardType = .namePhonePad
+    textField.textField.textContentType = .nickname
     textField.textField.returnKeyType = .next
     return textField
   }()
@@ -73,8 +73,12 @@ final class SetProfileViewController: BaseViewController, View {
     let textField = FavorTextField()
     textField.placeholder = "유저 아이디"
     textField.textField.keyboardType = .asciiCapable
+    textField.textField.textContentType = .nickname
     textField.textField.returnKeyType = .done
-    textField.updateMessageLabel(AuthValidationManager(type: .id).description(for: .empty), animated: false)
+    textField.updateMessageLabel(
+      AuthValidationManager(type: .id).description(for: .empty),
+      animated: false
+    )
     
     let label = UILabel()
     label.text = "@"
@@ -100,30 +104,21 @@ final class SetProfileViewController: BaseViewController, View {
   }()
   
   // MARK: - Life Cycle
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    self.view.layoutIfNeeded()
+  }
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.nameTextField.becomeFirstResponder()
+  }
   
   // MARK: - Binding
   
   func bind(reactor: SetProfileViewReactor) {
-    // Keyboard
-    RxKeyboard.instance.visibleHeight
-      .skip(1)
-      .drive(with: self, onNext: { owner, visibleHeight in
-        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
-          owner.nextButton.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
-          }
-          self.view.layoutIfNeeded()
-        }.startAnimation()
-      })
-      .disposed(by: self.disposeBag)
-
     // Action
-    Observable.just(())
-      .bind(with: self, onNext: { owner, _ in
-        owner.nameTextField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-    
     self.profileImageButton.rx.tap
       .map { Reactor.Action.profileImageButtonDidTap }
       .bind(to: reactor.action)
@@ -160,13 +155,24 @@ final class SetProfileViewController: BaseViewController, View {
       .do(onNext: { [weak self] _ in
         self?.scrollView.scroll(to: .zero)
       })
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
+      .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.scrollView.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+        owner.scrollView.scroll(to: .zero)
+      })
       .disposed(by: self.disposeBag)
     
     // State
@@ -219,18 +225,18 @@ final class SetProfileViewController: BaseViewController, View {
     }
 
     [
+      self.nameTextField,
+      self.idTextField
+    ].forEach {
+      self.textFieldStack.addArrangedSubview($0)
+    }
+
+    [
       self.profileImageButton,
       self.plusImageView,
       self.textFieldStack
     ].forEach {
       self.scrollView.addSubview($0)
-    }
-
-    [
-      self.nameTextField,
-      self.idTextField
-    ].forEach {
-      self.textFieldStack.addArrangedSubview($0)
     }
   }
   
@@ -255,11 +261,12 @@ final class SetProfileViewController: BaseViewController, View {
       make.top.equalTo(self.profileImageButton.snp.bottom).offset(56)
       make.directionalHorizontalEdges.equalToSuperview()
       make.width.equalToSuperview()
+      make.bottom.equalTo(self.scrollView.snp.bottom)
     }
     
     self.nextButton.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
-      make.bottom.equalToSuperview().offset(Metric.bottomSpacing)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-Metric.bottomSpacing)
     }
   }  
 }

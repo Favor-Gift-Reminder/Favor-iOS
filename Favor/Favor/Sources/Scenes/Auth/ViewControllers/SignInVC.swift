@@ -9,6 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
+import RxGesture
 import SnapKit
 import Then
 
@@ -60,16 +61,21 @@ final class SignInViewController: BaseViewController, View {
   }()
   
   // MARK: - Life Cycle
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.emailTextField.becomeFirstResponder()
+  }
   
   // MARK: - Binding
   
   func bind(reactor: SignInViewReactor) {
     // Action
-    Observable.just(())
-      .asDriver(onErrorJustReturn: ())
-      .drive(with: self, onNext: { owner, _ in
-        owner.emailTextField.textField.becomeFirstResponder()
-      })
+    self.emailTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.emailDidUpdate($0) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.emailTextField.rx.editingDidEndOnExit
@@ -77,6 +83,13 @@ final class SignInViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, _ in
         owner.passwordTextField.textField.becomeFirstResponder()
       })
+      .disposed(by: self.disposeBag)
+
+    self.passwordTextField.rx.text
+      .orEmpty
+      .distinctUntilChanged()
+      .map { Reactor.Action.passwordDidUpdate($0) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.passwordTextField.rx.editingDidEndOnExit
@@ -96,6 +109,14 @@ final class SignInViewController: BaseViewController, View {
     self.findPasswordButton.rx.tap
       .map { Reactor.Action.findPasswordButtonDidTap }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.view.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+      })
       .disposed(by: self.disposeBag)
     
     // State

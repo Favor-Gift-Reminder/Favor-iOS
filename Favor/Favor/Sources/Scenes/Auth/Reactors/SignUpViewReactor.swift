@@ -85,6 +85,7 @@ final class SignUpViewReactor: Reactor, Stepper {
         password,
         with: self.currentState.confirmPassword
       )
+      self.confirmPasswordValidate.accept(confirmPasswordValidationResult)
       return .concat([
         .just(.updatePassword(password)),
         .just(.updatePasswordValidationResult(passwordValidationResult)),
@@ -113,12 +114,16 @@ final class SignUpViewReactor: Reactor, Stepper {
   }
 
   func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
+    let combineValidationsMutation: Observable<Mutation> = .combineLatest(
       self.emailValidate,
       self.passwordValidate,
       self.confirmPasswordValidate,
       resultSelector: { emailValidate, passwordValidate, confirmPasswordValidate in
-        if emailValidate == .valid && passwordValidate == .valid && confirmPasswordValidate == .valid {
+        if [
+          emailValidate,
+          passwordValidate,
+          confirmPasswordValidate
+        ].allSatisfy({ $0 == .valid }) {
           return .validateNextButton(true)
         } else {
           return .validateNextButton(false)

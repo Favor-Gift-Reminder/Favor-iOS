@@ -9,7 +9,7 @@ import UIKit
 
 import ReactorKit
 import RxCocoa
-import RxKeyboard
+import RxGesture
 import SnapKit
 
 final class SignUpViewController: BaseViewController, View {
@@ -56,7 +56,6 @@ final class SignUpViewController: BaseViewController, View {
       animated: false
     )
     textField.isSecureField = true
-    textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .next
     return textField
@@ -71,7 +70,6 @@ final class SignUpViewController: BaseViewController, View {
       animated: false
     )
     textField.isSecureField = true
-    textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .done
     return textField
@@ -97,34 +95,19 @@ final class SignUpViewController: BaseViewController, View {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = Metric.textFieldSpacing
-    [
-      self.emailTextField,
-      self.pwTextField,
-      self.pwValidateTextField
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
     return stackView
   }()
   
   // MARK: - Life Cycle
+
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    self.emailTextField.becomeFirstResponder()
+  }
   
   // MARK: - Binding
 
   func bind(reactor: SignUpViewReactor) {
-    // Keyboard
-    RxKeyboard.instance.visibleHeight
-      .skip(1)
-      .drive(with: self, onNext: { owner, visibleHeight in
-        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
-          owner.nextButton.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
-          }
-          self.view.layoutIfNeeded()
-        }.startAnimation()
-      })
-      .disposed(by: self.disposeBag)
-
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in
@@ -180,6 +163,12 @@ final class SignUpViewController: BaseViewController, View {
       .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
+
+    self.pwValidateTextField.rx.editingDidBegin
+      .bind(with: self, onNext: { owner, _ in
+        owner.scrollView.scroll(to: owner.pwTextField.frame.maxY - Metric.topSpacing)
+      })
+      .disposed(by: self.disposeBag)
     
     self.pwValidateTextField.rx.editingDidEndOnExit
       .do(onNext: { [weak self] _ in
@@ -193,6 +182,15 @@ final class SignUpViewController: BaseViewController, View {
     self.nextButton.rx.tap
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.scrollView.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: {  owner, _ in
+        owner.view.endEditing(true)
+        owner.scrollView.scroll(to: .zero)
+      })
       .disposed(by: self.disposeBag)
     
     // State
@@ -283,6 +281,14 @@ final class SignUpViewController: BaseViewController, View {
       self.view.addSubview($0)
     }
 
+    [
+      self.emailTextField,
+      self.pwTextField,
+      self.pwValidateTextField
+    ].forEach {
+      self.textFieldStack.addArrangedSubview($0)
+    }
+
     self.scrollView.addSubview(self.textFieldStack)
   }
   
@@ -299,8 +305,8 @@ final class SignUpViewController: BaseViewController, View {
     }
 
     self.nextButton.snp.makeConstraints { make in
-      make.bottom.equalToSuperview().offset(-Metric.bottomSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-Metric.bottomSpacing)
     }
   }
 }
