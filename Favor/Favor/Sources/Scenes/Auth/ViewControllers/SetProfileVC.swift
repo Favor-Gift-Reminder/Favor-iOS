@@ -10,7 +10,6 @@ import UIKit
 import ReactorKit
 import RxCocoa
 import RxGesture
-import RxKeyboard
 import SnapKit
 
 final class SetProfileViewController: BaseViewController, View {
@@ -109,19 +108,6 @@ final class SetProfileViewController: BaseViewController, View {
   // MARK: - Binding
   
   func bind(reactor: SetProfileViewReactor) {
-    // Keyboard
-    RxKeyboard.instance.visibleHeight
-      .skip(1)
-      .drive(with: self, onNext: { owner, visibleHeight in
-        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
-          owner.nextButton.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
-          }
-          self.view.layoutIfNeeded()
-        }.startAnimation()
-      })
-      .disposed(by: self.disposeBag)
-
     // Action
     Observable.just(())
       .bind(with: self, onNext: { owner, _ in
@@ -276,7 +262,7 @@ final class SetProfileViewController: BaseViewController, View {
     
     self.nextButton.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
-      make.bottom.equalToSuperview().offset(Metric.bottomSpacing)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-Metric.bottomSpacing)
     }
   }  
 }

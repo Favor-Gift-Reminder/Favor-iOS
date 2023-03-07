@@ -10,7 +10,6 @@ import UIKit
 import ReactorKit
 import RxCocoa
 import RxGesture
-import RxKeyboard
 import SnapKit
 
 final class NewPasswordViewController: BaseViewController, View {
@@ -82,20 +81,6 @@ final class NewPasswordViewController: BaseViewController, View {
   // MARK: - Binding
 
   func bind(reactor: NewPasswordViewReactor) {
-    // Keyboard
-    RxKeyboard.instance.visibleHeight
-      .skip(1)
-      .filter { _ in self.doneButton.superview != nil }
-      .drive(with: self, onNext: { owner, visibleHeight in
-        UIViewPropertyAnimator(duration: 0.3, curve: .linear) {
-          owner.doneButton.snp.updateConstraints { make in
-            make.bottom.equalToSuperview().offset(-visibleHeight - Metric.bottomSpacing)
-          }
-          self.view.layoutIfNeeded()
-        }.startAnimation()
-      })
-      .disposed(by: self.disposeBag)
-
     // Action
     Observable.just(())
       .asDriver(onErrorRecover: { _ in return .never()})
@@ -228,8 +213,8 @@ final class NewPasswordViewController: BaseViewController, View {
     }
 
     self.doneButton.snp.makeConstraints { make in
-      make.bottom.equalToSuperview().offset(-Metric.bottomSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-Metric.bottomSpacing)
     }
   }
 }

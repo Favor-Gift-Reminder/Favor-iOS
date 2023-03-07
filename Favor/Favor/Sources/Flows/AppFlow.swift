@@ -67,10 +67,6 @@ private extension AppFlow {
     ))
   }
   
-  func navigateToDashBoard() -> FlowContributors {
-    return .none
-  }
-  
   /// UI Test를 위한 navigate 메서드
   func navigateToTest() -> FlowContributors {
     let testFlow = AuthFlow() // Change to Test Flow here.
