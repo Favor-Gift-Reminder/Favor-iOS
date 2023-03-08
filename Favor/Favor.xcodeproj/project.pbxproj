@@ -142,6 +142,11 @@
 		E58833A529B87D9D002B2CBE /* FriendAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */; };
 		E58833A729B87EB8002B2CBE /* FriendAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */; };
 		E58833A929B87F27002B2CBE /* FriendAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */; };
+		E58833AC29B88090002B2CBE /* GiftAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833AB29B88090002B2CBE /* GiftAPI.swift */; };
+		E58833AE29B88172002B2CBE /* GiftRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833AD29B88172002B2CBE /* GiftRequestModel.swift */; };
+		E58833B029B8B67B002B2CBE /* GiftAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833AF29B8B67B002B2CBE /* GiftAPI+Path.swift */; };
+		E58833B229B8B6E1002B2CBE /* GiftAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833B129B8B6E1002B2CBE /* GiftAPI+Method.swift */; };
+		E58833B429B8B73A002B2CBE /* GiftAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833B329B8B73A002B2CBE /* GiftAPI+Task.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
 		E5B1827C2974361400229C50 /* FavorLargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* FavorLargeButton.swift */; };
 		E5B1828329743D5400229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
@@ -300,6 +305,11 @@
 		E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Path.swift"; sourceTree = "<group>"; };
 		E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Method.swift"; sourceTree = "<group>"; };
 		E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Task.swift"; sourceTree = "<group>"; };
+		E58833AB29B88090002B2CBE /* GiftAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftAPI.swift; sourceTree = "<group>"; };
+		E58833AD29B88172002B2CBE /* GiftRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftRequestModel.swift; sourceTree = "<group>"; };
+		E58833AF29B8B67B002B2CBE /* GiftAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GiftAPI+Path.swift"; sourceTree = "<group>"; };
+		E58833B129B8B6E1002B2CBE /* GiftAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GiftAPI+Method.swift"; sourceTree = "<group>"; };
+		E58833B329B8B73A002B2CBE /* GiftAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GiftAPI+Task.swift"; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
 		E5B1827B2974361400229C50 /* FavorLargeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorLargeButton.swift; sourceTree = "<group>"; };
 		E5B1827D297439CA00229C50 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
@@ -632,6 +642,7 @@
 		2EBB015D295E8DDC0072D158 /* DataMapping */ = {
 			isa = PBXGroup;
 			children = (
+				E58833AD29B88172002B2CBE /* GiftRequestModel.swift */,
 				2EBB016A295EA9DA0072D158 /* README.md */,
 			);
 			path = DataMapping;
@@ -864,6 +875,7 @@
 			isa = PBXGroup;
 			children = (
 				E5E1C46429B87AE6003A44EE /* Friend */,
+				E58833AA29B88065002B2CBE /* Gift */,
 				2EE3BAAB29AF1679004FDCC9 /* README.md */,
 			);
 			path = APIs;
@@ -926,6 +938,17 @@
 				2EC939DC299684C000C8C47F /* MyPageFlow.swift */,
 			);
 			path = Flows;
+			sourceTree = "<group>";
+		};
+		E58833AA29B88065002B2CBE /* Gift */ = {
+			isa = PBXGroup;
+			children = (
+				E58833AB29B88090002B2CBE /* GiftAPI.swift */,
+				E58833AF29B8B67B002B2CBE /* GiftAPI+Path.swift */,
+				E58833B129B8B6E1002B2CBE /* GiftAPI+Method.swift */,
+				E58833B329B8B73A002B2CBE /* GiftAPI+Task.swift */,
+			);
+			path = Gift;
 			sourceTree = "<group>";
 		};
 		E5B182902974F39C00229C50 /* Common */ = {
@@ -1184,12 +1207,14 @@
 				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
 				2EE3691D29B634F300134760 /* UIButton+.swift in Sources */,
 				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
+				E58833B429B8B73A002B2CBE /* GiftAPI+Task.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
 				E5B1828729744D8400229C50 /* FavorSmallButton.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
+				E58833AC29B88090002B2CBE /* GiftAPI.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
 				2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift in Sources */,
@@ -1221,6 +1246,7 @@
 				E5626120299DD37200D14020 /* SmallFavorButtonType.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
+				E58833AE29B88172002B2CBE /* GiftRequestModel.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				2EE3BA9729AE55D2004FDCC9 /* Encodable+.swift in Sources */,
@@ -1242,6 +1268,8 @@
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
+				E58833B229B8B6E1002B2CBE /* GiftAPI+Method.swift in Sources */,
+				E58833B029B8B67B002B2CBE /* GiftAPI+Path.swift in Sources */,
 				E51AB858297A8BE200955301 /* FavorPlainButton.swift in Sources */,
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				E5B1828329743D5400229C50 /* UIFont+.swift in Sources */,
