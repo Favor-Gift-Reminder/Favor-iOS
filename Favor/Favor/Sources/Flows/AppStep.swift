@@ -12,8 +12,11 @@ import RxFlow
 enum AppStep: Step {
   case imagePickerIsRequired(PHPickerManager)
 
+  // MARK: - Root
+  case rootIsRequired
+
   // MARK: - Auth
-  case authIsRequired
+  case authIsRequired(Bool)
   case authIsComplete
   case findPasswordIsRequired
   case validateEmailCodeIsRequired(String)

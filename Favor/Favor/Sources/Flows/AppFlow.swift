@@ -14,14 +14,20 @@ import RxSwift
 final class AppFlow: Flow {
   
   // MARK: - Properties
-  
-  var root: Presentable { self.rootViewController }
-  
+
+  var window: UIWindow // Comment this line.
+  var root: Presentable { self.window } // Change to rootViewController
+
   private lazy var rootViewController: UINavigationController = {
     let viewController = UINavigationController()
     viewController.setNavigationBarHidden(true, animated: false)
     return viewController
   }()
+
+  // Comment this Initializer.
+  init(window: UIWindow) {
+    self.window = window
+  }
 
   // MARK: - Navigate
   
@@ -29,12 +35,18 @@ final class AppFlow: Flow {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
+    case .rootIsRequired:
+      return self.navigateToRoot()
+
     case .authIsRequired:
-      return self.navigationToAuthScreen()
+      return self.navigateToAuth()
+
     case .dashBoardIsRequired:
-      return self.navigationToDashBoardScreen()
+      return self.navigateToDashboard()
+
     case .testIsRequired:
       return self.navigateToTest()
+      
     default:
       return .none
     }
@@ -42,7 +54,15 @@ final class AppFlow: Flow {
 }
 
 private extension AppFlow {
-  func navigationToDashBoardScreen() -> FlowContributors {
+  func navigateToRoot() -> FlowContributors {
+    if FTUXStorage.isSignedIn {
+      return self.navigateToDashboard()
+    } else {
+      return self.navigateToAuth()
+    }
+  }
+
+  func navigateToDashboard() -> FlowContributors {
     let dashBoardFlow = TabBarFlow()
     
     return .one(flowContributor: .contribute(
@@ -51,36 +71,36 @@ private extension AppFlow {
     ))
   }
   
-  func navigationToAuthScreen() -> FlowContributors {
+  func navigateToAuth() -> FlowContributors {
     let authFlow = AuthFlow()
     
     Flows.use(authFlow, when: .created) { [unowned self] root in
       DispatchQueue.main.async {
-        root.modalPresentationStyle = .overFullScreen
-        self.rootViewController.present(root, animated: false)
+        self.window.rootViewController = root
       }
     }
     
     return .one(flowContributor: .contribute(
       withNextPresentable: authFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.authIsRequired)
+      withNextStepper: OneStepper(withSingleStep: AppStep.authIsRequired(true))
     ))
   }
   
   /// UI Test를 위한 navigate 메서드
   func navigateToTest() -> FlowContributors {
-    let testFlow = AuthFlow() // Change to Test Flow here.
+    let testFlow = AppFlow(window: self.window) // Change to Test Flow here.
     
     Flows.use(testFlow, when: .created) { [unowned self] root in
       DispatchQueue.main.async {
-        root.modalPresentationStyle = .overFullScreen
-        self.rootViewController.present(root, animated: false)
+        self.window.rootViewController = root // Change to commented lines.
+//        root.modalPresentationStyle = .overFullScreen
+//        self.rootViewController.present(root, animated: false)
       }
     }
     
     return .one(flowContributor: .contribute(
       withNextPresentable: testFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.authIsRequired) // Change to Test Step here.
+      withNextStepper: OneStepper(withSingleStep: AppStep.rootIsRequired) // Change to Test Step here.
     ))
   }
 }
