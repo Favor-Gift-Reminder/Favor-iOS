@@ -10,10 +10,7 @@ import Foundation
 final class FTUXStorage {
   @UserDefault(key: .isFirstLaunch, defaultValue: true)
   static var isFirstLaunch: Bool
+  
   @UserDefault(key: .isSignedIn, defaultValue: false)
   static var isSignedIn: Bool
-  
-  func setFirstLaunch() {
-    FTUXStorage.isFirstLaunch = false
-  }
 }

@@ -16,7 +16,7 @@ enum AppStep: Step {
   case rootIsRequired
 
   // MARK: - Auth
-  case authIsRequired(Bool)
+  case authIsRequired
   case authIsComplete
   case findPasswordIsRequired
   case validateEmailCodeIsRequired(String)
