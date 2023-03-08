@@ -26,7 +26,6 @@
 		2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */; };
 		2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */; };
 		2E6C90C029A6783D00AF963A /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BF29A6783D00AF963A /* FavorTextField.swift */; };
-		2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E6E86F729B3974C00C7AF69 /* Term-Info.plist */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
@@ -140,6 +139,9 @@
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
 		E57F313F297000DB00E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313E297000DB00E3D449 /* BaseView.swift */; };
+		E58833A529B87D9D002B2CBE /* FriendAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */; };
+		E58833A729B87EB8002B2CBE /* FriendAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */; };
+		E58833A929B87F27002B2CBE /* FriendAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
 		E5B1827C2974361400229C50 /* FavorLargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* FavorLargeButton.swift */; };
 		E5B1828329743D5400229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
@@ -150,6 +152,8 @@
 		E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */; };
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
+		E5E1C46329B875D7003A44EE /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5E1C46229B875D7003A44EE /* Term-Info.plist */; };
+		E5E1C46629B87AF4003A44EE /* FriendAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1C46529B87AF4003A44EE /* FriendAPI.swift */; };
 		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
@@ -180,7 +184,6 @@
 		2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageVC.swift; sourceTree = "<group>"; };
 		2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageViewReactor.swift; sourceTree = "<group>"; };
 		2E6C90BF29A6783D00AF963A /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
-		2E6E86F729B3974C00C7AF69 /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7C309B295D7C4300BAC43D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -294,6 +297,9 @@
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
 		E57F313E297000DB00E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Path.swift"; sourceTree = "<group>"; };
+		E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Method.swift"; sourceTree = "<group>"; };
+		E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Task.swift"; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
 		E5B1827B2974361400229C50 /* FavorLargeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorLargeButton.swift; sourceTree = "<group>"; };
 		E5B1827D297439CA00229C50 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
@@ -303,6 +309,8 @@
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5B61F3229B37D770031046C /* UICollectionViewCompositionalLayout+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+.swift"; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
+		E5E1C46229B875D7003A44EE /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Term-Info.plist"; path = "/Users/eungcheol/Desktop/Projects/Favor/Favor/Favor/Term-Info.plist"; sourceTree = "<absolute>"; };
+		E5E1C46529B87AF4003A44EE /* FriendAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendAPI.swift; sourceTree = "<group>"; };
 		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -452,7 +460,7 @@
 				2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */,
 				2E7C30A9295D7C4500BAC43D /* Info.plist */,
 				E57F3138296FF48400E3D449 /* API-Info.plist */,
-				2E6E86F729B3974C00C7AF69 /* Term-Info.plist */,
+				E5E1C46229B875D7003A44EE /* Term-Info.plist */,
 			);
 			path = Favor;
 			sourceTree = "<group>";
@@ -855,6 +863,7 @@
 		2EE3BA9C29AE5C2F004FDCC9 /* APIs */ = {
 			isa = PBXGroup;
 			children = (
+				E5E1C46429B87AE6003A44EE /* Friend */,
 				2EE3BAAB29AF1679004FDCC9 /* README.md */,
 			);
 			path = APIs;
@@ -946,6 +955,17 @@
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		E5E1C46429B87AE6003A44EE /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				E5E1C46529B87AF4003A44EE /* FriendAPI.swift */,
+				E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */,
+				E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */,
+				E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */,
+			);
+			path = Friend;
 			sourceTree = "<group>";
 		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
@@ -1071,8 +1091,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */,
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
+				E5E1C46329B875D7003A44EE /* Term-Info.plist in Resources */,
 				E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */,
 				E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
@@ -1122,6 +1142,7 @@
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
 				2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */,
 				2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */,
+				E5E1C46629B87AF4003A44EE /* FriendAPI.swift in Sources */,
 				2ED8CB4729B0C30400E7B547 /* TermCell.swift in Sources */,
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
@@ -1157,6 +1178,7 @@
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
 				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
+				E58833A529B87D9D002B2CBE /* FriendAPI+Path.swift in Sources */,
 				2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */,
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
@@ -1183,6 +1205,7 @@
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2EE3691B29B6344700134760 /* HapticManager.swift in Sources */,
 				2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */,
+				E58833A729B87EB8002B2CBE /* FriendAPI+Method.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
@@ -1233,6 +1256,7 @@
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
+				E58833A929B87F27002B2CBE /* FriendAPI+Task.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
 				2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */,
