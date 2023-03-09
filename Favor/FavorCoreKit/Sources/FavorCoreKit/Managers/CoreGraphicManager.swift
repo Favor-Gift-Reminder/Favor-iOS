@@ -8,7 +8,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-final class CoreGraphicManager {
+public final class CoreGraphicManager {
     
   /**
    CGImage를 다운샘플링 한 뒤 UIImage로 디코딩하여 반환합니다.
@@ -18,7 +18,7 @@ final class CoreGraphicManager {
       - scale: 디바이스의 Scale (`UIScreen.main.scale`)
    - Returns: `Data?` (UIImage로 Decodable).
    */
-  func downsample(at url: URL, toSize pointSize: CGSize, screenScale: CGFloat) -> Data? {
+  public func downsample(at url: URL, toSize pointSize: CGSize, screenScale: CGFloat) -> Data? {
     let sourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
     guard let source = CGImageSourceCreateWithURL(url as CFURL, sourceOptions) else { return nil }
     

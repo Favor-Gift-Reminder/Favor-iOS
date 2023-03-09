@@ -47,6 +47,6 @@ extension UIFont {
     }
 
     var error: Unmanaged<CFError>?
-    let success = CTFontManagerRegisterGraphicsFont(font, &error)
+    CTFontManagerRegisterGraphicsFont(font, &error)
   }
 }

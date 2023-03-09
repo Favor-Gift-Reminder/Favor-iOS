@@ -8,7 +8,7 @@
 import UIKit
 
 extension String {
-  func emojiToImage(size: CGSize) -> UIImage? {
+  public func emojiToImage(size: CGSize) -> UIImage? {
     UIGraphicsBeginImageContextWithOptions(size, false, 0)
     UIColor.clear.set()
     
@@ -17,7 +17,7 @@ extension String {
     (self as NSString).draw(
       in: rect,
       withAttributes: [
-        NSAttributedString.Key.font: UIFont.favorFont(.regular, size: size.width * 0.9)
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: size.width * 0.9, weight: .regular)
       ]
     )
     let image = UIGraphicsGetImageFromCurrentImageContext()

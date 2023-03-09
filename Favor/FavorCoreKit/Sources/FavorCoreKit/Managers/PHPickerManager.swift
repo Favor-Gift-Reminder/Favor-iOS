@@ -14,13 +14,15 @@ protocol PHPickerManagerProtocol {
   var pickedContents: BehaviorRelay<[UIImage]> { get }
 }
 
-final class PHPickerManager: PHPickerManagerProtocol {
-  var pickedContents = BehaviorRelay<[UIImage]>(value: [])
+public final class PHPickerManager: PHPickerManagerProtocol {
+  public var pickedContents = BehaviorRelay<[UIImage]>(value: [])
+
+  public init() { }
   
   /// PHPickerController를 선택한 NavigationController에 present합니다.
   /// - Parameters:
   ///   - navigationController: PHPicker를 present할 NavigationController
-  func presentPHPicker(
+  public func presentPHPicker(
     at navigationController: UINavigationController
   ) {
     var config = PHPickerConfiguration()
@@ -34,7 +36,10 @@ final class PHPickerManager: PHPickerManagerProtocol {
 
 extension PHPickerManager: PHPickerViewControllerDelegate {
   
-  func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+  public func picker(
+    _ picker: PHPickerViewController,
+    didFinishPicking results: [PHPickerResult]
+  ) {
     let cg = CoreGraphicManager()
     let itemProvider = results.first?.itemProvider
 
