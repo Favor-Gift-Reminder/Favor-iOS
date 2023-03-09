@@ -14,12 +14,16 @@ extension GiftAPI {
     switch self {
     case .getAllGifts:
       return .get
+
     case .getGift:
       return .get
+
     case .deleteGift:
       return .delete
+
     case .patchGift:
       return .patch
+      
     case .postGift:
       return .post
     }

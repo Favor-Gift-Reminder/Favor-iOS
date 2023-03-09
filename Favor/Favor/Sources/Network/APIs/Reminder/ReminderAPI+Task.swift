@@ -14,10 +14,13 @@ extension ReminderAPI {
     switch self {
     case .getAllReminders:
       return .requestPlain
+
     case .getReminder:
       return .requestPlain
+
     case .deleteReminder:
       return .requestPlain
+
     case .patchReminder(let reminderRequestDTO, let friendNo, _):
       return .requestCompositeParameters(
         bodyParameters: reminderRequestDTO.toDictionary(),
@@ -26,6 +29,7 @@ extension ReminderAPI {
           "friendNo": friendNo
         ]
       )
+      
     case .postReminder(let reminderRequestDTO, _, _):
       return .requestJSONEncodable(reminderRequestDTO)
     }

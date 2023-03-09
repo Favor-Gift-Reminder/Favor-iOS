@@ -14,12 +14,16 @@ extension GiftAPI {
     switch self {
     case .getAllGifts:
       return "/gifts"
+
     case .getGift(let giftNo):
       return "/gifts/\(giftNo)"
+
     case .deleteGift(let giftNo):
       return "/gifts/\(giftNo)"
+
     case .patchGift(_, _, let giftNo):
       return "/gifts/\(giftNo)"
+      
     case .postGift(_, let friendNo, let userNo):
       return "/gifts/\(userNo)/\(friendNo)"
     }

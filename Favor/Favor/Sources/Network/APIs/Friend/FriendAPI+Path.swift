@@ -14,14 +14,19 @@ extension FriendAPI {
     switch self {
     case .getAllFriends:
       return "/friends"
+
     case .getFriend(let friendNo):
       return "/friends/\(friendNo)"
+
     case .deleteFriend(let friendNo):
       return "/friends/\(friendNo)"
+
     case .patchFriend(_, _, let friendNo):
       return "/friends/\(friendNo)"
+
     case .postFriend(_, _, let userNo):
       return "/friends/\(userNo)"
+
     case .postUserFriend(_, _, let userNo):
       return "/friends/add/\(userNo)"
     }

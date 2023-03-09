@@ -14,12 +14,16 @@ extension ReminderAPI {
     switch self {
     case .getAllReminders:
       return .get
+
     case .getReminder:
       return .get
+
     case .deleteReminder:
       return .delete
+
     case .patchReminder:
       return .patch
+      
     case .postReminder:
       return .post
     }

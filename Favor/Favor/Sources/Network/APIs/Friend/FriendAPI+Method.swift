@@ -14,14 +14,19 @@ extension FriendAPI {
     switch self {
     case .getAllFriends:
       return .get
+
     case .getFriend:
       return .get
+
     case .deleteFriend:
       return .delete
+
     case .patchFriend:
       return .patch
+
     case .postFriend:
       return .post
+
     case .postUserFriend:
       return .post
     }

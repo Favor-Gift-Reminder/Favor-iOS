@@ -14,10 +14,13 @@ extension FriendAPI {
     switch self {
     case .getAllFriends:
       return .requestPlain
+
     case .getFriend:
       return .requestPlain
+
     case .deleteFriend:
       return .requestPlain
+
     case .patchFriend(let friendName, let friendMemo, _):
       return .requestParameters(
         parameters: [
@@ -26,6 +29,7 @@ extension FriendAPI {
         ],
         encoding: JSONEncoding.default
       )
+
     case .postFriend(let friendName, let friendMemo, _):
       return .requestParameters(
         parameters: [
@@ -34,6 +38,7 @@ extension FriendAPI {
         ],
         encoding: JSONEncoding.default
       )
+      
     case .postUserFriend(let userFriendNo, let userFriendMemo, _):
       return .requestParameters(
         parameters: [

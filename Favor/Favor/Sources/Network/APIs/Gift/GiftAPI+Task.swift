@@ -14,10 +14,13 @@ extension GiftAPI {
     switch self {
     case .getAllGifts:
       return .requestPlain
+
     case .getGift:
       return .requestPlain
+
     case .deleteGift:
       return .requestPlain
+
     case .patchGift(let giftRequestDTO, let friendNo, _):
       return .requestCompositeParameters(
         bodyParameters: giftRequestDTO.toDictionary(),
@@ -26,6 +29,7 @@ extension GiftAPI {
           "friendNo": friendNo
         ]
       )
+      
     case .postGift(let giftRequestDTO, _, _):
       return .requestJSONEncodable(giftRequestDTO)
     }

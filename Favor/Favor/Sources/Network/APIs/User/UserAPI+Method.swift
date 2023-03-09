@@ -14,28 +14,40 @@ extension UserAPI {
     switch self {
     case .getAllUsers:
       return .get
+
     case .getUser:
       return .get
+
     case .deleteUser:
       return .delete
+
     case .patchUser:
       return .patch
+
     case .getAllFriendList:
       return .get
+
     case .getGiftByCategory:
       return .get
+
     case .getGiftByEmotion:
       return .get
+
     case .getGiftByName:
       return .get
+
     case .getAllGifts:
       return .get
+
     case .getUserId:
       return .get
+
     case .patchProfile:
       return .patch
+
     case .getAllReminderList:
       return .get
+
     case .postSignUp:
       return .post
     }

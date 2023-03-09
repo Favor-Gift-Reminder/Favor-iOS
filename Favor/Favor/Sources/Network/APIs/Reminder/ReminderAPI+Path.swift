@@ -14,12 +14,16 @@ extension ReminderAPI {
     switch self {
     case .getAllReminders:
       return "/reminders"
+
     case .getReminder(let reminderNo):
       return "/reminders/\(reminderNo)"
+
     case .deleteReminder(let reminderNo):
       return "/reminders/\(reminderNo)"
+
     case .patchReminder(let reminderRequestDTO, let friendNo, let reminderNo):
       return "/reminders/\(reminderNo)"
+      
     case .postReminder(let reminderRequestDTO, let friendNo, let userNo):
       return "/reminders/\(userNo)/\(friendNo)"
     }

@@ -14,10 +14,13 @@ extension UserAPI {
     switch self {
     case .getAllUsers:
       return .requestPlain
+
     case .getUser:
       return .requestPlain
+
     case .deleteUser:
       return .requestPlain
+
     case .patchUser(let name, let userId, let favorList, _):
       return .requestParameters(
         parameters: [
@@ -27,18 +30,25 @@ extension UserAPI {
         ],
         encoding: JSONEncoding.default
       )
+
     case .getAllFriendList:
       return .requestPlain
+
     case .getGiftByCategory:
       return .requestPlain
+
     case .getGiftByEmotion:
       return .requestPlain
+
     case .getGiftByName:
       return .requestPlain
+
     case .getAllGifts:
       return .requestPlain
+
     case .getUserId:
       return .requestPlain
+
     case .patchProfile(let userId, let name, let userNo):
       return .requestCompositeParameters(
         bodyParameters: [
@@ -50,8 +60,10 @@ extension UserAPI {
           "userNo": userNo
         ]
       )
+
     case .getAllReminderList:
       return .requestPlain
+
     case .postSignUp(let email, let password):
       return .requestParameters(
         parameters: [
