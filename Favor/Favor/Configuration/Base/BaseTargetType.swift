@@ -9,16 +9,14 @@ import Foundation
 
 import Moya
 
-protocol BaseTargetType: TargetType { }
+protocol BaseTargetType: TargetType {
+  func getPath() -> String
+  func getMethod() -> Moya.Method
+  func getTask() -> Moya.Task
+}
 
 extension BaseTargetType {
-  var baseURL: URL {
-    URL(string: APIManager.mock.baseURL)! // TODO: 서버 배포에 맞는 baseURL로 교체
-  }
-
+  var baseURL: URL { URL(string: APIManager.mock.baseURL)! }
   var sampleData: Data { Data() }
-  
-  var headers: [String : String]? {
-    return APIManager.header(for: .json)
-  }
+  var headers: [String: String]? { return APIManager.header(for: .json) }
 }

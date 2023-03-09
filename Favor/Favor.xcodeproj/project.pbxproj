@@ -28,6 +28,7 @@
 		2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2E6E86F729B3974C00C7AF69 /* Term-Info.plist */; };
 		2E730C6729BA2BC5003668D9 /* FavorCoreKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E730C6629BA2BC5003668D9 /* FavorCoreKit */; };
 		2E730C6A29BA31F4003668D9 /* FavorNetworkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E730C6929BA31F4003668D9 /* FavorNetworkKit */; };
+		2E6C90C029A6783D00AF963A /* FavorTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BF29A6783D00AF963A /* FavorTextField.swift */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
 		2E77370929B86D8E00DDF377 /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E77370829B86D8E00DDF377 /* UserDefaultsKey.swift */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
@@ -126,10 +127,35 @@
 		E57F3139296FF48400E3D449 /* API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E57F3138296FF48400E3D449 /* API-Info.plist */; };
 		E57F313B296FF4AB00E3D449 /* Preview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313A296FF4AB00E3D449 /* Preview.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
+		E57F313F297000DB00E3D449 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313E297000DB00E3D449 /* BaseView.swift */; };
+		E58833A529B87D9D002B2CBE /* FriendAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */; };
+		E58833A729B87EB8002B2CBE /* FriendAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */; };
+		E58833A929B87F27002B2CBE /* FriendAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */; };
+		E58833AC29B88090002B2CBE /* GiftAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833AB29B88090002B2CBE /* GiftAPI.swift */; };
+		E58833AE29B88172002B2CBE /* GiftRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833AD29B88172002B2CBE /* GiftRequestDTO.swift */; };
+		E58833B029B8B67B002B2CBE /* GiftAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833AF29B8B67B002B2CBE /* GiftAPI+Path.swift */; };
+		E58833B229B8B6E1002B2CBE /* GiftAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833B129B8B6E1002B2CBE /* GiftAPI+Method.swift */; };
+		E58833B429B8B73A002B2CBE /* GiftAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833B329B8B73A002B2CBE /* GiftAPI+Task.swift */; };
+		E58833B729B8B938002B2CBE /* ReminderAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833B629B8B938002B2CBE /* ReminderAPI.swift */; };
+		E58833B929B8B99C002B2CBE /* ReminderRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833B829B8B99C002B2CBE /* ReminderRequestDTO.swift */; };
+		E58833BB29B8BA4E002B2CBE /* ReminderAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833BA29B8BA4E002B2CBE /* ReminderAPI+Path.swift */; };
+		E58833BD29B8BAAD002B2CBE /* ReminderAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833BC29B8BAAD002B2CBE /* ReminderAPI+Method.swift */; };
+		E58833BF29B8BAE3002B2CBE /* ReminderAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833BE29B8BAE3002B2CBE /* ReminderAPI+Task.swift */; };
+		E58833C229B8BCE3002B2CBE /* UserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833C129B8BCE3002B2CBE /* UserAPI.swift */; };
+		E58833CA29B95A5B002B2CBE /* UserAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833C929B95A5B002B2CBE /* UserAPI+Path.swift */; };
+		E58833CC29B95A63002B2CBE /* UserAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833CB29B95A63002B2CBE /* UserAPI+Method.swift */; };
+		E58833CE29B95A75002B2CBE /* UserAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833CD29B95A75002B2CBE /* UserAPI+Task.swift */; };
+		E58833D029B95D98002B2CBE /* FriendResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833CF29B95D98002B2CBE /* FriendResponseDTO.swift */; };
+		E58833D229B95E49002B2CBE /* GiftResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833D129B95E49002B2CBE /* GiftResponseDTO.swift */; };
+		E58833D429B95ECF002B2CBE /* ReminderResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833D329B95ECF002B2CBE /* ReminderResponseDTO.swift */; };
+		E58833D629B95F74002B2CBE /* UserResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833D529B95F74002B2CBE /* UserResponseDTO.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
 		E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182982974F79A00229C50 /* ReuseIdentifying.swift */; };
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
+		E5E1C46329B875D7003A44EE /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E5E1C46229B875D7003A44EE /* Term-Info.plist */; };
+		E5E1C46629B87AF4003A44EE /* FriendAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E1C46529B87AF4003A44EE /* FriendAPI.swift */; };
+		E5E28ECC295DAC3F006B9245 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
@@ -161,6 +187,7 @@
 		2E6E86F729B3974C00C7AF69 /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2E730C6529BA2B85003668D9 /* FavorCoreKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorCoreKit; sourceTree = "<group>"; };
 		2E730C6829BA311C003668D9 /* FavorNetworkKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorNetworkKit; sourceTree = "<group>"; };
+		2E6C90BF29A6783D00AF963A /* FavorTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTextField.swift; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E77370829B86D8E00DDF377 /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -260,9 +287,34 @@
 		E57F3138296FF48400E3D449 /* API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "API-Info.plist"; sourceTree = "<group>"; };
 		E57F313A296FF4AB00E3D449 /* Preview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Preview.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
+		E57F313E297000DB00E3D449 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
+		E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Path.swift"; sourceTree = "<group>"; };
+		E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Method.swift"; sourceTree = "<group>"; };
+		E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FriendAPI+Task.swift"; sourceTree = "<group>"; };
+		E58833AB29B88090002B2CBE /* GiftAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftAPI.swift; sourceTree = "<group>"; };
+		E58833AD29B88172002B2CBE /* GiftRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftRequestDTO.swift; sourceTree = "<group>"; };
+		E58833AF29B8B67B002B2CBE /* GiftAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GiftAPI+Path.swift"; sourceTree = "<group>"; };
+		E58833B129B8B6E1002B2CBE /* GiftAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GiftAPI+Method.swift"; sourceTree = "<group>"; };
+		E58833B329B8B73A002B2CBE /* GiftAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GiftAPI+Task.swift"; sourceTree = "<group>"; };
+		E58833B629B8B938002B2CBE /* ReminderAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderAPI.swift; sourceTree = "<group>"; };
+		E58833B829B8B99C002B2CBE /* ReminderRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderRequestDTO.swift; sourceTree = "<group>"; };
+		E58833BA29B8BA4E002B2CBE /* ReminderAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderAPI+Path.swift"; sourceTree = "<group>"; };
+		E58833BC29B8BAAD002B2CBE /* ReminderAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderAPI+Method.swift"; sourceTree = "<group>"; };
+		E58833BE29B8BAE3002B2CBE /* ReminderAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReminderAPI+Task.swift"; sourceTree = "<group>"; };
+		E58833C129B8BCE3002B2CBE /* UserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAPI.swift; sourceTree = "<group>"; };
+		E58833C929B95A5B002B2CBE /* UserAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserAPI+Path.swift"; sourceTree = "<group>"; };
+		E58833CB29B95A63002B2CBE /* UserAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserAPI+Method.swift"; sourceTree = "<group>"; };
+		E58833CD29B95A75002B2CBE /* UserAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserAPI+Task.swift"; sourceTree = "<group>"; };
+		E58833CF29B95D98002B2CBE /* FriendResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendResponseDTO.swift; sourceTree = "<group>"; };
+		E58833D129B95E49002B2CBE /* GiftResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftResponseDTO.swift; sourceTree = "<group>"; };
+		E58833D329B95ECF002B2CBE /* ReminderResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderResponseDTO.swift; sourceTree = "<group>"; };
+		E58833D529B95F74002B2CBE /* UserResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseDTO.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
+		E5E1C46229B875D7003A44EE /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "Term-Info.plist"; path = "/Users/eungcheol/Desktop/Projects/Favor/Favor/Favor/Term-Info.plist"; sourceTree = "<absolute>"; };
+		E5E1C46529B87AF4003A44EE /* FriendAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendAPI.swift; sourceTree = "<group>"; };
+		E5E28ECB295DAC3F006B9245 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -417,7 +469,7 @@
 				2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */,
 				2E7C30A9295D7C4500BAC43D /* Info.plist */,
 				E57F3138296FF48400E3D449 /* API-Info.plist */,
-				2E6E86F729B3974C00C7AF69 /* Term-Info.plist */,
+				E5E1C46229B875D7003A44EE /* Term-Info.plist */,
 			);
 			path = Favor;
 			sourceTree = "<group>";
@@ -577,6 +629,8 @@
 			isa = PBXGroup;
 			children = (
 				2EBB016A295EA9DA0072D158 /* README.md */,
+				E58833C329B8BE26002B2CBE /* RequestDTO */,
+				E58833C429B8BE31002B2CBE /* ResponseDTO */,
 			);
 			path = DataMapping;
 			sourceTree = "<group>";
@@ -808,6 +862,10 @@
 			isa = PBXGroup;
 			children = (
 				2EE3BAAB29AF1679004FDCC9 /* README.md */,
+				E5E1C46429B87AE6003A44EE /* Friend */,
+				E58833AA29B88065002B2CBE /* Gift */,
+				E58833B529B8B924002B2CBE /* Reminder */,
+				E58833C029B8BCCF002B2CBE /* User */,
 			);
 			path = APIs;
 			sourceTree = "<group>";
@@ -848,6 +906,59 @@
 			path = Flows;
 			sourceTree = "<group>";
 		};
+		E58833AA29B88065002B2CBE /* Gift */ = {
+			isa = PBXGroup;
+			children = (
+				E58833AB29B88090002B2CBE /* GiftAPI.swift */,
+				E58833AF29B8B67B002B2CBE /* GiftAPI+Path.swift */,
+				E58833B129B8B6E1002B2CBE /* GiftAPI+Method.swift */,
+				E58833B329B8B73A002B2CBE /* GiftAPI+Task.swift */,
+			);
+			path = Gift;
+			sourceTree = "<group>";
+		};
+		E58833B529B8B924002B2CBE /* Reminder */ = {
+			isa = PBXGroup;
+			children = (
+				E58833B629B8B938002B2CBE /* ReminderAPI.swift */,
+				E58833BA29B8BA4E002B2CBE /* ReminderAPI+Path.swift */,
+				E58833BC29B8BAAD002B2CBE /* ReminderAPI+Method.swift */,
+				E58833BE29B8BAE3002B2CBE /* ReminderAPI+Task.swift */,
+			);
+			path = Reminder;
+			sourceTree = "<group>";
+		};
+		E58833C029B8BCCF002B2CBE /* User */ = {
+			isa = PBXGroup;
+			children = (
+				E58833C129B8BCE3002B2CBE /* UserAPI.swift */,
+				E58833C929B95A5B002B2CBE /* UserAPI+Path.swift */,
+				E58833CB29B95A63002B2CBE /* UserAPI+Method.swift */,
+				E58833CD29B95A75002B2CBE /* UserAPI+Task.swift */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		E58833C329B8BE26002B2CBE /* RequestDTO */ = {
+			isa = PBXGroup;
+			children = (
+				E58833B829B8B99C002B2CBE /* ReminderRequestDTO.swift */,
+				E58833AD29B88172002B2CBE /* GiftRequestDTO.swift */,
+			);
+			path = RequestDTO;
+			sourceTree = "<group>";
+		};
+		E58833C429B8BE31002B2CBE /* ResponseDTO */ = {
+			isa = PBXGroup;
+			children = (
+				E58833CF29B95D98002B2CBE /* FriendResponseDTO.swift */,
+				E58833D129B95E49002B2CBE /* GiftResponseDTO.swift */,
+				E58833D329B95ECF002B2CBE /* ReminderResponseDTO.swift */,
+				E58833D529B95F74002B2CBE /* UserResponseDTO.swift */,
+			);
+			path = ResponseDTO;
+			sourceTree = "<group>";
+		};
 		E5B182902974F39C00229C50 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -872,6 +983,17 @@
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		E5E1C46429B87AE6003A44EE /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				E5E1C46529B87AF4003A44EE /* FriendAPI.swift */,
+				E58833A429B87D9D002B2CBE /* FriendAPI+Path.swift */,
+				E58833A629B87EB8002B2CBE /* FriendAPI+Method.swift */,
+				E58833A829B87F27002B2CBE /* FriendAPI+Task.swift */,
+			);
+			path = Friend;
 			sourceTree = "<group>";
 		};
 		E5E28ECA295DAC15006B9245 /* Base */ = {
@@ -998,8 +1120,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E6E86F829B3974C00C7AF69 /* Term-Info.plist in Resources */,
 				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
+				E5E1C46329B875D7003A44EE /* Term-Info.plist in Resources */,
+				E5B1828529743D5800229C50 /* Pretendard-Regular.otf in Resources */,
+				E5B1828429743D5700229C50 /* Pretendard-Bold.otf in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
 				E57F3139296FF48400E3D449 /* API-Info.plist in Resources */,
@@ -1043,14 +1167,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
+				E58833CA29B95A5B002B2CBE /* UserAPI+Path.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
 				2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */,
+				E58833BD29B8BAAD002B2CBE /* ReminderAPI+Method.swift in Sources */,
 				2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */,
+				E5E1C46629B87AF4003A44EE /* FriendAPI.swift in Sources */,
 				2ED8CB4729B0C30400E7B547 /* TermCell.swift in Sources */,
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
+				E58833B929B8B99C002B2CBE /* ReminderRequestDTO.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
+				E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */,
+				E58833D429B95ECF002B2CBE /* ReminderResponseDTO.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
@@ -1078,12 +1208,23 @@
 				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
 				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
 				2E77370929B86D8E00DDF377 /* UserDefaultsKey.swift in Sources */,
+				E562611E299DCE2E00D14020 /* LargeFavorButtonType.swift in Sources */,
+				E58833A529B87D9D002B2CBE /* FriendAPI+Path.swift in Sources */,
+				2EE3BA7429AA68DD004FDCC9 /* AuthType.swift in Sources */,
+				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
+				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
+				2EE3691D29B634F300134760 /* UIButton+.swift in Sources */,
+				2EE0D58D297832D20064E932 /* PHPickerManager.swift in Sources */,
+				E58833B429B8B73A002B2CBE /* GiftAPI+Task.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2ECC94CA296026A200B530F7 /* TabBarPage.swift in Sources */,
+				E58833AC29B88090002B2CBE /* GiftAPI.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
+				E58833C229B8BCE3002B2CBE /* UserAPI.swift in Sources */,
+				2EE0D58B29781F920064E932 /* CoreGraphicManager.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* MyPageSectionHeaderViewReactor.swift in Sources */,
 				2E6C90B129A607BD00AF963A /* FriendCell.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */,
@@ -1092,11 +1233,13 @@
 				2EE3BA8D29AE15A8004FDCC9 /* APIManager.swift in Sources */,
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
 				2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */,
+				E58833B729B8B938002B2CBE /* ReminderAPI.swift in Sources */,
 				2EC939EB299A7D4300C8C47F /* MyPageSectionHeaderView.swift in Sources */,
 				E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */,
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E00561A29A7E40F006CF302 /* ScrollDirection.swift in Sources */,
+				E58833A729B87EB8002B2CBE /* FriendAPI+Method.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
@@ -1109,7 +1252,10 @@
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
+				E58833D229B95E49002B2CBE /* GiftResponseDTO.swift in Sources */,
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
+				E58833AE29B88172002B2CBE /* GiftRequestDTO.swift in Sources */,
+				E58833CC29B95A63002B2CBE /* UserAPI+Method.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
@@ -1119,6 +1265,7 @@
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EE3BA9529AE54A1004FDCC9 /* BaseTargetType.swift in Sources */,
+				E58833BF29B8BAE3002B2CBE /* ReminderAPI+Task.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
@@ -1127,6 +1274,11 @@
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
+				E58833D629B95F74002B2CBE /* UserResponseDTO.swift in Sources */,
+				E58833B229B8B6E1002B2CBE /* GiftAPI+Method.swift in Sources */,
+				E58833CE29B95A75002B2CBE /* UserAPI+Task.swift in Sources */,
+				E58833B029B8B67B002B2CBE /* GiftAPI+Path.swift in Sources */,
+				E51AB858297A8BE200955301 /* FavorPlainButton.swift in Sources */,
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				2EAC2C0829BA06CF00D41DE0 /* BaseView.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
@@ -1138,9 +1290,13 @@
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
+				E58833A929B87F27002B2CBE /* FriendAPI+Task.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
 				2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */,
+				E58833BB29B8BA4E002B2CBE /* ReminderAPI+Path.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */,
+				E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */,
+				E58833D029B95D98002B2CBE /* FriendResponseDTO.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 				2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */,
 			);

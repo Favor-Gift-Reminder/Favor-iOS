@@ -11,7 +11,10 @@ extension Encodable {
   public func toDictionary() -> [String: Any] {
     do {
       let data = try JSONEncoder().encode(self)
-      let dict = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+      let dict = try JSONSerialization.jsonObject(
+        with: data,
+        options: .allowFragments
+      ) as? [String: Any]
       return dict ?? [:]
     } catch {
       return [:]
