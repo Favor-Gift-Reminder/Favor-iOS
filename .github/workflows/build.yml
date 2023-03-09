@@ -26,7 +26,7 @@ jobs:
         API_SECRET: ${{ secrets.API_SECRET }}
         TERM_SECRET: ${{ secrets.TERM_SECRET }}
       run: |
-        echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/API-Info.plist
+        echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}NetworkKit/Sources/${{ env.PROJECT }}NetworkKit/API-Info.plist
         echo $TERM_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/Term-Info.plist
         ls -al ${{ env.PROJECT }}
 
