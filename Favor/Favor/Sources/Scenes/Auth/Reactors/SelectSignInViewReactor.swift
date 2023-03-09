@@ -19,6 +19,7 @@ final class SelectSignInViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
+    case loadView
     case emailLoginButtonTap
     case signUpButtonTap
   }
@@ -39,6 +40,12 @@ final class SelectSignInViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .loadView:
+      if FTUXStorage.isFirstLaunch {
+        self.steps.accept(AppStep.onboardingIsRequired)
+      }
+      return .empty()
+
     case .emailLoginButtonTap:
       self.steps.accept(AppStep.signInIsRequired)
       return .empty()

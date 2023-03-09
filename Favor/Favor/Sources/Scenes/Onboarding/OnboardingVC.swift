@@ -48,7 +48,8 @@ final class OnboardingViewController: BaseViewController, Stepper {
         $0.configuration = LargeFavorButtonType.main("시작하기").configuration
       }
     }
-    
+    btn.addTarget(self, action: #selector(dismissOnboarding), for: .touchUpInside)
+
     return btn
   }()
   
@@ -77,7 +78,7 @@ final class OnboardingViewController: BaseViewController, Stepper {
   private var currentPage: Int = 0 {
     didSet {
       self.pageControl.currentPage = currentPage
-      self.startButton.isEnabled = self.currentPage == 2 ? true : false
+      self.startButton.isEnabled = self.currentPage == self.slides.count - 1 ? true : false
     }
   }
   
@@ -112,6 +113,13 @@ final class OnboardingViewController: BaseViewController, Stepper {
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(32)
     }
+  }
+
+  // MARK: - Functions
+
+  @objc
+  func dismissOnboarding() {
+    self.steps.accept(AppStep.onboardingIsComplete)
   }
 }
 

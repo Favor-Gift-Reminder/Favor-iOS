@@ -48,11 +48,16 @@ final class SelectSignInViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
   
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+
+    self.reactor?.action.onNext(.loadView)
+  }
+  
   // MARK: - Binding
   
   func bind(reactor: SelectSignInViewReactor) {
     // Action
-    
     self.emailLoginButton.rx.tap
       .map { Reactor.Action.emailLoginButtonTap }
       .bind(to: reactor.action)

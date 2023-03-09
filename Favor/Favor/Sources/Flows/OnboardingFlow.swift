@@ -23,7 +23,9 @@ final class OnboardingFlow: Flow {
     switch step {
     case .onboardingIsRequired:
       return .one(flowContributor: .contribute(withNext: self.rootViewController))
+
     case .onboardingIsComplete:
+      FTUXStorage.isFirstLaunch = false
       return .end(forwardToParentFlowWithStep: AppStep.onboardingIsComplete)
       
     default:

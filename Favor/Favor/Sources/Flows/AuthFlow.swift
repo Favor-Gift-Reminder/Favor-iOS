@@ -25,13 +25,17 @@ final class AuthFlow: Flow {
     
     switch step {
     case .authIsRequired:
-      return self.navigationToAuth()
-      
-    case .authIsComplete:
-      return .end(forwardToParentFlowWithStep: AppStep.authIsComplete)
+      return self.navigateToAuth()
+
+    case .onboardingIsRequired:
+      return self.navigateToOnboarding()
+
+    case .onboardingIsComplete:
+      self.rootViewController.presentedViewController?.dismiss(animated: true)
+      return .none
       
     case .signInIsRequired:
-      return self.navigationToSignIn()
+      return self.navigateToSignIn()
 
     case .findPasswordIsRequired:
       return self.navigateToFindPassword()
@@ -43,22 +47,19 @@ final class AuthFlow: Flow {
       return self.navigateToNewPassword()
       
     case .signUpIsRequired:
-      return self.navigationToSignUp()
+      return self.navigateToSignUp()
       
     case .setProfileIsRequired:
-      return self.navigationToSetProfile()
+      return self.navigateToSetProfile()
       
     case .termIsRequired(let userName):
-      return self.navigationToTerm(with: userName)
-      
-    case .onboardingIsRequired:
-      return .none
-      
-    case .onboardingIsComplete:
-      return .none
+      return self.navigateToTerm(with: userName)
 
     case .imagePickerIsRequired(let manager):
       return self.presentPHPicker(manager: manager)
+
+    case .authIsComplete:
+      return .end(forwardToParentFlowWithStep: AppStep.authIsComplete)
       
     default:
       return .none
@@ -67,7 +68,7 @@ final class AuthFlow: Flow {
 }
 
 private extension AuthFlow {
-  func navigationToAuth() -> FlowContributors {
+  func navigateToAuth() -> FlowContributors {
     let viewController = SelectSignInViewController()
     let reactor = SelectSignInViewReactor()
     viewController.reactor = reactor
@@ -79,7 +80,7 @@ private extension AuthFlow {
     ))
   }
   
-  func navigationToOnboarding() -> FlowContributors {
+  func navigateToOnboarding() -> FlowContributors {
     let onboardingFlow = OnboardingFlow()
 
     Flows.use(onboardingFlow, when: .created) { [unowned self] root in
@@ -95,7 +96,7 @@ private extension AuthFlow {
     ))
   }
   
-  func navigationToSignIn() -> FlowContributors {
+  func navigateToSignIn() -> FlowContributors {
     let viewController = SignInViewController()
     let reactor = SignInViewReactor()
     viewController.title = "로그인"
@@ -147,7 +148,7 @@ private extension AuthFlow {
     )
   }
   
-  func navigationToSignUp() -> FlowContributors {
+  func navigateToSignUp() -> FlowContributors {
     let viewController = SignUpViewController()
     let reactor = SignUpViewReactor()
     viewController.title = "회원가입"
@@ -160,7 +161,7 @@ private extension AuthFlow {
     )
   }
   
-  func navigationToSetProfile() -> FlowContributors {
+  func navigateToSetProfile() -> FlowContributors {
     let viewController = SetProfileViewController()
     let reactor = SetProfileViewReactor(pickerManager: PHPickerManager())
     viewController.title = "프로필 작성"
@@ -173,7 +174,7 @@ private extension AuthFlow {
     )
   }
   
-  func navigationToTerm(with userName: String) -> FlowContributors {
+  func navigateToTerm(with userName: String) -> FlowContributors {
     let viewController = TermViewController()
     let reactor = TermViewReactor(with: userName)
     viewController.reactor = reactor

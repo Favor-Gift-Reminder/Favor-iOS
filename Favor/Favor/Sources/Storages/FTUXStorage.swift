@@ -8,15 +8,9 @@
 import Foundation
 
 final class FTUXStorage {
+  @UserDefault(key: .isFirstLaunch, defaultValue: true)
+  static var isFirstLaunch: Bool
   
-  private let key = "LAUNCHED_BEFORE"
-  private let userDefaults = UserDefaults.standard
-  
-  var isFirstLaunched: Bool {
-    return userDefaults.bool(forKey: key)
-  }
-  
-  func setFirstLaunch() {
-    userDefaults.set(true, forKey: key)
-  }
+  @UserDefault(key: .isSignedIn, defaultValue: false)
+  static var isSignedIn: Bool
 }
