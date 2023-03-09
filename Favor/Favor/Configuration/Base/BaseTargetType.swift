@@ -9,7 +9,11 @@ import Foundation
 
 import Moya
 
-protocol BaseTargetType: TargetType { }
+protocol BaseTargetType: TargetType {
+  func getPath() -> String
+  func getMethod() -> Moya.Method
+  func getTask() -> Moya.Task
+}
 
 extension BaseTargetType {
   var baseURL: URL { URL(string: APIManager.mock.baseURL)! }
