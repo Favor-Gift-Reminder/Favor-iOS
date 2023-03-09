@@ -7,12 +7,12 @@
 
 import UIKit
 
-enum PlainFavorButtonType {
+public enum PlainFavorButtonType {
   case logIn(String)
   case more(String)
   case main(String, isRight: Bool)
   
-  var configuration: UIButton.Configuration {
+  public var configuration: UIButton.Configuration {
     var config = UIButton.Configuration.plain()
     var titleContainer = AttributeContainer()
     let titleString: String

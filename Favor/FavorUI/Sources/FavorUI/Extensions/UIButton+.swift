@@ -10,8 +10,8 @@ import UIKit
 import RxCocoa
 import RxSwift
 
-extension Reactive where Base: UIButton {
-  public var tap: ControlEvent<Void> {
+public extension Reactive where Base: UIButton {
+  var tapWithHaptic: ControlEvent<Void> {
     HapticManager.haptic(style: .soft)
     return controlEvent(.touchUpInside)
   }

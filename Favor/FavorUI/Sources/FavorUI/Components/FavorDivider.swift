@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class FavorDivider: UIView {
+public final class FavorDivider: UIView {
   
   // MARK: - INITIALIZER
   
@@ -25,7 +25,7 @@ final class FavorDivider: UIView {
   }
 }
 
-extension FavorDivider: BaseView {
+extension FavorDivider {
   func setupStyles() {
     self.backgroundColor = .favorColor(.divider)
   }

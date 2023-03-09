@@ -9,12 +9,12 @@ import UIKit
 
 import class RxSwift.DisposeBag
 
-class BaseViewController: UIViewController {
+open class BaseViewController: UIViewController {
 
   /// A dispose bag. 각 ViewController에 종속적이다.
-  final var disposeBag = DisposeBag()
-	
-  override func viewDidLoad() {
+  public final var disposeBag = DisposeBag()
+
+  open override func viewDidLoad() {
     super.viewDidLoad()
     setupLayouts()
     setupConstraints()
@@ -32,7 +32,7 @@ class BaseViewController: UIViewController {
   ///   // codes..
   /// }
   /// ```
-  func setupLayouts() { }
+  open func setupLayouts() { }
 
   /// UI 프로퍼티의 제약조건을 설정합니다.
   ///
@@ -45,7 +45,7 @@ class BaseViewController: UIViewController {
   ///   // codes..
   /// }
   /// ```
-  func setupConstraints() { }
+  open func setupConstraints() { }
 
   /// View와 관련된 Style을 설정합니다.
   ///
@@ -56,12 +56,12 @@ class BaseViewController: UIViewController {
   ///   // codes..
   /// }
   /// ```
-  func setupStyles() {
+  open func setupStyles() {
     self.view.backgroundColor = .favorColor(.white)
     self.view.directionalLayoutMargins = NSDirectionalEdgeInsets(
       top: 0, leading: 20.0, bottom: 0, trailing: 20.0
     )
   }
   
-  func bind() { }
+  open func bind() { }
 }

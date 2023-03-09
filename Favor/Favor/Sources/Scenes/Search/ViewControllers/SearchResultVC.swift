@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorUI
 import ReactorKit
 import RxGesture
 import RxSwift

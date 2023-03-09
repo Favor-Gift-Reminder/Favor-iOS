@@ -7,10 +7,10 @@
 
 import UIKit
 
+import FavorUI
 import ReactorKit
 import RxCocoa
 import SnapKit
-import Then
 
 final class SelectSignInViewController: BaseViewController, View {
   

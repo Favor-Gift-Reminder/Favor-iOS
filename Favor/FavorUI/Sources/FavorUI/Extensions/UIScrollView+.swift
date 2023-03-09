@@ -8,7 +8,7 @@
 import UIKit
 
 extension UIScrollView {
-  func scroll(to offsetY: CGFloat) {
+  public func scroll(to offsetY: CGFloat) {
     self.setContentOffset(CGPoint(x: .zero, y: offsetY), animated: true)
   }
 }

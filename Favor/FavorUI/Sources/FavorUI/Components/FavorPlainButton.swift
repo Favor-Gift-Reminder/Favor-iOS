@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FavorPlainButton: UIButton {
+public final class FavorPlainButton: UIButton {
   
   // MARK: - PROPERTIES
   
@@ -15,7 +15,7 @@ final class FavorPlainButton: UIButton {
 
   // MARK: - INITIALIZER
   
-  init(with plainFavorButtonType: PlainFavorButtonType) {
+  public init(with plainFavorButtonType: PlainFavorButtonType) {
     self.plainFavorButtonType = plainFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()
@@ -30,7 +30,7 @@ final class FavorPlainButton: UIButton {
 
 // MARK: - SETUP
 
-extension FavorPlainButton: BaseView {
+extension FavorPlainButton {
   func setupStyles() {
     self.configuration = self.plainFavorButtonType.configuration
   }

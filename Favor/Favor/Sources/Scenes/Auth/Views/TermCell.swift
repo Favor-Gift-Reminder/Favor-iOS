@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorUI
 import Reusable
 import RxCocoa
 import RxSwift

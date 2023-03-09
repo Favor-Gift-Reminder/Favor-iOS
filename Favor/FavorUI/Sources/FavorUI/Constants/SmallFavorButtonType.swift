@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum SmallFavorButtonType {
+public enum SmallFavorButtonType {
   case mainWithIcon(String, imageName: String)
   case main(String)
   case darkWithIcon(String, imageName: String)
@@ -17,7 +17,7 @@ enum SmallFavorButtonType {
   // TODO: 이모지 열거형 연관괎으로 추가하기
   case grayWithEmoji
   
-  var configuration: UIButton.Configuration {
+  public var configuration: UIButton.Configuration {
     var config = UIButton.Configuration.filled()
     let titleString: String
     config.background.cornerRadius = 32

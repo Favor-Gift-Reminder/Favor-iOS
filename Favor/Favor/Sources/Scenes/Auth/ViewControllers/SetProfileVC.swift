@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorUI
 import ReactorKit
 import RxCocoa
 import RxGesture
@@ -119,7 +120,7 @@ final class SetProfileViewController: BaseViewController, View {
   
   func bind(reactor: SetProfileViewReactor) {
     // Action
-    self.profileImageButton.rx.tap
+    self.profileImageButton.rx.tapWithHaptic
       .map { Reactor.Action.profileImageButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -160,7 +161,7 @@ final class SetProfileViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.nextButton.rx.tap
+    self.nextButton.rx.tapWithHaptic
       .delay(.milliseconds(500), scheduler: MainScheduler.instance)
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)

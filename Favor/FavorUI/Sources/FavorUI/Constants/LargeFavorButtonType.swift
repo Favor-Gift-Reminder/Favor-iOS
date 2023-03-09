@@ -7,14 +7,14 @@
 
 import UIKit
 
-enum LargeFavorButtonType {
+public enum LargeFavorButtonType {
   case main(String)
   case main2(String)
   case dark1(String)
   case dark2(String)
   case gray(String)
   
-  var configuration: UIButton.Configuration {
+  public var configuration: UIButton.Configuration {
     var config = UIButton.Configuration.filled()
     let titleString: String
     config.background.cornerRadius = 64

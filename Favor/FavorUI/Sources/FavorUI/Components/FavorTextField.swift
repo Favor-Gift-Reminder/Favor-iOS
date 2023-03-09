@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-class FavorTextField: UIView {
+public class FavorTextField: UIView {
 
   // MARK: - Properties
 
@@ -199,7 +199,7 @@ class FavorTextField: UIView {
 
   // MARK: - Functions
 
-  func updateMessageLabel(_ text: String?, state: MessageState? = nil, animated: Bool = true) {
+  public func updateMessageLabel(_ text: String?, state: MessageState? = nil, animated: Bool = true) {
     guard let text else { return }
     let updateClosure = {
       self.messageLabelText = text
@@ -226,7 +226,7 @@ class FavorTextField: UIView {
     }
   }
 
-  func addLeftItem(item: UIView) {
+  public func addLeftItem(item: UIView) {
     self.textField.leftView = item
     self.textField.leftView?.snp.makeConstraints { make in
       make.height.width.equalTo(24)
@@ -236,30 +236,30 @@ class FavorTextField: UIView {
 
   /// First Responder 지정을 TextField에 전달합니다.
   @discardableResult
-  override func becomeFirstResponder() -> Bool {
+  public override func becomeFirstResponder() -> Bool {
     super.becomeFirstResponder()
     return self.textField.becomeFirstResponder()
   }
 
   /// First Responder 지정 해제를 TextField에 전달합니다.
   @discardableResult
-  override func resignFirstResponder() -> Bool {
+  public override func resignFirstResponder() -> Bool {
     super.resignFirstResponder()
     return self.textField.resignFirstResponder()
   }
 }
 
 extension FavorTextField: UITextFieldDelegate {
-  func textFieldDidBeginEditing(_ textField: UITextField) {
+  public func textFieldDidBeginEditing(_ textField: UITextField) {
     self.isEditingOrSelected = true
   }
 
-  func textFieldDidEndEditing(_ textField: UITextField) {
+  public func textFieldDidEndEditing(_ textField: UITextField) {
     self.isEditingOrSelected = false
   }
 }
 
-extension FavorTextField: BaseView {
+extension FavorTextField {
   func setupStyles() { }
 
   func setupLayouts() {
@@ -381,7 +381,7 @@ private extension FavorTextField {
 
 // MARK: - ReactorKit
 
-extension Reactive where Base: FavorTextField {
+public extension Reactive where Base: FavorTextField {
   var text: ControlProperty<String?> {
     let source = base.textField.rx.text
     let bindingObserver = Binder(self.base) { (favorTextField, text: String?) in

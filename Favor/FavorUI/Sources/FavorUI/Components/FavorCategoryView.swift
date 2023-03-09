@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class FavorCategoryView: UIScrollView {
+public final class FavorCategoryView: UIScrollView {
   
   // MARK: - Properties
   
@@ -42,7 +42,7 @@ final class FavorCategoryView: UIScrollView {
   }
 }
 
-extension FavorCategoryView: BaseView {
+extension FavorCategoryView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.background)
     self.showsHorizontalScrollIndicator = false

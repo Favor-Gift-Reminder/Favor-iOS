@@ -11,43 +11,43 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
-class FavorSearchBar: UIView {
+public class FavorSearchBar: UIView {
   
   // MARK: - Properties
   
   /// 왼쪽 버튼의 크기 (1:1 ratio)
-  var leftItemSize: CGFloat = 48.0 {
+  public var leftItemSize: CGFloat = 48.0 {
     didSet {
       self.updateLeftItem()
     }
   }
   
   /// SearchBar의 높이
-  var searchBarHeight: CGFloat = 40.0
+  public var searchBarHeight: CGFloat = 40.0
   
   /// 왼쪽에 있는 아이콘의 이미지
-  var leftItemImage: UIImage? = UIImage(named: "ic_Search") {
+  public var leftItemImage: UIImage? = UIImage(named: "ic_Search") {
     didSet {
       self.updateSearchItem()
     }
   }
   
   /// SearchBar에 내장되어 있는 TextField의 Corner Radius
-  var cornerRadius: CGFloat = 20.0 {
+  public var cornerRadius: CGFloat = 20.0 {
     didSet {
       self.updateTextField()
     }
   }
   
   /// SearchBar에 내장되어 있는 TextField의 placeholder 텍스트
-  var placeholder: String? {
+  public var placeholder: String? {
     didSet {
       self.updateTextField()
     }
   }
   
   /// placeholder 텍스트의 색상
-  var placeholderColor: UIColor = .favorColor(.explain) {
+  public var placeholderColor: UIColor = .favorColor(.explain) {
     didSet {
       self.updateTextField()
     }
@@ -64,7 +64,7 @@ class FavorSearchBar: UIView {
     return button
   }()
   
-  lazy var searchBar: UISearchBar = {
+  public lazy var searchBar: UISearchBar = {
     let searchBar = UISearchBar()
     searchBar.searchBarStyle = .minimal
     searchBar.backgroundColor = .clear
@@ -91,7 +91,7 @@ class FavorSearchBar: UIView {
   
   // MARK: - Initializer
   
-  override init(frame: CGRect) {
+  public override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
@@ -110,13 +110,13 @@ class FavorSearchBar: UIView {
   
   // MARK: - Functions
   
-  func updateLeftItem() {
+  public func updateLeftItem() {
     self.leftItem.snp.updateConstraints { make in
       make.height.width.equalTo(self.leftItemSize)
     }
   }
   
-  func updateLeftItemVisibility(isHidden: Bool) {
+  public func updateLeftItemVisibility(isHidden: Bool) {
     let duration = isHidden ? 0.3 : 0.4
     DispatchQueue.main.async {
       UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut) {
@@ -126,7 +126,7 @@ class FavorSearchBar: UIView {
   }
   
   /// SearchBar에 내장되어 있는 TextField를 업데이트합니다.
-  func updateTextField() {
+  public func updateTextField() {
     self.searchBar.searchTextField.layer.cornerRadius = self.cornerRadius
     
     let attributedString = NSAttributedString(
@@ -140,7 +140,7 @@ class FavorSearchBar: UIView {
     self.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
   }
   
-  func updateSearchItem() {
+  public func updateSearchItem() {
     self.searchBar.setImage(self.leftItemImage, for: .search, state: .normal)
     self.searchBar.setPositionAdjustment(UIOffset(horizontal: 16, vertical: 0), for: .search)
   }
@@ -148,7 +148,7 @@ class FavorSearchBar: UIView {
 
 // MARK: - Setup
 
-extension FavorSearchBar: BaseView {
+extension FavorSearchBar {
   func setupStyles() {
     //
   }
@@ -175,7 +175,7 @@ extension FavorSearchBar: BaseView {
   }
 }
 
-extension Reactive where Base: FavorSearchBar {
+public extension Reactive where Base: FavorSearchBar {
   var leftItemDidTap: ControlEvent<()> {
     let source = base.leftItem.rx.tap
     return ControlEvent(events: source)

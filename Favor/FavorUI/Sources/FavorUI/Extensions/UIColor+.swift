@@ -21,7 +21,7 @@ extension UIColor {
     self.init(red: r, green: g, blue: b, alpha: 1.0)
   }
   
-  enum FavorColor: String {
+  public enum FavorColor: String {
     case white = "#FFFFFF"
     case black = "#000000"
     case main = "#FF5862"
@@ -44,8 +44,7 @@ extension UIColor {
   /// 사용하는 쪽
   ///
   /// label.textColor = .favorColor(.main)
-  static func favorColor(_ color: FavorColor) -> UIColor {
-    
+  public static func favorColor(_ color: FavorColor) -> UIColor {
     let favorColor = UIColor(color.rawValue)
     return favorColor
   }

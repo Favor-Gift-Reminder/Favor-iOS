@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorUI
 import RealmSwift
 
 @main
@@ -14,6 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
+
+    // FavorUI Package의 Custom Font Register 메서드
+    registerFonts()
     
     self.setupNavigationBarAppearance()
 

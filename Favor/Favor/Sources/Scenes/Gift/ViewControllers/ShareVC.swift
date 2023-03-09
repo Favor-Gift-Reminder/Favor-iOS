@@ -7,6 +7,8 @@
 
 import UIKit
 
+import FavorUI
+
 final class ShareViewController: BaseViewController {
   
 }

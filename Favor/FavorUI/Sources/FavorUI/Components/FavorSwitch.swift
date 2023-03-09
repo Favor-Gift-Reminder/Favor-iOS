@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FavorSwitch: UISwitch {
+public final class FavorSwitch: UISwitch {
   
   // MARK: - INITIALIZER
   

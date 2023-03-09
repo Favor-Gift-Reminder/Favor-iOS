@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class HapticManager {
+public final class HapticManager {
   /// 햅틱 진동을 발생시킵니다.
   /// `.heavy`, `.light`, `.medium`, `.rigid`, `.soft`
   static func haptic(style: UIImpactFeedbackGenerator.FeedbackStyle) {

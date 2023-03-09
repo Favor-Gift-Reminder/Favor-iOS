@@ -8,13 +8,14 @@
 import UIKit
 
 extension UIView {
-  func round(corners: UIRectCorner, radius: CGFloat) {
-    _ = _round(corners: corners, radius: radius)
+  public func round(corners: UIRectCorner, radius: CGFloat) {
+    _ = self._round(corners: corners, radius: radius)
   }
 }
 
 private extension UIView {
-  @discardableResult func _round(corners: UIRectCorner, radius: CGFloat) -> CAShapeLayer {
+  @discardableResult
+  func _round(corners: UIRectCorner, radius: CGFloat) -> CAShapeLayer {
     let path = UIBezierPath(roundedRect: bounds, byRoundingCorners: corners, cornerRadii: .init(width: radius, height: radius))
     let mask = CAShapeLayer()
     mask.path = path.cgPath

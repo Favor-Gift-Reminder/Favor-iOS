@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-final class FavorSmallButton: UIButton {
+public final class FavorSmallButton: UIButton {
   
   // MARK: - PROPERTIES
   
@@ -17,7 +17,7 @@ final class FavorSmallButton: UIButton {
   
   // MARK: - INITIALIZER
   
-  init(with smallFavorButtonType: SmallFavorButtonType, title: String = "") {
+  public init(with smallFavorButtonType: SmallFavorButtonType, title: String = "") {
     self.smallFavorButtonType = smallFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()
@@ -32,7 +32,7 @@ final class FavorSmallButton: UIButton {
 
 // MARK: - SETUP
 
-extension FavorSmallButton: BaseView {
+extension FavorSmallButton {
   func setupStyles() {
     self.configuration = self.smallFavorButtonType.configuration
     let imageConfig = UIImage.SymbolConfiguration(pointSize: 10)

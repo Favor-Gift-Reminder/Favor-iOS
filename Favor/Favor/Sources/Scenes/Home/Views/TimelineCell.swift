@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorUI
 import ReactorKit
 
 final class TimelineCell: UICollectionViewCell, ReuseIdentifying, View {
