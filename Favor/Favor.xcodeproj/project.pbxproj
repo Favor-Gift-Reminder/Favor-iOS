@@ -156,6 +156,10 @@
 		E58833CA29B95A5B002B2CBE /* UserAPI+Path.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833C929B95A5B002B2CBE /* UserAPI+Path.swift */; };
 		E58833CC29B95A63002B2CBE /* UserAPI+Method.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833CB29B95A63002B2CBE /* UserAPI+Method.swift */; };
 		E58833CE29B95A75002B2CBE /* UserAPI+Task.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833CD29B95A75002B2CBE /* UserAPI+Task.swift */; };
+		E58833D029B95D98002B2CBE /* FriendResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833CF29B95D98002B2CBE /* FriendResponseDTO.swift */; };
+		E58833D229B95E49002B2CBE /* GiftResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833D129B95E49002B2CBE /* GiftResponseDTO.swift */; };
+		E58833D429B95ECF002B2CBE /* ReminderResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833D329B95ECF002B2CBE /* ReminderResponseDTO.swift */; };
+		E58833D629B95F74002B2CBE /* UserResponseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = E58833D529B95F74002B2CBE /* UserResponseDTO.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
 		E5B1827C2974361400229C50 /* FavorLargeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827B2974361400229C50 /* FavorLargeButton.swift */; };
 		E5B1828329743D5400229C50 /* UIFont+.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B1827D297439CA00229C50 /* UIFont+.swift */; };
@@ -328,6 +332,10 @@
 		E58833C929B95A5B002B2CBE /* UserAPI+Path.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserAPI+Path.swift"; sourceTree = "<group>"; };
 		E58833CB29B95A63002B2CBE /* UserAPI+Method.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserAPI+Method.swift"; sourceTree = "<group>"; };
 		E58833CD29B95A75002B2CBE /* UserAPI+Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserAPI+Task.swift"; sourceTree = "<group>"; };
+		E58833CF29B95D98002B2CBE /* FriendResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendResponseDTO.swift; sourceTree = "<group>"; };
+		E58833D129B95E49002B2CBE /* GiftResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftResponseDTO.swift; sourceTree = "<group>"; };
+		E58833D329B95ECF002B2CBE /* ReminderResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderResponseDTO.swift; sourceTree = "<group>"; };
+		E58833D529B95F74002B2CBE /* UserResponseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserResponseDTO.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
 		E5B1827B2974361400229C50 /* FavorLargeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorLargeButton.swift; sourceTree = "<group>"; };
 		E5B1827D297439CA00229C50 /* UIFont+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+.swift"; sourceTree = "<group>"; };
@@ -1006,6 +1014,10 @@
 		E58833C429B8BE31002B2CBE /* ResponseDTO */ = {
 			isa = PBXGroup;
 			children = (
+				E58833CF29B95D98002B2CBE /* FriendResponseDTO.swift */,
+				E58833D129B95E49002B2CBE /* GiftResponseDTO.swift */,
+				E58833D329B95ECF002B2CBE /* ReminderResponseDTO.swift */,
+				E58833D529B95F74002B2CBE /* UserResponseDTO.swift */,
 			);
 			path = ResponseDTO;
 			sourceTree = "<group>";
@@ -1234,6 +1246,7 @@
 				E58833B929B8B99C002B2CBE /* ReminderRequestDTO.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				E5B61F3329B37D770031046C /* UICollectionViewCompositionalLayout+.swift in Sources */,
+				E58833D429B95ECF002B2CBE /* ReminderResponseDTO.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
@@ -1309,6 +1322,7 @@
 				2E3668C6299FA6F4001FC283 /* UIView+.swift in Sources */,
 				E5626120299DD37200D14020 /* SmallFavorButtonType.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
+				E58833D229B95E49002B2CBE /* GiftResponseDTO.swift in Sources */,
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
 				E58833AE29B88172002B2CBE /* GiftRequestDTO.swift in Sources */,
 				E58833CC29B95A63002B2CBE /* UserAPI+Method.swift in Sources */,
@@ -1334,6 +1348,7 @@
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
+				E58833D629B95F74002B2CBE /* UserResponseDTO.swift in Sources */,
 				E58833B229B8B6E1002B2CBE /* GiftAPI+Method.swift in Sources */,
 				E58833CE29B95A75002B2CBE /* UserAPI+Task.swift in Sources */,
 				E58833B029B8B67B002B2CBE /* GiftAPI+Path.swift in Sources */,
@@ -1357,6 +1372,7 @@
 				E58833BB29B8BA4E002B2CBE /* ReminderAPI+Path.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */,
 				E5626124299E5E0100D14020 /* FavorSwitch.swift in Sources */,
+				E58833D029B95D98002B2CBE /* FriendResponseDTO.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 				2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */,
 			);
