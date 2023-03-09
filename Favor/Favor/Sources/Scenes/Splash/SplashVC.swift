@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUI
+import FavorUIKit
 
 final class SplashViewController: BaseViewController {
   

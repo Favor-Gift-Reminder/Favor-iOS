@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUI
+import FavorUIKit
 import Reusable
 import SnapKit
 

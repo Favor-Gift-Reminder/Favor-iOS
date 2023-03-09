@@ -34,6 +34,7 @@
 		2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */; };
 		2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B0295D8DA400BAC43D /* ReactorKit */; };
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
+		2E9C9CBD29BA229F00857B71 /* FavorUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E9C9CBC29BA229F00857B71 /* FavorUIKit */; };
 		2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */; };
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
 		2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */; };
@@ -47,7 +48,6 @@
 		2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B7299235990081499C /* SearchViewReactor.swift */; };
 		2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B92992371C0081499C /* SearchFlow.swift */; };
 		2EA384C029936BAD0081499C /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384BF29936BAD0081499C /* String+.swift */; };
-		2EAC2C0629B9FED700D41DE0 /* FavorUI in Frameworks */ = {isa = PBXBuildFile; productRef = 2EAC2C0529B9FED700D41DE0 /* FavorUI */; };
 		2EAC2C0829BA06CF00D41DE0 /* BaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC2C0729BA06CF00D41DE0 /* BaseView.swift */; };
 		2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3AE92299E3E2700D31541 /* BackgroundView.swift */; };
 		2EC371F8299521AD00D1007B /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC371F7299521AD00D1007B /* RxGesture */; };
@@ -169,6 +169,7 @@
 		2E7C30A4295D7C4500BAC43D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7C30A7295D7C4500BAC43D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2E9C9CBB29BA21E300857B71 /* FavorUIKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorUIKit; sourceTree = "<group>"; };
 		2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingCellReactor.swift; sourceTree = "<group>"; };
 		2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
 		2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewReactor.swift; sourceTree = "<group>"; };
@@ -182,7 +183,6 @@
 		2EA384B7299235990081499C /* SearchViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewReactor.swift; sourceTree = "<group>"; };
 		2EA384B92992371C0081499C /* SearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFlow.swift; sourceTree = "<group>"; };
 		2EA384BF29936BAD0081499C /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
-		2EAC2C0329B9F8A800D41DE0 /* FavorUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorUI; sourceTree = "<group>"; };
 		2EAC2C0729BA06CF00D41DE0 /* BaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseView.swift; sourceTree = "<group>"; };
 		2EB3AE92299E3E2700D31541 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		2EBB0164295E8E1B0072D158 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
@@ -281,9 +281,9 @@
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
-				2EAC2C0629B9FED700D41DE0 /* FavorUI in Frameworks */,
 				2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */,
 				2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */,
+				2E9C9CBD29BA229F00857B71 /* FavorUIKit in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
 				2E635391295D906A00B23A14 /* Differentiator in Frameworks */,
 				E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */,
@@ -391,7 +391,7 @@
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
-				2EAC2C0329B9F8A800D41DE0 /* FavorUI */,
+				2E9C9CBB29BA21E300857B71 /* FavorUIKit */,
 				E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */,
 				2E7C309A295D7C4300BAC43D /* Favor */,
 				2EE0D595297A9D670064E932 /* FavorUITests */,
@@ -934,7 +934,7 @@
 				2EE3BA8129AB60A4004FDCC9 /* Realm */,
 				2EE3BA8329AB60A4004FDCC9 /* RealmSwift */,
 				2EE3BA8629AB60B9004FDCC9 /* RxRealm */,
-				2EAC2C0529B9FED700D41DE0 /* FavorUI */,
+				2E9C9CBC29BA229F00857B71 /* FavorUIKit */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1585,9 +1585,9 @@
 			package = 2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
-		2EAC2C0529B9FED700D41DE0 /* FavorUI */ = {
+		2E9C9CBC29BA229F00857B71 /* FavorUIKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = FavorUI;
+			productName = FavorUIKit;
 		};
 		2EC371F7299521AD00D1007B /* RxGesture */ = {
 			isa = XCSwiftPackageProductDependency;
