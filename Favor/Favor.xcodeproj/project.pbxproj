@@ -14,7 +14,6 @@
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562629A9220D006CF302 /* NewAnniversarySection.swift */; };
 		2E11C2FF29A7AB29004B5C4A /* FavorEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E11C2FE29A7AB29004B5C4A /* FavorEmptyCell.swift */; };
-		2E171164298035A400E34121 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E171163298035A400E34121 /* TabBarController.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
 		2E35647B29B8669D00FC9346 /* UserDefaultsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E35647A29B8669D00FC9346 /* UserDefaultsStorage.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
@@ -148,7 +147,6 @@
 		2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2E00562629A9220D006CF302 /* NewAnniversarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversarySection.swift; sourceTree = "<group>"; };
 		2E11C2FE29A7AB29004B5C4A /* FavorEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorEmptyCell.swift; sourceTree = "<group>"; };
-		2E171163298035A400E34121 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		2E35647A29B8669D00FC9346 /* UserDefaultsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsStorage.swift; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
@@ -465,7 +463,6 @@
 			children = (
 				2EBB0152295E8CCA0072D158 /* Application */,
 				E5B182902974F39C00229C50 /* Common */,
-				2ECC94C82960268000B530F7 /* TabBar */,
 				2E76F58629601EC3002FF001 /* Splash */,
 				2E1C5659296C24AE0067FC78 /* Auth */,
 				2EE07ED4296E8DFF00048A3C /* Gift */,
@@ -502,6 +499,7 @@
 			children = (
 				2EE3BA7329AA68DD004FDCC9 /* AuthType.swift */,
 				2E00561929A7E40F006CF302 /* ScrollDirection.swift */,
+				2ECC94C9296026A200B530F7 /* TabBarPage.swift */,
 				2E77370829B86D8E00DDF377 /* UserDefaultsKey.swift */,
 			);
 			path = Constants;
@@ -551,16 +549,6 @@
 				2EA3849F298D7C960081499C /* HomeVC.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		2ECC94C82960268000B530F7 /* TabBar */ = {
-			isa = PBXGroup;
-			children = (
-				2E171163298035A400E34121 /* TabBarController.swift */,
-				2ECC94C9296026A200B530F7 /* TabBarPage.swift */,
-			);
-			name = TabBar;
-			path = Application/TabBar;
 			sourceTree = "<group>";
 		};
 		2ED8CB4529B0C2E400E7B547 /* Views */ = {
@@ -1025,7 +1013,6 @@
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
-				2E171164298035A400E34121 /* TabBarController.swift in Sources */,
 				2E11C2FF29A7AB29004B5C4A /* FavorEmptyCell.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,

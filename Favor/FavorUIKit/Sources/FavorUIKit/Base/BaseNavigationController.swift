@@ -37,12 +37,12 @@ open class BaseNavigationController: UINavigationController {
     appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
 
     // Set Appearance
-    navigationBar.compactAppearance = appearance
-    navigationBar.standardAppearance = appearance
-    navigationBar.scrollEdgeAppearance = appearance
+    self.navigationBar.compactAppearance = appearance
+    self.navigationBar.standardAppearance = appearance
+    self.navigationBar.scrollEdgeAppearance = appearance
 
-    navigationBar.tintColor = UIColor.favorColor(.icon)
-    navigationBar.titleTextAttributes = [
+    self.navigationBar.tintColor = UIColor.favorColor(.icon)
+    self.navigationBar.titleTextAttributes = [
       .foregroundColor: UIColor.favorColor(.icon),
       .font: UIFont.favorFont(.bold, size: 18)
     ]
