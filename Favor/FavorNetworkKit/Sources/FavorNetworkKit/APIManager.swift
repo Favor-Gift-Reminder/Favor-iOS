@@ -34,7 +34,7 @@ class APIManager {
   /// plist 파일에 포함된 API의 BaseURL입니다.
   /// URL 끝에 '/'가 없습니다. Path를 작성할 때 `/user`와 같이 작성해주세요.
   var baseURL: String {
-    guard let filePath = Bundle.main.path(forResource: "API-Info", ofType: "plist") else {
+    guard let filePath = Bundle.module.path(forResource: "API-Info", ofType: "plist") else {
       fatalError("Couldn't find the 'API-Info.plist' file.")
     }
 
