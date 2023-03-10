@@ -17,6 +17,7 @@ let package = Package(
   dependencies: [
     // Dependencies declare other packages that this package depends on.
     // .package(url: /* package url */, from: "1.0.0"),
+    .package(url: "https://github.com/Alamofire/Alamofire.git", .upToNextMajor(from: "5.6.4")),
     .package(url: "https://github.com/Moya/Moya.git", .upToNextMajor(from: "15.0.3")),
     .package(path: "../FavorCoreKit")
   ],
@@ -26,10 +27,15 @@ let package = Package(
     .target(
       name: "FavorNetworkKit",
       dependencies: [
+        "Alamofire",
         "Moya",
         .product(name: "RxMoya", package: "Moya"),
         "FavorCoreKit"
-      ]),
+      ],
+      resources: [
+        .process("API-Info.plist")
+      ]
+    ),
     .testTarget(
       name: "FavorNetworkKitTests",
       dependencies: ["FavorNetworkKit"]),
