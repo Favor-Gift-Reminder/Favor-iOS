@@ -30,6 +30,8 @@
 		2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */; };
 		2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B0295D8DA400BAC43D /* ReactorKit */; };
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
+		2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
+		2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
 		2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */; };
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
 		2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */; };
@@ -70,7 +72,6 @@
 		2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B429B0F6EB001963D0 /* Terms.swift */; };
 		2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B629B0F98C001963D0 /* TermAcceptAllView.swift */; };
 		2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BA29B2F765001963D0 /* FindPasswordVC.swift */; };
-		2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
 		2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C029B327AA001963D0 /* ValidateEmailCodeVC.swift */; };
 		2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C229B327DE001963D0 /* ValidateEmailCodeViewReactor.swift */; };
 		2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C429B32C0C001963D0 /* NewPasswordVC.swift */; };
@@ -85,7 +86,6 @@
 		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
 		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
 		2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */; };
-		2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
 		2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */; };
 		2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D584297524660064E932 /* SetProfileVC.swift */; };
 		2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D586297524880064E932 /* SetProfileViewReactor.swift */; };
@@ -839,7 +839,6 @@
 			mainGroup = 2E7C308F295D7C4300BAC43D;
 			packageReferences = (
 				2E7C30AF295D8DA400BAC43D /* XCRemoteSwiftPackageReference "ReactorKit" */,
-				2E7C30B2295D8DC200BAC43D /* XCRemoteSwiftPackageReference "Then" */,
 				2E7C30B5295D8E1000BAC43D /* XCRemoteSwiftPackageReference "SnapKit" */,
 				2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */,
 				2E63538C295D904000B23A14 /* XCRemoteSwiftPackageReference "Kingfisher" */,
@@ -910,6 +909,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */,
+				2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
 				2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */,
@@ -939,10 +940,6 @@
 				2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
-				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
-				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
-				2EE0D58129751EBD0064E932 /* SignUpVC.swift in Sources */,
-				2ED326BD29B2F78B001963D0 /* FindPasswordViewReactor.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
@@ -1311,14 +1308,6 @@
 		2E7C30AF295D8DA400BAC43D /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 3.0.0;
-			};
-		};
-		2E7C30B2295D8DC200BAC43D /* XCRemoteSwiftPackageReference "Then" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/devxoul/Then";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.0;
