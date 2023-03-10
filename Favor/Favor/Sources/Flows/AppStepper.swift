@@ -17,7 +17,6 @@ final class AppStepper: Stepper {
   private let disposeBag = DisposeBag()
   
   var initialStep: Step {
-    // TODO: State에 따라서 Step 변경
     return AppStep.onboardingIsRequired
   }
 }
