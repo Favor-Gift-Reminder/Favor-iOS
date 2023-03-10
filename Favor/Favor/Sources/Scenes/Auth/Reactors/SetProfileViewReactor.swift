@@ -8,7 +8,7 @@
 import OSLog
 import UIKit
 
-import FavorCoreKit
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow

@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUIKit
+import FavorKit
 import ReactorKit
 import Reusable
 import SnapKit

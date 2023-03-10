@@ -7,8 +7,7 @@
 
 import UIKit
 
-import FavorCoreKit
-import FavorUIKit
+import FavorKit
 import RxFlow
 
 final class AuthFlow: Flow {

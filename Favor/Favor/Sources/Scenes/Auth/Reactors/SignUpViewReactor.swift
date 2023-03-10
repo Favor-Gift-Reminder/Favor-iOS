@@ -7,6 +7,7 @@
 
 import OSLog
 
+import FavorKit
 import FavorNetworkKit
 import Moya
 import ReactorKit

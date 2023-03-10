@@ -7,10 +7,10 @@
 
 import UIKit
 
-enum TabBarPage: Int, CaseIterable {
+public enum TabBarPage: Int, CaseIterable {
   case home = 0, reminder, myPage
   
-  var tabBarItem: UITabBarItem {
+  public var tabBarItem: UITabBarItem {
     switch self {
     case .home:
       return UITabBarItem(

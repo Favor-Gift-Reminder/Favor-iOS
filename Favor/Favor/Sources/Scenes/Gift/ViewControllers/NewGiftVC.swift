@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUIKit
+import FavorKit
 import RSKPlaceholderTextView
 import RxDataSources
 import RxSwift

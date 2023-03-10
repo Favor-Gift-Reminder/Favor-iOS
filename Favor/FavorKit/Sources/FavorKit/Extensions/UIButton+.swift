@@ -7,7 +7,6 @@
 
 import UIKit
 
-import FavorCoreKit
 import RxCocoa
 import RxSwift
 

@@ -7,7 +7,7 @@
 
 import Foundation
 
-import FavorCoreKit
+import FavorKit
 import RxFlow
 
 enum AppStep: Step {

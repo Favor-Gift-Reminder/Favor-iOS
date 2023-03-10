@@ -5,7 +5,7 @@
 //  Created by 이창준 on 2023/02/25.
 //
 
-enum ValidationResult {
+public enum ValidationResult {
   case empty, invalid, valid
 }
 
@@ -20,15 +20,15 @@ protocol ValidationManager {
 /// ``` Swift
 /// AuthValidationManager(.email).validate("favor@abc.com")
 /// ```
-final class AuthValidationManager: ValidationManager {
+public final class AuthValidationManager: ValidationManager {
 
   // MARK: - Properties
 
-  var type: AuthType
+  public var type: AuthType
 
   // MARK: - Initializer
 
-  init(type: AuthType) {
+  public init(type: AuthType) {
     self.type = type
   }
 
@@ -38,7 +38,7 @@ final class AuthValidationManager: ValidationManager {
   /// - Parameters:
   ///   - content: 텍스트 필드에 입력된 텍스트
   /// - Returns: 검증 결과 (`.empty`, `.invalid`, `.valid`)
-  func validate(_ content: String) -> ValidationResult {
+  public func validate(_ content: String) -> ValidationResult {
     guard !content.isEmpty else { return .empty }
     guard content.range(
       of: self.type.regex,
@@ -52,7 +52,7 @@ final class AuthValidationManager: ValidationManager {
   ///   - content: 비밀번호 확인 필드에 입력된 텍스트
   ///   - criterion: 비교 기준이 되는 비밀번호 텍스트
   /// - Returns: 비밀번호 일치 여부
-  func confirm(_ content: String, with criterion: String) -> ValidationResult {
+  public func confirm(_ content: String, with criterion: String) -> ValidationResult {
     guard !content.isEmpty else { return .empty }
     guard content == criterion else { return .invalid }
     return .valid
@@ -62,7 +62,7 @@ final class AuthValidationManager: ValidationManager {
   /// - Parameters:
   ///   - result: 검증 결과
   /// - Returns: 검증 결과와 텍스트필드 타입에 따른 안내 문구
-  func description(for result: ValidationResult) -> String {
+  public func description(for result: ValidationResult) -> String {
     switch result {
     case .empty: return self.type.emptyDescription
     case .invalid: return self.type.invalidDescription

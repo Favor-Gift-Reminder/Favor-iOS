@@ -7,10 +7,10 @@
 
 import Foundation
 
-final class FTUXStorage {
+public final class FTUXStorage {
   @UserDefault(key: .isFirstLaunch, defaultValue: true)
-  static var isFirstLaunch: Bool
+  public static var isFirstLaunch: Bool
   
   @UserDefault(key: .isSignedIn, defaultValue: false)
-  static var isSignedIn: Bool
+  public static var isSignedIn: Bool
 }

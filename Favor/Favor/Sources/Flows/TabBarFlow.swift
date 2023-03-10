@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUIKit
+import FavorKit
 import RxFlow
 
 final class TabBarFlow: Flow {

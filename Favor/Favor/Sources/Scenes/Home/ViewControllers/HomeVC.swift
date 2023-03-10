@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUIKit
+import FavorKit
 import ReactorKit
 import RxDataSources
 import RxSwift

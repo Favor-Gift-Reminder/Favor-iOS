@@ -21,7 +21,7 @@ extension UIViewController {
     }
   }
   
-  func toPreview() -> some View {
+  public func toPreview() -> some View {
     Preview(viewController: self)
   }
 }

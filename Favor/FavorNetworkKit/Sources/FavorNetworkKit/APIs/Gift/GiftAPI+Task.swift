@@ -7,7 +7,7 @@
 
 import Foundation
 
-import FavorCoreKit
+import FavorKit
 import Moya
 
 extension GiftAPI {

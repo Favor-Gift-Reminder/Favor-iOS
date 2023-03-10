@@ -5,7 +5,7 @@
 //  Created by 이창준 on 2023/02/26.
 //
 
-enum AuthType {
+public enum AuthType {
   case email, password, confirmPassword, id
 
   var regex: String {

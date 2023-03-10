@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUIKit
+import FavorKit
 import RealmSwift
 
 @main
@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
 
-    // FavorUIKit Package의 Custom Font Register 메서드
-    registerFonts()
+    // FavorKit Package의 Custom Font Register 메서드
+    FavorKit.registerFonts()
 
     let realm = try! Realm()
     print("Realm is located at", realm.configuration.fileURL!)

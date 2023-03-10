@@ -7,7 +7,7 @@
 
 import UIKit
 
-import FavorUIKit
+import FavorKit
 import Reusable
 import RxCocoa
 import RxFlow
