@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension FriendAPI {
-  func getPath() -> String {
+  public func getPath() -> String {
     switch self {
     case .getAllFriends:
       return "/friends"

@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension UserAPI {
-  func getPath() -> String {
+  public func getPath() -> String {
     switch self {
     case .getAllUsers:
       return "/users"

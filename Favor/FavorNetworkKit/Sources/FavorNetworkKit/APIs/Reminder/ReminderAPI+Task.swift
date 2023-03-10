@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension ReminderAPI {
-  func getTask() -> Moya.Task {
+  public func getTask() -> Moya.Task {
     switch self {
     case .getAllReminders:
       return .requestPlain

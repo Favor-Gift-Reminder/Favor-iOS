@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension ReminderAPI {
-  func getPath() -> String {
+  public func getPath() -> String {
     switch self {
     case .getAllReminders:
       return "/reminders"
@@ -21,10 +21,10 @@ extension ReminderAPI {
     case .deleteReminder(let reminderNo):
       return "/reminders/\(reminderNo)"
 
-    case .patchReminder(let reminderRequestDTO, let friendNo, let reminderNo):
+    case .patchReminder(_, _, let reminderNo):
       return "/reminders/\(reminderNo)"
       
-    case .postReminder(let reminderRequestDTO, let friendNo, let userNo):
+    case .postReminder(_, let friendNo, let userNo):
       return "/reminders/\(userNo)/\(friendNo)"
     }
   }

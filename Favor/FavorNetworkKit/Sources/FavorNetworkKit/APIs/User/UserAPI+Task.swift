@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension UserAPI {
-  func getTask() -> Moya.Task {
+  public func getTask() -> Moya.Task {
     switch self {
     case .getAllUsers:
       return .requestPlain

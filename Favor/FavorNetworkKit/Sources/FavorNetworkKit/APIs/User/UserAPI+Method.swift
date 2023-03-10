@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension UserAPI {
-  func getMethod() -> Moya.Method {
+  public func getMethod() -> Moya.Method {
     switch self {
     case .getAllUsers:
       return .get

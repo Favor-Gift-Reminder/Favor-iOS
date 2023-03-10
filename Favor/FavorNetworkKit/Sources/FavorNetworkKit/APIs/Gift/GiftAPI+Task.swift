@@ -11,7 +11,7 @@ import FavorCoreKit
 import Moya
 
 extension GiftAPI {
-  func getTask() -> Moya.Task {
+  public func getTask() -> Moya.Task {
     switch self {
     case .getAllGifts:
       return .requestPlain

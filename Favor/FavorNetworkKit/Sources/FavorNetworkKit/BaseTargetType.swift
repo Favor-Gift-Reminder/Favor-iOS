@@ -9,7 +9,7 @@ import Foundation
 
 import Moya
 
-protocol BaseTargetType: TargetType {
+public protocol BaseTargetType: TargetType {
   func getPath() -> String
   func getMethod() -> Moya.Method
   func getTask() -> Moya.Task

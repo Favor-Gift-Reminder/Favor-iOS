@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension GiftAPI {
-  func getPath() -> String {
+  public func getPath() -> String {
     switch self {
     case .getAllGifts:
       return "/gifts"

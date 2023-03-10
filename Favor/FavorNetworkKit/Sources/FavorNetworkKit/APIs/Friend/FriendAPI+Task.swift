@@ -10,7 +10,7 @@ import Foundation
 import Moya
 
 extension FriendAPI {
-  func getTask() -> Moya.Task {
+  public func getTask() -> Moya.Task {
     switch self {
     case .getAllFriends:
       return .requestPlain
