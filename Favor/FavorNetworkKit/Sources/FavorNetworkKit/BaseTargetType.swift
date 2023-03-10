@@ -16,7 +16,7 @@ protocol BaseTargetType: TargetType {
 }
 
 extension BaseTargetType {
-  var baseURL: URL { URL(string: APIManager.mock.baseURL)! }
-  var sampleData: Data { Data() }
-  var headers: [String: String]? { return APIManager.header(for: .json) }
+  public var baseURL: URL { URL(string: APIManager.v1.baseURL)! }
+  public var sampleData: Data { Data() }
+  public var headers: [String: String]? { return APIManager.header(for: .json) }
 }

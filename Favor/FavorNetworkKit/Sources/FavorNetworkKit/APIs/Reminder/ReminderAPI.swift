@@ -9,7 +9,7 @@ import Foundation
 
 import Moya
 
-enum ReminderAPI {
+public enum ReminderAPI {
   /// 전체 리마인더 조회
   case getAllReminders
 
@@ -59,7 +59,7 @@ enum ReminderAPI {
 }
 
 extension ReminderAPI: BaseTargetType {
-  var path: String { self.getPath() }
-  var method: Moya.Method { self.getMethod() }
-  var task: Moya.Task { self.getTask() }
+  public var path: String { self.getPath() }
+  public var method: Moya.Method { self.getMethod() }
+  public var task: Moya.Task { self.getTask() }
 }

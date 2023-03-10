@@ -10,13 +10,13 @@ import Foundation
 enum GiftResponseDTO {
   
   /// 전체 선물
-  struct AllGifts: Decodable {
+  public struct AllGifts: Decodable {
     let giftNo: Int
     let isPinned: Bool
   }
   
   /// 단일 선물
-  struct Gift: Decodable {
+  public struct Gift: Decodable {
     let category: String
     let emotion: String
     let friendNo: Int

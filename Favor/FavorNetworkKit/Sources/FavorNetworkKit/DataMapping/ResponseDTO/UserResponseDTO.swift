@@ -10,7 +10,7 @@ import Foundation
 enum UserResponseDTO {
   
   /// 전체 회원
-  struct AllUsers: Decodable {
+  public struct AllUsers: Decodable {
     let name: String
     let role: String
     let userNo: Int
@@ -18,7 +18,7 @@ enum UserResponseDTO {
   }
   
   /// 단일 회원
-  struct User: Decodable {
+  public struct User: Decodable {
     let email: String
     let favorList: [String]
     let frinedList: [FriendResponseDTO.AllFriends]

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct GiftRequestDTO: Encodable {
+public struct GiftRequestDTO: Encodable {
   let giftName: String
   let giftDate: String
   let giftMemo: String

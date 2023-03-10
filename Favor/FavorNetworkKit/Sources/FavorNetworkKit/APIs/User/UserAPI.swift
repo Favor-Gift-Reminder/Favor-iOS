@@ -9,7 +9,7 @@ import Foundation
 
 import Moya
 
-enum UserAPI {
+public enum UserAPI {
   /// 전체 회원 조회
   case getAllUsers
 
@@ -111,7 +111,7 @@ enum UserAPI {
 }
 
 extension UserAPI: BaseTargetType {
-  var path: String { self.getPath() }
-  var method: Moya.Method { self.getMethod() }
-  var task: Moya.Task { self.getTask() }
+  public var path: String { self.getPath() }
+  public var method: Moya.Method { self.getMethod() }
+  public var task: Moya.Task { self.getTask() }
 }

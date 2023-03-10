@@ -10,7 +10,7 @@ import Foundation
 enum ReminderResponseDTO {
   
   /// 전체 리마인더
-  struct AllReminders: Decodable {
+  public struct AllReminders: Decodable {
     let eventDate: String
     let friendNo: Int
     let isAlarmSet: Bool
@@ -20,7 +20,7 @@ enum ReminderResponseDTO {
   }
   
   /// 단일 리마인더
-  struct Reminder: Decodable {
+  public struct Reminder: Decodable {
     let alarmTime: String
     let friendNo: Int
     let isAlarmSet: Bool

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ReminderRequestDTO: Encodable {
+public struct ReminderRequestDTO: Encodable {
   let title: String
   let reminderDate: String
   let isAlarmSet: Bool

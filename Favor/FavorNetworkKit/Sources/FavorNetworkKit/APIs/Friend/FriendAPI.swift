@@ -9,7 +9,7 @@ import Foundation
 
 import Moya
 
-enum FriendAPI {
+public enum FriendAPI {
   /// 전체 친구 조회
   case getAllFriends
 
@@ -67,7 +67,7 @@ enum FriendAPI {
 }
 
 extension FriendAPI: BaseTargetType {
-  var path: String { self.getPath() }
-  var method: Moya.Method { self.getMethod() }
-  var task: Moya.Task { self.getTask() }
+  public var path: String { self.getPath() }
+  public var method: Moya.Method { self.getMethod() }
+  public var task: Moya.Task { self.getTask() }
 }

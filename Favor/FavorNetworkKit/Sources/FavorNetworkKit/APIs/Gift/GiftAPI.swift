@@ -9,7 +9,7 @@ import Foundation
 
 import Moya
 
-enum GiftAPI {
+public enum GiftAPI {
   /// 전체 선물 조회
   case getAllGifts
 
@@ -62,7 +62,7 @@ enum GiftAPI {
 }
 
 extension GiftAPI: BaseTargetType {
-  var path: String { self.getPath() }
-  var method: Moya.Method { self.getMethod() }
-  var task: Moya.Task { self.getTask() }
+  public var path: String { self.getPath() }
+  public var method: Moya.Method { self.getMethod() }
+  public var task: Moya.Task { self.getTask() }
 }

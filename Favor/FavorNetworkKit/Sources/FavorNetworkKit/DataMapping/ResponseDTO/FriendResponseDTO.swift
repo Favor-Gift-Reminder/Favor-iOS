@@ -10,14 +10,14 @@ import Foundation
 enum FriendResponseDTO {
   
   /// 전체 친구
-  struct AllFriends: Decodable {
+  public struct AllFriends: Decodable {
     let friendName: String
     let friendNo: Int
     let isUser: Bool
   }
   
   /// 단일 친구
-  struct Friend: Decodable {
+  public struct Friend: Decodable {
     let favorList: [String]
     let friendMemo: String
     let friendName: String
