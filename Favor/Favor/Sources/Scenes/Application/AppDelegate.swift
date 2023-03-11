@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorKit
 import RealmSwift
 
 @main
@@ -14,8 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		// Override point for customization after application launch.
-    
-    self.setupNavigationBarAppearance()
+
+    // FavorKit Package의 Custom Font Register 메서드
+    FavorKit.registerFonts()
 
     let realm = try! Realm()
     print("Realm is located at", realm.configuration.fileURL!)
@@ -37,35 +39,4 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 	}
 
-}
-
-private extension AppDelegate {
-  func setupNavigationBarAppearance() {
-    let appearance = UINavigationBarAppearance()
-    let backButtonAppearance = UIBarButtonItemAppearance()
-    
-    let leftArrowImage = UIImage(named: "ic_Left")?
-      .withRenderingMode(.alwaysOriginal)
-      .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0))
-
-    backButtonAppearance.normal.titleTextAttributes = [
-      .foregroundColor: UIColor.clear
-    ]
-
-    appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
-    appearance.backButtonAppearance = backButtonAppearance
-    
-    appearance.titleTextAttributes = [
-      .foregroundColor: UIColor.favorColor(.icon),
-      .font: UIFont.favorFont(.bold, size: 18)
-    ]
-
-    appearance.configureWithTransparentBackground()
-    appearance.backgroundColor = .clear
-    appearance.shadowColor = nil
-        
-    UINavigationBar.appearance().compactAppearance = appearance
-    UINavigationBar.appearance().standardAppearance = appearance
-    UINavigationBar.appearance().scrollEdgeAppearance = appearance
-  }
 }

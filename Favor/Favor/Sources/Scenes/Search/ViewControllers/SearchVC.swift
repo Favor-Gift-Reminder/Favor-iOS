@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxGesture

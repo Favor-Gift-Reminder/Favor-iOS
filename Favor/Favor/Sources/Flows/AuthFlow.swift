@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorKit
 import RxFlow
 
 final class AuthFlow: Flow {
@@ -15,8 +16,8 @@ final class AuthFlow: Flow {
     return self.rootViewController
   }
   
-  private lazy var rootViewController: UINavigationController = {
-    let viewController = UINavigationController()
+  private lazy var rootViewController: BaseNavigationController = {
+    let viewController = BaseNavigationController()
     return viewController
   }()
   

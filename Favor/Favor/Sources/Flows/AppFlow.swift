@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorKit
 import RxCocoa
 import RxFlow
 import RxSwift
@@ -18,8 +19,8 @@ final class AppFlow: Flow {
   var window: UIWindow // Comment this line.
   var root: Presentable { self.window } // Change to rootViewController
 
-  private lazy var rootViewController: UINavigationController = {
-    let viewController = UINavigationController()
+  private lazy var rootViewController: BaseNavigationController = {
+    let viewController = BaseNavigationController()
     viewController.setNavigationBarHidden(true, animated: false)
     return viewController
   }()
@@ -106,5 +107,3 @@ private extension AppFlow {
     ))
   }
 }
-
-

@@ -7,14 +7,15 @@
 
 import UIKit
 
+import FavorKit
 import RxFlow
 
 final class MyPageFlow: Flow {
   
   var root: Presentable { self.rootViewController }
   
-  private lazy var rootViewController: UINavigationController = {
-    let navigationController = UINavigationController()
+  private lazy var rootViewController: BaseNavigationController = {
+    let navigationController = BaseNavigationController()
     navigationController.isNavigationBarHidden = true
     return navigationController
   }()

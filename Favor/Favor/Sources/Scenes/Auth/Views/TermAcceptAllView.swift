@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorKit
 import RxCocoa
 import RxSwift
 import SnapKit

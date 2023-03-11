@@ -50,7 +50,6 @@ final class HomeViewReactor: Reactor, Stepper {
 
 private extension HomeViewReactor {
   
-  // TODO: 데이터 바인딩 되면 수정 (데이터가 비어있으면 emptyCell로 변환하여 반환)
   static func setupSections() -> [HomeSection] {
 //    let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "1"))
 //    let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "2"))

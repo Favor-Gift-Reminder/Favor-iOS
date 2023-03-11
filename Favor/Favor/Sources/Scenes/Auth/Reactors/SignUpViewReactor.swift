@@ -7,6 +7,9 @@
 
 import OSLog
 
+import FavorKit
+import FavorNetworkKit
+import Moya
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -17,6 +20,7 @@ final class SignUpViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  let networking = UserNetworking()
   
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
@@ -107,6 +111,12 @@ final class SignUpViewReactor: Reactor, Stepper {
     case .nextFlowRequested:
       os_log(.debug, "Next button or return key from keyboard did tap.")
       if self.currentState.isNextButtonEnabled {
+        networking.request(.postSignUp(email: "test@test.com", password: "2222bbbb"))
+          .asObservable()
+          .subscribe(with: self, onNext: { owner, response in
+            print(response)
+          })
+          .disposed(by: DisposeBag())
         self.steps.accept(AppStep.setProfileIsRequired)
       }
       return .empty()

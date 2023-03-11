@@ -7,6 +7,7 @@
 
 import UIKit
 
+import FavorKit
 import RxDataSources
 
 enum MyPageSectionItem {
@@ -148,7 +149,7 @@ extension MyPageSection {
     }
   }
   
-  var widthStretchingDirection: ScrollDirection {
+  var widthStretchingDirection: UICollectionView.ScrollDirection {
     switch self {
     case .prefers: return .horizontal
     default: return .vertical
