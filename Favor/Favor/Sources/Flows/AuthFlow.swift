@@ -59,8 +59,8 @@ final class AuthFlow: Flow {
     case .imagePickerIsRequired(let manager):
       return self.presentPHPicker(manager: manager)
 
-    case .authIsComplete:
-      return .end(forwardToParentFlowWithStep: AppStep.authIsComplete)
+    case .tabBarIsRequired:
+      return .end(forwardToParentFlowWithStep: AppStep.rootIsRequired)
       
     default:
       return .none

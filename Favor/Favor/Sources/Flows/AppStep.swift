@@ -18,7 +18,6 @@ enum AppStep: Step {
 
   // MARK: - Auth
   case authIsRequired
-  case authIsComplete
   case findPasswordIsRequired
   case validateEmailCodeIsRequired(String)
   case newPasswordIsRequired
@@ -32,7 +31,7 @@ enum AppStep: Step {
   case onboardingIsComplete
   
   // MARK: - Main
-  case dashBoardIsRequired
+  case tabBarIsRequired
   
   // MARK: - Home
   case homeIsRequired
@@ -40,6 +39,9 @@ enum AppStep: Step {
   // MARK: - Search
   case searchIsRequired
   case searchResultIsRequired
+
+  // MARK: - Reminder
+  case reminderIsRequired
   
   // MARK: - MyPage
   case myPageIsRequired

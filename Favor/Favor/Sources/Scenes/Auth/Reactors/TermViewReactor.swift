@@ -8,6 +8,7 @@
 import Foundation
 import OSLog
 
+import FavorKit
 import ReactorKit
 import Reusable
 import RxCocoa
@@ -75,7 +76,8 @@ final class TermViewReactor: Reactor, Stepper {
     case .nextFlowRequested:
       os_log(.debug, "Next button did tap.")
       if self.currentState.isNextButtonEnabled {
-//        self.steps.accept(AppStep.authIsComplete)
+        FTUXStorage.isSignedIn = true
+        self.steps.accept(AppStep.tabBarIsRequired)
       }
       return .empty()
     }
