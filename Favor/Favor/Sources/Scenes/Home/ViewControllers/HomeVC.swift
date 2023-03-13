@@ -170,7 +170,6 @@ private extension HomeViewController {
       self.searchButton,
       self.newGiftButton
     ]
-    self.navigationController?.navigationBar.backgroundColor = .systemYellow
   }
   
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
