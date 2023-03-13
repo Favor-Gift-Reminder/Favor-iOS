@@ -9,9 +9,10 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import SnapKit
 
-class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
+class HeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   

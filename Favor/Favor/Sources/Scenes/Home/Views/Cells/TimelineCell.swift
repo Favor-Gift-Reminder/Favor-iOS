@@ -9,8 +9,9 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 
-final class TimelineCell: UICollectionViewCell, ReuseIdentifying, View {
+final class TimelineCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   

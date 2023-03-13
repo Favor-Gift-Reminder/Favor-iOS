@@ -9,6 +9,7 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import RxDataSources
 import RxSwift
 import SnapKit
@@ -17,8 +18,6 @@ final class HomeViewController: BaseViewController, View {
   typealias HomeDataSource = RxCollectionViewSectionedReloadDataSource<HomeSection>
   
   // MARK: - Constants
-  
-  private let sectionHeaderElementKind = "SectionHeader"
   
   // MARK: - Properties
   
@@ -73,23 +72,16 @@ final class HomeViewController: BaseViewController, View {
       frame: self.view.bounds,
       collectionViewLayout: self.setupCollectionViewLayout()
     )
+
+    // register
+    collectionView.register(cellType: UpcomingCell.self)
+    collectionView.register(cellType: TimelineCell.self)
+    collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(
-      UpcomingCell.self,
-      forCellWithReuseIdentifier: UpcomingCell.reuseIdentifier
+      supplementaryViewType: HeaderView.self,
+      ofKind: HeaderView.reuseIdentifier
     )
-    collectionView.register(
-      TimelineCell.self,
-      forCellWithReuseIdentifier: TimelineCell.reuseIdentifier
-    )
-    collectionView.register(
-      FavorEmptyCell.self,
-      forCellWithReuseIdentifier: FavorEmptyCell.reuseIdentifier
-    )
-    collectionView.register(
-      HeaderView.self,
-      forSupplementaryViewOfKind: self.sectionHeaderElementKind,
-      withReuseIdentifier: HeaderView.reuseIdentifier
-    )
+
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
@@ -223,8 +215,11 @@ private extension HomeViewController {
   // 헤더
   func createHeader(sectionType: HomeSection) -> NSCollectionLayoutBoundarySupplementaryItem {
     let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: sectionType.headerHeight),
-      elementKind: self.sectionHeaderElementKind,
+      layoutSize: .init(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: sectionType.headerHeight
+      ),
+      elementKind: HeaderView.reuseIdentifier,
       alignment: .top
     )
     return sectionHeader
