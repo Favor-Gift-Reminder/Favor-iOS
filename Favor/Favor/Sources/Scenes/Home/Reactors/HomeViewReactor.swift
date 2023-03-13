@@ -62,10 +62,12 @@ final class HomeViewReactor: Reactor, Stepper {
 private extension HomeViewReactor {
   
   static func setupSections() -> [HomeSection] {
-//    let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "1"))
-//    let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(text: "2"))
-    let emptyUpcoming = HomeSectionItem.emptyCell("이벤트가 없습니다.")
-    let upcomingSection = HomeSection.upcoming([emptyUpcoming])
+    let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(cellData: CardCellData(
+      iconImage: .favorIcon(.friend), title: "은기 생일", subtitle: "23. 02. 29")))
+    let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(cellData: CardCellData(
+      iconImage: .favorIcon(.graduate), title: "졸업", subtitle: "23. 08. 31")))
+//    let emptyUpcoming = HomeSectionItem.emptyCell("이벤트가 없습니다.")
+    let upcomingSection = HomeSection.upcoming([upcomingOne, upcomingTwo])
     
 //    let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(text: "1"))
 //    let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(text: "2"))
