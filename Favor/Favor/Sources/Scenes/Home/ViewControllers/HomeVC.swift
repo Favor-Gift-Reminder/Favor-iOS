@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import RxCocoa
 import RxDataSources
 import RxSwift
 import SnapKit
@@ -66,6 +67,9 @@ final class HomeViewController: BaseViewController, View {
   )
   
   // MARK: - UI Components
+
+  private lazy var searchButton = FavorBarButtonItem(.search)
+  private lazy var newGiftButton = FavorBarButtonItem(.newGift)
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
@@ -92,7 +96,14 @@ final class HomeViewController: BaseViewController, View {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+
     self.setupCollectionView()
+  }
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    self.setupNavigationBar()
   }
   
   // MARK: - Setup
@@ -108,7 +119,7 @@ final class HomeViewController: BaseViewController, View {
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalToSuperview()
     }
   }
@@ -123,6 +134,16 @@ final class HomeViewController: BaseViewController, View {
   
   func bind(reactor: HomeViewReactor) {
     // Action
+    self.searchButton.rx.tap
+      .map { Reactor.Action.searchButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.newGiftButton.rx.tap
+      .map { Reactor.Action.newGiftButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.collectionView.rx.itemSelected
       .do(onNext: {
         print($0)
@@ -141,7 +162,16 @@ final class HomeViewController: BaseViewController, View {
   }
 }
 
+// MARK: - Privates
+
 private extension HomeViewController {
+  func setupNavigationBar() {
+    self.navigationItem.rightBarButtonItems = [
+      self.searchButton,
+      self.newGiftButton
+    ]
+    self.navigationController?.navigationBar.backgroundColor = .systemYellow
+  }
   
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return .init(sectionProvider: { [weak self] sectionIndex, _ in

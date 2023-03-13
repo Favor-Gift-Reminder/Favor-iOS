@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2022/12/30.
 //
 
+import OSLog
 import UIKit
 
 import ReactorKit
@@ -19,6 +20,8 @@ final class HomeViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
+    case searchButtonDidTap
+    case newGiftButtonDidTap
     case itemSelected(IndexPath)
   }
   
@@ -42,6 +45,14 @@ final class HomeViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .searchButtonDidTap:
+      os_log(.debug, "Search button did tap.")
+      return .empty()
+
+    case .newGiftButtonDidTap:
+      os_log(.debug, "New Gift button did tap.")
+      return .empty()
+
     case .itemSelected:
       return .empty()
     }
