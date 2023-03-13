@@ -12,11 +12,11 @@ import RxSwift
 
 extension UIButton.Configuration {
 
-  public mutating func updateAttributedTitle(_ text: String, font: UIFont) {
+  public mutating func updateAttributedTitle(_ text: String?, font: UIFont) {
     var container = AttributeContainer()
     container.font = font
     self.attributedTitle = AttributedString(
-      text,
+      text ?? "",
       attributes: container
     )
   }

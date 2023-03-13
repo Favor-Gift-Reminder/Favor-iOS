@@ -71,11 +71,11 @@ class HeaderView: UICollectionReusableView, Reusable, View {
   }()
   
   private lazy var rightButton: UIButton = {
-    var configuration = UIButton.Configuration.plain()
-    configuration.title = "버튼"
-    configuration.baseForegroundColor = .favorColor(.titleAndLine)
+    var config = UIButton.Configuration.plain()
+    config.updateAttributedTitle("버튼", font: .favorFont(.bold, size: 18))
+    config.baseForegroundColor = .favorColor(.titleAndLine)
     
-    let button = UIButton(configuration: configuration)
+    let button = UIButton(configuration: config)
     return button
   }()
   
@@ -119,18 +119,19 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     // State
     reactor.state.map { $0.sectionType }
       .map { $0 == .upcoming([]) }
-      .asDriver(onErrorJustReturn: true)
+      .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
         owner.descriptionLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
         // Filter Buttons
-        owner.hStack.isHidden = isUpcoming
+        owner.hStack.isHidden = isUpcoming ? true : false
         // Right Button
         owner.rightButton.configurationUpdateHandler = { button in
           var config = button.configuration
           config?.contentInsets = .zero
-          config?.baseForegroundColor = isUpcoming ? .favorColor(.explain) : .favorColor(.titleAndLine)
-          config?.title = isUpcoming ? "더보기" : nil
+          config?.baseForegroundColor = isUpcoming ? .favorColor(.subtext) : .favorColor(.icon)
+          let title = isUpcoming ? "더보기" : nil
+          config?.updateAttributedTitle(title, font: .favorFont(.regular, size: 12))
           config?.image = isUpcoming ? nil : UIImage(named: "ic_Filter")
           button.configuration = config
         }
