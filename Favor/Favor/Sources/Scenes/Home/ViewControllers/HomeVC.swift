@@ -47,7 +47,7 @@ final class HomeViewController: BaseViewController, View {
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: HeaderView.reuseIdentifier,
+        ofKind: kind,
         for: indexPath) as HeaderView
       let section = dataSource[indexPath.section]
       header.reactor = HeaderViewReactor(section: section)

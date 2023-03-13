@@ -25,28 +25,22 @@ extension HomeSection: SectionModelType, Equatable {
   
   var sectionIndex: Int {
     switch self {
-    case .upcoming:
-      return 0
-    case .timeline:
-      return 1
+    case .upcoming: return 0
+    case .timeline: return 1
     }
   }
   
   var items: [Item] {
     switch self {
-    case .upcoming(let items):
-      return items
-    case .timeline(let items):
-      return items
+    case .upcoming(let items): return items
+    case .timeline(let items): return items
     }
   }
   
   init(original: HomeSection, items: [Item]) {
     switch original {
-    case .upcoming:
-      self = .upcoming(items)
-    case .timeline:
-      self = .timeline(items)
+    case .upcoming: self = .upcoming(items)
+    case .timeline: self = .timeline(items)
     }
   }
   
@@ -75,19 +69,15 @@ extension HomeSection {
   
   var columns: Int {
     switch self {
-    case .upcoming:
-      return 1
-    case .timeline:
-      return 2
+    case .upcoming: return 1
+    case .timeline: return 2
     }
   }
   
   var spacing: CGFloat {
     switch self {
-    case .upcoming:
-      return 10.0
-    case .timeline:
-      return 5.0
+    case .upcoming: return 10.0
+    case .timeline: return 5.0
     }
   }
   

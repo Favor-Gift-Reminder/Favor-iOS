@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import SnapKit
 
 final class TimelineCell: UICollectionViewCell, Reusable, View {
   
