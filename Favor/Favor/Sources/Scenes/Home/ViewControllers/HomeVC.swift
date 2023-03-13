@@ -27,39 +27,28 @@ final class HomeViewController: BaseViewController, View {
       switch item {
       // Empty
       case .emptyCell(let text, let image):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: FavorEmptyCell.reuseIdentifier,
-          for: indexPath
-        ) as? FavorEmptyCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
         cell.text = text
         cell.image = image
         return cell
         
       // 다가오는 이벤트
       case .upcomingCell(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: UpcomingCell.reuseIdentifier,
-          for: indexPath
-        ) as? UpcomingCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as UpcomingCell
         cell.reactor = reactor
         return cell
         
       // 타임라인
       case .timelineCell(let reactor):
-        guard let cell = collectionView.dequeueReusableCell(
-          withReuseIdentifier: TimelineCell.reuseIdentifier,
-          for: indexPath
-        ) as? TimelineCell else { return UICollectionViewCell() }
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as TimelineCell
         cell.reactor = reactor
         return cell
       }
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-      guard let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        withReuseIdentifier: HeaderView.reuseIdentifier,
-        for: indexPath
-      ) as? HeaderView else { return UICollectionReusableView() }
+      let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: HeaderView.reuseIdentifier,
+        for: indexPath) as HeaderView
       let section = dataSource[indexPath.section]
       header.reactor = HeaderViewReactor(section: section)
       return header
