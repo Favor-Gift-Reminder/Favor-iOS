@@ -12,66 +12,58 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class UpcomingCell: UICollectionViewCell, Reusable, View {
+final class UpcomingCell: FavorCardCell, Reusable, View {
   
   // MARK: - Properties
   
-  var disposeBag = DisposeBag()
-  
   // MARK: - UI Components
-  
-  lazy var testLabel: UILabel = {
-    let label = UILabel()
-    return label
-  }()
-  
-  // MARK: - Initializer
-  
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    self.setupStyles()
-    self.setupLayouts()
-    self.setupConstraints()
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+
+  private lazy var toggleSwitch = FavorSwitch()
   
   // MARK: - Binding
   
   func bind(reactor: UpcomingCellReactor) {
+    // Action
+
     // State
-    reactor.state.map { $0.text }
-      .do(onNext: {
-        print("📝 Test text for upcoming: \($0)")
+    reactor.state.map { $0.iconImage }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, image in
+        owner.iconImage = image
       })
-      .bind(to: self.testLabel.rx.text)
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.title }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, title in
+        owner.title = title
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.subtitle }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, subtitle in
+        owner.subtitle = subtitle
+      })
       .disposed(by: self.disposeBag)
   }
-  
-}
 
-extension UpcomingCell: BaseView {
-  
-  func setupStyles() {
-    self.clipsToBounds = true
-    self.layer.cornerRadius = 24
-    self.backgroundColor = .magenta// .favorColor(.background)
+  // MARK: - UI Setup
+
+  override func setupLayouts() {
+    super.setupLayouts()
+
+    self.addSubview(self.toggleSwitch)
   }
-  
-  func setupLayouts() {
-    [
-      self.testLabel
-    ].forEach {
-      self.addSubview($0)
+
+  override func setupConstraints() {
+    super.setupConstraints()
+
+    self.toggleSwitch.snp.makeConstraints { make in
+      make.trailing.equalToSuperview().inset(16)
+      make.centerY.equalToSuperview()
+      make.width.equalTo(40)
+      make.height.equalTo(24)
     }
   }
-  
-  func setupConstraints() {
-    self.testLabel.snp.makeConstraints { make in
-      make.center.equalToSuperview()
-    }
-  }
-  
 }
