@@ -1,5 +1,5 @@
 //
-//  d.swift
+//  UICollectionViewCompositionalLayout+.swift
 //  Favor
 //
 //  Created by 김응철 on 2023/03/04.
