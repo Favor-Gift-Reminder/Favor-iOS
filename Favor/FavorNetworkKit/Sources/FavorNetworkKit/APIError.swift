@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  APIError.swift
 //  
 //
 //  Created by 김응철 on 2023/03/14.
