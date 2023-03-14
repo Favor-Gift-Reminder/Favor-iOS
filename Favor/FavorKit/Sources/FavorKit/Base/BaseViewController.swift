@@ -23,6 +23,11 @@ open class BaseViewController: UIViewController {
     setupStyles()
   }
 
+  open override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+    ToastManager.shared.resetToast()
+  }
+
   /// UI 프로퍼티를 view에 할당합니다.
   ///
   /// ```
@@ -71,7 +76,7 @@ public extension BaseViewController {
   func presentToast(_ message: String, duration: ToastManager.duration) {
     self.toast = ToastManager.shared.prepareToast(message)
     guard let toast = self.toast else { return }
-    ToastManager.shared.showToast(toast, at: self)
+    ToastManager.shared.showNewToast(toast, at: self)
   }
 
   func dismissToast() {

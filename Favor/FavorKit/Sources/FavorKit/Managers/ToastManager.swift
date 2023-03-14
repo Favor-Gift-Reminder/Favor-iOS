@@ -46,16 +46,12 @@ public final class ToastManager {
     return toast
   }
 
-  /// ToastView를 최상단 VC 위에 띄웁니다.
-  public func showToast(
+  private func showToast(
     _ toast: FavorToastMessageView,
     at viewController: BaseViewController,
-    duration: ToastManager.duration = .short,
     completion: (() -> Void)? = nil
   ) {
     toast.alpha = 0.0
-
-    self.queue.enqueue(toast)
     viewController.view.addSubview(toast)
 
     toast.snp.makeConstraints { make in
@@ -73,16 +69,37 @@ public final class ToastManager {
       viewController.view.layoutIfNeeded()
     }
     animator.addCompletion { _ in
-      self.hideToast(toast, from: viewController, duration: duration.timeInterval)
+      self.hideToast(toast, from: viewController, duration: toast.duration)
       if let completion { completion() }
     }
     animator.startAnimation()
   }
 
+  /// ToastView를 최상단 VC 위에 띄웁니다.
+  public func showNewToast(
+    _ toast: FavorToastMessageView,
+    at viewController: BaseViewController,
+    duration: ToastManager.duration = .short,
+    completion: (() -> Void)? = nil
+  ) {
+    toast.duration = duration
+    self.queue.enqueue(toast)
+
+    if self.queue.peek() === toast { // Queue에 쌓인 토스트가 없을 경우 (현재 토스트가 present 될 수 있을 경우)
+      self.showToast(
+        toast,
+        at: viewController,
+        completion: completion
+      )
+    } else { // Queue에 쌓인 토스트가 있을 경우
+      return
+    }
+  }
+
   public func hideToast(
     _ toast: FavorToastMessageView,
     from viewController: BaseViewController,
-    duration: TimeInterval? = nil
+    duration: ToastManager.duration? = nil
   ) {
     let animator = UIViewPropertyAnimator(duration: self.popOutDuration, curve: .easeInOut) {
       toast.alpha = 0.0
@@ -94,13 +111,21 @@ public final class ToastManager {
     animator.addCompletion { _ in
       DispatchQueue.main.asyncAfter(deadline: .now() + self.popOutDuration) {
         toast.removeFromSuperview()
+
         self.queue.dequeue()
+        if let nextToast = self.queue.peek() {
+          self.showToast(nextToast, at: viewController)
+        }
       }
     }
     if let duration {
-      animator.startAnimation(afterDelay: duration)
+      animator.startAnimation(afterDelay: duration.timeInterval)
     } else {
       animator.startAnimation()
     }
+  }
+
+  public func resetToast() {
+    self.queue = Queue<FavorToastMessageView>()
   }
 }

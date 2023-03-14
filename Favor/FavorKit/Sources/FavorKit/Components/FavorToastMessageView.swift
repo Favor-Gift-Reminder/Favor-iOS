@@ -23,6 +23,8 @@ public final class FavorToastMessageView: UIView {
     didSet { self.updateMessage() }
   }
 
+  public var duration: ToastManager.duration?
+
   // MARK: - UI Components
 
   private lazy var titleLabel: UILabel = {
