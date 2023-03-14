@@ -87,6 +87,18 @@ final class HomeViewController: BaseViewController, View {
     super.viewDidLoad()
 
     self.setupCollectionView()
+
+//    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
+//      self.makeToast("테스트 토스트 메시지", duration: .forever)
+//    }
+//
+//    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(5)) {
+//      self.hideToast()
+//    }
+//
+//    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(6)) {
+//      self.makeToast(".short는 3초입니다! 👏", duration: .short)
+//    }
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -124,6 +136,9 @@ final class HomeViewController: BaseViewController, View {
   func bind(reactor: HomeViewReactor) {
     // Action
     self.searchButton.rx.tap
+      .do(onNext: {
+        self.presentToast("🍞 토스트 메시지 🍞", duration: .short)
+      })
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)

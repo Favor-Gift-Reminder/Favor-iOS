@@ -14,12 +14,13 @@ open class BaseViewController: UIViewController {
   /// A dispose bag. 각 ViewController에 종속적이다.
   public final var disposeBag = DisposeBag()
 
+  private var toast: FavorToastMessageView?
+
   open override func viewDidLoad() {
     super.viewDidLoad()
     setupLayouts()
     setupConstraints()
     setupStyles()
-    bind()
   }
 
   /// UI 프로퍼티를 view에 할당합니다.
@@ -62,6 +63,19 @@ open class BaseViewController: UIViewController {
       top: 0, leading: 20.0, bottom: 0, trailing: 20.0
     )
   }
-  
-  open func bind() { }
+}
+
+// MARK: - Toast
+
+public extension BaseViewController {
+  func presentToast(_ message: String, duration: ToastManager.duration) {
+    self.toast = ToastManager.shared.prepareToast(message)
+    guard let toast = self.toast else { return }
+    ToastManager.shared.showToast(toast, at: self)
+  }
+
+  func dismissToast() {
+    guard let toast = self.toast else { return }
+    ToastManager.shared.hideToast(toast, from: self)
+  }
 }
