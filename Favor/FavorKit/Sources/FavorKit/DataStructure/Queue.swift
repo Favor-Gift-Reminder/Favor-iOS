@@ -23,11 +23,21 @@ struct Queue<T> {
   public mutating func dequeue() -> T? {
     guard
       self.front <= self.size,
+      !self.isEmpty,
       let element = self.queue[self.front]
     else { return nil }
     
     self.queue[self.front] = nil
     self.front += 1
+    return element
+  }
+
+  public func peek() -> T? {
+    guard
+      self.front < self.size,
+      let element = self.queue[self.front]
+    else { return nil }
+
     return element
   }
 }
