@@ -13,7 +13,7 @@ struct Queue<T> {
 
   public var size: Int { return self.queue.count }
 
-  public var isEmpty: Bool { return self.queue[self.front] == nil }
+  public var isEmpty: Bool { return self.size == 0 || self.queue[self.front] == nil }
 
   public mutating func enqueue(_ element: T) {
     self.queue.append(element)
