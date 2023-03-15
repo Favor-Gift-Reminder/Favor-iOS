@@ -19,10 +19,19 @@ final class TimelineCell: UICollectionViewCell, Reusable, View {
   var disposeBag = DisposeBag()
   
   // MARK: - UI Components
-  
-  lazy var testLabel: UILabel = {
-    let label = UILabel()
-    return label
+
+  private lazy var imageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .scaleAspectFill
+    imageView.backgroundColor = .favorColor(.background)
+    return imageView
+  }()
+
+  private lazy var pinnedIconView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .center
+    imageView.image = .favorIcon(.pin)?.withTintColor(.favorColor(.white))
+    return imageView
   }()
   
   // MARK: - Initializer
@@ -41,32 +50,40 @@ final class TimelineCell: UICollectionViewCell, Reusable, View {
   // MARK: - Binding
   
   func bind(reactor: TimelineCellReactor) {
+    // Action
+    
     // State
-    reactor.state.map { $0.text }
-      .do(onNext: {
-        print("📝 Test text for timeline: \($0)")
+    reactor.state.map { $0.isPinned }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, isPinned in
+        owner.pinnedIconView.isHidden = !isPinned
       })
-      .bind(to: self.testLabel.rx.text)
       .disposed(by: self.disposeBag)
   }
 }
 
 extension TimelineCell: BaseView {
   func setupStyles() {
-    self.backgroundColor = .systemTeal
+    //
   }
   
   func setupLayouts() {
     [
-      self.testLabel
+      self.imageView,
+      self.pinnedIconView
     ].forEach {
       self.addSubview($0)
     }
   }
   
   func setupConstraints() {
-    self.testLabel.snp.makeConstraints { make in
-      make.center.equalToSuperview()
+    self.imageView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+
+    self.pinnedIconView.snp.makeConstraints { make in
+      make.width.height.equalTo(32)
+      make.top.trailing.equalToSuperview().inset(8)
     }
   }
 }
