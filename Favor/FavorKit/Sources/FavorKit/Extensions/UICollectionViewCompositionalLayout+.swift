@@ -15,7 +15,7 @@ extension UICollectionViewCompositionalLayout {
   ///   - layoutSize: 그룹의 크기
   ///   - subItem: 그룹을 구성하는 CompositionalItem
   ///   - count: subItem의 개수
-  static func group(
+  public static func group(
     direction: UICollectionView.ScrollDirection,
     layoutSize: NSCollectionLayoutSize,
     subItem: NSCollectionLayoutItem,
@@ -60,7 +60,7 @@ extension UICollectionViewCompositionalLayout {
     return group
   }
 
-  enum BoundarySupplementaryItemType {
+  public enum BoundarySupplementaryItemType {
     case header, footer
   }
 
@@ -69,7 +69,7 @@ extension UICollectionViewCompositionalLayout {
   ///   - layoutSize: 헤더/푸터의 크기
   ///   - kind: 헤더/푸터를 식별하기 위한 ElementKind
   ///   - type: 헤더/푸터 선택 (`.header`, `.footer`)
-  static func supplementary(
+  public static func supplementary(
     _ type: BoundarySupplementaryItemType,
     layoutSize: NSCollectionLayoutSize,
     kind: String

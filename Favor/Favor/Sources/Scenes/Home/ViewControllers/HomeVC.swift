@@ -186,38 +186,27 @@ private extension HomeViewController {
     isEmpty: Bool = false
   ) -> NSCollectionLayoutSection {
     let (cellSize, columns, spacing) = (isEmpty == true)
-    ? (.init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(305.0)), 1, 0)
+    ? (NSCollectionLayoutSize(
+      widthDimension: .fractionalWidth(1.0),
+      heightDimension: .estimated(305.0)), 1, 0)
     : self.getSectionSize(sectionType: sectionType)
     
     // item
     let item = NSCollectionLayoutItem(
-      layoutSize: .init(
+      layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0)
-      )
+        heightDimension: .fractionalHeight(1.0))
     )
     
     // group
-    var group: NSCollectionLayoutGroup
-    if #available(iOS 16.0, *) {
-      group = NSCollectionLayoutGroup.horizontal(
-        layoutSize: .init(
-          widthDimension: cellSize.widthDimension,
-          heightDimension: cellSize.heightDimension
-        ),
-        repeatingSubitem: item,
-        count: columns
-      )
-    } else {
-      group = NSCollectionLayoutGroup.horizontal(
-        layoutSize: .init(
-          widthDimension: cellSize.widthDimension,
-          heightDimension: cellSize.heightDimension
-        ),
-        subitem: item,
-        count: columns
-      )
-    }
+    let group = UICollectionViewCompositionalLayout.group(
+      direction: .horizontal,
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: cellSize.widthDimension,
+        heightDimension: cellSize.heightDimension),
+      subItem: item,
+      count: columns
+    )
     group.interItemSpacing = .fixed(spacing)
     
     // section
