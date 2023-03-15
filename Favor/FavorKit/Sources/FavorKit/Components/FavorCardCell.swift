@@ -14,13 +14,38 @@ open class FavorCardCell: UICollectionViewCell, BaseView {
 
   // MARK: - Constants
 
+  public enum CellType {
+    case undefined
+    /// 이미지가 친구의 프로필 사진인 셀
+    case friend
+    /// 이미지가 이벤트 아이콘인 셀
+    case event
+
+    var inset: UIEdgeInsets {
+      switch self {
+      case .event:
+        return UIEdgeInsets(top: -6, left: -6, bottom: -6, right: -6)
+      default:
+        return .zero
+      }
+    }
+  }
+
+  private enum Metric {
+    static let iconImageSize = 48.0
+  }
+
   // MARK: - Properties
 
   public var disposeBag = DisposeBag()
 
+  public var type: CellType = .undefined {
+    didSet { self.transformToType() }
+  }
+
   /// Cell의 좌측에 위치한 아이콘 ImageView의 UIImage
-  public var iconImage: UIImage? {
-    didSet { self.updateIcon() }
+  public var image: UIImage? {
+    didSet { self.updateImage() }
   }
 
   /// Cell의 제목 String
@@ -36,10 +61,22 @@ open class FavorCardCell: UICollectionViewCell, BaseView {
   // MARK: - UI Components
 
   /// Cell 좌측에 위치한 아이콘이나 프로필 사진 등의 이미지가 채워지는 ImageView
-  private lazy var iconImageView: UIImageView = {
+  private lazy var profileDefaultImageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .scaleAspectFit
-    imageView.image = UIImage(systemName: "questionmark.square.dashed")
+    imageView.backgroundColor = .favorColor(.line3)
+    imageView.image = .favorIcon(.friend)?.withTintColor(.favorColor(.white))
+    imageView.contentMode = .center
+    imageView.layer.cornerRadius = Metric.iconImageSize / 2
+    imageView.clipsToBounds = true
+    imageView.isHidden = true
+    return imageView
+  }()
+
+  private lazy var imageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.backgroundColor = .clear
+    imageView.contentMode = .scaleAspectFill
+    imageView.clipsToBounds = true
     return imageView
   }()
 
@@ -99,7 +136,8 @@ open class FavorCardCell: UICollectionViewCell, BaseView {
     }
 
     [
-      self.iconImageView,
+      self.profileDefaultImageView,
+      self.imageView,
       self.labelStack
     ].forEach {
       self.addSubview($0)
@@ -107,14 +145,18 @@ open class FavorCardCell: UICollectionViewCell, BaseView {
   }
 
   open func setupConstraints() {
-    self.iconImageView.snp.makeConstraints { make in
+    self.imageView.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(24)
       make.centerY.equalToSuperview()
-      make.height.width.equalTo(48)
+      make.width.height.equalTo(Metric.iconImageSize)
+    }
+
+    self.profileDefaultImageView.snp.makeConstraints { make in
+      make.edges.equalTo(self.imageView)
     }
 
     self.labelStack.snp.makeConstraints { make in
-      make.leading.equalTo(self.iconImageView.snp.trailing).offset(16)
+      make.leading.equalTo(self.profileDefaultImageView.snp.trailing).offset(16)
       make.centerY.equalToSuperview()
     }
   }
@@ -123,8 +165,20 @@ open class FavorCardCell: UICollectionViewCell, BaseView {
 // MARK: - Privates
 
 private extension FavorCardCell {
-  func updateIcon() {
-    self.iconImageView.image = self.iconImage
+  func transformToType() {
+    switch self.type {
+    case .undefined: break
+    case .friend:
+      self.profileDefaultImageView.isHidden = false
+      self.imageView.layer.cornerRadius = Metric.iconImageSize / 2
+    case .event:
+      self.profileDefaultImageView.isHidden = true
+      self.imageView.layer.cornerRadius = 0
+    }
+  }
+
+  func updateImage() {
+    self.imageView.image = self.image?.withAlignmentRectInsets(self.type.inset)
   }
 
   func updateLabels() {

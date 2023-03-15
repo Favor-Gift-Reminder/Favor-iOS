@@ -63,9 +63,9 @@ private extension HomeViewReactor {
   
   static func setupSections() -> [HomeSection] {
     let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(cellData: CardCellData(
-      iconImage: .favorIcon(.couple), title: "화이트데이", subtitle: "23. 03. 14")))
+      iconImage: UIImage(named: "p1"), title: "화이트데이", subtitle: "23. 03. 14")))
     let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(cellData: CardCellData(
-      iconImage: .favorIcon(.graduate), title: "졸업", subtitle: "23. 08. 31")))
+      iconImage: UIImage(named: "p2"), title: "졸업", subtitle: "23. 08. 31")))
 //    let emptyUpcoming = HomeSectionItem.emptyCell("이벤트가 없습니다.")
     let upcomingSection = HomeSection.upcoming([upcomingOne, upcomingTwo])
     

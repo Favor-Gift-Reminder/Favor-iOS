@@ -19,6 +19,18 @@ final class UpcomingCell: FavorCardCell, Reusable, View {
   // MARK: - UI Components
 
   private lazy var toggleSwitch = FavorSwitch()
+
+  // MARK: - Initializer
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+
+    self.type = .friend
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
   
   // MARK: - Binding
   
@@ -29,7 +41,7 @@ final class UpcomingCell: FavorCardCell, Reusable, View {
     reactor.state.map { $0.iconImage }
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, image in
-        owner.iconImage = image
+        owner.image = image
       })
       .disposed(by: self.disposeBag)
 
