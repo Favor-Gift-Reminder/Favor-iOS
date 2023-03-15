@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/02/02.
 //
 
+import OSLog
+
 import ReactorKit
 
 final class HeaderViewReactor: Reactor {
@@ -41,12 +43,15 @@ final class HeaderViewReactor: Reactor {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .allButtonDidTap:
+      os_log(.debug, "All button did tap.")
       return .just(.updateSelectedButton(0))
       
     case .getButtonDidTap:
+      os_log(.debug, "Get button did tap.")
       return .just(.updateSelectedButton(1))
       
     case .giveButotnDidTap:
+      os_log(.debug, "Give button did tap.")
       return .just(.updateSelectedButton(2))
       
     case .rightButtonDidTap:

@@ -84,9 +84,9 @@ extension HomeSection {
   var headerHeight: NSCollectionLayoutDimension {
     switch self {
     case .upcoming:
-      return .estimated(32.0 + 26.0 + 16.0) // Top + Font + Bottom
+      return .estimated(40.0 + 32.0 + 16.0) // Top + Content + Bottom
     case .timeline:
-      return .estimated(32.0 + 63.0 + 16.0) // Top + Content + Bottom
+      return .estimated(40.0 + 67.0 + 22.0) // Top + Content + Bottom
     }
   }
 }

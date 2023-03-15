@@ -63,6 +63,7 @@ private extension FavorBarButtonItem {
   func makeButton(with icon: UIImage.FavorIcon) -> UIButton {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(icon)
+    config.contentInsets = NSDirectionalEdgeInsets(top: 11, leading: 11, bottom: 11, trailing: 11)
     let button = UIButton(configuration: config)
     return button
   }
