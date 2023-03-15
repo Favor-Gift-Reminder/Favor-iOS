@@ -20,7 +20,7 @@ public final class FavorSwitch: UIButton {
 
   private var animator: UIViewPropertyAnimator?
 
-  public var isOn: Bool = false {
+  fileprivate var isOn: Bool = false {
     didSet { self.updateState() }
   }
 
