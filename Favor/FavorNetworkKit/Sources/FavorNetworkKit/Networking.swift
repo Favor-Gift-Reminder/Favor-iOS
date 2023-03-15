@@ -25,8 +25,7 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Initializer
 
   public init() {
-    let provider = MoyaProvider<TargetType>()
-    self.provider = provider
+    self.provider = MoyaProvider<TargetType>()
   }
   
   // MARK: - Functions
