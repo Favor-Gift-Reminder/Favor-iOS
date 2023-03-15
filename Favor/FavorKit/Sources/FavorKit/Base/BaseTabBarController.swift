@@ -12,6 +12,7 @@ open class BaseTabBarController: UITabBarController {
   open override func viewDidLoad() {
     super.viewDidLoad()
 
+    self.delegate = self
     self.setupTabBarAppearance()
   }
 
@@ -50,5 +51,11 @@ open class BaseTabBarController: UITabBarController {
     self.tabBar.layer.cornerRadius = 24
     self.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     self.tabBar.clipsToBounds = true
+  }
+}
+
+extension BaseTabBarController: UITabBarControllerDelegate {
+  open override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+    HapticManager.haptic(style: .soft)
   }
 }
