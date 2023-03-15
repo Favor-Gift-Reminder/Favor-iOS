@@ -40,7 +40,7 @@ public final class FavorSwitch: UIButton {
   /// Thumb와 Bar의 leading, trailing 간격
   public var thumbHorizontalPadding: CGFloat = 1
 
-  public var duration: TimeInterval = 0.3
+  public var duration: TimeInterval = 0.2
 
   // MARK: - UI Components
 
