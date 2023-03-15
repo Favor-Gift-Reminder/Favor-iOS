@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic_Down_1x.png",
+      "filename" : "ic_down.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "ic_Down_2x.png",
+      "filename" : "ic_down_2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ic_Down_3x.png",
+      "filename" : "ic_down_3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -132,7 +132,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
           config?.baseForegroundColor = isUpcoming ? .favorColor(.subtext) : .favorColor(.icon)
           let title = isUpcoming ? "더보기" : nil
           config?.updateAttributedTitle(title, font: .favorFont(.regular, size: 12))
-          config?.image = isUpcoming ? nil : UIImage(named: "ic_Filter")
+          config?.image = isUpcoming ? nil : .favorIcon(.filter)
           button.configuration = config
         }
       })

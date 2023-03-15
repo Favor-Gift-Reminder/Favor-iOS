@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic_Congrat_1x.png",
+      "filename" : "ic_congrat.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "ic_Congrat_2x.png",
+      "filename" : "ic_congrat_2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ic_Congrat_3x.png",
+      "filename" : "ic_congrat_3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

@@ -40,7 +40,7 @@ final class SetProfileViewController: BaseViewController, View {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_Friend")?.withTintColor(.favorColor(.white))
+    config.image = .favorIcon(.friend)?.withTintColor(.favorColor(.white))
     config.background.imageContentMode = .scaleAspectFill
     
     let button = UIButton(configuration: config)
@@ -53,7 +53,7 @@ final class SetProfileViewController: BaseViewController, View {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = UIImage(named: "ic_Add")?.withTintColor(.favorColor(.white))
+    config.image = .favorIcon(.add)?.withTintColor(.favorColor(.white))
     config.background.cornerRadius = Metric.plusImageSize / 2
     
     let button = UIButton(configuration: config)

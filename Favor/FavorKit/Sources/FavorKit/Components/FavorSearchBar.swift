@@ -26,7 +26,7 @@ public class FavorSearchBar: UIView {
   public var searchBarHeight: CGFloat = 40.0
   
   /// 왼쪽에 있는 아이콘의 이미지
-  public var leftItemImage: UIImage? = UIImage(named: "ic_Search") {
+  public var leftItemImage: UIImage? = .favorIcon(.search) {
     didSet {
       self.updateSearchItem()
     }

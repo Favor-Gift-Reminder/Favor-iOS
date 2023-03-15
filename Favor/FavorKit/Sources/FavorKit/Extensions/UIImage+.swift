@@ -11,23 +11,25 @@ extension UIImage {
 
   public enum FavorIcon: String {
     case add
+    case addFriend
     case addNoti
     case check
+    case checked
     case close
-    case confirm
     case delete
     case deleteCard
     case deselect
     case done
     case edit
     case favor
+    case filter
     case friend
     case gallery
-    case hashTag
+    case hashtag
+    case heartedPerson
     case hide
     case home
     case more
-    case newFriend
     case newGift
     case noti
     case pin
@@ -53,8 +55,7 @@ extension UIImage {
   }
 
   public static func favorIcon(_ icon: FavorIcon) -> UIImage? {
-    let iconName = icon.rawValue.first!.uppercased() + icon.rawValue.dropFirst()
-    return UIImage(named: "ic_\(iconName)")
+    return UIImage(named: "ic_\(icon.rawValue)")
   }
 
   public func resize(newWidth: CGFloat) -> UIImage {

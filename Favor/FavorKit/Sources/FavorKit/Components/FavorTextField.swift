@@ -175,8 +175,8 @@ public class FavorTextField: UIView {
     button.configurationUpdateHandler = { button in
       guard let isTextSecured = self.isTextSecured else { return }
       var config = button.configuration
-      let showIcon: UIImage? = UIImage(named: "ic_Show")?.withTintColor(.favorColor(.explain))
-      let hideIcon: UIImage? = UIImage(named: "ic_Hide")?.withTintColor(.favorColor(.explain))
+      let showIcon: UIImage? = .favorIcon(.show)?.withTintColor(.favorColor(.explain))
+      let hideIcon: UIImage? = .favorIcon(.hide)?.withTintColor(.favorColor(.explain))
       config?.image = isTextSecured ? showIcon : hideIcon
       button.configuration = config
     }

@@ -22,7 +22,7 @@ class FavorAnniversaryCell: UICollectionViewCell, Reusable, View {
   private lazy var iconImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .center
-    imageView.image = UIImage(named: "ic_Congrat")
+    imageView.image = .favorIcon(.congrat)
     return imageView
   }()
   
