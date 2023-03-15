@@ -14,24 +14,21 @@ public enum TabBarPage: Int, CaseIterable {
     var tabBar = UITabBarItem()
     switch self {
     case .home:
-      let image: UIImage = .favorIcon(.home)!.resize(newWidth: 19)
       tabBar = UITabBarItem(
         title: nil,
-        image: image,
+        image: .favorIcon(.home)?.resize(newWidth: 25),
         selectedImage: nil
       )
     case .reminder:
-      let image: UIImage = .favorIcon(.noti)!.resize(newWidth: 18)
       tabBar = UITabBarItem(
         title: nil,
-        image: image,
+        image: .favorIcon(.noti)?.resize(newWidth: 25),
         selectedImage: nil
       )
     case .myPage:
-      let image: UIImage = .favorIcon(.friend)!.resize(newWidth: 19)
       tabBar = UITabBarItem(
         title: nil,
-        image: image,
+        image: .favorIcon(.friend)?.resize(newWidth: 25),
         selectedImage: nil
       )
     }
