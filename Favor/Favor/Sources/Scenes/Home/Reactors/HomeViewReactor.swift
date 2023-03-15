@@ -63,15 +63,18 @@ private extension HomeViewReactor {
   
   static func setupSections() -> [HomeSection] {
     let upcomingOne = HomeSectionItem.upcomingCell(UpcomingCellReactor(cellData: CardCellData(
-      iconImage: .favorIcon(.friend), title: "은기 생일", subtitle: "23. 02. 29")))
+      iconImage: .favorIcon(.couple), title: "화이트데이", subtitle: "23. 03. 14")))
     let upcomingTwo = HomeSectionItem.upcomingCell(UpcomingCellReactor(cellData: CardCellData(
       iconImage: .favorIcon(.graduate), title: "졸업", subtitle: "23. 08. 31")))
 //    let emptyUpcoming = HomeSectionItem.emptyCell("이벤트가 없습니다.")
     let upcomingSection = HomeSection.upcoming([upcomingOne, upcomingTwo])
     
-    let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(cellData: TimelineCellData()))
-    let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(cellData: TimelineCellData()))
-    let timelineThree = HomeSectionItem.timelineCell(TimelineCellReactor(cellData: TimelineCellData()))
+    let timelineOne = HomeSectionItem.timelineCell(TimelineCellReactor(
+      cellData: TimelineCellData(image: UIImage(named: "d1"), isPinned: true)))
+    let timelineTwo = HomeSectionItem.timelineCell(TimelineCellReactor(
+      cellData: TimelineCellData(image: UIImage(named: "d2"))))
+    let timelineThree = HomeSectionItem.timelineCell(TimelineCellReactor(
+      cellData: TimelineCellData(image: UIImage(named: "d3"))))
 //    let emptyTimeline = HomeSectionItem.emptyCell("선물 기록이 없습니다.")
     let timelineSection = HomeSection.timeline([timelineOne, timelineTwo, timelineThree])
     

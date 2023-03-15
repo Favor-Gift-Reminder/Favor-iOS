@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import RxCocoa
 import SnapKit
 
 final class TimelineCell: UICollectionViewCell, Reusable, View {
@@ -53,6 +54,10 @@ final class TimelineCell: UICollectionViewCell, Reusable, View {
     // Action
     
     // State
+    reactor.state.map { $0.image }
+      .bind(to: self.imageView.rx.image)
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.isPinned }
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isPinned in
