@@ -124,6 +124,9 @@ final class HomeViewController: BaseViewController, View {
   func bind(reactor: HomeViewReactor) {
     // Action
     self.searchButton.rx.tap
+      .do(onNext: { // TODO: 토스트 메시지 테스트용 코드 삭제
+        self.presentToast("🍞 토스트 메시지 🍞", duration: .short)
+      })
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
