@@ -7,31 +7,36 @@
 
 import UIKit
 
-import FavorKit
 import Reusable
 import SnapKit
 
-final class FavorEmptyCell: UICollectionViewCell, Reusable {
+public final class FavorEmptyCell: UICollectionViewCell, Reusable {
+
+  // MARK: - Constants
+
+  /// 외부에서 EmptyCell의 사이즈를 알아야할 때 사용하는 static 상수
+  public static let totalHeight = 305.0
+
+  private enum Metric {
+    static let imageSize = 183.0
+    static let topSpacing = 40.0
+  }
 
   // MARK: - Properties
 
   /// descriptionLabel에 들어갈 텍스트
-  var text: String = "Empty Cell" {
-    willSet {
-      self.descriptionLabel.text = newValue
-    }
+  var text: String = "표시할 내용이 없습니다." {
+    willSet { self.descriptionLabel.text = newValue }
   }
 
   /// illustView에 들어갈 이미지
   var image: UIImage? {
-    willSet {
-      self.illustView.image = newValue
-    }
+    willSet { self.imageView.image = newValue }
   }
 
   // MARK: - UI Components
 
-  private lazy var illustView: UIImageView = {
+  private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.backgroundColor = .favorColor(.background)
     return imageView
@@ -46,15 +51,11 @@ final class FavorEmptyCell: UICollectionViewCell, Reusable {
     return label
   }()
 
-  private lazy var containerView: UIView = {
-    let view = UIView()
-    return view
-  }()
-
   // MARK: - Initializer
 
-  override init(frame: CGRect) {
+  public override init(frame: CGRect) {
     super.init(frame: frame)
+
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
@@ -63,44 +64,41 @@ final class FavorEmptyCell: UICollectionViewCell, Reusable {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: - Functions
+
+  public func bindEmptyData(image: UIImage? = nil, text: String) {
+    self.image = image
+    self.text = text
+  }
 }
 
 // MARK: - Setup
 
 extension FavorEmptyCell: BaseView {
-  func setupStyles() {
+  public func setupStyles() {
     //
   }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     [
-      self.containerView
+      self.imageView,
+      self.descriptionLabel
     ].forEach {
       self.addSubview($0)
     }
-    [
-      self.illustView,
-      self.descriptionLabel
-    ].forEach {
-      self.containerView.addSubview($0)
-    }
   }
 
-  func setupConstraints() {
-    self.containerView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview()
-      make.top.bottom.equalToSuperview()
-    }
-
-    self.illustView.snp.makeConstraints { make in
+  public func setupConstraints() {
+    self.imageView.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.leading.trailing.lessThanOrEqualToSuperview().inset(96)
-      make.top.equalToSuperview().inset(56)
-      make.height.equalTo(self.illustView.snp.width)
+      make.top.equalToSuperview().inset(Metric.topSpacing)
+      make.width.equalTo(Metric.imageSize)
+      make.height.equalTo(self.imageView.snp.width)
     }
 
     self.descriptionLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.illustView.snp.bottom).offset(32)
+      make.top.equalTo(self.imageView.snp.bottom).offset(32)
       make.centerX.equalToSuperview()
     }
   }

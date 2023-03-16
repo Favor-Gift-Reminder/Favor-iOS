@@ -9,49 +9,31 @@ import UIKit
 
 import RxDataSources
 
-enum HomeSectionItem {
-  case emptyCell(String, UIImage? = nil)
-  case upcomingCell(UpcomingCellReactor)
-  case timelineCell(TimelineCellReactor)
+enum HomeSectionType: Equatable {
+  case upcoming
+  case timeline
 }
 
-enum HomeSection {
-  case upcoming([HomeSectionItem])
-  case timeline([HomeSectionItem])
-}
+struct HomeSection {
+  typealias HomeSectionModel = SectionModel<HomeSectionType, HomeSectionItem>
 
-extension HomeSection: SectionModelType, Equatable {
-  typealias Item = HomeSectionItem
-  
-  var sectionIndex: Int {
-    switch self {
-    case .upcoming: return 0
-    case .timeline: return 1
+  enum HomeSectionItem: Equatable {
+    case empty(UIImage?, String)
+    case upcoming(UpcomingCellReactor)
+    case timeline(TimelineCellReactor)
+
+    static func == (lhs: HomeSection.HomeSectionItem, rhs: HomeSection.HomeSectionItem) -> Bool {
+      switch (lhs, rhs) {
+      case (.empty, .empty), (.upcoming, .upcoming), (.timeline, .timeline):
+        return true
+      default:
+        return false
+      }
     }
-  }
-  
-  var items: [Item] {
-    switch self {
-    case .upcoming(let items): return items
-    case .timeline(let items): return items
-    }
-  }
-  
-  init(original: HomeSection, items: [Item]) {
-    switch original {
-    case .upcoming: self = .upcoming(items)
-    case .timeline: self = .timeline(items)
-    }
-  }
-  
-  static func == (lhs: HomeSection, rhs: HomeSection) -> Bool {
-    return lhs.sectionIndex == rhs.sectionIndex
   }
 }
 
-// MARK: - UI Constants
-
-extension HomeSection {
+extension HomeSectionType {
   var cellSize: NSCollectionLayoutSize {
     switch self {
     case .upcoming:
@@ -66,21 +48,21 @@ extension HomeSection {
       )
     }
   }
-  
+
   var columns: Int {
     switch self {
     case .upcoming: return 1
     case .timeline: return 2
     }
   }
-  
+
   var spacing: CGFloat {
     switch self {
     case .upcoming: return 10.0
     case .timeline: return 5.0
     }
   }
-  
+
   var headerHeight: NSCollectionLayoutDimension {
     switch self {
     case .upcoming:

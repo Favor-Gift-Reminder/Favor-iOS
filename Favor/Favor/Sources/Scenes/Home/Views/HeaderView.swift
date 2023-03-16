@@ -48,16 +48,8 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     button.isSelected = true
     return button
   }()
-  
-  private lazy var getButton: UIButton = {
-    let button = self.makeFilterButton(title: "받은 선물")
-    return button
-  }()
-  
-  private lazy var giveButton: UIButton = {
-    let button = self.makeFilterButton(title: "준 선물")
-    return button
-  }()
+  private lazy var getButton: UIButton = self.makeFilterButton(title: "받은 선물")
+  private lazy var giveButton: UIButton = self.makeFilterButton(title: "준 선물")
   
   private var buttons: [UIButton] = []
   
@@ -109,7 +101,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming([]) }
+      .map { $0 == .upcoming }
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title

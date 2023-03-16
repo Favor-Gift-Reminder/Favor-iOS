@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct TimelineCellData {
+struct TimelineCellData: Equatable {
   /// 메인으로 깔리는 이미지
   var image: UIImage?
   /// 상단 고정 여부
