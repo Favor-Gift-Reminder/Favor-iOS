@@ -89,7 +89,7 @@ final class HomeViewReactor: Reactor, Stepper {
   }
 
   // transform(state:)는 State stream에 영향을 주지 않습니다.
-  // 단지 최종적으로 전달되는 State에 변형을 줄 뿐입니다. = 저장되어있는 State는 변하지 않습니다.
+  // 단지 View에 최종적으로 전달되는 State에 변형을 줄 뿐입니다. = 저장되어있는 State는 변하지 않습니다.
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
@@ -130,20 +130,20 @@ private extension HomeViewReactor {
   }
 
   func getUpcomingMock() -> [CardCellData] {
-//    return (1...2).map {
-//      CardCellData(
-//        iconImage: UIImage(named: "p\($0)"),
-//        title: "기념일 \($0)",
-//        subtitle: "2023. 03. 0\($0)"
-//      )
-//    }
-    return []
+    return (1...2).map {
+      CardCellData(
+        iconImage: UIImage(named: "p\($0)"),
+        title: "기념일 \($0)",
+        subtitle: "2023. 03. 0\($0)"
+      )
+    }
+//    return []
   }
 
   func getTimelineMock() -> [TimelineCellData] {
-//    return (1...3).map {
-//      TimelineCellData(image: UIImage(named: "d\($0)"), isPinned: false)
-//    }
-    return []
+    return (1...3).map {
+      TimelineCellData(image: UIImage(named: "d\($0)"), isPinned: false)
+    }
+//    return []
   }
 }
