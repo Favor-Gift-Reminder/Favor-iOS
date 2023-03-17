@@ -17,19 +17,10 @@ enum HomeSectionType: Equatable {
 struct HomeSection {
   typealias HomeSectionModel = SectionModel<HomeSectionType, HomeSectionItem>
 
-  enum HomeSectionItem: Equatable {
+  enum HomeSectionItem {
     case empty(UIImage?, String)
     case upcoming(UpcomingCellReactor)
     case timeline(TimelineCellReactor)
-
-    static func == (lhs: HomeSection.HomeSectionItem, rhs: HomeSection.HomeSectionItem) -> Bool {
-      switch (lhs, rhs) {
-      case (.empty, .empty), (.upcoming, .upcoming), (.timeline, .timeline):
-        return true
-      default:
-        return false
-      }
-    }
   }
 }
 
