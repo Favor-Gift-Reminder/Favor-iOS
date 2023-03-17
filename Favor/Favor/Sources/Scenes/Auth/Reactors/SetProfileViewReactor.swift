@@ -9,6 +9,7 @@ import OSLog
 import UIKit
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -20,6 +21,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   var initialState: State
   let pickerManager: PHPickerManager
   var steps = PublishRelay<Step>()
+  let networking = UserNetworking()
 
   // Global States
   let isNameEmpty = BehaviorRelay<Bool>(value: true)
@@ -35,17 +37,21 @@ final class SetProfileViewReactor: Reactor, Stepper {
   enum Mutation {
     case updateProfileImage(UIImage?)
     case updateUserName(String)
+    case updateUserId(String)
     case updateNameValidationResult(Bool)
     case updateIDValidationResult(ValidationResult)
     case validateNextButton(Bool)
+    case updateLoading(Bool)
   }
   
   struct State {
     var profileImage: UIImage?
     var userName: String = ""
+    var userId: String = ""
     var nameValidationResult: Bool = true
     var idValidationResult: ValidationResult = .empty
     var isNextButtonEnabled: Bool = false
+    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -76,12 +82,32 @@ final class SetProfileViewReactor: Reactor, Stepper {
       os_log(.debug, "ID TextField did update: \(id).")
       let idValidationResult = AuthValidationManager(type: .id).validate(id)
       self.idValidate.accept(idValidationResult)
-      return .just(.updateIDValidationResult(idValidationResult))
+      return .concat([
+        .just(.updateUserId(id)),
+        .just(.updateIDValidationResult(idValidationResult))
+      ])
       
     case .nextFlowRequested:
       os_log(.debug, "Next button or return key from keyboard did tap.")
       if self.currentState.isNextButtonEnabled {
-        self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
+        let userId = self.currentState.userId
+        let userName = self.currentState.userName
+        
+        // TODO: 로컬 데이터로 User Infomation을 저장해야함.
+        
+        return .concat([
+          .just(.updateLoading(true)),
+          networking.request(.patchProfile(
+            userId: userId,
+            name: userName,
+            userNo: 0
+          ))
+          .debug()
+          .flatMap { _ -> Observable<Mutation> in
+            self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
+            return .just(.updateLoading(false))
+          }
+        ])
       }
       return .empty()
     }
@@ -120,9 +146,15 @@ final class SetProfileViewReactor: Reactor, Stepper {
 
     case .updateIDValidationResult(let isIDValid):
       newState.idValidationResult = isIDValid
+      
+    case .updateUserId(let id):
+      newState.userId = id
 
     case .validateNextButton(let isNextButtonEnabled):
       newState.isNextButtonEnabled = isNextButtonEnabled
+      
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
     }
     
     return newState

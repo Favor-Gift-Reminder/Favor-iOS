@@ -164,7 +164,7 @@ final class SignUpViewController: BaseViewController, View {
       .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.pwValidateTextField.rx.editingDidBegin
       .bind(with: self, onNext: { owner, _ in
         owner.scrollView.scroll(to: owner.pwTextField.frame.maxY - Metric.topSpacing)
@@ -214,7 +214,7 @@ final class SignUpViewController: BaseViewController, View {
         }
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.passwordValidationResult }
       .asDriver(onErrorJustReturn: .valid)
       .distinctUntilChanged()
@@ -263,6 +263,10 @@ final class SignUpViewController: BaseViewController, View {
           button.isEnabled = (isButtonEnabled == true)
         }
       })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
   

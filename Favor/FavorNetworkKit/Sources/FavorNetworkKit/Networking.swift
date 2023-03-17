@@ -32,18 +32,15 @@ public final class Networking<TargetType: BaseTargetType> {
   
   public func request(
     _ target: TargetType
-  ) -> Single<Response> {
+  ) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
       .filterSuccessfulStatusCodes()
       .catch(self.handleInternetConnection)
       .catch(self.handleTimeOut)
       .catch(self.handleREST)
+      .asObservable()
       .do(
-        onSuccess: { value in
-          let message = "🌐 ⭕ SUCCESS: \(requestURL) [\(value.statusCode)]"
-          os_log(.debug, "\(message)")
-        },
         onError: { error in
           switch error {
           case APIError.internetConnection:
