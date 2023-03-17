@@ -93,18 +93,21 @@ final class SetProfileViewReactor: Reactor, Stepper {
         let userId = self.currentState.userId
         let userName = self.currentState.userName
         
+        // TODO: 로컬 데이터로 User Infomation을 저장해야함.
+        
         return .concat([
           .just(.updateLoading(true)),
-
-          // TODO: Profile Networking
-//          networking.request(.patchProfile(
-//            userId: <#T##String#>,
-//            name: <#T##String#>,
-//            userNo: <#T##Int#>
-//          ))
-          
+          networking.request(.patchProfile(
+            userId: userId,
+            name: userName,
+            userNo: 0
+          ))
+          .debug()
+          .flatMap { _ -> Observable<Mutation> in
+            self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
+            return .just(.updateLoading(false))
+          }
         ])
-        self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
       }
       return .empty()
     }

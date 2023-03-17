@@ -211,6 +211,10 @@ final class SetProfileViewController: BaseViewController, View {
         owner.nextButton.isEnabled = isEnabled
       })
       .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions

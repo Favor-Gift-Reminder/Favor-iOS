@@ -164,7 +164,7 @@ final class SignUpViewController: BaseViewController, View {
       .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.pwValidateTextField.rx.editingDidBegin
       .bind(with: self, onNext: { owner, _ in
         owner.scrollView.scroll(to: owner.pwTextField.frame.maxY - Metric.topSpacing)
