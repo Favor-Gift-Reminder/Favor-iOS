@@ -44,8 +44,9 @@ final class SignUpViewReactor: Reactor, Stepper {
     // Check Password
     case updateConfirmPassword(String)
     case updateConfirmPasswordValidationResult(ValidationResult)
-    // Next Button
+    // UI
     case validateNextButton(Bool)
+    case updateLoading(Bool)
   }
   
   struct State {
@@ -58,8 +59,9 @@ final class SignUpViewReactor: Reactor, Stepper {
     // Check Password
     var confirmPassword: String = ""
     var confirmPasswordValidationResult: ValidationResult = .empty
-    // Button
+    // UI
     var isNextButtonEnabled: Bool = false
+    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -111,13 +113,18 @@ final class SignUpViewReactor: Reactor, Stepper {
     case .nextFlowRequested:
       os_log(.debug, "Next button or return key from keyboard did tap.")
       if self.currentState.isNextButtonEnabled {
-        networking.request(.postSignUp(email: "test@test.com", password: "2222bbbb"))
-          .asObservable()
-          .subscribe(with: self, onNext: { owner, response in
-            print(response)
-          })
-          .disposed(by: DisposeBag())
-        self.steps.accept(AppStep.setProfileIsRequired)
+        let email = self.currentState.email
+        let password = self.currentState.password
+
+        return .concat([
+          .just(.updateLoading(true)),
+          networking.request(.postSignUp(email: email, password: password))
+            .debug()
+            .flatMap { _ -> Observable<Mutation> in
+              self.steps.accept(AppStep.setProfileIsRequired)
+              return .just(.updateLoading(false))
+            }
+        ])
       }
       return .empty()
     }
@@ -166,6 +173,9 @@ final class SignUpViewReactor: Reactor, Stepper {
       
     case .validateNextButton(let isNextButtonEnabled):
       newState.isNextButtonEnabled = isNextButtonEnabled
+      
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
     }
     
     return newState
