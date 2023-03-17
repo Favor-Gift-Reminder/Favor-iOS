@@ -7,7 +7,7 @@
 
 import UIKit
 
-struct CardCellData {
+struct CardCellData: Equatable {
   /// 좌측 아이콘 이미지
   let iconImage: UIImage?
   /// 타이틀

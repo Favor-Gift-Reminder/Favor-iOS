@@ -51,6 +51,9 @@ open class BaseTabBarController: UITabBarController {
     self.tabBar.layer.cornerRadius = 24
     self.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     self.tabBar.clipsToBounds = true
+
+    self.tabBar.layer.borderWidth = 0.5
+    self.tabBar.layer.borderColor = UIColor.favorColor(.line3).cgColor
   }
 }
 

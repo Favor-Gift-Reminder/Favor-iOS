@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import RxCocoa
 import SnapKit
 
 class HeaderView: UICollectionReusableView, Reusable, View {
@@ -27,7 +28,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     return label
   }()
 
-  private lazy var rightButton: UIButton = {
+  fileprivate lazy var rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.updateAttributedTitle("버튼", font: .favorFont(.bold, size: 18))
     config.baseForegroundColor = .favorColor(.titleAndLine)
@@ -48,16 +49,8 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     button.isSelected = true
     return button
   }()
-  
-  private lazy var getButton: UIButton = {
-    let button = self.makeFilterButton(title: "받은 선물")
-    return button
-  }()
-  
-  private lazy var giveButton: UIButton = {
-    let button = self.makeFilterButton(title: "준 선물")
-    return button
-  }()
+  private lazy var getButton: UIButton = self.makeFilterButton(title: "받은 선물")
+  private lazy var giveButton: UIButton = self.makeFilterButton(title: "준 선물")
   
   private var buttons: [UIButton] = []
   
@@ -109,7 +102,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming([]) }
+      .map { $0 == .upcoming }
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
@@ -236,5 +229,13 @@ private extension HeaderView {
     button.configurationUpdateHandler = handler
     
     return button
+  }
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: HeaderView {
+  var rightButtonDidTap: ControlEvent<()> {
+    return ControlEvent(events: base.rightButton.rx.tap)
   }
 }
