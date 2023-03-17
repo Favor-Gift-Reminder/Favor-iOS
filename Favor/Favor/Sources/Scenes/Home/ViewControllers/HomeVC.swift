@@ -46,7 +46,7 @@ final class HomeViewController: BaseViewController, View {
       let sectionItem = dataSource[indexPath.section]
       header.reactor = HeaderViewReactor(section: sectionItem.model)
       header.rx.rightButtonDidTap
-        .map { Reactor.Action.rightButtonDidTap(sectionItem.identity) }
+        .map { Reactor.Action.rightButtonDidTap(sectionItem.model) }
         .bind(to: self.reactor!.action)
         .disposed(by: self.disposeBag)
       return header
