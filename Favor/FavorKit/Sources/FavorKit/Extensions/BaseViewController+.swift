@@ -13,7 +13,7 @@ private var spinnerView: UIView?
 
 extension Reactive where Base: BaseViewController {
   
-  public var spinnerState: Binder<Bool> {
+  public var isLoading: Binder<Bool> {
     return Binder(self.base) { vc, isLoading in
       let spinner = UIActivityIndicatorView()
       spinner.color = .lightGray
