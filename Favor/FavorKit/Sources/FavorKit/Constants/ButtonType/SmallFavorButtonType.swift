@@ -11,7 +11,7 @@ public enum SmallFavorButtonType {
   case mainWithIcon(String, imageName: String)
   case main(String)
   case darkWithIcon(String, imageName: String)
-  case darkWithHeart(String)
+  case darkWithHashTag(String)
   case gray(String)
   case grayWithUser(String)
   // TODO: 이모지 열거형 연관괎으로 추가하기
@@ -45,11 +45,11 @@ public enum SmallFavorButtonType {
       config.baseBackgroundColor = .favorColor(.titleAndLine)
       config.baseForegroundColor = .favorColor(.white)
       config.image = UIImage(named: imageName)
-    case .darkWithHeart(let title):
+    case .darkWithHashTag(let title):
       titleString = title
       config.baseBackgroundColor = .favorColor(.icon)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = UIImage(named: "ic_like_small")
+      config.image = .favorIcon(.hashtag)
     case .gray(let title):
       titleString = title
       config.baseBackgroundColor = .favorColor(.button)
@@ -58,7 +58,7 @@ public enum SmallFavorButtonType {
       titleString = userName
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.titleAndLine)
-      config.image = UIImage(named: "ic_friend_small")
+      config.image = .favorIcon(.friend)
     case .grayWithEmoji:
       titleString = ""
       config.baseBackgroundColor = .favorColor(.button)

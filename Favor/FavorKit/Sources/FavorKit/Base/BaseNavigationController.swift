@@ -19,7 +19,7 @@ open class BaseNavigationController: UINavigationController {
     // Button Appearance
     let backButtonAppearance = UIBarButtonItemAppearance()
 
-    let leftArrowImage = UIImage(named: "ic_Left")?
+    let leftArrowImage: UIImage? = .favorIcon(.left)!
       .withRenderingMode(.alwaysOriginal)
       .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0))
 

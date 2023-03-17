@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/01/31.
 //
 
+import UIKit
+
 import ReactorKit
 
 final class TimelineCellReactor: Reactor {
@@ -22,14 +24,16 @@ final class TimelineCellReactor: Reactor {
   }
   
   struct State {
-    var text: String
+    var image: UIImage?
+    var isPinned: Bool
   }
   
   // MARK: - Initializer
   
-  init(text: String) {
+  init(cellData: TimelineCellData) {
     self.initialState = State(
-      text: text
+      image: cellData.image,
+      isPinned: cellData.isPinned
     )
   }
   

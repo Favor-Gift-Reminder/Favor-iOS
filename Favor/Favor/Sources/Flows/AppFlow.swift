@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/01/27.
 //
 
+import OSLog
 import UIKit
 
 import FavorKit
@@ -19,6 +20,7 @@ final class AppFlow: Flow {
   var window: UIWindow // Comment this line.
   var root: Presentable { self.window } // Change to rootViewController
 
+  /// Used only for testFlow.
   private lazy var rootViewController: BaseNavigationController = {
     let viewController = BaseNavigationController()
     viewController.setNavigationBarHidden(true, animated: false)
@@ -42,7 +44,7 @@ final class AppFlow: Flow {
     case .authIsRequired:
       return self.navigateToAuth()
 
-    case .dashBoardIsRequired:
+    case .tabBarIsRequired:
       return self.navigateToDashboard()
 
     case .testIsRequired:
@@ -57,18 +59,28 @@ final class AppFlow: Flow {
 private extension AppFlow {
   func navigateToRoot() -> FlowContributors {
     if FTUXStorage.isSignedIn {
+      os_log(.debug, "🏁 Signed In: Navigating to tab bar flow.")
       return self.navigateToDashboard()
     } else {
+      os_log(.debug, "🏁 Not Signed In: Navigating to auth flow.")
       return self.navigateToAuth()
     }
   }
 
   func navigateToDashboard() -> FlowContributors {
-    let dashBoardFlow = TabBarFlow()
-    
+    let tabBarFlow = TabBarFlow()
+
+    Flows.use(tabBarFlow, when: .created) { [unowned self] root in
+      DispatchQueue.main.async {
+        self.window.rootViewController = root
+      }
+    }
+
     return .one(flowContributor: .contribute(
-      withNextPresentable: dashBoardFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.dashBoardIsRequired)
+      withNextPresentable: tabBarFlow,
+      withNextStepper: OneStepper(
+        withSingleStep: AppStep.tabBarIsRequired
+      )
     ))
   }
   

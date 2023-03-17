@@ -23,7 +23,7 @@ class FavorSetupProfileCell: UICollectionViewCell, Reusable, View {
     let imageView = UIImageView()
     imageView.tintColor = .favorColor(.titleAndLine)
     imageView.contentMode = .center
-    imageView.image = UIImage(named: "ic_Friend")
+    imageView.image = .favorIcon(.friend)
     return imageView
   }()
   

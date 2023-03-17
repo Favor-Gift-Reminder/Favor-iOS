@@ -1,12 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "ic_Right_1x.png",
+      "filename" : "ic_right.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "ic_Right_2x.png",
+      "filename" : "ic_right_2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

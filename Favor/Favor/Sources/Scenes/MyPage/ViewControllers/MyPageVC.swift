@@ -76,7 +76,7 @@ final class MyPageViewController: BaseViewController, View {
 
   private lazy var tempEditButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.image = UIImage(named: "ic_Edit")
+    config.image = .favorIcon(.edit)
     config.baseForegroundColor = .favorColor(.icon)
 
     let button = UIButton(configuration: config)

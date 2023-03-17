@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic_Pin_1x.png",
+      "filename" : "ic_Fin.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "ic_Pin_2x.png",
+      "filename" : "ic_Fin_2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ic_Pin_3x.png",
+      "filename" : "ic_Fin_3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

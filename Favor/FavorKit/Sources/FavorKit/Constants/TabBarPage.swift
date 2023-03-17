@@ -11,25 +11,28 @@ public enum TabBarPage: Int, CaseIterable {
   case home = 0, reminder, myPage
   
   public var tabBarItem: UITabBarItem {
+    var tabBar = UITabBarItem()
     switch self {
     case .home:
-      return UITabBarItem(
-        title: "홈",
-        image: UIImage(named: "ic_home"),
+      tabBar = UITabBarItem(
+        title: nil,
+        image: .favorIcon(.home)?.resize(newWidth: 25),
         selectedImage: nil
       )
     case .reminder:
-      return UITabBarItem(
-        title: "리마인더",
-        image: UIImage(named: "ic_notification"),
+      tabBar = UITabBarItem(
+        title: nil,
+        image: .favorIcon(.noti)?.resize(newWidth: 25),
         selectedImage: nil
       )
     case .myPage:
-      return UITabBarItem(
-        title: "마이페이지",
-        image: UIImage(named: "ic_person_circle"),
+      tabBar = UITabBarItem(
+        title: nil,
+        image: .favorIcon(.friend)?.resize(newWidth: 25),
         selectedImage: nil
       )
     }
+    tabBar.imageInsets = UIEdgeInsets(top: 8, left: 0, bottom: -8, right: 0)
+    return tabBar
   }
 }

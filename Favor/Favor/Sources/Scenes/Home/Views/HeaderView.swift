@@ -9,9 +9,11 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
+import RxCocoa
 import SnapKit
 
-class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
+class HeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   
@@ -19,11 +21,27 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
   
   // MARK: - UI Components
   
-  private lazy var descriptionLabel: UILabel = {
+  private lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 22.0)
     label.text = "헤더 타이틀"
     return label
+  }()
+
+  fileprivate lazy var rightButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.updateAttributedTitle("버튼", font: .favorFont(.bold, size: 18))
+    config.baseForegroundColor = .favorColor(.titleAndLine)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
+
+  private lazy var firstLineStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.distribution = .fillProportionally
+    return stackView
   }()
   
   private lazy var allButton: UIButton = {
@@ -31,51 +49,18 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     button.isSelected = true
     return button
   }()
-  
-  private lazy var getButton: UIButton = {
-    let button = self.makeFilterButton(title: "받은 선물")
-    return button
-  }()
-  
-  private lazy var giveButton: UIButton = {
-    let button = self.makeFilterButton(title: "준 선물")
-    return button
-  }()
+  private lazy var getButton: UIButton = self.makeFilterButton(title: "받은 선물")
+  private lazy var giveButton: UIButton = self.makeFilterButton(title: "준 선물")
   
   private var buttons: [UIButton] = []
   
-  private lazy var hStack: UIStackView = {
+  private lazy var secondLineStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .fillProportionally
     stackView.spacing = 24
-    [
-      self.allButton,
-      self.getButton,
-      self.giveButton
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
     stackView.isHidden = true
     return stackView
-  }()
-  
-  private lazy var vStack: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.spacing = 16
-    stackView.addArrangedSubview(self.descriptionLabel)
-    stackView.addArrangedSubview(self.hStack)
-    return stackView
-  }()
-  
-  private lazy var rightButton: UIButton = {
-    var configuration = UIButton.Configuration.plain()
-    configuration.title = "버튼"
-    configuration.baseForegroundColor = .favorColor(.titleAndLine)
-    
-    let button = UIButton(configuration: configuration)
-    return button
   }()
   
   // MARK: - Initializer
@@ -117,20 +102,21 @@ class HeaderView: UICollectionReusableView, ReuseIdentifying, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming([]) }
-      .asDriver(onErrorJustReturn: true)
+      .map { $0 == .upcoming }
+      .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
-        owner.descriptionLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
+        owner.titleLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
         // Filter Buttons
-        owner.hStack.isHidden = isUpcoming
+        owner.secondLineStack.isHidden = isUpcoming ? true : false
         // Right Button
         owner.rightButton.configurationUpdateHandler = { button in
           var config = button.configuration
           config?.contentInsets = .zero
-          config?.baseForegroundColor = isUpcoming ? .favorColor(.explain) : .favorColor(.titleAndLine)
-          config?.title = isUpcoming ? "더보기" : nil
-          config?.image = isUpcoming ? nil : UIImage(named: "ic_Filter")
+          config?.baseForegroundColor = isUpcoming ? .favorColor(.subtext) : .favorColor(.icon)
+          let title = isUpcoming ? "더보기" : nil
+          config?.updateAttributedTitle(title, font: .favorFont(.regular, size: 12))
+          config?.image = isUpcoming ? nil : .favorIcon(.filter)
           button.configuration = config
         }
       })
@@ -156,32 +142,54 @@ extension HeaderView: BaseView {
   
   func setupLayouts() {
     [
+      self.titleLabel,
+      self.rightButton
+    ].forEach {
+      self.firstLineStack.addArrangedSubview($0)
+    }
+
+    [
       self.allButton,
       self.getButton,
       self.giveButton
     ].forEach {
       self.buttons.append($0)
     }
+
+    [
+      self.allButton,
+      self.getButton,
+      self.giveButton
+    ].forEach {
+      self.secondLineStack.addArrangedSubview($0)
+    }
     
     [
-      self.vStack,
-      self.rightButton
+      self.firstLineStack,
+      self.secondLineStack
     ].forEach {
       self.addSubview($0)
     }
   }
   
   func setupConstraints() {
-    self.vStack.snp.makeConstraints { make in
-      make.top.equalToSuperview().inset(32)
+    self.firstLineStack.snp.makeConstraints { make in
+      make.top.equalToSuperview().inset(40)
+      make.height.equalTo(32)
+      make.directionalHorizontalEdges.equalToSuperview()
+    }
+
+    self.secondLineStack.snp.makeConstraints { make in
+      make.centerY.equalTo(self.firstLineStack.snp.bottom).offset(25)
       make.leading.equalToSuperview()
+      make.height.greaterThanOrEqualTo(44)
     }
-    
+
     self.rightButton.snp.makeConstraints { make in
-      make.centerY.equalTo(self.descriptionLabel.snp.centerY)
-      make.trailing.equalToSuperview()
+      make.width.height.equalTo(32)
     }
-    
+    self.rightButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+
     self.buttons.forEach {
       $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
@@ -197,7 +205,12 @@ private extension HeaderView {
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
     configuration.baseForegroundColor = .favorColor(.titleAndLine)
-    configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+    configuration.contentInsets = NSDirectionalEdgeInsets(
+      top: .zero,
+      leading: .zero,
+      bottom: .zero,
+      trailing: .zero
+    )
     
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       switch button.state {
@@ -216,5 +229,13 @@ private extension HeaderView {
     button.configurationUpdateHandler = handler
     
     return button
+  }
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: HeaderView {
+  var rightButtonDidTap: ControlEvent<()> {
+    return ControlEvent(events: base.rightButton.rx.tap)
   }
 }

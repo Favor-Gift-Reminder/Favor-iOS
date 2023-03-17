@@ -23,14 +23,14 @@ public enum PlainFavorButtonType {
     switch self {
     case .logIn(let title):
       titleString = title
-      config.image = UIImage(named: "ic_right_gray")
+      config.image = .favorIcon(.right)
       titleContainer.font = .favorFont(.regular, size: 16)
     case .more(let title):
       titleString = title
       titleContainer.font = .favorFont(.regular, size: 12)
     case let .main(title, isRight):
       titleString = title
-      config.image = isRight ? UIImage(named: "ic_right_gray") : UIImage(named: "ic_down_gray")
+      config.image = isRight ? .favorIcon(.right) : .favorIcon(.down)
       titleContainer.font = .favorFont(.regular, size: 14)
     }
     

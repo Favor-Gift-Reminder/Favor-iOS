@@ -20,8 +20,9 @@ final class TabBarFlow: Flow {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
-    case .dashBoardIsRequired:
+    case .tabBarIsRequired:
       return self.navigateToDashBoard()
+
     default:
       return .none
     }
@@ -30,40 +31,39 @@ final class TabBarFlow: Flow {
 
 private extension TabBarFlow {
   func navigateToDashBoard() -> FlowContributors {
+    let homeFlow = HomeFlow()
+    let reminderFlow = ReminderFlow()
+    let myPageFlow = MyPageFlow()
 
-    // let homeFlow
-    // let reminderFlow
-    // let myPageFlow
+    Flows.use(
+      homeFlow,
+      reminderFlow,
+      myPageFlow,
+      when: .created
+    ) { [unowned self] (homeNC: BaseNavigationController, reminderNC: BaseNavigationController, myPageNC: BaseNavigationController) in
+      let pages = TabBarPage.allCases
+      let navigationControllers: [BaseNavigationController] = [homeNC, reminderNC, myPageNC]
+      navigationControllers.enumerated().forEach { idx, nc in
+        nc.tabBarItem = pages[idx].tabBarItem
+      }
 
-//    Flows.use(
-//      homeFlow,
-//      reminderFlow,
-//      myPageFlow,
-//      when: .created
-//    ) { [weak self] homeFlow, reminderFlow, myPageFlow in
-//      let pages = TabBarPage.allCases
-//      let navigationControllers = pages.map {
-//        self.createTabNavController(of: $0)
-//      }
-//
-//      self.rootViewController.setViewControllers(navigationControllers, animated: false)
-//    }
+      self.rootViewController.setViewControllers(navigationControllers, animated: false)
+    }
     
-//    return .multiple(flowContributors: [
-//      .contribute(
-//        withNextPresentable: homeFlow,
-//        withNextStepper: <#T##Stepper#>
-//      ),
-//      .contribute(
-//        withNextPresentable: reminderFlow,
-//        withNextStepper: <#T##Stepper#>
-//      ),
-//      .contribute(
-//        withNextPresentable: myPageFlow,
-//        withNextStepper: <#T##Stepper#>
-//      )
-//    ])
-    return .none
+    return .multiple(flowContributors: [
+      .contribute(
+        withNextPresentable: homeFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
+      ),
+      .contribute(
+        withNextPresentable: reminderFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.reminderIsRequired)
+      ),
+      .contribute(
+        withNextPresentable: myPageFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
+      )
+    ])
   }
   
   func createTabNavController(of page: TabBarPage) -> BaseNavigationController {

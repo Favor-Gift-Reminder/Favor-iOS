@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/01/31.
 //
 
+import UIKit
+
 import ReactorKit
 
 final class UpcomingCellReactor: Reactor {
@@ -22,14 +24,18 @@ final class UpcomingCellReactor: Reactor {
   }
   
   struct State {
-    var text: String
+    var iconImage: UIImage?
+    var title: String
+    var subtitle: String
   }
   
   // MARK: - Initializer
   
-  init(text: String) {
+  init(cellData: CardCellData) {
     self.initialState = State(
-      text: text
+      iconImage: cellData.iconImage,
+      title: cellData.title,
+      subtitle: cellData.subtitle
     )
   }
   
