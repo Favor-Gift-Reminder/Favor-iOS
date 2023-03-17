@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class UpcomingCell: FavorCardCell, Reusable, View {
+final class UpcomingCell: BaseCardCell, Reusable, View {
   
   // MARK: - Properties
   

@@ -1,5 +1,5 @@
 //
-//  FavorCardCell.swift
+//  BaseCardCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/13.
@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import SnapKit
 
-open class FavorCardCell: UICollectionViewCell, BaseView {
+open class BaseCardCell: UICollectionViewCell, BaseView {
 
   // MARK: - Constants
 
@@ -164,7 +164,7 @@ open class FavorCardCell: UICollectionViewCell, BaseView {
 
 // MARK: - Privates
 
-private extension FavorCardCell {
+private extension BaseCardCell {
   func transformToType() {
     switch self.type {
     case .undefined: break
