@@ -18,9 +18,10 @@ open class BaseViewController: UIViewController {
 
   open override func viewDidLoad() {
     super.viewDidLoad()
-    setupLayouts()
-    setupConstraints()
-    setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
+    self.setupStyles()
+    self.bind()
   }
 
   open override func viewDidDisappear(_ animated: Bool) {
@@ -68,6 +69,8 @@ open class BaseViewController: UIViewController {
       top: 0, leading: 20.0, bottom: 0, trailing: 20.0
     )
   }
+
+  open func bind() { }
 }
 
 // MARK: - Toast
