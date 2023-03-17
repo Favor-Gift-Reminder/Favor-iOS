@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import RxCocoa
 import SnapKit
 
 class HeaderView: UICollectionReusableView, Reusable, View {
@@ -27,7 +28,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     return label
   }()
 
-  private lazy var rightButton: UIButton = {
+  fileprivate lazy var rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.updateAttributedTitle("버튼", font: .favorFont(.bold, size: 18))
     config.baseForegroundColor = .favorColor(.titleAndLine)
@@ -228,5 +229,13 @@ private extension HeaderView {
     button.configurationUpdateHandler = handler
     
     return button
+  }
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: HeaderView {
+  var rightButtonDidTap: ControlEvent<()> {
+    return ControlEvent(events: base.rightButton.rx.tap)
   }
 }

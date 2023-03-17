@@ -15,6 +15,7 @@ import RxDataSources
 import SnapKit
 
 final class HomeViewController: BaseViewController, View {
+  typealias Reactor = HomeViewReactor
   typealias HomeDataSource = RxCollectionViewSectionedReloadDataSource<HomeSection.HomeSectionModel>
   
   // MARK: - Constants
@@ -42,8 +43,12 @@ final class HomeViewController: BaseViewController, View {
       let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         for: indexPath) as HeaderView
-      let section = dataSource[indexPath.section].model
-      header.reactor = HeaderViewReactor(section: section)
+      let sectionItem = dataSource[indexPath.section]
+      header.reactor = HeaderViewReactor(section: sectionItem.model)
+      header.rx.rightButtonDidTap
+        .map { Reactor.Action.rightButtonDidTap(sectionItem.identity) }
+        .bind(to: self.reactor!.action)
+        .disposed(by: self.disposeBag)
       return header
     }
   )

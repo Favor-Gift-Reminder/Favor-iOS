@@ -23,6 +23,9 @@ final class HomeFlow: Flow {
     case .homeIsRequired:
       return self.navigateToHome()
 
+    case .filterIsRequired:
+      return self.navigateToFilter()
+
     default: return .none
     }
   }
@@ -40,5 +43,12 @@ private extension HomeFlow {
         withNextPresentable: homeVC,
         withNextStepper: homeReactor
       ))
+  }
+
+  func navigateToFilter() -> FlowContributors {
+    let filterVC = BaseBottomSheetViewController()
+    self.rootViewController.present(filterVC, animated: true)
+
+    return .none
   }
 }

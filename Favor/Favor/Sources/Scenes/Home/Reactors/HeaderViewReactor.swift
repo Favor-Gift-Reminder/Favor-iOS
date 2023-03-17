@@ -8,12 +8,16 @@
 import OSLog
 
 import ReactorKit
+import RxCocoa
 
 final class HeaderViewReactor: Reactor {
   
   // MARK: - Properties
   
   var initialState: State
+
+  // Global States
+  let rightButtonDidTap = PublishRelay<Void>()
   
   enum Action {
     case allButtonDidTap
@@ -37,7 +41,6 @@ final class HeaderViewReactor: Reactor {
     self.initialState = State(sectionType: section)
   }
   
-  
   // MARK: - Functions
   
   func mutate(action: Action) -> Observable<Mutation> {
@@ -55,7 +58,8 @@ final class HeaderViewReactor: Reactor {
       return .just(.updateSelectedButton(2))
       
     case .rightButtonDidTap:
-      print("Right Button")
+      os_log(.debug, "Right button did tap.")
+      self.rightButtonDidTap.accept(())
       return .empty()
     }
   }

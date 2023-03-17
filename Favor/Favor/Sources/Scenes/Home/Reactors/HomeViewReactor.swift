@@ -24,6 +24,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case searchButtonDidTap
     case newGiftButtonDidTap
     case itemSelected(IndexPath)
+    case rightButtonDidTap(HomeSectionType)
   }
   
   enum Mutation {
@@ -67,6 +68,14 @@ final class HomeViewReactor: Reactor, Stepper {
       return .empty()
 
     case .itemSelected:
+      return .empty()
+
+    case .rightButtonDidTap(let sectionType):
+      switch sectionType {
+      case .upcoming: break
+      case .timeline:
+        self.steps.accept(AppStep.filterIsRequired)
+      }
       return .empty()
     }
   }
