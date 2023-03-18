@@ -32,6 +32,7 @@
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
 		2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
 		2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
+		2E9F988F29C4B2A200789297 /* FilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F988E29C4B2A200789297 /* FilterVC.swift */; };
 		2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */; };
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
 		2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */; };
@@ -152,6 +153,7 @@
 		2E7C30A4295D7C4500BAC43D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7C30A7295D7C4500BAC43D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2E9F988E29C4B2A200789297 /* FilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
 		2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingCellReactor.swift; sourceTree = "<group>"; };
 		2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
 		2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewReactor.swift; sourceTree = "<group>"; };
@@ -497,6 +499,7 @@
 			isa = PBXGroup;
 			children = (
 				2EA3849F298D7C960081499C /* HomeVC.swift */,
+				2E9F988E29C4B2A200789297 /* FilterVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -950,6 +953,7 @@
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
+				2E9F988F29C4B2A200789297 /* FilterVC.swift in Sources */,
 				2EC6E11D29BC65BF006FBC11 /* HomeFlow.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,

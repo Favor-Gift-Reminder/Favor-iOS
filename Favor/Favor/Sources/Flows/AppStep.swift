@@ -35,7 +35,8 @@ enum AppStep: Step {
   
   // MARK: - Home
   case homeIsRequired
-  case filterIsRequired
+  case filterIsRequired(SortType)
+  case filterIsComplete(SortType)
   
   // MARK: - Search
   case searchIsRequired

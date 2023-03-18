@@ -13,7 +13,7 @@ open class BaseBottomSheetViewController: BaseViewController {
 
   // MARK: - UI Components
 
-  private lazy var menuContainerView = UIView()
+  public lazy var topMenuContainerView = UIView()
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
@@ -38,12 +38,12 @@ open class BaseBottomSheetViewController: BaseViewController {
   // MARK: - UI Setup
 
   open override func setupLayouts() {
-    self.view.addSubview(self.menuContainerView)
-    self.menuContainerView.addSubview(self.titleLabel)
+    self.view.addSubview(self.topMenuContainerView)
+    self.topMenuContainerView.addSubview(self.titleLabel)
   }
 
   open override func setupConstraints() {
-    self.menuContainerView.snp.makeConstraints { make in
+    self.topMenuContainerView.snp.makeConstraints { make in
       make.top.equalToSuperview().inset(20)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.height.equalTo(32)
@@ -52,5 +52,11 @@ open class BaseBottomSheetViewController: BaseViewController {
     self.titleLabel.snp.makeConstraints { make in
       make.center.equalToSuperview()
     }
+  }
+
+  // MARK: - Functions
+
+  public func updateTitle(_ title: String) {
+    self.titleLabel.text = title
   }
 }
