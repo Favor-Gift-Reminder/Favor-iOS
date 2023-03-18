@@ -73,7 +73,7 @@ final class SearchViewController: BaseViewController, View {
       .when(.recognized)
       .asDriver(onErrorDriveWith: .empty())
       .drive(with: self, onNext: { owner, _ in
-        owner.searchBar.searchBar.searchTextField.resignFirstResponder()
+        owner.searchBar.textField.resignFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
@@ -82,19 +82,19 @@ final class SearchViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidBegin])
+    self.searchBar.rx.editingDidBegin
       .map { Reactor.Action.searchDidBegin }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidEnd])
+    self.searchBar.rx.editingDidEnd
       .map { Reactor.Action.searchDidEnd }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidEndOnExit])
+    self.searchBar.rx.editingDidEndOnExit
       .do(onNext: {
-        self.searchBar.searchBar.searchTextField.resignFirstResponder()
+        self.searchBar.textField.resignFirstResponder()
       })
       .map { Reactor.Action.returnKeyDidTap }
       .bind(to: reactor.action)

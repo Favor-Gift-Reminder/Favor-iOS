@@ -54,8 +54,13 @@ public class FavorSearchBar: UIView {
   }
   
   // MARK: - UI Components
+
+  /// SearchBar의 textField에 짧게 접근하기 위한 프로퍼티
+  public var textField: UITextField {
+    self.searchBar.searchTextField
+  }
   
-  lazy var leftItem: UIButton = {
+  public lazy var leftItem: UIButton = {
     var configuration = UIButton.Configuration.plain()
     configuration.baseForegroundColor = .favorColor(.icon)
     configuration.image = UIImage(systemName: "chevron.backward")
@@ -178,6 +183,21 @@ extension FavorSearchBar {
 public extension Reactive where Base: FavorSearchBar {
   var leftItemDidTap: ControlEvent<()> {
     let source = base.leftItem.rx.tap
+    return ControlEvent(events: source)
+  }
+
+  var editingDidBegin: ControlEvent<()> {
+    let source = base.searchBar.searchTextField.rx.controlEvent(.editingDidBegin)
+    return ControlEvent(events: source)
+  }
+
+  var editingDidEnd: ControlEvent<()> {
+    let source = base.searchBar.searchTextField.rx.controlEvent(.editingDidEnd)
+    return ControlEvent(events: source)
+  }
+
+  var editingDidEndOnExit: ControlEvent<()> {
+    let source = base.searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
     return ControlEvent(events: source)
   }
 }
