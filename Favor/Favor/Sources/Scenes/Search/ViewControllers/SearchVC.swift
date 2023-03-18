@@ -69,11 +69,10 @@ final class SearchViewController: BaseViewController, View {
   
   func bind(reactor: SearchViewReactor) {
     // Action
-    self.view.rx.anyGesture(.tap())
-      .when(.recognized)
-      .asDriver(onErrorDriveWith: .empty())
+    self.rx.viewDidAppear
+      .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, _ in
-        owner.searchBar.textField.resignFirstResponder()
+        owner.searchBar.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
@@ -99,7 +98,15 @@ final class SearchViewController: BaseViewController, View {
       .map { Reactor.Action.returnKeyDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-    
+
+    self.view.rx.anyGesture(.tap())
+      .when(.recognized)
+      .asDriver(onErrorDriveWith: .empty())
+      .drive(with: self, onNext: { owner, _ in
+        owner.searchBar.textField.resignFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.isEditing }
       .asDriver(onErrorJustReturn: false)
