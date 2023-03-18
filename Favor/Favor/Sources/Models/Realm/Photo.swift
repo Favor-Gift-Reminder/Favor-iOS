@@ -8,5 +8,5 @@
 import RealmSwift
 
 class Photo: Object {
-  
+  @Persisted(primaryKey: true) var photoNo: Int
 }

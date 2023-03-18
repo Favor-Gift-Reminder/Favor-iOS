@@ -23,7 +23,7 @@ class Reminder: Object {
   /// 리마인더 알림 시간
   @Persisted var alarmTime: Date?
   /// 리마인더 보유 회원 번호
-  @Persisted(originProperty: "userNo") var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "reminderList") var userNo: LinkingObjects<User>
   /// 관련 친구의 회원 번호
-  @Persisted(originProperty: "friendNo") var friendNo: LinkingObjects<Friend>
+  @Persisted var friendNo: Int
 }
