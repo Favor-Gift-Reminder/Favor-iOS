@@ -204,13 +204,9 @@ private extension HeaderView {
     var attributedTitle = AttributedString(title)
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
+    configuration.baseBackgroundColor = .clear
     configuration.baseForegroundColor = .favorColor(.titleAndLine)
-    configuration.contentInsets = NSDirectionalEdgeInsets(
-      top: .zero,
-      leading: .zero,
-      bottom: .zero,
-      trailing: .zero
-    )
+    configuration.contentInsets = .zero
     
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       switch button.state {
