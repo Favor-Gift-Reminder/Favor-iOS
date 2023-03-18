@@ -70,6 +70,7 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
+      self.steps.accept(AppStep.searchIsRequired)
       return .empty()
 
     case .newGiftButtonDidTap:

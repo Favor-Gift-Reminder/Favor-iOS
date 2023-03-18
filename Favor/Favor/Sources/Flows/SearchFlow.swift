@@ -13,14 +13,19 @@ import RxFlow
 import RxSwift
 
 final class SearchFlow: Flow {
+
+  // MARK: - Properties
   
   var root: Presentable { self.rootViewController }
-  
-  private lazy var rootViewController: BaseNavigationController = {
-    let navigationController = BaseNavigationController()
-    navigationController.isNavigationBarHidden = true
-    return navigationController
-  }()
+  private var rootViewController: BaseNavigationController
+
+  // MARK: - Initializer
+
+  init(rootViewController: BaseNavigationController) {
+    self.rootViewController = rootViewController
+  }
+
+  // MARK: - Navigate
   
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
@@ -28,29 +33,40 @@ final class SearchFlow: Flow {
     switch step {
     case .searchIsRequired:
       return self.navigateToSearch()
+
     case .searchResultIsRequired:
       return self.navigateToSearchResult()
+
     default:
       return .none
     }
   }
-  
-  private func navigateToSearch() -> FlowContributors {
+}
+
+// MARK: - Navigates
+
+private extension SearchFlow {
+  func navigateToSearch() -> FlowContributors {
     let searchVC = SearchViewController()
     let searchReactor = SearchViewReactor()
     searchVC.reactor = searchReactor
-    self.rootViewController.setViewControllers([searchVC], animated: true)
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchVC, animated: true)
+      self.rootViewController.setNavigationBarHidden(true, animated: false)
+    }
+
     return .one(flowContributor: .contribute(
       withNextPresentable: searchVC,
       withNextStepper: searchReactor
     ))
   }
-  
-  private func navigateToSearchResult() -> FlowContributors {
+
+  func navigateToSearchResult() -> FlowContributors {
     let searchResultVC = SearchResultViewController()
     let searchResultReactor = SearchResultViewReactor()
     searchResultVC.reactor = searchResultReactor
-    self.rootViewController.pushViewController(searchResultVC, animated: true)
+    self.rootViewController.navigationController?.pushViewController(searchResultVC, animated: true)
     return .one(flowContributor: .contribute(
       withNextPresentable: searchResultVC,
       withNextStepper: searchResultReactor
