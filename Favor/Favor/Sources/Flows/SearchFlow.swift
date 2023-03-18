@@ -37,6 +37,9 @@ final class SearchFlow: Flow {
     case .searchResultIsRequired:
       return self.navigateToSearchResult()
 
+    case .searchIsComplete:
+      return self.navigateToHome()
+
     default:
       return .none
     }
@@ -71,5 +74,11 @@ private extension SearchFlow {
       withNextPresentable: searchResultVC,
       withNextStepper: searchResultReactor
     ))
+  }
+
+  func navigateToHome() -> FlowContributors {
+    self.rootViewController.popViewController(animated: true)
+    self.rootViewController.setNavigationBarHidden(false, animated: false)
+    return .end(forwardToParentFlowWithStep: AppStep.searchIsComplete)
   }
 }
