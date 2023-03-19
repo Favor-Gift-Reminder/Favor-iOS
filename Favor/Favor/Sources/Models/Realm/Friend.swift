@@ -7,7 +7,10 @@
 
 import RealmSwift
 
-class Friend: Object {
+public class Friend: Object {
+
+  // MARK: - Properties
+
   /// 친구 번호
   @Persisted(primaryKey: true) var friendNo: Int
   /// 친구를 보유한 회원의 회원 번호
@@ -18,12 +21,34 @@ class Friend: Object {
   @Persisted var friendPhoto: Photo?
   /// 친구에 대한 메모
   @Persisted var friendMemo: String?
-  /// 친구의 기념일 목록
-  @Persisted var reminderList: List<Reminder>
-  /// 친구와 관련된 선물 목록
-  @Persisted var giftList: List<Gift>
   /// 친구가 회원일 경우, 해당 친구의 회원 번호
-  @Persisted var friendUserNo: Int
+  @Persisted var friendUserNo: Int?
   /// 친구의 회원 여부 (회원 = `true`)
   @Persisted var isUser: Bool
+
+  // MARK: - Initializer
+
+  /// - Parameters:
+  ///   - friendNo: ***PK*** 친구 번호
+  ///   - friendName: 친구 이름
+  ///   - friendPhoto: 친구 사진
+  ///   - friendMemo: 친구에 대한 메모
+  ///   - friendUserNo: 친구가 회원일 경우, 해당 친구의 회원 번호
+  ///   - isUser: 친구의 회원 여부 (true: 회원)
+  public convenience init(
+    friendNo: Int,
+    friendName: String,
+    friendPhoto: Photo? = nil,
+    friendMemo: String? = nil,
+    friendUserNo: Int? = nil,
+    isUser: Bool
+  ) {
+    self.init()
+    self.friendNo = friendNo
+    self.friendName = friendName
+    self.friendPhoto = friendPhoto
+    self.friendMemo = friendMemo
+    self.friendUserNo = friendUserNo
+    self.isUser = isUser
+  }
 }

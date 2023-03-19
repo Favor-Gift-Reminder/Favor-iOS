@@ -7,8 +7,11 @@
 
 import RealmSwift
 
-class User: Object {
-  /// 유저 번호
+public class User: Object {
+
+  // MARK: - Properties
+
+  /// 회원 번호
   @Persisted(primaryKey: true) var userNo: Int
   /// 회원 이메일 (로그인 시 사용)
   @Persisted var email: String
@@ -29,9 +32,35 @@ class User: Object {
   /// 회원 배경사진
   @Persisted var backgroundPhoto: Photo?
 
-  override class func propertiesMapping() -> [String: String] {
+  public override class func propertiesMapping() -> [String: String] {
     [
       "userID": "userId"
     ]
+  }
+
+  // MARK: - Initializer
+
+  /// - Parameters:
+  ///   - userNo: ***PK*** 회원 번호
+  ///   - email: 로그인 시 사용되는 회원 이메일
+  ///   - userID: 검색 시 사용되는 회원 아이디 - *ex: @favor_281*
+  ///   - name: 회원 이름
+  ///   - userPhoto: *`Optioinal`* 회원 프로필 사진
+  ///   - backgroundPhoto: *`Optional`* 회원 프로필 배경 사진
+  public convenience init(
+    userNo: Int,
+    email: String,
+    userID: String,
+    name: String,
+    userPhoto: Photo? = nil,
+    backgroundPhoto: Photo? = nil
+  ) {
+    self.init()
+    self.userNo = userNo
+    self.email = email
+    self.userID = userID
+    self.name = name
+    self.userPhoto = userPhoto
+    self.backgroundPhoto = backgroundPhoto
   }
 }

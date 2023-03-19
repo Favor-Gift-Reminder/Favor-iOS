@@ -7,6 +7,6 @@
 
 import RealmSwift
 
-class Photo: Object {
+public class Photo: Object {
   @Persisted(primaryKey: true) var photoNo: Int
 }

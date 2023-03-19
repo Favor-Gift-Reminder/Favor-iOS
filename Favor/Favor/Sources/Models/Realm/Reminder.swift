@@ -9,7 +9,10 @@ import Foundation
 
 import RealmSwift
 
-class Reminder: Object {
+public class Reminder: Object {
+
+  // MARK: - Properties
+
   /// 리마인더  번호
   @Persisted(primaryKey: true) var reminderNo: Int
   /// 리마인더 제목
@@ -26,4 +29,33 @@ class Reminder: Object {
   @Persisted(originProperty: "reminderList") var userNo: LinkingObjects<User>
   /// 관련 친구의 회원 번호
   @Persisted var friendNo: Int
+
+  // MARK: - Initializer
+
+  /// - Parameters:
+  ///   - reminderNo: ***PK*** 리마인더 번호
+  ///   - title: 리마인더 제목
+  ///   - date: 리마인더로 등록한 이벤트의 날짜
+  ///   - memo: *`Optional`* 리마인더 메모
+  ///   - isAlarmSet: 리마인더 알림 여부
+  ///   - alarmTime: *`Optional`* 리마인더 알림 시간
+  ///   - friendNo: 관련된 친구의 회원 번호
+  public convenience init(
+    reminderNo: Int,
+    title: String,
+    date: Date,
+    memo: String? = nil,
+    isAlarmSet: Bool,
+    alarmTime: Date? = nil,
+    friendNo: Int
+  ) {
+    self.init()
+    self.reminderNo = reminderNo
+    self.title = title
+    self.reminderDate = date
+    self.reminderMemo = memo
+    self.isAlarmSet = isAlarmSet
+    self.alarmTime = alarmTime
+    self.friendNo = friendNo
+  }
 }
