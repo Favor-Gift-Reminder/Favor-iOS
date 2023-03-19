@@ -10,6 +10,7 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import RealmSwift
 import RxCocoa
 import RxFlow
 
@@ -19,6 +20,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  let realm = try! Realm()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -163,8 +165,9 @@ private extension HomeViewReactor {
   }
 
   func getTimelineMock() -> [TimelineCellData] {
-    return (1...3).map {
-      TimelineCellData(image: UIImage(named: "d\($0)"), isPinned: false)
+    let gifts = self.realm.objects(Gift.self)
+    return gifts.enumerated().map { index, gift in
+      TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
     }
 //    return []
   }
