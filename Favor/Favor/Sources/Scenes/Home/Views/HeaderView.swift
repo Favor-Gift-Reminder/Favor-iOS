@@ -215,10 +215,10 @@ private extension HeaderView {
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       switch button.state {
       case .selected:
-        button.configuration?.baseBackgroundColor = .clear
+        button.configuration?.background.backgroundColor = .clear
         button.configuration?.baseForegroundColor = .favorColor(.titleAndLine)
       case .normal:
-        button.configuration?.baseBackgroundColor = .clear
+        button.configuration?.background.backgroundColor = .clear
         button.configuration?.baseForegroundColor = .favorColor(.explain)
       default:
         break
