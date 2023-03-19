@@ -8,7 +8,6 @@
 import UIKit
 
 import FavorKit
-import RealmSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,8 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // FavorKit Package의 Custom Font Register 메서드
     FavorKit.registerFonts()
 
-    let realm = try! Realm()
-    print("Realm is located at", realm.configuration.fileURL!)
+    RealmManager.shared.initRealm()
     
 		return true
 	}
