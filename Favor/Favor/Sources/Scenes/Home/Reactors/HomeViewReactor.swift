@@ -8,6 +8,7 @@
 import OSLog
 import UIKit
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -18,6 +19,9 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+
+  // Global State
+  let currentSortType = BehaviorRelay<SortType>(value: .latest)
   
   enum Action {
     case viewDidLoad
@@ -28,11 +32,13 @@ final class HomeViewReactor: Reactor, Stepper {
   }
   
   enum Mutation {
-    case setUpcoming(HomeSection.HomeSectionModel)
-    case setTimeline(HomeSection.HomeSectionModel)
+    case popNewToast(String)
+    case updateUpcoming(HomeSection.HomeSectionModel)
+    case updateTimeline(HomeSection.HomeSectionModel)
   }
   
   struct State {
+    @Pulse var toastMessage: String?
     var upcomingSection = HomeSection.HomeSectionModel(
       model: .upcoming,
       items: []
@@ -41,12 +47,15 @@ final class HomeViewReactor: Reactor, Stepper {
       model: .timeline,
       items: []
     )
+    var currentSortType: SortType
   }
   
   // MARK: - Initializer
   
   init() {
-    self.initialState = State()
+    self.initialState = State(
+      currentSortType: self.currentSortType.value
+    )
   }
   
   // MARK: - Functions
@@ -55,8 +64,8 @@ final class HomeViewReactor: Reactor, Stepper {
     switch action {
     case .viewDidLoad:
       return .concat([
-        .just(.setUpcoming(self.fetchUpcoming(self.getUpcomingMock()))),
-        .just(.setTimeline(self.fetchTimeline(self.getTimelineMock())))
+        .just(.updateUpcoming(self.fetchUpcoming())),
+        .just(.updateTimeline(self.fetchTimeline()))
       ])
 
     case .searchButtonDidTap:
@@ -74,7 +83,7 @@ final class HomeViewReactor: Reactor, Stepper {
       switch sectionType {
       case .upcoming: break
       case .timeline:
-        self.steps.accept(AppStep.filterIsRequired)
+        self.steps.accept(AppStep.filterIsRequired(self.currentSortType.value))
       }
       return .empty()
     }
@@ -88,9 +97,13 @@ final class HomeViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
-    case .setUpcoming(let model):
+    case .popNewToast(let message):
+      newState.toastMessage = message
+
+    case .updateUpcoming(let model):
       newState.upcomingSection = model
-    case .setTimeline(let model):
+      
+    case .updateTimeline(let model):
       newState.timelineSection = model
     }
 
@@ -116,8 +129,8 @@ final class HomeViewReactor: Reactor, Stepper {
 }
 
 private extension HomeViewReactor {
-  func fetchUpcoming(_ data: [CardCellData]) -> HomeSection.HomeSectionModel {
-    let upcomingItems = data.map {
+  func fetchUpcoming() -> HomeSection.HomeSectionModel {
+    let upcomingItems = self.getUpcomingMock().map {
       let reactor = UpcomingCellReactor(cellData: $0)
       return HomeSection.HomeSectionItem.upcoming(reactor)
     }
@@ -127,8 +140,8 @@ private extension HomeViewReactor {
     )
   }
 
-  func fetchTimeline(_ data: [TimelineCellData]) -> HomeSection.HomeSectionModel {
-    let timelineItems = data.map {
+  func fetchTimeline() -> HomeSection.HomeSectionModel {
+    let timelineItems = getTimelineMock().map {
       let reactor = TimelineCellReactor(cellData: $0)
       return HomeSection.HomeSectionItem.timeline(reactor)
     }

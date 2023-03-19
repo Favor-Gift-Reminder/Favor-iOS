@@ -8,7 +8,9 @@
 import UIKit
 
 import FavorKit
+import RxCocoa
 import RxFlow
+import RxSwift
 
 final class HomeFlow: Flow {
 
@@ -23,8 +25,11 @@ final class HomeFlow: Flow {
     case .homeIsRequired:
       return self.navigateToHome()
 
-    case .filterIsRequired:
-      return self.navigateToFilter()
+    case .filterIsRequired(let sortType):
+      return self.navigateToFilter(sortedBy: sortType)
+
+    case .filterIsComplete(let sortType):
+      return self.dismissFilter(sortedBy: sortType)
 
     default: return .none
     }
@@ -45,10 +50,26 @@ private extension HomeFlow {
       ))
   }
 
-  func navigateToFilter() -> FlowContributors {
-    let filterVC = BaseBottomSheetViewController()
+  func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
+    let filterVC = FilterViewController()
+    filterVC.currentSortType = sortType
     self.rootViewController.present(filterVC, animated: true)
 
+    return .one(
+      flowContributor: .contribute(
+        withNextPresentable: filterVC,
+        withNextStepper: filterVC
+      ))
+  }
+
+  func dismissFilter(sortedBy sortType: SortType) -> FlowContributors {
+    self.rootViewController.topViewController?.dismiss(animated: true) {
+      guard let homeVC = self.rootViewController.topViewController as? HomeViewController else {
+        return
+      }
+      // TODO: Realm DB 구현하며 Sort, Filter 방식 변경
+      homeVC.reactor?.currentSortType.accept(sortType)
+    }
     return .none
   }
 }

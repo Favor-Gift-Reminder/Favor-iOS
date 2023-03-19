@@ -121,9 +121,6 @@ final class HomeViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.searchButton.rx.tap
-      .do(onNext: { // TODO: 토스트 메시지 테스트용 코드 삭제
-        self.presentToast("🍞 토스트 메시지 🍞", duration: .short)
-      })
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -142,6 +139,14 @@ final class HomeViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
+    reactor.state.map { $0.toastMessage }
+      .compactMap { $0 }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, message in
+        owner.presentToast(message, duration: .short)
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { [$0.upcomingSection, $0.timelineSection] }
       .do(onNext: {
         print("⬆️ Section: \($0)")
@@ -181,9 +186,6 @@ private extension HomeViewController {
     sectionType: HomeSectionType,
     isEmpty: Bool
   ) -> NSCollectionLayoutSection {
-    // 이대로는 그냥 무조건 첫 아이템이 Empty 자리에 박힌다.
-    // 비어있느냐 아니냐에 따라 구분을 두어야할듯
-    // item 타입이 .empty인지 구분해서 emptyItem을 넣을지 말지 선택?
     let emptyItem = NSCollectionLayoutItem(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
