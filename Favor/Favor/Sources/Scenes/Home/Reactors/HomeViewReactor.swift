@@ -133,7 +133,15 @@ final class HomeViewReactor: Reactor, Stepper {
 
 private extension HomeViewReactor {
   func fetchUpcoming() -> HomeSection.HomeSectionModel {
-    let upcomingItems = self.getUpcomingMock().map {
+    let reminders = RealmManager.shared.read(Reminder.self)
+    let upcomings = reminders.enumerated().map { index, reminder in
+      CardCellData(
+        iconImage: UIImage(named: "p\(index + 1)"),
+        title: reminder.title,
+        subtitle: reminder.reminderDate.formatted()
+      )
+    }
+    let upcomingItems = upcomings.map {
       let reactor = UpcomingCellReactor(cellData: $0)
       return HomeSection.HomeSectionItem.upcoming(reactor)
     }
@@ -144,7 +152,11 @@ private extension HomeViewReactor {
   }
 
   func fetchTimeline() -> HomeSection.HomeSectionModel {
-    let timelineItems = getTimelineMock().map {
+    let gifts = RealmManager.shared.read(Gift.self)
+    let timelines = gifts.enumerated().map { index, gift in
+      TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
+    }
+    let timelineItems = timelines.map {
       let reactor = TimelineCellReactor(cellData: $0)
       return HomeSection.HomeSectionItem.timeline(reactor)
     }
@@ -152,25 +164,5 @@ private extension HomeViewReactor {
       model: .timeline,
       items: timelineItems
     )
-  }
-
-  func getUpcomingMock() -> [CardCellData] {
-    let reminders = RealmManager.shared.read(Reminder.self)
-    return reminders.enumerated().map { index, reminder in
-      CardCellData(
-        iconImage: UIImage(named: "p\(index + 1)"),
-        title: reminder.title,
-        subtitle: reminder.reminderDate.formatted()
-      )
-    }
-//    return []
-  }
-
-  func getTimelineMock() -> [TimelineCellData] {
-    let gifts = RealmManager.shared.read(Gift.self)
-    return gifts.enumerated().map { index, gift in
-      TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
-    }
-//    return []
   }
 }
