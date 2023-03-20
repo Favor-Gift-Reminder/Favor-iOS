@@ -108,7 +108,11 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Binding
   
   override func bind() {
-    Observable.just([])
+    // State
+    self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
+      .do(onNext: {
+        print("⬆️ Section: \($0)")
+      })
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
@@ -145,13 +149,6 @@ final class HomeViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, message in
         owner.presentToast(message, duration: .short)
       })
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { [$0.upcomingSection, $0.timelineSection] }
-      .do(onNext: {
-        print("⬆️ Section: \($0)")
-      })
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
 }

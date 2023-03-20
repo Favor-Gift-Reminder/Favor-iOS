@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // FavorKit Package의 Custom Font Register 메서드
     FavorKit.registerFonts()
 
-    RealmManager.shared.initRealm()
+    RealmManager.shared.locateRealm()
     
 		return true
 	}

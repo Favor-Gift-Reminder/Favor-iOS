@@ -10,7 +10,6 @@ import UIKit
 
 import FavorKit
 import ReactorKit
-import RealmSwift
 import RxCocoa
 import RxFlow
 
@@ -20,7 +19,6 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let realm = try! Realm()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -76,7 +74,10 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case .newGiftButtonDidTap:
       os_log(.debug, "New Gift button did tap.")
-      return .empty()
+      return .concat([
+        .just(.updateUpcoming(self.fetchUpcoming())),
+        .just(.updateTimeline(self.fetchTimeline()))
+      ])
 
     case .itemSelected:
       return .empty()
@@ -154,18 +155,19 @@ private extension HomeViewReactor {
   }
 
   func getUpcomingMock() -> [CardCellData] {
-    return (1...2).map {
+    let reminders = RealmManager.shared.read(Reminder.self)
+    return reminders.enumerated().map { index, reminder in
       CardCellData(
-        iconImage: UIImage(named: "p\($0)"),
-        title: "기념일 \($0)",
-        subtitle: "2023. 03. 0\($0)"
+        iconImage: UIImage(named: "p\(index + 1)"),
+        title: reminder.title,
+        subtitle: reminder.reminderDate.formatted()
       )
     }
 //    return []
   }
 
   func getTimelineMock() -> [TimelineCellData] {
-    let gifts = self.realm.objects(Gift.self)
+    let gifts = RealmManager.shared.read(Gift.self)
     return gifts.enumerated().map { index, gift in
       TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
     }
