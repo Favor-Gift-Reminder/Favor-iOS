@@ -23,6 +23,22 @@ public final class FavorCategoryView: UIScrollView {
   private lazy var graduationButton = self.button("졸업", selectedImage: .favorIcon(.graduate))
   private lazy var etcButton = self.button("기타", selectedImage: nil)
   
+  private lazy var buttons: [FavorSmallButton] = {
+    var buttons = [FavorSmallButton]()
+    
+    [
+      self.lightGiftButton,
+      self.birthDayButton,
+      self.houseWarmButton,
+      self.testButton,
+      self.promotionButton,
+      self.graduationButton,
+      self.etcButton
+    ].forEach { buttons.append($0) }
+    
+    return buttons
+  }()
+  
   private let contentsView: UIView = {
     let view = UIView()
     view.backgroundColor = .favorColor(.white)
@@ -32,10 +48,20 @@ public final class FavorCategoryView: UIScrollView {
   
   // MARK: - PROPERTIES
   
-  private let disposeBag = DisposeBag()
+  private var selectedButton: FavorSmallButton {
+    self.buttons.filter { $0.isSelected }.first!
+  }
   
-  /// 현재 선택된 버튼 이벤트를 방출하는 Subject입니다.
-  private(set) var currentSelectedButton = BehaviorSubject<Category>(value: .lightGift)
+  /// 현재 선택된 버튼이 어떤 카테고리인지 알 수 있는 Property입니다.
+  var currentCategory: FavorCategory {
+    get {
+      self.selectedButton.category!      
+    }
+    set {
+      let button = self.buttons.filter { $0.category == newValue }.first!
+      self.didTapButton(button)
+    }
+  }
   
   // MARK: - INITIALIZER
   
@@ -44,100 +70,31 @@ public final class FavorCategoryView: UIScrollView {
     setupStyles()
     setupLayouts()
     setupConstraints()
-    bind()
+    
+    self.buttons.forEach {
+      $0.addTarget(
+        self,
+        action: #selector(self.didTapButton),
+        for: .touchUpInside
+      )
+    }
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - BIND
-  
-  private func bind() {
-
-    // 가벼운 선물 버튼 클릭
-    self.lightGiftButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.lightGift)
-      }
-      .disposed(by: self.disposeBag)
-    
-    // 생일 버튼 클릭
-    self.birthDayButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.birthDay)
-      }
-      .disposed(by: self.disposeBag)
-    
-    // 집들이 버튼 클릭
-    self.houseWarmButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.houseWarm)
-      }
-      .disposed(by: self.disposeBag)
-
-    // 시험 버튼 클릭
-    self.testButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.test)
-      }
-      .disposed(by: self.disposeBag)
-
-    // 승진 버튼 클릭
-    self.promotionButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.promotion)
-      }
-      .disposed(by: self.disposeBag)
-
-    // 졸업 버튼 클릭
-    self.graduationButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.graduation)
-      }
-      .disposed(by: self.disposeBag)
-    
-    // 기타 버튼 클릭
-    self.etcButton.rx.tap
-      .bind(with: self) { owner, _ in
-        owner.changeButtonState(.etc)
-      }
-      .disposed(by: self.disposeBag)
-  }
-  
   // MARK: - HELPERS
   
-  private func changeButtonState(_ category: Category) {
-    [
-      self.lightGiftButton,
-      self.birthDayButton,
-      self.houseWarmButton,
-      self.testButton,
-      self.promotionButton,
-      self.graduationButton,
-      self.etcButton
-    ].forEach {
-      $0.isSelected = false
+  @objc
+  private func didTapButton(_ sender: FavorSmallButton) {
+    for button in self.buttons {
+      if button == sender {
+        button.isSelected = true
+      } else {
+        button.isSelected = false
+      }
     }
-    
-    switch category {
-    case .lightGift:
-      self.lightGiftButton.isSelected = true
-    case .birthDay:
-      self.birthDayButton.isSelected = true
-    case .houseWarm:
-      self.houseWarmButton.isSelected = true
-    case .test:
-      self.testButton.isSelected = true
-    case .promotion:
-      self.promotionButton.isSelected = true
-    case .graduation:
-      self.graduationButton.isSelected = true
-    case .etc:
-      self.etcButton.isSelected = true
-    }
-    
-    self.currentSelectedButton.onNext(category)
   }
 }
 
