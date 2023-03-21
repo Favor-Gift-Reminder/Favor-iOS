@@ -41,7 +41,7 @@ final class SearchViewController: BaseViewController, View {
     stackView.axis = .horizontal
     stackView.spacing = 10
     self.giftCategories.forEach {
-      stackView.addArrangedSubview(FavorSmallButton(with: .mainWithIcon($0, imageName: "")))
+      stackView.addArrangedSubview(FavorSmallButton(with: .mainWithIcon($0, image: nil)))
     }
     return stackView
   }()

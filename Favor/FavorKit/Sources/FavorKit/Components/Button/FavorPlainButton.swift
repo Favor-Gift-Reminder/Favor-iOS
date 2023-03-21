@@ -7,15 +7,17 @@
 
 import UIKit
 
+import SnapKit
+
 public final class FavorPlainButton: UIButton {
   
   // MARK: - PROPERTIES
   
-  private let plainFavorButtonType: PlainFavorButtonType
+  private let plainFavorButtonType: FavorPlainButtonType
 
   // MARK: - INITIALIZER
   
-  public init(with plainFavorButtonType: PlainFavorButtonType) {
+  public init(with plainFavorButtonType: FavorPlainButtonType) {
     self.plainFavorButtonType = plainFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()

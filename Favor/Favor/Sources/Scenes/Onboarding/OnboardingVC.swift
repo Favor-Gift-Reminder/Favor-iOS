@@ -44,9 +44,9 @@ final class OnboardingViewController: BaseViewController, Stepper {
     btn.configurationUpdateHandler = {
       switch $0.state {
       case .disabled:
-        $0.configuration = LargeFavorButtonType.gray("시작하기").configuration
+        $0.configuration = FavorLargeButtonType.gray("시작하기").configuration
       default:
-        $0.configuration = LargeFavorButtonType.main("시작하기").configuration
+        $0.configuration = FavorLargeButtonType.main("시작하기").configuration
       }
     }
     btn.addTarget(self, action: #selector(dismissOnboarding), for: .touchUpInside)

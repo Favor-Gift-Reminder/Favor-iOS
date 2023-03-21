@@ -13,11 +13,11 @@ public final class FavorSmallButton: UIButton {
   
   // MARK: - PROPERTIES
   
-  private let smallFavorButtonType: SmallFavorButtonType
+  private let smallFavorButtonType: FavorSmallButtonType
   
   // MARK: - INITIALIZER
   
-  public init(with smallFavorButtonType: SmallFavorButtonType, title: String = "") {
+  public init(with smallFavorButtonType: FavorSmallButtonType, title: String = "") {
     self.smallFavorButtonType = smallFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()
