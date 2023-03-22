@@ -92,10 +92,6 @@ final class HomeViewReactor: Reactor, Stepper {
     }
   }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    return .merge(mutation)
-  }
-
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -138,7 +134,7 @@ private extension HomeViewReactor {
       CardCellData(
         iconImage: UIImage(named: "p\(index + 1)"),
         title: reminder.title,
-        subtitle: reminder.reminderDate.formatted()
+        subtitle: reminder.date.formatted()
       )
     }
     let upcomingItems = upcomings.map {

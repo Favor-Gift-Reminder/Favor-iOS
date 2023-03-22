@@ -27,7 +27,7 @@ public final class RealmManager: RealmCRUDable {
   /// 로컬 DB의 버전
   ///
   /// [~ Version History ~](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  private static let version: UInt64 = 1
+  private static let version: UInt64 = 2
 
   /// RealmManager에서 사용될 realm 인스턴스
   private let realm: Realm
