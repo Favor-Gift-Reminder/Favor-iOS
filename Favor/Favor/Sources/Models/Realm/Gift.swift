@@ -50,11 +50,12 @@ public class Gift: Object {
   /// - Parameters:
   ///   - giftNo: ***PK*** 선물 번호
   ///   - name: 선물 이름
-  ///   - date: *`Optional`* 선물 메모
+  ///   - date: *`Optional`* 선물 전달 날짜
+  ///   - memo: *`Optional`* 선물 메모
   ///   - category: *`Optional`* 선물 카테고리
   ///   - emotion: *`Optional`* 선물에 등록된 감정 기록
   ///   - isPinned: 선물 목록 혹은 타임라인에서의 핀 여부
-  ///   - friendNo: *`Optional`* 선물과 관련된 친구의 번호
+  ///   - relatedFriend: *`Optional`* 선물과 관련된 친구의 번호
   ///   - isGiven: 받은 선물 / 준 선물 여부 (`true`: 받은 선물)
   public convenience init(
     _ giftNo: Int,
