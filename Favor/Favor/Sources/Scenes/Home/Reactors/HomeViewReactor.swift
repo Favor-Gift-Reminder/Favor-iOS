@@ -9,6 +9,7 @@ import OSLog
 import UIKit
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -19,6 +20,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  let reminderFetcher = Fetcher<[Reminder]>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -56,6 +58,7 @@ final class HomeViewReactor: Reactor, Stepper {
     self.initialState = State(
       currentSortType: self.currentSortType.value
     )
+    self.setupReminderFetcher()
   }
   
   // MARK: - Functions
@@ -63,6 +66,13 @@ final class HomeViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
+      self.reminderFetcher.fetch { status, reminders in
+        reminders.forEach {
+          print("❓ ITEM: \($0)")
+        }
+        let upcomingSection = self.refineUpcoming(reminders: reminders)
+        print("❓ FETCHER STATUS: \(status)")
+      }
       return .concat([
         .just(.updateUpcoming(self.fetchUpcoming())),
         .just(.updateTimeline(self.fetchTimeline()))
@@ -127,9 +137,67 @@ final class HomeViewReactor: Reactor, Stepper {
   }
 }
 
+// MARK: - Fetcher
+
+private extension HomeViewReactor {
+  func setupReminderFetcher() {
+    // onRemote
+    self.reminderFetcher.onRemote = {
+      let networking = UserNetworking()
+      let reminders = networking.request(.getAllReminderList(userNo: 1))
+        .flatMap { reminders -> Observable<[Reminder]> in
+          let responseData = reminders.data
+          let a: ResponseDTO<[ReminderResponseDTO.AllReminders]> = APIManager.decode(responseData)
+          print("❗ REMOTE: \(a.data)")
+          return .just(
+            [Reminder(reminderNo: 0, title: "sdflkj", date: .now, shouldNotify: true, friendNo: 0)]
+          )
+        }
+        .asSingle()
+      return reminders
+    }
+    // onLocal
+    self.reminderFetcher.onLocal = {
+      let reminders = RealmManager.shared.read(Reminder.self)
+      return reminders.toArray()
+    }
+    // onLocalByObservable
+    self.reminderFetcher.onLocalByObservable = {
+      let reminders = RealmManager.shared.read(Reminder.self)
+      return .just(reminders.toArray())
+    }
+    // onLocalUpdate
+    self.reminderFetcher.onLocalUpdate = { reminders in
+      reminders.forEach {
+        RealmManager.shared.update($0)
+      }
+    }
+  }
+}
+
+// MARK: - Privates
+
 private extension HomeViewReactor {
   func fetchUpcoming() -> HomeSection.HomeSectionModel {
     let reminders = RealmManager.shared.read(Reminder.self)
+    let upcomings = reminders.enumerated().map { index, reminder in
+      CardCellData(
+        iconImage: UIImage(named: "p\(index + 1)"),
+        title: reminder.title,
+        subtitle: reminder.date.formatted()
+      )
+    }
+    let upcomingItems = upcomings.map {
+      let reactor = UpcomingCellReactor(cellData: $0)
+      return HomeSection.HomeSectionItem.upcoming(reactor)
+    }
+    return HomeSection.HomeSectionModel(
+      model: .upcoming,
+      items: upcomingItems
+    )
+  }
+
+  func refineUpcoming(reminders: [Reminder]) -> HomeSection.HomeSectionModel {
     let upcomings = reminders.enumerated().map { index, reminder in
       CardCellData(
         iconImage: UIImage(named: "p\(index + 1)"),
