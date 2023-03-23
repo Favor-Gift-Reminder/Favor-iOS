@@ -68,10 +68,11 @@ final class HomeViewReactor: Reactor, Stepper {
     case .viewDidLoad:
       self.reminderFetcher.fetch { status, reminders in
         reminders.forEach {
-          print("❓ ITEM: \($0)")
+          os_log(.debug, "❓ ITEM: \($0)")
         }
         let upcomingSection = self.refineUpcoming(reminders: reminders)
-        print("❓ FETCHER STATUS: \(status)")
+        let statusMessage = "❓ FETCHER STATUS: \(status)"
+        os_log(.debug, "\(statusMessage)")
       }
       return .concat([
         .just(.updateUpcoming(self.fetchUpcoming())),
@@ -110,9 +111,11 @@ final class HomeViewReactor: Reactor, Stepper {
       newState.toastMessage = message
 
     case .updateUpcoming(let model):
+      os_log(.debug, "⚠️ Upcoming: \(model)")
       newState.upcomingSection = model
       
     case .updateTimeline(let model):
+      os_log(.debug, "⚠️ Timeline: \(model)")
       newState.timelineSection = model
     }
 
