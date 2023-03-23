@@ -168,9 +168,7 @@ private extension HomeViewReactor {
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { reminders in
-      reminders.forEach {
-        RealmManager.shared.update($0)
-      }
+      RealmManager.shared.updateAll(reminders)
     }
   }
 }

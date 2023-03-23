@@ -140,6 +140,32 @@ public final class RealmManager: RealmCRUDable {
     }
   }
 
+  /// RealmDB에 존재하는 `RealmObject` 인스턴스의 값들을 업데이트합니다.
+  /// 만약 값이 없다면, 새로운 인스턴스들로 추가합니다.
+  ///
+  /// **Usage**
+  /// ``` Swift
+  /// let gifts = networking.request(.getAllGifts)
+  /// let decodedGifts: ResponseDTO<GiftResponseDTO.AllGifts> = APIManager.decode(gifts)
+  /// RealmManager.shared.updateAll(gifts)
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - objects: 업데이트할 `RealmObject` 인스턴스들의 컬렉션
+  ///   - errorHandler: RealmDB에 주어진 인스턴스들을 업데이트하지 못했을 때 호출되는 `@escaping` 클로저
+  public func updateAll<T: Object>(
+    _ objects: [T],
+  _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
+  ) {
+    do {
+      try self.realm.write {
+        self.realm.add(objects, update: .modified)
+      }
+    } catch {
+      errorHandler(error)
+    }
+  }
+
   /// RealmDB에 존재하는 인스턴스를 삭제합니다.
   ///
   /// **Usage**
