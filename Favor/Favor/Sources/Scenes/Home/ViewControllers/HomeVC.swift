@@ -147,6 +147,10 @@ final class HomeViewController: BaseViewController, View {
         owner.presentToast(message, duration: .short)
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
+      .disposed(by: self.disposeBag)
   }
 }
 

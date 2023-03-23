@@ -14,6 +14,11 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
+/*
+ Fetcher가 fetch하는 시점
+ - 뷰가 시작될 때 (viewDidLoad)
+*/
+
 final class HomeViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
@@ -27,6 +32,8 @@ final class HomeViewReactor: Reactor, Stepper {
   
   enum Action {
     case viewDidLoad
+    case upcomingFetched(HomeSection.HomeSectionModel)
+    case fetchStateDidChanged(Fetcher<[Reminder]>.Status)
     case searchButtonDidTap
     case newGiftButtonDidTap
     case itemSelected(IndexPath)
@@ -37,6 +44,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case popNewToast(String)
     case updateUpcoming(HomeSection.HomeSectionModel)
     case updateTimeline(HomeSection.HomeSectionModel)
+    case updateLoading(Bool)
   }
   
   struct State {
@@ -50,6 +58,7 @@ final class HomeViewReactor: Reactor, Stepper {
       items: []
     )
     var currentSortType: SortType
+    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -67,17 +76,24 @@ final class HomeViewReactor: Reactor, Stepper {
     switch action {
     case .viewDidLoad:
       self.reminderFetcher.fetch { status, reminders in
-        reminders.forEach {
-          os_log(.debug, "❓ ITEM: \($0)")
-        }
+        os_log(.debug, "🔽 FETCHER GET: \(reminders)")
         let upcomingSection = self.refineUpcoming(reminders: reminders)
+        self.action.onNext(Action.upcomingFetched(upcomingSection))
+
         let statusMessage = "❓ FETCHER STATUS: \(status)"
         os_log(.debug, "\(statusMessage)")
+        self.action.onNext(Action.fetchStateDidChanged(status))
       }
       return .concat([
         .just(.updateUpcoming(self.fetchUpcoming())),
         .just(.updateTimeline(self.fetchTimeline()))
       ])
+
+    case .fetchStateDidChanged(let status):
+      return .just(.updateLoading(status == .inProgress))
+
+    case .upcomingFetched(let model):
+      return .just(.updateUpcoming(model))
 
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
@@ -111,12 +127,13 @@ final class HomeViewReactor: Reactor, Stepper {
       newState.toastMessage = message
 
     case .updateUpcoming(let model):
-      os_log(.debug, "⚠️ Upcoming: \(model)")
       newState.upcomingSection = model
       
     case .updateTimeline(let model):
-      os_log(.debug, "⚠️ Timeline: \(model)")
       newState.timelineSection = model
+
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
     }
 
     return newState
@@ -155,7 +172,7 @@ private extension HomeViewReactor {
             Reminder(
               reminderNo: $0.reminderNo,
               title: $0.title,
-              date: .now,
+              date: $0.eventDate.toDate() ?? .now,
               shouldNotify: $0.isAlarmSet,
               friendNo: $0.friendNo
             )
@@ -176,6 +193,7 @@ private extension HomeViewReactor {
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { reminders in
+      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(reminders)")
       RealmManager.shared.updateAll(reminders)
     }
   }
