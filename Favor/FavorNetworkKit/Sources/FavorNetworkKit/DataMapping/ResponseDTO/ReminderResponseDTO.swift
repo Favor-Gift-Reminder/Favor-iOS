@@ -7,27 +7,27 @@
 
 import Foundation
 
-enum ReminderResponseDTO {
+public enum ReminderResponseDTO {
   
   /// 전체 리마인더
   public struct AllReminders: Decodable {
-    let eventDate: String
-    let friendNo: Int
-    let isAlarmSet: Bool
-    let reminderNo: Int
-    let title: String
-    let userNo: Int
+    public let eventDate: String
+    public let friendNo: Int
+    public let isAlarmSet: Bool
+    public let reminderNo: Int
+    public let title: String
+    public let userNo: Int
   }
   
   /// 단일 리마인더
   public struct Reminder: Decodable {
-    let alarmTime: String
-    let friendNo: Int
-    let isAlarmSet: Bool
-    let memo: String
-    let reminderDate: String
-    let reminderNo: Int
-    let title: String
-    let userNo: Int
+    public let alarmTime: String
+    public let friendNo: Int
+    public let isAlarmSet: Bool
+    public let memo: String
+    public let reminderDate: String
+    public let reminderNo: Int
+    public let title: String
+    public let userNo: Int
   }
 }

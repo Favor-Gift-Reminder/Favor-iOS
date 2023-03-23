@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct ResponseDTO<T: Decodable> {
-  let responseCode: String
-  let responseMessage: String
-  let data: T
+public struct ResponseDTO<T: Decodable>: Decodable {
+  public let responseCode: String
+  public let responseMessage: String
+  public let data: T
 }
