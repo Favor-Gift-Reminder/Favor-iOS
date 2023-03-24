@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum FavorCategory: String {
+public enum FavorCategory: String {
   case lightGift = "가벼운 선물"
   case birthDay = "생일"
   case houseWarm = "집들이"

@@ -39,6 +39,7 @@ public enum FavorPlainButtonType {
       titleString,
       attributes: titleContainer
     )
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     return config
   }
