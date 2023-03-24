@@ -34,7 +34,9 @@ public final class FavorCategoryView: UIScrollView {
       self.promotionButton,
       self.graduationButton,
       self.etcButton
-    ].forEach { buttons.append($0) }
+    ].forEach {
+      buttons.append($0)
+    }
     
     return buttons
   }()
@@ -53,7 +55,7 @@ public final class FavorCategoryView: UIScrollView {
   }
   
   /// 현재 선택된 버튼이 어떤 카테고리인지 알 수 있는 Property입니다.
-  var currentCategory: FavorCategory {
+  public var currentCategory: FavorCategory {
     get {
       self.selectedButton.category!      
     }
