@@ -31,7 +31,7 @@ final class HomeViewReactor: Reactor, Stepper {
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
   
   enum Action {
-    case viewDidLoad
+    case viewDidAppear
     case upcomingFetched(HomeSection.HomeSectionModel)
     case fetchStateDidChanged(Fetcher<[Reminder]>.Status)
     case searchButtonDidTap
@@ -74,20 +74,20 @@ final class HomeViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewDidLoad:
-      self.reminderFetcher.fetch { status, reminders in
-        os_log(.debug, "🔽 FETCHER GET: \(reminders)")
-        let upcomingSection = self.refineUpcoming(reminders: reminders)
-        self.action.onNext(Action.upcomingFetched(upcomingSection))
+    case .viewDidAppear:
+      return self.reminderFetcher.fetch()
+        .flatMap { (status, reminders) -> Observable<Mutation> in
+          os_log(.debug, "🔽 FETCHER GET: \(reminders)")
+          let upcomingSection = self.refineUpcoming(reminders: reminders)
 
-        let statusMessage = "❓ FETCHER STATUS: \(status)"
-        os_log(.debug, "\(statusMessage)")
-        self.action.onNext(Action.fetchStateDidChanged(status))
-      }
-      return .concat([
-        .just(.updateUpcoming(self.fetchUpcoming())),
-        .just(.updateTimeline(self.fetchTimeline()))
-      ])
+          let statusMessage = "❓ FETCHER STATUS: \(status)"
+          os_log(.debug, "\(statusMessage)")
+
+          return .concat([
+            .just(.updateUpcoming(upcomingSection)),
+            .just(.updateLoading(status == .inProgress))
+          ])
+        }
 
     case .fetchStateDidChanged(let status):
       return .just(.updateLoading(status == .inProgress))
@@ -101,10 +101,7 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case .newGiftButtonDidTap:
       os_log(.debug, "New Gift button did tap.")
-      return .concat([
-        .just(.updateUpcoming(self.fetchUpcoming())),
-        .just(.updateTimeline(self.fetchTimeline()))
-      ])
+      return .empty()
 
     case .itemSelected:
       return .empty()
@@ -202,25 +199,6 @@ private extension HomeViewReactor {
 // MARK: - Privates
 
 private extension HomeViewReactor {
-  func fetchUpcoming() -> HomeSection.HomeSectionModel {
-    let reminders = RealmManager.shared.read(Reminder.self)
-    let upcomings = reminders.enumerated().map { index, reminder in
-      CardCellData(
-        iconImage: UIImage(named: "p\(index + 1)"),
-        title: reminder.title,
-        subtitle: reminder.date.formatted()
-      )
-    }
-    let upcomingItems = upcomings.map {
-      let reactor = UpcomingCellReactor(cellData: $0)
-      return HomeSection.HomeSectionItem.upcoming(reactor)
-    }
-    return HomeSection.HomeSectionModel(
-      model: .upcoming,
-      items: upcomingItems
-    )
-  }
-
   func refineUpcoming(reminders: [Reminder]) -> HomeSection.HomeSectionModel {
     let upcomings = reminders.enumerated().map { index, reminder in
       CardCellData(
@@ -239,8 +217,7 @@ private extension HomeViewReactor {
     )
   }
 
-  func fetchTimeline() -> HomeSection.HomeSectionModel {
-    let gifts = RealmManager.shared.read(Gift.self)
+  func refineTimeline(gifts: [Gift]) -> HomeSection.HomeSectionModel {
     let timelines = gifts.enumerated().map { index, gift in
       TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
     }
