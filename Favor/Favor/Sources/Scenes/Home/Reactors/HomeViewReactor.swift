@@ -32,8 +32,6 @@ final class HomeViewReactor: Reactor, Stepper {
   
   enum Action {
     case viewDidAppear
-    case upcomingFetched(HomeSection.HomeSectionModel)
-    case fetchStateDidChanged(Fetcher<[Reminder]>.Status)
     case searchButtonDidTap
     case newGiftButtonDidTap
     case itemSelected(IndexPath)
@@ -88,12 +86,6 @@ final class HomeViewReactor: Reactor, Stepper {
             .just(.updateLoading(status == .inProgress))
           ])
         }
-
-    case .fetchStateDidChanged(let status):
-      return .just(.updateLoading(status == .inProgress))
-
-    case .upcomingFetched(let model):
-      return .just(.updateUpcoming(model))
 
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")

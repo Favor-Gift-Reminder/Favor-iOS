@@ -40,6 +40,16 @@ public class Fetcher<T> {
 
   // MARK: - Functions
 
+  /// 로컬 DB와 서버로부터 데이터를 `fetch`해옵니다.
+  ///
+  /// **로직 순서**
+  /// 1. 로컬 DB로부터 데이터를 `read`하고 방출합니다. (`status` = `.inProgress`)
+  /// 2. 서버에서부터 데이터를 `GET`해옵니다.
+  /// 3. `request`가 성공했다면
+  /// 4. 로컬 DB를 `response`를 적용하여 업데이트합니다.
+  /// 5. 업데이트된 로컬 DB로부터 데이터를 `read`하고 방출합니다. (`status` = `.success`)
+  /// 6. `request`가 실패했다면
+  /// 7. 로컬 DB에 있는 데이터를 그대로 `read`하여 방출합니다. (`status` = `.failure`)
   public func fetch() -> Observable<(Status, T)> {
     guard let _onLocal = self.onLocal else {
       fatalError("Define onLocal() method before calling fetch()")
