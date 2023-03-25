@@ -8,16 +8,17 @@
 import UIKit
 
 import FavorKit
+import ReactorKit
 import RSKPlaceholderTextView
 import RxDataSources
 import RxSwift
 import SnapKit
 
-final class NewGiftViewController: BaseViewController {
+final class NewGiftViewController: BaseViewController, View {
   
   typealias DataSource = RxCollectionViewSectionedReloadDataSource<PickedPictureSection>
   
-  // MARK: - Properties
+  // MARK: - UI COMPONENTS
   
   private let scrollView: UIScrollView = {
     let sv = UIScrollView()
@@ -27,7 +28,7 @@ final class NewGiftViewController: BaseViewController {
   
   private let contentsView: UIView = {
     let view = UIView()
-    view.backgroundColor = .favorColor(.background)
+    view.backgroundColor = .favorColor(.white)
     
     return view
   }()
@@ -37,7 +38,7 @@ final class NewGiftViewController: BaseViewController {
     let attributedPlaceholder = NSAttributedString(
       string: "선물 이름 (최대 20자)",
       attributes: [
-        .foregroundColor: UIColor.favorColor(.subtext),
+        .foregroundColor: UIColor.favorColor(.explain),
         .font: UIFont.favorFont(.regular, size: 16)
       ]
     )
@@ -114,10 +115,16 @@ final class NewGiftViewController: BaseViewController {
       attributes: titleContainer
     )
     
-    // TODO: 핀셋 이미지 추가
-    
     let button = UIButton(configuration: config)
     return button
+  }()
+  
+  private lazy var datePicker: UIDatePicker = {
+    let dp = UIDatePicker()
+    dp.datePickerMode = .date
+    dp.addTarget(self, action: #selector(didChangedDate), for: .valueChanged)
+    
+    return dp
   }()
   
   var dataSource = DataSource { dataSource, collectionView, indexPath, item in
@@ -142,27 +149,32 @@ final class NewGiftViewController: BaseViewController {
     }
   }
   
-  private lazy var giftReceivedButton = self.makeGiftButton("받은 선물")
-  private lazy var giftGivenButton = self.makeGiftButton("준 선물")
-  private lazy var titleLabel = self.makeTitleLabel("제목")
-  private lazy var titleLine = self.makeLine()
-  private lazy var categoryLabel = self.makeTitleLabel("카테고리")
-  private let categoryView = FavorCategoryView()
-  private lazy var pictureLabel = self.makeTitleLabel("사진")
-  private lazy var friendLabel = self.makeTitleLabel("준 사람")
-  private let giverButton = FavorPlainButton(with: .main("친구 선택", isRight: true))
-  private let receiverButton = FavorPlainButton(with: .main("친구선택", isRight: true))
-  private lazy var friendLine = self.makeLine()
-  private lazy var dateLabel = self.makeTitleLabel("날짜")
-  private let dateButton = FavorPlainButton(with: .main("날짜 선택", isRight: false))
-  private lazy var dateLine = self.makeLine()
-  private lazy var emotionLabel = self.makeTitleLabel("감정 메모")
+  // Divider
+  private let titleDivider = FavorDivider()
+  private let friendDivider = FavorDivider()
+  private let dateDivider = FavorDivider()
+  private let memoDivider = FavorDivider()
+  
+  // Label
+  private lazy var titleLabel = self.label("제목")
+  private lazy var categoryLabel = self.label("카테고리")
+  private lazy var photoLabel = self.label("사진")
+  private lazy var dateLabel = self.label("날짜")
+  private lazy var friendLabel = self.label("준 사람")
+  private lazy var emotionLabel = self.label("감정 메모")
+  
+  // Button
+  private lazy var giftReceivedButton = self.giftButton("받은 선물")
+  private lazy var giftGivenButton = self.giftButton("준 선물")
+  private lazy var choiceFriendButton = self.choiceButton("친구 선택", isRight: true)
+  private lazy var choiceDateButton = self.choiceButton("날짜 선택", isRight: false)
   private lazy var emotionButton1 = self.makeEmotionButton("🥹")
   private lazy var emotionButton2 = self.makeEmotionButton("🥹")
   private lazy var emotionButton3 = self.makeEmotionButton("🥹")
   private lazy var emotionButton4 = self.makeEmotionButton("🥹")
   private lazy var emotionButton5 = self.makeEmotionButton("🥹")
-  private lazy var memoLine = self.makeLine()
+  
+  private let categoryView = FavorCategoryView()
   
   // MARK: - LifeCycle
   
@@ -177,9 +189,8 @@ final class NewGiftViewController: BaseViewController {
   // MARK: - Setup
   
   override func setupStyles() {
-    self.giftReceivedButton.isSelected = true
-    self.view.backgroundColor = .favorColor(.background)
-    self.receiverButton.isHidden = true
+    self.view.backgroundColor = .favorColor(.white)
+    self.categoryView.currentCategory = .lightGift
   }
   
   override func setupLayouts() {
@@ -193,13 +204,13 @@ final class NewGiftViewController: BaseViewController {
     
     [
       self.giftReceivedButton, self.giftGivenButton,
-      self.titleLabel, self.titleLine, self.titleTextField, self.titleLine,
+      self.titleLabel, self.titleDivider, self.titleTextField, self.titleDivider,
       self.categoryLabel, self.categoryView,
-      self.pictureLabel, self.pickedPictureCollectionView,
-      self.friendLabel, self.giverButton, self.receiverButton, self.friendLine,
-      self.dateLabel, self.dateButton, self.dateLine,
+      self.photoLabel, self.pickedPictureCollectionView,
+      self.friendLabel, self.choiceFriendButton, self.friendDivider,
+      self.dateLabel, self.choiceDateButton, self.dateDivider,
       self.emotionLabel, self.emotionStackView,
-      self.memoTextView, self.memoLine,
+      self.memoTextView, self.memoDivider,
       self.pinTimelineButton
     ].forEach {
       self.contentsView.addSubview($0)
@@ -230,7 +241,7 @@ final class NewGiftViewController: BaseViewController {
       make.top.equalTo(self.giftReceivedButton.snp.bottom).offset(40)
     }
     
-    self.titleLine.snp.makeConstraints { make in
+    self.titleDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
     }
     
@@ -239,7 +250,7 @@ final class NewGiftViewController: BaseViewController {
       make.top.equalTo(self.titleLabel.snp.bottom).offset(16)
     }
     
-    self.titleLine.snp.makeConstraints { make in
+    self.titleDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
       make.top.equalTo(titleTextField.snp.bottom).offset(16)
       make.height.equalTo(1)
@@ -247,7 +258,7 @@ final class NewGiftViewController: BaseViewController {
     
     self.categoryLabel.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.titleLine.snp.bottom).offset(40)
+      make.top.equalTo(self.titleDivider.snp.bottom).offset(40)
     }
     
     self.categoryView.snp.makeConstraints { make in
@@ -256,14 +267,14 @@ final class NewGiftViewController: BaseViewController {
       make.top.equalTo(self.categoryLabel.snp.bottom).offset(16)
     }
     
-    self.pictureLabel.snp.makeConstraints { make in
+    self.photoLabel.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.categoryView.snp.bottom).offset(24)
     }
     
     self.pickedPictureCollectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.pictureLabel.snp.bottom).offset(16)
+      make.top.equalTo(self.photoLabel.snp.bottom).offset(16)
       make.height.equalTo(110)
     }
     
@@ -272,41 +283,36 @@ final class NewGiftViewController: BaseViewController {
       make.top.equalTo(self.pickedPictureCollectionView.snp.bottom).offset(40)
     }
     
-    self.giverButton.snp.makeConstraints { make in
+    self.choiceFriendButton.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
     }
-    
-    self.receiverButton.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
-    }
-    
-    self.friendLine.snp.makeConstraints { make in
+        
+    self.friendDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.giverButton.snp.bottom).offset(16)
+      make.top.equalTo(self.choiceFriendButton.snp.bottom).offset(16)
       make.height.equalTo(1)
     }
     
     self.dateLabel.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendLine.snp.bottom).offset(40)
+      make.top.equalTo(self.friendDivider.snp.bottom).offset(40)
     }
     
-    self.dateButton.snp.makeConstraints { make in
+    self.choiceDateButton.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.dateLabel.snp.bottom).offset(16)
     }
     
-    self.dateLine.snp.makeConstraints { make in
+    self.dateDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateButton.snp.bottom).offset(16)
+      make.top.equalTo(self.choiceDateButton.snp.bottom).offset(16)
       make.height.equalTo(1)
     }
     
     self.emotionLabel.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateLine.snp.bottom).offset(40)
+      make.top.equalTo(self.dateDivider.snp.bottom).offset(40)
     }
     
     self.emotionStackView.snp.makeConstraints { make in
@@ -320,7 +326,7 @@ final class NewGiftViewController: BaseViewController {
       make.height.equalTo(130)
     }
     
-    self.memoLine.snp.makeConstraints { make in
+    self.memoDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
       make.top.equalTo(self.memoTextView.snp.bottom).offset(16)
       make.height.equalTo(1)
@@ -328,12 +334,71 @@ final class NewGiftViewController: BaseViewController {
     
     self.pinTimelineButton.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.memoLine.snp.bottom).offset(40)
+      make.top.equalTo(self.memoDivider.snp.bottom).offset(40)
       make.bottom.equalToSuperview().inset(85)
     }
   }
   
-  // MARK: - Bind
+  // MARK: - BIND
+  
+  func bind(reactor: NewGiftViewReactor) {
+    
+    // MARK: - ACTION
+    
+    // 받은 선물 버튼 클릭
+    self.giftReceivedButton.rx.tap
+      .map { NewGiftViewReactor.Action.giftReceivedButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 준 선물 버튼 클릭
+    self.giftGivenButton.rx.tap
+      .map { NewGiftViewReactor.Action.giftGivenButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 제목 텍스트 필드
+    self.titleTextField.rx.text
+      .orEmpty
+      .map { NewGiftViewReactor.Action.titleTextFieldDidChange($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 날짜 선택 버튼 클릭
+    self.choiceDateButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in
+        
+      }
+      .disposed(by: self.disposeBag)
+    
+    // MARK: - STATE
+    
+    // 선물 종류 토글
+    reactor.state.map { $0.isReceivedGift }
+      .distinctUntilChanged()
+      .asDriver(onErrorJustReturn: false)
+      .drive(with: self) {
+        if $1 {
+          $0.giftReceivedButton.isSelected = true
+          $0.giftGivenButton.isSelected = false
+        } else {
+          $0.giftReceivedButton.isSelected = false
+          $0.giftGivenButton.isSelected = true
+        }
+      }
+      .disposed(by: self.disposeBag)
+    
+    // FriendLabel Text 변경
+    reactor.state.map { $0.isReceivedGift }
+      .distinctUntilChanged()
+      .map { $0 ? "준 사람" : "받은 사람" }
+      .bind(to: self.friendLabel.rx.text)
+      .disposed(by: self.disposeBag)
+    
+    //
+  }
+  
   func getMockSection() -> [PickedPictureSection] {
     let pickItem = PickedPictureSectionItem.pick(.init(5))
     let pickedPicture1 = PickedPictureSectionItem.picked(.init(UIImage()))
@@ -352,27 +417,45 @@ final class NewGiftViewController: BaseViewController {
     
     return [firstSection]
   }
+  
+  // MARK: - SELECTORS
+  
+  @objc
+  private func didChangedDate() {
+    
+  }
 }
 
-// MARK: - Helpers
+// MARK: - HELPERS
 
 private extension NewGiftViewController {
-  func makeGiftButton(_ title: String) -> UIButton {
-    let btn = UIButton()
-    let attributedTitle = NSAttributedString(
-      string: title,
-      attributes: [
+  func giftButton(_ title: String) -> UIButton {
+    var config = UIButton.Configuration.plain()
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+    config.baseBackgroundColor = .favorColor(.white)
+    config.attributedTitle = AttributedString(
+      title,
+      attributes: .init([
         .font: UIFont.favorFont(.bold, size: 22)
-      ]
+      ])
     )
-    btn.setAttributedTitle(attributedTitle, for: .normal)
-    btn.setTitleColor(.favorColor(.titleAndLine), for: .selected)
-    btn.setTitleColor(.favorColor(.line2), for: .normal)
     
-    return btn
+    let button = UIButton(configuration: config)
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.baseForegroundColor = .favorColor(.line2)
+      case .selected:
+        button.configuration?.baseForegroundColor = .favorColor(.titleAndLine)
+      default:
+        break
+      }
+    }
+    
+    return button
   }
   
-  func makeTitleLabel(_ title: String) -> UILabel {
+  func label(_ title: String) -> UILabel {
     let lb = UILabel()
     lb.textColor = .favorColor(.titleAndLine)
     lb.text = title
@@ -381,11 +464,21 @@ private extension NewGiftViewController {
     return lb
   }
   
-  func makeLine() -> UIView {
-    let view = UIView()
-    view.backgroundColor = .favorColor(.divider)
-    
-    return view
+  func choiceButton(_ title: String, isRight: Bool) -> FavorPlainButton {
+    let button = FavorPlainButton(with: .main(title, isRight: isRight))
+    button.configurationUpdateHandler = {
+      switch $0.state {
+      case .normal:
+        $0.configuration?.baseForegroundColor = .favorColor(.explain)
+        $0.configuration?.baseBackgroundColor = .favorColor(.white)
+      case .selected:
+        $0.configuration?.baseForegroundColor = .favorColor(.icon)
+        $0.configuration?.baseBackgroundColor = .favorColor(.white)
+      default:
+        break
+      }
+    }
+    return button
   }
   
   func makeEmotionButton(_ image: String) -> UIButton {
@@ -395,12 +488,3 @@ private extension NewGiftViewController {
     return button
   }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-struct NewGiftVC_PreView: PreviewProvider {
-  static var previews: some View {
-    NewGiftViewController().toPreview()
-  }
-}
-#endif
