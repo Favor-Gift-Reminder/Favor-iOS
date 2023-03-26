@@ -75,12 +75,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case .viewDidAppear:
       return self.reminderFetcher.fetch()
         .flatMap { (status, reminders) -> Observable<Mutation> in
-          os_log(.debug, "🔽 FETCHER GET: \(reminders)")
           let upcomingSection = self.refineUpcoming(reminders: reminders)
-
-          let statusMessage = "❓ FETCHER STATUS: \(status)"
-          os_log(.debug, "\(statusMessage)")
-
           return .concat([
             .just(.updateUpcoming(upcomingSection)),
             .just(.updateLoading(status == .inProgress))
@@ -153,7 +148,7 @@ private extension HomeViewReactor {
     // onRemote
     self.reminderFetcher.onRemote = {
       let networking = UserNetworking()
-      let reminders = networking.request(.getAllReminderList(userNo: 1)) // TODO: UserNo 변경
+      let reminders = networking.request(.getAllReminderList(userNo: 39)) // TODO: UserNo 변경
         .flatMap { reminders -> Observable<[Reminder]> in
           let responseData = reminders.data
           let remote: ResponseDTO<[ReminderResponseDTO.AllReminders]> = APIManager.decode(responseData)
@@ -173,12 +168,12 @@ private extension HomeViewReactor {
     // onLocal
     self.reminderFetcher.onLocal = {
       let reminders = RealmManager.shared.read(Reminder.self)
-      return reminders.toArray()
+      return Array(reminders)
     }
     // onLocalByObservable
     self.reminderFetcher.onLocalByObservable = {
       let reminders = RealmManager.shared.read(Reminder.self)
-      return .just(reminders.toArray())
+      return .just(Array(reminders))
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { reminders in

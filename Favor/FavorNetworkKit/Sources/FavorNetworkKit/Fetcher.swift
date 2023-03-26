@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 import FavorKit
 import Moya
@@ -22,8 +23,6 @@ public class Fetcher<T> {
   }
 
   // MARK: - Properties
-
-  private let disposeBag = DisposeBag()
 
   /// 서버에서 데이터를 받아오는 클로저
   public var onRemote: (() -> Single<T>) = { return .never() }
@@ -55,30 +54,41 @@ public class Fetcher<T> {
       fatalError("Define onLocal() method before calling fetch()")
     }
 
+    // FIXME: dispose를 언제 해줘야하지..?
+    // 1. `onRemote`가 끝나자마자
+    // 2. `fetch` 메서드가 종료되고 해제될 때
+    //    = `Reactor`로 `Disposables`을 넘겨주고
+    // 3. 해당 로직을 실행한 `Reactor`가 해제될 때 : ❌ 한 화면에서 여러번 수행되면 메모리에 쌓이게 될듯
     return .create { observer in
+      let disposeBag = DisposeBag()
+
       // 로컬에 저장된 데이터를 방출하며 status를 inProgress로 설정합니다.
+      os_log(.debug, "📂 🟡 FETCHER STATUS: inProgress")
       observer.onNext((.inProgress, _onLocal()))
 
-      // 서버로부터 데이터를 받아와 처리합니다.
-      self.onRemote()
-        // 성공했다면
-        .subscribe(onSuccess: { data in
-          // 로컬 데이터를 업데이트하고
-          self.onLocalUpdate(data)
+      self.onRemote() // 서버로부터 데이터를 받아와 처리합니다.
+        .subscribe(onSuccess: { data in // 성공했다면
+          self.onLocalUpdate(data) // 로컬 데이터를 업데이트하고
 
-          // 로컬 데이터를 방출하며
           self.onLocalByObservable()
             .subscribe(onNext: {
-              // status를 success로 설정합니다.
-              observer.onNext((.success, $0))
+              os_log(.debug, "📂 🟢 FETCHER STATUS: success")
+              observer.onNext((.success, $0)) // 로컬 데이터를 방출하며 status를 success로 설정합니다.
+            }, onError: { error in
+              observer.onError(error)
+            }, onDisposed: {
+              print("Local Diposed")
             })
-            .disposed(by: self.disposeBag)
-          // 실패했다면
-        }, onFailure: { _ in
+            .disposed(by: disposeBag)
+        }, onFailure: { _ in // 실패했다면
           // 로컬 데이터를 그대로 방출하고 status를 failure로 설정합니다.
+          os_log(.debug, "📂 🔴 FETCHER STATUS: failure")
           observer.onNext((.failure, _onLocal()))
+        }, onDisposed: {
+          print("Remote Disposed")
         })
-        .disposed(by: self.disposeBag)
+        .disposed(by: disposeBag)
+
       return Disposables.create()
     }
   }

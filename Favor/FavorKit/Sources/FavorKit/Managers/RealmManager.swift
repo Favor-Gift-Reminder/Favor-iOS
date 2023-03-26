@@ -8,7 +8,6 @@
 import OSLog
 
 import RealmSwift
-import RxRealm
 
 protocol RealmCRUDable {
   func create<T: Object>(_ object: T, _ errorHandler: @escaping (_ error: Error) -> Void)
@@ -155,7 +154,7 @@ public final class RealmManager: RealmCRUDable {
   ///   - errorHandler: RealmDB에 주어진 인스턴스들을 업데이트하지 못했을 때 호출되는 `@escaping` 클로저
   public func updateAll<T: Object>(
     _ objects: [T],
-  _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
+    _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
   ) {
     do {
       try self.realm.write {

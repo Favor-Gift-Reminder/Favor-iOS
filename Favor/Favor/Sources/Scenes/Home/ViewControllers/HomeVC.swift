@@ -116,7 +116,7 @@ final class HomeViewController: BaseViewController, View {
   
   func bind(reactor: HomeViewReactor) {
     // Action
-    self.rx.viewDidAppear
+    self.rx.viewWillAppear
       .map { _ in Reactor.Action.viewDidAppear }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
