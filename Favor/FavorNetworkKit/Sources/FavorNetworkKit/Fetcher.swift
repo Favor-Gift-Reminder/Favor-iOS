@@ -53,7 +53,7 @@ public class Fetcher<T> {
       let onLocal = self.onLocal,
       let onLocalUpdate = self.onLocalUpdate
     else {
-      fatalError("Define onLocal() method before calling fetch()")
+      fatalError("Failed to setup closures which are needed in fetch() method.")
     }
 
     return .create { observer in
