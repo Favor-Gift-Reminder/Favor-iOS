@@ -167,18 +167,13 @@ private extension HomeViewReactor {
     }
     // onLocal
     self.reminderFetcher.onLocal = {
-      let reminders = RealmManager.shared.read(Reminder.self)
-      return Array(reminders)
-    }
-    // onLocalByObservable
-    self.reminderFetcher.onLocalByObservable = {
-      let reminders = RealmManager.shared.read(Reminder.self)
-      return .just(Array(reminders))
+      let reminders = try await RealmManager.shared.read(Reminder.self)
+      return await reminders.toArray()
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { reminders in
       os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(reminders)")
-      RealmManager.shared.updateAll(reminders)
+      try await RealmManager.shared.updateAll(reminders)
     }
   }
 }
@@ -188,7 +183,7 @@ private extension HomeViewReactor {
 private extension HomeViewReactor {
   func refineUpcoming(reminders: [Reminder]) -> HomeSection.HomeSectionModel {
     let upcomings = reminders.enumerated().map { index, reminder in
-      CardCellData(
+      return CardCellData(
         iconImage: UIImage(named: "p\(index + 1)"),
         title: reminder.title,
         subtitle: reminder.date.formatted()

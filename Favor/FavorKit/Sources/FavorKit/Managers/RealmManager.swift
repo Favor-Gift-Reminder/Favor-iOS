@@ -16,7 +16,7 @@ protocol RealmCRUDable {
   func delete<T: Object>(_ object: T, _ errorHandler: @escaping (_ error: Error) -> Void)
 }
 
-public final class RealmManager: RealmCRUDable {
+public final class RealmManager {
 
   // MARK: - Properties
 
@@ -29,24 +29,22 @@ public final class RealmManager: RealmCRUDable {
   private static let version: UInt64 = 2
 
   /// RealmManager에서 사용될 realm 인스턴스
-  private let realm: Realm
+  private var realm: Realm!
+  /// Realm의 transaction은 해당 realm 인스턴스가 생성된 쓰레드에서 이루어져야 합니다.
+  private let realmQueue = DispatchQueue.realmThread
 
   // MARK: - Initializer
 
   private init() {
-    let config = Realm.Configuration(
-      schemaVersion: RealmManager.version
-    )
     do {
-      let realm = try Realm(configuration: config)
-      self.realm = realm
-    } catch {
-      fatalError(
-        """
-        Failed to create Realm instance with config: \(config), \
-        Error Message: \(error.localizedDescription)
-        """
+      let config = Realm.Configuration(
+        schemaVersion: RealmManager.version
       )
+      try self.realmQueue.sync {
+        self.realm = try Realm(configuration: config, queue: self.realmQueue)
+      }
+    } catch {
+      fatalError("Failed to create Realm instance: \(error.localizedDescription)")
     }
   }
 
@@ -68,16 +66,21 @@ public final class RealmManager: RealmCRUDable {
   /// - Parameters:
   ///   - object: 추가할 `RealmObject` 인스턴스
   ///   - errorHandler: RealmDB에 주어진 인스턴스를 추가하지 못했을 때 호출되는 `@escaping` 클로저
-  public func create<T: Object>(
-    _ object: T,
-    _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
-  ) {
-    do {
-      try self.realm.write {
-        self.realm.add(object)
+  /// - Returns: 추가된 `RealmObject`
+  @discardableResult
+  public func create<T: Object>(_ object: T) async throws -> T {
+    typealias RealmContinuation = CheckedContinuation<T, Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
+          try self.realm.write {
+            self.realm.add(object)
+          }
+          continuation.resume(returning: object)
+        } catch {
+          continuation.resume(throwing: error)
+        }
       }
-    } catch {
-      errorHandler(error)
     }
   }
 
@@ -91,8 +94,15 @@ public final class RealmManager: RealmCRUDable {
   /// - Parameters:
   ///   - objectType: 읽어올 `RealmObject`의 클래스 타입
   /// - Returns: 주어진 `RealmObject` 클래스 타입의 모든 값을 읽어온 `Results`
-  public func read<T: Object>(_ objectType: T.Type) -> Results<T> {
-    return self.realm.objects(objectType)
+  public func read<T: Object>(_ objectType: T.Type) async throws -> Results<T> {
+    typealias RealmContinuation = CheckedContinuation<Results<T>, Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        let frozenRealm = self.realm.freeze()
+        let frozenObjects = frozenRealm.objects(objectType)
+        continuation.resume(returning: frozenObjects)
+      }
+    }
   }
 
   /// RealmDB에서 주어진 PK 값의 `RealmObject` 인스턴스를 읽어옵니다.
@@ -130,12 +140,14 @@ public final class RealmManager: RealmCRUDable {
     _ object: T,
     _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
   ) {
-    do {
-      try self.realm.write {
-        self.realm.add(object, update: .modified)
+    self.realmQueue.async {
+      do {
+        try self.realm.write {
+          self.realm.add(object, update: .modified)
+        }
+      } catch {
+        errorHandler(error)
       }
-    } catch {
-      errorHandler(error)
     }
   }
 
@@ -152,16 +164,20 @@ public final class RealmManager: RealmCRUDable {
   /// - Parameters:
   ///   - objects: 업데이트할 `RealmObject` 인스턴스들의 컬렉션
   ///   - errorHandler: RealmDB에 주어진 인스턴스들을 업데이트하지 못했을 때 호출되는 `@escaping` 클로저
-  public func updateAll<T: Object>(
-    _ objects: [T],
-    _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
-  ) {
-    do {
-      try self.realm.write {
-        self.realm.add(objects, update: .modified)
+  @discardableResult
+  public func updateAll<T: Object>(_ objects: [T]) async throws -> [T] {
+    typealias RealmContinuation = CheckedContinuation<[T], Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
+          try self.realm.write {
+            self.realm.add(objects, update: .modified)
+          }
+          continuation.resume(returning: objects)
+        } catch {
+          continuation.resume(throwing: error)
+        }
       }
-    } catch {
-      errorHandler(error)
     }
   }
 
@@ -180,12 +196,14 @@ public final class RealmManager: RealmCRUDable {
     _ object: T,
     _ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }
   ) {
-    do {
-      try self.realm.write {
-        self.realm.delete(object)
+    self.realmQueue.async {
+      do {
+        try self.realm.write {
+          self.realm.delete(object)
+        }
+      } catch {
+        errorHandler(error)
       }
-    } catch {
-      errorHandler(error)
     }
   }
 
@@ -198,12 +216,14 @@ public final class RealmManager: RealmCRUDable {
   /// - Parameters:
   ///   - errorHandler: RealmDB에 주어진 인스턴스를 삭제하지 못했을 때 호출되는 `@escaping` 클로저
   public func deleteAll(_ errorHandler: @escaping (_ error: Error) -> Void = { _ in return }) {
-    do {
-      try self.realm.write {
-        self.realm.deleteAll()
+    self.realmQueue.async {
+      do {
+        try self.realm.write {
+          self.realm.deleteAll()
+        }
+      } catch {
+        errorHandler(error)
       }
-    } catch {
-      errorHandler(error)
     }
   }
 }

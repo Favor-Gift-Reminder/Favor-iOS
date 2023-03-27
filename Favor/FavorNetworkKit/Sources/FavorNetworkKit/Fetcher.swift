@@ -25,13 +25,13 @@ public class Fetcher<T> {
   // MARK: - Properties
 
   /// 서버에서 데이터를 받아오는 클로저
-  public var onRemote: (() -> Single<T>) = { return .never() }
+  public var onRemote: (() async throws -> Single<T>)?
   /// LocalDB에서 데이터를 Observable 타입으로 생성하여 반환하는 클로저
-  public var onLocalByObservable: (() -> Observable<T>) = { return .empty() }
+  public var onLocalByObservable: (() async throws -> Observable<T>)?
   /// LocalDB에서 데이터를 받아오는 클로저
-  public var onLocal: (() -> T)?
+  public var onLocal: (() async throws -> T)?
   /// LocalDB를 업데이트 하는 클로저
-  public var onLocalUpdate: ((T) -> Void) = { _ in return }
+  public var onLocalUpdate: ((T) async throws -> Void)?
 
   // MARK: - Initializer
 
@@ -50,44 +50,35 @@ public class Fetcher<T> {
   /// 6. `request`가 실패했다면
   /// 7. 로컬 DB에 있는 데이터를 그대로 `read`하여 방출합니다. (`status` = `.failure`)
   public func fetch() -> Observable<(Status, T)> {
-    guard let _onLocal = self.onLocal else {
+    guard
+      let onRemote = self.onRemote,
+//      let onLocalByObservable = self.onLocalByObservable,
+      let onLocal = self.onLocal,
+      let onLocalUpdate = self.onLocalUpdate
+    else {
       fatalError("Define onLocal() method before calling fetch()")
     }
 
-    // FIXME: dispose를 언제 해줘야하지..?
-    // 1. `onRemote`가 끝나자마자
-    // 2. `fetch` 메서드가 종료되고 해제될 때
-    //    = `Reactor`로 `Disposables`을 넘겨주고
-    // 3. 해당 로직을 실행한 `Reactor`가 해제될 때 : ❌ 한 화면에서 여러번 수행되면 메모리에 쌓이게 될듯
     return .create { observer in
-      let disposeBag = DisposeBag()
+      _Concurrency.Task {
+        do {
+          // 로컬에 저장된 데이터를 방출하며 status를 inProgress로 설정합니다.
+          os_log(.debug, "📂 🟡 FETCHER STATUS: inProgress")
 
-      // 로컬에 저장된 데이터를 방출하며 status를 inProgress로 설정합니다.
-      os_log(.debug, "📂 🟡 FETCHER STATUS: inProgress")
-      observer.onNext((.inProgress, _onLocal()))
+          let local = try await onLocal()
+          observer.onNext((.inProgress, local))
 
-      self.onRemote() // 서버로부터 데이터를 받아와 처리합니다.
-        .subscribe(onSuccess: { data in // 성공했다면
-          self.onLocalUpdate(data) // 로컬 데이터를 업데이트하고
+          let remote = try await onRemote().value
+          try await onLocalUpdate(remote)
 
-          self.onLocalByObservable()
-            .subscribe(onNext: {
-              os_log(.debug, "📂 🟢 FETCHER STATUS: success")
-              observer.onNext((.success, $0)) // 로컬 데이터를 방출하며 status를 success로 설정합니다.
-            }, onError: { error in
-              observer.onError(error)
-            }, onDisposed: {
-              print("Local Diposed")
-            })
-            .disposed(by: disposeBag)
-        }, onFailure: { _ in // 실패했다면
-          // 로컬 데이터를 그대로 방출하고 status를 failure로 설정합니다.
+          let updatedLocal = try await onLocal()
+          os_log(.debug, "📂 🟢 FETCHER STATUS: success")
+          observer.onNext((.success, updatedLocal))
+        } catch {
           os_log(.debug, "📂 🔴 FETCHER STATUS: failure")
-          observer.onNext((.failure, _onLocal()))
-        }, onDisposed: {
-          print("Remote Disposed")
-        })
-        .disposed(by: disposeBag)
+          observer.onError(error)
+        }
+      }
 
       return Disposables.create()
     }
