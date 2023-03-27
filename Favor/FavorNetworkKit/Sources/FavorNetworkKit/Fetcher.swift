@@ -26,8 +26,6 @@ public class Fetcher<T> {
 
   /// 서버에서 데이터를 받아오는 클로저
   public var onRemote: (() async throws -> Single<T>)?
-  /// LocalDB에서 데이터를 Observable 타입으로 생성하여 반환하는 클로저
-  public var onLocalByObservable: (() async throws -> Observable<T>)?
   /// LocalDB에서 데이터를 받아오는 클로저
   public var onLocal: (() async throws -> T)?
   /// LocalDB를 업데이트 하는 클로저
@@ -52,7 +50,6 @@ public class Fetcher<T> {
   public func fetch() -> Observable<(Status, T)> {
     guard
       let onRemote = self.onRemote,
-//      let onLocalByObservable = self.onLocalByObservable,
       let onLocal = self.onLocal,
       let onLocalUpdate = self.onLocalUpdate
     else {
@@ -68,15 +65,20 @@ public class Fetcher<T> {
           let local = try await onLocal()
           observer.onNext((.inProgress, local))
 
-          let remote = try await onRemote().value
-          try await onLocalUpdate(remote)
+          do {
+            let remote = try await onRemote().value
+            try await onLocalUpdate(remote)
 
-          let updatedLocal = try await onLocal()
-          os_log(.debug, "📂 🟢 FETCHER STATUS: success")
-          observer.onNext((.success, updatedLocal))
+            let updatedLocal = try await onLocal()
+            observer.onNext((.success, updatedLocal))
+            os_log(.debug, "📂 🟢 FETCHER STATUS: success")
+          } catch {
+            observer.onNext((.failure, local))
+            os_log(.error, "📂 🔴 FETCHER STATUS: failure")
+          }
         } catch {
-          os_log(.debug, "📂 🔴 FETCHER STATUS: failure")
           observer.onError(error)
+          os_log(.error, "📂 ❌ FETCHER STATUS: error")
         }
       }
 
