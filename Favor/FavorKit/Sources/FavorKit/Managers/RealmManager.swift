@@ -81,7 +81,7 @@ public final class RealmManager: RealmCRUDable {
           try self.realm.write {
             self.realm.add(object)
           }
-          continuation.resume(returning: object)
+          continuation.resume(returning: object.freeze())
         } catch {
           continuation.resume(throwing: error)
         }
@@ -168,7 +168,7 @@ public final class RealmManager: RealmCRUDable {
           try self.realm.write {
             self.realm.add(object, update: .modified)
           }
-          continuation.resume(returning: object)
+          continuation.resume(returning: object.freeze())
         } catch {
           continuation.resume(throwing: error)
         }
@@ -199,7 +199,8 @@ public final class RealmManager: RealmCRUDable {
           try self.realm.write {
             self.realm.add(objects, update: .modified)
           }
-          continuation.resume(returning: objects)
+          let frozenObjects = objects.map { $0.freeze() }
+          continuation.resume(returning: frozenObjects)
         } catch {
           continuation.resume(throwing: error)
         }
@@ -233,7 +234,7 @@ public final class RealmManager: RealmCRUDable {
           try self.realm.write {
             self.realm.delete(object)
           }
-          continuation.resume(returning: object)
+          continuation.resume(returning: object.freeze())
         } catch {
           continuation.resume(throwing: error)
         }
