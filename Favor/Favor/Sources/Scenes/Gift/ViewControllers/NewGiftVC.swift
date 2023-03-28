@@ -11,6 +11,7 @@ import FavorKit
 import ReactorKit
 import RSKPlaceholderTextView
 import RxDataSources
+import RxGesture
 import RxSwift
 import SnapKit
 
@@ -45,6 +46,7 @@ final class NewGiftViewController: BaseViewController, View {
     tf.attributedPlaceholder = attributedPlaceholder
     tf.font = .favorFont(.regular, size: 16)
     tf.textColor = .favorColor(.titleAndLine)
+    tf.rightView = UIImageView(image: .favorIcon(.birth))
     
     return tf
   }()
@@ -119,14 +121,6 @@ final class NewGiftViewController: BaseViewController, View {
     return button
   }()
   
-  private lazy var datePicker: UIDatePicker = {
-    let dp = UIDatePicker()
-    dp.datePickerMode = .date
-    dp.addTarget(self, action: #selector(didChangedDate), for: .valueChanged)
-    
-    return dp
-  }()
-  
   var dataSource = DataSource { dataSource, collectionView, indexPath, item in
     switch item {
     case .pick(let reactor):
@@ -167,7 +161,7 @@ final class NewGiftViewController: BaseViewController, View {
   private lazy var giftReceivedButton = self.giftButton("받은 선물")
   private lazy var giftGivenButton = self.giftButton("준 선물")
   private lazy var choiceFriendButton = self.choiceButton("친구 선택", isRight: true)
-  private lazy var choiceDateButton = self.choiceButton("날짜 선택", isRight: false)
+  private lazy var datePickerTextField = DatePickerTextField()
   private lazy var emotionButton1 = self.makeEmotionButton("🥹")
   private lazy var emotionButton2 = self.makeEmotionButton("🥹")
   private lazy var emotionButton3 = self.makeEmotionButton("🥹")
@@ -180,7 +174,7 @@ final class NewGiftViewController: BaseViewController, View {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
+
     Observable.just(getMockSection())
       .bind(to: self.pickedPictureCollectionView.rx.items(dataSource: dataSource))
       .disposed(by: disposeBag)
@@ -208,10 +202,10 @@ final class NewGiftViewController: BaseViewController, View {
       self.categoryLabel, self.categoryView,
       self.photoLabel, self.pickedPictureCollectionView,
       self.friendLabel, self.choiceFriendButton, self.friendDivider,
-      self.dateLabel, self.choiceDateButton, self.dateDivider,
+      self.dateLabel, self.datePickerTextField, self.dateDivider,
       self.emotionLabel, self.emotionStackView,
       self.memoTextView, self.memoDivider,
-      self.pinTimelineButton
+      self.pinTimelineButton, self.datePickerTextField
     ].forEach {
       self.contentsView.addSubview($0)
     }
@@ -223,7 +217,8 @@ final class NewGiftViewController: BaseViewController, View {
     }
 
     self.scrollView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.top.leading.trailing.equalToSuperview()
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top)
     }
     
     self.giftReceivedButton.snp.makeConstraints { make in
@@ -299,14 +294,14 @@ final class NewGiftViewController: BaseViewController, View {
       make.top.equalTo(self.friendDivider.snp.bottom).offset(40)
     }
     
-    self.choiceDateButton.snp.makeConstraints { make in
+    self.datePickerTextField.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.dateLabel.snp.bottom).offset(16)
     }
     
     self.dateDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.choiceDateButton.snp.bottom).offset(16)
+      make.top.equalTo(self.datePickerTextField.snp.bottom).offset(16)
       make.height.equalTo(1)
     }
     
@@ -345,6 +340,16 @@ final class NewGiftViewController: BaseViewController, View {
     
     // MARK: - ACTION
     
+    // 빈 화면 터치
+    self.scrollView.rx.tapGesture { _, delegate in
+      delegate.simultaneousRecognitionPolicy = .never
+    }
+    .asDriver()
+    .drive(with: self) { owner, _ in
+      owner.view.endEditing(true)
+    }
+    .disposed(by: self.disposeBag)
+    
     // 받은 선물 버튼 클릭
     self.giftReceivedButton.rx.tap
       .map { NewGiftViewReactor.Action.giftReceivedButtonDidTap }
@@ -362,14 +367,6 @@ final class NewGiftViewController: BaseViewController, View {
       .orEmpty
       .map { NewGiftViewReactor.Action.titleTextFieldDidChange($0) }
       .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    // 날짜 선택 버튼 클릭
-    self.choiceDateButton.rx.tap
-      .asDriver()
-      .drive(with: self) { owner, _ in
-        
-      }
       .disposed(by: self.disposeBag)
     
     // MARK: - STATE
