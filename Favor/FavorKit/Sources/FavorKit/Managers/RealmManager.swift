@@ -197,7 +197,7 @@ public final class RealmManager: RealmCRUDable {
       self.realmQueue.async {
         do {
           try self.realm.write {
-            self.realm.add(objects, update: .modified)
+            self.realm.add(objects, update: .all)
           }
           let frozenObjects = objects.map { $0.freeze() }
           continuation.resume(returning: frozenObjects)

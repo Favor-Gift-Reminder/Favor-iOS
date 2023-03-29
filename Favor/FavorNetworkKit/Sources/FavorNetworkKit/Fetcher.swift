@@ -66,11 +66,9 @@ public class Fetcher<T> {
           observer.onNext((.inProgress, local))
 
           do {
-            let remote = try await onRemote().value
-            try await onLocalUpdate(remote)
+            try await onLocalUpdate(try await onRemote().value)
 
-            let updatedLocal = try await onLocal()
-            observer.onNext((.success, updatedLocal))
+            observer.onNext((.success, try await onLocal()))
             os_log(.debug, "📂 🟢 FETCHER STATUS: success")
           } catch {
             observer.onNext((.failure, local))
