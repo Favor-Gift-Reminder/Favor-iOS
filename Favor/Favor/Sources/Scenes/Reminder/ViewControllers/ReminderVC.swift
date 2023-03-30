@@ -24,10 +24,6 @@ final class ReminderViewController: BaseViewController, View {
   private lazy var dataSource = ReminderDataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
-      case let .empty(image, text):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
-        cell.bindEmptyData(image: image, text: text)
-        return cell
       case .reminder(let reactor):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as ReminderCell
         cell.reactor = reactor
@@ -207,29 +203,15 @@ private extension ReminderViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
       guard
-        let sectionType = self?.dataSource[sectionIndex].model,
-        let sectionFirstItem = self?.dataSource[0].items.first
+        let sectionType = self?.dataSource[sectionIndex].model
       else { fatalError("Fatal error occured while setting up section datas.") }
 
-      var isSectionEmpty: Bool = false
-      if case ReminderSection.ReminderSectionItem.empty(_, _) = sectionFirstItem {
-        isSectionEmpty = true
-      }
-      return self?.createCollectionViewLayout(sectionType: sectionType, isEmpty: isSectionEmpty)
+      return self?.createCollectionViewLayout(sectionType: sectionType)
     })
   }
 
-  func createCollectionViewLayout(
-    sectionType: ReminderSectionType,
-    isEmpty: Bool
-  ) -> NSCollectionLayoutSection {
+  func createCollectionViewLayout(sectionType: ReminderSectionType) -> NSCollectionLayoutSection {
     // Item
-    let emptyItem = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0))
-    )
-
     let item = NSCollectionLayoutItem(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),

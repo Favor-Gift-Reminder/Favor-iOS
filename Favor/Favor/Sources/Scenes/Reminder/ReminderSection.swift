@@ -18,7 +18,6 @@ struct ReminderSection {
   typealias ReminderSectionModel = SectionModel<ReminderSectionType, ReminderSectionItem>
 
   enum ReminderSectionItem {
-    case empty(UIImage?, String)
     case reminder(ReminderCellReactor)
   }
 }
