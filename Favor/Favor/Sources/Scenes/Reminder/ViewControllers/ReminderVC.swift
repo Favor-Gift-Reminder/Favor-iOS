@@ -91,7 +91,7 @@ final class ReminderViewController: BaseViewController, View {
       ofKind: ReminderHeaderView.reuseIdentifier
     )
 
-    collectionView.backgroundColor = .clear
+    collectionView.backgroundColor = .favorColor(.white)
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     return collectionView
@@ -185,7 +185,7 @@ final class ReminderViewController: BaseViewController, View {
 
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalToSuperview()
     }
   }
@@ -201,13 +201,18 @@ private extension ReminderViewController {
   }
 
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
+    let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
       guard
         let sectionType = self?.dataSource[sectionIndex].model
       else { fatalError("Fatal error occured while setting up section datas.") }
 
       return self?.createCollectionViewLayout(sectionType: sectionType)
     })
+    layout.register(
+      PastSectionBackgroundView.self,
+      forDecorationViewOfKind: PastSectionBackgroundView.reuseIdentifier
+    )
+    return layout
   }
 
   func createCollectionViewLayout(sectionType: ReminderSectionType) -> NSCollectionLayoutSection {
@@ -219,18 +224,24 @@ private extension ReminderViewController {
     )
 
     // Group
-    let group = UICollectionViewCompositionalLayout.group(
-      direction: .vertical,
+    let group = NSCollectionLayoutGroup.vertical(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalWidth(1.0)),
-      subItem: item,
-      count: 1
+        heightDimension: .estimated(95)),
+      subitems: [item]
     )
-    group.interItemSpacing = .fixed(10)
 
     // Section
     let section = NSCollectionLayoutSection(group: group)
+    section.interGroupSpacing = 10
+    section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 44, trailing: 20)
+
+    let backgroundView = NSCollectionLayoutDecorationItem.background(
+      elementKind: PastSectionBackgroundView.reuseIdentifier
+    )
+    if sectionType == .past {
+      section.decorationItems = [backgroundView]
+    }
 
     // header
     section.boundarySupplementaryItems = [

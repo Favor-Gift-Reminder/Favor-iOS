@@ -57,6 +57,8 @@
 		2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71429D48B97008D10A0 /* ReminderCell.swift */; };
 		2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */; };
 		2EB3E71929D49008008D10A0 /* ReminderHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71829D49008008D10A0 /* ReminderHeaderView.swift */; };
+		2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71A29D5EB77008D10A0 /* PastSectionBackgroundView.swift */; };
+		2EB3E71F29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71E29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift */; };
 		2EC371F8299521AD00D1007B /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC371F7299521AD00D1007B /* RxGesture */; };
 		2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371F92995262D00D1007B /* SearchResultVC.swift */; };
 		2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371FB2995266B00D1007B /* SearchResultViewReactor.swift */; };
@@ -187,6 +189,8 @@
 		2EB3E71429D48B97008D10A0 /* ReminderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCell.swift; sourceTree = "<group>"; };
 		2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCellReactor.swift; sourceTree = "<group>"; };
 		2EB3E71829D49008008D10A0 /* ReminderHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderHeaderView.swift; sourceTree = "<group>"; };
+		2EB3E71A29D5EB77008D10A0 /* PastSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSectionBackgroundView.swift; sourceTree = "<group>"; };
+		2EB3E71E29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSectionHeaderBackgroundView.swift; sourceTree = "<group>"; };
 		2EC371F92995262D00D1007B /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
 		2EC371FB2995266B00D1007B /* SearchResultViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewReactor.swift; sourceTree = "<group>"; };
 		2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFlow.swift; sourceTree = "<group>"; };
@@ -603,6 +607,8 @@
 			children = (
 				2EB3E71429D48B97008D10A0 /* ReminderCell.swift */,
 				2EB3E71829D49008008D10A0 /* ReminderHeaderView.swift */,
+				2EB3E71A29D5EB77008D10A0 /* PastSectionBackgroundView.swift */,
+				2EB3E71E29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -997,6 +1003,7 @@
 				2EE07ED3296E8DE600048A3C /* EventEditVC.swift in Sources */,
 				2ED326AD29B0DB9D001963D0 /* TermSection.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */,
+				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
 				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
@@ -1037,6 +1044,7 @@
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
+				2EB3E71F29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
