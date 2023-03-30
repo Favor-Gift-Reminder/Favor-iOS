@@ -17,3 +17,11 @@ extension DateComponents {
     return "\(year)년 \(month)월"
   }
 }
+
+extension DateComponents: Comparable {
+  public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
+    let now = Date()
+    let calendar = Calendar.current
+    return calendar.date(byAdding: lhs, to: now)! < calendar.date(byAdding: rhs, to: now)!
+  }
+}

@@ -30,6 +30,7 @@ final class ReminderViewReactor: Reactor, Stepper {
 
   enum Mutation {
     case updateUpcoming(ReminderSection.ReminderSectionModel)
+    case updatePast(ReminderSection.ReminderSectionModel)
     case updateLoading(Bool)
   }
 
@@ -71,6 +72,7 @@ final class ReminderViewReactor: Reactor, Stepper {
           let (upcomingSection, pastSection) = self.extractUpcoming(from: filteredReminders)
           return .concat([
             .just(.updateUpcoming(upcomingSection)),
+            .just(.updatePast(pastSection)),
             .just(.updateLoading(status == .inProgress))
           ])
         }
@@ -88,6 +90,9 @@ final class ReminderViewReactor: Reactor, Stepper {
     case .updateUpcoming(let upcomingSection):
       newState.upcomingSection = upcomingSection
 
+    case .updatePast(let pastSection):
+      newState.pastSection = pastSection
+
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
     }
@@ -103,15 +108,15 @@ private extension ReminderViewReactor {
     // onRemote
     self.reminderFetcher.onRemote = {
       let networking =  UserNetworking()
-      let reminders = networking.request(.getAllReminderList(userNo: 39)) // TODO: UserNo 변경
+      let reminders = networking.request(.getAllReminderList(userNo: 1)) // TODO: UserNo 변경
         .flatMap { reminders -> Observable<[Reminder]> in
           let responseData = reminders.data
-          let remote: ResponseDTO<[ReminderResponseDTO.AllReminders]> = APIManager.decode(responseData)
+          let remote: ResponseDTO<[ReminderResponseDTO.Reminder]> = APIManager.decode(responseData)
           return .just(remote.data.map {
             Reminder(
               reminderNo: $0.reminderNo,
               title: $0.title,
-              date: $0.eventDate.toDate() ?? .now,
+              date: $0.reminderDate.toDate() ?? .now,
               shouldNotify: $0.isAlarmSet,
               friendNo: $0.friendNo
             )
@@ -139,15 +144,32 @@ private extension ReminderViewReactor {
   func extractUpcoming(
     from reminders: [Reminder]
   ) -> (ReminderSection.ReminderSectionModel, ReminderSection.ReminderSectionModel) {
-    // TODO: 현재 날짜와 리마인더의 날짜로 다가오는 / 지나간 구분
-    let upcomings = reminders.enumerated().map { index, reminder in
-      return CardCellData(
-        iconImage: UIImage(named: "p\(index + 1)"),
+    var upcomingReminders: [CardCellData] = []
+    var pastReminders: [CardCellData] = []
+
+    reminders.enumerated().forEach { index, reminder in
+      let cellData = CardCellData(
+        iconImage: UIImage(named: "p\(index + 1)").flatMap { $0 },
         title: reminder.title,
         subtitle: reminder.date.formatted()
       )
+
+      let reminderDateComponents = Calendar.current.dateComponents(
+        [.year, .month],
+        from: reminder.date
+      )
+      if reminderDateComponents < self.currentState.selectedDate {
+        upcomingReminders.append(cellData)
+      } else {
+        pastReminders.append(cellData)
+      }
     }
-    let upcomingItems = upcomings.map { data in
+
+    let upcomingItems = upcomingReminders.map { data in
+      let reactor = ReminderCellReactor(cellData: data)
+      return ReminderSection.ReminderSectionItem.reminder(reactor)
+    }
+    let pastItems = pastReminders.map { data in
       let reactor = ReminderCellReactor(cellData: data)
       return ReminderSection.ReminderSectionItem.reminder(reactor)
     }
@@ -158,8 +180,9 @@ private extension ReminderViewReactor {
     )
     let pastSection = ReminderSection.ReminderSectionModel(
       model: .past,
-      items: []
+      items: pastItems
     )
+
     return (upcomingSection, pastSection)
   }
 }

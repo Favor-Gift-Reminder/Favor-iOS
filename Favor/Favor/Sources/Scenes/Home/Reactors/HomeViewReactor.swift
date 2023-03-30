@@ -148,15 +148,15 @@ private extension HomeViewReactor {
     // onRemote
     self.reminderFetcher.onRemote = {
       let networking = UserNetworking()
-      let reminders = networking.request(.getAllReminderList(userNo: 39)) // TODO: UserNo 변경
+      let reminders = networking.request(.getAllReminderList(userNo: 1)) // TODO: UserNo 변경
         .flatMap { reminders -> Observable<[Reminder]> in
           let responseData = reminders.data
-          let remote: ResponseDTO<[ReminderResponseDTO.AllReminders]> = APIManager.decode(responseData)
+          let remote: ResponseDTO<[ReminderResponseDTO.Reminder]> = APIManager.decode(responseData)
           return .just(remote.data.map {
             Reminder(
               reminderNo: $0.reminderNo,
               title: $0.title,
-              date: $0.eventDate.toDate() ?? .now,
+              date: $0.reminderDate.toDate() ?? .now,
               shouldNotify: $0.isAlarmSet,
               friendNo: $0.friendNo
             )
