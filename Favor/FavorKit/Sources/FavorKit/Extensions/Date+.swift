@@ -8,6 +8,14 @@
 import Foundation
 
 extension Date {
+  public var currentYear: Int {
+    Int(self.toYearString()) ?? 0
+  }
+
+  public var currentMonth: Int {
+    Int(self.toMonthString()) ?? 0
+  }
+
   public func toYearString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy"

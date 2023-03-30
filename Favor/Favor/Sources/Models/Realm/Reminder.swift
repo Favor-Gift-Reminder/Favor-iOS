@@ -69,3 +69,5 @@ public class Reminder: Object {
     self.friendNo = friendNo
   }
 }
+
+// TODO: Mapping 함수 구현 (CardCellData)

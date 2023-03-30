@@ -11,13 +11,38 @@ import FavorKit
 import ReactorKit
 import Reusable
 import RxCocoa
+import RxDataSources
 import SnapKit
 
 final class ReminderViewController: BaseViewController, View {
+  typealias ReminderDataSource = RxCollectionViewSectionedReloadDataSource<ReminderSection.ReminderSectionModel>
 
   // MARK: - Constants
 
   // MARK: - Properties
+
+  private lazy var dataSource = ReminderDataSource(
+    configureCell: { _, collectionView, indexPath, item in
+      switch item {
+      case let .empty(image, text):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
+        cell.bindEmptyData(image: image, text: text)
+        return cell
+      case .reminder(let reactor):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as ReminderCell
+        cell.reactor = reactor
+        return cell
+      }
+    }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+      let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        for: indexPath
+      ) as ReminderHeaderView
+      let sectionItem = dataSource[indexPath.section]
+      header.updateTitle(sectionItem.model.headerTitle)
+      return header
+    }
+  )
 
   // MARK: - UI Components
 
@@ -33,6 +58,29 @@ final class ReminderViewController: BaseViewController, View {
 
   private lazy var newReminderButton = FavorBarButtonItem(.addNoti)
 
+  private lazy var emptyImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = .favorIcon(.deselect)?
+      .withTintColor(.favorColor(.explain))
+      .withAlignmentRectInsets(UIEdgeInsets(top: -35, left: -35, bottom: -35, right: -35))
+    return imageView
+  }()
+
+  private lazy var emptyLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.regular, size: 16)
+    label.textColor = .favorColor(.explain)
+    label.textAlignment = .center
+    label.text = "이벤트가 없습니다."
+    return label
+  }()
+
+  private lazy var emptyContainerStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    return stackView
+  }()
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: self.view.bounds,
@@ -40,6 +88,12 @@ final class ReminderViewController: BaseViewController, View {
     )
 
     // register
+    collectionView.register(cellType: FavorEmptyCell.self)
+    collectionView.register(cellType: ReminderCell.self)
+    collectionView.register(
+      supplementaryViewType: ReminderHeaderView.self,
+      ofKind: ReminderHeaderView.reuseIdentifier
+    )
 
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
@@ -57,8 +111,28 @@ final class ReminderViewController: BaseViewController, View {
 
   // MARK: - Binding
 
+  override func bind() {
+    guard let reactor = self.reactor else { return }
+
+    reactor.state
+      .map { state -> [ReminderSection.ReminderSectionModel] in
+        [state.upcomingSection, state.pastSection]
+          .compactMap { section -> ReminderSection.ReminderSectionModel? in
+            guard !section.items.isEmpty else { return nil }
+            return section
+          }
+      }
+      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
+  }
+
   func bind(reactor: ReminderViewReactor) {
     // Action
+    self.rx.viewWillAppear
+      .map { _ in Reactor.Action.viewWillAppear }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.selectDateButton.rx.tap
       .map { Reactor.Action.selectDateButtonDidTap }
       .bind(to: reactor.action)
@@ -89,10 +163,30 @@ final class ReminderViewController: BaseViewController, View {
   // MARK: - UI Setups
 
   override func setupLayouts() {
-    self.view.addSubview(self.collectionView)
+    [
+      self.emptyImageView,
+      self.emptyLabel
+    ].forEach {
+      self.emptyContainerStack.addArrangedSubview($0)
+    }
+
+    [
+      self.emptyContainerStack,
+      self.collectionView
+    ].forEach {
+      self.view.addSubview($0)
+    }
   }
 
   override func setupConstraints() {
+    self.emptyImageView.snp.makeConstraints { make in
+      make.width.height.equalTo(150)
+    }
+
+    self.emptyContainerStack.snp.makeConstraints { make in
+      make.center.equalToSuperview()
+    }
+
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
@@ -112,18 +206,34 @@ private extension ReminderViewController {
 
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
-      return self?.createCollectionViewLayout()
+      guard
+        let sectionType = self?.dataSource[sectionIndex].model,
+        let sectionFirstItem = self?.dataSource[0].items.first
+      else { fatalError("Fatal error occured while setting up section datas.") }
+
+      var isSectionEmpty: Bool = false
+      if case ReminderSection.ReminderSectionItem.empty(_, _) = sectionFirstItem {
+        isSectionEmpty = true
+      }
+      return self?.createCollectionViewLayout(sectionType: sectionType, isEmpty: isSectionEmpty)
     })
   }
 
   func createCollectionViewLayout(
+    sectionType: ReminderSectionType,
+    isEmpty: Bool
   ) -> NSCollectionLayoutSection {
     // Item
+    let emptyItem = NSCollectionLayoutItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0))
+    )
+
     let item = NSCollectionLayoutItem(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalWidth(1.0)
-      )
+        heightDimension: .estimated(95))
     )
 
     // Group
@@ -135,10 +245,26 @@ private extension ReminderViewController {
       subItem: item,
       count: 1
     )
+    group.interItemSpacing = .fixed(10)
 
     // Section
     let section = NSCollectionLayoutSection(group: group)
 
+    // header
+    section.boundarySupplementaryItems = [
+      self.createHeader(sectionType: sectionType)
+    ]
+
     return section
+  }
+
+  func createHeader(sectionType: ReminderSectionType) -> NSCollectionLayoutBoundarySupplementaryItem {
+    return NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: sectionType.headerHeight),
+      elementKind: ReminderHeaderView.reuseIdentifier,
+      alignment: .top
+    )
   }
 }
