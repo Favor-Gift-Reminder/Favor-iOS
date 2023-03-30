@@ -155,10 +155,14 @@ private extension ReminderViewReactor {
       )
 
       let reminderDateComponents = Calendar.current.dateComponents(
-        [.year, .month],
+        [.year, .month, .day],
         from: reminder.date
       )
-      if reminderDateComponents < self.currentState.selectedDate {
+      let currentDateComponents = Calendar.current.dateComponents(
+        [.year, .month, .day],
+        from: .now
+      )
+      if reminderDateComponents >= currentDateComponents {
         upcomingReminders.append(cellData)
       } else {
         pastReminders.append(cellData)
@@ -183,6 +187,8 @@ private extension ReminderViewReactor {
       items: pastItems
     )
 
+    print("Upcoming: \(upcomingSection)")
+    print("Past: \(pastSection)")
     return (upcomingSection, pastSection)
   }
 }

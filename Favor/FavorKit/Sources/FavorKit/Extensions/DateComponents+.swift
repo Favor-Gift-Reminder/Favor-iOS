@@ -20,8 +20,24 @@ extension DateComponents {
 
 extension DateComponents: Comparable {
   public static func < (lhs: DateComponents, rhs: DateComponents) -> Bool {
-    let now = Date()
-    let calendar = Calendar.current
-    return calendar.date(byAdding: lhs, to: now)! < calendar.date(byAdding: rhs, to: now)!
+    if lhs.year != rhs.year {
+      return lhs.year ?? 0 < rhs.year ?? 0
+    }
+    if lhs.month != rhs.month {
+      return lhs.month ?? 0 < rhs.month ?? 0
+    }
+    if lhs.day != rhs.day {
+      return lhs.day ?? 0 < rhs.day ?? 0
+    }
+    if lhs.hour != rhs.hour {
+      return lhs.hour ?? 0 < rhs.hour ?? 0
+    }
+    if lhs.minute != rhs.minute {
+      return lhs.minute ?? 0 < rhs.minute ?? 0
+    }
+    if lhs.second != rhs.second {
+      return lhs.second ?? 0 < rhs.second ?? 0
+    }
+    return false
   }
 }
