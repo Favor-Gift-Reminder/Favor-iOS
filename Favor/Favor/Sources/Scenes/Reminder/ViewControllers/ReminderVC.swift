@@ -120,6 +120,14 @@ final class ReminderViewController: BaseViewController, View {
       }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isReminderEmpty }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, isEmpty in
+        owner.collectionView.isHidden = isEmpty
+      })
+      .disposed(by: self.disposeBag)
   }
 
   func bind(reactor: ReminderViewReactor) {
@@ -141,6 +149,8 @@ final class ReminderViewController: BaseViewController, View {
         owner.updateSelectedDate(to: date)
       })
       .disposed(by: self.disposeBag)
+
+
   }
 
   // MARK: - Functions

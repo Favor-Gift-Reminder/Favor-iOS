@@ -29,6 +29,7 @@ final class ReminderViewReactor: Reactor, Stepper {
   }
 
   enum Mutation {
+    case updateIsReminderEmpty(Bool)
     case updateUpcoming(ReminderSection.ReminderSectionModel)
     case updatePast(ReminderSection.ReminderSectionModel)
     case updateLoading(Bool)
@@ -39,6 +40,7 @@ final class ReminderViewReactor: Reactor, Stepper {
       year: Int(Date().toYearString()),
       month: Int(Date().toMonthString())
     )
+    var isReminderEmpty: Bool = true
     var upcomingSection = ReminderSection.ReminderSectionModel(
       model: .upcoming,
       items: []
@@ -73,7 +75,10 @@ final class ReminderViewReactor: Reactor, Stepper {
           return .concat([
             .just(.updateUpcoming(upcomingSection)),
             .just(.updatePast(pastSection)),
-            .just(.updateLoading(status == .inProgress))
+            .just(.updateLoading(status == .inProgress)),
+            .just(.updateIsReminderEmpty(
+              upcomingSection.items.isEmpty && pastSection.items.isEmpty
+            ))
           ])
         }
 
@@ -87,6 +92,9 @@ final class ReminderViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
+    case .updateIsReminderEmpty(let isReminderEmpty):
+      newState.isReminderEmpty = isReminderEmpty
+
     case .updateUpcoming(let upcomingSection):
       newState.upcomingSection = upcomingSection
 
@@ -187,8 +195,6 @@ private extension ReminderViewReactor {
       items: pastItems
     )
 
-    print("Upcoming: \(upcomingSection)")
-    print("Past: \(pastSection)")
     return (upcomingSection, pastSection)
   }
 }
