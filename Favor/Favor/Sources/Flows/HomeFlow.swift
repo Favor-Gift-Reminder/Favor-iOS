@@ -30,13 +30,32 @@ final class HomeFlow: Flow {
 
     case .filterIsComplete(let sortType):
       return self.dismissFilter(sortedBy: sortType)
+      
+    case .newGiftIsRequired:
+      return self.navigateToGift()
 
-    default: return .none
+    default:
+      return .none
     }
   }
 }
 
 private extension HomeFlow {
+  func navigateToGift() -> FlowContributors {
+    let viewController = NewGiftViewController()
+    let reactor = NewGiftViewReactor(pickerManager: PHPickerManager())
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+    
+    let giftFlow = GiftFlow(viewController)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: giftFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired),
+      allowStepWhenDismissed: true
+    ))
+  }
+  
   func navigateToHome() -> FlowContributors {
     let homeVC = HomeViewController()
     let homeReactor = HomeViewReactor()
@@ -49,7 +68,7 @@ private extension HomeFlow {
         withNextStepper: homeReactor
       ))
   }
-
+  
   func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
     let filterVC = FilterViewController()
     filterVC.currentSortType = sortType
