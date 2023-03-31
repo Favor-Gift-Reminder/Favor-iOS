@@ -24,7 +24,7 @@ public enum FavorPlainButtonType {
     case .logIn(let title):
       titleString = title
       config.image = .favorIcon(.right)
-      titleContainer.font = .favorFont(.regular, size: 16)
+      titleContainer.font = .favorFont(.regular, size: 14)
     case .more(let title):
       titleString = title
       titleContainer.font = .favorFont(.regular, size: 12)
@@ -32,7 +32,7 @@ public enum FavorPlainButtonType {
       titleString = title
       let arrowImage: UIImage? = isRight ? .favorIcon(.right) : .favorIcon(.down)
       config.image = arrowImage?.resize(newWidth: 10)
-      titleContainer.font = .favorFont(.regular, size: 14)
+      titleContainer.font = .favorFont(.regular, size: 16)
     }
     
     config.attributedTitle = AttributedString(

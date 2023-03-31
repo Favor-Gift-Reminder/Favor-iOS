@@ -40,6 +40,7 @@ extension UIImage {
     case share
     case show
     case uncheck
+    case photo
 
     case down
     case left
