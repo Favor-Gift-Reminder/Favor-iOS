@@ -21,7 +21,19 @@ final class ReminderCell: BaseCardCell, Reusable, View {
 
   // MARK: - UI Components
 
-  // MARK: - Life Cycle
+  private lazy var toggleSwitch = FavorSwitch()
+
+  // MARK: - Initializer
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    
+    self.imageType = .friend
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
 
   // MARK: - Binding
 
@@ -55,4 +67,20 @@ final class ReminderCell: BaseCardCell, Reusable, View {
 
   // MARK: - UI Setups
 
+  override func setupLayouts() {
+    super.setupLayouts()
+
+    self.addSubview(self.toggleSwitch)
+  }
+
+  override func setupConstraints() {
+    super.setupConstraints()
+
+    self.toggleSwitch.snp.makeConstraints { make in
+      make.trailing.equalToSuperview().inset(16)
+      make.centerY.equalToSuperview()
+      make.width.equalTo(40)
+      make.height.equalTo(24)
+    }
+  }
 }

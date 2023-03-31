@@ -28,6 +28,12 @@ extension Date {
     return formatter.string(from: self)
   }
 
+  public func toDayString() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "d"
+    return formatter.string(from: self)
+  }
+
   public func toDday() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "d일까지 'D'-d"

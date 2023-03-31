@@ -39,7 +39,8 @@ open class BaseCardCell: UICollectionViewCell, BaseView {
 
   public var disposeBag = DisposeBag()
 
-  public var type: CellType = .undefined {
+  /// Cell의 좌측에 위치한 아이콘에 들어가는 이미지의 타입
+  public var imageType: CellType = .undefined {
     didSet { self.transformToType() }
   }
 
@@ -166,7 +167,7 @@ open class BaseCardCell: UICollectionViewCell, BaseView {
 
 private extension BaseCardCell {
   func transformToType() {
-    switch self.type {
+    switch self.imageType {
     case .undefined: break
     case .friend:
       self.profileDefaultImageView.isHidden = false
@@ -178,7 +179,7 @@ private extension BaseCardCell {
   }
 
   func updateImage() {
-    self.imageView.image = self.image?.withAlignmentRectInsets(self.type.inset)
+    self.imageView.image = self.image?.withAlignmentRectInsets(self.imageType.inset)
   }
 
   func updateLabels() {

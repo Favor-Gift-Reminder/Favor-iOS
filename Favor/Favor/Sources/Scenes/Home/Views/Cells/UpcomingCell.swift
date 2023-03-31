@@ -25,7 +25,7 @@ final class UpcomingCell: BaseCardCell, Reusable, View {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    self.type = .friend
+    self.imageType = .friend
   }
 
   required init?(coder: NSCoder) {

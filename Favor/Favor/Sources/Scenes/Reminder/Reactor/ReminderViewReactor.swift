@@ -156,10 +156,13 @@ private extension ReminderViewReactor {
     var pastReminders: [CardCellData] = []
 
     reminders.enumerated().forEach { index, reminder in
+      let formattedSubtitle = {
+        reminder.date.toDayString() == Date.now.toDayString() ? "오늘" : reminder.date.toDday()
+      }()
       let cellData = CardCellData(
         iconImage: UIImage(named: "p\(index + 1)").flatMap { $0 },
         title: reminder.title,
-        subtitle: reminder.date.formatted()
+        subtitle: formattedSubtitle
       )
 
       let reminderDateComponents = Calendar.current.dateComponents(
