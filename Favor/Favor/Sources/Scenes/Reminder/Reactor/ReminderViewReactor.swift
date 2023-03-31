@@ -6,8 +6,8 @@
 //
 
 import Foundation
-import UIKit.UIImage
 import OSLog
+import UIKit.UIImage
 
 import FavorKit
 import FavorNetworkKit
@@ -26,6 +26,7 @@ final class ReminderViewReactor: Reactor, Stepper {
   enum Action {
     case viewWillAppear
     case selectDateButtonDidTap
+    case newReminderButtonDidTap
   }
 
   enum Mutation {
@@ -84,6 +85,11 @@ final class ReminderViewReactor: Reactor, Stepper {
 
     case .selectDateButtonDidTap:
       os_log(.debug, "Select date button did tap.")
+      return .empty()
+
+    case .newReminderButtonDidTap:
+      os_log(.debug, "New Reminder button did tap.")
+      self.steps.accept(AppStep.newReminderIsRequired)
       return .empty()
     }
   }

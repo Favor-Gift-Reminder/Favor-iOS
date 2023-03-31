@@ -142,6 +142,11 @@ final class ReminderViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.newReminderButton.rx.tap
+      .map { Reactor.Action.newReminderButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.selectedDate }
       .asDriver(onErrorRecover: { _ in return .never()})
@@ -149,8 +154,6 @@ final class ReminderViewController: BaseViewController, View {
         owner.updateSelectedDate(to: date)
       })
       .disposed(by: self.disposeBag)
-
-
   }
 
   // MARK: - Functions

@@ -107,6 +107,8 @@
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
+		2EE1823129D67A9000949901 /* NewReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1823029D67A9000949901 /* NewReminderVC.swift */; };
+		2EE1823329D67AF600949901 /* NewReminderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */; };
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
 		2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA6F29A9D7D4004FDCC9 /* Reusable */; };
 		2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8129AB60A4004FDCC9 /* Realm */; };
@@ -241,6 +243,8 @@
 		2EE0D594297A9D670064E932 /* FavorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FavorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2EE1823029D67A9000949901 /* NewReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReminderVC.swift; sourceTree = "<group>"; };
+		2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReminderViewReactor.swift; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
@@ -597,6 +601,7 @@
 			isa = PBXGroup;
 			children = (
 				2EE07ED2296E8DE600048A3C /* EventEditVC.swift */,
+				2EE1823029D67A9000949901 /* NewReminderVC.swift */,
 				2EE07ECE296E8DB500048A3C /* ReminderVC.swift */,
 			);
 			path = ViewControllers;
@@ -616,6 +621,7 @@
 		2EE07EAD296E7BE200048A3C /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
+				2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */,
 				2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */,
 				2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */,
 			);
@@ -980,6 +986,7 @@
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
+				2EE1823329D67AF600949901 /* NewReminderViewReactor.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */,
 				2EC6E12129BF8B5E006FBC11 /* CardCellData.swift in Sources */,
@@ -1063,6 +1070,7 @@
 				2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */,
 				2EC939F1299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
+				2EE1823129D67A9000949901 /* NewReminderVC.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,

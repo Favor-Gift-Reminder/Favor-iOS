@@ -23,6 +23,9 @@ final class ReminderFlow: Flow {
     case .reminderIsRequired:
       return self.navigateToReminder()
 
+    case .newReminderIsRequired:
+      return self.navigateToNewReminder()
+
     default: return .none
     }
   }
@@ -39,6 +42,19 @@ private extension ReminderFlow {
       flowContributor: .contribute(
         withNextPresentable: reminderVC,
         withNextStepper: reminderReactor
+      ))
+  }
+
+  func navigateToNewReminder() -> FlowContributors {
+    let newReminderVC = NewReminderViewController()
+    let newReminderReactor = NewReminderViewReactor()
+    newReminderVC.reactor = newReminderReactor
+    self.rootViewController.pushViewController(newReminderVC, animated: true)
+
+    return .one(
+      flowContributor: .contribute(
+        withNextPresentable: newReminderVC,
+        withNextStepper: newReminderReactor
       ))
   }
 }
