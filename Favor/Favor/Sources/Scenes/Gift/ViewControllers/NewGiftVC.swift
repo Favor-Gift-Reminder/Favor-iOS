@@ -9,6 +9,7 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import RSKPlaceholderTextView
 import RxDataSources
 import RxGesture
@@ -17,13 +18,12 @@ import SnapKit
 
 final class NewGiftViewController: BaseViewController, View {
   
-  typealias DataSource = RxCollectionViewSectionedReloadDataSource<PickedPictureSection>
+  typealias DataSource = RxCollectionViewSectionedReloadDataSource<NewGiftPhotoSection.NewGiftPhotoSectionModel>
   
   // MARK: - UI COMPONENTS
   
   private let scrollView: UIScrollView = {
     let sv = UIScrollView()
-    
     return sv
   }()
   
@@ -51,22 +51,16 @@ final class NewGiftViewController: BaseViewController, View {
     return tf
   }()
   
-  private lazy var pickedPictureCollectionView: UICollectionView = {
+  private lazy var photoCollectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .horizontal
-    layout.itemSize = CGSize(width: 110, height: 110)
+    layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 6)
+    layout.itemSize = CGSize(width: 100, height: 100)
     let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    cv.backgroundColor = .favorColor(.background)
+    cv.backgroundColor = .favorColor(.white)
     cv.showsHorizontalScrollIndicator = false
-    cv.register(
-      PickedPictureCell.self,
-      forCellWithReuseIdentifier: PickedPictureCell.reuseIdentifier
-    )
-    cv.register(
-      PickPictureCell.self,
-      forCellWithReuseIdentifier: PickPictureCell.reuseIdentifier
-    )
-    
+    cv.register(cellType: NewGiftEmptyCell.self)
+    cv.register(cellType: NewGiftPhotoCell.self)
     return cv
   }()
   
@@ -100,48 +94,72 @@ final class NewGiftViewController: BaseViewController, View {
     tv.attributedPlaceholder = attributedPlaceholder
     tv.textColor = .favorColor(.explain)
     tv.font = .favorFont(.regular, size: 16)
-    tv.backgroundColor = .favorColor(.background)
+    tv.backgroundColor = .favorColor(.white)
     tv.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     
     return tv
   }()
-  
+    
   private let pinTimelineButton: UIButton = {
     var config = UIButton.Configuration.plain()
     var titleContainer = AttributeContainer()
     titleContainer.font = .favorFont(.bold, size: 18)
-    titleContainer.foregroundColor = .favorColor(.titleAndLine)
-    
+    titleContainer.foregroundColor = .favorColor(.icon)
     config.attributedTitle = AttributedString(
       "타임라인 고정",
       attributes: titleContainer
     )
+    config.background.backgroundColor = .white
+    let pinImage = UIImage.favorIcon(.pin)?
+      .resize(newWidth: 18)
+    config.imagePadding = 10
+    config.imagePlacement = .trailing
+    config.image = pinImage
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     let button = UIButton(configuration: config)
+    
+    button.configurationUpdateHandler = {
+      var config = $0.configuration
+      switch $0.state {
+      case .normal:
+        $0.configuration?.image = pinImage?.withTintColor(.favorColor(.line3))
+      case .selected:
+        $0.configuration?.image = pinImage?.withTintColor(.favorColor(.icon))
+      default:
+        break
+      }
+    }
     return button
   }()
   
-  var dataSource = DataSource { dataSource, collectionView, indexPath, item in
-    switch item {
-    case .pick(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: PickPictureCell.reuseIdentifier,
-        for: indexPath
-      ) as? PickPictureCell else {
-        return UICollectionViewCell()
+  private let doneButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.attributedTitle = AttributedString(
+      "완료",
+      attributes: .init([
+        .font: UIFont.favorFont(.bold, size: 18)
+      ])
+    )
+    let btn = UIButton(configuration: config)
+    btn.configurationUpdateHandler = {
+      switch $0.state {
+      case .disabled:
+        config.baseForegroundColor = .favorColor(.line2)
+      case .normal:
+        config.baseForegroundColor = .favorColor(.icon)
+      default:
+        break
       }
-      return cell
-      
-    case .picked(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: PickedPictureCell.reuseIdentifier,
-        for: indexPath
-      ) as? PickedPictureCell else {
-        return UICollectionViewCell()
-      }
-      return cell
     }
-  }
+    return btn
+  }()
+  
+  private let categoryView: FavorCategoryView = {
+    let view = FavorCategoryView()
+    view.configureCategory(.lightGift)
+    return view
+  }()
   
   // Divider
   private let titleDivider = FavorDivider()
@@ -155,57 +173,56 @@ final class NewGiftViewController: BaseViewController, View {
   private lazy var photoLabel = self.label("사진")
   private lazy var dateLabel = self.label("날짜")
   private lazy var friendLabel = self.label("준 사람")
-  private lazy var emotionLabel = self.label("감정 메모")
+  private lazy var emotionLabel = self.label("메모")
   
   // Button
   private lazy var giftReceivedButton = self.giftButton("받은 선물")
   private lazy var giftGivenButton = self.giftButton("준 선물")
-  private lazy var choiceFriendButton = self.choiceButton("친구 선택", isRight: true)
-  private lazy var datePickerTextField = DatePickerTextField()
+  private lazy var datePickerTextField = NewGiftDatePickerTextField()
   private lazy var emotionButton1 = self.makeEmotionButton("🥹")
   private lazy var emotionButton2 = self.makeEmotionButton("🥹")
   private lazy var emotionButton3 = self.makeEmotionButton("🥹")
   private lazy var emotionButton4 = self.makeEmotionButton("🥹")
   private lazy var emotionButton5 = self.makeEmotionButton("🥹")
   
-  private let categoryView = FavorCategoryView()
+  private let choiceFrinedView = NewGiftChoiceFriendView()
   
-  // MARK: - LifeCycle
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    Observable.just(getMockSection())
-      .bind(to: self.pickedPictureCollectionView.rx.items(dataSource: dataSource))
-      .disposed(by: disposeBag)
-  }
+  // MARK: - PROPERTIES
   
   // MARK: - Setup
   
   override func setupStyles() {
     self.view.backgroundColor = .favorColor(.white)
-    self.categoryView.currentCategory = .lightGift
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
   }
   
   override func setupLayouts() {
     self.scrollView.addSubview(contentsView)
+    self.view.addSubview(self.scrollView)
     
     [
-      self.scrollView,
-    ].forEach {
-      self.view.addSubview($0)
-    }
-    
-    [
-      self.giftReceivedButton, self.giftGivenButton,
-      self.titleLabel, self.titleDivider, self.titleTextField, self.titleDivider,
-      self.categoryLabel, self.categoryView,
-      self.photoLabel, self.pickedPictureCollectionView,
-      self.friendLabel, self.choiceFriendButton, self.friendDivider,
-      self.dateLabel, self.datePickerTextField, self.dateDivider,
-      self.emotionLabel, self.emotionStackView,
-      self.memoTextView, self.memoDivider,
-      self.pinTimelineButton, self.datePickerTextField
+      self.giftReceivedButton,
+      self.giftGivenButton,
+      self.titleLabel,
+      self.titleDivider,
+      self.titleTextField,
+      self.titleDivider,
+      self.categoryLabel,
+      self.categoryView,
+      self.photoLabel,
+      self.photoCollectionView,
+      self.friendLabel,
+      self.choiceFrinedView,
+      self.friendDivider,
+      self.dateLabel,
+      self.datePickerTextField,
+      self.dateDivider,
+      self.emotionLabel,
+      self.emotionStackView,
+      self.memoTextView,
+      self.memoDivider,
+      self.pinTimelineButton,
+      self.datePickerTextField,
     ].forEach {
       self.contentsView.addSubview($0)
     }
@@ -267,25 +284,25 @@ final class NewGiftViewController: BaseViewController, View {
       make.top.equalTo(self.categoryView.snp.bottom).offset(24)
     }
     
-    self.pickedPictureCollectionView.snp.makeConstraints { make in
+    self.photoCollectionView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
       make.top.equalTo(self.photoLabel.snp.bottom).offset(16)
-      make.height.equalTo(110)
+      make.height.equalTo(100)
     }
     
     self.friendLabel.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.pickedPictureCollectionView.snp.bottom).offset(40)
+      make.top.equalTo(self.photoCollectionView.snp.bottom).offset(40)
     }
     
-    self.choiceFriendButton.snp.makeConstraints { make in
+    self.choiceFrinedView.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
     }
         
     self.friendDivider.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.choiceFriendButton.snp.bottom).offset(16)
+      make.top.equalTo(self.choiceFrinedView.snp.bottom).offset(16)
       make.height.equalTo(1)
     }
     
@@ -337,15 +354,15 @@ final class NewGiftViewController: BaseViewController, View {
   // MARK: - BIND
   
   func bind(reactor: NewGiftViewReactor) {
-    
+        
     // MARK: - ACTION
     
     // 빈 화면 터치
-    self.scrollView.rx.tapGesture { _, delegate in
-      delegate.simultaneousRecognitionPolicy = .never
+    self.view.rx.tapGesture { gesture, _ in
+      gesture.cancelsTouchesInView = false
     }
-    .asDriver()
-    .drive(with: self) { owner, _ in
+    .when(.recognized)
+    .bind(with: self) { owner, _ in
       owner.view.endEditing(true)
     }
     .disposed(by: self.disposeBag)
@@ -369,7 +386,46 @@ final class NewGiftViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    // 셀 선택
+    self.photoCollectionView.rx.itemSelected
+      .map { $0.item }
+      .map { NewGiftViewReactor.Action.cellSelected(index: $0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 카테고리 변경
+    self.categoryView.currentCategory
+      .map { NewGiftViewReactor.Action.categoryDidChange($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 타임라인 고정 토글
+    self.pinTimelineButton.rx.tap
+      .withUnretained(self)
+      .do { $0.0.pinTimelineButton.isSelected.toggle() }
+      .map { $0.0.pinTimelineButton.isSelected }
+      .map { NewGiftViewReactor.Action.pinToggle($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // MARK: - STATE
+    
+    let dataSource = DataSource { _, collectionView, indexPath, item in
+      switch item {
+      case .empty:
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftEmptyCell
+        return cell
+      case .photo(let image):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftPhotoCell
+        cell.imageView.image = image
+        
+        cell.removeButtonDidTap = { [weak self] in
+          self?.reactor?.action.onNext(.photoRemoveButtonDidTap(index: indexPath.item))
+        }
+        
+        return cell
+      }
+    }
     
     // 선물 종류 토글
     reactor.state.map { $0.isReceivedGift }
@@ -393,33 +449,10 @@ final class NewGiftViewController: BaseViewController, View {
       .bind(to: self.friendLabel.rx.text)
       .disposed(by: self.disposeBag)
     
-    //
-  }
-  
-  func getMockSection() -> [PickedPictureSection] {
-    let pickItem = PickedPictureSectionItem.pick(.init(5))
-    let pickedPicture1 = PickedPictureSectionItem.picked(.init(UIImage()))
-    let pickedPicture2 = PickedPictureSectionItem.picked(.init(UIImage()))
-    let pickedPicture3 = PickedPictureSectionItem.picked(.init(UIImage()))
-    let pickedPicture4 = PickedPictureSectionItem.picked(.init(UIImage()))
-    
-    let itemInFirstSection = [pickItem, pickedPicture1, pickedPicture2, pickedPicture3, pickedPicture4]
-    let firstSection = PickedPictureSection(
-      original: PickedPictureSection(
-        original: .first(itemInFirstSection),
-        items: itemInFirstSection
-      ),
-      items: itemInFirstSection
-    )
-    
-    return [firstSection]
-  }
-  
-  // MARK: - SELECTORS
-  
-  @objc
-  private func didChangedDate() {
-    
+    // DataSource Binding
+    reactor.state.map { [$0.newGiftPhotoSection] }
+      .bind(to: self.photoCollectionView.rx.items(dataSource: dataSource))
+      .disposed(by: self.disposeBag)
   }
 }
 
@@ -459,23 +492,6 @@ private extension NewGiftViewController {
     lb.font = .favorFont(.bold, size: 18)
     
     return lb
-  }
-  
-  func choiceButton(_ title: String, isRight: Bool) -> FavorPlainButton {
-    let button = FavorPlainButton(with: .main(title, isRight: isRight))
-    button.configurationUpdateHandler = {
-      switch $0.state {
-      case .normal:
-        $0.configuration?.baseForegroundColor = .favorColor(.explain)
-        $0.configuration?.baseBackgroundColor = .favorColor(.white)
-      case .selected:
-        $0.configuration?.baseForegroundColor = .favorColor(.icon)
-        $0.configuration?.baseBackgroundColor = .favorColor(.white)
-      default:
-        break
-      }
-    }
-    return button
   }
   
   func makeEmotionButton(_ image: String) -> UIButton {
