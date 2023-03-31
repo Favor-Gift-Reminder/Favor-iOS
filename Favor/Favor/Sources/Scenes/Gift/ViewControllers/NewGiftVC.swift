@@ -178,7 +178,7 @@ final class NewGiftViewController: BaseViewController, View {
   // Button
   private lazy var giftReceivedButton = self.giftButton("받은 선물")
   private lazy var giftGivenButton = self.giftButton("준 선물")
-  private lazy var datePickerTextField = NewGiftDatePickerTextField()
+  private lazy var datePickerTextField = FavorDatePickerTextField()
   private lazy var emotionButton1 = self.makeEmotionButton("🥹")
   private lazy var emotionButton2 = self.makeEmotionButton("🥹")
   private lazy var emotionButton3 = self.makeEmotionButton("🥹")
