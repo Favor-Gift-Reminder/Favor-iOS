@@ -50,20 +50,10 @@ public final class FavorCategoryView: UIScrollView {
   
   // MARK: - PROPERTIES
   
-  private var selectedButton: FavorSmallButton {
-    self.buttons.filter { $0.isSelected }.first!
-  }
-  
   /// 현재 선택된 버튼이 어떤 카테고리인지 알 수 있는 Property입니다.
-  public var currentCategory: FavorCategory {
-    get {
-      self.selectedButton.category!      
-    }
-    set {
-      let button = self.buttons.filter { $0.category == newValue }.first!
-      self.didTapButton(button)
-    }
-  }
+  public let currentCategory = BehaviorRelay<FavorCategory>(value: .lightGift)
+  
+  private let disposeBag = DisposeBag()
   
   // MARK: - INITIALIZER
   
@@ -73,6 +63,7 @@ public final class FavorCategoryView: UIScrollView {
     setupLayouts()
     setupConstraints()
     
+    // buttons AddTarget
     self.buttons.forEach {
       $0.addTarget(
         self,
@@ -88,11 +79,20 @@ public final class FavorCategoryView: UIScrollView {
   
   // MARK: - HELPERS
   
+  /// 외부에서 카테고리를 주입해줄 수 있는 메서드입니다.
+  public func configureCategory(_ category: FavorCategory) {
+    let button = self.buttons.filter { $0.category == category }.first!
+    self.didTapButton(button)
+  }
+  
+  // MARK: - SELECTORS
+  
   @objc
   private func didTapButton(_ sender: FavorSmallButton) {
     for button in self.buttons {
       if button == sender {
         button.isSelected = true
+        self.currentCategory.accept(button.category!)
       } else {
         button.isSelected = false
       }
@@ -104,6 +104,7 @@ extension FavorCategoryView: BaseView {
   public func setupStyles() {
     self.backgroundColor = .favorColor(.white)
     self.showsHorizontalScrollIndicator = false
+    self.didTapButton(self.lightGiftButton)
   }
   
   public func setupLayouts() {
