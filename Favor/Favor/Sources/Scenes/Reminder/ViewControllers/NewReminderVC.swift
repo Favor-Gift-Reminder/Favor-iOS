@@ -11,11 +11,16 @@ import FavorKit
 import ReactorKit
 import RSKPlaceholderTextView
 import RxCocoa
+import RxGesture
 import SnapKit
 
 final class NewReminderViewController: BaseViewController, View {
 
   // MARK: - Constants
+
+  private enum Metric {
+    static let topSpacing = 32.0
+  }
 
   // MARK: - Properties
 
@@ -26,6 +31,7 @@ final class NewReminderViewController: BaseViewController, View {
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.showsVerticalScrollIndicator = false
     scrollView.alwaysBounceVertical = true
+    scrollView.contentInset = UIEdgeInsets(top: Metric.topSpacing, left: 0, bottom: 0, right: 0)
     return scrollView
   }()
 
@@ -50,7 +56,11 @@ final class NewReminderViewController: BaseViewController, View {
   )
 
   // 받을 사람
-  private lazy var selectFriendButton = FavorPlainButton(with: .main("친구 선택", isRight: true))
+  private lazy var selectFriendButton: FavorPlainButton = {
+    let button = FavorPlainButton(with: .main("친구 선택", isRight: true))
+    button.contentHorizontalAlignment = .leading
+    return button
+  }()
   private lazy var selectFriendStack = self.makeEditStack(
     title: "받을 사람",
     itemView: self.selectFriendButton
@@ -95,6 +105,36 @@ final class NewReminderViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
+    self.memoTextView.rx.didBeginEditing
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.scrollToBottom()
+      })
+      .disposed(by: self.disposeBag)
+
+    self.memoTextView.rx.didChange
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.scrollToBottom()
+      })
+      .disposed(by: self.disposeBag)
+
+    self.memoTextView.rx.didEndEditing
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.scrollToBottom()
+      })
+      .disposed(by: self.disposeBag)
+
+    self.scrollView.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.view.endEditing(true)
+        owner.scrollView.scroll(to: .zero)
+      })
+      .disposed(by: self.disposeBag)
+
     // State
 
   }
@@ -121,8 +161,7 @@ final class NewReminderViewController: BaseViewController, View {
 
   override func setupConstraints() {
     self.scrollView.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(32)
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
 
@@ -174,5 +213,9 @@ private extension NewReminderViewController {
     label.textAlignment = .left
     label.text = title
     return label
+  }
+
+  func scrollToBottom() {
+    self.scrollView.scroll(to: self.memoTextView.frame.maxY + self.memoTextView.contentSize.height)
   }
 }
