@@ -14,7 +14,7 @@ import RxCocoa
 import RxGesture
 import SnapKit
 
-final class NewReminderViewController: BaseViewController, View {
+final class NewReminderViewController: BaseEventEditViewController, View {
 
   // MARK: - Constants
 
@@ -179,42 +179,6 @@ final class NewReminderViewController: BaseViewController, View {
 // MARK: - Privates
 
 private extension NewReminderViewController {
-  func makeEditStack(
-    title: String,
-    itemView: UIView,
-    isDividerNeeded: Bool = true
-  ) -> UIStackView {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.spacing = 16
-    stackView.distribution = .fillProportionally
-
-    // Title Label
-    let titleLabel = self.makeTitleLabel(title: title)
-
-    // Divider
-    let divider = FavorDivider()
-    divider.layer.opacity = isDividerNeeded ? 1.0 : 0.0
-
-    [
-      titleLabel,
-      itemView,
-      divider
-    ].forEach {
-      stackView.addArrangedSubview($0)
-    }
-
-    return stackView
-  }
-
-  func makeTitleLabel(title: String) -> UILabel {
-    let label = UILabel()
-    label.font = .favorFont(.bold, size: 18)
-    label.textAlignment = .left
-    label.text = title
-    return label
-  }
-
   func scrollToBottom() {
     self.scrollView.scroll(to: self.memoTextView.frame.maxY + self.memoTextView.contentSize.height)
   }
