@@ -21,15 +21,16 @@ final class NewReminderViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
 
   enum Action {
+    case postButtonDidTap
     case viewDidPop
   }
 
   enum Mutation {
-
+    case setPostButton(Bool)
   }
 
   struct State {
-
+    var isPostButtonEnabled: Bool = false
   }
 
   // MARK: - Initializer
@@ -43,9 +44,24 @@ final class NewReminderViewReactor: Reactor, Stepper {
 
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .postButtonDidTap:
+      os_log(.debug, "Post button did tap.")
+      return .empty()
+
     case .viewDidPop:
       self.steps.accept(AppStep.newReminderIsComplete)
       return .empty()
     }
+  }
+
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+
+    switch mutation {
+    case .setPostButton(let isEnabled):
+      newState.isPostButtonEnabled = isEnabled
+    }
+
+    return newState
   }
 }

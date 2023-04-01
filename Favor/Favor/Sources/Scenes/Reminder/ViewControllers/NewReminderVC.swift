@@ -28,6 +28,19 @@ final class NewReminderViewController: BaseViewController, View {
 
   // MARK: - UI Components
 
+  private lazy var postButton: UIBarButtonItem = {
+    let button = UIBarButtonItem(title: "등록", style: .done, target: nil, action: nil)
+    button.setTitleTextAttributes(
+      [NSAttributedString.Key.foregroundColor: UIColor.favorColor(.icon)],
+      for: .normal
+    )
+    button.setTitleTextAttributes(
+      [NSAttributedString.Key.foregroundColor: UIColor.favorColor(.line2)],
+      for: .disabled
+    )
+    return button
+  }()
+
   private lazy var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsHorizontalScrollIndicator = false
@@ -103,16 +116,7 @@ final class NewReminderViewController: BaseViewController, View {
   // MARK: - Binding
 
   func bind(reactor: NewReminderViewReactor) {
-    // Action
-    self.rx.viewDidDisappear
-      .map { _ in Reactor.Action.viewDidPop }
-      .bind(with: self, onNext: { owner, _ in
-        if owner.isMovingFromParent {
-          reactor.action.onNext(.viewDidPop)
-        }
-      })
-      .disposed(by: self.disposeBag)
-
+    // UI
     Observable.merge(
       self.memoTextView.rx.didBeginEditing.asObservable(),
       self.memoTextView.rx.didChange.asObservable()
@@ -159,8 +163,27 @@ final class NewReminderViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    // State
+    // Action
+    self.rx.viewDidDisappear
+      .map { _ in Reactor.Action.viewDidPop }
+      .bind(with: self, onNext: { owner, _ in
+        if owner.isMovingFromParent {
+          reactor.action.onNext(.viewDidPop)
+        }
+      })
+      .disposed(by: self.disposeBag)
 
+    self.postButton.rx.tap
+      .map { Reactor.Action.postButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    // State
+    reactor.state.map { $0.isPostButtonEnabled }
+      .bind(with: self, onNext: { owner, isEnabled in
+        owner.postButton.isEnabled = isEnabled
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -173,6 +196,8 @@ final class NewReminderViewController: BaseViewController, View {
   }
 
   override func setupLayouts() {
+    self.navigationItem.setRightBarButton(self.postButton, animated: true)
+
     self.view.addSubview(self.scrollView)
 
     self.scrollView.addSubview(self.stackView)
