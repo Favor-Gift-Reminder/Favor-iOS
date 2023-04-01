@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2022/12/29.
 //
 
+import OSLog
 import UIKit
 
 import RxFlow
@@ -33,7 +34,8 @@ private extension SceneDelegate {
   
   func enableNavigateLog() {
     self.coordinator.rx.didNavigate.subscribe(onNext: { flow, step in
-      print("➡️ Navigate to flow = \(flow) and step = \(step)")
+      let message = "➡️ Navigate to flow = \(flow) and step = \(step)"
+      os_log(.debug, "\(message)")
     }).disposed(by: self.disposeBag)
   }
 }

@@ -12,10 +12,10 @@ import OSLog
 ///   ``` swift
 ///   APIManager.mock.baseURL
 ///   ```
-class APIManager {
+public class APIManager {
   private typealias JSON = [String: Any]
   
-  enum HeaderType {
+  public enum HeaderType {
     case json
     case multiPart
   }
@@ -27,13 +27,13 @@ class APIManager {
 
   // MARK: - Properties
 
-  static let mock = APIManager(.mock)
-  static let v1 = APIManager(.v1)
+  public static let mock = APIManager(.mock)
+  public static let v1 = APIManager(.v1)
   private var type: ServerType
   
   /// plist 파일에 포함된 API의 BaseURL입니다.
   /// URL 끝에 '/'가 없습니다. Path를 작성할 때 `/user`와 같이 작성해주세요.
-  var baseURL: String {
+  public var baseURL: String {
     guard let filePath = Bundle.module.path(forResource: "API-Info", ofType: "plist") else {
       fatalError("Couldn't find the 'API-Info.plist' file.")
     }
@@ -68,7 +68,7 @@ class APIManager {
 // MARK: - TYPE METHODS
 
 extension APIManager {
-  static func decode<T: Decodable>(_ data: Data) -> T {
+  public static func decode<T: Decodable>(_ data: Data) -> T {
     let decoder = JSONDecoder()
     guard let responseModel = try? decoder.decode(T.self, from: data) else {
       fatalError("Decode Error")
@@ -76,7 +76,7 @@ extension APIManager {
     return responseModel
   }
 
-  static func header(for header: HeaderType) -> [String: String] {
+  public static func header(for header: HeaderType) -> [String: String] {
     switch header {
     case .json: return ["Content-Type": "application/json"]
     case .multiPart: return ["Content-Type": "multipart/form-data"]
