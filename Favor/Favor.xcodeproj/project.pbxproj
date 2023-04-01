@@ -14,6 +14,7 @@
 		2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562629A9220D006CF302 /* NewAnniversarySection.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
 		2E35C3B829D84AD000B7AC80 /* EditStackMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E35C3B729D84AD000B7AC80 /* EditStackMaker.swift */; };
+		2E35C3C029D8798E00B7AC80 /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 2E35C3BF29D8798E00B7AC80 /* RxKeyboard */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
 		2E635391295D906A00B23A14 /* Differentiator in Frameworks */ = {isa = PBXBuildFile; productRef = 2E635390295D906A00B23A14 /* Differentiator */; };
@@ -279,6 +280,7 @@
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
+				2E35C3C029D8798E00B7AC80 /* RxKeyboard in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
 				2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */,
 				2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */,
@@ -852,6 +854,7 @@
 				2EE3BA8629AB60B9004FDCC9 /* RxRealm */,
 				2E730C6929BA31F4003668D9 /* FavorNetworkKit */,
 				2EEFD5B629BB7B4300BA46BA /* FavorKit */,
+				2E35C3BF29D8798E00B7AC80 /* RxKeyboard */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -912,10 +915,10 @@
 				2EE6B3952982EDA400CDBC81 /* XCRemoteSwiftPackageReference "RxFlow" */,
 				2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */,
 				E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */,
-				2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 				2EE3BA6E29A9D7D3004FDCC9 /* XCRemoteSwiftPackageReference "Reusable" */,
 				2EE3BA8029AB60A4004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				2EE3BA8529AB60B9004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */,
+				2E35C3BE29D8798E00B7AC80 /* XCRemoteSwiftPackageReference "RxKeyboard" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1365,6 +1368,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2E35C3BE29D8798E00B7AC80 /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya";
@@ -1421,14 +1432,6 @@
 				minimumVersion = 4.0.0;
 			};
 		};
-		2EE3BA7529AB241E004FDCC9 /* XCRemoteSwiftPackageReference "RxKeyboard" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/RxSwiftCommunity/RxKeyboard";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
-			};
-		};
 		2EE3BA8029AB60A4004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1464,6 +1467,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2E35C3BF29D8798E00B7AC80 /* RxKeyboard */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E35C3BE29D8798E00B7AC80 /* XCRemoteSwiftPackageReference "RxKeyboard" */;
+			productName = RxKeyboard;
+		};
 		2E63538A295D900F00B23A14 /* RxMoya */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */;

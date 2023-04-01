@@ -12,6 +12,7 @@ import ReactorKit
 import RSKPlaceholderTextView
 import RxCocoa
 import RxGesture
+import RxKeyboard
 import SnapKit
 
 final class NewReminderViewController: BaseViewController, View {
@@ -20,6 +21,7 @@ final class NewReminderViewController: BaseViewController, View {
 
   private enum Metric {
     static let topSpacing = 32.0
+    static let memoMinimumHeight = 130.0
   }
 
   // MARK: - Properties
@@ -31,7 +33,12 @@ final class NewReminderViewController: BaseViewController, View {
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.showsVerticalScrollIndicator = false
     scrollView.alwaysBounceVertical = true
-    scrollView.contentInset = UIEdgeInsets(top: Metric.topSpacing, left: 0, bottom: 0, right: 0)
+    scrollView.contentInset = UIEdgeInsets(
+      top: Metric.topSpacing,
+      left: .zero,
+      bottom: Metric.topSpacing,
+      right: .zero
+    )
     return scrollView
   }()
 
@@ -86,6 +93,7 @@ final class NewReminderViewController: BaseViewController, View {
     textView.textColor = .favorColor(.explain)
     textView.font = .favorFont(.regular, size: 16)
     textView.backgroundColor = .clear
+    textView.isScrollEnabled = false
     return textView
   }()
   private lazy var memoStack = self.makeEditStack(title: "메모", itemView: self.memoTextView)
@@ -105,33 +113,36 @@ final class NewReminderViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    self.memoTextView.rx.didBeginEditing
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.scrollToBottom()
-      })
-      .disposed(by: self.disposeBag)
-
-    self.memoTextView.rx.didChange
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.scrollToBottom()
-      })
-      .disposed(by: self.disposeBag)
-
-    self.memoTextView.rx.didEndEditing
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.scrollToBottom()
-      })
-      .disposed(by: self.disposeBag)
+    Observable.merge(
+      self.memoTextView.rx.didBeginEditing.asObservable(),
+      self.memoTextView.rx.didChange.asObservable()
+    )
+    .flatMap { _ -> Observable<CGFloat> in
+      return RxKeyboard.instance.willShowVisibleHeight.map { height in
+        return height
+      }
+      .asObservable()
+    }
+    .asDriver(onErrorRecover: { _ in return .never()})
+    .drive(with: self, onNext: { owner, height in
+      owner.scrollToCursor(keyboardHeight: height)
+    })
+    .disposed(by: self.disposeBag)
 
     self.scrollView.rx.tapGesture()
       .when(.recognized)
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, _ in
         owner.view.endEditing(true)
-        owner.scrollView.scroll(to: .zero)
+      })
+      .disposed(by: self.disposeBag)
+
+    self.scrollView.rx.willBeginDragging
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, _ in
+        if owner.memoTextView.isFirstResponder {
+          owner.memoTextView.resignFirstResponder()
+        }
       })
       .disposed(by: self.disposeBag)
 
@@ -142,6 +153,11 @@ final class NewReminderViewController: BaseViewController, View {
   // MARK: - Functions
 
   // MARK: - UI Setups
+
+  override func setupStyles() {
+    super.setupStyles()
+    self.title = "새 이벤트"
+  }
 
   override func setupLayouts() {
     self.view.addSubview(self.scrollView)
@@ -171,7 +187,7 @@ final class NewReminderViewController: BaseViewController, View {
     }
 
     self.memoTextView.snp.makeConstraints { make in
-      make.height.equalTo(130)
+      make.height.greaterThanOrEqualTo(Metric.memoMinimumHeight)
     }
   }
 }
@@ -183,7 +199,12 @@ extension NewReminderViewController: EditStackMaker { }
 // MARK: - Privates
 
 private extension NewReminderViewController {
-  func scrollToBottom() {
-    self.scrollView.scroll(to: self.memoTextView.frame.maxY + self.memoTextView.contentSize.height)
+  func scrollToCursor(keyboardHeight: CGFloat) {
+    if self.memoTextView.isFirstResponder {
+      if let selectedRange = self.memoTextView.selectedTextRange?.start {
+        let cursorPosition = self.memoTextView.caretRect(for: selectedRange).origin.y
+        self.scrollView.scroll(to: self.memoStack.frame.minY - keyboardHeight + cursorPosition)
+      }
+    }
   }
 }

@@ -23,14 +23,14 @@ extension EditStackMaker {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 16
-    stackView.distribution = .fillProportionally
+    stackView.distribution = .equalSpacing
 
     // Title Label
     let titleLabel = self.makeTitleLabel(title: title)
 
     // Divider
     let divider = FavorDivider()
-    divider.layer.opacity = isDividerNeeded ? 1.0 : 0.0
+    divider.isHidden = isDividerNeeded ? false : true
 
     [
       titleLabel,
