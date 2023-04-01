@@ -103,7 +103,7 @@ final class NewReminderViewController: BaseViewController, View {
       ]
     )
     textView.attributedPlaceholder = attributedPlaceholder
-    textView.textColor = .favorColor(.explain)
+    textView.textColor = .favorColor(.icon)
     textView.font = .favorFont(.regular, size: 16)
     textView.backgroundColor = .clear
     textView.isScrollEnabled = false
