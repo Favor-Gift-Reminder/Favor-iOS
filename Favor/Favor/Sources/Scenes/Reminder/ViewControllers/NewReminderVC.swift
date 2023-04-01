@@ -129,13 +129,26 @@ final class NewReminderViewController: BaseViewController, View {
     })
     .disposed(by: self.disposeBag)
 
-    self.scrollView.rx.tapGesture()
-      .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.view.endEditing(true)
+    Observable.merge(
+      self.scrollView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
+        guard let `self` = self else { return }
+        recognizer.delegate = self
+        delegate.simultaneousRecognitionPolicy = .never
       })
-      .disposed(by: self.disposeBag)
+      .asObservable(),
+      self.memoTextView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
+        guard let `self` = self else { return }
+        recognizer.delegate = self
+        delegate.simultaneousRecognitionPolicy = .never
+      })
+      .asObservable()
+    )
+    .when(.recognized)
+    .asDriver(onErrorRecover: { _ in return .never()})
+    .drive(with: self, onNext: { owner, _ in
+      owner.view.endEditing(true)
+    })
+    .disposed(by: self.disposeBag)
 
     self.scrollView.rx.willBeginDragging
       .asDriver(onErrorRecover: { _ in return .never()})
@@ -195,6 +208,18 @@ final class NewReminderViewController: BaseViewController, View {
 // MARK: - EditStackMaker
 
 extension NewReminderViewController: EditStackMaker { }
+
+// MARK: - Recognizer
+
+extension NewReminderViewController: UIGestureRecognizerDelegate {
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldReceive touch: UITouch
+  ) -> Bool {
+    guard touch.view?.isDescendant(of: self.memoTextView) == false else { return false }
+    return true
+  }
+}
 
 // MARK: - Privates
 
