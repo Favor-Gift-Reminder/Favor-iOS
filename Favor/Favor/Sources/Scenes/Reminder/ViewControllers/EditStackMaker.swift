@@ -1,5 +1,5 @@
 //
-//  BaseEventEditVC.swift
+//  EditStackMaker.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/01.
@@ -9,7 +9,12 @@ import UIKit
 
 import FavorKit
 
-class BaseEventEditViewController: BaseViewController {
+protocol EditStackMaker {
+  func makeEditStack(title: String, itemView: UIView, isDividerNeeded: Bool) -> UIStackView
+  func makeTitleLabel(title: String) -> UILabel
+}
+
+extension EditStackMaker {
   func makeEditStack(
     title: String,
     itemView: UIView,

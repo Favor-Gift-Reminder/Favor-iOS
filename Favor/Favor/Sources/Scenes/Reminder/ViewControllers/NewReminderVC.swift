@@ -14,7 +14,7 @@ import RxCocoa
 import RxGesture
 import SnapKit
 
-final class NewReminderViewController: BaseEventEditViewController, View {
+final class NewReminderViewController: BaseViewController, View {
 
   // MARK: - Constants
 
@@ -175,6 +175,10 @@ final class NewReminderViewController: BaseEventEditViewController, View {
     }
   }
 }
+
+// MARK: - EditStackMaker
+
+extension NewReminderViewController: EditStackMaker { }
 
 // MARK: - Privates
 
