@@ -22,9 +22,10 @@ public enum FriendResponseDTO {
     public let friendMemo: String
     public let friendName: String
     public let friendNo: Int
-    public let isUser: Int
-    public let reminderList: [ReminderResponseDTO.AllReminders]
-    public let userFrinedNo: Int
+    public let isUser: Bool
+    public let reminderList: [ReminderResponseDTO.Reminder]
+    public let giftNoList: [Int]
+    public let friendUserNo: Int
     public let userNo: Int
   }
 }

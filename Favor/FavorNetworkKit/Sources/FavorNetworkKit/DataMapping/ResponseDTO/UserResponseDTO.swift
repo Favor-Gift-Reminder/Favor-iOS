@@ -21,12 +21,12 @@ public enum UserResponseDTO {
   public struct User: Decodable {
     public let email: String
     public let favorList: [String]
-    public let frinedList: [FriendResponseDTO.AllFriends]
-    public let giftList: [GiftResponseDTO.AllGifts]
-    public let name: String
-    public let reminderList: [ReminderResponseDTO.AllReminders]
+    public let frinedList: [FriendResponseDTO.Friend]
+    public let giftList: [GiftResponseDTO.Gift]
+    public let name: String?
+    public let reminderList: [ReminderResponseDTO.Reminder]
     public let role: String
     public let userNo: Int
-    public let userId: String
+    public let userId: String?
   }
 }
