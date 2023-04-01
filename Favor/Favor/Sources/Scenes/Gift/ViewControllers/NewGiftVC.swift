@@ -419,9 +419,10 @@ final class NewGiftViewController: BaseViewController, View {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftPhotoCell
         cell.imageView.image = image
         
-        cell.removeButtonDidTap = { [weak self] in
-          self?.reactor?.action.onNext(.photoRemoveButtonDidTap(index: indexPath.item))
-        }
+        cell.rx.removeButtonTapped
+          .map { NewGiftViewReactor.Action.photoRemoveButtonDidTap(index: indexPath.row) }
+          .bind(to: reactor.action)
+          .disposed(by: self.disposeBag)
         
         return cell
       }

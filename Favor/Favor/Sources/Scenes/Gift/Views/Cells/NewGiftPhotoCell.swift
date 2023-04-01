@@ -9,6 +9,8 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import RxSwift
+import RxCocoa
 import Reusable
 
 final class NewGiftPhotoCell: UICollectionViewCell, Reusable {
@@ -23,19 +25,14 @@ final class NewGiftPhotoCell: UICollectionViewCell, Reusable {
     return iv
   }()
   
-  private lazy var removeButton: UIButton = {
+  let removeButton: UIButton = {
     let btn = UIButton()
     let removeImage: UIImage? = .favorIcon(.remove)?
       .withTintColor(.favorColor(.white))
       .resize(newWidth: 22)
     btn.setImage(removeImage, for: .normal)
-    btn.addTarget(self, action: #selector(didTapRemoveButton), for: .touchUpInside)
     return btn
   }()
-  
-  // MARK: - PROPERTIES
-  
-  var removeButtonDidTap: (() -> Void)?
   
   // MARK: - INITIALIZER
   
@@ -48,13 +45,6 @@ final class NewGiftPhotoCell: UICollectionViewCell, Reusable {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-    
-  // MARK: - SELECTORS
-  
-  @objc
-  private func didTapRemoveButton() {
-    self.removeButtonDidTap?()
   }
 }
 
@@ -80,5 +70,11 @@ extension NewGiftPhotoCell: BaseView {
     self.removeButton.snp.makeConstraints { make in
       make.top.trailing.equalToSuperview().inset(12)
     }
+  }
+}
+
+extension Reactive where Base: NewGiftPhotoCell {
+  var removeButtonTapped: ControlEvent<Void> {
+    return base.removeButton.rx.tap
   }
 }
