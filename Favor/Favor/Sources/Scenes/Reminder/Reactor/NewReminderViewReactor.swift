@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OSLog
 
 import FavorKit
 import ReactorKit
@@ -20,7 +21,7 @@ final class NewReminderViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
 
   enum Action {
-
+    case viewDidPop
   }
 
   enum Mutation {
@@ -40,5 +41,11 @@ final class NewReminderViewReactor: Reactor, Stepper {
 
   // MARK: - Functions
 
-
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .viewDidPop:
+      self.steps.accept(AppStep.newReminderIsComplete)
+      return .empty()
+    }
+  }
 }

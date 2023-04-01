@@ -86,6 +86,14 @@ final class NewReminderViewController: BaseViewController, View {
 
   func bind(reactor: NewReminderViewReactor) {
     // Action
+    self.rx.viewDidDisappear
+      .map { _ in Reactor.Action.viewDidPop }
+      .bind(with: self, onNext: { owner, _ in
+        if owner.isMovingFromParent {
+          reactor.action.onNext(.viewDidPop)
+        }
+      })
+      .disposed(by: self.disposeBag)
 
     // State
 

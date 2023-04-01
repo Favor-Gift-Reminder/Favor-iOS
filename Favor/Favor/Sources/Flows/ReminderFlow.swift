@@ -26,6 +26,9 @@ final class ReminderFlow: Flow {
     case .newReminderIsRequired:
       return self.navigateToNewReminder()
 
+    case .newReminderIsComplete:
+      return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
+
     default: return .none
     }
   }
