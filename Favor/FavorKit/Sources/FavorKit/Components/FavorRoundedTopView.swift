@@ -1,5 +1,5 @@
 //
-//  RoundedTopView.swift
+//  FavorRoundedTopView.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/31.
@@ -7,11 +7,12 @@
 
 import UIKit
 
-final class PastSectionHeaderBackgroundView: UIView {
+/// 회색 배경에 둥근 모서리를 구현하기 쉽도록 만든 View입니다.
+public final class FavorRoundedTopView: UIView {
 
   // MARK: - Draw
 
-  override func draw(_ rect: CGRect) {
+  public override func draw(_ rect: CGRect) {
     let layer = CAShapeLayer()
 
     let path = UIBezierPath()
