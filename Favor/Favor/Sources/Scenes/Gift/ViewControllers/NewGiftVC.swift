@@ -8,27 +8,27 @@
 import UIKit
 
 import FavorKit
+import ReactorKit
+import Reusable
 import RSKPlaceholderTextView
 import RxDataSources
+import RxGesture
 import RxSwift
 import SnapKit
 
-final class NewGiftViewController: BaseViewController {
+final class NewGiftViewController: BaseViewController, View {
   
-  typealias DataSource = RxCollectionViewSectionedReloadDataSource<PickedPictureSection>
+  typealias DataSource = RxCollectionViewSectionedReloadDataSource<NewGiftPhotoSection.NewGiftPhotoSectionModel>
   
-  // MARK: - Properties
+  // MARK: - UI COMPONENTS
   
   private let scrollView: UIScrollView = {
     let sv = UIScrollView()
-    
     return sv
   }()
   
   private let contentsView: UIView = {
     let view = UIView()
-    view.backgroundColor = .favorColor(.background)
-    
     return view
   }()
   
@@ -37,52 +37,29 @@ final class NewGiftViewController: BaseViewController {
     let attributedPlaceholder = NSAttributedString(
       string: "선물 이름 (최대 20자)",
       attributes: [
-        .foregroundColor: UIColor.favorColor(.subtext),
+        .foregroundColor: UIColor.favorColor(.explain),
         .font: UIFont.favorFont(.regular, size: 16)
       ]
     )
     tf.attributedPlaceholder = attributedPlaceholder
     tf.font = .favorFont(.regular, size: 16)
     tf.textColor = .favorColor(.titleAndLine)
+    tf.rightView = UIImageView(image: .favorIcon(.birth))
     
     return tf
   }()
   
-  private lazy var pickedPictureCollectionView: UICollectionView = {
+  private lazy var photoCollectionView: UICollectionView = {
     let layout = UICollectionViewFlowLayout()
     layout.scrollDirection = .horizontal
-    layout.itemSize = CGSize(width: 110, height: 110)
+    layout.sectionInset = .init(top: 0, left: 0, bottom: 0, right: 6)
+    layout.itemSize = CGSize(width: 100, height: 100)
     let cv = UICollectionView(frame: .zero, collectionViewLayout: layout)
-    cv.backgroundColor = .favorColor(.background)
+    cv.backgroundColor = .favorColor(.white)
     cv.showsHorizontalScrollIndicator = false
-    cv.register(
-      PickedPictureCell.self,
-      forCellWithReuseIdentifier: PickedPictureCell.reuseIdentifier
-    )
-    cv.register(
-      PickPictureCell.self,
-      forCellWithReuseIdentifier: PickPictureCell.reuseIdentifier
-    )
-    
+    cv.register(cellType: NewGiftEmptyCell.self)
+    cv.register(cellType: NewGiftPhotoCell.self)
     return cv
-  }()
-  
-  private lazy var emotionStackView: UIStackView = {
-    let sv = UIStackView()
-    [
-      self.emotionButton1,
-      self.emotionButton2,
-      self.emotionButton3,
-      self.emotionButton4,
-      self.emotionButton5
-    ].forEach {
-      sv.addArrangedSubview($0)
-    }
-    
-    sv.axis = .horizontal
-    sv.distribution = .equalSpacing
-    
-    return sv
   }()
   
   private let memoTextView: RSKPlaceholderTextView = {
@@ -97,9 +74,8 @@ final class NewGiftViewController: BaseViewController {
     tv.attributedPlaceholder = attributedPlaceholder
     tv.textColor = .favorColor(.explain)
     tv.font = .favorFont(.regular, size: 16)
-    tv.backgroundColor = .favorColor(.background)
-    tv.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    
+    tv.backgroundColor = .favorColor(.white)
+    tv.textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
     return tv
   }()
   
@@ -107,99 +83,123 @@ final class NewGiftViewController: BaseViewController {
     var config = UIButton.Configuration.plain()
     var titleContainer = AttributeContainer()
     titleContainer.font = .favorFont(.bold, size: 18)
-    titleContainer.foregroundColor = .favorColor(.titleAndLine)
-    
+    titleContainer.foregroundColor = .favorColor(.icon)
     config.attributedTitle = AttributedString(
       "타임라인 고정",
       attributes: titleContainer
     )
-    
-    // TODO: 핀셋 이미지 추가
+    config.background.backgroundColor = .white
+    let pinImage = UIImage.favorIcon(.pin)?
+      .resize(newWidth: 18)
+    config.imagePadding = 10
+    config.imagePlacement = .trailing
+    config.image = pinImage
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     let button = UIButton(configuration: config)
+    
+    button.configurationUpdateHandler = {
+      var config = $0.configuration
+      switch $0.state {
+      case .normal:
+        $0.configuration?.image = pinImage?.withTintColor(.favorColor(.line3))
+      case .selected:
+        $0.configuration?.image = pinImage?.withTintColor(.favorColor(.icon))
+      default:
+        break
+      }
+    }
     return button
   }()
   
-  var dataSource = DataSource { dataSource, collectionView, indexPath, item in
-    switch item {
-    case .pick(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: PickPictureCell.reuseIdentifier,
-        for: indexPath
-      ) as? PickPictureCell else {
-        return UICollectionViewCell()
+  private let doneButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.attributedTitle = AttributedString(
+      "완료",
+      attributes: .init([
+        .font: UIFont.favorFont(.bold, size: 18)
+      ])
+    )
+    let btn = UIButton(configuration: config)
+    btn.configurationUpdateHandler = {
+      switch $0.state {
+      case .disabled:
+        config.baseForegroundColor = .favorColor(.line2)
+      case .normal:
+        config.baseForegroundColor = .favorColor(.icon)
+      default:
+        break
       }
-      return cell
-      
-    case .picked(let reactor):
-      guard let cell = collectionView.dequeueReusableCell(
-        withReuseIdentifier: PickedPictureCell.reuseIdentifier,
-        for: indexPath
-      ) as? PickedPictureCell else {
-        return UICollectionViewCell()
-      }
-      return cell
     }
-  }
+    return btn
+  }()
   
-  private lazy var giftReceivedButton = self.makeGiftButton("받은 선물")
-  private lazy var giftGivenButton = self.makeGiftButton("준 선물")
-  private lazy var titleLabel = self.makeTitleLabel("제목")
-  private lazy var titleLine = self.makeLine()
-  private lazy var categoryLabel = self.makeTitleLabel("카테고리")
-  private let categoryView = FavorCategoryView()
-  private lazy var pictureLabel = self.makeTitleLabel("사진")
-  private lazy var friendLabel = self.makeTitleLabel("준 사람")
-  private let giverButton = FavorPlainButton(with: .main("친구 선택", isRight: true))
-  private let receiverButton = FavorPlainButton(with: .main("친구선택", isRight: true))
-  private lazy var friendLine = self.makeLine()
-  private lazy var dateLabel = self.makeTitleLabel("날짜")
-  private let dateButton = FavorPlainButton(with: .main("날짜 선택", isRight: false))
-  private lazy var dateLine = self.makeLine()
-  private lazy var emotionLabel = self.makeTitleLabel("감정 메모")
-  private lazy var emotionButton1 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton2 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton3 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton4 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton5 = self.makeEmotionButton("🥹")
-  private lazy var memoLine = self.makeLine()
+  private let categoryView: FavorCategoryView = {
+    let view = FavorCategoryView()
+    view.setSelectedCategory(.lightGift)
+    return view
+  }()
   
-  // MARK: - LifeCycle
+  private lazy var giftReceivedButton = self.giftButton("받은 선물")
+  private lazy var giftGivenButton = self.giftButton("준 선물")
+  private let datePickerTextField = FavorDatePickerTextField()
+  private let choiceFrinedButton = NewGiftChoiceFriendButton()
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    
-    Observable.just(getMockSection())
-      .bind(to: self.pickedPictureCollectionView.rx.items(dataSource: dataSource))
-      .disposed(by: disposeBag)
-  }
+  private lazy var titleStackView = makeStack(
+    title: "제목",
+    items: [self.titleTextField],
+    isDivider: true
+  )
+  
+  private lazy var categoryStackView = makeStack(
+    title: "카테고리",
+    items: [self.categoryView],
+    isDivider: false
+  )
+  
+  private lazy var photoStackView = makeStack(
+    title: "사진",
+    items: [self.photoCollectionView],
+    isDivider: false
+  )
+  
+  private lazy var friendStackView = makeStack(
+    title: "받은 사람",
+    items: [self.choiceFrinedButton],
+    isDivider: true
+  )
+  
+  private lazy var dateStackView = makeStack(
+    title: "날짜",
+    items: [self.datePickerTextField],
+    isDivider: true
+  )
+  
+  private lazy var memoStackView = makeStack(
+    title: "메모",
+    items: [self.memoTextView],
+    isDivider: true
+  )
   
   // MARK: - Setup
   
   override func setupStyles() {
-    self.giftReceivedButton.isSelected = true
-    self.view.backgroundColor = .favorColor(.background)
-    self.receiverButton.isHidden = true
+    self.view.backgroundColor = .favorColor(.white)
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
   }
   
   override func setupLayouts() {
     self.scrollView.addSubview(contentsView)
-    
+    self.view.addSubview(self.scrollView)
     [
-      self.scrollView,
-    ].forEach {
-      self.view.addSubview($0)
-    }
-    
-    [
-      self.giftReceivedButton, self.giftGivenButton,
-      self.titleLabel, self.titleLine, self.titleTextField, self.titleLine,
-      self.categoryLabel, self.categoryView,
-      self.pictureLabel, self.pickedPictureCollectionView,
-      self.friendLabel, self.giverButton, self.receiverButton, self.friendLine,
-      self.dateLabel, self.dateButton, self.dateLine,
-      self.emotionLabel, self.emotionStackView,
-      self.memoTextView, self.memoLine,
+      self.giftReceivedButton,
+      self.giftGivenButton,
+      self.titleStackView,
+      self.categoryStackView,
+      self.photoStackView,
+      self.friendStackView,
+      self.dateStackView,
+      self.memoStackView,
       self.pinTimelineButton
     ].forEach {
       self.contentsView.addSubview($0)
@@ -208,11 +208,13 @@ final class NewGiftViewController: BaseViewController {
   
   override func setupConstraints() {
     self.contentsView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.width.equalTo(self.view.frame.width)
+      make.top.bottom.equalToSuperview()
     }
 
     self.scrollView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.top.leading.trailing.equalToSuperview()
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top)
     }
     
     self.giftReceivedButton.snp.makeConstraints { make in
@@ -224,183 +226,217 @@ final class NewGiftViewController: BaseViewController {
       make.top.equalToSuperview().inset(32)
       make.leading.equalTo(self.giftReceivedButton.snp.trailing).offset(33)
     }
-    
-    self.titleLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.giftReceivedButton.snp.bottom).offset(40)
+
+    self.titleStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.giftGivenButton.snp.bottom).offset(40)
     }
     
-    self.titleLine.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-    }
-    
-    self.titleTextField.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.titleLabel.snp.bottom).offset(16)
-    }
-    
-    self.titleLine.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(titleTextField.snp.bottom).offset(16)
-      make.height.equalTo(1)
-    }
-    
-    self.categoryLabel.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.titleLine.snp.bottom).offset(40)
+    self.categoryStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.titleStackView.snp.bottom).offset(40)
     }
     
     self.categoryView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview()
-      make.width.equalTo(self.view.frame.width)
-      make.top.equalTo(self.categoryLabel.snp.bottom).offset(16)
+      make.directionalHorizontalEdges.equalToSuperview()
     }
     
-    self.pictureLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.categoryView.snp.bottom).offset(24)
+    self.photoStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.categoryStackView.snp.bottom).offset(40)
     }
     
-    self.pickedPictureCollectionView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.pictureLabel.snp.bottom).offset(16)
-      make.height.equalTo(110)
+    self.photoCollectionView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(100)
     }
     
-    self.friendLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.pickedPictureCollectionView.snp.bottom).offset(40)
+    self.friendStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.photoStackView.snp.bottom).offset(40)
     }
     
-    self.giverButton.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
+    self.dateStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.friendStackView.snp.bottom).offset(40)
     }
     
-    self.receiverButton.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
-    }
-    
-    self.friendLine.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.giverButton.snp.bottom).offset(16)
-      make.height.equalTo(1)
-    }
-    
-    self.dateLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendLine.snp.bottom).offset(40)
-    }
-    
-    self.dateButton.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateLabel.snp.bottom).offset(16)
-    }
-    
-    self.dateLine.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateButton.snp.bottom).offset(16)
-      make.height.equalTo(1)
-    }
-    
-    self.emotionLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateLine.snp.bottom).offset(40)
-    }
-    
-    self.emotionStackView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.emotionLabel.snp.bottom).offset(16)
+    self.memoStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.dateStackView.snp.bottom).offset(40)
     }
     
     self.memoTextView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.emotionStackView.snp.bottom).offset(16)
-      make.height.equalTo(130)
-    }
-    
-    self.memoLine.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.memoTextView.snp.bottom).offset(16)
-      make.height.equalTo(1)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(113)
     }
     
     self.pinTimelineButton.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.memoLine.snp.bottom).offset(40)
-      make.bottom.equalToSuperview().inset(85)
+      make.top.equalTo(self.memoStackView.snp.bottom).offset(40)
+      make.leading.equalToSuperview().inset(16)
+      make.bottom.equalToSuperview().inset(77)
     }
   }
   
-  // MARK: - Bind
-  func getMockSection() -> [PickedPictureSection] {
-    let pickItem = PickedPictureSectionItem.pick(.init(5))
-    let pickedPicture1 = PickedPictureSectionItem.picked(.init(UIImage()))
-    let pickedPicture2 = PickedPictureSectionItem.picked(.init(UIImage()))
-    let pickedPicture3 = PickedPictureSectionItem.picked(.init(UIImage()))
-    let pickedPicture4 = PickedPictureSectionItem.picked(.init(UIImage()))
+  // MARK: - BIND
+  
+  func bind(reactor: NewGiftViewReactor) {
+        
+    // MARK: - ACTION
     
-    let itemInFirstSection = [pickItem, pickedPicture1, pickedPicture2, pickedPicture3, pickedPicture4]
-    let firstSection = PickedPictureSection(
-      original: PickedPictureSection(
-        original: .first(itemInFirstSection),
-        items: itemInFirstSection
-      ),
-      items: itemInFirstSection
-    )
+    // 빈 화면 터치
+    self.view.rx.tapGesture { gesture, _ in
+      gesture.cancelsTouchesInView = false
+    }
+    .when(.recognized)
+    .bind(with: self) { owner, _ in
+      owner.view.endEditing(true)
+    }
+    .disposed(by: self.disposeBag)
     
-    return [firstSection]
+    // 받은 선물 버튼 클릭
+    self.giftReceivedButton.rx.tap
+      .map { NewGiftViewReactor.Action.giftReceivedButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 준 선물 버튼 클릭
+    self.giftGivenButton.rx.tap
+      .map { NewGiftViewReactor.Action.giftGivenButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 제목 텍스트 필드
+    self.titleTextField.rx.text
+      .orEmpty
+      .map { NewGiftViewReactor.Action.titleTextFieldDidChange($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 셀 선택
+    self.photoCollectionView.rx.itemSelected
+      .map { $0.item }
+      .map { NewGiftViewReactor.Action.cellSelected(index: $0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 카테고리 변경
+    self.categoryView.currentCategory
+      .map { NewGiftViewReactor.Action.categoryDidChange($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 타임라인 고정 토글
+    self.pinTimelineButton.rx.tap
+      .withUnretained(self)
+      .do { $0.0.pinTimelineButton.isSelected.toggle() }
+      .map { $0.0.pinTimelineButton.isSelected }
+      .map { NewGiftViewReactor.Action.pinToggle($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // MARK: - STATE
+    
+    let dataSource = DataSource { _, collectionView, indexPath, item in
+      switch item {
+      case .empty:
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftEmptyCell
+        return cell
+      case .photo(let image):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftPhotoCell
+        cell.imageView.image = image
+        
+        cell.rx.removeButtonTapped
+          .map { NewGiftViewReactor.Action.photoRemoveButtonDidTap(index: indexPath.row) }
+          .bind(to: reactor.action)
+          .disposed(by: self.disposeBag)
+        
+        return cell
+      }
+    }
+    
+    // 선물 종류 토글
+    reactor.state.map { $0.isReceivedGift }
+      .distinctUntilChanged()
+      .asDriver(onErrorJustReturn: false)
+      .drive(with: self) {
+        if $1 {
+          $0.giftReceivedButton.isSelected = true
+          $0.giftGivenButton.isSelected = false
+        } else {
+          $0.giftReceivedButton.isSelected = false
+          $0.giftGivenButton.isSelected = true
+        }
+      }
+      .disposed(by: self.disposeBag)
+    
+    // FriendLabel Text 변경
+    reactor.state.map { $0.isReceivedGift }
+      .distinctUntilChanged()
+      .map { $0 ? "준 사람" : "받은 사람" }
+      .asDriver(onErrorJustReturn: "")
+      .drive(with: self) { owner, text in
+        let label = owner.friendStackView.subviews.first as! UILabel
+        label.text = text
+      }
+      .disposed(by: self.disposeBag)
+    
+    // DataSource Binding
+    reactor.state.map { [$0.newGiftPhotoSection] }
+      .bind(to: self.photoCollectionView.rx.items(dataSource: dataSource))
+      .disposed(by: self.disposeBag)
   }
 }
 
-// MARK: - Helpers
+// MARK: - HELPERS
 
 private extension NewGiftViewController {
-  func makeGiftButton(_ title: String) -> UIButton {
-    let btn = UIButton()
-    let attributedTitle = NSAttributedString(
-      string: title,
-      attributes: [
+  func giftButton(_ title: String) -> UIButton {
+    var config = UIButton.Configuration.plain()
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+    config.baseBackgroundColor = .favorColor(.white)
+    config.attributedTitle = AttributedString(
+      title,
+      attributes: .init([
         .font: UIFont.favorFont(.bold, size: 22)
-      ]
+      ])
     )
-    btn.setAttributedTitle(attributedTitle, for: .normal)
-    btn.setTitleColor(.favorColor(.titleAndLine), for: .selected)
-    btn.setTitleColor(.favorColor(.line2), for: .normal)
-    
-    return btn
-  }
-  
-  func makeTitleLabel(_ title: String) -> UILabel {
-    let lb = UILabel()
-    lb.textColor = .favorColor(.titleAndLine)
-    lb.text = title
-    lb.font = .favorFont(.bold, size: 18)
-    
-    return lb
-  }
-  
-  func makeLine() -> UIView {
-    let view = UIView()
-    view.backgroundColor = .favorColor(.divider)
-    
-    return view
-  }
-  
-  func makeEmotionButton(_ image: String) -> UIButton {
-    let button = UIButton()
-    button.setImage(UIImage(named: image), for: .normal)
-    
+    let button = UIButton(configuration: config)
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.baseForegroundColor = .favorColor(.line2)
+      case .selected:
+        button.configuration?.baseForegroundColor = .favorColor(.titleAndLine)
+      default:
+        break
+      }
+    }
     return button
   }
-}
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-struct NewGiftVC_PreView: PreviewProvider {
-  static var previews: some View {
-    NewGiftViewController().toPreview()
+  
+  func makeStack(title: String, items: [UIView], isDivider: Bool) -> UIStackView {
+    let divider = FavorDivider()
+    
+    let lb = UILabel()
+    lb.text = title
+    lb.font = .favorFont(.bold, size: 18)
+    lb.textColor = .favorColor(.icon)
+    
+    let sv = UIStackView()
+    sv.addArrangedSubview(lb)
+    items.forEach {
+      sv.addArrangedSubview($0)
+    }
+    if isDivider {
+      sv.addArrangedSubview(divider)
+      divider.snp.makeConstraints { make in
+        make.directionalHorizontalEdges.equalToSuperview()
+      }
+    }
+    sv.spacing = 16
+    sv.alignment = .leading
+    sv.axis = .vertical
+    return sv
   }
 }
-#endif

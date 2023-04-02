@@ -13,11 +13,11 @@ public final class FavorLargeButton: UIButton {
   
   // MARK: - PROPERTIES
   
-  private let largeFavorButtonType: LargeFavorButtonType
+  private let largeFavorButtonType: FavorLargeButtonType
   
   // MARK: - INITIALIZER
   
-  public init(with largeFavorButtonType: LargeFavorButtonType) {
+  public init(with largeFavorButtonType: FavorLargeButtonType) {
     self.largeFavorButtonType = largeFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()

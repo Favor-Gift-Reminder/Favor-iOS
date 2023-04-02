@@ -33,6 +33,9 @@ final class HomeFlow: Flow {
 
     case .filterIsComplete(let sortType):
       return self.dismissFilter(sortedBy: sortType)
+      
+    case .newGiftIsRequired:
+      return self.navigateToGift()
 
     case .searchIsRequired:
       return self.navigateToSearch()
@@ -45,6 +48,15 @@ final class HomeFlow: Flow {
 // MARK: - Navigates
 
 private extension HomeFlow {
+  func navigateToGift() -> FlowContributors {
+    let giftFlow = GiftFlow(self.rootViewController)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: giftFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired)
+    ))
+  }
+  
   func navigateToHome() -> FlowContributors {
     let homeVC = HomeViewController()
     let homeReactor = HomeViewReactor()
@@ -57,7 +69,7 @@ private extension HomeFlow {
         withNextStepper: homeReactor
       ))
   }
-
+  
   func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
     let filterVC = FilterViewController()
     filterVC.currentSortType = sortType

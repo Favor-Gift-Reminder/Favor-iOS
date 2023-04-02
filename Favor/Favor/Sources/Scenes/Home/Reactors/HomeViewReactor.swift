@@ -81,14 +81,13 @@ final class HomeViewReactor: Reactor, Stepper {
             .just(.updateLoading(status == .inProgress))
           ])
         }
-
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
       self.steps.accept(AppStep.searchIsRequired)
       return .empty()
 
     case .newGiftButtonDidTap:
-      os_log(.debug, "New Gift button did tap.")
+      self.steps.accept(AppStep.newGiftIsRequired)
       return .empty()
 
     case .itemSelected:
