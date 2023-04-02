@@ -80,7 +80,7 @@ public final class FavorCategoryView: UIScrollView {
   // MARK: - HELPERS
   
   /// 외부에서 카테고리를 주입해줄 수 있는 메서드입니다.
-  public func configureCategory(_ category: FavorCategory) {
+  public func setSelectedCategory(_ category: FavorCategory) {
     let button = self.buttons.filter { $0.category == category }.first!
     self.didTapButton(button)
   }

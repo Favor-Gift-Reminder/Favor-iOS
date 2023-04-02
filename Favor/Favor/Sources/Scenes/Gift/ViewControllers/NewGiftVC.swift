@@ -136,7 +136,7 @@ final class NewGiftViewController: BaseViewController, View {
   
   private let categoryView: FavorCategoryView = {
     let view = FavorCategoryView()
-    view.configureCategory(.lightGift)
+    view.setSelectedCategory(.lightGift)
     return view
   }()
   
@@ -370,12 +370,16 @@ final class NewGiftViewController: BaseViewController, View {
       }
       .disposed(by: self.disposeBag)
     
-//    // FriendLabel Text 변경
-//    reactor.state.map { $0.isReceivedGift }
-//      .distinctUntilChanged()
-//      .map { $0 ? "준 사람" : "받은 사람" }
-//      .bind(to: self.friendLabel.rx.text)
-//      .disposed(by: self.disposeBag)
+    // FriendLabel Text 변경
+    reactor.state.map { $0.isReceivedGift }
+      .distinctUntilChanged()
+      .map { $0 ? "준 사람" : "받은 사람" }
+      .asDriver(onErrorJustReturn: "")
+      .drive(with: self) { owner, text in
+        let label = owner.friendStackView.subviews.first as! UILabel
+        label.text = text
+      }
+      .disposed(by: self.disposeBag)
     
     // DataSource Binding
     reactor.state.map { [$0.newGiftPhotoSection] }

@@ -93,6 +93,7 @@ public final class FavorDatePickerTextField: UIView {
   
   @objc
   private func didChangeDate() {
+    // TODO: 머지 후 Date+.swift의 메서드로 변경
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy년 M월 d일"
     let dateString = formatter.string(from: self.datePicker.date)
