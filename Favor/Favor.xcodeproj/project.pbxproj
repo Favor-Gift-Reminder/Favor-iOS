@@ -59,7 +59,6 @@
 		2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */; };
 		2EB3E71929D49008008D10A0 /* ReminderHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71829D49008008D10A0 /* ReminderHeaderView.swift */; };
 		2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71A29D5EB77008D10A0 /* PastSectionBackgroundView.swift */; };
-		2EB3E71F29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71E29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift */; };
 		2EC371F8299521AD00D1007B /* RxGesture in Frameworks */ = {isa = PBXBuildFile; productRef = 2EC371F7299521AD00D1007B /* RxGesture */; };
 		2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371F92995262D00D1007B /* SearchResultVC.swift */; };
 		2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC371FB2995266B00D1007B /* SearchResultViewReactor.swift */; };
@@ -116,8 +115,8 @@
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
-		2EEC97D329D9881C00AACF38 /* EventDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* EventDetailVC.swift */; };
-		2EEC97D529D9885C00AACF38 /* EventDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* EventDetailViewReactor.swift */; };
+		2EEC97D329D9881C00AACF38 /* ReminderDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* ReminderDetailVC.swift */; };
+		2EEC97D529D9885C00AACF38 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */; };
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
@@ -196,7 +195,6 @@
 		2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderCellReactor.swift; sourceTree = "<group>"; };
 		2EB3E71829D49008008D10A0 /* ReminderHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderHeaderView.swift; sourceTree = "<group>"; };
 		2EB3E71A29D5EB77008D10A0 /* PastSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSectionBackgroundView.swift; sourceTree = "<group>"; };
-		2EB3E71E29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PastSectionHeaderBackgroundView.swift; sourceTree = "<group>"; };
 		2EC371F92995262D00D1007B /* SearchResultVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultVC.swift; sourceTree = "<group>"; };
 		2EC371FB2995266B00D1007B /* SearchResultViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewReactor.swift; sourceTree = "<group>"; };
 		2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFlow.swift; sourceTree = "<group>"; };
@@ -252,8 +250,8 @@
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
-		2EEC97D229D9881C00AACF38 /* EventDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailVC.swift; sourceTree = "<group>"; };
-		2EEC97D429D9885C00AACF38 /* EventDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewReactor.swift; sourceTree = "<group>"; };
+		2EEC97D229D9881C00AACF38 /* ReminderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailVC.swift; sourceTree = "<group>"; };
+		2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewReactor.swift; sourceTree = "<group>"; };
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
@@ -610,7 +608,7 @@
 			children = (
 				2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */,
 				2EE07ED2296E8DE600048A3C /* EventEditVC.swift */,
-				2EEC97D229D9881C00AACF38 /* EventDetailVC.swift */,
+				2EEC97D229D9881C00AACF38 /* ReminderDetailVC.swift */,
 				2EE1823029D67A9000949901 /* NewReminderVC.swift */,
 				2EE07ECE296E8DB500048A3C /* ReminderVC.swift */,
 			);
@@ -623,7 +621,6 @@
 				2EB3E71429D48B97008D10A0 /* ReminderCell.swift */,
 				2EB3E71829D49008008D10A0 /* ReminderHeaderView.swift */,
 				2EB3E71A29D5EB77008D10A0 /* PastSectionBackgroundView.swift */,
-				2EB3E71E29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -631,7 +628,7 @@
 		2EE07EAD296E7BE200048A3C /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
-				2EEC97D429D9885C00AACF38 /* EventDetailViewReactor.swift */,
+				2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */,
 				2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */,
 				2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */,
 				2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */,
@@ -996,7 +993,7 @@
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
-				2EEC97D529D9885C00AACF38 /* EventDetailViewReactor.swift in Sources */,
+				2EEC97D529D9885C00AACF38 /* ReminderDetailViewReactor.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EE1823329D67AF600949901 /* NewReminderViewReactor.swift in Sources */,
@@ -1065,11 +1062,10 @@
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
-				2EB3E71F29D606C2008D10A0 /* PastSectionHeaderBackgroundView.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
-				2EEC97D329D9881C00AACF38 /* EventDetailVC.swift in Sources */,
+				2EEC97D329D9881C00AACF38 /* ReminderDetailVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
