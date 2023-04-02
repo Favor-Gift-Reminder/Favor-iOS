@@ -108,15 +108,16 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Binding
   
   override func bind() {
-    Observable.just([])
+    // State
+    self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
   
   func bind(reactor: HomeViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewDidLoad }
+    self.rx.viewWillAppear
+      .map { _ in Reactor.Action.viewDidAppear }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -147,11 +148,8 @@ final class HomeViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { [$0.upcomingSection, $0.timelineSection] }
-      .do(onNext: {
-        print("⬆️ Section: \($0)")
-      })
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
 }

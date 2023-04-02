@@ -43,6 +43,7 @@ final class SearchViewController: BaseViewController, View {
     self.giftCategories.forEach {
       stackView.addArrangedSubview(FavorSmallButton(with: .mainWithIcon($0, image: nil)))
     }
+    stackView.distribution = .fillProportionally
     return stackView
   }()
   
@@ -50,8 +51,7 @@ final class SearchViewController: BaseViewController, View {
     let scrollView = UIScrollView()
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.showsVerticalScrollIndicator = false
-    scrollView.contentInset = .init(top: 0, left: 20, bottom: 0, right: 20)
-    scrollView.addSubview(self.giftCategoryButtonStack)
+    scrollView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
     return scrollView
   }()
   
@@ -61,29 +61,21 @@ final class SearchViewController: BaseViewController, View {
   private lazy var emotionButtonStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
-    stackView.spacing = 34
     stackView.distribution = .equalSpacing
-    self.emotions.forEach {
-      stackView.addArrangedSubview(self.makeEmojiButton(emoji: $0))
-    }
+    stackView.spacing = 34
     return stackView
   }()
   
   // MARK: - Life Cycle
   
-  override func viewDidLoad() {
-    super.viewDidLoad()
-  }
-  
   // MARK: - Binding
   
   func bind(reactor: SearchViewReactor) {
     // Action
-    self.view.rx.anyGesture(.tap())
-      .when(.recognized)
-      .asDriver(onErrorDriveWith: .empty())
+    self.rx.viewDidAppear
+      .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, _ in
-        owner.searchBar.searchBar.searchTextField.resignFirstResponder()
+        owner.searchBar.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
     
@@ -92,24 +84,32 @@ final class SearchViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidBegin])
+    self.searchBar.rx.editingDidBegin
       .map { Reactor.Action.searchDidBegin }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidEnd])
+    self.searchBar.rx.editingDidEnd
       .map { Reactor.Action.searchDidEnd }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.searchBar.searchBar.searchTextField.rx.controlEvent([.editingDidEndOnExit])
+    self.searchBar.rx.editingDidEndOnExit
       .do(onNext: {
-        self.searchBar.searchBar.searchTextField.resignFirstResponder()
+        self.searchBar.textField.resignFirstResponder()
       })
       .map { Reactor.Action.returnKeyDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-    
+
+    self.view.rx.anyGesture(.tap())
+      .when(.recognized)
+      .asDriver(onErrorDriveWith: .empty())
+      .drive(with: self, onNext: { owner, _ in
+        owner.searchBar.textField.resignFirstResponder()
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.isEditing }
       .asDriver(onErrorJustReturn: false)
@@ -128,6 +128,15 @@ final class SearchViewController: BaseViewController, View {
   }
   
   override func setupLayouts() {
+    self.giftCategories.forEach {
+      self.giftCategoryButtonStack.addArrangedSubview(FavorSmallButton(with: .gray($0)))
+    }
+    self.giftCategoryButtonScrollView.addSubview(self.giftCategoryButtonStack)
+
+    self.emotions.forEach {
+      self.emotionButtonStack.addArrangedSubview(self.makeEmojiButton(emoji: $0))
+    }
+
     [
       self.searchBar,
       self.giftCategoryTitleLabel,
@@ -142,16 +151,16 @@ final class SearchViewController: BaseViewController, View {
   override func setupConstraints() {
     self.searchBar.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     
     self.giftCategoryTitleLabel.snp.makeConstraints { make in
       make.top.equalTo(self.searchBar.snp.bottom).offset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     self.giftCategoryButtonScrollView.snp.makeConstraints { make in
       make.top.equalTo(self.giftCategoryTitleLabel.snp.bottom).offset(16)
-      make.leading.trailing.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(32)
     }
     self.giftCategoryButtonStack.snp.makeConstraints { make in
@@ -161,11 +170,11 @@ final class SearchViewController: BaseViewController, View {
     
     self.emotionTitleLabel.snp.makeConstraints { make in
       make.top.equalTo(self.giftCategoryButtonScrollView.snp.bottom).offset(56)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     self.emotionButtonStack.snp.makeConstraints { make in
       make.top.equalTo(self.emotionTitleLabel.snp.bottom).offset(16)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.height.equalTo(40)
     }
   }
@@ -176,9 +185,8 @@ final class SearchViewController: BaseViewController, View {
 private extension SearchViewController {
   func makeTitleLabel(title: String) -> UILabel {
     let label = UILabel()
-    label.layoutMargins = .init(top: 0, left: 20, bottom: 0, right: 0)
     label.font = .favorFont(.bold, size: 18)
-    label.textColor = .favorColor(.titleAndLine)
+    label.textColor = .favorColor(.icon)
     label.text = title
     return label
   }

@@ -7,25 +7,25 @@
 
 import Foundation
 
-enum GiftResponseDTO {
+public enum GiftResponseDTO {
   
   /// 전체 선물
   public struct AllGifts: Decodable {
-    let giftNo: Int
-    let isPinned: Bool
+    public let giftNo: Int
+    public let isPinned: Bool
   }
   
   /// 단일 선물
   public struct Gift: Decodable {
-    let category: String
-    let emotion: String
-    let friendNo: Int
-    let giftDate: String
-    let giftMemo: String
-    let giftName: String
-    let giftNo: Int
-    let isGiven: Bool
-    let isPinned: Bool
-    let userNo: Int
+    public let category: String
+    public let emotion: String
+    public let friendNo: Int
+    public let giftDate: String
+    public let giftMemo: String
+    public let giftName: String
+    public let giftNo: Int
+    public let isGiven: Bool
+    public let isPinned: Bool
+    public let userNo: Int
   }
 }
