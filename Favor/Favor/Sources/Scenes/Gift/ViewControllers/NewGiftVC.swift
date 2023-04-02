@@ -29,8 +29,6 @@ final class NewGiftViewController: BaseViewController, View {
   
   private let contentsView: UIView = {
     let view = UIView()
-    view.backgroundColor = .favorColor(.white)
-    
     return view
   }()
   
@@ -64,24 +62,6 @@ final class NewGiftViewController: BaseViewController, View {
     return cv
   }()
   
-  private lazy var emotionStackView: UIStackView = {
-    let sv = UIStackView()
-    [
-      self.emotionButton1,
-      self.emotionButton2,
-      self.emotionButton3,
-      self.emotionButton4,
-      self.emotionButton5
-    ].forEach {
-      sv.addArrangedSubview($0)
-    }
-    
-    sv.axis = .horizontal
-    sv.distribution = .equalSpacing
-    
-    return sv
-  }()
-  
   private let memoTextView: RSKPlaceholderTextView = {
     let tv = RSKPlaceholderTextView()
     let attributedPlaceholder = NSAttributedString(
@@ -95,11 +75,10 @@ final class NewGiftViewController: BaseViewController, View {
     tv.textColor = .favorColor(.explain)
     tv.font = .favorFont(.regular, size: 16)
     tv.backgroundColor = .favorColor(.white)
-    tv.textContainerInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    
+    tv.textContainerInset = UIEdgeInsets(top: 0, left: -4, bottom: 0, right: 0)
     return tv
   }()
-    
+  
   private let pinTimelineButton: UIButton = {
     var config = UIButton.Configuration.plain()
     var titleContainer = AttributeContainer()
@@ -161,33 +140,46 @@ final class NewGiftViewController: BaseViewController, View {
     return view
   }()
   
-  // Divider
-  private let titleDivider = FavorDivider()
-  private let friendDivider = FavorDivider()
-  private let dateDivider = FavorDivider()
-  private let memoDivider = FavorDivider()
-  
-  // Label
-  private lazy var titleLabel = self.label("제목")
-  private lazy var categoryLabel = self.label("카테고리")
-  private lazy var photoLabel = self.label("사진")
-  private lazy var dateLabel = self.label("날짜")
-  private lazy var friendLabel = self.label("준 사람")
-  private lazy var emotionLabel = self.label("메모")
-  
-  // Button
   private lazy var giftReceivedButton = self.giftButton("받은 선물")
   private lazy var giftGivenButton = self.giftButton("준 선물")
-  private lazy var datePickerTextField = FavorDatePickerTextField()
-  private lazy var emotionButton1 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton2 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton3 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton4 = self.makeEmotionButton("🥹")
-  private lazy var emotionButton5 = self.makeEmotionButton("🥹")
+  private let datePickerTextField = FavorDatePickerTextField()
+  private let choiceFrinedButton = NewGiftChoiceFriendButton()
   
-  private let choiceFrinedView = NewGiftChoiceFriendButton()
+  private lazy var titleStackView = makeStack(
+    title: "제목",
+    items: [self.titleTextField],
+    isDivider: true
+  )
   
-  // MARK: - PROPERTIES
+  private lazy var categoryStackView = makeStack(
+    title: "카테고리",
+    items: [self.categoryView],
+    isDivider: false
+  )
+  
+  private lazy var photoStackView = makeStack(
+    title: "사진",
+    items: [self.photoCollectionView],
+    isDivider: false
+  )
+  
+  private lazy var friendStackView = makeStack(
+    title: "받은 사람",
+    items: [self.choiceFrinedButton],
+    isDivider: true
+  )
+  
+  private lazy var dateStackView = makeStack(
+    title: "날짜",
+    items: [self.datePickerTextField],
+    isDivider: true
+  )
+  
+  private lazy var memoStackView = makeStack(
+    title: "메모",
+    items: [self.memoTextView],
+    isDivider: true
+  )
   
   // MARK: - Setup
   
@@ -199,30 +191,16 @@ final class NewGiftViewController: BaseViewController, View {
   override func setupLayouts() {
     self.scrollView.addSubview(contentsView)
     self.view.addSubview(self.scrollView)
-    
     [
       self.giftReceivedButton,
       self.giftGivenButton,
-      self.titleLabel,
-      self.titleDivider,
-      self.titleTextField,
-      self.titleDivider,
-      self.categoryLabel,
-      self.categoryView,
-      self.photoLabel,
-      self.photoCollectionView,
-      self.friendLabel,
-      self.choiceFrinedView,
-      self.friendDivider,
-      self.dateLabel,
-      self.datePickerTextField,
-      self.dateDivider,
-      self.emotionLabel,
-      self.emotionStackView,
-      self.memoTextView,
-      self.memoDivider,
-      self.pinTimelineButton,
-      self.datePickerTextField,
+      self.titleStackView,
+      self.categoryStackView,
+      self.photoStackView,
+      self.friendStackView,
+      self.dateStackView,
+      self.memoStackView,
+      self.pinTimelineButton
     ].forEach {
       self.contentsView.addSubview($0)
     }
@@ -230,7 +208,8 @@ final class NewGiftViewController: BaseViewController, View {
   
   override func setupConstraints() {
     self.contentsView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.width.equalTo(self.view.frame.width)
+      make.top.bottom.equalToSuperview()
     }
 
     self.scrollView.snp.makeConstraints { make in
@@ -247,107 +226,55 @@ final class NewGiftViewController: BaseViewController, View {
       make.top.equalToSuperview().inset(32)
       make.leading.equalTo(self.giftReceivedButton.snp.trailing).offset(33)
     }
-    
-    self.titleLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.giftReceivedButton.snp.bottom).offset(40)
+
+    self.titleStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.giftGivenButton.snp.bottom).offset(40)
     }
     
-    self.titleDivider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-    }
-    
-    self.titleTextField.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.titleLabel.snp.bottom).offset(16)
-    }
-    
-    self.titleDivider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(titleTextField.snp.bottom).offset(16)
-      make.height.equalTo(1)
-    }
-    
-    self.categoryLabel.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.titleDivider.snp.bottom).offset(40)
+    self.categoryStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.titleStackView.snp.bottom).offset(40)
     }
     
     self.categoryView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview()
-      make.width.equalTo(self.view.frame.width)
-      make.top.equalTo(self.categoryLabel.snp.bottom).offset(16)
+      make.directionalHorizontalEdges.equalToSuperview()
     }
     
-    self.photoLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.categoryView.snp.bottom).offset(24)
+    self.photoStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.categoryStackView.snp.bottom).offset(40)
     }
     
     self.photoCollectionView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.photoLabel.snp.bottom).offset(16)
+      make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(100)
     }
     
-    self.friendLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.photoCollectionView.snp.bottom).offset(40)
+    self.friendStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.photoStackView.snp.bottom).offset(40)
     }
     
-    self.choiceFrinedView.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendLabel.snp.bottom).offset(16)
-    }
-        
-    self.friendDivider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.choiceFrinedView.snp.bottom).offset(16)
-      make.height.equalTo(1)
+    self.dateStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.friendStackView.snp.bottom).offset(40)
     }
     
-    self.dateLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.friendDivider.snp.bottom).offset(40)
-    }
-    
-    self.datePickerTextField.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateLabel.snp.bottom).offset(16)
-    }
-    
-    self.dateDivider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.datePickerTextField.snp.bottom).offset(16)
-      make.height.equalTo(1)
-    }
-    
-    self.emotionLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.dateDivider.snp.bottom).offset(40)
-    }
-    
-    self.emotionStackView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.emotionLabel.snp.bottom).offset(16)
+    self.memoStackView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.equalTo(self.dateStackView.snp.bottom).offset(40)
     }
     
     self.memoTextView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.emotionStackView.snp.bottom).offset(16)
-      make.height.equalTo(130)
-    }
-    
-    self.memoDivider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
-      make.top.equalTo(self.memoTextView.snp.bottom).offset(16)
-      make.height.equalTo(1)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(113)
     }
     
     self.pinTimelineButton.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
-      make.top.equalTo(self.memoDivider.snp.bottom).offset(40)
-      make.bottom.equalToSuperview().inset(85)
+      make.top.equalTo(self.memoStackView.snp.bottom).offset(40)
+      make.leading.equalToSuperview().inset(16)
+      make.bottom.equalToSuperview().inset(77)
     }
   }
   
@@ -443,12 +370,12 @@ final class NewGiftViewController: BaseViewController, View {
       }
       .disposed(by: self.disposeBag)
     
-    // FriendLabel Text 변경
-    reactor.state.map { $0.isReceivedGift }
-      .distinctUntilChanged()
-      .map { $0 ? "준 사람" : "받은 사람" }
-      .bind(to: self.friendLabel.rx.text)
-      .disposed(by: self.disposeBag)
+//    // FriendLabel Text 변경
+//    reactor.state.map { $0.isReceivedGift }
+//      .distinctUntilChanged()
+//      .map { $0 ? "준 사람" : "받은 사람" }
+//      .bind(to: self.friendLabel.rx.text)
+//      .disposed(by: self.disposeBag)
     
     // DataSource Binding
     reactor.state.map { [$0.newGiftPhotoSection] }
@@ -470,7 +397,6 @@ private extension NewGiftViewController {
         .font: UIFont.favorFont(.bold, size: 22)
       ])
     )
-    
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
       switch button.state {
@@ -482,23 +408,31 @@ private extension NewGiftViewController {
         break
       }
     }
-    
     return button
   }
   
-  func label(_ title: String) -> UILabel {
+  func makeStack(title: String, items: [UIView], isDivider: Bool) -> UIStackView {
+    let divider = FavorDivider()
+    
     let lb = UILabel()
-    lb.textColor = .favorColor(.titleAndLine)
     lb.text = title
     lb.font = .favorFont(.bold, size: 18)
+    lb.textColor = .favorColor(.icon)
     
-    return lb
-  }
-  
-  func makeEmotionButton(_ image: String) -> UIButton {
-    let button = UIButton()
-    button.setImage(UIImage(named: image), for: .normal)
-    
-    return button
+    let sv = UIStackView()
+    sv.addArrangedSubview(lb)
+    items.forEach {
+      sv.addArrangedSubview($0)
+    }
+    if isDivider {
+      sv.addArrangedSubview(divider)
+      divider.snp.makeConstraints { make in
+        make.directionalHorizontalEdges.equalToSuperview()
+      }
+    }
+    sv.spacing = 16
+    sv.alignment = .leading
+    sv.axis = .vertical
+    return sv
   }
 }

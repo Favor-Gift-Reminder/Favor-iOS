@@ -129,7 +129,7 @@ extension FavorCategoryView: BaseView {
     }
     
     self.contentsView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20)
+      make.leading.trailing.equalToSuperview()
       make.bottom.top.equalToSuperview()
     }
     
