@@ -13,7 +13,6 @@
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562629A9220D006CF302 /* NewAnniversarySection.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
-		2E35C3B829D84AD000B7AC80 /* EditStackMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E35C3B729D84AD000B7AC80 /* EditStackMaker.swift */; };
 		2E35C3C029D8798E00B7AC80 /* RxKeyboard in Frameworks */ = {isa = PBXBuildFile; productRef = 2E35C3BF29D8798E00B7AC80 /* RxKeyboard */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
@@ -117,6 +116,9 @@
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
+		2EEC97D329D9881C00AACF38 /* EventDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* EventDetailVC.swift */; };
+		2EEC97D529D9885C00AACF38 /* EventDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* EventDetailViewReactor.swift */; };
+		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
@@ -155,7 +157,6 @@
 		2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2E00562629A9220D006CF302 /* NewAnniversarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversarySection.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
-		2E35C3B729D84AD000B7AC80 /* EditStackMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditStackMaker.swift; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* FriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCellReactor.swift; sourceTree = "<group>"; };
 		2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageVC.swift; sourceTree = "<group>"; };
@@ -251,6 +252,9 @@
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
+		2EEC97D229D9881C00AACF38 /* EventDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailVC.swift; sourceTree = "<group>"; };
+		2EEC97D429D9885C00AACF38 /* EventDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewReactor.swift; sourceTree = "<group>"; };
+		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
@@ -604,8 +608,9 @@
 		2EE07EAB296E7BD700048A3C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				2E35C3B729D84AD000B7AC80 /* EditStackMaker.swift */,
+				2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */,
 				2EE07ED2296E8DE600048A3C /* EventEditVC.swift */,
+				2EEC97D229D9881C00AACF38 /* EventDetailVC.swift */,
 				2EE1823029D67A9000949901 /* NewReminderVC.swift */,
 				2EE07ECE296E8DB500048A3C /* ReminderVC.swift */,
 			);
@@ -626,6 +631,7 @@
 		2EE07EAD296E7BE200048A3C /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
+				2EEC97D429D9885C00AACF38 /* EventDetailViewReactor.swift */,
 				2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */,
 				2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */,
 				2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */,
@@ -990,6 +996,7 @@
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
+				2EEC97D529D9885C00AACF38 /* EventDetailViewReactor.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EE1823329D67AF600949901 /* NewReminderViewReactor.swift in Sources */,
@@ -1039,7 +1046,6 @@
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
 				2E00561C29A7E720006CF302 /* FavorSelectionSection.swift in Sources */,
-				2E35C3B829D84AD000B7AC80 /* EditStackMaker.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
@@ -1052,6 +1058,7 @@
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
 				2ED326AF29B0EE16001963D0 /* TermTableView.swift in Sources */,
+				2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */,
 				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
@@ -1062,6 +1069,7 @@
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
+				2EEC97D329D9881C00AACF38 /* EventDetailVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,

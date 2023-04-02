@@ -15,14 +15,9 @@ import RxGesture
 import RxKeyboard
 import SnapKit
 
-final class NewReminderViewController: BaseViewController, View {
+final class NewReminderViewController: BaseReminderViewController, View {
 
   // MARK: - Constants
-
-  private enum Metric {
-    static let topSpacing = 32.0
-    static let memoMinimumHeight = 130.0
-  }
 
   // MARK: - Properties
 
@@ -41,28 +36,6 @@ final class NewReminderViewController: BaseViewController, View {
     return button
   }()
 
-  private lazy var scrollView: UIScrollView = {
-    let scrollView = UIScrollView()
-    scrollView.showsHorizontalScrollIndicator = false
-    scrollView.showsVerticalScrollIndicator = false
-    scrollView.alwaysBounceVertical = true
-    scrollView.contentInset = UIEdgeInsets(
-      top: Metric.topSpacing,
-      left: .zero,
-      bottom: Metric.topSpacing,
-      right: .zero
-    )
-    return scrollView
-  }()
-
-  private lazy var stackView: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.distribution = .equalSpacing
-    stackView.spacing = 40
-    return stackView
-  }()
-
   // 제목
   private lazy var titleTextField: FavorTextField = {
     let textField = FavorTextField()
@@ -75,94 +48,11 @@ final class NewReminderViewController: BaseViewController, View {
     isDividerNeeded: false
   )
 
-  // 받을 사람
-  private lazy var selectFriendButton: FavorPlainButton = {
-    let button = FavorPlainButton(with: .main("친구 선택", isRight: true))
-    button.contentHorizontalAlignment = .leading
-    return button
-  }()
-  private lazy var selectFriendStack = self.makeEditStack(
-    title: "받을 사람",
-    itemView: self.selectFriendButton
-  )
-
-  // 날짜
-  private lazy var selectDateStack = self.makeEditStack(title: "날짜", itemView: UIView())
-
-  // 알림
-  private lazy var selectNotiStack = self.makeEditStack(title: "알림", itemView: UIView())
-
-  // 메모
-  private lazy var memoTextView: RSKPlaceholderTextView = {
-    let textView = RSKPlaceholderTextView()
-    let attributedPlaceholder = NSAttributedString(
-      string: "자유롭게 작성해주세요!",
-      attributes: [
-        .foregroundColor: UIColor.favorColor(.explain),
-        .font: UIFont.favorFont(.regular, size: 16)
-      ]
-    )
-    textView.attributedPlaceholder = attributedPlaceholder
-    textView.textColor = .favorColor(.icon)
-    textView.font = .favorFont(.regular, size: 16)
-    textView.backgroundColor = .clear
-    textView.isScrollEnabled = false
-    return textView
-  }()
-  private lazy var memoStack = self.makeEditStack(title: "메모", itemView: self.memoTextView)
-
   // MARK: - Life Cycle
 
   // MARK: - Binding
 
   func bind(reactor: NewReminderViewReactor) {
-    // UI
-    Observable.merge(
-      self.memoTextView.rx.didBeginEditing.asObservable(),
-      self.memoTextView.rx.didChange.asObservable()
-    )
-    .flatMap { _ -> Observable<CGFloat> in
-      return RxKeyboard.instance.willShowVisibleHeight.map { height in
-        return height
-      }
-      .asObservable()
-    }
-    .asDriver(onErrorRecover: { _ in return .never()})
-    .drive(with: self, onNext: { owner, height in
-      owner.scrollToCursor(keyboardHeight: height)
-    })
-    .disposed(by: self.disposeBag)
-
-    Observable.merge(
-      self.scrollView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-        guard let `self` = self else { return }
-        recognizer.delegate = self
-        delegate.simultaneousRecognitionPolicy = .never
-      })
-      .asObservable(),
-      self.memoTextView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-        guard let `self` = self else { return }
-        recognizer.delegate = self
-        delegate.simultaneousRecognitionPolicy = .never
-      })
-      .asObservable()
-    )
-    .when(.recognized)
-    .asDriver(onErrorRecover: { _ in return .never()})
-    .drive(with: self, onNext: { owner, _ in
-      owner.view.endEditing(true)
-    })
-    .disposed(by: self.disposeBag)
-
-    self.scrollView.rx.willBeginDragging
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, _ in
-        if owner.memoTextView.isFirstResponder {
-          owner.memoTextView.resignFirstResponder()
-        }
-      })
-      .disposed(by: self.disposeBag)
-
     // Action
     self.rx.viewDidDisappear
       .map { _ in Reactor.Action.viewDidPop }
@@ -198,19 +88,9 @@ final class NewReminderViewController: BaseViewController, View {
   override func setupLayouts() {
     self.navigationItem.setRightBarButton(self.postButton, animated: true)
 
-    self.view.addSubview(self.scrollView)
+    self.stackView.addArrangedSubview(self.titleStack)
 
-    self.scrollView.addSubview(self.stackView)
-
-    [
-      self.titleStack,
-      self.selectFriendStack,
-      self.selectDateStack,
-      self.selectNotiStack,
-      self.memoStack
-    ].forEach {
-      self.stackView.addArrangedSubview($0)
-    }
+    super.setupLayouts()
   }
 
   override func setupConstraints() {
@@ -218,43 +98,6 @@ final class NewReminderViewController: BaseViewController, View {
       make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
-
-    self.stackView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
-      make.width.equalToSuperview()
-    }
-
-    self.memoTextView.snp.makeConstraints { make in
-      make.height.greaterThanOrEqualTo(Metric.memoMinimumHeight)
-    }
-  }
-}
-
-// MARK: - EditStackMaker
-
-extension NewReminderViewController: EditStackMaker { }
-
-// MARK: - Recognizer
-
-extension NewReminderViewController: UIGestureRecognizerDelegate {
-  func gestureRecognizer(
-    _ gestureRecognizer: UIGestureRecognizer,
-    shouldReceive touch: UITouch
-  ) -> Bool {
-    guard touch.view?.isDescendant(of: self.memoTextView) == false else { return false }
-    return true
-  }
-}
-
-// MARK: - Privates
-
-private extension NewReminderViewController {
-  func scrollToCursor(keyboardHeight: CGFloat) {
-    if self.memoTextView.isFirstResponder {
-      if let selectedRange = self.memoTextView.selectedTextRange?.start {
-        let cursorPosition = self.memoTextView.caretRect(for: selectedRange).origin.y
-        self.scrollView.scroll(to: self.memoStack.frame.minY - keyboardHeight + cursorPosition)
-      }
-    }
+    super.setupConstraints()
   }
 }
