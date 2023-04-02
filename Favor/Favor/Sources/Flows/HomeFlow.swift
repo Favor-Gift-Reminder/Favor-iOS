@@ -42,17 +42,11 @@ final class HomeFlow: Flow {
 
 private extension HomeFlow {
   func navigateToGift() -> FlowContributors {
-    let viewController = NewGiftViewController()
-    let reactor = NewGiftViewReactor(pickerManager: PHPickerManager())
-    viewController.reactor = reactor
-    self.rootViewController.pushViewController(viewController, animated: true)
-    
-    let giftFlow = GiftFlow(viewController)
+    let giftFlow = GiftFlow(self.rootViewController)
     
     return .one(flowContributor: .contribute(
       withNextPresentable: giftFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired),
-      allowStepWhenDismissed: true
+      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired)
     ))
   }
   
