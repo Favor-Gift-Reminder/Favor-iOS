@@ -7,9 +7,7 @@
 
 import UIKit
 
-import FavorKit
-
-final class FavorDatePickerTextField: UIView {
+public final class FavorDatePickerTextField: UIView {
   
   // MARK: - UI
   

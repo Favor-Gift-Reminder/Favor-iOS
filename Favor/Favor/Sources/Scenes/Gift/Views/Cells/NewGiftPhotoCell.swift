@@ -9,9 +9,9 @@ import UIKit
 
 import FavorKit
 import ReactorKit
-import RxSwift
-import RxCocoa
 import Reusable
+import RxCocoa
+import RxSwift
 
 final class NewGiftPhotoCell: UICollectionViewCell, Reusable {
   

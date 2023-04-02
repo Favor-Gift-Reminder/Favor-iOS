@@ -185,7 +185,7 @@ final class NewGiftViewController: BaseViewController, View {
   private lazy var emotionButton4 = self.makeEmotionButton("🥹")
   private lazy var emotionButton5 = self.makeEmotionButton("🥹")
   
-  private let choiceFrinedView = NewGiftChoiceFriendView()
+  private let choiceFrinedView = NewGiftChoiceFriendButton()
   
   // MARK: - PROPERTIES
   
