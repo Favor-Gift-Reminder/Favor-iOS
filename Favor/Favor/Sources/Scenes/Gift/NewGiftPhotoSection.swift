@@ -12,7 +12,7 @@ import RxDataSources
 struct NewGiftPhotoSection {
   typealias NewGiftPhotoSectionModel = SectionModel<Int, NewGiftSectionItem>
   
-  enum NewGiftSectionItem {
+  enum NewGiftSectionItem: Equatable {
     case empty
     case photo(UIImage)
   }

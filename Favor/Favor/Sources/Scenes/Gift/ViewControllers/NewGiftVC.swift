@@ -208,10 +208,10 @@ final class NewGiftViewController: BaseViewController, View {
   
   override func setupConstraints() {
     self.contentsView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
       make.width.equalTo(self.view.frame.width)
-      make.top.bottom.equalToSuperview()
     }
-
+    
     self.scrollView.snp.makeConstraints { make in
       make.top.leading.trailing.equalToSuperview()
       make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top)
@@ -335,6 +335,8 @@ final class NewGiftViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    // TODO: 메모 텍스트 필드 포커싱 될 때, ScrollView의 높이 설정
+    
     // MARK: - STATE
     
     let dataSource = DataSource { _, collectionView, indexPath, item in
@@ -383,6 +385,7 @@ final class NewGiftViewController: BaseViewController, View {
     
     // DataSource Binding
     reactor.state.map { [$0.newGiftPhotoSection] }
+      .distinctUntilChanged()
       .bind(to: self.photoCollectionView.rx.items(dataSource: dataSource))
       .disposed(by: self.disposeBag)
   }
