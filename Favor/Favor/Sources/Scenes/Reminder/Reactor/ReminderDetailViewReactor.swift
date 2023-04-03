@@ -31,14 +31,14 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
 
   struct State {
     var isEditable: Bool = false
-    var reminder: Reminder
+    var reminderData: Reminder
   }
 
   // MARK: - Initializer
 
   init(reminder: Reminder) {
     self.initialState = State(
-      reminder: reminder
+      reminderData: reminder
     )
   }
 

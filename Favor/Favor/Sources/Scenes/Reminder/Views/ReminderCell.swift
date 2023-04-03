@@ -39,6 +39,10 @@ final class ReminderCell: BaseCardCell, Reusable, View {
 
   func bind(reactor: ReminderCellReactor) {
     // Action
+    self.toggleSwitch.rx.tap
+      .map { Reactor.Action.notifySwitchDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
 
     // State
     reactor.state.map { $0.reminderData }
@@ -46,6 +50,7 @@ final class ReminderCell: BaseCardCell, Reusable, View {
       .drive(with: self, onNext: { owner, reminder in
         owner.title = reminder.title
         owner.subtitle = reminder.date.toDday()
+        owner.toggleSwitch.rx.state.onNext(reminder.shouldNotify)
       })
       .disposed(by: self.disposeBag)
   }

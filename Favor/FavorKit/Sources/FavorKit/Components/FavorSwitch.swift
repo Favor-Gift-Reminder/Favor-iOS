@@ -152,8 +152,9 @@ private extension FavorSwitch {
 // MARK: - Reactive
 
 public extension Reactive where Base: FavorSwitch {
-  var isToggled: ControlEvent<Bool> {
-    let source = Observable.just(base.isOn)
-    return ControlEvent(events: source)
+  var state: Binder<Bool> {
+    Binder(base) { base, isOn in
+      base.isOn = isOn
+    }
   }
 }

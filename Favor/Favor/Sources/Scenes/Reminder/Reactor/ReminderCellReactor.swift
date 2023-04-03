@@ -16,7 +16,7 @@ final class ReminderCellReactor: Reactor {
   var initialState: State
 
   enum Action {
-
+    case notifySwitchDidTap
   }
 
   enum Mutation {
@@ -38,5 +38,11 @@ final class ReminderCellReactor: Reactor {
 
   // MARK: - Functions
 
-
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .notifySwitchDidTap:
+      // Update Reminder
+      return .empty()
+    }
+  }
 }

@@ -126,7 +126,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { $0.reminder }
+    reactor.state.map { $0.reminderData }
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, data in
         owner.eventTitleLabel.text = data.title
