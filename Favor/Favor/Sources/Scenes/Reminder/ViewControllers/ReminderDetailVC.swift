@@ -22,6 +22,9 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   // MARK: - Properties
 
   override var topSpacing: CGFloat { return 8.0 }
+  override var memoStackMinY: CGFloat {
+    self.memoStack.frame.minY
+  }
 
   // MARK: - UI Components
 
@@ -88,13 +91,16 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
 
   private lazy var roundedTopView = FavorRoundedTopView()
 
+  private lazy var eventStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 15
+    return stackView
+  }()
+
   // MARK: - Life Cycle
 
   // MARK: - Binding
-
-  override func bind() {
-    super.bind()
-  }
 
   func bind(reactor: ReminderDetailViewReactor) {
     // Action
@@ -131,6 +137,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .drive(with: self, onNext: { owner, data in
         owner.eventTitleLabel.text = data.title
         owner.eventSubtitleLabel.text = data.date.toDday()
+        owner.selectDatePicker.rx.text.onNext(data.date.toString())
       })
       .disposed(by: self.disposeBag)
   }
@@ -140,15 +147,6 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   // MARK: - UI Setups
 
   override func setupLayouts() {
-    super.setupLayouts()
-
-    [
-      self.eventInfoViewContainer,
-      self.roundedTopView
-    ].forEach {
-      self.view.addSubview($0)
-    }
-
     [
       self.eventTitleLabel,
       self.eventSubtitleLabel
@@ -162,14 +160,23 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     ].forEach {
       self.eventInfoViewContainer.addSubview($0)
     }
+
+    [
+      self.eventInfoViewContainer,
+      self.roundedTopView
+    ].forEach {
+      self.eventStack.addArrangedSubview($0)
+    }
+
+    self.stackView.addArrangedSubview(self.eventStack)
+
+    super.setupLayouts()
   }
 
   override func setupConstraints() {
     super.setupConstraints()
 
     self.eventInfoViewContainer.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(112)
     }
 
@@ -185,15 +192,12 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     }
 
     self.roundedTopView.snp.makeConstraints { make in
-      make.top.equalTo(self.eventInfoViewContainer.snp.bottom).offset(Metric.detailViewTopSpacing)
-      make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(40)
     }
 
     self.scrollView.snp.makeConstraints { make in
-      make.top.equalTo(self.roundedTopView.snp.bottom)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
     }
   }
 }

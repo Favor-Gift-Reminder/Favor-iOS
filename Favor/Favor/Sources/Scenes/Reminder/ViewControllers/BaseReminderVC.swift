@@ -22,6 +22,7 @@ class BaseReminderViewController: BaseViewController {
 
   public var topSpacing: CGFloat { return 32.0 }
   public var memoMinimumHeight: CGFloat { return 130.0 }
+  public var memoStackMinY: CGFloat { return self.memoStack.frame.minY }
 
   // MARK: - UI Components
 
@@ -43,7 +44,16 @@ class BaseReminderViewController: BaseViewController {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.distribution = .equalSpacing
+    return stackView
+  }()
+
+  public lazy var editStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.distribution = .equalSpacing
     stackView.spacing = 40
+    stackView.layoutMargins = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    stackView.isLayoutMarginsRelativeArrangement = true
     return stackView
   }()
 
@@ -193,6 +203,7 @@ class BaseReminderViewController: BaseViewController {
     self.view.addSubview(self.scrollView)
 
     self.scrollView.addSubview(self.stackView)
+    self.stackView.addArrangedSubview(self.editStack)
 
     [
       self.selectFriendStack,
@@ -200,7 +211,7 @@ class BaseReminderViewController: BaseViewController {
       self.selectNotiStack,
       self.memoStack
     ].forEach {
-      self.stackView.addArrangedSubview($0)
+      self.editStack.addArrangedSubview($0)
     }
   }
 
@@ -223,7 +234,7 @@ private extension BaseReminderViewController {
     if self.memoTextView.isFirstResponder {
       if let selectedRange = self.memoTextView.selectedTextRange?.start {
         let cursorPosition = self.memoTextView.caretRect(for: selectedRange).origin.y
-        self.scrollView.scroll(to: self.memoStack.frame.minY - keyboardHeight + cursorPosition)
+        self.scrollView.scroll(to: self.memoStackMinY - keyboardHeight + cursorPosition)
       }
     }
   }

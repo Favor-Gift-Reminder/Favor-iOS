@@ -8,6 +8,7 @@
 import UIKit
 
 import RxCocoa
+import RxSwift
 import SnapKit
 
 /// TODO: -
@@ -94,7 +95,7 @@ public final class FavorPickerTextField: UIView {
     return tb
   }()
   
-  private lazy var textField: UITextField = {
+  fileprivate lazy var textField: UITextField = {
     let tf = UITextField()
     let placeholder = NSAttributedString(
       string: "날짜 선택",
@@ -261,5 +262,15 @@ extension FavorPickerTextField: UIPickerViewDelegate, UIPickerViewDataSource {
       selectedValues.append(self.dataSource[index][row])
     }
     self.textField.text = String(format: self.customPickerStringFormat, arguments: selectedValues)
+  }
+}
+
+// MARK: - Reactive
+
+public extension Reactive where Base: FavorPickerTextField {
+  var text: Binder<String> {
+    Binder(base) { base, text in
+      base.textField.text = text
+    }
   }
 }

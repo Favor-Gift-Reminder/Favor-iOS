@@ -88,7 +88,7 @@ final class NewReminderViewController: BaseReminderViewController, View {
   override func setupLayouts() {
     self.navigationItem.setRightBarButton(self.postButton, animated: true)
 
-    self.stackView.addArrangedSubview(self.titleStack)
+    self.editStack.addArrangedSubview(self.titleStack)
 
     super.setupLayouts()
   }
@@ -96,7 +96,7 @@ final class NewReminderViewController: BaseReminderViewController, View {
   override func setupConstraints() {
     self.scrollView.snp.makeConstraints { make in
       make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalToSuperview()
     }
     super.setupConstraints()
   }
