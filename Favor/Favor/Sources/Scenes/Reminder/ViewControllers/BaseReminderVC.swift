@@ -13,12 +13,15 @@ import RxKeyboard
 import RxSwift
 import SnapKit
 
+/// 포함된 컴퍼넌트: 받을 사람, 날짜, 알림, 메모
+///
+/// ⚠️ ScrollView Constraints 설정 필요
 class BaseReminderViewController: BaseViewController {
 
   // MARK: - Properties
 
-  public var topSpacing: CGFloat = 32.0
-  public var memoMinimumHeight: CGFloat = 130.0
+  public var topSpacing: CGFloat { return 32.0 }
+  public var memoMinimumHeight: CGFloat { return 130.0 }
 
   // MARK: - UI Components
 

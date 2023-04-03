@@ -46,6 +46,7 @@ enum AppStep: Step {
   case reminderIsRequired
   case newReminderIsRequired
   case newReminderIsComplete
+  case reminderDetailIsRequired
   
   // MARK: - MyPage
   case myPageIsRequired
