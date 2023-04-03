@@ -41,8 +41,14 @@ extension Date {
   }
 
   public func toDday() -> String {
-    let formatter = DateFormatter()
-    formatter.dateFormat = "d일까지 'D'-d"
-    return formatter.string(from: self)
+    let dateComponents = Calendar.current.dateComponents([.day], from: self, to: Date())
+    guard let days = dateComponents.day else { return "D-Day 계산 실패" }
+    let dayDate = self.toDayString()
+    switch days.signum() {
+    case 0: return "오늘"
+    case ..<0: return "\(dayDate)일까지 D-\(days)"
+    case 1...: return "\(dayDate)로부터 D+\(days)"
+    default: return "D-Day 계산 실패"
+    }
   }
 }
