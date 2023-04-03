@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum PlainFavorButtonType {
+public enum FavorPlainButtonType {
   case logIn(String)
   case more(String)
   case main(String, isRight: Bool)
@@ -24,20 +24,22 @@ public enum PlainFavorButtonType {
     case .logIn(let title):
       titleString = title
       config.image = .favorIcon(.right)
-      titleContainer.font = .favorFont(.regular, size: 16)
+      titleContainer.font = .favorFont(.regular, size: 14)
     case .more(let title):
       titleString = title
       titleContainer.font = .favorFont(.regular, size: 12)
     case let .main(title, isRight):
       titleString = title
-      config.image = isRight ? .favorIcon(.right) : .favorIcon(.down)
-      titleContainer.font = .favorFont(.regular, size: 14)
+      let arrowImage: UIImage? = isRight ? .favorIcon(.right) : .favorIcon(.down)
+      config.image = arrowImage?.resize(newWidth: 10)
+      titleContainer.font = .favorFont(.regular, size: 16)
     }
     
     config.attributedTitle = AttributedString(
       titleString,
       attributes: titleContainer
     )
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
     
     return config
   }

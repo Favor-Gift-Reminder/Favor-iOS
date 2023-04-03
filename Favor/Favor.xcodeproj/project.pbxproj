@@ -118,17 +118,17 @@
 		2EEC97D529D9885C00AACF38 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */; };
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
+		E52F565B29D5698A004E85A6 /* GiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* GiftFlow.swift */; };
+		E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
 		E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C3298B5CDF002940D1 /* AppStpper.swift */; };
 		E55CF7C6298B8EBB002940D1 /* TabBarFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C5298B8EBB002940D1 /* TabBarFlow.swift */; };
 		E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260EE298F4D4F00D14020 /* NewGiftVC.swift */; };
 		E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */ = {isa = PBXBuildFile; productRef = E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */; };
-		E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260FD299249BD00D14020 /* PickedPictureCell.swift */; };
-		E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610129934B4E00D14020 /* PickPictureCell.swift */; };
-		E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610329939E8800D14020 /* PickedPictureSection.swift */; };
-		E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610529948B4C00D14020 /* PickPictureCellReactor.swift */; };
-		E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */; };
+		E56260FE299249BD00D14020 /* NewGiftPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260FD299249BD00D14020 /* NewGiftPhotoCell.swift */; };
+		E562610229934B4E00D14020 /* NewGiftEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610129934B4E00D14020 /* NewGiftEmptyCell.swift */; };
+		E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610329939E8800D14020 /* NewGiftPhotoSection.swift */; };
 		E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610E299497C000D14020 /* NewGiftViewReactor.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
@@ -229,6 +229,8 @@
 		2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermViewReactor.swift; sourceTree = "<group>"; };
 		2ED8CB4629B0C30400E7B547 /* TermCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermCell.swift; sourceTree = "<group>"; };
 		2EE07EB1296E8C1F00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		2EE07EB3296E8C2B00048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		2EE07EB5296E8C3700048A3C /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
 		2EE07ECA296E8D8400048A3C /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
 		2EE07ECC296E8D9A00048A3C /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		2EE07ECE296E8DB500048A3C /* ReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVC.swift; sourceTree = "<group>"; };
@@ -252,16 +254,16 @@
 		2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewReactor.swift; sourceTree = "<group>"; };
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
+		E52F565A29D5698A004E85A6 /* GiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftFlow.swift; sourceTree = "<group>"; };
+		E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftChoiceFriendButton.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		E55CF7C3298B5CDF002940D1 /* AppStpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStpper.swift; sourceTree = "<group>"; };
 		E55CF7C5298B8EBB002940D1 /* TabBarFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFlow.swift; sourceTree = "<group>"; };
 		E56260EE298F4D4F00D14020 /* NewGiftVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftVC.swift; sourceTree = "<group>"; };
-		E56260FD299249BD00D14020 /* PickedPictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureCell.swift; sourceTree = "<group>"; };
-		E562610129934B4E00D14020 /* PickPictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickPictureCell.swift; sourceTree = "<group>"; };
-		E562610329939E8800D14020 /* PickedPictureSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureSection.swift; sourceTree = "<group>"; };
-		E562610529948B4C00D14020 /* PickPictureCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickPictureCellReactor.swift; sourceTree = "<group>"; };
-		E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickedPictureCellReactor.swift; sourceTree = "<group>"; };
+		E56260FD299249BD00D14020 /* NewGiftPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftPhotoCell.swift; sourceTree = "<group>"; };
+		E562610129934B4E00D14020 /* NewGiftEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftEmptyCell.swift; sourceTree = "<group>"; };
+		E562610329939E8800D14020 /* NewGiftPhotoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftPhotoSection.swift; sourceTree = "<group>"; };
 		E562610E299497C000D14020 /* NewGiftViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftViewReactor.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
@@ -479,7 +481,6 @@
 				2E1C5659296C24AE0067FC78 /* Auth */,
 				2EE07ED4296E8DFF00048A3C /* Gift */,
 				2EE07EB9296E8CC700048A3C /* Home */,
-				2EE07EA3296C602100048A3C /* NewGift */,
 				2EE07E9F296C5F1D00048A3C /* Search */,
 				2EE07EBD296E8D2300048A3C /* MyPage */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
@@ -572,22 +573,6 @@
 				2EE07EBA296E8CE600048A3C /* ViewControllers */,
 			);
 			path = Search;
-			sourceTree = "<group>";
-		};
-		2EE07EA3296C602100048A3C /* NewGift */ = {
-			isa = PBXGroup;
-			children = (
-				2EE07EA7296C669000048A3C /* ViewControllers */,
-			);
-			path = NewGift;
-			sourceTree = "<group>";
-		};
-		2EE07EA7296C669000048A3C /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				2EE07EB1296E8C1F00048A3C /* .gitkeep */,
-			);
-			path = ViewControllers;
 			sourceTree = "<group>";
 		};
 		2EE07EAA296E7BC100048A3C /* Reminder */ = {
@@ -704,7 +689,7 @@
 		2EE07ED4296E8DFF00048A3C /* Gift */ = {
 			isa = PBXGroup;
 			children = (
-				E562610329939E8800D14020 /* PickedPictureSection.swift */,
+				E562610329939E8800D14020 /* NewGiftPhotoSection.swift */,
 				2EE07EDA296E8E4400048A3C /* Views */,
 				2EE07EDB296E8E4800048A3C /* Reactors */,
 				2EE07ED5296E8E0C00048A3C /* ViewControllers */,
@@ -724,8 +709,8 @@
 		2EE07EDA296E8E4400048A3C /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				E562610129934B4E00D14020 /* PickPictureCell.swift */,
-				E56260FD299249BD00D14020 /* PickedPictureCell.swift */,
+				E5C0A00929D3D486006CCF99 /* Cells */,
+				E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -733,8 +718,6 @@
 		2EE07EDB296E8E4800048A3C /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				E562610529948B4C00D14020 /* PickPictureCellReactor.swift */,
-				E562610C29948D3600D14020 /* PickedPictureCellReactor.swift */,
 				E562610E299497C000D14020 /* NewGiftViewReactor.swift */,
 			);
 			path = Reactors;
@@ -799,6 +782,7 @@
 				2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */,
 				2EC6E11E29BC6656006FBC11 /* ReminderFlow.swift */,
 				2EC939DC299684C000C8C47F /* MyPageFlow.swift */,
+				E52F565A29D5698A004E85A6 /* GiftFlow.swift */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -819,6 +803,15 @@
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		E5C0A00929D3D486006CCF99 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				E562610129934B4E00D14020 /* NewGiftEmptyCell.swift */,
+				E56260FD299249BD00D14020 /* NewGiftPhotoCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -988,6 +981,7 @@
 				2E78D19C29C1C2E900662151 /* TimelineCellData.swift in Sources */,
 				2ED8CB4729B0C30400E7B547 /* TermCell.swift in Sources */,
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
+				E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
 				2EEC97D529D9885C00AACF38 /* ReminderDetailViewReactor.swift in Sources */,
@@ -1012,6 +1006,7 @@
 				2E9F988F29C4B2A200789297 /* FilterVC.swift in Sources */,
 				2EC6E11D29BC65BF006FBC11 /* HomeFlow.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
+				E52F565B29D5698A004E85A6 /* GiftFlow.swift in Sources */,
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,
 				2EC939E72998C6D100C8C47F /* FavorAnniversaryCell.swift in Sources */,
 				2ED326AD29B0DB9D001963D0 /* TermSection.swift in Sources */,
@@ -1019,7 +1014,6 @@
 				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
-				E562610D29948D3600D14020 /* PickedPictureCellReactor.swift in Sources */,
 				2E9F989129C6275300789297 /* Gift.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
@@ -1032,7 +1026,6 @@
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
 				2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */,
 				2EC939EB299A7D4300C8C47F /* MyPageSectionHeaderView.swift in Sources */,
-				E562610629948B4C00D14020 /* PickPictureCellReactor.swift in Sources */,
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
@@ -1046,10 +1039,12 @@
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
+				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
+				E562610229934B4E00D14020 /* NewGiftEmptyCell.swift in Sources */,
 				2E9F989629C62CEA00789297 /* Reminder.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
-				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
+				E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */,
 				2ED326AF29B0EE16001963D0 /* TermTableView.swift in Sources */,
 				2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */,
 				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
@@ -1063,6 +1058,7 @@
 				E56260FE299249BD00D14020 /* PickedPictureCell.swift in Sources */,
 				2EEC97D329D9881C00AACF38 /* ReminderDetailVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
+				E56260FE299249BD00D14020 /* NewGiftPhotoCell.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2EB3E71929D49008008D10A0 /* ReminderHeaderView.swift in Sources */,
@@ -1241,7 +1237,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XW996HTK32;
+				DEVELOPMENT_TEAM = 95JTZ6AP78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
@@ -1274,7 +1270,7 @@
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = XW996HTK32;
+				DEVELOPMENT_TEAM = 95JTZ6AP78;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";

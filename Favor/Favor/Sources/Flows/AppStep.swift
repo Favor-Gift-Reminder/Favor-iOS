@@ -41,6 +41,7 @@ enum AppStep: Step {
   // MARK: - Search
   case searchIsRequired
   case searchResultIsRequired
+  case searchIsComplete
 
   // MARK: - Reminder
   case reminderIsRequired
@@ -54,4 +55,8 @@ enum AppStep: Step {
   
   // MARK: - Test
   case testIsRequired
+  
+  // MARK: - Gift
+  case newGiftIsRequired
+  case newGiftIsComplete
 }

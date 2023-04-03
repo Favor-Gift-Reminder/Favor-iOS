@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum LargeFavorButtonType {
+public enum FavorLargeButtonType {
   case main(String)
   case main2(String)
   case dark1(String)
