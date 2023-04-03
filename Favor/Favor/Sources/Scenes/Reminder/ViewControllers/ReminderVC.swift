@@ -110,6 +110,11 @@ final class ReminderViewController: BaseViewController, View {
   override func bind() {
     guard let reactor = self.reactor else { return }
 
+    self.collectionView.rx.modelSelected(ReminderSection.ReminderSectionItem.self)
+      .map { item in Reactor.Action.reminderDidSelected(item) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     reactor.state
       .map { state -> [ReminderSection.ReminderSectionModel] in
         [state.upcomingSection, state.pastSection]

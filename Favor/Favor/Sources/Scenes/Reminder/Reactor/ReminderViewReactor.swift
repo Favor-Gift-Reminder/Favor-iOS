@@ -26,6 +26,7 @@ final class ReminderViewReactor: Reactor, Stepper {
   enum Action {
     case viewWillAppear
     case selectDateButtonDidTap
+    case reminderDidSelected(ReminderSection.ReminderSectionItem)
     case newReminderButtonDidTap
   }
 
@@ -85,6 +86,14 @@ final class ReminderViewReactor: Reactor, Stepper {
 
     case .selectDateButtonDidTap:
       os_log(.debug, "Select date button did tap.")
+      return .empty()
+
+    case .reminderDidSelected(let item):
+      switch item {
+      case .reminder(let cellReactor):
+        print(cellReactor)
+        self.steps.accept(AppStep.reminderDetailIsRequired)
+      }
       return .empty()
 
     case .newReminderButtonDidTap:

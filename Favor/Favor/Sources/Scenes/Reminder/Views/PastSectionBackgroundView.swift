@@ -15,7 +15,7 @@ final class PastSectionBackgroundView: UICollectionReusableView, Reusable {
 
   // MARK: - UI Components
 
-  private lazy var roundedView = PastSectionHeaderBackgroundView()
+  private lazy var roundedView = FavorRoundedTopView()
 
   // MARK: - Initializer
 
