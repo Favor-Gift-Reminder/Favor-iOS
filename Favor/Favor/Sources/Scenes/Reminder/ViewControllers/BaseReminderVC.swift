@@ -59,10 +59,22 @@ class BaseReminderViewController: BaseViewController {
   )
 
   // 날짜
-  public lazy var selectDateStack = self.makeEditStack(title: "날짜", itemView: UIView())
+  public lazy var selectDatePicker = FavorPickerTextField(pickerType: .date)
+  public lazy var selectDateStack = self.makeEditStack(title: "날짜", itemView: selectDatePicker)
 
   // 알림
-  public lazy var selectNotiStack = self.makeEditStack(title: "알림", itemView: UIView())
+  public lazy var selectNotiPicker: FavorPickerTextField = {
+    let picker = FavorPickerTextField(pickerType: .custom)
+    picker.dataSource = [
+      NotifyDays.allCases.compactMap { $0.stringValue },
+      ["오전", "오후"],
+      (1...12).compactMap { "\($0)시" }
+    ]
+    picker.width = [120, 80, 100]
+    picker.customPickerStringFormat = "%@ %@ %@"
+    return picker
+  }()
+  public lazy var selectNotiStack = self.makeEditStack(title: "알림", itemView: self.selectNotiPicker)
 
   // 메모
   public lazy var memoTextView: RSKPlaceholderTextView = {

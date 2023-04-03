@@ -203,5 +203,8 @@ private extension ReminderDetailViewController {
     self.navigationItem.setHidesBackButton(isEditable, animated: true)
     self.navigationItem.setRightBarButtonItems(rightItems, animated: true)
     self.title = isEditable ? "이벤트 수정" : nil
+
+    self.selectDatePicker.updateIsUserInteractable(to: isEditable)
+    self.selectNotiPicker.updateIsUserInteractable(to: isEditable)
   }
 }

@@ -25,8 +25,12 @@ public final class FavorPickerTextField: UIView {
 
   // MARK: - PROPERTIES
 
+  /// custom Picker 선택 시 포함되는 데이터들
   public var dataSource: [[String]] = []
+  /// custom Picker 선택 시 각 Component들의 너비
   public var width: [CGFloat] = []
+  /// custom Picker 선택 시 TextField에 표현되는 String의 Format
+  public var customPickerStringFormat: String = ""
 
   public var currentDateString: String? {
     didSet { self.downButton.isSelected = true }
@@ -35,9 +39,6 @@ public final class FavorPickerTextField: UIView {
   public var pickerType: PickerType = .custom {
     didSet { self.updatePickerType(to: self.pickerType) }
   }
-
-  /// custom Picker 선택 시 TextField에 표현되는 String의 Format
-  public var customPickerStringFormat: String = ""
   
   // MARK: - UI
   
@@ -145,6 +146,20 @@ public final class FavorPickerTextField: UIView {
   @objc
   private func didTapDownButton() {
     self.textField.becomeFirstResponder()
+  }
+
+  // MARK: - FUNCTIONS
+
+  public func updateIsUserInteractable(to isInteractable: Bool) {
+    self.textField.isUserInteractionEnabled = isInteractable
+    let animator = UIViewPropertyAnimator(
+      duration: TimeInterval(0.2),
+      curve: .easeInOut,
+      animations: {
+        self.downButton.alpha = isInteractable ? 1.0 : 0.0
+      }
+    )
+    animator.startAnimation()
   }
 }
 
