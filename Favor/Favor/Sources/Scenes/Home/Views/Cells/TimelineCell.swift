@@ -54,14 +54,10 @@ final class TimelineCell: UICollectionViewCell, Reusable, View {
     // Action
     
     // State
-    reactor.state.map { $0.image }
-      .bind(to: self.imageView.rx.image)
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.isPinned }
+    reactor.state.map { $0.gift }
       .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, isPinned in
-        owner.pinnedIconView.isHidden = !isPinned
+      .drive(with: self, onNext: { owner, gift in
+        owner.pinnedIconView.isHidden = !gift.isPinned
       })
       .disposed(by: self.disposeBag)
   }

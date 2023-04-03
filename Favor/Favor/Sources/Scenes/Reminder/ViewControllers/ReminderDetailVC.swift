@@ -125,6 +125,14 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
         owner.switchToEditMode(isEditable)
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.reminder }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, data in
+        owner.eventTitleLabel.text = data.title
+        owner.eventSubtitleLabel.text = data.date.toDday()
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions

@@ -90,9 +90,8 @@ final class ReminderViewReactor: Reactor, Stepper {
 
     case .reminderDidSelected(let item):
       switch item {
-      case .reminder(let cellReactor):
-        print(cellReactor)
-        self.steps.accept(AppStep.reminderDetailIsRequired)
+      case .reminder(let reactor):
+        self.steps.accept(AppStep.reminderDetailIsRequired(reactor.currentState.reminderData))
       }
       return .empty()
 
@@ -167,18 +166,18 @@ private extension ReminderViewReactor {
   func extractUpcoming(
     from reminders: [Reminder]
   ) -> (ReminderSection.ReminderSectionModel, ReminderSection.ReminderSectionModel) {
-    var upcomingReminders: [CardCellData] = []
-    var pastReminders: [CardCellData] = []
+    var upcomingReminders: [Reminder] = []
+    var pastReminders: [Reminder] = []
 
     reminders.enumerated().forEach { index, reminder in
-      let formattedSubtitle = {
-        reminder.date.toDayString() == Date.now.toDayString() ? "오늘" : reminder.date.toDday()
-      }()
-      let cellData = CardCellData(
-        iconImage: UIImage(named: "p\(index + 1)").flatMap { $0 },
-        title: reminder.title,
-        subtitle: formattedSubtitle
-      )
+//      let formattedSubtitle = { // TODO: bind 받는 쪽에서
+//        reminder.date.toDayString() == Date.now.toDayString() ? "오늘" : reminder.date.toDday()
+//      }()
+//      let cellData = CardCellData(
+//        iconImage: UIImage(named: "p\(index + 1)").flatMap { $0 },
+//        title: reminder.title,
+//        subtitle: formattedSubtitle
+//      )
 
       let reminderDateComponents = Calendar.current.dateComponents(
         [.year, .month, .day],
@@ -189,18 +188,18 @@ private extension ReminderViewReactor {
         from: .now
       )
       if reminderDateComponents >= currentDateComponents {
-        upcomingReminders.append(cellData)
+        upcomingReminders.append(reminder)
       } else {
-        pastReminders.append(cellData)
+        pastReminders.append(reminder)
       }
     }
 
     let upcomingItems = upcomingReminders.map { data in
-      let reactor = ReminderCellReactor(cellData: data)
+      let reactor = ReminderCellReactor(reminder: data)
       return ReminderSection.ReminderSectionItem.reminder(reactor)
     }
     let pastItems = pastReminders.map { data in
-      let reactor = ReminderCellReactor(cellData: data)
+      let reactor = ReminderCellReactor(reminder: data)
       return ReminderSection.ReminderSectionItem.reminder(reactor)
     }
 

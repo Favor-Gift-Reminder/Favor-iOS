@@ -182,15 +182,8 @@ private extension HomeViewReactor {
 
 private extension HomeViewReactor {
   func refineUpcoming(reminders: [Reminder]) -> HomeSection.HomeSectionModel {
-    let upcomings = reminders.enumerated().map { index, reminder in
-      return CardCellData(
-        iconImage: UIImage(named: "p\(index + 1)"),
-        title: reminder.title,
-        subtitle: reminder.date.formatted()
-      )
-    }
-    let upcomingItems = upcomings.map {
-      let reactor = UpcomingCellReactor(cellData: $0)
+    let upcomingItems = reminders.map {
+      let reactor = UpcomingCellReactor(reminder: $0)
       return HomeSection.HomeSectionItem.upcoming(reactor)
     }
     return HomeSection.HomeSectionModel(
@@ -200,11 +193,8 @@ private extension HomeViewReactor {
   }
 
   func refineTimeline(gifts: [Gift]) -> HomeSection.HomeSectionModel {
-    let timelines = gifts.enumerated().map { index, gift in
-      TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
-    }
-    let timelineItems = timelines.map {
-      let reactor = TimelineCellReactor(cellData: $0)
+    let timelineItems = gifts.map {
+      let reactor = TimelineCellReactor(gift: $0)
       return HomeSection.HomeSectionItem.timeline(reactor)
     }
     return HomeSection.HomeSectionModel(

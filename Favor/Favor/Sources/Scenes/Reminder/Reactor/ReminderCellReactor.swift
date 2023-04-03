@@ -24,18 +24,14 @@ final class ReminderCellReactor: Reactor {
   }
 
   struct State {
-    var iconImage: UIImage?
-    var title: String
-    var subtitle: String
+    var reminderData: Reminder
   }
 
   // MARK: - Initializer
 
-  init(cellData: CardCellData) {
+  init(reminder: Reminder) {
     self.initialState = State(
-      iconImage: cellData.iconImage,
-      title: cellData.title,
-      subtitle: cellData.subtitle
+      reminderData: reminder
     )
   }
 

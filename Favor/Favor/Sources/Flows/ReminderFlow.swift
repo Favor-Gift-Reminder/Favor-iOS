@@ -29,8 +29,8 @@ final class ReminderFlow: Flow {
     case .newReminderIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
 
-    case .reminderDetailIsRequired:
-      return self.navigateToReminderDetail()
+    case .reminderDetailIsRequired(let data):
+      return self.navigateToReminderDetail(reminder: data)
 
     default: return .none
     }
@@ -64,9 +64,9 @@ private extension ReminderFlow {
       ))
   }
 
-  func navigateToReminderDetail() -> FlowContributors {
+  func navigateToReminderDetail(reminder: Reminder) -> FlowContributors {
     let reminderDetailVC = ReminderDetailViewController()
-    let reminderDetailReactor = ReminderDetailViewReactor()
+    let reminderDetailReactor = ReminderDetailViewReactor(reminder: reminder)
     reminderDetailVC.reactor = reminderDetailReactor
     self.rootViewController.pushViewController(reminderDetailVC, animated: true)
 

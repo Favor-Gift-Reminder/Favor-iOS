@@ -44,7 +44,7 @@ open class FavorIconImageView: UIView {
 
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .center
+    imageView.contentMode = .scaleAspectFill
     return imageView
   }()
 

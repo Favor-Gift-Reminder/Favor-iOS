@@ -24,16 +24,14 @@ final class TimelineCellReactor: Reactor {
   }
   
   struct State {
-    var image: UIImage?
-    var isPinned: Bool
+    var gift: Gift
   }
   
   // MARK: - Initializer
   
-  init(cellData: TimelineCellData) {
+  init(gift: Gift) {
     self.initialState = State(
-      image: cellData.image,
-      isPinned: cellData.isPinned
+      gift: gift
     )
   }
   
