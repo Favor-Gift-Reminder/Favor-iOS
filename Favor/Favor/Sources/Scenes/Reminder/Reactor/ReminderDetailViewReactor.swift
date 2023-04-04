@@ -18,15 +18,19 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
   var initialState: State
   var steps = PublishRelay<Step>()
 
+  private var cachedReminder: Reminder
+
   enum Action {
     case editButtonDidTap
     case deleteButtonDidTap
     case cancelButtonDidTap
     case doneButtonDidTap
+    case datePickerDidUpdate(String?)
   }
 
   enum Mutation {
     case switchEditModeTo(Bool)
+    case updateReminderDate(Date)
   }
 
   struct State {
@@ -40,6 +44,7 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
     self.initialState = State(
       reminderData: reminder
     )
+    self.cachedReminder = reminder
   }
 
 
@@ -62,6 +67,10 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
     case .doneButtonDidTap:
       os_log(.debug, "Done button did tap.")
       return .just(.switchEditModeTo(false))
+
+    case .datePickerDidUpdate(let dateString):
+      guard let date = dateString?.toDate("yyyy년 M월 d일") else { return .empty() }
+      return .just(.updateReminderDate(date))
     }
   }
 
@@ -71,6 +80,9 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
     switch mutation {
     case .switchEditModeTo(let isEditable):
       newState.isEditable = isEditable
+
+    case .updateReminderDate(let date):
+      self.cachedReminder.date = date
     }
 
     return newState

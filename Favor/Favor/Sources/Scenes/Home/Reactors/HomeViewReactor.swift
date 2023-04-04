@@ -156,7 +156,7 @@ private extension HomeViewReactor {
             Reminder(
               reminderNo: $0.reminderNo,
               title: $0.title,
-              date: $0.reminderDate.toDate() ?? .now,
+              date: $0.reminderDate.toDate("yyyy-MM-dd") ?? .now,
               shouldNotify: $0.isAlarmSet,
               friendNo: $0.friendNo
             )

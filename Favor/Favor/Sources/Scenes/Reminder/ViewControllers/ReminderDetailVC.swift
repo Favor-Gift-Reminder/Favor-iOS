@@ -124,9 +124,23 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.selectDatePicker.rx.dateString
+      .map { Reactor.Action.datePickerDidUpdate($0) }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { _, action in
+        reactor.action.onNext(action)
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.isEditable }
+      .do(onNext: { isEditable in
+        if isEditable {
+          self.selectDatePicker.finishEditMode()
+        }
+      })
       .asDriver(onErrorRecover: { _ in return .never()})
+      .delay(.microseconds(100))
       .drive(with: self, onNext: { owner, isEditable in
         owner.switchToEditMode(isEditable)
       })
@@ -137,7 +151,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .drive(with: self, onNext: { owner, data in
         owner.eventTitleLabel.text = data.title
         owner.eventSubtitleLabel.text = data.date.toDday()
-        owner.selectDatePicker.rx.text.onNext(data.date.toString())
+        owner.selectDatePicker.rx.dateString.onNext(data.date.toString())
       })
       .disposed(by: self.disposeBag)
   }
@@ -217,6 +231,7 @@ private extension ReminderDetailViewController {
     self.title = isEditable ? "이벤트 수정" : nil
 
     self.selectDatePicker.updateIsUserInteractable(to: isEditable)
-    self.selectNotiPicker.updateIsUserInteractable(to: isEditable)
+    self.notifyTimeSelectorButton.updateIsUserInteractable(to: isEditable)
+    self.memoTextView.isUserInteractionEnabled = isEditable
   }
 }

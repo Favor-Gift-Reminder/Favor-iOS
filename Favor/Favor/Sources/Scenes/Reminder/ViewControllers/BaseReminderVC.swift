@@ -69,22 +69,39 @@ class BaseReminderViewController: BaseViewController {
   )
 
   // 날짜
-  public lazy var selectDatePicker = FavorPickerTextField(pickerType: .date)
+  public lazy var selectDatePicker = FavorDatePickerTextField()
   public lazy var selectDateStack = self.makeEditStack(title: "날짜", itemView: selectDatePicker)
 
   // 알림
-  public lazy var selectNotiPicker: FavorPickerTextField = {
-    let picker = FavorPickerTextField(pickerType: .custom)
-    picker.dataSource = [
-      NotifyDays.allCases.compactMap { $0.stringValue },
-      ["오전", "오후"],
-      (1...12).compactMap { "\($0)시" }
-    ]
-    picker.width = [120, 80, 100]
-    picker.customPickerStringFormat = "%@ %@ %@"
+  public lazy var notifyDateSelectorButton: FavorPlainButton = {
+    let button = FavorPlainButton(with: .main("당일", isRight: false))
+    button.showsMenuAsPrimaryAction = true
+    button.changesSelectionAsPrimaryAction = false
+
+    let actions = NotifyDays.allCases.compactMap { day in
+      UIAction(title: day.stringValue, handler: { _ in
+        self.updateNotiDayButton(title: day.stringValue)
+      })
+    }
+    let buttonMenu = UIMenu(title: "알림 기간", children: actions)
+    button.menu = buttonMenu
+    return button
+  }()
+  public lazy var notifyTimeSelectorButton: FavorDatePickerTextField = {
+    let picker = FavorDatePickerTextField()
     return picker
   }()
-  public lazy var selectNotiStack = self.makeEditStack(title: "알림", itemView: self.selectNotiPicker)
+  public lazy var notifySelectorButtonStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.distribution = .fillProportionally
+    stackView.spacing = 16
+    return stackView
+  }()
+  public lazy var selectNotiStack = self.makeEditStack(
+    title: "알림",
+    itemView: self.notifySelectorButtonStack
+  )
 
   // 메모
   public lazy var memoTextView: RSKPlaceholderTextView = {
@@ -108,20 +125,11 @@ class BaseReminderViewController: BaseViewController {
   // MARK: - Binding
 
   override func bind() {
-    Observable.merge(
-      self.scrollView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-        guard let `self` = self else { return }
-        recognizer.delegate = self
-        delegate.simultaneousRecognitionPolicy = .never
-      })
-      .asObservable(),
-      self.memoTextView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-        guard let `self` = self else { return }
-        recognizer.delegate = self
-        delegate.simultaneousRecognitionPolicy = .never
-      })
-      .asObservable()
-    )
+    self.scrollView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
+      guard let `self` = self else { return }
+      recognizer.delegate = self
+      delegate.simultaneousRecognitionPolicy = .never
+    })
     .when(.recognized)
     .asDriver(onErrorRecover: { _ in return .never()})
     .drive(with: self, onNext: { owner, _ in
@@ -157,6 +165,7 @@ class BaseReminderViewController: BaseViewController {
     stackView.axis = .vertical
     stackView.spacing = 16
     stackView.distribution = .equalSpacing
+    stackView.alignment = .leading
 
     // Title Label
     let titleLabel = self.makeTitleLabel(title: title)
@@ -190,7 +199,6 @@ class BaseReminderViewController: BaseViewController {
     self.view.addSubview(self.scrollView)
     self.scrollView.addSubview(self.stackView)
 
-    self.stackView.addArrangedSubview(self.editablesStack)
     [
       self.selectFriendStack,
       self.selectDateStack,
@@ -198,6 +206,14 @@ class BaseReminderViewController: BaseViewController {
       self.memoStack
     ].forEach {
       self.editablesStack.addArrangedSubview($0)
+    }
+    self.stackView.addArrangedSubview(self.editablesStack)
+
+    [
+      self.notifyDateSelectorButton,
+      self.notifyTimeSelectorButton
+    ].forEach {
+      self.notifySelectorButtonStack.addArrangedSubview($0)
     }
   }
 
@@ -210,6 +226,17 @@ class BaseReminderViewController: BaseViewController {
     self.memoTextView.snp.makeConstraints { make in
       make.height.greaterThanOrEqualTo(self.memoMinimumHeight)
     }
+  }
+}
+
+// MARK: - Privates
+
+private extension BaseReminderViewController {
+  func updateNotiDayButton(title: String) {
+    self.notifyDateSelectorButton.configuration?.updateAttributedTitle(
+      title,
+      font: .favorFont(.regular, size: 16)
+    )
   }
 }
 

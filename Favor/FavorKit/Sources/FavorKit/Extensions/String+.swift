@@ -26,9 +26,9 @@ extension String {
     return image
   }
 
-  public func toDate() -> Date? {
+  public func toDate(_ format: String) -> Date? {
     let dateFormatter = DateFormatter()
-    dateFormatter.dateFormat = "yyyy-MM-dd"
+    dateFormatter.dateFormat = format
     if let date = dateFormatter.date(from: self) {
       return date
     }
