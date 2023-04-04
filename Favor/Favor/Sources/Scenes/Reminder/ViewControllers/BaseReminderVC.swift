@@ -20,8 +20,9 @@ class BaseReminderViewController: BaseViewController {
 
   // MARK: - Properties
 
-  public var topSpacing: CGFloat { return 32.0 }
+  public var verticalSpacing: CGFloat { return 32.0 }
   public var memoMinimumHeight: CGFloat { return 130.0 }
+  public var memoStackMinY: CGFloat { return self.memoStack.frame.minY }
 
   // MARK: - UI Components
 
@@ -31,9 +32,9 @@ class BaseReminderViewController: BaseViewController {
     scrollView.showsVerticalScrollIndicator = false
     scrollView.alwaysBounceVertical = true
     scrollView.contentInset = UIEdgeInsets(
-      top: self.topSpacing,
+      top: self.verticalSpacing,
       left: .zero,
-      bottom: self.topSpacing,
+      bottom: self.verticalSpacing,
       right: .zero
     )
     return scrollView
@@ -108,22 +109,6 @@ class BaseReminderViewController: BaseViewController {
 
   override func bind() {
     Observable.merge(
-      self.memoTextView.rx.didBeginEditing.asObservable(),
-      self.memoTextView.rx.didChange.asObservable()
-    )
-    .flatMap { _ -> Observable<CGFloat> in
-      return RxKeyboard.instance.willShowVisibleHeight.map { height in
-        return height
-      }
-      .asObservable()
-    }
-    .asDriver(onErrorRecover: { _ in return .never()})
-    .drive(with: self, onNext: { owner, height in
-      owner.scrollToCursor(keyboardHeight: height)
-    })
-    .disposed(by: self.disposeBag)
-
-    Observable.merge(
       self.scrollView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
         guard let `self` = self else { return }
         recognizer.delegate = self
@@ -150,6 +135,13 @@ class BaseReminderViewController: BaseViewController {
         if owner.memoTextView.isFirstResponder {
           owner.memoTextView.resignFirstResponder()
         }
+      })
+      .disposed(by: self.disposeBag)
+
+    RxKeyboard.instance.visibleHeight
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, height in
+        owner.scrollView.contentInset.bottom = height + self.verticalSpacing
       })
       .disposed(by: self.disposeBag)
   }
@@ -217,19 +209,6 @@ class BaseReminderViewController: BaseViewController {
 
     self.memoTextView.snp.makeConstraints { make in
       make.height.greaterThanOrEqualTo(self.memoMinimumHeight)
-    }
-  }
-}
-
-// MARK: - Privates
-
-private extension BaseReminderViewController {
-  func scrollToCursor(keyboardHeight: CGFloat) {
-    if self.memoTextView.isFirstResponder {
-      if let selectedRange = self.memoTextView.selectedTextRange?.start {
-        let cursorPosition = self.memoTextView.caretRect(for: selectedRange).origin.y
-        self.scrollView.scroll(to: self.memoStack.frame.minY - keyboardHeight + cursorPosition)
-      }
     }
   }
 }

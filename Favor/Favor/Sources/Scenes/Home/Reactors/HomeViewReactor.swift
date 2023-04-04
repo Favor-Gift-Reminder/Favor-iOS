@@ -75,7 +75,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.reminderFetcher.fetch()
         .flatMap { (status, reminders) -> Observable<Mutation> in
-          let upcomingSection = self.refineUpcoming(reminders: reminders)
+          let upcomingSection = self.refineUpcoming(reminders: reminders.prefix(3).wrap())
           return .concat([
             .just(.updateUpcoming(upcomingSection)),
             .just(.updateLoading(status == .inProgress))

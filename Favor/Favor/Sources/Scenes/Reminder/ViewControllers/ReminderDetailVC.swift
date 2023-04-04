@@ -21,7 +21,10 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
 
   // MARK: - Properties
 
-  override var topSpacing: CGFloat { return 8.0 }
+  override var verticalSpacing: CGFloat { return 8.0 }
+  override var memoStackMinY: CGFloat {
+    return self.memoStack.frame.minY + self.eventStack.frame.maxY
+  }
 
   // MARK: - UI Components
 
