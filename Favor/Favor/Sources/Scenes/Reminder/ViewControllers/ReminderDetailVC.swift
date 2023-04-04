@@ -22,9 +22,6 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   // MARK: - Properties
 
   override var topSpacing: CGFloat { return 8.0 }
-  override var memoStackMinY: CGFloat {
-    self.memoStack.frame.minY
-  }
 
   // MARK: - UI Components
 
@@ -169,7 +166,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     }
 
     self.stackView.addArrangedSubview(self.eventStack)
-
+    
     super.setupLayouts()
   }
 
