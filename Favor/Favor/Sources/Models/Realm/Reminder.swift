@@ -70,4 +70,14 @@ public class Reminder: Object {
   }
 }
 
-// TODO: Mapping 함수 구현 (CardCellData)
+extension Reminder {
+  public func toDomain() -> ReminderEditor {
+    ReminderEditor(
+      pk: self.reminderNo,
+      title: self.title,
+      date: self.date,
+      shouldNotify: self.shouldNotify,
+      friend: self.friendNo
+    )
+  }
+}

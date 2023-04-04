@@ -46,7 +46,7 @@ extension Date {
     let dayDate = self.toDayString()
     switch days.signum() {
     case 0: return "오늘"
-    case ..<0: return "\(dayDate)일까지 D-\(days)"
+    case ..<0: return "\(dayDate)일까지 D\(days)"
     case 1...: return "\(days)일 전"
     default: return "D-Day 계산 실패"
     }

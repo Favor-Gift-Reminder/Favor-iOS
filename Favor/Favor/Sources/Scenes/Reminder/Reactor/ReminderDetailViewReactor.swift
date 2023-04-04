@@ -7,6 +7,7 @@
 
 import OSLog
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -17,8 +18,6 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-
-  private var cachedReminder: Reminder
 
   enum Action {
     case editButtonDidTap
@@ -31,20 +30,23 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
   enum Mutation {
     case switchEditModeTo(Bool)
     case updateReminderDate(Date)
+    case applyEditAction(EditAction)
   }
 
   struct State {
     var isEditable: Bool = false
-    var reminderData: Reminder
+    var reminderEditor: ReminderEditor
+    var cachedReminder: ReminderEditor
   }
 
   // MARK: - Initializer
 
   init(reminder: Reminder) {
+    let wrappedReminder = reminder.toDomain()
     self.initialState = State(
-      reminderData: reminder
+      reminderEditor: wrappedReminder,
+      cachedReminder: wrappedReminder
     )
-    self.cachedReminder = reminder
   }
 
 
@@ -61,12 +63,16 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .cancelButtonDidTap:
-      os_log(.debug, "Cancel button did tap.")
-      return .just(.switchEditModeTo(false))
+      return .merge(
+        .just(.switchEditModeTo(false)),
+        .just(.applyEditAction(.cancel))
+      )
 
     case .doneButtonDidTap:
-      os_log(.debug, "Done button did tap.")
-      return .just(.switchEditModeTo(false))
+      return .merge(
+        .just(.switchEditModeTo(false)),
+        .just(.applyEditAction(.apply))
+      )
 
     case .datePickerDidUpdate(let dateString):
       guard let date = dateString?.toDate("yyyy년 M월 d일") else { return .empty() }
@@ -82,7 +88,15 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
       newState.isEditable = isEditable
 
     case .updateReminderDate(let date):
-      self.cachedReminder.date = date
+      newState.reminderEditor.date = date
+
+    case .applyEditAction(let action):
+      switch action {
+      case .apply:
+        newState.cachedReminder = state.reminderEditor
+      case .cancel:
+        newState.reminderEditor = state.cachedReminder
+      }
     }
 
     return newState

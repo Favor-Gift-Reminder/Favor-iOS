@@ -51,6 +51,7 @@
 		2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B7299235990081499C /* SearchViewReactor.swift */; };
 		2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B92992371C0081499C /* SearchFlow.swift */; };
 		2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EA46B2929BA35570030904E /* Term-Info.plist */; };
+		2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4429DCA249005097C0 /* ReminderEditor.swift */; };
 		2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3AE92299E3E2700D31541 /* BackgroundView.swift */; };
 		2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */; };
 		2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71229D4500D008D10A0 /* ReminderSection.swift */; };
@@ -184,6 +185,7 @@
 		2EA384B7299235990081499C /* SearchViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewReactor.swift; sourceTree = "<group>"; };
 		2EA384B92992371C0081499C /* SearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFlow.swift; sourceTree = "<group>"; };
 		2EA46B2929BA35570030904E /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
+		2EA73C4429DCA249005097C0 /* ReminderEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditor.swift; sourceTree = "<group>"; };
 		2EB3AE92299E3E2700D31541 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewReactor.swift; sourceTree = "<group>"; };
 		2EB3E71229D4500D008D10A0 /* ReminderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSection.swift; sourceTree = "<group>"; };
@@ -488,6 +490,7 @@
 				2E9F989429C62B2200789297 /* Realm */,
 				2EE3BAA829AF11E5004FDCC9 /* README.md */,
 				2ED326B429B0F6EB001963D0 /* Terms.swift */,
+				2EA73C4429DCA249005097C0 /* ReminderEditor.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1018,6 +1021,7 @@
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
+				2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
 				2E00561C29A7E720006CF302 /* FavorSelectionSection.swift in Sources */,

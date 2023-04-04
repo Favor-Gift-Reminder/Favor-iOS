@@ -135,7 +135,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     // State
     reactor.state.map { $0.isEditable }
       .do(onNext: { isEditable in
-        if isEditable {
+        if !isEditable {
           self.selectDatePicker.finishEditMode()
         }
       })
@@ -146,12 +146,12 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { $0.reminderData }
+    reactor.state.map { $0.reminderEditor }
       .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, data in
-        owner.eventTitleLabel.text = data.title
-        owner.eventSubtitleLabel.text = data.date.toDday()
-        owner.selectDatePicker.rx.dateString.onNext(data.date.toString())
+      .drive(with: self, onNext: { owner, editor in
+        owner.eventTitleLabel.text = editor.title
+        owner.eventSubtitleLabel.text = editor.date.toDday()
+        owner.selectDatePicker.rx.dateString.onNext(editor.date.toString())
       })
       .disposed(by: self.disposeBag)
   }
