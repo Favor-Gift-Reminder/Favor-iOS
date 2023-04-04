@@ -116,8 +116,9 @@ final class HomeViewController: BaseViewController, View {
   
   func bind(reactor: HomeViewReactor) {
     // Action
-    self.rx.viewWillAppear
-      .map { _ in Reactor.Action.viewDidAppear }
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 

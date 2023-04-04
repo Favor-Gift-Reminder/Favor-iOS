@@ -137,8 +137,9 @@ final class ReminderViewController: BaseViewController, View {
 
   func bind(reactor: ReminderViewReactor) {
     // Action
-    self.rx.viewWillAppear
-      .map { _ in Reactor.Action.viewWillAppear }
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -157,6 +158,13 @@ final class ReminderViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, date in
         owner.updateSelectedDate(to: date)
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isLoading }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, isLoading in
+        owner.rx.isLoading.onNext(isLoading)
       })
       .disposed(by: self.disposeBag)
   }

@@ -24,7 +24,7 @@ final class ReminderViewReactor: Reactor, Stepper {
   let reminderFetcher = Fetcher<[Reminder]>()
 
   enum Action {
-    case viewWillAppear
+    case viewNeedsLoaded
     case selectDateButtonDidTap
     case reminderDidSelected(ReminderSection.ReminderSectionItem)
     case newReminderButtonDidTap
@@ -65,7 +65,7 @@ final class ReminderViewReactor: Reactor, Stepper {
 
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewWillAppear:
+    case .viewNeedsLoaded:
       return self.reminderFetcher.fetch()
         .flatMap { (status, reminders) -> Observable<Mutation> in
           let filteredReminders = reminders.filter {
@@ -169,16 +169,7 @@ private extension ReminderViewReactor {
     var upcomingReminders: [Reminder] = []
     var pastReminders: [Reminder] = []
 
-    reminders.enumerated().forEach { index, reminder in
-//      let formattedSubtitle = { // TODO: bind 받는 쪽에서
-//        reminder.date.toDayString() == Date.now.toDayString() ? "오늘" : reminder.date.toDday()
-//      }()
-//      let cellData = CardCellData(
-//        iconImage: UIImage(named: "p\(index + 1)").flatMap { $0 },
-//        title: reminder.title,
-//        subtitle: formattedSubtitle
-//      )
-
+    reminders.forEach { reminder in
       let reminderDateComponents = Calendar.current.dateComponents(
         [.year, .month, .day],
         from: reminder.date

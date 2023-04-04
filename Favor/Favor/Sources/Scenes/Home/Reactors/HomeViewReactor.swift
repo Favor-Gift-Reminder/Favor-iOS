@@ -31,7 +31,7 @@ final class HomeViewReactor: Reactor, Stepper {
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
   
   enum Action {
-    case viewDidAppear
+    case viewNeedsLoaded
     case searchButtonDidTap
     case newGiftButtonDidTap
     case itemSelected(IndexPath)
@@ -72,7 +72,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewDidAppear:
+    case .viewNeedsLoaded:
       return self.reminderFetcher.fetch()
         .flatMap { (status, reminders) -> Observable<Mutation> in
           let upcomingSection = self.refineUpcoming(reminders: reminders)
