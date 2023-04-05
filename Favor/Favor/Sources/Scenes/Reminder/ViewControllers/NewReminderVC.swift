@@ -44,7 +44,7 @@ final class NewReminderViewController: BaseReminderViewController, View {
   }()
   private lazy var titleStack = self.makeEditStack(
     title: "제목",
-    itemView: titleTextField,
+    itemViews: [titleTextField],
     isDividerNeeded: false
   )
 
@@ -87,8 +87,6 @@ final class NewReminderViewController: BaseReminderViewController, View {
 
   override func setupLayouts() {
     self.navigationItem.setRightBarButton(self.postButton, animated: true)
-
-    self.editablesStack.addArrangedSubview(self.titleStack)
 
     super.setupLayouts()
   }

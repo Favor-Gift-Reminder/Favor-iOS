@@ -25,11 +25,13 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
     case cancelButtonDidTap
     case doneButtonDidTap
     case datePickerDidUpdate(String?)
+    case notifyTimePickerDidUpdate(String?)
   }
 
   enum Mutation {
     case switchEditModeTo(Bool)
     case updateReminderDate(Date)
+    case updateNotifyTime(Date)
     case applyEditAction(EditAction)
   }
 
@@ -77,6 +79,10 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
     case .datePickerDidUpdate(let dateString):
       guard let date = dateString?.toDate("yyyy년 M월 d일") else { return .empty() }
       return .just(.updateReminderDate(date))
+
+    case .notifyTimePickerDidUpdate(let timeString):
+      guard let time = timeString?.toDate("a h시 m분") else { return .empty() }
+      return .just(.updateNotifyTime(time))
     }
   }
 
@@ -89,6 +95,9 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
 
     case .updateReminderDate(let date):
       newState.reminderEditor.date = date
+
+    case .updateNotifyTime(let time):
+      newState.reminderEditor.notifyTime = time
 
     case .applyEditAction(let action):
       switch action {

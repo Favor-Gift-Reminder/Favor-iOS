@@ -42,7 +42,7 @@ final class UpcomingCell: BaseCardCell, Reusable, View {
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, reminder in
         owner.title = reminder.title
-        owner.subtitle = reminder.date.toString()
+        owner.subtitle = reminder.date.toDateString()
       })
       .disposed(by: self.disposeBag)
   }

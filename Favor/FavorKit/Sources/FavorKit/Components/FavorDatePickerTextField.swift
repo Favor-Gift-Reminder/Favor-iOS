@@ -16,6 +16,24 @@ public final class FavorDatePickerTextField: UIView {
   // MARK: - PROPERTIES
 
   private let disposeBag = DisposeBag()
+
+  public var pickerMode: UIDatePicker.Mode = .date {
+    didSet { self.datePicker.datePickerMode = self.pickerMode }
+  }
+
+  public var placeholder: String = "선택" {
+    didSet {
+      let placeholder = NSAttributedString(
+        string: self.placeholder,
+        attributes: [
+          .foregroundColor: UIColor.favorColor(.explain),
+          .font: UIFont.favorFont(.regular, size: 16)
+        ]
+      )
+      self.textField.attributedPlaceholder = placeholder
+    }
+  }
+
   var currentDateString: String? {
     didSet { self.downButton.isSelected = true }
   }
@@ -74,14 +92,6 @@ public final class FavorDatePickerTextField: UIView {
 
   fileprivate lazy var textField: UITextField = {
     let tf = UITextField()
-    let placeholder = NSAttributedString(
-      string: "날짜 선택",
-      attributes: [
-        .foregroundColor: UIColor.favorColor(.explain),
-        .font: UIFont.favorFont(.regular, size: 16)
-      ]
-    )
-    tf.attributedPlaceholder = placeholder
     tf.textColor = .favorColor(.icon)
     tf.tintColor = .clear
     tf.font = .favorFont(.regular, size: 16)
@@ -108,6 +118,7 @@ public final class FavorDatePickerTextField: UIView {
 
   public func updateIsUserInteractable(to isInteractable: Bool) {
     self.textField.isUserInteractionEnabled = isInteractable
+    self.downButton.isHidden = !isInteractable
   }
 
   public func finishEditMode() {
@@ -120,7 +131,7 @@ public final class FavorDatePickerTextField: UIView {
     self.datePicker.rx.date
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
-        let dateString = date.toString()
+        let dateString = self.pickerMode == .time ? date.toTimeString() : date.toDateString()
         owner.textField.text = dateString
         owner.currentDateString = dateString
       })

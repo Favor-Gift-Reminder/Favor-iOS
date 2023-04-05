@@ -22,9 +22,6 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   // MARK: - Properties
 
   override var verticalSpacing: CGFloat { return 8.0 }
-  override var memoStackMinY: CGFloat {
-    return self.memoStack.frame.minY + self.eventStack.frame.maxY
-  }
 
   // MARK: - UI Components
 
@@ -59,6 +56,15 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   }()
 
   // View Items
+
+  private lazy var stackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 40
+    return stackView
+  }()
+
+  private let contentsView = UIView()
 
   private lazy var eventInfoViewContainer: UIView = {
     let view = UIView()
@@ -132,6 +138,14 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       })
       .disposed(by: self.disposeBag)
 
+    self.notifyTimePicker.rx.dateString
+      .map { Reactor.Action.notifyTimePickerDidUpdate($0) }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { _, action in
+        reactor.action.onNext(action)
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.isEditable }
       .do(onNext: { isEditable in
@@ -151,7 +165,8 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .drive(with: self, onNext: { owner, editor in
         owner.eventTitleLabel.text = editor.title
         owner.eventSubtitleLabel.text = editor.date.toDday()
-        owner.selectDatePicker.rx.dateString.onNext(editor.date.toString())
+        owner.selectDatePicker.rx.dateString.onNext(editor.date.toDateString())
+        owner.notifyTimePicker.rx.dateString.onNext(editor.notifyTime?.toTimeString())
       })
       .disposed(by: self.disposeBag)
   }
@@ -161,6 +176,11 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   // MARK: - UI Setups
 
   override func setupLayouts() {
+    super.setupLayouts()
+
+    self.scrollView.addSubview(self.contentsView)
+    self.contentsView.addSubview(self.stackView)
+
     [
       self.eventTitleLabel,
       self.eventSubtitleLabel
@@ -181,15 +201,37 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     ].forEach {
       self.eventStack.addArrangedSubview($0)
     }
-
-    self.stackView.addArrangedSubview(self.eventStack)
     
-    super.setupLayouts()
+    [
+      self.eventStack,
+      self.selectFriendStack,
+      self.selectDateStack,
+      self.selectNotiStack,
+      self.memoStack
+    ].forEach {
+      self.stackView.addArrangedSubview($0)
+    }
+    self.stackView.setCustomSpacing(8.0, after: self.eventStack)
   }
 
   override func setupConstraints() {
     super.setupConstraints()
 
+    self.scrollView.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
+    }
+
+    self.contentsView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+      make.width.equalToSuperview()
+    }
+
+    self.stackView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+
+    // Header
     self.eventInfoViewContainer.snp.makeConstraints { make in
       make.height.equalTo(112)
     }
@@ -207,11 +249,6 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
 
     self.roundedTopView.snp.makeConstraints { make in
       make.height.equalTo(40)
-    }
-
-    self.scrollView.snp.makeConstraints { make in
-      make.directionalHorizontalEdges.equalToSuperview()
-      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
     }
   }
 }
@@ -231,7 +268,8 @@ private extension ReminderDetailViewController {
     self.title = isEditable ? "이벤트 수정" : nil
 
     self.selectDatePicker.updateIsUserInteractable(to: isEditable)
-    self.notifyTimeSelectorButton.updateIsUserInteractable(to: isEditable)
+    self.notifyDateSelectorButton.isEnabled = isEditable
+    self.notifyTimePicker.updateIsUserInteractable(to: isEditable)
     self.memoTextView.isUserInteractionEnabled = isEditable
   }
 }

@@ -142,7 +142,11 @@ final class NewGiftViewController: BaseViewController, View {
   
   private lazy var giftReceivedButton = self.giftButton("받은 선물")
   private lazy var giftGivenButton = self.giftButton("준 선물")
-  private let datePickerTextField = FavorDatePickerTextField()
+  private lazy var datePickerTextField: FavorDatePickerTextField = {
+    let picker = FavorDatePickerTextField()
+    picker.placeholder = "날짜 선택"
+    return picker
+  }()
   private let choiceFrinedButton = NewGiftChoiceFriendButton()
   
   private lazy var titleStackView = makeStack(
