@@ -20,18 +20,19 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
 
   enum Action {
+    case viewDidLoad
     case editButtonDidTap
     case deleteButtonDidTap
     case cancelButtonDidTap
     case doneButtonDidTap
-    case datePickerDidUpdate(String?)
-    case notifyTimePickerDidUpdate(String?)
+    case datePickerDidUpdate(Date)
+    case notifyTimePickerDidUpdate(Date)
   }
 
   enum Mutation {
     case switchEditModeTo(Bool)
     case updateReminderDate(Date)
-    case updateNotifyTime(Date)
+    case updateNotifyTime(Date?)
     case applyEditAction(EditAction)
   }
 
@@ -56,8 +57,13 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
 
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .viewDidLoad:
+      return .merge(
+        .just(.updateReminderDate(self.currentState.cachedReminder.date)),
+        .just(.updateNotifyTime(self.currentState.cachedReminder.notifyTime))
+      )
+
     case .editButtonDidTap:
-      os_log(.debug, "Edit button did tap.")
       return .just(.switchEditModeTo(true))
 
     case .deleteButtonDidTap:
@@ -76,13 +82,11 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
         .just(.applyEditAction(.apply))
       )
 
-    case .datePickerDidUpdate(let dateString):
-      guard let date = dateString?.toDate("yyyy년 M월 d일") else { return .empty() }
+    case .datePickerDidUpdate(let date):
       return .just(.updateReminderDate(date))
 
-    case .notifyTimePickerDidUpdate(let timeString):
-      guard let time = timeString?.toDate("a h시 m분") else { return .empty() }
-      return .just(.updateNotifyTime(time))
+    case .notifyTimePickerDidUpdate(let date):
+      return .just(.updateNotifyTime(date))
     }
   }
 

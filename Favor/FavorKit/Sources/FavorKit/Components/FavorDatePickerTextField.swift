@@ -67,7 +67,7 @@ public final class FavorDatePickerTextField: UIView {
     return btn
   }()
 
-  private lazy var datePicker: UIDatePicker = {
+  fileprivate lazy var datePicker: UIDatePicker = {
     let dp = UIDatePicker()
     dp.datePickerMode = .date
     dp.preferredDatePickerStyle = .wheels
@@ -185,6 +185,14 @@ extension FavorDatePickerTextField: BaseView {
 // MARK: - Reactive
 
 public extension Reactive where Base: FavorDatePickerTextField {
+  var date: ControlProperty<Date> {
+    let source = base.datePicker.rx.date
+    let bindingObserver = Binder(self.base) { (picker, date: Date) in
+      picker.datePicker.date = date
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
+  }
+
   var dateString: ControlProperty<String?> {
     let source = base.textField.rx.text
     let bindingObserver = Binder(self.base) { (picker, dateString: String?) in

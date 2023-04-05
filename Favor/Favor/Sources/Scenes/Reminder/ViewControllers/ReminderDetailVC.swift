@@ -110,6 +110,11 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
 
   func bind(reactor: ReminderDetailViewReactor) {
     // Action
+    self.rx.viewDidLoad
+      .map { Reactor.Action.viewDidLoad }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.editButton.rx.tap
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
@@ -130,15 +135,15 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.selectDatePicker.rx.dateString
+    self.selectDatePicker.rx.date
       .map { Reactor.Action.datePickerDidUpdate($0) }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { _, action in
         reactor.action.onNext(action)
       })
       .disposed(by: self.disposeBag)
 
-    self.notifyTimePicker.rx.dateString
+    self.notifyTimePicker.rx.date
       .map { Reactor.Action.notifyTimePickerDidUpdate($0) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { _, action in
@@ -153,15 +158,15 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
           self.selectDatePicker.finishEditMode()
         }
       })
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .delay(.microseconds(100))
+      .observe(on: MainScheduler.asyncInstance)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEditable in
         owner.switchToEditMode(isEditable)
       })
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.reminderEditor }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, editor in
         owner.eventTitleLabel.text = editor.title
         owner.eventSubtitleLabel.text = editor.date.toDday()

@@ -62,8 +62,6 @@ class BaseReminderViewController: BaseViewController {
   public lazy var notifyDateSelectorButton: FavorPlainButton = {
     let button = FavorPlainButton(with: .main("당일", isRight: false))
     button.configuration?.background.backgroundColor = .clear
-    button.configuration?.titleAlignment = .center
-    button.configuration?.imagePlacement = .trailing
     button.configuration?.imagePadding = 8
 
     button.configurationUpdateHandler = { button in
@@ -96,6 +94,9 @@ class BaseReminderViewController: BaseViewController {
     }
     let buttonMenu = UIMenu(title: "알림 기간", children: actions)
     button.menu = buttonMenu
+
+    button.setContentHuggingPriority(.defaultHigh, for: .vertical)
+
     return button
   }()
   public lazy var notifyTimePicker: FavorDatePickerTextField = {
@@ -104,17 +105,9 @@ class BaseReminderViewController: BaseViewController {
     picker.placeholder = "시간 선택"
     return picker
   }()
-  public lazy var notifySelectorButtonStack: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.distribution = .fillProportionally
-    stackView.spacing = 16
-    stackView.alignment = .leading
-    return stackView
-  }()
   public lazy var selectNotiStack = self.makeEditStack(
     title: "알림",
-    itemViews: [self.notifySelectorButtonStack]
+    itemViews: [self.notifyDateSelectorButton, self.notifyTimePicker]
   )
 
   // 메모
@@ -222,13 +215,6 @@ class BaseReminderViewController: BaseViewController {
 
   override func setupLayouts() {
     self.view.addSubview(self.scrollView)
-
-    [
-      self.notifyDateSelectorButton,
-      self.notifyTimePicker
-    ].forEach {
-      self.notifySelectorButtonStack.addArrangedSubview($0)
-    }
   }
 
   override func setupConstraints() {
