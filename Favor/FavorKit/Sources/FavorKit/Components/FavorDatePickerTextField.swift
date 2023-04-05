@@ -34,8 +34,8 @@ public final class FavorDatePickerTextField: UIView {
     }
   }
 
-  var currentDateString: String? {
-    didSet { self.downButton.isSelected = true }
+  public var isSelected: Bool = false {
+    didSet { self.downButton.isSelected = self.isSelected }
   }
 
   // MARK: - UI
@@ -133,7 +133,6 @@ public final class FavorDatePickerTextField: UIView {
       .drive(with: self, onNext: { owner, date in
         let dateString = self.pickerMode == .time ? date.toTimeString() : date.toDateString()
         owner.textField.text = dateString
-        owner.currentDateString = dateString
       })
       .disposed(by: self.disposeBag)
 

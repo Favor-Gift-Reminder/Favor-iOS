@@ -171,6 +171,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
         owner.eventTitleLabel.text = editor.title
         owner.eventSubtitleLabel.text = editor.date.toDday()
         owner.selectDatePicker.rx.dateString.onNext(editor.date.toDateString())
+        owner.notifyTimePicker.isSelected = !(editor.notifyTime == nil)
         owner.notifyTimePicker.rx.dateString.onNext(editor.notifyTime?.toTimeString())
       })
       .disposed(by: self.disposeBag)
@@ -273,7 +274,7 @@ private extension ReminderDetailViewController {
     self.title = isEditable ? "이벤트 수정" : nil
 
     self.selectDatePicker.updateIsUserInteractable(to: isEditable)
-    self.notifyDateSelectorButton.isEnabled = isEditable
+    self.updateNotifyDateSelectorButton(state: isEditable)
     self.notifyTimePicker.updateIsUserInteractable(to: isEditable)
     self.memoTextView.isUserInteractionEnabled = isEditable
   }

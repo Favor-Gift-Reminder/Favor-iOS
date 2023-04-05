@@ -67,8 +67,6 @@ class BaseReminderViewController: BaseViewController {
     button.configurationUpdateHandler = { button in
       var config = button.configuration
       switch button.state {
-      case .disabled:
-        config?.image = nil
       case .normal:
         config?.image = .favorIcon(.down)?
           .withTintColor(.favorColor(.explain), renderingMode: .alwaysTemplate)
@@ -209,6 +207,14 @@ class BaseReminderViewController: BaseViewController {
     label.textAlignment = .left
     label.text = title
     return label
+  }
+
+  public func updateNotifyDateSelectorButton(state isEditable: Bool) {
+    self.notifyDateSelectorButton.isUserInteractionEnabled = isEditable
+    let downIcon: UIImage? = .favorIcon(.down)?
+      .resize(newWidth: 12)
+      .withTintColor(.favorColor(.explain), renderingMode: .alwaysTemplate)
+    self.notifyDateSelectorButton.configuration?.image = isEditable ? downIcon : nil
   }
 
   // MARK: - UI Setups
