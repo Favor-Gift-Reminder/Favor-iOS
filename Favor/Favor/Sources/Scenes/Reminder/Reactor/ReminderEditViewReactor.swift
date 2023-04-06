@@ -83,7 +83,6 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     case .doneButtonDidTap:
       os_log(.debug, "Done button did tap.")
       print(self.currentState.reminderEditor)
-//      self.uploadReminder(self.currentState.type)
       return .empty()
 
     case .datePickerDidUpdate(let date):
@@ -112,41 +111,5 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     }
 
     return newState
-  }
-}
-
-// MARK: - Privates
-
-private extension ReminderEditViewReactor {
-  func uploadReminder(_ type: EditType) {
-    let currentReminder = self.currentState.reminderEditor
-    let requestDTO = ReminderRequestDTO(
-      title: currentReminder.title,
-      reminderDate: currentReminder.date.toDTODateString(),
-      isAlarmSet: currentReminder.shouldNotify,
-      alarmTime: String(describing: currentReminder.notifyTime),
-      reminderMemo: currentReminder.memo ?? ""
-    )
-    switch type {
-    case .edit:
-      guard let reminder = self.currentState.cachedReminder else {
-        fatalError()
-      }
-      let response = reminderNetworking.request(
-        .patchReminder(
-          requestDTO,
-          friendNo: currentReminder.friend,
-          reminderNo: reminder.reminderNo
-        )
-      )
-    case .new:
-      let response = reminderNetworking.request(
-        .postReminder(
-          requestDTO,
-          friendNo: currentReminder.friend,
-          userNo: 3
-        )
-      )
-    }
   }
 }
