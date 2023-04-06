@@ -173,7 +173,7 @@ open class BaseBottomSheet: BaseViewController {
     }
   }
   
-  func animateDismissView() {
+  public func animateDismissView() {
     UIView.animate(withDuration: 0.3) {
       self.containerViewBottomInset?.update(inset: -294)
       self.view.layoutIfNeeded()
@@ -194,7 +194,7 @@ open class BaseBottomSheet: BaseViewController {
     }
   }
   
-  // MARK: - FUNCTIONS
+  // MARK: - Functions
   
   public func updateTitle(_ title: String) {
     self.titleLabel.text = title
