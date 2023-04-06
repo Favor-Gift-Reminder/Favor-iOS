@@ -8,6 +8,7 @@
 import OSLog
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -24,6 +25,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
+  let reminderNetworking = ReminderNetworking()
 
   enum Action {
     case viewDidLoad
@@ -69,19 +71,17 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     switch action {
     case .viewDidLoad:
       if currentState.type == .edit {
-        guard let reminder = currentState.cachedReminder else {
-          fatalError("Edit mode should be injected with Reminder parameter from initializer.")
-        }
         return .merge(
-          .just(.updateReminderDate(reminder.date)),
-          .just(.updateNotifyTime(reminder.notifyTime))
+          .just(.updateReminderDate(self.currentState.reminderEditor.date)),
+          .just(.updateNotifyTime(self.currentState.reminderEditor.notifyTime))
         )
       } else {
         return .empty()
       }
 
     case .doneButtonDidTap:
-      print(self.currentState.reminderEditor)
+      os_log(.debug, "Done button did tap.")
+      self.uploadReminder(self.currentState.type)
       return .empty()
 
     case .datePickerDidUpdate(let date):
@@ -107,5 +107,41 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     }
 
     return newState
+  }
+}
+
+// MARK: - Privates
+
+private extension ReminderEditViewReactor {
+  func uploadReminder(_ type: EditType) {
+    let currentReminder = self.currentState.reminderEditor
+    let requestDTO = ReminderRequestDTO(
+      title: currentReminder.title,
+      reminderDate: currentReminder.date.toDTODateString(),
+      isAlarmSet: currentReminder.shouldNotify,
+      alarmTime: String(describing: currentReminder.notifyTime),
+      reminderMemo: currentReminder.memo ?? ""
+    )
+    switch type {
+    case .edit:
+      guard let reminder = self.currentState.cachedReminder else {
+        fatalError()
+      }
+      let response = reminderNetworking.request(
+        .patchReminder(
+          requestDTO,
+          friendNo: currentReminder.friend,
+          reminderNo: reminder.reminderNo
+        )
+      )
+    case .new:
+      let response = reminderNetworking.request(
+        .postReminder(
+          requestDTO,
+          friendNo: currentReminder.friend,
+          userNo: 3
+        )
+      )
+    }
   }
 }

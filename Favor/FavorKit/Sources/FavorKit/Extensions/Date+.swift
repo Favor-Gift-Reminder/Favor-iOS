@@ -57,4 +57,10 @@ extension Date {
     default: return "D-Day 계산 실패"
     }
   }
+
+  public func toDTODateString() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter.string(from: self)
+  }
 }

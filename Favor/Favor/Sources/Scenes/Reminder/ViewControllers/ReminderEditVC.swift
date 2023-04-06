@@ -41,19 +41,6 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     return button
   }()
 
-//  private lazy var doneButton: UIBarButtonItem = {
-//    let button = UIBarButtonItem(title: "등록", style: .done, target: nil, action: nil)
-//    button.setTitleTextAttributes(
-//      [NSAttributedString.Key.foregroundColor: UIColor.favorColor(.icon)],
-//      for: .normal
-//    )
-//    button.setTitleTextAttributes(
-//      [NSAttributedString.Key.foregroundColor: UIColor.favorColor(.line2)],
-//      for: .disabled
-//    )
-//    return button
-//  }()
-
   // View Items
   private let contentsView = UIView()
 
@@ -77,6 +64,11 @@ final class ReminderEditViewController: BaseReminderViewController, View {
 
     self.notifySwitch.rx.isOn
       .map { Reactor.Action.notifySwitchDidToggle($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.doneButton.rx.tap
+      .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
