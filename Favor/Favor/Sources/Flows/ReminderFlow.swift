@@ -29,8 +29,11 @@ final class ReminderFlow: Flow {
     case .newReminderIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
 
-    case .reminderDetailIsRequired(let data):
-      return self.navigateToReminderDetail(reminder: data)
+    case .reminderDetailIsRequired(let reminder):
+      return self.navigateToReminderDetail(reminder: reminder)
+
+    case .reminderEditIsRequired(let reminder):
+      return self.navigateToEditReminder(reminder: reminder)
 
     default: return .none
     }
@@ -52,8 +55,8 @@ private extension ReminderFlow {
   }
 
   func navigateToNewReminder() -> FlowContributors {
-    let newReminderVC = NewReminderViewController()
-    let newReminderReactor = NewReminderViewReactor()
+    let newReminderVC = ReminderEditViewController()
+    let newReminderReactor = ReminderEditViewReactor(.new)
     newReminderVC.reactor = newReminderReactor
     self.rootViewController.pushViewController(newReminderVC, animated: true)
 
@@ -74,6 +77,19 @@ private extension ReminderFlow {
       flowContributor: .contribute(
         withNextPresentable: reminderDetailVC,
         withNextStepper: reminderDetailReactor
+      ))
+  }
+
+  func navigateToEditReminder(reminder: Reminder) -> FlowContributors {
+    let reminderEditVC = ReminderEditViewController()
+    let reminderEditReactor = ReminderEditViewReactor(reminder: reminder)
+    reminderEditVC.reactor = reminderEditReactor
+    self.rootViewController.pushViewController(reminderEditVC, animated: true)
+
+    return .one(
+      flowContributor: .contribute(
+        withNextPresentable: reminderEditVC,
+        withNextStepper: reminderEditReactor
       ))
   }
 }

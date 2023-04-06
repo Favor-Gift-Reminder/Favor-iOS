@@ -73,7 +73,6 @@ public class Reminder: Object {
 extension Reminder {
   public func toDomain() -> ReminderEditor {
     ReminderEditor(
-      pk: self.reminderNo,
       title: self.title,
       date: self.date,
       shouldNotify: self.shouldNotify,

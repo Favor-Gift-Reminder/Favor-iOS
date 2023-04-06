@@ -13,7 +13,7 @@ import RxKeyboard
 import RxSwift
 import SnapKit
 
-/// 포함된 컴퍼넌트: 받을 사람, 날짜, 알림, 메모
+/// 포함된 컴퍼넌트: 스크롤뷰, 받을 사람, 날짜, 알림, 메모
 ///
 /// ⚠️ ScrollView Constraints 설정 필요
 class BaseReminderViewController: BaseViewController {
@@ -32,7 +32,7 @@ class BaseReminderViewController: BaseViewController {
     scrollView.showsVerticalScrollIndicator = false
     scrollView.alwaysBounceVertical = true
     scrollView.contentInset = UIEdgeInsets(
-      top: self.verticalSpacing,
+      top: .zero,
       left: .zero,
       bottom: self.verticalSpacing,
       right: .zero
@@ -40,20 +40,33 @@ class BaseReminderViewController: BaseViewController {
     return scrollView
   }()
 
+  // 제목
+  public lazy var titleTextField: FavorTextField = {
+    let textField = FavorTextField()
+    textField.placeholder = "이벤트 이름 (최대 20자)"
+    textField.hasMessage = false
+    return textField
+  }()
+  public lazy var titleStack = self.makeEditableStack(
+    title: "제목",
+    itemViews: [titleTextField],
+    isDividerNeeded: false
+  )
+
   // 받을 사람
   public lazy var selectFriendButton: FavorPlainButton = {
     let button = FavorPlainButton(with: .main("친구 선택", isRight: true))
     button.contentHorizontalAlignment = .leading
     return button
   }()
-  public lazy var selectFriendStack = self.makeEditStack(
+  public lazy var selectFriendStack = self.makeEditableStack(
     title: "받을 사람",
     itemViews: [self.selectFriendButton]
   )
 
   // 날짜
-  public lazy var selectDatePicker = FavorDatePickerTextField()
-  public lazy var selectDateStack = self.makeEditStack(
+  public let selectDatePicker = FavorDatePickerTextField()
+  public lazy var selectDateStack = self.makeEditableStack(
     title: "날짜",
     itemViews: [self.selectDatePicker]
   )
@@ -103,10 +116,11 @@ class BaseReminderViewController: BaseViewController {
     picker.placeholder = "시간 선택"
     return picker
   }()
-  public lazy var selectNotiStack = self.makeEditStack(
+  public lazy var selectNotiStack = self.makeEditableStack(
     title: "알림",
     itemViews: [self.notifyDateSelectorButton, self.notifyTimePicker]
   )
+  public let notifySwitch = FavorSwitch()
 
   // 메모
   public lazy var memoTextView: RSKPlaceholderTextView = {
@@ -125,7 +139,7 @@ class BaseReminderViewController: BaseViewController {
     textView.isScrollEnabled = false
     return textView
   }()
-  public lazy var memoStack = self.makeEditStack(title: "메모", itemViews: [self.memoTextView])
+  public lazy var memoStack = self.makeEditableStack(title: "메모", itemViews: [self.memoTextView])
 
   // MARK: - Binding
 
@@ -161,7 +175,7 @@ class BaseReminderViewController: BaseViewController {
 
   // MARK: - Functions
 
-  public func makeEditStack(
+  public func makeEditableStack(
     title: String,
     itemViews: [UIView],
     isDividerNeeded: Bool = true
@@ -181,6 +195,11 @@ class BaseReminderViewController: BaseViewController {
     itemsContainer.addSubview(itemStack)
     itemStack.snp.makeConstraints { make in
       make.directionalVerticalEdges.leading.equalToSuperview()
+    }
+    if (itemViews.first === self.memoTextView) || (itemViews.first === self.titleTextField) {
+      itemStack.snp.makeConstraints { make in
+        make.edges.equalToSuperview()
+      }
     }
 
     // Divider
@@ -209,23 +228,34 @@ class BaseReminderViewController: BaseViewController {
     return label
   }
 
-  public func updateNotifyDateSelectorButton(state isEditable: Bool) {
-    self.notifyDateSelectorButton.isUserInteractionEnabled = isEditable
-    let downIcon: UIImage? = .favorIcon(.down)?
-      .resize(newWidth: 12)
-      .withTintColor(.favorColor(.explain), renderingMode: .alwaysTemplate)
-    self.notifyDateSelectorButton.configuration?.image = isEditable ? downIcon : nil
+  public func setViewEditable(to isEditable: Bool) {
+    // 받을 사람
+    // 날짜
+    self.selectDatePicker.updateIsUserInteractable(to: isEditable)
+    // 알림
+    self.updateNotifyDateSelectorButton(state: isEditable)
+    self.notifyTimePicker.updateIsUserInteractable(to: isEditable)
+    // 메모
+    self.memoTextView.isUserInteractionEnabled = isEditable
   }
 
   // MARK: - UI Setups
 
   override func setupLayouts() {
     self.view.addSubview(self.scrollView)
+    self.selectNotiStack.addSubview(self.notifySwitch)
   }
 
   override func setupConstraints() {
     self.memoTextView.snp.makeConstraints { make in
       make.height.greaterThanOrEqualTo(self.memoMinimumHeight)
+    }
+
+    self.notifySwitch.snp.makeConstraints { make in
+      make.centerY.equalToSuperview()
+      make.trailing.equalToSuperview().inset(20)
+      make.width.equalTo(40)
+      make.height.equalTo(24)
     }
   }
 }
@@ -239,6 +269,14 @@ private extension BaseReminderViewController {
       font: .favorFont(.regular, size: 16)
     )
     self.notifyDateSelectorButton.isSelected = true
+  }
+
+  func updateNotifyDateSelectorButton(state isEditable: Bool) {
+    self.notifyDateSelectorButton.isUserInteractionEnabled = isEditable
+    let downIcon: UIImage? = .favorIcon(.down)?
+      .resize(newWidth: 12)
+      .withTintColor(.favorColor(.explain), renderingMode: .alwaysTemplate)
+    self.notifyDateSelectorButton.configuration?.image = isEditable ? downIcon : nil
   }
 }
 

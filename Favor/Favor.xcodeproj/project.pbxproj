@@ -52,6 +52,8 @@
 		2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B92992371C0081499C /* SearchFlow.swift */; };
 		2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EA46B2929BA35570030904E /* Term-Info.plist */; };
 		2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4429DCA249005097C0 /* ReminderEditor.swift */; };
+		2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */; };
+		2EA73C4929DE703F005097C0 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */; };
 		2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3AE92299E3E2700D31541 /* BackgroundView.swift */; };
 		2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */; };
 		2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71229D4500D008D10A0 /* ReminderSection.swift */; };
@@ -105,16 +107,14 @@
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
-		2EE1823129D67A9000949901 /* NewReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1823029D67A9000949901 /* NewReminderVC.swift */; };
-		2EE1823329D67AF600949901 /* NewReminderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */; };
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
 		2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA6F29A9D7D4004FDCC9 /* Reusable */; };
 		2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8129AB60A4004FDCC9 /* Realm */; };
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
-		2EEC97D329D9881C00AACF38 /* ReminderDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* ReminderDetailVC.swift */; };
-		2EEC97D529D9885C00AACF38 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */; };
+		2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */; };
+		2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */; };
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		E52F565B29D5698A004E85A6 /* GiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* GiftFlow.swift */; };
@@ -186,6 +186,8 @@
 		2EA384B92992371C0081499C /* SearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFlow.swift; sourceTree = "<group>"; };
 		2EA46B2929BA35570030904E /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2EA73C4429DCA249005097C0 /* ReminderEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditor.swift; sourceTree = "<group>"; };
+		2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailVC.swift; sourceTree = "<group>"; };
+		2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewReactor.swift; sourceTree = "<group>"; };
 		2EB3AE92299E3E2700D31541 /* BackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundView.swift; sourceTree = "<group>"; };
 		2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewReactor.swift; sourceTree = "<group>"; };
 		2EB3E71229D4500D008D10A0 /* ReminderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSection.swift; sourceTree = "<group>"; };
@@ -240,13 +242,11 @@
 		2EE0D594297A9D670064E932 /* FavorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FavorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		2EE1823029D67A9000949901 /* NewReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReminderVC.swift; sourceTree = "<group>"; };
-		2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewReminderViewReactor.swift; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
-		2EEC97D229D9881C00AACF38 /* ReminderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailVC.swift; sourceTree = "<group>"; };
-		2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewReactor.swift; sourceTree = "<group>"; };
+		2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditVC.swift; sourceTree = "<group>"; };
+		2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditViewReactor.swift; sourceTree = "<group>"; };
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		E52F565A29D5698A004E85A6 /* GiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftFlow.swift; sourceTree = "<group>"; };
@@ -584,9 +584,9 @@
 			isa = PBXGroup;
 			children = (
 				2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */,
-				2EEC97D229D9881C00AACF38 /* ReminderDetailVC.swift */,
-				2EE1823029D67A9000949901 /* NewReminderVC.swift */,
 				2EE07ECE296E8DB500048A3C /* ReminderVC.swift */,
+				2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */,
+				2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -604,10 +604,10 @@
 		2EE07EAD296E7BE200048A3C /* Reactor */ = {
 			isa = PBXGroup;
 			children = (
-				2EEC97D429D9885C00AACF38 /* ReminderDetailViewReactor.swift */,
-				2EE1823229D67AF600949901 /* NewReminderViewReactor.swift */,
-				2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */,
 				2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */,
+				2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */,
+				2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */,
+				2EB3E71629D48BFE008D10A0 /* ReminderCellReactor.swift */,
 			);
 			path = Reactor;
 			sourceTree = "<group>";
@@ -977,15 +977,16 @@
 				E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
-				2EEC97D529D9885C00AACF38 /* ReminderDetailViewReactor.swift in Sources */,
+				2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
-				2EE1823329D67AF600949901 /* NewReminderViewReactor.swift in Sources */,
+				2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
 				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
 				2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */,
+				2EA73C4929DE703F005097C0 /* ReminderDetailViewReactor.swift in Sources */,
 				2E9F989829C62D0200789297 /* Friend.swift in Sources */,
 				2E9F989329C62B1700789297 /* User.swift in Sources */,
 				2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */,
@@ -1047,7 +1048,7 @@
 				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
 				E5B182992974F79A00229C50 /* ReuseIdentifying.swift in Sources */,
 				E56260FE299249BD00D14020 /* NewGiftPhotoCell.swift in Sources */,
-				2EEC97D329D9881C00AACF38 /* ReminderDetailVC.swift in Sources */,
+				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
@@ -1063,7 +1064,6 @@
 				2EB3AE93299E3E2700D31541 /* BackgroundView.swift in Sources */,
 				2EC939F1299CF67E00C8C47F /* FavorGiftStatsCellReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
-				2EE1823129D67A9000949901 /* NewReminderVC.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,

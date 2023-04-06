@@ -8,11 +8,10 @@
 import Foundation
 
 public struct ReminderEditor {
-  let pk: Int
-  var title: String
-  var date: Date
+  var title: String = ""
+  var date: Date = .now
   var memo: String?
-  var shouldNotify: Bool
+  var shouldNotify: Bool = false
   var notifyTime: Date?
-  var friend: Int
+  var friend: Int = -1
 }

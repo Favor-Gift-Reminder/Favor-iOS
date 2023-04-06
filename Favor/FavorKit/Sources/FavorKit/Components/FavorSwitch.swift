@@ -157,4 +157,9 @@ public extension Reactive where Base: FavorSwitch {
       base.isOn = isOn
     }
   }
+
+  var isOn: ControlEvent<Bool> {
+    let source = Observable.just(base.isOn)
+    return ControlEvent(events: source)
+  }
 }
