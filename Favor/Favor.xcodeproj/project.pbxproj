@@ -103,7 +103,7 @@
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
-		E51FA9D629D6EA5300598446 /* FilterBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51FA9D529D6EA5300598446 /* FilterBottomSheet.swift */; };
+		E537D46D29DE4D160025474D /* BaseBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E537D46C29DE4D160025474D /* BaseBottomSheetViewController.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
 		E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C3298B5CDF002940D1 /* AppStpper.swift */; };
@@ -122,6 +122,7 @@
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
+		E5E423F429DC0D4300A6B48D /* FilterBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E423F329DC0D4300A6B48D /* FilterBottomSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -226,7 +227,7 @@
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
-		E51FA9D529D6EA5300598446 /* FilterBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheet.swift; sourceTree = "<group>"; };
+		E537D46C29DE4D160025474D /* BaseBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBottomSheetViewController.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
 		E55CF7C3298B5CDF002940D1 /* AppStpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStpper.swift; sourceTree = "<group>"; };
@@ -243,6 +244,7 @@
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		E5E423F329DC0D4300A6B48D /* FilterBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -435,8 +437,8 @@
 		2EBB014B295E8C770072D158 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				E5E423F229DC0D3400A6B48D /* BottomSheet */,
 				2EBB0152295E8CCA0072D158 /* Application */,
-				E51FA9D429D6E5BF00598446 /* BottomSheet */,
 				E5B182902974F39C00229C50 /* Common */,
 				2E76F58629601EC3002FF001 /* Splash */,
 				2E1C5659296C24AE0067FC78 /* Auth */,
@@ -502,7 +504,6 @@
 			isa = PBXGroup;
 			children = (
 				2EA3849F298D7C960081499C /* HomeVC.swift */,
-				2E9F988E29C4B2A200789297 /* FilterVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -741,14 +742,6 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		E51FA9D429D6E5BF00598446 /* BottomSheet */ = {
-			isa = PBXGroup;
-			children = (
-				E51FA9D529D6EA5300598446 /* FilterBottomSheet.swift */,
-			);
-			path = BottomSheet;
-			sourceTree = "<group>";
-		};
 		E55CF7B8298A705F002940D1 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
@@ -778,10 +771,20 @@
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				2E9F988E29C4B2A200789297 /* FilterVC.swift */,
+				E537D46C29DE4D160025474D /* BaseBottomSheetViewController.swift */,
 				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		E5E423F229DC0D3400A6B48D /* BottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				E5E423F329DC0D4300A6B48D /* FilterBottomSheet.swift */,
+			);
+			name = BottomSheet;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -992,6 +995,7 @@
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
+				E537D46D29DE4D160025474D /* BaseBottomSheetViewController.swift in Sources */,
 				2E00561C29A7E720006CF302 /* FavorSelectionSection.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */,
@@ -1000,13 +1004,13 @@
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
+				E5E423F429DC0D4300A6B48D /* FilterBottomSheet.swift in Sources */,
 				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				E562610429939E8800D14020 /* PickedPictureSection.swift in Sources */,
 				2ED326AF29B0EE16001963D0 /* TermTableView.swift in Sources */,
 				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
-				E51FA9D629D6EA5300598446 /* FilterBottomSheet.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
