@@ -288,6 +288,7 @@ extension BaseReminderViewController: UIGestureRecognizerDelegate {
     shouldReceive touch: UITouch
   ) -> Bool {
     guard touch.view?.isDescendant(of: self.memoTextView) == false else { return false }
+    guard touch.view?.isDescendant(of: self.notifySwitch) == false else { return false }
     return true
   }
 }

@@ -38,6 +38,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
   enum Mutation {
     case updateReminderDate(Date)
     case updateNotifyTime(Date?)
+    case updateShouldNotify(Bool)
   }
 
   struct State {
@@ -81,7 +82,8 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 
     case .doneButtonDidTap:
       os_log(.debug, "Done button did tap.")
-      self.uploadReminder(self.currentState.type)
+      print(self.currentState.reminderEditor)
+//      self.uploadReminder(self.currentState.type)
       return .empty()
 
     case .datePickerDidUpdate(let date):
@@ -91,7 +93,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       return .just(.updateNotifyTime(date))
 
     case .notifySwitchDidToggle(let isOn):
-      return .empty()
+      return .just(.updateShouldNotify(isOn))
     }
   }
 
@@ -104,6 +106,9 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 
     case .updateNotifyTime(let time):
       newState.reminderEditor.notifyTime = time
+
+    case .updateShouldNotify(let shouldNotify):
+      newState.reminderEditor.shouldNotify = shouldNotify
     }
 
     return newState

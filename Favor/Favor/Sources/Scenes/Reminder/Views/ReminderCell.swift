@@ -50,7 +50,7 @@ final class ReminderCell: BaseCardCell, Reusable, View {
       .drive(with: self, onNext: { owner, reminder in
         owner.title = reminder.title
         owner.subtitle = reminder.date.toDday()
-        owner.toggleSwitch.rx.state.onNext(reminder.shouldNotify)
+        owner.toggleSwitch.rx.isOn.onNext(reminder.shouldNotify)
       })
       .disposed(by: self.disposeBag)
   }

@@ -63,6 +63,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .disposed(by: self.disposeBag)
 
     self.notifySwitch.rx.isOn
+      .distinctUntilChanged()
       .map { Reactor.Action.notifySwitchDidToggle($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
