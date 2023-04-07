@@ -67,7 +67,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.notifyTimePicker.rx.optionalDate
+    self.notifyTimeSelectorTextField.rx.optionalDate
       .map { Reactor.Action.notifyTimePickerDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -100,8 +100,8 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, editor in
         owner.dateSelectorTextField.rx.dateString.onNext(editor.date.toDateString())
-        owner.notifyTimePicker.isSelected = !(editor.notifyTime == nil)
-        owner.notifyTimePicker.rx.dateString.onNext(editor.notifyTime?.toTimeString())
+        owner.notifyTimeSelectorTextField.isSelected = !(editor.notifyTime == nil)
+        owner.notifyTimeSelectorTextField.rx.dateString.onNext(editor.notifyTime?.toTimeString())
       })
       .disposed(by: self.disposeBag)
   }

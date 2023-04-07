@@ -110,7 +110,7 @@ class BaseReminderViewController: BaseViewController {
 
     return button
   }()
-  public lazy var notifyTimePicker: FavorDatePickerTextField = {
+  public lazy var notifyTimeSelectorTextField: FavorDatePickerTextField = {
     let picker = FavorDatePickerTextField()
     picker.pickerMode = .time
     picker.placeholder = "시간 선택"
@@ -118,7 +118,7 @@ class BaseReminderViewController: BaseViewController {
   }()
   public lazy var notifySelectorStack = self.makeEditableStack(
     title: "알림",
-    itemViews: [self.notifyDateSelectorButton, self.notifyTimePicker]
+    itemViews: [self.notifyDateSelectorButton, self.notifyTimeSelectorTextField]
   )
   public let notifySwitch = FavorSwitch()
 
@@ -234,7 +234,7 @@ class BaseReminderViewController: BaseViewController {
     self.dateSelectorTextField.updateIsUserInteractable(to: isEditable)
     // 알림
     self.updateNotifyDateSelectorButton(state: isEditable)
-    self.notifyTimePicker.updateIsUserInteractable(to: isEditable)
+    self.notifyTimeSelectorTextField.updateIsUserInteractable(to: isEditable)
     // 메모
     self.memoTextView.isUserInteractionEnabled = isEditable
   }
