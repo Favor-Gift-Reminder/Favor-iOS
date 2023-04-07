@@ -54,21 +54,21 @@ class BaseReminderViewController: BaseViewController {
   )
 
   // 받을 사람
-  public lazy var selectFriendButton: FavorPlainButton = {
+  public lazy var friendSelectorButton: FavorPlainButton = {
     let button = FavorPlainButton(with: .main("친구 선택", isRight: true))
     button.contentHorizontalAlignment = .leading
     return button
   }()
-  public lazy var selectFriendStack = self.makeEditableStack(
+  public lazy var friendSelectorStack = self.makeEditableStack(
     title: "받을 사람",
-    itemViews: [self.selectFriendButton]
+    itemViews: [self.friendSelectorButton]
   )
 
   // 날짜
-  public let selectDatePicker = FavorDatePickerTextField()
-  public lazy var selectDateStack = self.makeEditableStack(
+  public let dateSelectorTextField = FavorDatePickerTextField()
+  public lazy var dateSelectorStack = self.makeEditableStack(
     title: "날짜",
-    itemViews: [self.selectDatePicker]
+    itemViews: [self.dateSelectorTextField]
   )
 
   // 알림
@@ -116,7 +116,7 @@ class BaseReminderViewController: BaseViewController {
     picker.placeholder = "시간 선택"
     return picker
   }()
-  public lazy var selectNotiStack = self.makeEditableStack(
+  public lazy var notifySelectorStack = self.makeEditableStack(
     title: "알림",
     itemViews: [self.notifyDateSelectorButton, self.notifyTimePicker]
   )
@@ -231,7 +231,7 @@ class BaseReminderViewController: BaseViewController {
   public func setViewEditable(to isEditable: Bool) {
     // 받을 사람
     // 날짜
-    self.selectDatePicker.updateIsUserInteractable(to: isEditable)
+    self.dateSelectorTextField.updateIsUserInteractable(to: isEditable)
     // 알림
     self.updateNotifyDateSelectorButton(state: isEditable)
     self.notifyTimePicker.updateIsUserInteractable(to: isEditable)
@@ -243,7 +243,7 @@ class BaseReminderViewController: BaseViewController {
 
   override func setupLayouts() {
     self.view.addSubview(self.scrollView)
-    self.selectNotiStack.addSubview(self.notifySwitch)
+    self.notifySelectorStack.addSubview(self.notifySwitch)
   }
 
   override func setupConstraints() {

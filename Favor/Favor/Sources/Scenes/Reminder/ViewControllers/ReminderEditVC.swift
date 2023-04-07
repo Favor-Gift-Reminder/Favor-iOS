@@ -62,7 +62,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.selectDatePicker.rx.date
+    self.dateSelectorTextField.rx.date
       .map { Reactor.Action.datePickerDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -99,7 +99,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     reactor.state.map { $0.reminderEditor }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, editor in
-        owner.selectDatePicker.rx.dateString.onNext(editor.date.toDateString())
+        owner.dateSelectorTextField.rx.dateString.onNext(editor.date.toDateString())
         owner.notifyTimePicker.isSelected = !(editor.notifyTime == nil)
         owner.notifyTimePicker.rx.dateString.onNext(editor.notifyTime?.toTimeString())
       })
@@ -132,9 +132,9 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     
     [
       self.titleStack,
-      self.selectFriendStack,
-      self.selectDateStack,
-      self.selectNotiStack,
+      self.friendSelectorStack,
+      self.dateSelectorStack,
+      self.notifySelectorStack,
       self.memoStack
     ].forEach {
       self.stackView.addArrangedSubview($0)

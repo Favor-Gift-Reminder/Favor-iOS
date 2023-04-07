@@ -94,7 +94,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .drive(with: self, onNext: { owner, reminder in
         owner.eventTitleLabel.text = reminder.title
         owner.eventSubtitleLabel.text = reminder.date.toDday()
-        owner.selectDatePicker.rx.date.onNext(reminder.date)
+        owner.dateSelectorTextField.rx.date.onNext(reminder.date)
         owner.notifyTimePicker.rx.optionalDate.onNext(reminder.notifyTime)
         owner.memoTextView.text = reminder.memo
       })
@@ -144,9 +144,9 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
 
     [
       self.eventStack,
-      self.selectFriendStack,
-      self.selectDateStack,
-      self.selectNotiStack,
+      self.friendSelectorStack,
+      self.dateSelectorStack,
+      self.notifySelectorStack,
       self.memoStack
     ].forEach {
       self.stackView.addArrangedSubview($0)
