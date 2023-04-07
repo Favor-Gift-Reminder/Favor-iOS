@@ -94,10 +94,8 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .drive(with: self, onNext: { owner, reminder in
         owner.eventTitleLabel.text = reminder.title
         owner.eventSubtitleLabel.text = reminder.date.toDday()
-        // 받을 사람
         owner.selectDatePicker.rx.date.onNext(reminder.date)
-        // 알림 당일
-//        owner.notifyTimePicker.rx.date.onNext(reminder.notifyTime)
+        owner.notifyTimePicker.rx.optionalDate.onNext(reminder.notifyTime)
         owner.memoTextView.text = reminder.memo
       })
       .disposed(by: self.disposeBag)

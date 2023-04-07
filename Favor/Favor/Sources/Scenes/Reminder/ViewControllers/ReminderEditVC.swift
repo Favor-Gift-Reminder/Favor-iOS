@@ -62,6 +62,16 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.selectDatePicker.rx.date
+      .map { Reactor.Action.datePickerDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.notifyTimePicker.rx.optionalDate
+      .map { Reactor.Action.notifyTimePickerDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.notifySwitch.rx.isOn
       .distinctUntilChanged()
       .map { Reactor.Action.notifySwitchDidToggle($0) }

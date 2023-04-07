@@ -21,6 +21,9 @@ public final class FavorDatePickerTextField: UIView {
     didSet { self.datePicker.datePickerMode = self.pickerMode }
   }
 
+  /// DatePicker의 `date` 프로퍼티를 Optional하게 래핑한 프로퍼티
+  fileprivate let optionalDate = PublishRelay<Date?>()
+
   public var placeholder: String = "선택" {
     didSet {
       let placeholder = NSAttributedString(
@@ -129,10 +132,12 @@ public final class FavorDatePickerTextField: UIView {
 
   private func bind() {
     self.datePicker.rx.date
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
         let dateString = self.pickerMode == .time ? date.toTimeString() : date.toDateString()
         owner.textField.text = dateString
+        owner.optionalDate.accept(date)
       })
       .disposed(by: self.disposeBag)
 
@@ -188,6 +193,20 @@ public extension Reactive where Base: FavorDatePickerTextField {
     let source = base.datePicker.rx.date
     let bindingObserver = Binder(self.base) { (picker, date: Date) in
       picker.datePicker.date = date
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
+  }
+
+  ///
+  var optionalDate: ControlProperty<Date?> {
+    let source = base.optionalDate
+    let bindingObserver = Binder(self.base) { (picker, date: Date?) in
+      if let date {
+        picker.optionalDate.accept(date)
+        picker.datePicker.date = date
+      } else { // nil
+        picker.optionalDate.accept(date)
+      }
     }
     return ControlProperty(values: source, valueSink: bindingObserver)
   }

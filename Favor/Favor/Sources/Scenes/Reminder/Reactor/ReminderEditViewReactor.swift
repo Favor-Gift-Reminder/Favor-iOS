@@ -31,7 +31,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     case viewDidLoad
     case doneButtonDidTap
     case datePickerDidUpdate(Date)
-    case notifyTimePickerDidUpdate(Date)
+    case notifyTimePickerDidUpdate(Date?)
     case notifySwitchDidToggle(Bool)
   }
 
