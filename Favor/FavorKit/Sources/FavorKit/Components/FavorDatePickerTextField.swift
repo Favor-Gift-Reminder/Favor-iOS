@@ -154,6 +154,15 @@ public final class FavorDatePickerTextField: UIView {
         owner.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
+
+    self.optionalDate
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, date in
+        if date == nil {
+          owner.textField.text = nil
+        }
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 
