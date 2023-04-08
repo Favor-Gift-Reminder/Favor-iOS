@@ -31,7 +31,6 @@
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
 		2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
 		2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
-		2E9F988F29C4B2A200789297 /* FilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F988E29C4B2A200789297 /* FilterVC.swift */; };
 		2E9F989129C6275300789297 /* Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989029C6275300789297 /* Gift.swift */; };
 		2E9F989329C62B1700789297 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989229C62B1700789297 /* User.swift */; };
 		2E9F989629C62CEA00789297 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989529C62CEA00789297 /* Reminder.swift */; };
@@ -165,7 +164,6 @@
 		2E7C30A4295D7C4500BAC43D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7C30A7295D7C4500BAC43D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E9F988E29C4B2A200789297 /* FilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
 		2E9F989029C6275300789297 /* Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gift.swift; sourceTree = "<group>"; };
 		2E9F989229C62B1700789297 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		2E9F989529C62CEA00789297 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
@@ -533,7 +531,6 @@
 			isa = PBXGroup;
 			children = (
 				2EA3849F298D7C960081499C /* HomeVC.swift */,
-				2E9F988E29C4B2A200789297 /* FilterVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -992,7 +989,6 @@
 				2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
-				2E9F988F29C4B2A200789297 /* FilterVC.swift in Sources */,
 				2EC6E11D29BC65BF006FBC11 /* HomeFlow.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
 				E52F565B29D5698A004E85A6 /* GiftFlow.swift in Sources */,
