@@ -22,7 +22,7 @@ public final class FavorDatePickerTextField: UIView {
   }
 
   /// DatePicker의 `date` 프로퍼티를 Optional하게 래핑한 프로퍼티
-  fileprivate let optionalDate = PublishRelay<Date?>()
+  fileprivate let optionalDate = BehaviorRelay<Date?>(value: nil)
 
   public var placeholder: String = "선택" {
     didSet {
@@ -122,8 +122,9 @@ public final class FavorDatePickerTextField: UIView {
   public func updateDate(_ date: Date?) {
     if let date {
       self.datePicker.setDate(date, animated: true)
+    } else {
+      self.optionalDate.accept(date)
     }
-    self.optionalDate.accept(date)
   }
 
   public func updateIsUserInteractable(to isInteractable: Bool) {
