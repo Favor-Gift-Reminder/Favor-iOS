@@ -71,14 +71,10 @@ final class ReminderEditViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      if currentState.type == .edit {
-        return .merge(
-          .just(.updateReminderDate(self.currentState.reminderEditor.date)),
-          .just(.updateNotifyTime(self.currentState.reminderEditor.notifyTime))
-        )
-      } else {
-        return .empty()
-      }
+      return .merge(
+        .just(.updateReminderDate(self.currentState.reminderEditor.date)),
+        .just(.updateNotifyTime(self.currentState.reminderEditor.notifyTime))
+      )
 
     case .doneButtonDidTap:
       os_log(.debug, "Done button did tap.")
