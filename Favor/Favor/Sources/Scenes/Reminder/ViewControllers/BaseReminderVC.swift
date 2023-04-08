@@ -229,7 +229,7 @@ class BaseReminderViewController: BaseViewController {
       if [self.memoTextView, self.titleTextField].contains(itemStack.arrangedSubviews.first) {
         make.edges.equalToSuperview()
       } else {
-        make.directionalVerticalEdges.equalToSuperview()
+        make.directionalVerticalEdges.leading.equalToSuperview()
       }
     }
 
@@ -267,6 +267,7 @@ class BaseReminderViewController: BaseViewController {
     self.updateNotifyDateSelectorButton(toEditable: isEditable)
     self.notifyTimeSelectorTextField.updateIsUserInteractable(to: isEditable)
     self.notifyTimeDateSelectorStack.spacing = isEditable ? 16 : -16
+    self.notifySwitch.isHidden = !isEditable
     // 메모
     self.memoTextView.isUserInteractionEnabled = isEditable
   }

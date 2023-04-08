@@ -72,6 +72,16 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     return stackView
   }()
 
+  // Editables
+  private lazy var notifyEmptyLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.regular, size: 16)
+    label.textColor = .favorColor(.icon)
+    label.text = "알림 없음"
+    label.isHidden = true
+    return label
+  }()
+
   // MARK: - Life Cycle
 
   // MARK: - Binding
@@ -92,10 +102,17 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     reactor.state.map { $0.reminder }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, reminder in
+        // 헤더
         owner.eventTitleLabel.text = reminder.title
         owner.eventSubtitleLabel.text = reminder.date.toDday()
+        // 날짜
         owner.dateSelectorTextField.updateDate(reminder.date)
+        // 알림
+        let isNotifyTimeSet: Bool = reminder.notifyTime != nil
+        owner.notifySelectorStack.arrangedSubviews[1].isHidden = !isNotifyTimeSet
+        owner.notifyEmptyLabel.isHidden = isNotifyTimeSet
         owner.notifyTimeSelectorTextField.updateDate(reminder.notifyTime)
+        // 메모
         owner.memoTextView.text = reminder.memo
       })
       .disposed(by: self.disposeBag)
@@ -137,6 +154,8 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       self.eventStack.addArrangedSubview($0)
     }
 
+
+    self.notifySelectorStack.insertArrangedSubview(self.notifyEmptyLabel, at: 2)
     [
       self.eventStack,
       self.friendSelectorStack,
