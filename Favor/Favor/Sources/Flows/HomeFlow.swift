@@ -18,9 +18,11 @@ final class HomeFlow: Flow {
 
   var root: Presentable { self.rootViewController }
   let rootViewController = BaseNavigationController()
+  
+  var filterBottomSheet: FilterBottomSheet?
 
   // MARK: - Navigate
-
+  
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
@@ -73,5 +75,30 @@ private extension HomeFlow {
         withNextStepper: OneStepper(withSingleStep: AppStep.searchIsRequired)
       )
     )
+
+  func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
+    let filterBottomSheet = FilterBottomSheet()
+    filterBottomSheet.currentSortType = sortType
+    filterBottomSheet.modalPresentationStyle = .overFullScreen
+    self.rootViewController.present(filterBottomSheet, animated: false)
+    self.filterBottomSheet = filterBottomSheet
+    
+    return .one(
+      flowContributor: .contribute(
+        withNextPresentable: filterBottomSheet,
+        withNextStepper: filterBottomSheet
+      ))
+  }
+  
+  func dismissFilter(sortedBy sortType: SortType) -> FlowContributors {
+    self.filterBottomSheet?.animateDismissView()
+    self.filterBottomSheet = nil
+    
+    guard let homeVC = self.rootViewController.topViewController as? HomeViewController else {
+      return .none
+    }
+    // TODO: Realm DB 구현하며 Sort, Filter 방식 변경
+    homeVC.reactor?.currentSortType.accept(sortType)
+    return .none
   }
 }
