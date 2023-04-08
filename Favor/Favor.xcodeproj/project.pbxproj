@@ -108,7 +108,6 @@
 		2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8629AB60B9004FDCC9 /* RxRealm */; };
 		2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE6B3962982EDA400CDBC81 /* RxFlow */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
-		E537D46D29DE4D160025474D /* BaseBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E537D46C29DE4D160025474D /* BaseBottomSheetViewController.swift */; };
 		E52F565B29D5698A004E85A6 /* GiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* GiftFlow.swift */; };
 		E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
@@ -127,7 +126,6 @@
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
-		E5E423F429DC0D4300A6B48D /* FilterBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E423F329DC0D4300A6B48D /* FilterBottomSheet.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,7 +234,6 @@
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
-		E537D46C29DE4D160025474D /* BaseBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseBottomSheetViewController.swift; sourceTree = "<group>"; };
 		E52F565A29D5698A004E85A6 /* GiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftFlow.swift; sourceTree = "<group>"; };
 		E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftChoiceFriendButton.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
@@ -253,7 +250,6 @@
 		E5B182982974F79A00229C50 /* ReuseIdentifying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReuseIdentifying.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		E5E423F329DC0D4300A6B48D /* FilterBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheet.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -458,7 +454,6 @@
 		2EBB014B295E8C770072D158 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				E5E423F229DC0D3400A6B48D /* BottomSheet */,
 				2EBB0152295E8CCA0072D158 /* Application */,
 				E5B182902974F39C00229C50 /* Common */,
 				2E76F58629601EC3002FF001 /* Splash */,
@@ -525,6 +520,7 @@
 			isa = PBXGroup;
 			children = (
 				2EA3849F298D7C960081499C /* HomeVC.swift */,
+				2E9F988E29C4B2A200789297 /* FilterVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -775,20 +771,12 @@
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
-				2E9F988E29C4B2A200789297 /* FilterVC.swift */,
-				E537D46C29DE4D160025474D /* BaseBottomSheetViewController.swift */,
 				E5B182982974F79A00229C50 /* ReuseIdentifying.swift */,
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Deprecated;
 			sourceTree = "<group>";
 		};
-		E5E423F229DC0D3400A6B48D /* BottomSheet */ = {
-			isa = PBXGroup;
-			children = (
-				E5E423F329DC0D4300A6B48D /* FilterBottomSheet.swift */,
-			);
-			name = BottomSheet;
 		E5C0A00929D3D486006CCF99 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1010,7 +998,6 @@
 				2E6C90B529A607FA00AF963A /* FriendCellReactor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
-				E537D46D29DE4D160025474D /* BaseBottomSheetViewController.swift in Sources */,
 				2E00561C29A7E720006CF302 /* FavorSelectionSection.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */,
@@ -1019,8 +1006,6 @@
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				2EE07ED1296E8DD000048A3C /* EventVC.swift in Sources */,
-				E5E423F429DC0D4300A6B48D /* FilterBottomSheet.swift in Sources */,
-				E562610229934B4E00D14020 /* PickPictureCell.swift in Sources */,
 				E562610229934B4E00D14020 /* NewGiftEmptyCell.swift in Sources */,
 				2E9F989629C62CEA00789297 /* Reminder.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
