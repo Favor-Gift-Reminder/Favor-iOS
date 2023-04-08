@@ -68,13 +68,14 @@ private extension HomeFlow {
 
   func navigateToSearch() -> FlowContributors {
     let searchFlow = SearchFlow(rootViewController: self.rootViewController)
-
+    
     return .one(
       flowContributor: .contribute(
         withNextPresentable: searchFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.searchIsRequired)
       )
     )
+  }
 
   func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
     let filterBottomSheet = FilterBottomSheet()
