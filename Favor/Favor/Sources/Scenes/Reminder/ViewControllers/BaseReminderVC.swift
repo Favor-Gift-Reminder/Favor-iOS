@@ -9,7 +9,7 @@ import UIKit
 
 import FavorKit
 import RSKPlaceholderTextView
-import RxKeyboard
+//import RxKeyboard
 import RxSwift
 import SnapKit
 
@@ -192,12 +192,12 @@ class BaseReminderViewController: BaseViewController {
       })
       .disposed(by: self.disposeBag)
 
-    RxKeyboard.instance.visibleHeight
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, height in
-        owner.scrollView.contentInset.bottom = height + self.verticalSpacing
-      })
-      .disposed(by: self.disposeBag)
+//    RxKeyboard.instance.visibleHeight
+//      .asDriver(onErrorRecover: { _ in return .empty()})
+//      .drive(with: self, onNext: { owner, height in
+//        owner.scrollView.contentInset.bottom = height + self.verticalSpacing
+//      })
+//      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
