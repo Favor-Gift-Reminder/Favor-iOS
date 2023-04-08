@@ -86,11 +86,9 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       return .empty()
 
     case .datePickerDidUpdate(let date):
-      print(date)
       return .just(.updateReminderDate(date))
 
     case .notifyTimePickerDidUpdate(let date):
-      print(date)
       return .just(.updateNotifyTime(date))
 
     case .notifySwitchDidToggle(let isOn):

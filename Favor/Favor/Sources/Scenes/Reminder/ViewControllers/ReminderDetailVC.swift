@@ -103,11 +103,6 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
 
   // MARK: - Functions
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-    self.setViewEditable(to: false)
-  }
-
   // MARK: - UI Setups
 
   override func setupLayouts() {

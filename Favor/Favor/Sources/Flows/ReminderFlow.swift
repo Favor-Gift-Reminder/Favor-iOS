@@ -58,6 +58,7 @@ private extension ReminderFlow {
     let newReminderVC = ReminderEditViewController()
     let newReminderReactor = ReminderEditViewReactor(.new)
     newReminderVC.reactor = newReminderReactor
+    newReminderVC.isEditable = true
     self.rootViewController.pushViewController(newReminderVC, animated: true)
 
     return .one(
@@ -71,6 +72,7 @@ private extension ReminderFlow {
     let reminderDetailVC = ReminderDetailViewController()
     let reminderDetailReactor = ReminderDetailViewReactor(reminder: reminder)
     reminderDetailVC.reactor = reminderDetailReactor
+    reminderDetailVC.isEditable = false
     self.rootViewController.pushViewController(reminderDetailVC, animated: true)
 
     return .one(
@@ -84,6 +86,7 @@ private extension ReminderFlow {
     let reminderEditVC = ReminderEditViewController()
     let reminderEditReactor = ReminderEditViewReactor(reminder: reminder)
     reminderEditVC.reactor = reminderEditReactor
+    reminderEditVC.isEditable = true
     self.rootViewController.pushViewController(reminderEditVC, animated: true)
 
     return .one(

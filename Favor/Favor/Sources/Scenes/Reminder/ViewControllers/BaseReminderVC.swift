@@ -20,6 +20,10 @@ class BaseReminderViewController: BaseViewController {
 
   // MARK: - Properties
 
+  public var isEditable: Bool = false {
+    didSet { self.setViewEditable(to: self.isEditable) }
+  }
+
   public var verticalSpacing: CGFloat { return 32.0 }
   public var memoMinimumHeight: CGFloat { return 130.0 }
   public var memoStackMinY: CGFloat { return self.memoStack.frame.minY }
@@ -72,10 +76,20 @@ class BaseReminderViewController: BaseViewController {
   )
 
   // 알림
-  public lazy var notifyDateSelectorButton: FavorPlainButton = {
-    let button = FavorPlainButton(with: .main("당일", isRight: false))
-    button.configuration?.background.backgroundColor = .clear
-    button.configuration?.imagePadding = 8
+  public lazy var notifyDateSelectorButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    var titleContainer = AttributeContainer()
+    titleContainer.font = .favorFont(.regular, size: 16)
+    config.attributedTitle = AttributedString(
+      "당일",
+      attributes: titleContainer
+    )
+    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+    config.background.backgroundColor = .clear
+    config.imagePadding = 8
+    config.imagePlacement = .trailing
+
+    let button = UIButton(configuration: config)
 
     button.configurationUpdateHandler = { button in
       var config = button.configuration
@@ -233,10 +247,15 @@ class BaseReminderViewController: BaseViewController {
     // 날짜
     self.dateSelectorTextField.updateIsUserInteractable(to: isEditable)
     // 알림
-    self.updateNotifyDateSelectorButton(state: isEditable)
+    self.updateNotifyDateSelectorButton(toEditable: isEditable)
     self.notifyTimeSelectorTextField.updateIsUserInteractable(to: isEditable)
     // 메모
     self.memoTextView.isUserInteractionEnabled = isEditable
+  }
+
+  func updateNotifyDateSelectorButton(toEditable isEditable: Bool) {
+    self.notifyDateSelectorButton.isUserInteractionEnabled = isEditable
+    self.notifyDateSelectorButton.imageView?.isHidden = !isEditable
   }
 
   // MARK: - UI Setups
@@ -270,14 +289,6 @@ private extension BaseReminderViewController {
     )
     self.notifyDateSelectorButton.isSelected = true
   }
-
-  func updateNotifyDateSelectorButton(state isEditable: Bool) {
-    self.notifyDateSelectorButton.isUserInteractionEnabled = isEditable
-    let downIcon: UIImage? = .favorIcon(.down)?
-      .resize(newWidth: 12)
-      .withTintColor(.favorColor(.explain), renderingMode: .alwaysTemplate)
-    self.notifyDateSelectorButton.configuration?.image = isEditable ? downIcon : nil
-  }
 }
 
 // MARK: - Recognizer
@@ -287,8 +298,10 @@ extension BaseReminderViewController: UIGestureRecognizerDelegate {
     _ gestureRecognizer: UIGestureRecognizer,
     shouldReceive touch: UITouch
   ) -> Bool {
-    guard touch.view?.isDescendant(of: self.memoTextView) == false else { return false }
-    guard touch.view?.isDescendant(of: self.notifySwitch) == false else { return false }
+    guard
+      touch.view?.isDescendant(of: self.memoTextView) == false,
+      touch.view?.isDescendant(of: self.notifySwitch) == false
+    else { return false }
     return true
   }
 }
