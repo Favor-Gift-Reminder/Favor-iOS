@@ -53,7 +53,7 @@ class BaseReminderViewController: BaseViewController {
   }()
   public lazy var titleStack = self.makeEditableStack(
     title: "제목",
-    itemViews: [titleTextField],
+    itemViews: [self.titleTextField],
     isDividerNeeded: false
   )
 
@@ -130,9 +130,20 @@ class BaseReminderViewController: BaseViewController {
     picker.placeholder = "시간 선택"
     return picker
   }()
+  public lazy var notifyTimeDateSelectorStack: UIStackView = {
+    let stackView = UIStackView(
+      arrangedSubviews: [
+        self.notifyDateSelectorButton,
+        self.notifyTimeSelectorTextField
+      ]
+    )
+    stackView.axis = .horizontal
+    stackView.spacing = 16
+    return stackView
+  }()
   public lazy var notifySelectorStack = self.makeEditableStack(
     title: "알림",
-    itemViews: [self.notifyDateSelectorButton, self.notifyTimeSelectorTextField]
+    itemStackView: self.notifyTimeDateSelectorStack
   )
   public let notifySwitch = FavorSwitch()
 
@@ -191,7 +202,8 @@ class BaseReminderViewController: BaseViewController {
 
   public func makeEditableStack(
     title: String,
-    itemViews: [UIView],
+    itemViews: [UIView]? = nil,
+    itemStackView: UIStackView? = nil,
     isDividerNeeded: Bool = true
   ) -> UIStackView {
     let stackView = UIStackView()
@@ -203,16 +215,21 @@ class BaseReminderViewController: BaseViewController {
 
     // Item View
     let itemsContainer = UIView()
-    let itemStack = UIStackView(arrangedSubviews: itemViews)
-    itemStack.axis = .horizontal
-    itemStack.spacing = 16
-    itemsContainer.addSubview(itemStack)
-    itemStack.snp.makeConstraints { make in
-      make.directionalVerticalEdges.leading.equalToSuperview()
+    var itemStack = UIStackView()
+    if let itemViews {
+      itemStack = UIStackView(arrangedSubviews: itemViews)
+      itemStack.axis = .horizontal
+      itemStack.spacing = 16
+    } else if let itemStackView {
+      itemStack = itemStackView
     }
-    if (itemViews.first === self.memoTextView) || (itemViews.first === self.titleTextField) {
-      itemStack.snp.makeConstraints { make in
+    itemsContainer.addSubview(itemStack)
+
+    itemStack.snp.makeConstraints { make in
+      if [self.memoTextView, self.titleTextField].contains(itemStack.arrangedSubviews.first) {
         make.edges.equalToSuperview()
+      } else {
+        make.directionalVerticalEdges.equalToSuperview()
       }
     }
 
@@ -249,6 +266,7 @@ class BaseReminderViewController: BaseViewController {
     // 알림
     self.updateNotifyDateSelectorButton(toEditable: isEditable)
     self.notifyTimeSelectorTextField.updateIsUserInteractable(to: isEditable)
+    self.notifyTimeDateSelectorStack.spacing = isEditable ? 16 : -16
     // 메모
     self.memoTextView.isUserInteractionEnabled = isEditable
   }
