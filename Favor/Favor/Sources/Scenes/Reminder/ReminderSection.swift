@@ -25,8 +25,8 @@ struct ReminderSection {
 extension ReminderSectionType {
   var headerTitle: String {
     switch self {
-    case .upcoming: return "다가오는 이벤트"
-    case .past: return "지난 이벤트"
+    case .upcoming: return "다가오는 기념일"
+    case .past: return "지난 기념일"
     }
   }
 

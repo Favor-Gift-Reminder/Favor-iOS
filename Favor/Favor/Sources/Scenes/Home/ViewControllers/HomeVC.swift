@@ -29,7 +29,7 @@ final class HomeViewController: BaseViewController, View {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
         cell.bindEmptyData(image: image, text: text)
         return cell
-      case .upcoming(let reactor): // 다가오는 이벤트
+      case .upcoming(let reactor): // 다가오는 기념일
         let cell = collectionView.dequeueReusableCell(for: indexPath) as UpcomingCell
         cell.reactor = reactor
         return cell

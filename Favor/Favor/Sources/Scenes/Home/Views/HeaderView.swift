@@ -106,7 +106,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
-        owner.titleLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
+        owner.titleLabel.text = isUpcoming ? "다가오는 기념일" : "타임라인"
         // Filter Buttons
         owner.secondLineStack.isHidden = isUpcoming ? true : false
         // Right Button

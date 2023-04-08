@@ -272,6 +272,15 @@ class BaseReminderViewController: BaseViewController {
     self.notifySwitch.isHidden = !isEditable
     // 메모
     self.memoTextView.isUserInteractionEnabled = isEditable
+    let placeholderText = isEditable ? "자유롭게 작성해주세요!" : "메모가 없습니다."
+    let placeholder = NSAttributedString(
+      string: placeholderText,
+      attributes: [
+        .foregroundColor: UIColor.favorColor(.explain),
+        .font: UIFont.favorFont(.regular, size: 16)
+      ]
+    )
+    self.memoTextView.attributedPlaceholder = NSAttributedString(attributedString: placeholder)
   }
 
   func updateNotifyDateSelectorButton(toEditable isEditable: Bool) {
