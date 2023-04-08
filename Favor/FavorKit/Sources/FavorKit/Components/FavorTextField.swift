@@ -114,7 +114,7 @@ public class FavorTextField: UIView {
   }
 
   /// TextField의 상태가 `error`일 때 밑줄과 메시지 색상
-  public var errorStateColor: UIColor = .favorColor(.error) {
+  public var errorStateColor: UIColor = .favorColor(.main) {
     didSet { self.updateColor() }
   }
 

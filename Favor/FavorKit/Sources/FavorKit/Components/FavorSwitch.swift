@@ -25,7 +25,7 @@ public final class FavorSwitch: UIButton {
   fileprivate var isOn = BehaviorRelay<Bool>(value: false)
 
   /// Switch가 켜졌을 때의 색상
-  public var onTintColor: SwitchColor = (.favorColor(.main), .favorColor(.white))
+  public var onTintColor: SwitchColor = (.favorColor(.sub), .favorColor(.white))
 
   /// Switch가 꺼졌을 때의 색상
   public var offTintColor: SwitchColor = (.favorColor(.line3), .favorColor(.white))

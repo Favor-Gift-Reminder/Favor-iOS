@@ -25,17 +25,17 @@ extension UIColor {
     case white = "#FFFFFF"
     case black = "#000000"
     case main = "#FF5862"
-    case error = "#E85A46"
-    case background = "#F5F5F5"
+    case sub = "#141E54"
     case button = "#F8F8F8"
     case card = "#FAFAFA"
+    case background = "#F5F5F5"
+    case divider = "#EEEEEE"
     case line3 = "#E0E0E0"
     case line2 = "#BDBDBD"
     case explain = "#9E9E9E"
     case subtext = "#616161"
     case titleAndLine = "#424242"
     case icon = "#222222"
-    case divider = "#EEEEEE"
   }
   
   /// 색상을 적용하는 전역 메서드 입니다.
