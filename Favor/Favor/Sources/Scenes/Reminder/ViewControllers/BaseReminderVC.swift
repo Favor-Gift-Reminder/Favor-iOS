@@ -162,6 +162,8 @@ class BaseReminderViewController: BaseViewController {
     textView.font = .favorFont(.regular, size: 16)
     textView.backgroundColor = .clear
     textView.isScrollEnabled = false
+    textView.textContainerInset = .zero
+    textView.textContainer.lineFragmentPadding = .zero
     return textView
   }()
   public lazy var memoStack = self.makeEditableStack(title: "메모", itemViews: [self.memoTextView])
