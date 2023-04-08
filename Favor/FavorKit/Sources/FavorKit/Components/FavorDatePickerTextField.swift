@@ -119,6 +119,13 @@ public final class FavorDatePickerTextField: UIView {
 
   // MARK: - FUNCTIONS
 
+  public func updateDate(_ date: Date?) {
+    if let date {
+      self.datePicker.setDate(date, animated: true)
+    }
+    self.optionalDate.accept(date)
+  }
+
   public func updateIsUserInteractable(to isInteractable: Bool) {
     self.textField.isUserInteractionEnabled = isInteractable
     self.downButton.isHidden = !isInteractable
@@ -141,6 +148,15 @@ public final class FavorDatePickerTextField: UIView {
       })
       .disposed(by: self.disposeBag)
 
+    self.optionalDate
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, date in
+        if date == nil {
+          owner.textField.text = nil
+        }
+      })
+      .disposed(by: self.disposeBag)
+
     self.doneButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
@@ -152,15 +168,6 @@ public final class FavorDatePickerTextField: UIView {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.textField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
-    self.optionalDate
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, date in
-        if date == nil {
-          owner.textField.text = nil
-        }
       })
       .disposed(by: self.disposeBag)
   }
@@ -198,33 +205,26 @@ extension FavorDatePickerTextField: BaseView {
 // MARK: - Reactive
 
 public extension Reactive where Base: FavorDatePickerTextField {
-  var date: ControlProperty<Date> {
+  /// DatePicker가 nil이 될 수 없을 때 사용되는 프로퍼티
+  var date: ControlEvent<Date> {
     let source = base.datePicker.rx.date
-    let bindingObserver = Binder(self.base) { (picker, date: Date) in
-      picker.datePicker.date = date
-    }
-    return ControlProperty(values: source, valueSink: bindingObserver)
+//    let bindingObserver = Binder(self.base) { (picker, date: Date) in
+//      picker.datePicker.date = date
+//    }
+    return ControlEvent(events: source)
   }
 
-  ///
-  var optionalDate: ControlProperty<Date?> {
+  /// DatePicker가 nil이 될 필요가 있을 때 사용되는 프로퍼티
+  var optionalDate: ControlEvent<Date?> {
     let source = base.optionalDate
-    let bindingObserver = Binder(self.base) { (picker, date: Date?) in
-      if let date {
-        picker.optionalDate.accept(date)
-        picker.datePicker.date = date
-      } else { // nil
-        picker.optionalDate.accept(date)
-      }
-    }
-    return ControlProperty(values: source, valueSink: bindingObserver)
-  }
-
-  var dateString: ControlProperty<String?> {
-    let source = base.textField.rx.text
-    let bindingObserver = Binder(self.base) { (picker, dateString: String?) in
-      picker.textField.text = dateString
-    }
-    return ControlProperty(values: source, valueSink: bindingObserver)
+//    let bindingObserver = Binder(self.base) { (picker, date: Date?) in
+//      if let date {
+//        picker.datePicker.date = date
+//        picker.optionalDate.accept(date)
+//      } else { // nil
+//        picker.optionalDate.accept(date)
+//      }
+//    }
+    return ControlEvent(events: source)
   }
 }
