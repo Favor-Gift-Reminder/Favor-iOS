@@ -19,8 +19,14 @@ final class HomeFlow: Flow {
   var root: Presentable { self.rootViewController }
   let rootViewController = BaseNavigationController()
 
+<<<<<<< HEAD
+<<<<<<< HEAD
   // MARK: - Navigate
 
+=======
+>>>>>>> parent of 469a5a2 ([Fix] HomeFlow BottomSheet 화면 전환 로직 수정)
+=======
+>>>>>>> parent of 469a5a2 ([Fix] HomeFlow BottomSheet 화면 전환 로직 수정)
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     

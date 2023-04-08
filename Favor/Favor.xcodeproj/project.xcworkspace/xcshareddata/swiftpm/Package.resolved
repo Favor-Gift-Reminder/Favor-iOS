@@ -50,8 +50,18 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
+<<<<<<< HEAD
+<<<<<<< HEAD
         "revision" : "3c950f43bafc4fe39ce605e913cc7f30426e1747",
         "version" : "13.8.0"
+=======
+        "revision" : "a7d486d07b821e28ffd3587e99355a63148cbb43",
+        "version" : "13.4.1"
+>>>>>>> parent of 469a5a2 ([Fix] HomeFlow BottomSheet 화면 전환 로직 수정)
+=======
+        "revision" : "a7d486d07b821e28ffd3587e99355a63148cbb43",
+        "version" : "13.4.1"
+>>>>>>> parent of 469a5a2 ([Fix] HomeFlow BottomSheet 화면 전환 로직 수정)
       }
     },
     {
@@ -59,8 +69,18 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
+<<<<<<< HEAD
+<<<<<<< HEAD
         "revision" : "80368adfbf58360104042522d9f4623a3de7863b",
         "version" : "10.37.2"
+=======
+        "revision" : "4d55ba88e78ed427eae439e7c15fac2372f95c64",
+        "version" : "10.36.0"
+>>>>>>> parent of 469a5a2 ([Fix] HomeFlow BottomSheet 화면 전환 로직 수정)
+=======
+        "revision" : "4d55ba88e78ed427eae439e7c15fac2372f95c64",
+        "version" : "10.36.0"
+>>>>>>> parent of 469a5a2 ([Fix] HomeFlow BottomSheet 화면 전환 로직 수정)
       }
     },
     {
