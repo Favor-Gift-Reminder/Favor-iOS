@@ -9,9 +9,15 @@ import OSLog
 import UIKit
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
+
+/*
+ Fetcher가 fetch하는 시점
+ - 뷰가 시작될 때 (viewDidLoad)
+*/
 
 final class HomeViewReactor: Reactor, Stepper {
   
@@ -19,12 +25,13 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  let reminderFetcher = Fetcher<[Reminder]>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
   
   enum Action {
-    case viewDidLoad
+    case viewDidAppear
     case searchButtonDidTap
     case newGiftButtonDidTap
     case itemSelected(IndexPath)
@@ -35,6 +42,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case popNewToast(String)
     case updateUpcoming(HomeSection.HomeSectionModel)
     case updateTimeline(HomeSection.HomeSectionModel)
+    case updateLoading(Bool)
   }
   
   struct State {
@@ -48,6 +56,7 @@ final class HomeViewReactor: Reactor, Stepper {
       items: []
     )
     var currentSortType: SortType
+    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -56,24 +65,29 @@ final class HomeViewReactor: Reactor, Stepper {
     self.initialState = State(
       currentSortType: self.currentSortType.value
     )
+    self.setupReminderFetcher()
   }
   
   // MARK: - Functions
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewDidLoad:
-      return .concat([
-        .just(.updateUpcoming(self.fetchUpcoming())),
-        .just(.updateTimeline(self.fetchTimeline()))
-      ])
-
+    case .viewDidAppear:
+      return self.reminderFetcher.fetch()
+        .flatMap { (status, reminders) -> Observable<Mutation> in
+          let upcomingSection = self.refineUpcoming(reminders: reminders)
+          return .concat([
+            .just(.updateUpcoming(upcomingSection)),
+            .just(.updateLoading(status == .inProgress))
+          ])
+        }
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
+      self.steps.accept(AppStep.searchIsRequired)
       return .empty()
 
     case .newGiftButtonDidTap:
-      os_log(.debug, "New Gift button did tap.")
+      self.steps.accept(AppStep.newGiftIsRequired)
       return .empty()
 
     case .itemSelected:
@@ -89,10 +103,6 @@ final class HomeViewReactor: Reactor, Stepper {
     }
   }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    return .merge(mutation)
-  }
-
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -105,6 +115,9 @@ final class HomeViewReactor: Reactor, Stepper {
       
     case .updateTimeline(let model):
       newState.timelineSection = model
+
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
     }
 
     return newState
@@ -128,9 +141,55 @@ final class HomeViewReactor: Reactor, Stepper {
   }
 }
 
+// MARK: - Fetcher
+
 private extension HomeViewReactor {
-  func fetchUpcoming() -> HomeSection.HomeSectionModel {
-    let upcomingItems = self.getUpcomingMock().map {
+  func setupReminderFetcher() {
+    // onRemote
+    self.reminderFetcher.onRemote = {
+      let networking = UserNetworking()
+      let reminders = networking.request(.getAllReminderList(userNo: 39)) // TODO: UserNo 변경
+        .flatMap { reminders -> Observable<[Reminder]> in
+          let responseData = reminders.data
+          let remote: ResponseDTO<[ReminderResponseDTO.AllReminders]> = APIManager.decode(responseData)
+          return .just(remote.data.map {
+            Reminder(
+              reminderNo: $0.reminderNo,
+              title: $0.title,
+              date: $0.eventDate.toDate() ?? .now,
+              shouldNotify: $0.isAlarmSet,
+              friendNo: $0.friendNo
+            )
+          })
+        }
+        .asSingle()
+      return reminders
+    }
+    // onLocal
+    self.reminderFetcher.onLocal = {
+      let reminders = try await RealmManager.shared.read(Reminder.self)
+      return await reminders.toArray()
+    }
+    // onLocalUpdate
+    self.reminderFetcher.onLocalUpdate = { reminders in
+      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(reminders)")
+      try await RealmManager.shared.updateAll(reminders)
+    }
+  }
+}
+
+// MARK: - Privates
+
+private extension HomeViewReactor {
+  func refineUpcoming(reminders: [Reminder]) -> HomeSection.HomeSectionModel {
+    let upcomings = reminders.enumerated().map { index, reminder in
+      return CardCellData(
+        iconImage: UIImage(named: "p\(index + 1)"),
+        title: reminder.title,
+        subtitle: reminder.date.formatted()
+      )
+    }
+    let upcomingItems = upcomings.map {
       let reactor = UpcomingCellReactor(cellData: $0)
       return HomeSection.HomeSectionItem.upcoming(reactor)
     }
@@ -140,8 +199,11 @@ private extension HomeViewReactor {
     )
   }
 
-  func fetchTimeline() -> HomeSection.HomeSectionModel {
-    let timelineItems = getTimelineMock().map {
+  func refineTimeline(gifts: [Gift]) -> HomeSection.HomeSectionModel {
+    let timelines = gifts.enumerated().map { index, gift in
+      TimelineCellData(image: UIImage(named: "d\(index + 1)"), isPinned: gift.isPinned)
+    }
+    let timelineItems = timelines.map {
       let reactor = TimelineCellReactor(cellData: $0)
       return HomeSection.HomeSectionItem.timeline(reactor)
     }
@@ -149,23 +211,5 @@ private extension HomeViewReactor {
       model: .timeline,
       items: timelineItems
     )
-  }
-
-  func getUpcomingMock() -> [CardCellData] {
-    return (1...2).map {
-      CardCellData(
-        iconImage: UIImage(named: "p\($0)"),
-        title: "기념일 \($0)",
-        subtitle: "2023. 03. 0\($0)"
-      )
-    }
-//    return []
-  }
-
-  func getTimelineMock() -> [TimelineCellData] {
-    return (1...3).map {
-      TimelineCellData(image: UIImage(named: "d\($0)"), isPinned: false)
-    }
-//    return []
   }
 }

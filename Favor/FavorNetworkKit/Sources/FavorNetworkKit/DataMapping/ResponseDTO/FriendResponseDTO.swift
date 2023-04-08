@@ -7,24 +7,24 @@
 
 import Foundation
 
-enum FriendResponseDTO {
+public enum FriendResponseDTO {
   
   /// 전체 친구
   public struct AllFriends: Decodable {
-    let friendName: String
-    let friendNo: Int
-    let isUser: Bool
+    public let friendName: String
+    public let friendNo: Int
+    public let isUser: Bool
   }
   
   /// 단일 친구
   public struct Friend: Decodable {
-    let favorList: [String]
-    let friendMemo: String
-    let friendName: String
-    let friendNo: Int
-    let isUser: Int
-    let reminderList: [ReminderResponseDTO.AllReminders]
-    let userFrinedNo: Int
-    let userNo: Int
+    public let favorList: [String]
+    public let friendMemo: String
+    public let friendName: String
+    public let friendNo: Int
+    public let isUser: Int
+    public let reminderList: [ReminderResponseDTO.AllReminders]
+    public let userFrinedNo: Int
+    public let userNo: Int
   }
 }

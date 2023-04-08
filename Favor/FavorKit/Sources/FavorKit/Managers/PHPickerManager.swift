@@ -31,7 +31,6 @@ public final class PHPickerManager: PHPickerManagerProtocol {
     imagePickerController.delegate = self
     navigationController.present(imagePickerController, animated: true)
   }
-  
 }
 
 extension PHPickerManager: PHPickerViewControllerDelegate {

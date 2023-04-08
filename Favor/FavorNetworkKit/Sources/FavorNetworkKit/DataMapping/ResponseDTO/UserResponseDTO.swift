@@ -7,26 +7,26 @@
 
 import Foundation
 
-enum UserResponseDTO {
+public enum UserResponseDTO {
   
   /// 전체 회원
   public struct AllUsers: Decodable {
-    let name: String
-    let role: String
-    let userNo: Int
-    let userId: String
+    public let name: String
+    public let role: String
+    public let userNo: Int
+    public let userId: String
   }
   
   /// 단일 회원
   public struct User: Decodable {
-    let email: String
-    let favorList: [String]
-    let frinedList: [FriendResponseDTO.AllFriends]
-    let giftList: [GiftResponseDTO.AllGifts]
-    let name: String
-    let reminderList: [ReminderResponseDTO.AllReminders]
-    let role: String
-    let userNo: Int
-    let userId: String
+    public let email: String
+    public let favorList: [String]
+    public let frinedList: [FriendResponseDTO.AllFriends]
+    public let giftList: [GiftResponseDTO.AllGifts]
+    public let name: String
+    public let reminderList: [ReminderResponseDTO.AllReminders]
+    public let role: String
+    public let userNo: Int
+    public let userId: String
   }
 }

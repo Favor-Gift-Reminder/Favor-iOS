@@ -66,9 +66,9 @@ final class NewPasswordViewController: BaseViewController, View {
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
-        button.configuration = LargeFavorButtonType.main("다음").configuration
+        button.configuration = FavorLargeButtonType.main("다음").configuration
       case .disabled:
-        button.configuration = LargeFavorButtonType.gray("다음").configuration
+        button.configuration = FavorLargeButtonType.gray("다음").configuration
       default:
         break
       }
