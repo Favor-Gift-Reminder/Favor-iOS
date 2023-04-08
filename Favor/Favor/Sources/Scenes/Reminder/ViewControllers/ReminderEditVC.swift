@@ -89,7 +89,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     reactor.state.map { $0.type }
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, type in
-        owner.title = type == .new ? "새 이벤트" : "이벤트 수정"
+        owner.title = type == .new ? "새 리마인더" : "리마인더 수정"
         let doneText = type == .new ? "등록" : "완료"
         owner.doneButton.configuration?.updateAttributedTitle(
           doneText,
