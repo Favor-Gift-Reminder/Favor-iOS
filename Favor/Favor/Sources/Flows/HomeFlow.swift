@@ -18,9 +18,10 @@ final class HomeFlow: Flow {
 
   var root: Presentable { self.rootViewController }
   let rootViewController = BaseNavigationController()
+  var filterBottomSheet: FilterBottomSheet?
 
   // MARK: - Navigate
-
+  
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
@@ -71,25 +72,28 @@ private extension HomeFlow {
   }
   
   func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
-    let filterVC = FilterViewController()
-    filterVC.currentSortType = sortType
-    self.rootViewController.present(filterVC, animated: true)
-
+    let filterBottomSheet = FilterBottomSheet()
+    filterBottomSheet.currentSortType = sortType
+    filterBottomSheet.modalPresentationStyle = .overFullScreen
+    self.rootViewController.present(filterBottomSheet, animated: false)
+    self.filterBottomSheet = filterBottomSheet
+    
     return .one(
       flowContributor: .contribute(
-        withNextPresentable: filterVC,
-        withNextStepper: filterVC
+        withNextPresentable: filterBottomSheet,
+        withNextStepper: filterBottomSheet
       ))
   }
-
+  
   func dismissFilter(sortedBy sortType: SortType) -> FlowContributors {
-    self.rootViewController.topViewController?.dismiss(animated: true) {
-      guard let homeVC = self.rootViewController.topViewController as? HomeViewController else {
-        return
-      }
-      // TODO: Realm DB 구현하며 Sort, Filter 방식 변경
-      homeVC.reactor?.currentSortType.accept(sortType)
+    self.filterBottomSheet?.animateDismissView()
+    self.filterBottomSheet = nil
+    
+    guard let homeVC = self.rootViewController.topViewController as? HomeViewController else {
+      return .none
     }
+    // TODO: Realm DB 구현하며 Sort, Filter 방식 변경
+    homeVC.reactor?.currentSortType.accept(sortType)
     return .none
   }
 

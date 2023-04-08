@@ -1,96 +1,71 @@
 //
-//  FilterVC.swift
+//  FilterBottomSheet.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/03/17.
+//  Created by 김응철 on 2023/04/04.
 //
 
 import UIKit
 
 import FavorKit
-import RxCocoa
 import RxFlow
-import SnapKit
+import RxSwift
+import RxCocoa
 
-final class FilterViewController: BaseBottomSheetViewController, Stepper {
-
-  // MARK: - Constants
-
+final class FilterBottomSheet: BaseBottomSheet, Stepper {
+  
   // MARK: - Properties
-
+  
+  private lazy var latestButton = self.makeSelectionButton(title: "최신순")
+  private lazy var oldestButton = self.makeSelectionButton(title: "과거순")
+  private lazy var buttons: [UIButton] = []
+  
+  var steps = PublishRelay<Step>()
+  
   public var currentSortType: SortType = .latest {
     didSet { self.updateButton() }
   }
-
-  // MARK: - UI Components
-
-  var steps = PublishRelay<Step>()
-
-  private lazy var sortLabel: UILabel = {
-    let label = UILabel()
-    label.font = .favorFont(.bold, size: 18)
-    label.text = "정렬 기준"
-    return label
-  }()
-
-  private lazy var latestButton = self.makeSelectionButton(title: "최신순")
-  private lazy var oldestButton = self.makeSelectionButton(title: "과거순")
-
-  private lazy var buttons: [UIButton] = []
-
-  private lazy var buttonStack: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.spacing = 24
-    stackView.alignment = .leading
-    return stackView
-  }()
-
-  // MARK: - Life Cycle
-
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
+  
+  // MARK: - Setup
+  
+  override func setupStyles() {
+    super.setupStyles()
     self.updateTitle("필터")
+    self.cancelButton.isHidden = true
     self.buttons = [latestButton, oldestButton]
     self.updateButton()
   }
-
-  // MARK: - UI Setup
-
+  
   override func setupLayouts() {
     super.setupLayouts()
-
+    
     [
       self.latestButton,
       self.oldestButton
     ].forEach {
-      self.buttonStack.addArrangedSubview($0)
-    }
-
-    [
-      self.sortLabel,
-      self.buttonStack
-    ].forEach {
       self.view.addSubview($0)
     }
   }
-
+  
   override func setupConstraints() {
     super.setupConstraints()
-
-    self.sortLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.topMenuContainerView.snp.bottom).offset(40)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+    
+    self.latestButton.snp.makeConstraints { make in
+      make.top.equalTo(self.titleLabel.snp.bottom).offset(56)
+      make.leading.equalTo(self.view.layoutMarginsGuide)
     }
 
-    self.buttonStack.snp.makeConstraints { make in
-      make.top.equalTo(self.sortLabel.snp.bottom).offset(32)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+    self.oldestButton.snp.makeConstraints { make in
+      make.top.equalTo(self.latestButton.snp.bottom).offset(32)
+      make.leading.equalTo(self.view.layoutMarginsGuide)
     }
   }
-
+  
+  // MARK: - Bind
+  
   override func bind() {
+    super.bind()
+    
     self.latestButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, _ in
@@ -107,9 +82,19 @@ final class FilterViewController: BaseBottomSheetViewController, Stepper {
       })
       .disposed(by: self.disposeBag)
   }
+  
+  // MARK: - Functions
+  
+  func updateButton() {
+    self.buttons.enumerated().forEach { index, button in
+      button.isSelected = self.currentSortType.rawValue == index ? true : false
+    }
+  }
 }
 
-private extension FilterViewController {
+// MARK: - UI Factories
+
+private extension FilterBottomSheet {
   func makeSelectionButton(title: String) -> UIButton {
     var config = UIButton.Configuration.plain()
     var container = AttributeContainer()
@@ -129,11 +114,5 @@ private extension FilterViewController {
       button.configuration = config
     }
     return button
-  }
-
-  func updateButton() {
-    self.buttons.enumerated().forEach { index, button in
-      button.isSelected = self.currentSortType.rawValue == index ? true : false
-    }
   }
 }
