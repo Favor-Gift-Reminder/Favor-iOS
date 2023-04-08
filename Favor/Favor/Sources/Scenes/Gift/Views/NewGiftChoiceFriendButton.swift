@@ -8,9 +8,9 @@
 import UIKit
 
 import FavorKit
-import SnapKit
 import RxCocoa
 import RxSwift
+import SnapKit
 
 final class NewGiftChoiceFriendButton: UIButton {
   
@@ -39,7 +39,7 @@ final class NewGiftChoiceFriendButton: UIButton {
     
     self.currentFriend
       .skip(1)
-      .asDriver(onErrorJustReturn: "")
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self) { owner, _ in
         owner.updateUI()
       }

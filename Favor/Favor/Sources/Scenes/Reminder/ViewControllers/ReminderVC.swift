@@ -128,7 +128,7 @@ final class ReminderViewController: BaseViewController, View {
 
     reactor.state.map { $0.isReminderEmpty }
       .distinctUntilChanged()
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEmpty in
         owner.collectionView.isHidden = isEmpty
       })
@@ -155,14 +155,14 @@ final class ReminderViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.selectedDate }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
         owner.updateSelectedDate(to: date)
       })
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isLoading }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isLoading in
         owner.rx.isLoading.onNext(isLoading)
       })

@@ -87,7 +87,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
 
     // State
     reactor.state.map { $0.type }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, type in
         owner.title = type == .new ? "새 리마인더" : "리마인더 수정"
         let doneText = type == .new ? "등록" : "완료"

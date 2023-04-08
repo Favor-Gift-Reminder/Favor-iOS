@@ -25,13 +25,9 @@ open class FavorIconImageView: UIView {
     didSet { self.update(image: self.image) }
   }
 
-  public var placeholderImage: UIImage? = .favorIcon(.friend) {
-    didSet { }
-  }
+  public var placeholderImage: UIImage? = .favorIcon(.friend)
 
-  public var imageColor: UIColor = .favorColor(.white) {
-    didSet { }
-  }
+  public var imageColor: UIColor = .favorColor(.white)
 
   private var emptyEdgeInsets: UIEdgeInsets = .zero
 

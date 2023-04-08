@@ -55,7 +55,7 @@ final class TimelineCell: UICollectionViewCell, Reusable, View {
     
     // State
     reactor.state.map { $0.gift }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, gift in
         owner.pinnedIconView.isHidden = !gift.isPinned
       })

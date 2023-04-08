@@ -55,7 +55,7 @@ final class TermCell: UITableViewCell, Reusable {
     self.setupConstraints()
 
     self.openDetailButton.rx.tap
-      .asDriver(onErrorRecover: {_ in return .never()})
+      .asDriver(onErrorRecover: {_ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         guard
           let urlString = owner.url,

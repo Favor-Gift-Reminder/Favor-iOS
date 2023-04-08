@@ -79,7 +79,7 @@ final class SignInViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.emailTextField.rx.editingDidEndOnExit
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.passwordTextField.textField.becomeFirstResponder()
       })
@@ -113,7 +113,7 @@ final class SignInViewController: BaseViewController, View {
 
     self.view.rx.tapGesture()
       .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: {  owner, _ in
         owner.view.endEditing(true)
       })
@@ -121,7 +121,7 @@ final class SignInViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.isSignInButtonEnabled }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEnabled in
         owner.signInButton.isEnabled = isEnabled
       })

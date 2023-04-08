@@ -118,7 +118,7 @@ final class TermViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isNextButtonEnabled }
-      .asDriver(onErrorJustReturn: false)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEnabled in
         owner.startButton.isEnabled = isEnabled
       })

@@ -95,7 +95,7 @@ final class NewPasswordViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.newPasswordTextField.rx.editingDidEndOnExit
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.pwValidateTextField.becomeFirstResponder()
       })
@@ -117,7 +117,7 @@ final class NewPasswordViewController: BaseViewController, View {
 
     self.scrollView.rx.tapGesture()
       .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: {  owner, _ in
         owner.view.endEditing(true)
         owner.scrollView.scroll(to: .zero)
@@ -126,7 +126,7 @@ final class NewPasswordViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.passwordValidationResult }
-      .asDriver(onErrorJustReturn: .valid)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .distinctUntilChanged()
       .skip(1)
       .drive(with: self, onNext: { owner, validationResult in
@@ -146,7 +146,7 @@ final class NewPasswordViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.confirmPasswordValidationResult }
-      .asDriver(onErrorJustReturn: .valid)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .distinctUntilChanged()
       .skip(1)
       .drive(with: self, onNext: { owner, validationResult in
@@ -166,7 +166,7 @@ final class NewPasswordViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isDoneButtonEnabled }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEnabled in
         owner.doneButton.isEnabled = isEnabled
       })

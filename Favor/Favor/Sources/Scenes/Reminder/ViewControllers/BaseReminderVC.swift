@@ -177,14 +177,14 @@ class BaseReminderViewController: BaseViewController {
       delegate.simultaneousRecognitionPolicy = .never
     })
     .when(.recognized)
-    .asDriver(onErrorRecover: { _ in return .never()})
+    .asDriver(onErrorRecover: { _ in return .empty()})
     .drive(with: self, onNext: { owner, _ in
       owner.view.endEditing(true)
     })
     .disposed(by: self.disposeBag)
 
     self.scrollView.rx.willBeginDragging
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         if owner.memoTextView.isFirstResponder {
           owner.memoTextView.resignFirstResponder()
@@ -193,7 +193,7 @@ class BaseReminderViewController: BaseViewController {
       .disposed(by: self.disposeBag)
 
     RxKeyboard.instance.visibleHeight
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, height in
         owner.scrollView.contentInset.bottom = height + self.verticalSpacing
       })

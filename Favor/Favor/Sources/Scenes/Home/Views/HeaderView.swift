@@ -103,7 +103,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     // State
     reactor.state.map { $0.sectionType }
       .map { $0 == .upcoming }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
         owner.titleLabel.text = isUpcoming ? "다가오는 기념일" : "타임라인"
@@ -123,7 +123,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.selectedButtonIndex }
-      .asDriver(onErrorJustReturn: 0)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, buttonIndex in
         owner.buttons.enumerated().forEach { currentIndex, button in
           button.isSelected = (currentIndex == buttonIndex) ? true : false

@@ -39,7 +39,7 @@ final class UpcomingCell: BaseCardCell, Reusable, View {
 
     // State
     reactor.state.map { $0.reminder }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, reminder in
         owner.title = reminder.title
         owner.subtitle = reminder.date.toDateString()

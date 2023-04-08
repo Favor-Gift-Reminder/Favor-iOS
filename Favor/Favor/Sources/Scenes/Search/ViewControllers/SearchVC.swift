@@ -73,7 +73,7 @@ final class SearchViewController: BaseViewController, View {
   func bind(reactor: SearchViewReactor) {
     // Action
     self.rx.viewDidAppear
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.searchBar.textField.becomeFirstResponder()
       })
@@ -112,7 +112,7 @@ final class SearchViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.isEditing }
-      .asDriver(onErrorJustReturn: false)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEditing in
         owner.searchBar.updateLeftItemVisibility(isHidden: isEditing)
       })

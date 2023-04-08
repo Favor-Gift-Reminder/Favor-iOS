@@ -143,7 +143,7 @@ final class HomeViewController: BaseViewController, View {
     // State
     reactor.state.map { $0.toastMessage }
       .compactMap { $0 }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, message in
         owner.presentToast(message, duration: .short)
       })

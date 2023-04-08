@@ -54,7 +54,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
       .orEmpty
       .distinctUntilChanged()
       .observe(on: MainScheduler.asyncInstance)
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, code in
         let currentInput = owner.emailCodeTextField.textField.text
         let trimmedCurrentInput = currentInput?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -78,7 +78,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.email }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, email in
         owner.emailCodeTextField.updateMessageLabel("\(email)으로 전송된 6자리 코드를 입력하세요.")
       })

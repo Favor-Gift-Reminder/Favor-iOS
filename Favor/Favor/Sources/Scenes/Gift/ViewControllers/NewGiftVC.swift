@@ -364,7 +364,7 @@ final class NewGiftViewController: BaseViewController, View {
     // 선물 종류 토글
     reactor.state.map { $0.isReceivedGift }
       .distinctUntilChanged()
-      .asDriver(onErrorJustReturn: false)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self) {
         if $1 {
           $0.giftReceivedButton.isSelected = true
@@ -380,7 +380,7 @@ final class NewGiftViewController: BaseViewController, View {
     reactor.state.map { $0.isReceivedGift }
       .distinctUntilChanged()
       .map { $0 ? "준 사람" : "받은 사람" }
-      .asDriver(onErrorJustReturn: "")
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self) { owner, text in
         let label = owner.friendStackView.subviews.first as! UILabel
         label.text = text

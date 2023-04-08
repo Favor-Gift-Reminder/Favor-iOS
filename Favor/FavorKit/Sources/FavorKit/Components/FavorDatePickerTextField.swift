@@ -209,23 +209,12 @@ public extension Reactive where Base: FavorDatePickerTextField {
   /// DatePicker가 nil이 될 수 없을 때 사용되는 프로퍼티
   var date: ControlEvent<Date> {
     let source = base.datePicker.rx.date
-//    let bindingObserver = Binder(self.base) { (picker, date: Date) in
-//      picker.datePicker.date = date
-//    }
     return ControlEvent(events: source)
   }
 
   /// DatePicker가 nil이 될 필요가 있을 때 사용되는 프로퍼티
   var optionalDate: ControlEvent<Date?> {
     let source = base.optionalDate
-//    let bindingObserver = Binder(self.base) { (picker, date: Date?) in
-//      if let date {
-//        picker.datePicker.date = date
-//        picker.optionalDate.accept(date)
-//      } else { // nil
-//        picker.optionalDate.accept(date)
-//      }
-//    }
     return ControlEvent(events: source)
   }
 }

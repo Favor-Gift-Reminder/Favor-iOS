@@ -169,7 +169,7 @@ final class SetProfileViewController: BaseViewController, View {
 
     self.scrollView.rx.tapGesture()
       .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: {  owner, _ in
         owner.view.endEditing(true)
         owner.scrollView.scroll(to: .zero)
@@ -179,14 +179,14 @@ final class SetProfileViewController: BaseViewController, View {
     // State
     reactor.state.map { $0.profileImage }
       .skip(1)
-      .asDriver(onErrorJustReturn: nil)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, image in
         owner.profileImageButton.configuration?.image = image
       })
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.idValidationResult }
-      .asDriver(onErrorJustReturn: .valid)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .distinctUntilChanged()
       .skip(1)
       .drive(with: self, onNext: { owner, validationResult in
@@ -206,7 +206,7 @@ final class SetProfileViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isNextButtonEnabled }
-      .asDriver(onErrorJustReturn: false)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEnabled in
         owner.nextButton.isEnabled = isEnabled
       })
