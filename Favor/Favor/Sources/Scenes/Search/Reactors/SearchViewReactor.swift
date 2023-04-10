@@ -20,6 +20,7 @@ final class SearchViewReactor: Reactor, Stepper {
   
   enum Action {
     case backButtonDidTap
+    case viewDidDisappear
     case searchDidBegin
     case searchDidEnd
     case returnKeyDidTap
@@ -45,7 +46,10 @@ final class SearchViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .backButtonDidTap:
-      os_log(.debug, "Back Button Did Tap")
+      self.steps.accept(AppStep.searchIsComplete)
+      return .empty()
+
+    case .viewDidDisappear:
       self.steps.accept(AppStep.searchIsComplete)
       return .empty()
       
