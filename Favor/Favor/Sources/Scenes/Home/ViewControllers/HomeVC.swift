@@ -107,6 +107,24 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Binding
   
   override func bind() {
+    self.collectionView.rx.didEndDisplayingCell
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { _, endDisplayingCell in
+        let (cell, _) = endDisplayingCell
+        guard let  cell = cell as? BaseCollectionViewCell else { return }
+        cell.disposeBag = DisposeBag()
+      })
+      .disposed(by: self.disposeBag)
+
+    self.collectionView.rx.didEndDisplayingSupplementaryView
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { _, endDisplayingView in
+        let (view, _, _) = endDisplayingView
+        guard let view = view as? HeaderView else { return }
+        view.disposeBag = DisposeBag()
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))

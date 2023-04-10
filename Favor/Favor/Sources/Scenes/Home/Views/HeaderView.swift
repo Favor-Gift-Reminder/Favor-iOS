@@ -79,6 +79,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Binding
   
   func bind(reactor: HeaderViewReactor) {
+    // TODO: Action들 VC로 뺴기
     // Action
     self.allButton.rx.tap
       .map { Reactor.Action.allButtonDidTap }
