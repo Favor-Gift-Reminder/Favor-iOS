@@ -31,6 +31,9 @@ final class NewGiftFlow: Flow {
       
     case .newGiftIsRequired:
       return self.navigateToNewGift()
+
+    case .newGiftIsComplete:
+      return self.popToTabBar()
       
     default:
       return .none
@@ -51,6 +54,12 @@ private extension NewGiftFlow {
       withNextPresentable: newGiftViewController,
       withNextStepper: newGiftReactor
     ))
+  }
+
+  func popToTabBar() -> FlowContributors {
+    self.rootViewController.dismiss(animated: true)
+
+    return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
   }
   
   func presentPHPicker(manager: PHPickerManager) -> FlowContributors {

@@ -22,6 +22,7 @@ final class NewGiftViewReactor: Reactor, Stepper {
   let pickerManager: PHPickerManager
   
   enum Action {
+    case cancelButtonDidTap
     case giftReceivedButtonDidTap
     case giftGivenButtonDidTap
     case categoryDidChange(FavorCategory)
@@ -61,6 +62,10 @@ final class NewGiftViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .cancelButtonDidTap:
+      self.steps.accept(AppStep.newGiftIsComplete)
+      return .empty()
+
     case .giftGivenButtonDidTap:
       return .just(.setReceivedGift(false))
       

@@ -71,6 +71,7 @@ private extension DashboardFlow {
 
     Flows.use(newGiftFlow, when: .ready) { [unowned self] root in
       DispatchQueue.main.async {
+        root.modalPresentationStyle = .overFullScreen
         self.rootViewController.present(root, animated: true)
       }
     }
