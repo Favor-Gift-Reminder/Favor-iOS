@@ -111,7 +111,7 @@ final class HomeViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { _, endDisplayingCell in
         let (cell, _) = endDisplayingCell
-        guard let  cell = cell as? BaseCollectionViewCell else { return }
+        guard let cell = cell as? BaseCollectionViewCell else { return }
         cell.disposeBag = DisposeBag()
       })
       .disposed(by: self.disposeBag)

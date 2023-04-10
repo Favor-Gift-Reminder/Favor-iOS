@@ -61,7 +61,7 @@ private extension DashboardFlow {
         withNextPresentable: homeFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
       ),
-//      .forwardToCurrentFlow(withStep: AppStep.tabBarIsReady),
+      .contribute(withNext: self.rootViewController),
       .contribute(
         withNextPresentable: myPageFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
