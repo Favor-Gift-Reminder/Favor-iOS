@@ -10,17 +10,17 @@ import UIKit
 import FavorKit
 import RxFlow
 
-final class GiftFlow: Flow {
+final class NewGiftFlow: Flow {
+
+  // MARK: - Properties
   
   var root: Presentable {
     self.rootViewController
   }
-  
-  private let rootViewController: BaseNavigationController
-  
-  init(_ navigationController: BaseNavigationController) {
-    self.rootViewController = navigationController
-  }
+
+  private let rootViewController = BaseNavigationController()
+
+  // MARK: - Navigate
   
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
@@ -38,17 +38,18 @@ final class GiftFlow: Flow {
   }
 }
 
-private extension GiftFlow {
+// MARK: - Navigates
+
+private extension NewGiftFlow {
   func navigateToNewGift() -> FlowContributors {
-    let viewController = NewGiftViewController()
-    let reactor = NewGiftViewReactor(pickerManager: PHPickerManager())
-    viewController.reactor = reactor
-    viewController.hidesBottomBarWhenPushed = true
-    self.rootViewController.pushViewController(viewController, animated: true)
+    let newGiftViewController = NewGiftViewController()
+    let newGiftReactor = NewGiftViewReactor(pickerManager: PHPickerManager())
+    newGiftViewController.reactor = newGiftReactor
+    self.rootViewController.pushViewController(newGiftViewController, animated: false)
     
     return .one(flowContributor: .contribute(
-      withNextPresentable: viewController,
-      withNextStepper: reactor
+      withNextPresentable: newGiftViewController,
+      withNextStepper: newGiftReactor
     ))
   }
   

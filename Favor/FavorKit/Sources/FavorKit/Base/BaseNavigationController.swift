@@ -9,11 +9,19 @@ import UIKit
 
 open class BaseNavigationController: UINavigationController {
 
+  // MARK: - Properties
+
+  public var isValid: Bool = true
+
+  // MARK: - Life Cycle
+
   open override func viewDidLoad() {
     super.viewDidLoad()
 
     self.setupNavigationAppearance()
   }
+
+  // MARK: - Functions
 
   func setupNavigationAppearance() {
     // Button Appearance

@@ -33,7 +33,6 @@ final class HomeViewReactor: Reactor, Stepper {
   enum Action {
     case viewNeedsLoaded
     case searchButtonDidTap
-    case newGiftButtonDidTap
     case itemSelected(IndexPath)
     case rightButtonDidTap(HomeSectionType)
   }
@@ -84,10 +83,6 @@ final class HomeViewReactor: Reactor, Stepper {
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
       self.steps.accept(AppStep.searchIsRequired)
-      return .empty()
-
-    case .newGiftButtonDidTap:
-      self.steps.accept(AppStep.newGiftIsRequired)
       return .empty()
 
     case .itemSelected:

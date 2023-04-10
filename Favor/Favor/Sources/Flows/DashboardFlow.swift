@@ -1,5 +1,5 @@
 //
-//  TabBarFlow.swift
+//  DashboardFlow.swift
 //  Favor
 //
 //  Created by 김응철 on 2023/02/02.
@@ -10,11 +10,11 @@ import UIKit
 import FavorKit
 import RxFlow
 
-final class TabBarFlow: Flow {
+final class DashboardFlow: Flow {
   
   var root: Presentable { self.rootViewController }
   
-  let rootViewController = BaseTabBarController()
+  let rootViewController = FavorTabBarController()
   
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
@@ -23,26 +23,29 @@ final class TabBarFlow: Flow {
     case .tabBarIsRequired:
       return self.navigateToDashBoard()
 
+    case .newGiftIsRequired:
+      return self.navigateToNewGift()
+
     default:
       return .none
     }
   }
 }
 
-private extension TabBarFlow {
+private extension DashboardFlow {
   func navigateToDashBoard() -> FlowContributors {
     let homeFlow = HomeFlow()
-    let reminderFlow = ReminderFlow()
     let myPageFlow = MyPageFlow()
 
     Flows.use(
       homeFlow,
-      reminderFlow,
       myPageFlow,
-      when: .created
-    ) { [unowned self] (homeNC: BaseNavigationController, reminderNC: BaseNavigationController, myPageNC: BaseNavigationController) in
+      when: .ready
+    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
       let pages = TabBarPage.allCases
-      let navigationControllers: [BaseNavigationController] = [homeNC, reminderNC, myPageNC]
+      let emptyNC = BaseNavigationController()
+      emptyNC.isValid = false
+      let navigationControllers: [BaseNavigationController] = [homeNC, emptyNC, myPageNC]
       navigationControllers.enumerated().forEach { idx, nc in
         nc.tabBarItem = pages[idx].tabBarItem
       }
@@ -55,21 +58,26 @@ private extension TabBarFlow {
         withNextPresentable: homeFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
       ),
-      .contribute(
-        withNextPresentable: reminderFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.reminderIsRequired)
-      ),
+      .contribute(withNext: self.rootViewController),
       .contribute(
         withNextPresentable: myPageFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
       )
     ])
   }
-  
-  func createTabNavController(of page: TabBarPage) -> BaseNavigationController {
-    let tabNavController = BaseNavigationController()
-    tabNavController.tabBarItem = page.tabBarItem
-    tabNavController.title = page.tabBarItem.title
-    return tabNavController
+
+  func navigateToNewGift() -> FlowContributors {
+    let newGiftFlow = NewGiftFlow()
+
+    Flows.use(newGiftFlow, when: .ready) { [unowned self] root in
+      DispatchQueue.main.async {
+        self.rootViewController.present(root, animated: true)
+      }
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: newGiftFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired)
+    ))
   }
 }

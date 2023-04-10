@@ -56,7 +56,6 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - UI Components
 
   private lazy var searchButton = FavorBarButtonItem(.search)
-  private lazy var newGiftButton = FavorBarButtonItem(.newGift)
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
@@ -127,11 +126,6 @@ final class HomeViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.newGiftButton.rx.tap
-      .map { Reactor.Action.newGiftButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
     self.collectionView.rx.itemSelected
       .do(onNext: {
         print($0)
@@ -160,8 +154,7 @@ final class HomeViewController: BaseViewController, View {
 private extension HomeViewController {
   func setupNavigationBar() {
     self.navigationItem.rightBarButtonItems = [
-      self.searchButton,
-      self.newGiftButton
+      self.searchButton
     ]
   }
   

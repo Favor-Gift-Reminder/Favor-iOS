@@ -9,8 +9,8 @@ import UIKit
 
 import FavorKit
 import RxFlow
-import RxSwift
 import RxCocoa
+import RxSwift
 
 final class FilterBottomSheet: BaseBottomSheet, Stepper {
   
@@ -67,7 +67,7 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
     super.bind()
     
     self.latestButton.rx.tap
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.currentSortType = .latest
         owner.steps.accept(AppStep.filterIsComplete(.latest))
@@ -75,7 +75,7 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
       .disposed(by: self.disposeBag)
 
     self.oldestButton.rx.tap
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.currentSortType = .oldest
         owner.steps.accept(AppStep.filterIsComplete(.oldest))

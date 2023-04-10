@@ -29,9 +29,6 @@ final class HomeFlow: Flow {
     switch step {
     case .homeIsRequired:
       return self.navigateToHome()
-      
-    case .newGiftIsRequired:
-      return self.navigateToGift()
 
     case .searchIsRequired:
       return self.navigateToSearch()
@@ -44,15 +41,6 @@ final class HomeFlow: Flow {
 // MARK: - Navigates
 
 private extension HomeFlow {
-  func navigateToGift() -> FlowContributors {
-    let giftFlow = GiftFlow(self.rootViewController)
-    
-    return .one(flowContributor: .contribute(
-      withNextPresentable: giftFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired)
-    ))
-  }
-  
   func navigateToHome() -> FlowContributors {
     let homeVC = HomeViewController()
     let homeReactor = HomeViewReactor()
