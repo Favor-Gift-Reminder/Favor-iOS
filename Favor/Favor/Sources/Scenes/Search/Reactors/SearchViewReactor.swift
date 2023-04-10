@@ -45,11 +45,7 @@ final class SearchViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .backButtonDidTap:
-      self.steps.accept(AppStep.searchIsComplete)
-      return .empty()
-
-    case .viewDidDisappear:
+    case .backButtonDidTap, .viewDidDisappear:
       self.steps.accept(AppStep.searchIsComplete)
       return .empty()
       
