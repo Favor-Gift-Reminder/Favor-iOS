@@ -32,6 +32,7 @@ enum AppStep: Step {
   
   // MARK: - Main
   case tabBarIsRequired
+  case tabBarIsReady
   
   // MARK: - Home
   case homeIsRequired

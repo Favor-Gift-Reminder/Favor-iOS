@@ -89,8 +89,11 @@ final class HomeViewReactor: Reactor, Stepper {
       return .empty()
 
     case .rightButtonDidTap(let sectionType):
+      let type = "\(sectionType)"
+      os_log(.debug, "\(type)")
       switch sectionType {
-      case .upcoming: break
+      case .upcoming:
+        self.steps.accept(AppStep.reminderIsRequired)
       case .timeline:
         self.steps.accept(AppStep.filterIsRequired(self.currentSortType.value))
       }

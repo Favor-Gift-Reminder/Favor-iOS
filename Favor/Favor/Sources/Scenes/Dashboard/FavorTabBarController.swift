@@ -80,9 +80,6 @@ extension FavorTabBarController: UITabBarControllerDelegate {
   ) -> Bool {
     guard let navController = viewController as? BaseNavigationController else { return true }
     if !navController.isValid {
-      print(self.steps.subscribe(onNext: { a in
-        print(a)
-      }).dispose())
       self.steps.accept(AppStep.newGiftIsRequired)
       return false
     }

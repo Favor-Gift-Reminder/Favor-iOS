@@ -95,11 +95,6 @@ class HeaderView: UICollectionReusableView, Reusable, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.rightButton.rx.tap
-      .map { Reactor.Action.rightButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
     // State
     reactor.state.map { $0.sectionType }
       .map { $0 == .upcoming }

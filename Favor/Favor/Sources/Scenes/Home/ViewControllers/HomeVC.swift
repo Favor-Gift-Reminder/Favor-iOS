@@ -40,10 +40,10 @@ final class HomeViewController: BaseViewController, View {
       }
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+      let sectionItem = dataSource[indexPath.section]
       let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         for: indexPath) as HeaderView
-      let sectionItem = dataSource[indexPath.section]
       header.reactor = HeaderViewReactor(section: sectionItem.model)
       header.rx.rightButtonDidTap
         .map { Reactor.Action.rightButtonDidTap(sectionItem.model) }
