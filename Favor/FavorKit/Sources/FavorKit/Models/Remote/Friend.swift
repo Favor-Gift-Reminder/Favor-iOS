@@ -12,19 +12,19 @@ public class Friend: Object {
   // MARK: - Properties
 
   /// 친구 번호
-  @Persisted(primaryKey: true) var friendNo: Int
+  @Persisted(primaryKey: true) public var friendNo: Int
   /// 친구를 보유한 회원의 회원 번호
-  @Persisted(originProperty: "friendList") var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "friendList") public var userNo: LinkingObjects<User>
   /// 친구 이름
-  @Persisted var name: String
+  @Persisted public var name: String
   /// 친구 사진
-  @Persisted var profilePhoto: Photo?
+  @Persisted public var profilePhoto: Photo?
   /// 친구에 대한 메모
-  @Persisted var memo: String?
+  @Persisted public var memo: String?
   /// 친구가 회원일 경우, 해당 친구의 회원 번호
-  @Persisted var friendUserNo: Int?
+  @Persisted public var friendUserNo: Int?
   /// 친구의 회원 여부 (회원 = `true`)
-  @Persisted var isUser: Bool
+  @Persisted public var isUser: Bool
 
   public override class func propertiesMapping() -> [String: String] {
     [

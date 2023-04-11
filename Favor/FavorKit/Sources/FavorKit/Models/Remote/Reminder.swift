@@ -14,22 +14,22 @@ public class Reminder: Object {
   // MARK: - Properties
 
   /// 리마인더  번호
-  @Persisted(primaryKey: true) var reminderNo: Int
+  @Persisted(primaryKey: true) public var reminderNo: Int
   /// 리마인더 보유 회원 번호
   /// - Description: `User`의 `reminderList` 프로퍼티에 등록된 `Reminder` 테이블의 Primary Key.
-  @Persisted(originProperty: "reminderList") var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "reminderList") public var userNo: LinkingObjects<User>
   /// 리마인더 제목
-  @Persisted var title: String
+  @Persisted public var title: String
   /// 리마인더로 등록한 이벤트의 날짜
-  @Persisted var date: Date
+  @Persisted public var date: Date
   /// 리마인더 메모
-  @Persisted var memo: String?
+  @Persisted public var memo: String?
   /// 리마인더 알림 여부
-  @Persisted var shouldNotify: Bool
+  @Persisted public var shouldNotify: Bool
   /// 리마인더 알림 시간
-  @Persisted var notifyTime: Date?
+  @Persisted public var notifyTime: Date?
   /// 관련 친구의 회원 번호
-  @Persisted var friendNo: Int
+  @Persisted public var friendNo: Int
 
   public override class func propertiesMapping() -> [String: String] {
     [
@@ -67,16 +67,5 @@ public class Reminder: Object {
     self.shouldNotify = shouldNotify
     self.notifyTime = notifyTime
     self.friendNo = friendNo
-  }
-}
-
-extension Reminder {
-  public func toDomain() -> ReminderEditor {
-    ReminderEditor(
-      title: self.title,
-      date: self.date,
-      shouldNotify: self.shouldNotify,
-      friend: self.friendNo
-    )
   }
 }

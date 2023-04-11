@@ -14,28 +14,28 @@ public class Gift: Object {
   // MARK: - Properties
 
   /// 선물 번호 - **PK**
-  @Persisted(primaryKey: true) var giftNo: Int
+  @Persisted(primaryKey: true) public var giftNo: Int
   /// 선물을 등록한 회원의 회원 번호
   /// - Description: `User`의 `giftList` 프로퍼티에 등록된 `Gift` 테이블의 Primary Key.
-  @Persisted(originProperty: "giftList") var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "giftList") public var userNo: LinkingObjects<User>
   /// 선물 제목
-  @Persisted var name: String
+  @Persisted public var name: String
   /// 선물 날짜
-  @Persisted var date: Date?
+  @Persisted public var date: Date?
   /// 선물 사진 목록
-  @Persisted var photoList: List<Photo>
+  @Persisted public var photoList: List<Photo>
   /// 선물 메모
-  @Persisted var memo: String?
+  @Persisted public var memo: String?
   /// 선물 카테고리
-  @Persisted var category: Int?
+  @Persisted public var category: Int?
   /// 선물 감정 기록
-  @Persisted var emotion: Int?
+  @Persisted public var emotion: Int?
   /// 선물 핀 여부
-  @Persisted var isPinned: Bool
+  @Persisted public var isPinned: Bool
   /// 선물과 관련된 친구 번호
-  @Persisted var relatedFriend: Friend?
+  @Persisted public var relatedFriend: Friend?
   /// 받은 선물 / 준 선물 여부 (받은 선물 = `true`)
-  @Persisted var isGiven: Bool
+  @Persisted public var isGiven: Bool
 
   public override class func propertiesMapping() -> [String: String] {
     [

@@ -26,19 +26,29 @@ public final class RealmManager: RealmCRUDable {
   /// 로컬 DB의 버전
   ///
   /// [~ Version History ~](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  private static let version: UInt64 = 2
+  private static let version: UInt64 = 4
 
   /// RealmManager에서 사용될 realm 인스턴스
   private var realm: Realm!
   /// Realm의 transaction은 해당 realm 인스턴스가 생성된 쓰레드에서 이루어져야 합니다.
-  private let realmQueue = DispatchQueue.realmThread
+  public let realmQueue = DispatchQueue.realmThread
 
   // MARK: - Initializer
 
   private init() {
     do {
       let config = Realm.Configuration(
-        schemaVersion: RealmManager.version
+        schemaVersion: RealmManager.version,
+        migrationBlock: { migration, oldVersion in
+          if oldVersion < 4 {
+            migration.enumerateObjects(ofType: RecentSearch.className(), { oldObject, newObject in
+              let searchText = oldObject!["searchText"] as! String
+              let searchDate = oldObject!["searchDate"] as! Date
+              newObject!["searchText"] = searchText
+              newObject!["searchDate"] = searchDate
+            })
+          }
+        }
       )
       try self.realmQueue.sync {
         self.realm = try Realm(configuration: config, queue: self.realmQueue)
