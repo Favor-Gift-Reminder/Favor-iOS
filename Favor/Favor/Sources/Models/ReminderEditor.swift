@@ -7,6 +7,8 @@
 
 import Foundation
 
+import FavorKit
+
 public struct ReminderEditor {
   var title: String = ""
   var date: Date = .now
@@ -14,4 +16,15 @@ public struct ReminderEditor {
   var shouldNotify: Bool = false
   var notifyTime: Date?
   var friend: Int = -1
+}
+
+extension Reminder {
+  public func toDomain() -> ReminderEditor {
+    ReminderEditor(
+      title: self.title,
+      date: self.date,
+      shouldNotify: self.shouldNotify,
+      friend: self.friendNo
+    )
+  }
 }

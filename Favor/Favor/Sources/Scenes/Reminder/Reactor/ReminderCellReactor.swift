@@ -7,6 +7,7 @@
 
 import UIKit.UIImage
 
+import FavorKit
 import ReactorKit
 
 final class ReminderCellReactor: Reactor {

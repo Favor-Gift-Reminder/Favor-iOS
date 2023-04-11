@@ -7,6 +7,7 @@
 
 import OSLog
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -63,7 +64,11 @@ final class SearchViewReactor: Reactor, Stepper {
       
     case .returnKeyDidTap:
       if let searchString = self.currentState.searchString {
-        self.steps.accept(AppStep.searchResultIsRequired(searchString))
+        let recentSearch = RecentSearch(searchText: searchString, searchDate: .now)
+        _Concurrency.Task {
+          try await RealmManager.shared.update(recentSearch)
+          self.steps.accept(AppStep.searchResultIsRequired(searchString))
+        }
       }
       return .empty()
     }
