@@ -20,17 +20,20 @@ final class SearchViewReactor: Reactor, Stepper {
   
   enum Action {
     case backButtonDidTap
-    case searchDidBegin
-    case searchDidEnd
+    case editingDidBegin
+    case textDidChanged(String?)
+    case editingDidEnd
     case returnKeyDidTap
   }
   
   enum Mutation {
-    case switchIsEditingTo(Bool)
+    case toggleIsEditingTo(Bool)
+    case updateText(String?)
   }
   
   struct State {
     var isEditing: Bool = false
+    var searchString: String?
   }
   
   // MARK: - Initializer
@@ -49,14 +52,19 @@ final class SearchViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.searchIsComplete)
       return .empty()
       
-    case .searchDidBegin:
-      return .just(.switchIsEditingTo(true))
+    case .editingDidBegin:
+      return .just(.toggleIsEditingTo(true))
+
+    case .textDidChanged(let text):
+      return .just(.updateText(text))
       
-    case .searchDidEnd:
-      return .just(.switchIsEditingTo(false))
+    case .editingDidEnd:
+      return .just(.toggleIsEditingTo(false))
       
     case .returnKeyDidTap:
-      self.steps.accept(AppStep.searchResultIsRequired)
+      if let searchString = self.currentState.searchString {
+        self.steps.accept(AppStep.searchResultIsRequired(searchString))
+      }
       return .empty()
     }
   }
@@ -65,8 +73,11 @@ final class SearchViewReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-    case .switchIsEditingTo(let isEditing):
+    case .toggleIsEditingTo(let isEditing):
       newState.isEditing = isEditing
+
+    case .updateText(let text):
+      newState.searchString = text
     }
     
     return newState

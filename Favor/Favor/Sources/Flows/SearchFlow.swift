@@ -34,7 +34,7 @@ final class SearchFlow: Flow {
     case .searchIsRequired:
       return self.navigateToSearch()
 
-    case .searchResultIsRequired:
+    case .searchResultIsRequired(let query):
       return self.navigateToSearchResult()
 
     case .searchIsComplete:
