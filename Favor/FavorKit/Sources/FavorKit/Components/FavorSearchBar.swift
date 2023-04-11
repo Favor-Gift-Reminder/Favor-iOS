@@ -219,6 +219,14 @@ private extension FavorSearchBar {
 // MARK: - Reactive
 
 public extension Reactive where Base: FavorSearchBar {
+  var text: ControlProperty<String?> {
+    let source = base.textField.rx.text
+    let bindingObserver = Binder(self.base) { textField, text in
+      textField.textField.text = text
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
+  }
+
   var backButtonDidTap: ControlEvent<()> {
     let source = base.backButton.rx.tap
     return ControlEvent(events: source)
