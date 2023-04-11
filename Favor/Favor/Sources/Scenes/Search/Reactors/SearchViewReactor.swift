@@ -20,6 +20,7 @@ final class SearchViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   
   enum Action {
+    case viewNeedsLoaded
     case backButtonDidTap
     case editingDidBegin
     case textDidChanged(String?)
@@ -48,6 +49,9 @@ final class SearchViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .viewNeedsLoaded:
+      return .just(.toggleIsEditingTo(true))
+
     case .backButtonDidTap:
       os_log(.debug, "Back Button Did Tap")
       self.steps.accept(AppStep.searchIsComplete)
@@ -70,7 +74,7 @@ final class SearchViewReactor: Reactor, Stepper {
           self.steps.accept(AppStep.searchResultIsRequired(searchString))
         }
       }
-      return .empty()
+      return .just(.toggleIsEditingTo(false))
     }
   }
   

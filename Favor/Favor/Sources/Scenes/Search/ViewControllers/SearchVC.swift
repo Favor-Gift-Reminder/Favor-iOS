@@ -69,7 +69,7 @@ final class SearchViewController: BaseViewController, View {
     let tableView = UITableView()
     tableView.showsHorizontalScrollIndicator = false
     tableView.showsVerticalScrollIndicator = false
-//    tableView.isHidden = true
+    tableView.isHidden = true
     return tableView
   }()
   
@@ -79,6 +79,11 @@ final class SearchViewController: BaseViewController, View {
   
   func bind(reactor: SearchViewReactor) {
     // Action
+    self.rx.viewDidAppear
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.searchTextField.rx.backButtonDidTap
       .map { Reactor.Action.backButtonDidTap }
       .bind(to: reactor.action)
@@ -89,37 +94,40 @@ final class SearchViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.searchTextField.rx.editingDidEnd
-      .map { Reactor.Action.editingDidEnd }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
     self.searchTextField.rx.text
       .map { Reactor.Action.textDidChanged($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.searchTextField.rx.editingDidEndOnExit
-      .do(onNext: {
-        self.searchTextField.textField.resignFirstResponder()
-      })
-      .map { Reactor.Action.returnKeyDidTap }
+    self.searchTextField.rx.editingDidEnd
+      .map { Reactor.Action.editingDidEnd }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.view.rx.anyGesture(.tap())
       .when(.recognized)
-      .asDriver(onErrorDriveWith: .empty())
-      .drive(with: self, onNext: { owner, _ in
-        owner.searchTextField.textField.resignFirstResponder()
-      })
+      .map { _ in Reactor.Action.editingDidEnd }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.searchTextField.rx.editingDidEndOnExit
+      .map { Reactor.Action.returnKeyDidTap }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     // State
     reactor.state.map { $0.isEditing }
+      .distinctUntilChanged()
+      .delay(.nanoseconds(100), scheduler: MainScheduler.asyncInstance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEditing in
         owner.searchTextField.setBackButton(toHidden: isEditing)
+        if isEditing {
+          owner.searchTextField.textField.becomeFirstResponder()
+        } else {
+          owner.searchTextField.textField.resignFirstResponder()
+        }
+        owner.toggleRecentSearch(to: !isEditing)
       })
       .disposed(by: self.disposeBag)
   }
@@ -208,5 +216,17 @@ private extension SearchViewController {
     button.contentMode = .center
     button.setImage(emoji.emojiToImage(size: .init(width: 40, height: 40)), for: .normal)
     return button
+  }
+
+  func toggleRecentSearch(to isHidden: Bool) {
+    let duration = isHidden ? 0.2 : 0.3
+    self.recentSearchTableView.isHidden = false
+    let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+      self.recentSearchTableView.layer.opacity = isHidden ? 0.0 : 1.0
+    }
+    animator.addCompletion { _ in
+      self.recentSearchTableView.isHidden = isHidden
+    }
+    animator.startAnimation()
   }
 }

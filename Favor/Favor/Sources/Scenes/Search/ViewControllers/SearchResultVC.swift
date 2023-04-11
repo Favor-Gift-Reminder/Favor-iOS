@@ -43,13 +43,14 @@ final class SearchResultViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-//    self.searchTextField.rx.text
-//      .map { Reactor.Action.textDidChanged($0) }
-//      .bind(to: reactor.action)
-//      .disposed(by: self.disposeBag)
+    self.searchTextField.rx.text
+      .map { Reactor.Action.textDidChanged($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
 
     // State
     reactor.state.map { $0.searchString }
+      .take(1) // 최초 1회만 필요
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, searchString in
         owner.searchTextField.textField.text = searchString
