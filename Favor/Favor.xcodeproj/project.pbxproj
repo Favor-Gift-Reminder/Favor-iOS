@@ -31,11 +31,6 @@
 		2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E7C30B6295D8E1000BAC43D /* SnapKit */; };
 		2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
 		2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
-		2E9F989129C6275300789297 /* Gift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989029C6275300789297 /* Gift.swift */; };
-		2E9F989329C62B1700789297 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989229C62B1700789297 /* User.swift */; };
-		2E9F989629C62CEA00789297 /* Reminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989529C62CEA00789297 /* Reminder.swift */; };
-		2E9F989829C62D0200789297 /* Friend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989729C62D0200789297 /* Friend.swift */; };
-		2E9F989A29C62D4700789297 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9F989929C62D4700789297 /* Photo.swift */; };
 		2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */; };
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
 		2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */; };
@@ -166,11 +161,6 @@
 		2E7C30A4295D7C4500BAC43D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7C30A7295D7C4500BAC43D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2E9F989029C6275300789297 /* Gift.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gift.swift; sourceTree = "<group>"; };
-		2E9F989229C62B1700789297 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		2E9F989529C62CEA00789297 /* Reminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reminder.swift; sourceTree = "<group>"; };
-		2E9F989729C62D0200789297 /* Friend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friend.swift; sourceTree = "<group>"; };
-		2E9F989929C62D4700789297 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingCellReactor.swift; sourceTree = "<group>"; };
 		2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
 		2EA38491298D7C5F0081499C /* HeaderViewReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeaderViewReactor.swift; sourceTree = "<group>"; };
@@ -421,18 +411,6 @@
 			path = Favor;
 			sourceTree = "<group>";
 		};
-		2E9F989429C62B2200789297 /* Realm */ = {
-			isa = PBXGroup;
-			children = (
-				2E9F989729C62D0200789297 /* Friend.swift */,
-				2E9F989029C6275300789297 /* Gift.swift */,
-				2E9F989929C62D4700789297 /* Photo.swift */,
-				2E9F989529C62CEA00789297 /* Reminder.swift */,
-				2E9F989229C62B1700789297 /* User.swift */,
-			);
-			path = Realm;
-			sourceTree = "<group>";
-		};
 		2EA384B3299234630081499C /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -488,7 +466,6 @@
 		2EBB014D295E8C880072D158 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				2E9F989429C62B2200789297 /* Realm */,
 				2EE3BAA829AF11E5004FDCC9 /* README.md */,
 				2ED326B429B0F6EB001963D0 /* Terms.swift */,
 				2EA73C4429DCA249005097C0 /* ReminderEditor.swift */,
@@ -972,7 +949,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E9F989A29C62D4700789297 /* Photo.swift in Sources */,
 				2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */,
 				2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
@@ -995,8 +971,6 @@
 				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
 				2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */,
 				2EA73C4929DE703F005097C0 /* ReminderDetailViewReactor.swift in Sources */,
-				2E9F989829C62D0200789297 /* Friend.swift in Sources */,
-				2E9F989329C62B1700789297 /* User.swift in Sources */,
 				2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */,
 				2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */,
 				E5B61F3529B37F260031046C /* (null) in Sources */,
@@ -1014,7 +988,6 @@
 				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* FavorGiftStatsCell.swift in Sources */,
-				2E9F989129C6275300789297 /* Gift.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
@@ -1041,7 +1014,6 @@
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
-				2E9F989629C62CEA00789297 /* Reminder.swift in Sources */,
 				E5E423F429DC0D4300A6B48D /* FilterBottomSheet.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,

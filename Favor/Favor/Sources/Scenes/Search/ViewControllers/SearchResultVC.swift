@@ -21,10 +21,7 @@ final class SearchResultViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  private lazy var searchBar: FavorSearchBar = {
-    let searchBar = FavorSearchBar()
-    return searchBar
-  }()
+  private let searchTextField = FavorSearchBar()
   
   // MARK: - Life Cycle
   
@@ -41,9 +38,22 @@ final class SearchResultViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    self.searchBar.rx.leftItemDidTap
+    self.searchTextField.rx.backButtonDidTap
       .map { Reactor.Action.backButtonDidTap }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+//    self.searchTextField.rx.text
+//      .map { Reactor.Action.textDidChanged($0) }
+//      .bind(to: reactor.action)
+//      .disposed(by: self.disposeBag)
+
+    // State
+    reactor.state.map { $0.searchString }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, searchString in
+        owner.searchTextField.textField.text = searchString
+      })
       .disposed(by: self.disposeBag)
   }
   
@@ -57,14 +67,14 @@ final class SearchResultViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.searchBar
+      self.searchTextField
     ].forEach {
       self.view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    self.searchBar.snp.makeConstraints { make in
+    self.searchTextField.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
       make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
     }

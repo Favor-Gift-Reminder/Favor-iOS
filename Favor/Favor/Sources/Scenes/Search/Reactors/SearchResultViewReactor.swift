@@ -18,20 +18,23 @@ final class SearchResultViewReactor: Reactor, Stepper {
   
   enum Action {
     case backButtonDidTap
+    case textDidChanged(String?)
   }
   
   enum Mutation {
-    
+    case updateText(String?)
   }
   
   struct State {
-    
+    var searchString: String
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  init(initialSearchString: String) {
+    self.initialState = State(
+      searchString: initialSearchString
+    )
   }
   
   
@@ -40,8 +43,11 @@ final class SearchResultViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .backButtonDidTap:
-      print("Back Button Did Tap")
+      self.steps.accept(AppStep.searchResultIsComplete)
       return .empty()
+
+    case .textDidChanged(let text):
+      return .just(.updateText(text))
     }
   }
   
@@ -49,7 +55,8 @@ final class SearchResultViewReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-      
+    case .updateText(let text):
+      newState.searchString = text ?? ""
     }
     
     return newState
