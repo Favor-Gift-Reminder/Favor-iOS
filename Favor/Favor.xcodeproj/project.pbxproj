@@ -100,6 +100,9 @@
 		2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58E29786C1C0064E932 /* TermVC.swift */; };
 		2EE0D597297A9D670064E932 /* FavorUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D596297A9D670064E932 /* FavorUITests.swift */; };
 		2EE0D599297A9D670064E932 /* FavorUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */; };
+		2EE1537329E5A6BE0023FEA5 /* SearchRecentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1537229E5A6BE0023FEA5 /* SearchRecentCell.swift */; };
+		2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1537429E5AD560023FEA5 /* SearchRecentHeader.swift */; };
+		2EE1537729E5B00D0023FEA5 /* SearchRecentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1537629E5B00D0023FEA5 /* SearchRecentSection.swift */; };
 		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
 		2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA6F29A9D7D4004FDCC9 /* Reusable */; };
 		2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8129AB60A4004FDCC9 /* Realm */; };
@@ -231,6 +234,9 @@
 		2EE0D594297A9D670064E932 /* FavorUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FavorUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2EE0D596297A9D670064E932 /* FavorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITests.swift; sourceTree = "<group>"; };
 		2EE0D598297A9D670064E932 /* FavorUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2EE1537229E5A6BE0023FEA5 /* SearchRecentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecentCell.swift; sourceTree = "<group>"; };
+		2EE1537429E5AD560023FEA5 /* SearchRecentHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecentHeader.swift; sourceTree = "<group>"; };
+		2EE1537629E5B00D0023FEA5 /* SearchRecentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecentSection.swift; sourceTree = "<group>"; };
 		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
@@ -414,6 +420,8 @@
 		2EA384B3299234630081499C /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				2EE1537229E5A6BE0023FEA5 /* SearchRecentCell.swift */,
+				2EE1537429E5AD560023FEA5 /* SearchRecentHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -539,6 +547,7 @@
 		2EE07E9F296C5F1D00048A3C /* Search */ = {
 			isa = PBXGroup;
 			children = (
+				2EE1537629E5B00D0023FEA5 /* SearchRecentSection.swift */,
 				2EA384B4299234680081499C /* Reactors */,
 				2EA384B3299234630081499C /* Views */,
 				2EE07EBA296E8CE600048A3C /* ViewControllers */,
@@ -951,6 +960,7 @@
 			files = (
 				2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */,
 				2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */,
+				2EE1537329E5A6BE0023FEA5 /* SearchRecentCell.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
 				2ED326C129B327AA001963D0 /* ValidateEmailCodeVC.swift in Sources */,
@@ -1015,6 +1025,7 @@
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				E5E423F429DC0D4300A6B48D /* FilterBottomSheet.swift in Sources */,
+				2EE1537729E5B00D0023FEA5 /* SearchRecentSection.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */,
@@ -1023,6 +1034,7 @@
 				2EC939E52998C68900C8C47F /* FavorPrefersCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
+				2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,

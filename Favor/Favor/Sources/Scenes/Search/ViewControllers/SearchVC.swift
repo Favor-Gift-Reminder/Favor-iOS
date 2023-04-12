@@ -9,11 +9,14 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import RxCocoa
+import RxDataSources
 import RxGesture
 import SnapKit
 
 final class SearchViewController: BaseViewController, View {
+  typealias RecentSearchDataSource = RxCollectionViewSectionedReloadDataSource<SearchRecentSection.SearchRecentModel>
   
   // MARK: - Constants
   
@@ -21,6 +24,17 @@ final class SearchViewController: BaseViewController, View {
   let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
   
   // MARK: - Properties
+
+  private var dataSource = RecentSearchDataSource(
+    configureCell: { _, collectionView, indexPath, item in
+      switch item {
+      case .recent(let recentSearch):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchRecentCell
+        cell.updateText(recentSearch)
+        return cell
+      }
+    }
+  )
   
   // MARK: - UI Components
   
@@ -65,17 +79,37 @@ final class SearchViewController: BaseViewController, View {
     return stackView
   }()
 
-  private lazy var recentSearchTableView: UITableView = {
-    let tableView = UITableView()
-    tableView.showsHorizontalScrollIndicator = false
-    tableView.showsVerticalScrollIndicator = false
-    tableView.isHidden = true
-    return tableView
+  private lazy var recentSearchCollectionView: UICollectionView = {
+    let collectionView = UICollectionView(
+      frame: .zero,
+      collectionViewLayout: self.setupCollectionViewLayout()
+    )
+
+    // Register
+    collectionView.register(cellType: SearchRecentCell.self)
+    collectionView.register(
+      supplementaryViewType: SearchRecentHeader.self,
+      ofKind: SearchRecentCell.reuseIdentifier
+    )
+
+    // Setup
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.isHidden = true
+    return collectionView
   }()
   
   // MARK: - Life Cycle
   
   // MARK: - Binding
+
+  override func bind() {
+    guard let reactor = self.reactor else { return }
+
+    reactor.state.map { [$0.searchRecents] }
+      .bind(to: self.recentSearchCollectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
+  }
   
   func bind(reactor: SearchViewReactor) {
     // Action
@@ -156,7 +190,7 @@ final class SearchViewController: BaseViewController, View {
       self.giftCategoryButtonScrollView,
       self.emotionTitleLabel,
       self.emotionButtonStack,
-      self.recentSearchTableView
+      self.recentSearchCollectionView
     ].forEach {
       self.view.addSubview($0)
     }
@@ -192,11 +226,47 @@ final class SearchViewController: BaseViewController, View {
       make.height.equalTo(40)
     }
 
-    self.recentSearchTableView.snp.makeConstraints { make in
+    self.recentSearchCollectionView.snp.makeConstraints { make in
       make.top.equalTo(self.searchTextField.snp.bottom)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide)
     }
+  }
+}
+
+// MARK: - CollectionView
+
+private extension SearchViewController {
+  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    let item = NSCollectionLayoutItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0)
+      )
+    )
+    let group = UICollectionViewCompositionalLayout.group(
+      direction: .vertical,
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(28)
+      ),
+      subItem: item,
+      count: 1
+    )
+    let section = NSCollectionLayoutSection(group: group)
+    section.interGroupSpacing = 16
+
+    let header = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(37)
+      ),
+      elementKind: SearchRecentCell.reuseIdentifier,
+      alignment: .topLeading
+    )
+    section.boundarySupplementaryItems = [header]
+    let layout = UICollectionViewCompositionalLayout(section: section)
+    return layout
   }
 }
 
@@ -220,12 +290,12 @@ private extension SearchViewController {
 
   func toggleRecentSearch(to isHidden: Bool) {
     let duration = isHidden ? 0.2 : 0.3
-    self.recentSearchTableView.isHidden = false
+    self.recentSearchCollectionView.isHidden = false
     let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
-      self.recentSearchTableView.layer.opacity = isHidden ? 0.0 : 1.0
+      self.recentSearchCollectionView.layer.opacity = isHidden ? 0.0 : 1.0
     }
     animator.addCompletion { _ in
-      self.recentSearchTableView.isHidden = isHidden
+      self.recentSearchCollectionView.isHidden = isHidden
     }
     animator.startAnimation()
   }

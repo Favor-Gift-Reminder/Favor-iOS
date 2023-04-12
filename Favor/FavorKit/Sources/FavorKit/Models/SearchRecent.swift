@@ -1,5 +1,5 @@
 //
-//  RecentSearch.swift
+//  SearchRecent.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/11.
@@ -9,12 +9,12 @@ import Foundation
 
 import RealmSwift
 
-public class RecentSearch: Object {
+public class SearchRecent: Object {
 
   // MARK: - Properties
 
-  @Persisted(primaryKey: true) var searchText: String
-  @Persisted var searchDate: Date
+  @Persisted(primaryKey: true) public var searchText: String
+  @Persisted public var searchDate: Date
 
   // MARK: - Initializer
 

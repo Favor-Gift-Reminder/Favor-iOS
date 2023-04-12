@@ -41,7 +41,7 @@ public final class RealmManager: RealmCRUDable {
         schemaVersion: RealmManager.version,
         migrationBlock: { migration, oldVersion in
           if oldVersion < 4 {
-            migration.enumerateObjects(ofType: RecentSearch.className(), { oldObject, newObject in
+            migration.enumerateObjects(ofType: SearchRecent.className(), { oldObject, newObject in
               let searchText = oldObject!["searchText"] as! String
               let searchDate = oldObject!["searchDate"] as! Date
               newObject!["searchText"] = searchText
