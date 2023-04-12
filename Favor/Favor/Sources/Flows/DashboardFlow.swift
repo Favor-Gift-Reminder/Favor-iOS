@@ -23,9 +23,6 @@ final class DashboardFlow: Flow {
     case .tabBarIsRequired:
       return self.navigateToDashBoard()
 
-    case .tabBarIsReady:
-      return .none
-
     case .newGiftIsRequired:
       return self.navigateToNewGift()
 

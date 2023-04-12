@@ -32,7 +32,6 @@ enum AppStep: Step {
   
   // MARK: - Main
   case tabBarIsRequired
-  case tabBarIsReady
   
   // MARK: - Home
   case homeIsRequired
@@ -50,6 +49,7 @@ enum AppStep: Step {
   case newReminderIsComplete
   case reminderDetailIsRequired(Reminder)
   case reminderEditIsRequired(Reminder)
+  case reminderIsComplete
   
   // MARK: - MyPage
   case myPageIsRequired

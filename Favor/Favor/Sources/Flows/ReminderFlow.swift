@@ -41,6 +41,9 @@ final class ReminderFlow: Flow {
     case .reminderEditIsRequired(let reminder):
       return self.navigateToEditReminder(reminder: reminder)
 
+    case .reminderIsComplete:
+      return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
+
     default: return .none
     }
   }

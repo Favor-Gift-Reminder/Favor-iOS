@@ -41,17 +41,6 @@ final class ReminderViewController: BaseViewController, View {
   )
 
   // MARK: - UI Components
-
-  private lazy var selectDateButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.imagePlacement = .trailing
-    config.imagePadding = 10
-    config.image = .favorIcon(.down)
-
-    let button = UIButton(configuration: config)
-    return button
-  }()
-
   private lazy var newReminderButton = FavorBarButtonItem(.addNoti)
 
   private lazy var emptyImageView: UIImageView = {
@@ -143,8 +132,8 @@ final class ReminderViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.selectDateButton.rx.tap
-      .map { Reactor.Action.selectDateButtonDidTap }
+    self.rx.viewWillDisappear
+      .map { _ in Reactor.Action.viewWillDisappear }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -157,7 +146,7 @@ final class ReminderViewController: BaseViewController, View {
     reactor.state.map { $0.selectedDate }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
-        owner.updateSelectedDate(to: date)
+
       })
       .disposed(by: self.disposeBag)
 
@@ -170,17 +159,6 @@ final class ReminderViewController: BaseViewController, View {
   }
 
   // MARK: - Functions
-
-  private func updateSelectedDate(to date: DateComponents) {
-    guard let dateString = date.toYearMonthString() else { return }
-
-    var container = AttributeContainer()
-    container.font = .favorFont(.bold, size: 22)
-
-    self.selectDateButton.configurationUpdateHandler = { button in
-      button.configuration?.attributedTitle = AttributedString(dateString, attributes: container)
-    }
-  }
 
   // MARK: - UI Setups
 
@@ -221,12 +199,11 @@ final class ReminderViewController: BaseViewController, View {
 
 private extension ReminderViewController {
   func setupNavigationBar() {
-    let leftButton = UIBarButtonItem(customView: self.selectDateButton)
-    self.navigationItem.setLeftBarButton(leftButton, animated: false)
     self.navigationItem.setRightBarButton(self.newReminderButton, animated: false)
   }
 
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
+    // FIXME: VC가 pop되는 순간 약한 참조(weak self)로 인해 self를 잃게되어 fatalError가 발생
     let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
       guard
         let sectionType = self?.dataSource[sectionIndex].model
