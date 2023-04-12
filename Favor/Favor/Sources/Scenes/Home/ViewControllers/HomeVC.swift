@@ -48,7 +48,7 @@ final class HomeViewController: BaseViewController, View {
       header.rx.rightButtonDidTap
         .map { Reactor.Action.rightButtonDidTap(sectionItem.model) }
         .bind(to: self.reactor!.action)
-        .disposed(by: self.disposeBag)
+        .disposed(by: header.disposeBag)
       return header
     }
   )
@@ -141,14 +141,6 @@ final class HomeViewController: BaseViewController, View {
 
     self.searchButton.rx.tap
       .map { Reactor.Action.searchButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.collectionView.rx.itemSelected
-      .do(onNext: {
-        print($0)
-      })
-      .map { Reactor.Action.itemSelected($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     

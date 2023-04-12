@@ -17,7 +17,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   
-  var disposeBag = DisposeBag()
+  public var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
