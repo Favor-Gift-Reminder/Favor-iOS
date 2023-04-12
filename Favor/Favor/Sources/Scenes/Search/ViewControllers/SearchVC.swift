@@ -33,6 +33,12 @@ final class SearchViewController: BaseViewController, View {
         cell.updateText(recentSearch)
         return cell
       }
+    }, configureSupplementaryView: { _, collectionView, kind, indexPath in
+      let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        for: indexPath
+      ) as SearchRecentHeader
+      return header
     }
   )
   
@@ -93,6 +99,7 @@ final class SearchViewController: BaseViewController, View {
     )
 
     // Setup
+
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.isHidden = true
@@ -227,7 +234,7 @@ final class SearchViewController: BaseViewController, View {
     }
 
     self.recentSearchCollectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.searchTextField.snp.bottom)
+      make.top.equalTo(self.searchTextField.snp.bottom).offset(40)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide)
     }
@@ -259,12 +266,20 @@ private extension SearchViewController {
     let header = NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(37)
+        heightDimension: .estimated(21)
       ),
       elementKind: SearchRecentCell.reuseIdentifier,
       alignment: .topLeading
     )
     section.boundarySupplementaryItems = [header]
+
+    section.contentInsets = NSDirectionalEdgeInsets(
+      top: 16,
+      leading: 20,
+      bottom: 16,
+      trailing: 20
+    )
+
     let layout = UICollectionViewCompositionalLayout(section: section)
     return layout
   }

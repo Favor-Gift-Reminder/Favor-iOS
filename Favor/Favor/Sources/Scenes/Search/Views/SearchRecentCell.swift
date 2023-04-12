@@ -65,10 +65,6 @@ extension SearchRecentCell: BaseView {
   }
 
   func setupConstraints() {
-    self.snp.makeConstraints { make in
-      make.height.equalTo(28)
-    }
-
     self.iconImageView.snp.makeConstraints { make in
       make.leading.directionalVerticalEdges.equalToSuperview()
     }
