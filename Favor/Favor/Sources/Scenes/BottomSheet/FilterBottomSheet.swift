@@ -8,8 +8,8 @@
 import UIKit
 
 import FavorKit
-import RxFlow
 import RxCocoa
+import RxFlow
 import RxSwift
 
 final class FilterBottomSheet: BaseBottomSheet, Stepper {

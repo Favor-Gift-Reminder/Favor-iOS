@@ -13,9 +13,7 @@ import Moya
 extension Networking {
   static func convertToURLError(_ error: Error) -> URLError? {
     switch error {
-    case let MoyaError.underlying(afError as AFError, _):
-      fallthrough
-    case let afError as AFError:
+    case let afError as AFError, let MoyaError.underlying(afError as AFError, _):
       return afError.underlyingError as? URLError
     case let urlError as URLError:
       return urlError
@@ -35,7 +33,6 @@ extension Networking {
       break
     case let MoyaError.underlying(urlError as URLError, _):
       guard urlError.code == .networkConnectionLost else { fallthrough }
-      break
     default:
       return false
     }

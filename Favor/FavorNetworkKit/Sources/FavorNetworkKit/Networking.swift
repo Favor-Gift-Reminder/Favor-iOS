@@ -49,7 +49,7 @@ public final class Networking<TargetType: BaseTargetType> {
           case APIError.timeOut:
             // 요청 시간이 초과됐을 때,
             break
-          case let APIError.restError(_, statusCode, errorCode):
+          case APIError.restError(_, _, _):
             // statusCode가 200..<300 이외의 Response
             break
           default:

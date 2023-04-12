@@ -145,7 +145,7 @@ final class ReminderViewController: BaseViewController, View {
     // State
     reactor.state.map { $0.selectedDate }
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, date in
+      .drive(with: self, onNext: { _, _ in
 
       })
       .disposed(by: self.disposeBag)
