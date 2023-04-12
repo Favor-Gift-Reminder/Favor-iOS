@@ -58,7 +58,7 @@ final class SearchViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      self.setupRecentSearchTask()
+      self.fetchSearchRecents()
       return .just(.toggleIsEditingTo(true))
 
     case .backButtonDidTap:
@@ -118,7 +118,8 @@ final class SearchViewReactor: Reactor, Stepper {
 
 private extension SearchViewReactor {
   func refineRecentSearch(recentSearches: [SearchRecent]) -> SearchRecentSection.SearchRecentModel {
-    let recentSearchItems = recentSearches.map {
+    let sortedRecentSearches = recentSearches.sorted(by: { $0.searchDate > $1.searchDate })
+    let recentSearchItems = sortedRecentSearches.map {
       let searchText = $0.searchText
       return SearchRecentSection.SearchRecentItem.recent(searchText)
     }
@@ -128,7 +129,7 @@ private extension SearchViewReactor {
     )
   }
 
-  func setupRecentSearchTask() {
+  func fetchSearchRecents() {
     Task {
       do {
         let searches = try await RealmManager.shared.read(SearchRecent.self).toArray()
