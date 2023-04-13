@@ -203,13 +203,9 @@ private extension ReminderViewController {
   }
 
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    // FIXME: VC가 pop되는 순간 약한 참조(weak self)로 인해 self를 잃게되어 fatalError가 발생
-    let layout = UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
-      guard
-        let sectionType = self?.dataSource[sectionIndex].model
-      else { fatalError("Fatal error occured while setting up section datas.") }
-
-      return self?.createCollectionViewLayout(sectionType: sectionType)
+    let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
+      let sectionType = self.dataSource[sectionIndex].model
+      return self.createCollectionViewLayout(sectionType: sectionType)
     })
     layout.register(
       PastSectionBackgroundView.self,
