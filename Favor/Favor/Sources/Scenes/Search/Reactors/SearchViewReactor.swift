@@ -30,6 +30,7 @@ final class SearchViewReactor: Reactor, Stepper {
     case textDidChanged(String?)
     case editingDidEnd
     case returnKeyDidTap
+    case searchRecentDidSelected(SearchRecentSection.SearchRecentItem)
   }
   
   enum Mutation {
@@ -77,13 +78,16 @@ final class SearchViewReactor: Reactor, Stepper {
       
     case .returnKeyDidTap:
       if let searchString = self.currentState.searchString {
-        let searchRecent = SearchRecent(searchText: searchString, searchDate: .now)
-        _Concurrency.Task {
-          try await RealmManager.shared.update(searchRecent)
-          self.steps.accept(AppStep.searchResultIsRequired(searchString))
-        }
+        self.updateAndNavigateToSearchResult(searchString)
       }
       return .just(.toggleIsEditingTo(false))
+
+    case .searchRecentDidSelected(let item):
+      switch item {
+      case .recent(let recentSearchString):
+        self.updateAndNavigateToSearchResult(recentSearchString)
+      }
+      return .empty()
     }
   }
 
@@ -116,6 +120,8 @@ final class SearchViewReactor: Reactor, Stepper {
   }
 }
 
+// MARK: - Privates
+
 private extension SearchViewReactor {
   func refineRecentSearch(recentSearches: [SearchRecent]) -> SearchRecentSection.SearchRecentModel {
     let sortedRecentSearches = recentSearches.sorted(by: { $0.searchDate > $1.searchDate })
@@ -137,6 +143,14 @@ private extension SearchViewReactor {
       } catch {
         self.searchRecents.accept([])
       }
+    }
+  }
+
+  func updateAndNavigateToSearchResult(_ searchString: String) {
+    let searchRecent = SearchRecent(searchText: searchString, searchDate: .now)
+    _Concurrency.Task {
+      try await RealmManager.shared.update(searchRecent)
+      self.steps.accept(AppStep.searchResultIsRequired(searchString))
     }
   }
 }

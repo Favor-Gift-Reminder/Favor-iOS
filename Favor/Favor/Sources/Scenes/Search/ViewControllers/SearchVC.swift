@@ -113,6 +113,13 @@ final class SearchViewController: BaseViewController, View {
   override func bind() {
     guard let reactor = self.reactor else { return }
 
+    // Action
+    self.recentSearchCollectionView.rx.modelSelected(SearchRecentSection.SearchRecentItem.self)
+      .map { item in Reactor.Action.searchRecentDidSelected(item) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    // State
     reactor.state.map { [$0.searchRecents] }
       .bind(to: self.recentSearchCollectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
@@ -145,11 +152,15 @@ final class SearchViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.view.rx.anyGesture(.tap())
-      .when(.recognized)
-      .map { _ in Reactor.Action.editingDidEnd }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
+    self.view.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
+      guard let `self` = self else { return }
+      recognizer.delegate = self
+      delegate.simultaneousRecognitionPolicy = .never
+    })
+    .when(.recognized)
+    .map { _ in Reactor.Action.editingDidEnd }
+    .bind(to: reactor.action)
+    .disposed(by: self.disposeBag)
 
     self.searchTextField.rx.editingDidEndOnExit
       .map { Reactor.Action.returnKeyDidTap }
@@ -313,5 +324,20 @@ private extension SearchViewController {
       self.recentSearchCollectionView.isHidden = isHidden
     }
     animator.startAnimation()
+  }
+}
+
+// MARK: - Recognizer
+
+extension SearchViewController: UIGestureRecognizerDelegate {
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldReceive touch: UITouch
+  ) -> Bool {
+    guard
+      !(touch.view is UIControl),
+      !(touch.view is SearchRecentCell)
+    else { return false }
+    return true
   }
 }
