@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/02/07.
 //
 
+import OSLog
+
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -43,7 +45,8 @@ final class SearchViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .backButtonDidTap:
-      print("Back Button Did Tap")
+      os_log(.debug, "Back Button Did Tap")
+      self.steps.accept(AppStep.searchIsComplete)
       return .empty()
       
     case .searchDidBegin:

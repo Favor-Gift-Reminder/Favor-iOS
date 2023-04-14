@@ -31,8 +31,8 @@ open class BaseNavigationController: UINavigationController {
     // Bar Appearance
     let appearance = UINavigationBarAppearance()
     appearance.configureWithTransparentBackground()
-    appearance.backgroundColor = .clear
-    appearance.shadowColor = .clear
+    appearance.backgroundColor = .favorColor(.white)
+    appearance.shadowColor = .favorColor(.white)
     appearance.backButtonAppearance = backButtonAppearance
     appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
 

@@ -29,7 +29,7 @@ final class HomeViewController: BaseViewController, View {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
         cell.bindEmptyData(image: image, text: text)
         return cell
-      case .upcoming(let reactor): // 다가오는 이벤트
+      case .upcoming(let reactor): // 다가오는 기념일
         let cell = collectionView.dequeueReusableCell(for: indexPath) as UpcomingCell
         cell.reactor = reactor
         return cell
@@ -108,15 +108,17 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Binding
   
   override func bind() {
-    Observable.just([])
+    // State
+    self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
   
   func bind(reactor: HomeViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewDidLoad }
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -141,17 +143,14 @@ final class HomeViewController: BaseViewController, View {
     // State
     reactor.state.map { $0.toastMessage }
       .compactMap { $0 }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, message in
         owner.presentToast(message, duration: .short)
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { [$0.upcomingSection, $0.timelineSection] }
-      .do(onNext: {
-        print("⬆️ Section: \($0)")
-      })
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
 }

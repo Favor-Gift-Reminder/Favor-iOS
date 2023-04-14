@@ -25,7 +25,7 @@ final class UpcomingCell: BaseCardCell, Reusable, View {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    self.type = .friend
+    self.imageType = .friend
   }
 
   required init?(coder: NSCoder) {
@@ -38,24 +38,11 @@ final class UpcomingCell: BaseCardCell, Reusable, View {
     // Action
 
     // State
-    reactor.state.map { $0.iconImage }
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, image in
-        owner.image = image
-      })
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.title }
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, title in
-        owner.title = title
-      })
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.subtitle }
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, subtitle in
-        owner.subtitle = subtitle
+    reactor.state.map { $0.reminder }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, reminder in
+        owner.title = reminder.title
+        owner.subtitle = reminder.date.toDateString()
       })
       .disposed(by: self.disposeBag)
   }

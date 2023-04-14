@@ -12,5 +12,19 @@ public struct ReminderRequestDTO: Encodable {
   let reminderDate: String
   let isAlarmSet: Bool
   let alarmTime: String
-  let reminderMemo: String
+  let reminderMemo: String?
+
+  public init(
+    title: String,
+    reminderDate: String,
+    isAlarmSet: Bool,
+    alarmTime: String,
+    reminderMemo: String
+  ) {
+    self.title = title
+    self.reminderDate = reminderDate
+    self.isAlarmSet = isAlarmSet
+    self.alarmTime = alarmTime
+    self.reminderMemo = reminderMemo
+  }
 }

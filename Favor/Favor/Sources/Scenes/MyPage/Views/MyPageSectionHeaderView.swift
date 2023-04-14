@@ -72,7 +72,7 @@ final class MyPageSectionHeaderView: UICollectionReusableView, Reusable, View {
 
     reactor.state.map { $0.title }
       .filter { $0 != nil }
-      .asDriver(onErrorJustReturn: "")
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, title in
         owner.headerTitle.text = title
       })

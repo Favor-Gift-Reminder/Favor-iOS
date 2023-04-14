@@ -103,10 +103,10 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     // State
     reactor.state.map { $0.sectionType }
       .map { $0 == .upcoming }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
-        owner.titleLabel.text = isUpcoming ? "다가오는 이벤트" : "타임라인"
+        owner.titleLabel.text = isUpcoming ? "다가오는 기념일" : "타임라인"
         // Filter Buttons
         owner.secondLineStack.isHidden = isUpcoming ? true : false
         // Right Button
@@ -123,7 +123,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.selectedButtonIndex }
-      .asDriver(onErrorJustReturn: 0)
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, buttonIndex in
         owner.buttons.enumerated().forEach { currentIndex, button in
           button.isSelected = (currentIndex == buttonIndex) ? true : false
@@ -204,13 +204,9 @@ private extension HeaderView {
     var attributedTitle = AttributedString(title)
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
+    configuration.baseBackgroundColor = .clear
     configuration.baseForegroundColor = .favorColor(.titleAndLine)
-    configuration.contentInsets = NSDirectionalEdgeInsets(
-      top: .zero,
-      leading: .zero,
-      bottom: .zero,
-      trailing: .zero
-    )
+    configuration.contentInsets = .zero
     
     let handler: UIButton.ConfigurationUpdateHandler = { button in
       switch button.state {

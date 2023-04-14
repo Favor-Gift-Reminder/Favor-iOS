@@ -120,7 +120,9 @@ final class SignUpViewReactor: Reactor, Stepper {
           .just(.updateLoading(true)),
           networking.request(.postSignUp(email: email, password: password))
             .debug()
-            .flatMap { _ -> Observable<Mutation> in
+            .flatMap { response -> Observable<Mutation> in
+              let data: ResponseDTO<UserResponseDTO.User> = APIManager.decode(response.data)
+              print(data.data.userNo)
               self.steps.accept(AppStep.setProfileIsRequired)
               return .just(.updateLoading(false))
             }

@@ -40,6 +40,7 @@ extension UIImage {
     case share
     case show
     case uncheck
+    case photo
 
     case down
     case left
@@ -59,10 +60,7 @@ extension UIImage {
   }
 
   public func resize(newWidth: CGFloat) -> UIImage {
-    let scale = newWidth / self.size.width
-    let newHeight = self.size.height * scale
-
-    let newSize = CGSize(width: newWidth, height: newHeight)
+    let newSize = CGSize(width: newWidth, height: newWidth)
     let renderer = UIGraphicsImageRenderer(size: newSize)
     let renderedImage = renderer.image { _ in
       self.draw(in: CGRect(origin: .zero, size: newSize))

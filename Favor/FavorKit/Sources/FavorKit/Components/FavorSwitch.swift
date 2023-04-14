@@ -18,21 +18,17 @@ public final class FavorSwitch: UIButton {
 
   // MARK: - Properties
 
+  private let disposeBag = DisposeBag()
+
   private var animator: UIViewPropertyAnimator?
 
-  fileprivate var isOn: Bool = false {
-    didSet { self.updateState() }
-  }
+  fileprivate var isOn = BehaviorRelay<Bool>(value: false)
 
   /// Switch가 켜졌을 때의 색상
-  public var onTintColor: SwitchColor = (.favorColor(.main), .favorColor(.white)) {
-    didSet { self.updateColor() }
-  }
+  public var onTintColor: SwitchColor = (.favorColor(.sub), .favorColor(.white))
 
   /// Switch가 꺼졌을 때의 색상
-  public var offTintColor: SwitchColor = (.favorColor(.line3), .favorColor(.white)) {
-    didSet { self.updateColor() }
-  }
+  public var offTintColor: SwitchColor = (.favorColor(.line3), .favorColor(.white))
 
   /// Thumb와 Bar의 top, bottom 간격
   public var thumbVerticalPadding: CGFloat = 1
@@ -64,7 +60,13 @@ public final class FavorSwitch: UIButton {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
-    self.updateColor()
+
+    self.isOn
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, isOn in
+        owner.updateState(isOn)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   required init?(coder: NSCoder) {
@@ -74,7 +76,7 @@ public final class FavorSwitch: UIButton {
   // MARK: - Functions
 
   public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    self.isOn.toggle()
+    self.isOn.accept(!self.isOn.value)
   }
 
   public override func layoutSublayers(of layer: CALayer) {
@@ -114,15 +116,15 @@ extension FavorSwitch: BaseView {
 // MARK: - Privates
 
 private extension FavorSwitch {
-  func updateState() {
-    let centerX = self.isOn
+  func updateState(_ isOn: Bool) {
+    let centerX = isOn
       ? self.frame.width - (self.thumbView.frame.width / 2) - self.thumbHorizontalPadding
       : (self.thumbView.frame.width / 2) + self.thumbHorizontalPadding
     self.animator = UIViewPropertyAnimator(
       duration: self.duration,
       curve: .easeInOut,
       animations: {
-        self.updateColor()
+        self.updateColor(isOn)
         self.thumbView.snp.updateConstraints { make in
           make.centerX.equalTo(centerX)
         }
@@ -138,8 +140,8 @@ private extension FavorSwitch {
     self.thumbView.layer.cornerRadius = self.thumbView.frame.height / 2
   }
 
-  func updateColor() {
-    if self.isOn {
+  func updateColor(_ isOn: Bool) {
+    if isOn {
       self.barView.backgroundColor = self.onTintColor.bar
       self.thumbView.backgroundColor = self.onTintColor.thumb
     } else {
@@ -152,8 +154,11 @@ private extension FavorSwitch {
 // MARK: - Reactive
 
 public extension Reactive where Base: FavorSwitch {
-  var isToggled: ControlEvent<Bool> {
-    let source = Observable.just(base.isOn)
-    return ControlEvent(events: source)
+  var isOn: ControlProperty<Bool> {
+    let source = base.isOn
+    let bindingObserver = Binder(self.base) { favorSwitch, isOn in
+      favorSwitch.isOn.accept(isOn)
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
   }
 }
