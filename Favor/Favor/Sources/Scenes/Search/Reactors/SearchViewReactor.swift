@@ -19,9 +19,6 @@ final class SearchViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-
-  // Global State
-  let searchRecents = PublishRelay<[SearchRecent]>()
   
   enum Action {
     case viewNeedsLoaded
@@ -59,8 +56,15 @@ final class SearchViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      self.fetchSearchRecents()
-      return .just(.toggleIsEditingTo(true))
+      return self.createSearchRecents()
+        .asObservable()
+        .flatMap { searchRecents -> Observable<Mutation> in
+          let model = self.refineRecentSearch(searchRecents: searchRecents)
+          return .concat([
+            .just(.updateRecentSearches(model)),
+            .just(.toggleIsEditingTo(true))
+          ])
+        }
 
     case .backButtonDidTap:
       os_log(.debug, "Back Button Did Tap")
@@ -90,17 +94,6 @@ final class SearchViewReactor: Reactor, Stepper {
       return .empty()
     }
   }
-
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    let searchRecents = self.searchRecents.flatMap { searchRecents -> Observable<Mutation> in
-      let searchRecentModel = self.refineRecentSearch(recentSearches: searchRecents)
-      return .just(.updateRecentSearches(searchRecentModel))
-    }
-    return .merge(
-      mutation,
-      searchRecents
-    )
-  }
   
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
@@ -123,8 +116,8 @@ final class SearchViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension SearchViewReactor {
-  func refineRecentSearch(recentSearches: [SearchRecent]) -> SearchRecentSection.SearchRecentModel {
-    let sortedRecentSearches = recentSearches.sorted(by: { $0.searchDate > $1.searchDate })
+  func refineRecentSearch(searchRecents: [SearchRecent]) -> SearchRecentSection.SearchRecentModel {
+    let sortedRecentSearches = searchRecents.sorted(by: { $0.searchDate > $1.searchDate })
     let recentSearchItems = sortedRecentSearches.map {
       let searchText = $0.searchText
       return SearchRecentSection.SearchRecentItem.recent(searchText)
@@ -135,13 +128,19 @@ private extension SearchViewReactor {
     )
   }
 
-  func fetchSearchRecents() {
-    Task {
-      do {
-        let searches = try await RealmManager.shared.read(SearchRecent.self).toArray()
-        self.searchRecents.accept(searches)
-      } catch {
-        self.searchRecents.accept([])
+  func createSearchRecents() -> Single<[SearchRecent]> {
+    return Single<[SearchRecent]>.create { single in
+      let task = Task {
+        do {
+          let searches = try await RealmManager.shared.read(SearchRecent.self).toArray()
+          single(.success(searches))
+        } catch {
+          single(.failure(error))
+        }
+      }
+
+      return Disposables.create {
+        task.cancel()
       }
     }
   }
