@@ -22,6 +22,12 @@ extension Date {
     return formatter.string(from: self)
   }
 
+  public func toShortenDateString() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy. M. d"
+    return formatter.string(from: self)
+  }
+
   public func toTimeString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "a h시 m분"

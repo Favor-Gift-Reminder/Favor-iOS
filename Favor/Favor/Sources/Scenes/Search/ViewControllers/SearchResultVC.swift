@@ -240,6 +240,7 @@ private extension SearchResultViewController {
       subItem: item,
       count: 2
     )
+    group.interItemSpacing = .fixed(5)
     let section = NSCollectionLayoutSection(group: group)
     section.contentInsets = NSDirectionalEdgeInsets(
       top: 32,
@@ -247,6 +248,7 @@ private extension SearchResultViewController {
       bottom: .zero,
       trailing: 20
     )
+    section.interGroupSpacing = 5
 
     let layout = UICollectionViewCompositionalLayout(section: section)
     return layout

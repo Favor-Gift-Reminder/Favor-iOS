@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/04/14.
 //
 
+import FavorKit
 import ReactorKit
 
 final class SearchGiftResultCellReactor: Reactor {
@@ -22,7 +23,7 @@ final class SearchGiftResultCellReactor: Reactor {
   }
 
   struct State {
-
+    var gift: Gift = Gift(0, name: "테스트", relatedFriend: nil)
   }
 
   // MARK: - Initializer

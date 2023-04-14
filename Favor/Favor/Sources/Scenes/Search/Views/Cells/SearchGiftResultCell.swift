@@ -62,7 +62,17 @@ final class SearchGiftResultCell: UICollectionViewCell, View, Reusable { // TODO
   // MARK: - Binding
 
   func bind(reactor: SearchGiftResultCellReactor) {
-    //
+    // Action
+
+    // State
+    reactor.state.map { $0.gift }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, gift in
+        // image
+        owner.titleLabel.text = gift.name
+        owner.dateLabel.text = gift.date?.toShortenDateString()
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 
@@ -70,7 +80,7 @@ final class SearchGiftResultCell: UICollectionViewCell, View, Reusable { // TODO
 
 extension SearchGiftResultCell: BaseView {
   func setupStyles() {
-    //
+    self.backgroundColor = .favorColor(.main)
   }
 
   func setupLayouts() {
