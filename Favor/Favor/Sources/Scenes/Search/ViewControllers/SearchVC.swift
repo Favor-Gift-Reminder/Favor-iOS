@@ -78,7 +78,16 @@ final class SearchViewController: BaseViewController, View {
         owner.searchBar.textField.becomeFirstResponder()
       })
       .disposed(by: self.disposeBag)
-    
+
+    self.rx.viewDidDisappear
+      .map { _ in Reactor.Action.viewDidDisappear }
+      .bind(with: self, onNext: { owner, _ in
+        if owner.isMovingFromParent {
+          reactor.action.onNext(.viewDidDisappear)
+        }
+      })
+      .disposed(by: self.disposeBag)
+
     self.searchBar.rx.leftItemDidTap
       .map { Reactor.Action.backButtonDidTap }
       .bind(to: reactor.action)

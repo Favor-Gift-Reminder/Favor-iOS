@@ -28,6 +28,7 @@ final class ReminderViewReactor: Reactor, Stepper {
     case selectDateButtonDidTap
     case reminderDidSelected(ReminderSection.ReminderSectionItem)
     case newReminderButtonDidTap
+    case viewWillDisappear
   }
 
   enum Mutation {
@@ -83,6 +84,10 @@ final class ReminderViewReactor: Reactor, Stepper {
             ))
           ])
         }
+
+    case .viewWillDisappear:
+      self.steps.accept(AppStep.reminderIsComplete)
+      return .empty()
 
     case .selectDateButtonDidTap:
       os_log(.debug, "Select date button did tap.")

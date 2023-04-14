@@ -23,7 +23,6 @@ final class HeaderViewReactor: Reactor {
     case allButtonDidTap
     case getButtonDidTap
     case giveButotnDidTap
-    case rightButtonDidTap
   }
   
   enum Mutation {
@@ -56,11 +55,6 @@ final class HeaderViewReactor: Reactor {
     case .giveButotnDidTap:
       os_log(.debug, "Give button did tap.")
       return .just(.updateSelectedButton(2))
-      
-    case .rightButtonDidTap:
-      os_log(.debug, "Right button did tap.")
-      self.rightButtonDidTap.accept(())
-      return .empty()
     }
   }
   

@@ -17,7 +17,7 @@ final class SearchFlow: Flow {
   // MARK: - Properties
   
   var root: Presentable { self.rootViewController }
-  private var rootViewController: BaseNavigationController
+  private let rootViewController: BaseNavigationController
 
   // MARK: - Initializer
 

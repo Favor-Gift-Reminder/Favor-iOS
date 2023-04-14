@@ -8,8 +8,9 @@
 import UIKit
 
 import FavorKit
+import Reusable
 
-final class BackgroundView: UICollectionReusableView, ReuseIdentifying {
+final class BackgroundView: UICollectionReusableView, Reusable {
   
   // MARK: - Initializer
   

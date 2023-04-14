@@ -13,11 +13,9 @@ import Reusable
 import RxCocoa
 import SnapKit
 
-final class TimelineCell: UICollectionViewCell, Reusable, View {
+final class TimelineCell: BaseCollectionViewCell, Reusable, View {
   
   // MARK: - Properties
-  
-  var disposeBag = DisposeBag()
   
   // MARK: - UI Components
 

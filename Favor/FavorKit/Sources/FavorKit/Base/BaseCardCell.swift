@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import SnapKit
 
-open class BaseCardCell: UICollectionViewCell, BaseView {
+open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
   // MARK: - Constants
 
@@ -36,8 +36,6 @@ open class BaseCardCell: UICollectionViewCell, BaseView {
   }
 
   // MARK: - Properties
-
-  public var disposeBag = DisposeBag()
 
   /// Cell의 좌측에 위치한 아이콘에 들어가는 이미지의 타입
   public var imageType: CellType = .undefined {

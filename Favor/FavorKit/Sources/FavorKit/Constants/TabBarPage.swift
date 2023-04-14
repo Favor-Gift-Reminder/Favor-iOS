@@ -8,7 +8,7 @@
 import UIKit
 
 public enum TabBarPage: Int, CaseIterable {
-  case home = 0, reminder, myPage
+  case home = 0, newGift, myPage
   
   public var tabBarItem: UITabBarItem {
     var tabBar = UITabBarItem()
@@ -19,10 +19,10 @@ public enum TabBarPage: Int, CaseIterable {
         image: .favorIcon(.home)?.resize(newWidth: 25),
         selectedImage: nil
       )
-    case .reminder:
+    case .newGift:
       tabBar = UITabBarItem(
         title: nil,
-        image: .favorIcon(.noti)?.resize(newWidth: 25),
+        image: .favorIcon(.newGift)?.resize(newWidth: 25),
         selectedImage: nil
       )
     case .myPage:
