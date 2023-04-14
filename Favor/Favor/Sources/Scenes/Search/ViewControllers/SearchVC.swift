@@ -22,6 +22,11 @@ final class SearchViewController: BaseViewController, View {
   
   let giftCategories: [String] = ["가벼운 선물", "생일", "집들이", "시험", "승진", "졸업", "기타"]
   let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
+
+  private enum Constants {
+    static let fadeInDuration = 0.15
+    static let fadeOutDuration = 0.2
+  }
   
   // MARK: - Properties
 
@@ -316,7 +321,7 @@ private extension SearchViewController {
   }
 
   func toggleRecentSearch(to isHidden: Bool) {
-    let duration = isHidden ? 0.2 : 0.3
+    let duration = isHidden ? Constants.fadeInDuration : Constants.fadeOutDuration
     self.recentSearchCollectionView.isHidden = false
     let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
       self.recentSearchCollectionView.layer.opacity = isHidden ? 0.0 : 1.0

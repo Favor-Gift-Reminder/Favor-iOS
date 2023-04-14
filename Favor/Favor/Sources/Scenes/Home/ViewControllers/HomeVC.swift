@@ -163,6 +163,7 @@ private extension HomeViewController {
       self.searchButton,
       self.newGiftButton
     ]
+    self.navigationController?.setNavigationBarHidden(false, animated: false)
   }
   
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {

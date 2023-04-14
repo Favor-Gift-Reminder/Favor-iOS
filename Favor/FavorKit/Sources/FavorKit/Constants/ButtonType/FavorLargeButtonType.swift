@@ -9,6 +9,7 @@ import UIKit
 
 public enum FavorLargeButtonType {
   case main(String)
+  /// Stroke 설정 필요
   case main2(String)
   case dark1(String)
   case dark2(String)
@@ -24,8 +25,8 @@ public enum FavorLargeButtonType {
       config.baseForegroundColor = .favorColor(.white)
       titleString = title
     case .main2(let title):
-      config.baseBackgroundColor = .favorColor(.button)
-      config.baseForegroundColor = .favorColor(.main)
+      config.baseBackgroundColor = .favorColor(.white)
+      config.baseForegroundColor = .favorColor(.subtext)
       titleString = title
     case .dark1(let title):
       config.baseBackgroundColor = .favorColor(.titleAndLine)

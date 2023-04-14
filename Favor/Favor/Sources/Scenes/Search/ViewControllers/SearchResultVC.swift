@@ -16,7 +16,7 @@ import RxSwift
 import SnapKit
 
 final class SearchResultViewController: BaseViewController, View {
-  typealias SearchGiftResultDataSource = RxCollectionViewSectionedReloadDataSource<SearchGiftResultSection.SearchGiftResultModel>
+  typealias SearchGiftResultDataSource = RxCollectionViewSectionedReloadDataSource<SearchResultSection.SearchGiftResultModel>
   
   // MARK: - Constants
   
@@ -27,6 +27,10 @@ final class SearchResultViewController: BaseViewController, View {
       switch item {
       case .gift(let reactor):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchGiftResultCell
+        cell.reactor = reactor
+        return cell
+      case .user(let reactor):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchUserResultCell
         cell.reactor = reactor
         return cell
       }
@@ -60,6 +64,7 @@ final class SearchResultViewController: BaseViewController, View {
 
     // register
     collectionView.register(cellType: SearchGiftResultCell.self)
+    collectionView.register(cellType: SearchUserResultCell.self)
 
     // Configure
     collectionView.showsHorizontalScrollIndicator = false
@@ -76,7 +81,15 @@ final class SearchResultViewController: BaseViewController, View {
     // Action
 
     // State
-    reactor.state.map { [$0.giftResults] }
+    reactor.state
+      .map { state in
+        switch state.selectedSearch {
+        case .gift:
+          return [state.giftResults]
+        case .user:
+          return [state.userResult]
+        }
+      }
       .bind(to: self.giftCollectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
@@ -126,6 +139,7 @@ final class SearchResultViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, selected in
         owner.updateSelectedSearchButton(to: selected)
+        owner.giftCollectionView.isScrollEnabled = selected == .gift
       })
       .disposed(by: self.disposeBag)
   }
@@ -225,32 +239,34 @@ private extension SearchResultViewController {
 
 private extension SearchResultViewController {
   func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
+    return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
+      let sectionType = self.dataSource[sectionIndex].model
+      return self.makeCompositionalSection(sectionType: sectionType)
+    })
+  }
+
+  func makeCompositionalSection(
+    sectionType: SearchResultSectionType
+  ) -> NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(0.5),
-        heightDimension: .fractionalWidth(0.5)
-      )
+      layoutSize: sectionType.cellSize
     )
+
     let group = UICollectionViewCompositionalLayout.group(
       direction: .horizontal,
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalWidth(0.5)
+        heightDimension: sectionType.cellSize.heightDimension
       ),
       subItem: item,
-      count: 2
+      count: sectionType.columns
     )
-    group.interItemSpacing = .fixed(5)
-    let section = NSCollectionLayoutSection(group: group)
-    section.contentInsets = NSDirectionalEdgeInsets(
-      top: 32,
-      leading: 20,
-      bottom: .zero,
-      trailing: 20
-    )
-    section.interGroupSpacing = 5
+    group.interItemSpacing = .fixed(sectionType.spacing)
 
-    let layout = UICollectionViewCompositionalLayout(section: section)
-    return layout
+    let section = NSCollectionLayoutSection(group: group)
+    section.contentInsets = sectionType.sectionInset
+    section.interGroupSpacing = sectionType.spacing
+
+    return section
   }
 }

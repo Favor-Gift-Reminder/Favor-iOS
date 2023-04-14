@@ -37,9 +37,13 @@ final class SearchResultViewReactor: Reactor, Stepper {
   struct State {
     var searchString: String
     var selectedSearch: SelectedSearch = .gift
-    var giftResults = SearchGiftResultSection.SearchGiftResultModel(
-      model: .zero,
+    var giftResults = SearchResultSection.SearchGiftResultModel(
+      model: .gift,
       items: [.gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor())]
+    )
+    var userResult = SearchResultSection.SearchGiftResultModel(
+      model: .user,
+      items: [.user(SearchUserResultCellReactor())]
     )
   }
   

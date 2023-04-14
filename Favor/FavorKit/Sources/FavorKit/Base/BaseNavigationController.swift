@@ -9,11 +9,24 @@ import UIKit
 
 open class BaseNavigationController: UINavigationController {
 
+  // MARK: - Life Cycle
+
   open override func viewDidLoad() {
     super.viewDidLoad()
 
     self.setupNavigationAppearance()
   }
+
+  open override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+
+    if let interactivePopGestureRecognizer = self.interactivePopGestureRecognizer {
+      interactivePopGestureRecognizer.isEnabled = true
+      interactivePopGestureRecognizer.delegate = self
+    }
+  }
+
+  // MARK: - Functions
 
   func setupNavigationAppearance() {
     // Button Appearance
@@ -47,5 +60,13 @@ open class BaseNavigationController: UINavigationController {
       .font: UIFont.favorFont(.bold, size: 18)
     ]
     navigationItem.backButtonDisplayMode = .minimal
+  }
+}
+
+// MARK: - Recognizer
+
+extension BaseNavigationController: UIGestureRecognizerDelegate {
+  public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    return self.viewControllers.count > 1
   }
 }
