@@ -43,7 +43,7 @@ final class HomeViewController: BaseViewController, View {
       let sectionItem = dataSource[indexPath.section]
       let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
-        for: indexPath) as HeaderView
+        for: indexPath) as HomeHeaderView
       header.reactor = HeaderViewReactor(section: sectionItem.model)
       header.rx.rightButtonDidTap
         .map { Reactor.Action.rightButtonDidTap(sectionItem.model) }
@@ -68,8 +68,8 @@ final class HomeViewController: BaseViewController, View {
     collectionView.register(cellType: UpcomingCell.self)
     collectionView.register(cellType: TimelineCell.self)
     collectionView.register(
-      supplementaryViewType: HeaderView.self,
-      ofKind: HeaderView.reuseIdentifier
+      supplementaryViewType: HomeHeaderView.self,
+      ofKind: HomeHeaderView.reuseIdentifier
     )
 
     collectionView.backgroundColor = .clear
@@ -120,7 +120,7 @@ final class HomeViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { _, endDisplayingView in
         let (view, _, _) = endDisplayingView
-        guard let view = view as? HeaderView else { return }
+        guard let view = view as? HomeHeaderView else { return }
         view.disposeBag = DisposeBag()
       })
       .disposed(by: self.disposeBag)
@@ -242,7 +242,7 @@ private extension HomeViewController {
         widthDimension: .fractionalWidth(1.0),
         heightDimension: sectionType.headerHeight
       ),
-      elementKind: HeaderView.reuseIdentifier,
+      elementKind: HomeHeaderView.reuseIdentifier,
       alignment: .top
     )
     return sectionHeader
