@@ -5,11 +5,18 @@
 //  Created by 이창준 on 2023/02/09.
 //
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow
 
 final class SearchResultViewReactor: Reactor, Stepper {
+
+  // MARK: - Constants
+
+  public enum SelectedSearch {
+    case gift, user
+  }
   
   // MARK: - Properties
   
@@ -19,14 +26,21 @@ final class SearchResultViewReactor: Reactor, Stepper {
   enum Action {
     case backButtonDidTap
     case textDidChanged(String?)
+    case selectedSearchDidUpdate(SelectedSearch)
   }
   
   enum Mutation {
     case updateText(String?)
+    case updateSelectedSearch(SelectedSearch)
   }
   
   struct State {
     var searchString: String
+    var selectedSearch: SelectedSearch = .gift
+    var giftResults = SearchGiftResultSection.SearchGiftResultModel(
+      model: .zero,
+      items: [.gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor())]
+    )
   }
   
   // MARK: - Initializer
@@ -48,6 +62,9 @@ final class SearchResultViewReactor: Reactor, Stepper {
 
     case .textDidChanged(let text):
       return .just(.updateText(text))
+
+    case .selectedSearchDidUpdate(let selected):
+      return .just(.updateSelectedSearch(selected))
     }
   }
   
@@ -57,6 +74,9 @@ final class SearchResultViewReactor: Reactor, Stepper {
     switch mutation {
     case .updateText(let text):
       newState.searchString = text ?? ""
+
+    case .updateSelectedSearch(let selected):
+      newState.selectedSearch = selected
     }
     
     return newState
