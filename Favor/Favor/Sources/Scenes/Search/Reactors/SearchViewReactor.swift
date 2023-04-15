@@ -13,42 +13,67 @@ import RealmSwift
 import RxCocoa
 import RxFlow
 
+public enum SearchViewMode {
+  case search, result
+}
+
 final class SearchViewReactor: Reactor, Stepper {
-  
+
+  // MARK: - Constants
+
+  public enum SearchType {
+    case gift, user
+  }
+
   // MARK: - Properties
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  let mode: SearchViewMode
   
   enum Action {
     case viewNeedsLoaded
-    case backButtonDidTap
+    case viewWillDisappear
     case editingDidBegin
     case textDidChanged(String?)
     case editingDidEnd
     case returnKeyDidTap
     case searchRecentDidSelected(SearchRecentSection.SearchRecentItem)
+    case searchTypeDidSelected(SearchType)
   }
   
   enum Mutation {
     case toggleIsEditingTo(Bool)
     case updateText(String?)
     case updateRecentSearches(SearchRecentSection.SearchRecentModel)
+    case updateSearchType(SearchType)
   }
   
   struct State {
     var isEditing: Bool = false
-    var searchString: String?
+    var searchQuery: String?
     var searchRecents = SearchRecentSection.SearchRecentModel(
       model: .zero,
       items: []
+    )
+    var selectedSearchType: SearchType = .gift
+    var giftResults = SearchResultSection.SearchGiftResultModel(
+      model: .gift,
+      items: [.gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor())]
+    )
+    var userResult = SearchResultSection.SearchGiftResultModel(
+      model: .user,
+      items: [.user(SearchUserResultCellReactor())]
     )
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  init(mode: SearchViewMode, searchQuery: String? = nil) {
+    self.initialState = State(
+      searchQuery: searchQuery
+    )
+    self.mode = mode
   }
 
   // MARK: - Functions
@@ -66,9 +91,13 @@ final class SearchViewReactor: Reactor, Stepper {
           ])
         }
 
-    case .backButtonDidTap:
-      os_log(.debug, "Back Button Did Tap")
-      self.steps.accept(AppStep.searchIsComplete)
+    case .viewWillDisappear:
+      switch self.mode {
+      case .search:
+        self.steps.accept(AppStep.searchIsComplete)
+      case .result:
+        self.steps.accept(AppStep.searchResultIsComplete)
+      }
       return .empty()
       
     case .editingDidBegin:
@@ -81,7 +110,7 @@ final class SearchViewReactor: Reactor, Stepper {
       return .just(.toggleIsEditingTo(false))
       
     case .returnKeyDidTap:
-      if let searchString = self.currentState.searchString {
+      if let searchString = self.currentState.searchQuery {
         self.updateAndNavigateToSearchResult(searchString)
       }
       return .just(.toggleIsEditingTo(false))
@@ -92,9 +121,12 @@ final class SearchViewReactor: Reactor, Stepper {
         self.updateAndNavigateToSearchResult(recentSearchString)
       }
       return .empty()
+
+    case .searchTypeDidSelected(let searchType):
+      return .just(.updateSearchType(searchType))
     }
   }
-  
+
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
     
@@ -103,10 +135,13 @@ final class SearchViewReactor: Reactor, Stepper {
       newState.isEditing = isEditing
 
     case .updateText(let text):
-      newState.searchString = text
+      newState.searchQuery = text
 
     case .updateRecentSearches(let recentSearches):
       newState.searchRecents = recentSearches
+
+    case .updateSearchType(let searchType):
+      newState.selectedSearchType = searchType
     }
     
     return newState

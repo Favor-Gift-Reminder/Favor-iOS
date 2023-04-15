@@ -15,7 +15,7 @@ import RxGesture
 import RxSwift
 import SnapKit
 
-final class SearchResultViewController: BaseViewController, View {
+final class SearchResultViewController: BaseSearchViewController {
   typealias SearchGiftResultDataSource = RxCollectionViewSectionedReloadDataSource<SearchResultSection.SearchGiftResultModel>
   
   // MARK: - Constants
@@ -38,8 +38,6 @@ final class SearchResultViewController: BaseViewController, View {
   )
   
   // MARK: - UI Components
-  
-  private let searchTextField = FavorSearchBar()
 
   // Search Selected
   private lazy var giftSelectedButton = self.makeSelectedSearchButton(with: "선물")
@@ -55,7 +53,6 @@ final class SearchResultViewController: BaseViewController, View {
   private let selectedIndicatorBarView = SelectedIndicatorBar()
 
   // Contents
-
   private lazy var giftCollectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
@@ -83,7 +80,7 @@ final class SearchResultViewController: BaseViewController, View {
     // State
     reactor.state
       .map { state in
-        switch state.selectedSearch {
+        switch state.selectedSearchType {
         case .gift:
           return [state.giftResults]
         case .user:
@@ -94,39 +91,22 @@ final class SearchResultViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
   }
   
-  func bind(reactor: SearchResultViewReactor) {
-    // Action
-    self.view.rx.screenEdgePanGesture()
-      .skip(1)
-      .asDriver(onErrorDriveWith: .empty())
-      .drive(with: self, onNext: { owner, _ in
-        print("Pan Gesture")
-        owner.navigationController?.popViewController(animated: true)
-      })
-      .disposed(by: self.disposeBag)
+  override func bind(reactor: SearchViewReactor) {
+    super.bind(reactor: reactor)
     
-    self.searchTextField.rx.backButtonDidTap
-      .map { Reactor.Action.backButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.searchTextField.rx.text
-      .map { Reactor.Action.textDidChanged($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
+    // Action
     self.giftSelectedButton.rx.tap
-      .map { Reactor.Action.selectedSearchDidUpdate(.gift) }
+      .map { Reactor.Action.searchTypeDidSelected(.gift) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.userSelectedButton.rx.tap
-      .map { Reactor.Action.selectedSearchDidUpdate(.user) }
+      .map { Reactor.Action.searchTypeDidSelected(.user) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.searchString }
+    reactor.state.map { $0.searchQuery }
       .take(1) // 최초 1회만 필요
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, searchString in
@@ -134,8 +114,9 @@ final class SearchResultViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { $0.selectedSearch }
+    reactor.state.map { $0.selectedSearchType }
       .distinctUntilChanged()
+      .skip(1)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, selected in
         owner.updateSelectedSearchButton(to: selected)
@@ -219,7 +200,7 @@ private extension SearchResultViewController {
     return button
   }
 
-  func updateSelectedSearchButton(to selected: SearchResultViewReactor.SelectedSearch) {
+  func updateSelectedSearchButton(to selected: SearchViewReactor.SearchType) {
     UIViewPropertyAnimator(duration: 0.3, curve: .easeInOut) {
       self.giftSelectedButton.isSelected = selected == .gift
       self.userSelectedButton.isSelected = selected == .user

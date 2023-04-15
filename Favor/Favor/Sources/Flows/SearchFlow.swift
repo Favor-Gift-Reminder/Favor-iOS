@@ -54,7 +54,7 @@ final class SearchFlow: Flow {
 private extension SearchFlow {
   func navigateToSearch() -> FlowContributors {
     let searchVC = SearchViewController()
-    let searchReactor = SearchViewReactor()
+    let searchReactor = SearchViewReactor(mode: .search)
     searchVC.reactor = searchReactor
 
     DispatchQueue.main.async {
@@ -68,9 +68,9 @@ private extension SearchFlow {
     ))
   }
 
-  func navigateToSearchResult(with queryString: String) -> FlowContributors {
+  func navigateToSearchResult(with searchQuery: String) -> FlowContributors {
     let searchResultVC = SearchResultViewController()
-    let searchResultReactor = SearchResultViewReactor(initialSearchString: queryString)
+    let searchResultReactor = SearchViewReactor(mode: .result, searchQuery: searchQuery)
     searchResultVC.reactor = searchResultReactor
 
     DispatchQueue.main.async {

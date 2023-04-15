@@ -15,7 +15,7 @@ import RxDataSources
 import RxGesture
 import SnapKit
 
-final class SearchViewController: BaseViewController, View {
+final class SearchViewController: BaseSearchViewController {
   typealias RecentSearchDataSource = RxCollectionViewSectionedReloadDataSource<SearchRecentSection.SearchRecentModel>
   
   // MARK: - Constants
@@ -49,14 +49,6 @@ final class SearchViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  // SearchBar
-  private lazy var searchTextField: FavorSearchBar = {
-    let searchBar = FavorSearchBar()
-    searchBar.searchBarHeight = 40
-    searchBar.placeholder = "선물, 유저 ID를 검색해보세요"
-    return searchBar
-  }()
-  
   // Gift Category
   private lazy var giftCategoryTitleLabel = self.makeTitleLabel(title: "선물 카테고리")
   
@@ -89,27 +81,6 @@ final class SearchViewController: BaseViewController, View {
     stackView.spacing = 34
     return stackView
   }()
-
-  private lazy var recentSearchCollectionView: UICollectionView = {
-    let collectionView = UICollectionView(
-      frame: .zero,
-      collectionViewLayout: self.setupCollectionViewLayout()
-    )
-
-    // Register
-    collectionView.register(cellType: SearchRecentCell.self)
-    collectionView.register(
-      supplementaryViewType: SearchRecentHeader.self,
-      ofKind: SearchRecentCell.reuseIdentifier
-    )
-
-    // Setup
-
-    collectionView.showsHorizontalScrollIndicator = false
-    collectionView.showsVerticalScrollIndicator = false
-    collectionView.isHidden = true
-    return collectionView
-  }()
   
   // MARK: - Life Cycle
   
@@ -130,31 +101,13 @@ final class SearchViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
   }
   
-  func bind(reactor: SearchViewReactor) {
+  override func bind(reactor: SearchViewReactor) {
+    super.bind(reactor: reactor)
+
     // Action
     Observable.combineLatest(self.rx.viewDidAppear, self.rx.viewWillAppear)
       .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
       .map { _ in Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.searchTextField.rx.backButtonDidTap
-      .map { Reactor.Action.backButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.searchTextField.rx.editingDidBegin
-      .map { Reactor.Action.editingDidBegin }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.searchTextField.rx.text
-      .map { Reactor.Action.textDidChanged($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.searchTextField.rx.editingDidEnd
-      .map { Reactor.Action.editingDidEnd }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -255,50 +208,6 @@ final class SearchViewController: BaseViewController, View {
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide)
     }
-  }
-}
-
-// MARK: - CollectionView
-
-private extension SearchViewController {
-  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    let item = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0)
-      )
-    )
-    let group = UICollectionViewCompositionalLayout.group(
-      direction: .vertical,
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(28)
-      ),
-      subItem: item,
-      count: 1
-    )
-    let section = NSCollectionLayoutSection(group: group)
-    section.interGroupSpacing = 16
-
-    let header = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(21)
-      ),
-      elementKind: SearchRecentCell.reuseIdentifier,
-      alignment: .topLeading
-    )
-    section.boundarySupplementaryItems = [header]
-
-    section.contentInsets = NSDirectionalEdgeInsets(
-      top: 16,
-      leading: 20,
-      bottom: 16,
-      trailing: 20
-    )
-
-    let layout = UICollectionViewCompositionalLayout(section: section)
-    return layout
   }
 }
 
