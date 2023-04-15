@@ -20,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.4
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v2.4.4
         with:
           python-version: 3.9
       - name: Install dependencies
@@ -35,6 +35,6 @@ jobs:
           event_type=$(jq -r ".\"${{ github.event_name }}\"" <<< $payload)
           repository_name=$(jq -r '.repository.name' <<< $payload)
           sender_username=$(jq -r '.sender.login' <<< $payload)
-          message="New $event_type event on $repository_name by $sender_username!"
+          message="New event on $repository_name by $sender_username! <@&1048243176999235637>"
           payload=$(jq --arg message "$message" '. + {content: $message}' <<< $payload)
           curl -H "Content-Type: application/json" -X POST -d "$payload" $DISCORD_WEBHOOK_URL
