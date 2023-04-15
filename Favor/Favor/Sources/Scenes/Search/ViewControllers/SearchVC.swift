@@ -241,13 +241,12 @@ private extension BaseSearchViewController {
       direction: .vertical,
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(28)
+        heightDimension: .estimated(44)
       ),
       subItem: item,
       count: 1
     )
     let section = NSCollectionLayoutSection(group: group)
-    section.interGroupSpacing = 16
 
     let header = NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: NSCollectionLayoutSize(

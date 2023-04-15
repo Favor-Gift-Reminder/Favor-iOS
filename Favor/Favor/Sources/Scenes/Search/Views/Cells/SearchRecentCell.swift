@@ -28,6 +28,16 @@ final class SearchRecentCell: UICollectionViewCell, Reusable {
     return label
   }()
 
+  private let deleteButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.line2)
+    config.image = .favorIcon(.close)?.resize(newWidth: 12)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
+
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -58,7 +68,8 @@ extension SearchRecentCell: BaseView {
   func setupLayouts() {
     [
       self.iconImageView,
-      self.textLabel
+      self.textLabel,
+      self.deleteButton
     ].forEach {
       self.addSubview($0)
     }
@@ -72,6 +83,12 @@ extension SearchRecentCell: BaseView {
     self.textLabel.snp.makeConstraints { make in
       make.leading.equalTo(self.iconImageView.snp.trailing).offset(8)
       make.centerY.equalToSuperview()
+    }
+
+    self.deleteButton.snp.makeConstraints { make in
+      make.trailing.equalToSuperview()
+      make.centerY.equalToSuperview()
+      make.width.height.equalTo(12)
     }
   }
 }
