@@ -1,0 +1,40 @@
+name: Notify Discord of GitHub activity
+
+on:
+  discussion:
+    types: [ created, answered ]
+  discussion_comment:
+  pull_request:
+    types: [ opened, reopened, closed ]
+    branches: [ main, dev ]
+  issue_comment:
+    types: [ created ]
+  issues:
+    types: [ opened, deleted, closed, reopened ]
+  release:
+    types: [ published ]
+  # Add other events here that you want to trigger the workflow on
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install dependencies
+        run: pip install requests
+      - name: Process webhook payload and notify Discord
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          payload=$(cat $GITHUB_EVENT_PATH)
+          event_type=$(jq -r ".\"${{ github.event_name }}\"" <<< $payload)
+          repository_name=$(jq -r '.repository.name' <<< $payload)
+          sender_username=$(jq -r '.sender.login' <<< $payload)
+          message="New $event_type event on $repository_name by $sender_username!"
+          payload=$(jq --arg message "$message" '. + {content: $message}' <<< $payload)
+          curl -H "Content-Type: application/json" -X POST -d "$payload" $DISCORD_WEBHOOK_URL
