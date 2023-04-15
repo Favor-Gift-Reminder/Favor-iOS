@@ -81,6 +81,27 @@ final class SearchViewController: BaseSearchViewController {
     stackView.spacing = 34
     return stackView
   }()
+
+  // SearchRecent
+  private lazy var recentSearchCollectionView: UICollectionView = {
+    let collectionView = UICollectionView(
+      frame: .zero,
+      collectionViewLayout: self.makeSearchRecentCompositionalLayout()
+    )
+
+    // Register
+    collectionView.register(cellType: SearchRecentCell.self)
+    collectionView.register(
+      supplementaryViewType: SearchRecentHeader.self,
+      ofKind: SearchRecentCell.reuseIdentifier
+    )
+
+    // Setup
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.isHidden = true
+    return collectionView
+  }()
   
   // MARK: - Life Cycle
   
@@ -101,49 +122,13 @@ final class SearchViewController: BaseSearchViewController {
       .disposed(by: self.disposeBag)
   }
   
-  override func bind(reactor: SearchViewReactor) {
-    super.bind(reactor: reactor)
-
-    // Action
-    Observable.combineLatest(self.rx.viewDidAppear, self.rx.viewWillAppear)
-      .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
-      .map { _ in Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.view.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-      guard let `self` = self else { return }
-      recognizer.delegate = self
-      delegate.simultaneousRecognitionPolicy = .never
-    })
-    .when(.recognized)
-    .map { _ in Reactor.Action.editingDidEnd }
-    .bind(to: reactor.action)
-    .disposed(by: self.disposeBag)
-
-    self.searchTextField.rx.editingDidEndOnExit
-      .map { Reactor.Action.returnKeyDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    // State
-    reactor.state.map { $0.isEditing }
-      .distinctUntilChanged()
-      .delay(.nanoseconds(100), scheduler: MainScheduler.asyncInstance)
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, isEditing in
-        owner.searchTextField.setBackButton(toHidden: isEditing)
-        if isEditing {
-          owner.searchTextField.textField.becomeFirstResponder()
-        } else {
-          owner.searchTextField.textField.resignFirstResponder()
-        }
-        owner.toggleRecentSearch(to: !isEditing)
-      })
-      .disposed(by: self.disposeBag)
-  }
-  
   // MARK: - Functions
+
+  override func toggleIsEditing(to isEditing: Bool) {
+    super.toggleIsEditing(to: isEditing)
+    
+    self.toggleRecentSearch(to: !isEditing)
+  }
   
   // MARK: - UI Setups
   
@@ -242,17 +227,46 @@ private extension SearchViewController {
   }
 }
 
-// MARK: - Recognizer
+// MARK: - CollectionView
 
-extension SearchViewController: UIGestureRecognizerDelegate {
-  func gestureRecognizer(
-    _ gestureRecognizer: UIGestureRecognizer,
-    shouldReceive touch: UITouch
-  ) -> Bool {
-    guard
-      !(touch.view is UIControl),
-      !(touch.view is SearchRecentCell)
-    else { return false }
-    return true
+private extension BaseSearchViewController {
+  func makeSearchRecentCompositionalLayout() -> UICollectionViewCompositionalLayout {
+    let item = NSCollectionLayoutItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0)
+      )
+    )
+    let group = UICollectionViewCompositionalLayout.group(
+      direction: .vertical,
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(28)
+      ),
+      subItem: item,
+      count: 1
+    )
+    let section = NSCollectionLayoutSection(group: group)
+    section.interGroupSpacing = 16
+
+    let header = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(21)
+      ),
+      elementKind: SearchRecentCell.reuseIdentifier,
+      alignment: .topLeading
+    )
+    section.boundarySupplementaryItems = [header]
+
+    section.contentInsets = NSDirectionalEdgeInsets(
+      top: 16,
+      leading: 20,
+      bottom: 16,
+      trailing: 20
+    )
+
+    let layout = UICollectionViewCompositionalLayout(section: section)
+    return layout
   }
 }

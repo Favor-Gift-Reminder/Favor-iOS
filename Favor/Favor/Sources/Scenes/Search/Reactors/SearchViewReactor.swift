@@ -33,13 +33,13 @@ final class SearchViewReactor: Reactor, Stepper {
   
   enum Action {
     case viewNeedsLoaded
-    case viewWillDisappear
     case editingDidBegin
     case textDidChanged(String?)
     case editingDidEnd
     case returnKeyDidTap
     case searchRecentDidSelected(SearchRecentSection.SearchRecentItem)
     case searchTypeDidSelected(SearchType)
+    case viewWillDisappear
   }
   
   enum Mutation {
@@ -111,7 +111,15 @@ final class SearchViewReactor: Reactor, Stepper {
       
     case .returnKeyDidTap:
       if let searchString = self.currentState.searchQuery {
-        self.updateAndNavigateToSearchResult(searchString)
+        switch self.mode {
+        case .search:
+          self.updateAndNavigateToSearchResult(searchString)
+        case .result:
+          return .concat([
+            .just(.toggleIsEditingTo(false)),
+            .empty() // TODO: Update Result
+          ])
+        }
       }
       return .just(.toggleIsEditingTo(false))
 

@@ -23,102 +23,98 @@ class BaseSearchViewController: BaseViewController, View {
     return searchBar
   }()
 
-  // SearchRecent
-  public lazy var recentSearchCollectionView: UICollectionView = {
-    let collectionView = UICollectionView(
-      frame: .zero,
-      collectionViewLayout: self.makeSearchRecentCompositionalLayout()
-    )
+  // MARK: - Life Cycle
 
-    // Register
-    collectionView.register(cellType: SearchRecentCell.self)
-    collectionView.register(
-      supplementaryViewType: SearchRecentHeader.self,
-      ofKind: SearchRecentCell.reuseIdentifier
-    )
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
 
-    // Setup
-    collectionView.showsHorizontalScrollIndicator = false
-    collectionView.showsVerticalScrollIndicator = false
-    collectionView.isHidden = true
-    return collectionView
-  }()
+    self.navigationController?.setNavigationBarHidden(true, animated: false)
+  }
+
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+
+    self.setEditing(false, animated: true)
+  }
 
   // MARK: - Binding
 
   func bind(reactor: SearchViewReactor) {
     // Action
+    Observable.combineLatest(self.rx.viewDidAppear, self.rx.viewWillAppear)
+      .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.searchTextField.rx.editingDidBegin
-      .debug("editingDidBegin")
       .map { Reactor.Action.editingDidBegin }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.searchTextField.rx.text
       .distinctUntilChanged()
-      .debug("text")
       .map { Reactor.Action.textDidChanged($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.searchTextField.rx.editingDidEnd
-      .debug("editingDidEnd")
       .map { Reactor.Action.editingDidEnd }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.searchTextField.rx.editingDidEndOnExit
+      .map { Reactor.Action.returnKeyDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
 //    Observable.combineLatest(self.rx.viewWillDisappear, self.searchTextField.rx.backButtonDidTap)
     self.searchTextField.rx.backButtonDidTap
       .throttle(.nanoseconds(500), scheduler: MainScheduler.asyncInstance)
-      .debug("viewWillDisappear")
       .map { _ in Reactor.Action.viewWillDisappear }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-    
+
+    self.view.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
+      guard let `self` = self else { return }
+      recognizer.delegate = self
+      delegate.simultaneousRecognitionPolicy = .never
+    })
+    .when(.recognized)
+    .map { _ in Reactor.Action.editingDidEnd }
+    .bind(to: reactor.action)
+    .disposed(by: self.disposeBag)
+
     // State
+    reactor.state.map { $0.isEditing }
+      .distinctUntilChanged()
+      .debug("isEditing")
+      .delay(.nanoseconds(100), scheduler: MainScheduler.instance)
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, isEditing in
+        owner.toggleIsEditing(to: isEditing)
+      })
+      .disposed(by: self.disposeBag)
+  }
+
+  // MARK: - Functions
+
+  public func toggleIsEditing(to isEditing: Bool) {
+    self.searchTextField.setBackButton(toHidden: isEditing)
   }
 }
 
-// MARK: - CollectionView
+// MARK: - Recognizer
 
-private extension BaseSearchViewController {
-  func makeSearchRecentCompositionalLayout() -> UICollectionViewCompositionalLayout {
-    let item = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0)
-      )
-    )
-    let group = UICollectionViewCompositionalLayout.group(
-      direction: .vertical,
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(28)
-      ),
-      subItem: item,
-      count: 1
-    )
-    let section = NSCollectionLayoutSection(group: group)
-    section.interGroupSpacing = 16
-
-    let header = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(21)
-      ),
-      elementKind: SearchRecentCell.reuseIdentifier,
-      alignment: .topLeading
-    )
-    section.boundarySupplementaryItems = [header]
-
-    section.contentInsets = NSDirectionalEdgeInsets(
-      top: 16,
-      leading: 20,
-      bottom: 16,
-      trailing: 20
-    )
-
-    let layout = UICollectionViewCompositionalLayout(section: section)
-    return layout
+extension BaseSearchViewController: UIGestureRecognizerDelegate {
+  func gestureRecognizer(
+    _ gestureRecognizer: UIGestureRecognizer,
+    shouldReceive touch: UITouch
+  ) -> Bool {
+    guard
+      !(touch.view is UIControl),
+      !(touch.view is SearchRecentCell)
+    else { return false }
+    return true
   }
 }

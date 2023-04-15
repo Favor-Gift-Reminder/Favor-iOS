@@ -105,6 +105,13 @@ final class SearchResultViewController: BaseSearchViewController {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.giftCollectionView.rx.didScroll
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.view.endEditing(true)
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     reactor.state.map { $0.searchQuery }
       .take(1) // 최초 1회만 필요
