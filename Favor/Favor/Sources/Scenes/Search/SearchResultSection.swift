@@ -17,6 +17,7 @@ struct SearchResultSection {
   typealias SearchGiftResultModel = SectionModel<SearchResultSectionType, SearchResultItem>
 
   enum SearchResultItem {
+    case empty(UIImage?, String)
     case gift(SearchGiftResultCellReactor)
     case user(SearchUserResultCellReactor)
   }

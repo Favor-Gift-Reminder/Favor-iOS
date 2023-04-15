@@ -121,6 +121,17 @@ final class SearchViewController: BaseSearchViewController {
       .bind(to: self.recentSearchCollectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
   }
+
+  override func bind(reactor: SearchViewReactor) {
+    super.bind(reactor: reactor)
+
+    // Action
+    Observable.combineLatest(self.rx.viewDidAppear, self.rx.viewWillAppear)
+      .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+  }
   
   // MARK: - Functions
 

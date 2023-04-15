@@ -25,6 +25,10 @@ final class SearchResultViewController: BaseSearchViewController {
   private let dataSource = SearchGiftResultDataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
+      case let .empty(image, text):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
+        cell.bindEmptyData(image: image, text: text)
+        return cell
       case .gift(let reactor):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchGiftResultCell
         cell.reactor = reactor
@@ -60,11 +64,14 @@ final class SearchResultViewController: BaseSearchViewController {
     )
 
     // register
+    collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: SearchGiftResultCell.self)
     collectionView.register(cellType: SearchUserResultCell.self)
 
     // Configure
+    collectionView.showsVerticalScrollIndicator = false
     collectionView.showsHorizontalScrollIndicator = false
+    collectionView.alwaysBounceVertical = false
     return collectionView
   }()
   
@@ -95,6 +102,12 @@ final class SearchResultViewController: BaseSearchViewController {
     super.bind(reactor: reactor)
     
     // Action
+    self.rx.viewDidLoad
+      .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.giftSelectedButton.rx.tap
       .map { Reactor.Action.searchTypeDidSelected(.gift) }
       .bind(to: reactor.action)
@@ -228,13 +241,28 @@ private extension SearchResultViewController {
   func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
       let sectionType = self.dataSource[sectionIndex].model
-      return self.makeCompositionalSection(sectionType: sectionType)
+      let sectionFirstItem = self.dataSource[sectionIndex].items.first
+
+      var isSectionEmpty: Bool = false
+      if let sectionFirstItem {
+        if case SearchResultSection.SearchResultItem.empty(_, _) = sectionFirstItem {
+          isSectionEmpty = true
+        }
+      }
+      return self.makeCompositionalSection(sectionType: sectionType, isEmpty: isSectionEmpty)
     })
   }
 
   func makeCompositionalSection(
-    sectionType: SearchResultSectionType
+    sectionType: SearchResultSectionType,
+    isEmpty: Bool
   ) -> NSCollectionLayoutSection {
+    let emptyItem = NSCollectionLayoutItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0))
+    )
+
     let item = NSCollectionLayoutItem(
       layoutSize: sectionType.cellSize
     )
@@ -243,15 +271,15 @@ private extension SearchResultViewController {
       direction: .horizontal,
       layoutSize: NSCollectionLayoutSize(
         widthDimension: .fractionalWidth(1.0),
-        heightDimension: sectionType.cellSize.heightDimension
+        heightDimension: isEmpty ? .fractionalHeight(1.0) : sectionType.cellSize.heightDimension
       ),
-      subItem: item,
-      count: sectionType.columns
+      subItem: isEmpty ? emptyItem : item,
+      count: isEmpty ? 1 : sectionType.columns
     )
     group.interItemSpacing = .fixed(sectionType.spacing)
 
     let section = NSCollectionLayoutSection(group: group)
-    section.contentInsets = sectionType.sectionInset
+    section.contentInsets = isEmpty ? .zero : sectionType.sectionInset
     section.interGroupSpacing = sectionType.spacing
 
     return section

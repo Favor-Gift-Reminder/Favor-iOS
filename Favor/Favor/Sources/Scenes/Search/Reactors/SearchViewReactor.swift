@@ -59,11 +59,23 @@ final class SearchViewReactor: Reactor, Stepper {
     var selectedSearchType: SearchType = .gift
     var giftResults = SearchResultSection.SearchGiftResultModel(
       model: .gift,
-      items: [.gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor()), .gift(SearchGiftResultCellReactor())]
+      items: [
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor()),
+        .gift(SearchGiftResultCellReactor())
+      ]
     )
     var userResult = SearchResultSection.SearchGiftResultModel(
       model: .user,
-      items: [.user(SearchUserResultCellReactor())]
+      items: [
+//        .user(SearchUserResultCellReactor())
+      ]
     )
   }
   
@@ -159,6 +171,21 @@ final class SearchViewReactor: Reactor, Stepper {
     }
     
     return newState
+  }
+
+  func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+      // Upcoming이 비어있을 경우 .empty 데이터 추가
+      if state.giftResults.items.isEmpty {
+        newState.giftResults.items.append(.empty(nil, "검색 결과가 없습니다."))
+      }
+      // Timeline이 비어있을 경우 .empty 데이터 추가
+      if state.userResult.items.isEmpty {
+        newState.userResult.items.append(.empty(nil, "검색 결과가 없습니다."))
+      }
+      return newState
+    }
   }
 }
 

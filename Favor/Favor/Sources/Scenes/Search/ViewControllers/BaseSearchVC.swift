@@ -41,12 +41,6 @@ class BaseSearchViewController: BaseViewController, View {
 
   func bind(reactor: SearchViewReactor) {
     // Action
-    Observable.combineLatest(self.rx.viewDidAppear, self.rx.viewWillAppear)
-      .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
-      .map { _ in Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
     self.searchTextField.rx.editingDidBegin
       .map { Reactor.Action.editingDidBegin }
       .bind(to: reactor.action)
