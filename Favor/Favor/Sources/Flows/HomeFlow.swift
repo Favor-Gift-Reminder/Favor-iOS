@@ -29,12 +29,12 @@ final class HomeFlow: Flow {
     switch step {
     case .homeIsRequired:
       return self.navigateToHome()
-      
-    case .newGiftIsRequired:
-      return self.navigateToGift()
 
     case .searchIsRequired:
       return self.navigateToSearch()
+
+    case .reminderIsRequired:
+      return self.navigateToReminder()
 
     default: return .none
     }
@@ -44,37 +44,34 @@ final class HomeFlow: Flow {
 // MARK: - Navigates
 
 private extension HomeFlow {
-  func navigateToGift() -> FlowContributors {
-    let giftFlow = GiftFlow(self.rootViewController)
-    
-    return .one(flowContributor: .contribute(
-      withNextPresentable: giftFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired)
-    ))
-  }
-  
   func navigateToHome() -> FlowContributors {
     let homeVC = HomeViewController()
     let homeReactor = HomeViewReactor()
     homeVC.reactor = homeReactor
     self.rootViewController.pushViewController(homeVC, animated: true)
 
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: homeVC,
-        withNextStepper: homeReactor
-      ))
+    return .one(flowContributor: .contribute(
+      withNextPresentable: homeVC,
+      withNextStepper: homeReactor
+    ))
   }
 
   func navigateToSearch() -> FlowContributors {
     let searchFlow = SearchFlow(rootViewController: self.rootViewController)
     
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: searchFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.searchIsRequired)
-      )
-    )
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.searchIsRequired)
+    ))
+  }
+
+  func navigateToReminder() -> FlowContributors {
+    let reminderFlow = ReminderFlow(rootViewController: self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: reminderFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.reminderIsRequired)
+    ))
   }
 
   func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
@@ -84,11 +81,10 @@ private extension HomeFlow {
     self.rootViewController.present(filterBottomSheet, animated: false)
     self.filterBottomSheet = filterBottomSheet
     
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: filterBottomSheet,
-        withNextStepper: filterBottomSheet
-      ))
+    return .one(flowContributor: .contribute(
+      withNextPresentable: filterBottomSheet,
+      withNextStepper: filterBottomSheet
+    ))
   }
   
   func dismissFilter(sortedBy sortType: SortType) -> FlowContributors {

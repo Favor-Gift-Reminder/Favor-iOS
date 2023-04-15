@@ -40,15 +40,15 @@ final class HomeViewController: BaseViewController, View {
       }
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+      let sectionItem = dataSource[indexPath.section]
       let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         for: indexPath) as HeaderView
-      let sectionItem = dataSource[indexPath.section]
       header.reactor = HeaderViewReactor(section: sectionItem.model)
       header.rx.rightButtonDidTap
         .map { Reactor.Action.rightButtonDidTap(sectionItem.model) }
         .bind(to: self.reactor!.action)
-        .disposed(by: self.disposeBag)
+        .disposed(by: header.disposeBag)
       return header
     }
   )
@@ -56,7 +56,6 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - UI Components
 
   private lazy var searchButton = FavorBarButtonItem(.search)
-  private lazy var newGiftButton = FavorBarButtonItem(.newGift)
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
@@ -108,6 +107,24 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Binding
   
   override func bind() {
+    self.collectionView.rx.didEndDisplayingCell
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { _, endDisplayingCell in
+        let (cell, _) = endDisplayingCell
+        guard let cell = cell as? BaseCollectionViewCell else { return }
+        cell.disposeBag = DisposeBag()
+      })
+      .disposed(by: self.disposeBag)
+
+    self.collectionView.rx.didEndDisplayingSupplementaryView
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { _, endDisplayingView in
+        let (view, _, _) = endDisplayingView
+        guard let view = view as? HeaderView else { return }
+        view.disposeBag = DisposeBag()
+      })
+      .disposed(by: self.disposeBag)
+
     // State
     self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
@@ -124,19 +141,6 @@ final class HomeViewController: BaseViewController, View {
 
     self.searchButton.rx.tap
       .map { Reactor.Action.searchButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.newGiftButton.rx.tap
-      .map { Reactor.Action.newGiftButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.collectionView.rx.itemSelected
-      .do(onNext: {
-        print($0)
-      })
-      .map { Reactor.Action.itemSelected($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -160,8 +164,7 @@ final class HomeViewController: BaseViewController, View {
 private extension HomeViewController {
   func setupNavigationBar() {
     self.navigationItem.rightBarButtonItems = [
-      self.searchButton,
-      self.newGiftButton
+      self.searchButton
     ]
     self.navigationController?.setNavigationBarHidden(false, animated: false)
   }

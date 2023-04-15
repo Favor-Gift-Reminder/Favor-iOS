@@ -21,7 +21,38 @@ final class NewGiftViewController: BaseViewController, View {
   typealias DataSource = RxCollectionViewSectionedReloadDataSource<NewGiftPhotoSection.NewGiftPhotoSectionModel>
   
   // MARK: - UI COMPONENTS
-  
+
+  // Navigation Items
+  private let doneButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.attributedTitle = AttributedString(
+      "완료",
+      attributes: .init([
+        .font: UIFont.favorFont(.bold, size: 18)
+      ])
+    )
+    let btn = UIButton(configuration: config)
+    btn.configurationUpdateHandler = {
+      switch $0.state {
+      case .disabled:
+        config.baseForegroundColor = .favorColor(.line2)
+      case .normal:
+        config.baseForegroundColor = .favorColor(.icon)
+      default:
+        break
+      }
+    }
+    return btn
+  }()
+
+  private lazy var cancelButton = UIBarButtonItem(
+    title: "취소",
+    style: .plain,
+    target: nil,
+    action: nil
+  )
+
+  // View Items
   private let scrollView: UIScrollView = {
     let sv = UIScrollView()
     return sv
@@ -112,28 +143,6 @@ final class NewGiftViewController: BaseViewController, View {
     return button
   }()
   
-  private let doneButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.attributedTitle = AttributedString(
-      "완료",
-      attributes: .init([
-        .font: UIFont.favorFont(.bold, size: 18)
-      ])
-    )
-    let btn = UIButton(configuration: config)
-    btn.configurationUpdateHandler = {
-      switch $0.state {
-      case .disabled:
-        config.baseForegroundColor = .favorColor(.line2)
-      case .normal:
-        config.baseForegroundColor = .favorColor(.icon)
-      default:
-        break
-      }
-    }
-    return btn
-  }()
-  
   private let categoryView: FavorCategoryView = {
     let view = FavorCategoryView()
     view.setSelectedCategory(.lightGift)
@@ -189,6 +198,7 @@ final class NewGiftViewController: BaseViewController, View {
   
   override func setupStyles() {
     self.view.backgroundColor = .favorColor(.white)
+    self.navigationItem.leftBarButtonItem = self.cancelButton
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
   }
   
@@ -287,6 +297,11 @@ final class NewGiftViewController: BaseViewController, View {
   func bind(reactor: NewGiftViewReactor) {
         
     // MARK: - ACTION
+
+    self.cancelButton.rx.tap
+      .map { Reactor.Action.cancelButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     // 빈 화면 터치
     self.view.rx.tapGesture { gesture, _ in

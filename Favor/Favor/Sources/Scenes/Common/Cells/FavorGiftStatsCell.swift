@@ -79,7 +79,6 @@ extension FavorGiftStatsCell: BaseView {
       self.addSubview($0)
     }
 
-    // TODO: Stack을 넣고 뺴는 로직 필요
     [
       self.totalStack,
       self.receivedStack,

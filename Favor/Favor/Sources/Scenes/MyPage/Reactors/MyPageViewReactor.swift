@@ -48,16 +48,6 @@ final class MyPageViewReactor: Reactor, Stepper {
       return .empty()
     }
   }
-  
-  func reduce(state: State, mutation: Mutation) -> State {
-    var newState = state
-    
-    switch mutation {
-
-    }
-    
-    return newState
-  }
 }
 
 // MARK: - Temporaries

@@ -10,7 +10,7 @@ import UIKit
 import Reusable
 import SnapKit
 
-public final class FavorEmptyCell: UICollectionViewCell, Reusable {
+public final class FavorEmptyCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Constants
 

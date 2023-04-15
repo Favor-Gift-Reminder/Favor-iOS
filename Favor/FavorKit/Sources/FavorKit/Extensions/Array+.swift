@@ -13,3 +13,4 @@ extension ArraySlice {
     return Array<Element>(self)
   }
 }
+// swiftlint:enable syntactic_sugar

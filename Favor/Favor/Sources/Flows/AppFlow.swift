@@ -71,16 +71,16 @@ private extension AppFlow {
   }
 
   func navigateToDashboard() -> FlowContributors {
-    let tabBarFlow = TabBarFlow()
+    let dashboardFlow = DashboardFlow()
 
-    Flows.use(tabBarFlow, when: .created) { [unowned self] root in
+    Flows.use(dashboardFlow, when: .created) { [unowned self] root in
       DispatchQueue.main.async {
         self.window.rootViewController = root
       }
     }
 
     return .one(flowContributor: .contribute(
-      withNextPresentable: tabBarFlow,
+      withNextPresentable: dashboardFlow,
       withNextStepper: OneStepper(
         withSingleStep: AppStep.tabBarIsRequired
       )

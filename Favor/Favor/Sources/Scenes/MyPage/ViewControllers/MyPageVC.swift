@@ -246,7 +246,6 @@ private extension MyPageViewController {
     section.orthogonalScrollingBehavior = sectionType.orthogonalScrollingBehavior
 
     // Header & Background
-    let sectionItem = self.dataSource[sectionIndex]
     switch sectionType {
     case .giftStats: break
     default:

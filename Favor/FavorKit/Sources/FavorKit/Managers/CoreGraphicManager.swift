@@ -23,14 +23,14 @@ public final class CoreGraphicManager {
     guard let source = CGImageSourceCreateWithURL(url as CFURL, sourceOptions) else { return nil }
     
     let maxDimensionInPixels = max(pointSize.width, pointSize.height) * screenScale
-    let downsampleOptions = [
+    let downsampleOptions: [CFString: Any] = [
       kCGImageSourceCreateThumbnailFromImageAlways: true,
       kCGImageSourceShouldCacheImmediately: true,
       kCGImageSourceCreateThumbnailWithTransform: true,
       kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels
-    ] as CFDictionary
+    ]
     
-    guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, downsampleOptions) else { return nil }
+    guard let cgImage = CGImageSourceCreateThumbnailAtIndex(source, 0, downsampleOptions as CFDictionary) else { return nil }
     
     let data = NSMutableData()
     

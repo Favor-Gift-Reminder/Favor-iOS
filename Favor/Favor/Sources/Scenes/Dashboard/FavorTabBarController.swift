@@ -1,22 +1,34 @@
 //
-//  BaseTabBarController.swift
-//  
+//  FavorTabBarController.swift
+//  Favor
 //
 //  Created by 이창준 on 2023/03/10.
 //
 
 import UIKit
 
-open class BaseTabBarController: UITabBarController {
+import FavorKit
+import RxCocoa
+import RxFlow
 
-  open override func viewDidLoad() {
+final class FavorTabBarController: UITabBarController, Stepper {
+
+  // MARK: - Properties
+
+  var steps = PublishRelay<Step>()
+
+  // MARK: - Life Cycle
+
+  public override func viewDidLoad() {
     super.viewDidLoad()
 
     self.delegate = self
     self.setupTabBarAppearance()
   }
 
-  func setupTabBarAppearance() {
+  // MARK: - Functions
+
+  private func setupTabBarAppearance() {
     // Item Appearance
     let itemApperance = UITabBarItemAppearance()
 
@@ -57,8 +69,20 @@ open class BaseTabBarController: UITabBarController {
   }
 }
 
-extension BaseTabBarController: UITabBarControllerDelegate {
-  open override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+extension FavorTabBarController: UITabBarControllerDelegate {
+  override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
     HapticManager.haptic(style: .soft)
+  }
+
+  func tabBarController(
+    _ tabBarController: UITabBarController,
+    shouldSelect viewController: UIViewController
+  ) -> Bool {
+    guard let navController = viewController as? BaseNavigationController else { return true }
+    if !navController.isValid {
+      self.steps.accept(AppStep.newGiftIsRequired)
+      return false
+    }
+    return true
   }
 }

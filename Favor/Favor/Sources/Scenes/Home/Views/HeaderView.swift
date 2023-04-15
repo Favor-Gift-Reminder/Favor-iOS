@@ -17,7 +17,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   
-  var disposeBag = DisposeBag()
+  public var disposeBag = DisposeBag()
   
   // MARK: - UI Components
   
@@ -79,6 +79,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Binding
   
   func bind(reactor: HeaderViewReactor) {
+    // TODO: Action들 VC로 뺴기
     // Action
     self.allButton.rx.tap
       .map { Reactor.Action.allButtonDidTap }
@@ -92,11 +93,6 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     
     self.giveButton.rx.tap
       .map { Reactor.Action.giveButotnDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.rightButton.rx.tap
-      .map { Reactor.Action.rightButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     

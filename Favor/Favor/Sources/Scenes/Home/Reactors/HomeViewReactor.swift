@@ -33,7 +33,6 @@ final class HomeViewReactor: Reactor, Stepper {
   enum Action {
     case viewNeedsLoaded
     case searchButtonDidTap
-    case newGiftButtonDidTap
     case itemSelected(IndexPath)
     case rightButtonDidTap(HomeSectionType)
   }
@@ -86,16 +85,15 @@ final class HomeViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.searchIsRequired)
       return .empty()
 
-    case .newGiftButtonDidTap:
-      self.steps.accept(AppStep.newGiftIsRequired)
-      return .empty()
-
     case .itemSelected:
       return .empty()
 
     case .rightButtonDidTap(let sectionType):
+      let type = "\(sectionType)"
+      os_log(.debug, "\(type)")
       switch sectionType {
-      case .upcoming: break
+      case .upcoming:
+        self.steps.accept(AppStep.reminderIsRequired)
       case .timeline:
         self.steps.accept(AppStep.filterIsRequired(self.currentSortType.value))
       }

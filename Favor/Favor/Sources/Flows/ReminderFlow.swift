@@ -12,9 +12,18 @@ import RxFlow
 
 final class ReminderFlow: Flow {
 
-  var root: Presentable { self.rootViewController }
+  // MARK: - Properties
 
-  let rootViewController = BaseNavigationController()
+  var root: Presentable { self.rootViewController }
+  private let rootViewController: BaseNavigationController
+
+  // MARK: - Initializer
+
+  init(rootViewController: BaseNavigationController) {
+    self.rootViewController = rootViewController
+  }
+
+  // MARK: - Navigate
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
@@ -26,32 +35,36 @@ final class ReminderFlow: Flow {
     case .newReminderIsRequired:
       return self.navigateToNewReminder()
 
-    case .newReminderIsComplete:
-      return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
-
     case .reminderDetailIsRequired(let reminder):
       return self.navigateToReminderDetail(reminder: reminder)
 
     case .reminderEditIsRequired(let reminder):
       return self.navigateToEditReminder(reminder: reminder)
 
+    case .reminderIsComplete:
+      return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
+
     default: return .none
     }
   }
 }
+
+// MARK: - Navigates
 
 private extension ReminderFlow {
   func navigateToReminder() -> FlowContributors {
     let reminderVC = ReminderViewController()
     let reminderReactor = ReminderViewReactor()
     reminderVC.reactor = reminderReactor
-    self.rootViewController.pushViewController(reminderVC, animated: true)
 
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: reminderVC,
-        withNextStepper: reminderReactor
-      ))
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(reminderVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: reminderVC,
+      withNextStepper: reminderReactor
+    ))
   }
 
   func navigateToNewReminder() -> FlowContributors {
@@ -59,13 +72,15 @@ private extension ReminderFlow {
     let newReminderReactor = ReminderEditViewReactor(.new)
     newReminderVC.reactor = newReminderReactor
     newReminderVC.isEditable = true
-    self.rootViewController.pushViewController(newReminderVC, animated: true)
 
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: newReminderVC,
-        withNextStepper: newReminderReactor
-      ))
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(newReminderVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: newReminderVC,
+      withNextStepper: newReminderReactor
+    ))
   }
 
   func navigateToReminderDetail(reminder: Reminder) -> FlowContributors {
@@ -73,13 +88,15 @@ private extension ReminderFlow {
     let reminderDetailReactor = ReminderDetailViewReactor(reminder: reminder)
     reminderDetailVC.reactor = reminderDetailReactor
     reminderDetailVC.isEditable = false
-    self.rootViewController.pushViewController(reminderDetailVC, animated: true)
 
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: reminderDetailVC,
-        withNextStepper: reminderDetailReactor
-      ))
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(reminderDetailVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: reminderDetailVC,
+      withNextStepper: reminderDetailReactor
+    ))
   }
 
   func navigateToEditReminder(reminder: Reminder) -> FlowContributors {
@@ -87,12 +104,14 @@ private extension ReminderFlow {
     let reminderEditReactor = ReminderEditViewReactor(reminder: reminder)
     reminderEditVC.reactor = reminderEditReactor
     reminderEditVC.isEditable = true
-    self.rootViewController.pushViewController(reminderEditVC, animated: true)
 
-    return .one(
-      flowContributor: .contribute(
-        withNextPresentable: reminderEditVC,
-        withNextStepper: reminderEditReactor
-      ))
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(reminderEditVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: reminderEditVC,
+      withNextStepper: reminderEditReactor
+    ))
   }
 }
