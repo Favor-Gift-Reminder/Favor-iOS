@@ -160,7 +160,7 @@ final class SearchResultViewController: BaseSearchViewController {
   override func setupConstraints() {
     self.searchTextField.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.leading.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
 
     self.buttonStack.snp.makeConstraints { make in
