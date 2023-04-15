@@ -123,7 +123,6 @@ final class SearchResultViewController: BaseSearchViewController {
 
     reactor.state.map { $0.selectedSearchType }
       .distinctUntilChanged()
-      .skip(1)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, selected in
         owner.updateSelectedSearchButton(to: selected)

@@ -81,15 +81,21 @@ final class SearchViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.createSearchRecents()
-        .asObservable()
-        .flatMap { searchRecents -> Observable<Mutation> in
-          let model = self.refineRecentSearch(searchRecents: searchRecents)
-          return .concat([
-            .just(.updateRecentSearches(model)),
-            .just(.toggleIsEditingTo(true))
-          ])
-        }
+      switch self.mode {
+      case .search:
+        return self.createSearchRecents()
+          .asObservable()
+          .flatMap { searchRecents -> Observable<Mutation> in
+            let model = self.refineRecentSearch(searchRecents: searchRecents)
+            return .concat([
+              .just(.updateRecentSearches(model)),
+              .just(.toggleIsEditingTo(true))
+            ])
+          }
+      case .result:
+        return .just(.updateSearchType(.gift))
+      }
+
 
     case .viewWillDisappear:
       switch self.mode {

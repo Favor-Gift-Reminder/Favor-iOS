@@ -46,7 +46,7 @@ class BaseSearchViewController: BaseViewController, View {
       .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.searchTextField.rx.editingDidBegin
       .map { Reactor.Action.editingDidBegin }
       .bind(to: reactor.action)
@@ -101,6 +101,9 @@ class BaseSearchViewController: BaseViewController, View {
 
   public func toggleIsEditing(to isEditing: Bool) {
     self.searchTextField.setBackButton(toHidden: isEditing)
+    _ = isEditing ?
+    self.searchTextField.textField.becomeFirstResponder() :
+    self.searchTextField.textField.resignFirstResponder()
   }
 }
 
