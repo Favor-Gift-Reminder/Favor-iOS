@@ -9,29 +9,45 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import RxCocoa
+import RxDataSources
 import RxGesture
 import SnapKit
 
-final class SearchViewController: BaseViewController, View {
+final class SearchViewController: BaseSearchViewController {
+  typealias RecentSearchDataSource = RxCollectionViewSectionedReloadDataSource<SearchRecentSection.SearchRecentModel>
   
   // MARK: - Constants
   
   let giftCategories: [String] = ["가벼운 선물", "생일", "집들이", "시험", "승진", "졸업", "기타"]
   let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
+
+  private enum Constants {
+    static let fadeInDuration = 0.15
+    static let fadeOutDuration = 0.2
+  }
   
   // MARK: - Properties
+
+  private var dataSource = RecentSearchDataSource(
+    configureCell: { _, collectionView, indexPath, item in
+      switch item {
+      case .recent(let recentSearch):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchRecentCell
+        cell.updateText(recentSearch)
+        return cell
+      }
+    }, configureSupplementaryView: { _, collectionView, kind, indexPath in
+      let header = collectionView.dequeueReusableSupplementaryView(
+        ofKind: kind,
+        for: indexPath
+      ) as SearchRecentHeader
+      return header
+    }
+  )
   
   // MARK: - UI Components
-  
-  // SearchBar
-  private lazy var searchBar: FavorSearchBar = {
-    let searchBar = FavorSearchBar()
-    searchBar.searchBarHeight = 40
-    searchBar.placeholder = "선물, 유저 ID를 검색해보세요"
-    searchBar.searchBar.autocapitalizationType = .none
-    return searchBar
-  }()
   
   // Gift Category
   private lazy var giftCategoryTitleLabel = self.makeTitleLabel(title: "선물 카테고리")
@@ -65,70 +81,65 @@ final class SearchViewController: BaseViewController, View {
     stackView.spacing = 34
     return stackView
   }()
+
+  // SearchRecent
+  private lazy var recentSearchCollectionView: UICollectionView = {
+    let collectionView = UICollectionView(
+      frame: .zero,
+      collectionViewLayout: self.makeSearchRecentCompositionalLayout()
+    )
+
+    // Register
+    collectionView.register(cellType: SearchRecentCell.self)
+    collectionView.register(
+      supplementaryViewType: SearchRecentHeader.self,
+      ofKind: SearchRecentCell.reuseIdentifier
+    )
+
+    // Setup
+    collectionView.showsHorizontalScrollIndicator = false
+    collectionView.showsVerticalScrollIndicator = false
+    collectionView.isHidden = true
+    return collectionView
+  }()
   
   // MARK: - Life Cycle
   
   // MARK: - Binding
-  
-  func bind(reactor: SearchViewReactor) {
+
+  override func bind() {
+    guard let reactor = self.reactor else { return }
+
     // Action
-    self.rx.viewDidAppear
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.searchBar.textField.becomeFirstResponder()
-      })
-      .disposed(by: self.disposeBag)
-
-    self.rx.viewDidDisappear
-      .map { _ in Reactor.Action.viewDidDisappear }
-      .bind(with: self, onNext: { owner, _ in
-        if owner.isMovingFromParent {
-          reactor.action.onNext(.viewDidDisappear)
-        }
-      })
-      .disposed(by: self.disposeBag)
-
-    self.searchBar.rx.leftItemDidTap
-      .map { Reactor.Action.backButtonDidTap }
+    self.recentSearchCollectionView.rx.modelSelected(SearchRecentSection.SearchRecentItem.self)
+      .map { item in Reactor.Action.searchRecentDidSelected(item) }
       .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.searchBar.rx.editingDidBegin
-      .map { Reactor.Action.searchDidBegin }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.searchBar.rx.editingDidEnd
-      .map { Reactor.Action.searchDidEnd }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.searchBar.rx.editingDidEndOnExit
-      .do(onNext: {
-        self.searchBar.textField.resignFirstResponder()
-      })
-      .map { Reactor.Action.returnKeyDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.view.rx.anyGesture(.tap())
-      .when(.recognized)
-      .asDriver(onErrorDriveWith: .empty())
-      .drive(with: self, onNext: { owner, _ in
-        owner.searchBar.textField.resignFirstResponder()
-      })
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.isEditing }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, isEditing in
-        owner.searchBar.updateLeftItemVisibility(isHidden: isEditing)
-      })
+    reactor.state.map { [$0.searchRecents] }
+      .bind(to: self.recentSearchCollectionView.rx.items(dataSource: self.dataSource))
+      .disposed(by: self.disposeBag)
+  }
+
+  override func bind(reactor: SearchViewReactor) {
+    super.bind(reactor: reactor)
+
+    // Action
+    Observable.combineLatest(self.rx.viewDidAppear, self.rx.viewWillAppear)
+      .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
+
+  override func toggleIsEditing(to isEditing: Bool) {
+    super.toggleIsEditing(to: isEditing)
+    
+    self.toggleRecentSearch(to: !isEditing)
+  }
   
   // MARK: - UI Setups
   
@@ -147,24 +158,25 @@ final class SearchViewController: BaseViewController, View {
     }
 
     [
-      self.searchBar,
+      self.searchTextField,
       self.giftCategoryTitleLabel,
       self.giftCategoryButtonScrollView,
       self.emotionTitleLabel,
-      self.emotionButtonStack
+      self.emotionButtonStack,
+      self.recentSearchCollectionView
     ].forEach {
       self.view.addSubview($0)
     }
   }
   
   override func setupConstraints() {
-    self.searchBar.snp.makeConstraints { make in
+    self.searchTextField.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     
     self.giftCategoryTitleLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.searchBar.snp.bottom).offset(56)
+      make.top.equalTo(self.searchTextField.snp.bottom).offset(56)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     self.giftCategoryButtonScrollView.snp.makeConstraints { make in
@@ -186,6 +198,12 @@ final class SearchViewController: BaseViewController, View {
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.height.equalTo(40)
     }
+
+    self.recentSearchCollectionView.snp.makeConstraints { make in
+      make.top.equalTo(self.searchTextField.snp.bottom).offset(40)
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+    }
   }
 }
 
@@ -205,5 +223,60 @@ private extension SearchViewController {
     button.contentMode = .center
     button.setImage(emoji.emojiToImage(size: .init(width: 40, height: 40)), for: .normal)
     return button
+  }
+
+  func toggleRecentSearch(to isHidden: Bool) {
+    let duration = isHidden ? Constants.fadeInDuration : Constants.fadeOutDuration
+    self.recentSearchCollectionView.isHidden = false
+    let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+      self.recentSearchCollectionView.layer.opacity = isHidden ? 0.0 : 1.0
+    }
+    animator.addCompletion { _ in
+      self.recentSearchCollectionView.isHidden = isHidden
+    }
+    animator.startAnimation()
+  }
+}
+
+// MARK: - CollectionView
+
+private extension BaseSearchViewController {
+  func makeSearchRecentCompositionalLayout() -> UICollectionViewCompositionalLayout {
+    let item = NSCollectionLayoutItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .fractionalHeight(1.0)
+      )
+    )
+    let group = UICollectionViewCompositionalLayout.group(
+      direction: .vertical,
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(44)
+      ),
+      subItem: item,
+      count: 1
+    )
+    let section = NSCollectionLayoutSection(group: group)
+
+    let header = NSCollectionLayoutBoundarySupplementaryItem(
+      layoutSize: NSCollectionLayoutSize(
+        widthDimension: .fractionalWidth(1.0),
+        heightDimension: .estimated(21)
+      ),
+      elementKind: SearchRecentCell.reuseIdentifier,
+      alignment: .topLeading
+    )
+    section.boundarySupplementaryItems = [header]
+
+    section.contentInsets = NSDirectionalEdgeInsets(
+      top: 16,
+      leading: 20,
+      bottom: 16,
+      trailing: 20
+    )
+
+    let layout = UICollectionViewCompositionalLayout(section: section)
+    return layout
   }
 }

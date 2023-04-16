@@ -12,25 +12,25 @@ public class User: Object {
   // MARK: - Properties
 
   /// 회원 번호
-  @Persisted(primaryKey: true) var userNo: Int
+  @Persisted(primaryKey: true) public var userNo: Int
   /// 회원 이메일 (로그인 시 사용)
-  @Persisted var email: String
+  @Persisted public var email: String
   /// 회원 아이디 (@)
-  @Persisted var userID: String
+  @Persisted public var userID: String
   /// 회원 이름
-  @Persisted var name: String
+  @Persisted public var name: String
   /// 회원 취향 태그
-  @Persisted var favorList: MutableSet<Int>
+  @Persisted public var favorList: MutableSet<Int>
   /// 선물 목록
-  @Persisted var giftList: List<Gift>
+  @Persisted public var giftList: List<Gift>
   /// 리마인더 목록
-  @Persisted var reminderList: List<Reminder>
+  @Persisted public var reminderList: List<Reminder>
   /// 회원 친구 목록
-  @Persisted var friendList: List<Friend>
+  @Persisted public var friendList: List<Friend>
   /// 회원 사진
-  @Persisted var userPhoto: Photo?
+  @Persisted public var userPhoto: Photo?
   /// 회원 배경사진
-  @Persisted var backgroundPhoto: Photo?
+  @Persisted public var backgroundPhoto: Photo?
 
   public override class func propertiesMapping() -> [String: String] {
     [

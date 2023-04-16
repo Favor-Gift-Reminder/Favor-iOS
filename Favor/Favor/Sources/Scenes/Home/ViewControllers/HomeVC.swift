@@ -166,6 +166,7 @@ private extension HomeViewController {
     self.navigationItem.rightBarButtonItems = [
       self.searchButton
     ]
+    self.navigationController?.setNavigationBarHidden(false, animated: false)
   }
   
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {

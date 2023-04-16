@@ -31,14 +31,24 @@ public final class RealmManager: RealmCRUDable {
   /// RealmManager에서 사용될 realm 인스턴스
   private var realm: Realm!
   /// Realm의 transaction은 해당 realm 인스턴스가 생성된 쓰레드에서 이루어져야 합니다.
-  private let realmQueue = DispatchQueue.realmThread
+  public let realmQueue = DispatchQueue.realmThread
 
   // MARK: - Initializer
 
   private init() {
     do {
       let config = Realm.Configuration(
-        schemaVersion: RealmManager.version
+        schemaVersion: RealmManager.version,
+        migrationBlock: { migration, oldVersion in
+          if oldVersion < 4 {
+            migration.enumerateObjects(ofType: SearchRecent.className(), { oldObject, newObject in
+              let searchText = oldObject!["searchText"] as! String
+              let searchDate = oldObject!["searchDate"] as! Date
+              newObject!["searchText"] = searchText
+              newObject!["searchDate"] = searchDate
+            })
+          }
+        }
       )
       try self.realmQueue.sync {
         self.realm = try Realm(configuration: config, queue: self.realmQueue)
