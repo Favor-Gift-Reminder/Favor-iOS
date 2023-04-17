@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class FavorCompositionalLayout: UICollectionViewCompositionalLayout {
+public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout {
 
   // MARK: - Item
 
