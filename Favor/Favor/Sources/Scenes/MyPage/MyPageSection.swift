@@ -11,148 +11,120 @@ import FavorKit
 import RxDataSources
 
 enum MyPageSectionItem {
-  case giftStats(FavorGiftStatsCellReactor)
-  case setupProfile(FavorSetupProfileCellReactor)
-  case prefers(FavorPrefersCellReactor)
-  case anniversary(FavorAnniversaryCellReactor)
-  case friend(FriendCellReactor)
+  case profileSetupHelper(FavorSetupProfileCellReactor)
+  case preferences(FavorPrefersCellReactor)
+  case anniversaries(FavorAnniversaryCellReactor)
 }
 
 enum MyPageSection {
-  case giftStats([MyPageSectionItem])
-  case setupProfile([MyPageSectionItem])
-  case prefers([MyPageSectionItem])
-  case anniversary([MyPageSectionItem])
-  case friend([MyPageSectionItem])
+  case profileSetupHelper([MyPageSectionItem])
+  case preferences([MyPageSectionItem])
+  case anniversaries([MyPageSectionItem])
 }
 
 extension MyPageSection: SectionModelType {
-  typealias Item = MyPageSectionItem
-  
   var items: [MyPageSectionItem] {
     switch self {
-    case .giftStats(let items):
+    case .profileSetupHelper(let items):
       return items
-    case .setupProfile(let items):
+    case .preferences(let items):
       return items
-    case .prefers(let items):
-      return items
-    case .anniversary(let items):
-      return items
-    case .friend(let items):
+    case .anniversaries(let items):
       return items
     }
   }
   
   init(original: MyPageSection, items: [MyPageSectionItem]) {
     switch original {
-    case .giftStats:
-      self = .giftStats(items)
-    case .setupProfile:
-      self = .setupProfile(items)
-    case .prefers:
-      self = .prefers(items)
-    case .anniversary:
-      self = .anniversary(items)
-    case .friend:
-      self = .friend(items)
+    case .profileSetupHelper:
+      self = .profileSetupHelper(items)
+    case .preferences:
+      self = .preferences(items)
+    case .anniversaries:
+      self = .anniversaries(items)
     }
   }
 
   var headerTitle: String? {
     switch self {
-    case .giftStats: return nil
-    case .setupProfile: return "새 프로필"
-    case .prefers: return "취향"
-    case .anniversary: return "기념일"
-    case .friend: return "친구"
-    }
-  }
-
-  var headerRightItemTitle: String? {
-    switch self {
-    case .friend: return "전체보기"
-    default: return nil
+    case .profileSetupHelper: return "새 프로필"
+    case .preferences: return "취향"
+    case .anniversaries: return "기념일"
     }
   }
 }
 
-// MARK: - UI Constants
+// MARK: - Adapter
 
-extension MyPageSection {
-  var headerSize: NSCollectionLayoutSize {
-    NSCollectionLayoutSize(
-      widthDimension: .fractionalWidth(1.0),
-      heightDimension: .absolute(40)
-    )
-  }
-  
-  var cellSize: NSCollectionLayoutSize {
+extension MyPageSection: Adaptive {
+  var item: FavorCompositionalLayout.Item {
     switch self {
-    case .giftStats:
-      return .init(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .absolute(131)
+    case .profileSetupHelper:
+      return .grid(
+        width: .absolute(250),
+        height: .absolute(250)
       )
-    case .setupProfile:
-      return .init(
-        widthDimension: .absolute(250),
-        heightDimension: .absolute(262)
+    case .preferences:
+      return .grid(
+        width: .estimated(50),
+        height: .absolute(32)
       )
-    case .prefers:
-      return .init(
-        widthDimension: .estimated(60),
-        heightDimension: .absolute(32)
-      )
-    case .anniversary:
-      return .init(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .absolute(95)
-      )
-    case .friend:
-      return NSCollectionLayoutSize(
-        widthDimension: .absolute(60),
-        heightDimension: .absolute(85)
+    case .anniversaries:
+      return .listRow(
+        height: .absolute(95)
       )
     }
   }
-  
-  var sectionInset: NSDirectionalEdgeInsets {
+
+  var group: FavorCompositionalLayout.Group {
     switch self {
-    case .giftStats: return .zero
-    default: return .init(top: 0, leading: 20, bottom: 40, trailing: 20)
+    case .profileSetupHelper:
+      return .contents(
+        width: .estimated(250),
+        height: .estimated(250),
+        direction: .horizontal,
+        numberOfItems: 2,
+        spacing: .fixed(8)
+      )
+    case .preferences:
+      return .flow(
+        height: .estimated(32),
+        numberOfItems: 3,
+        spacing: .fixed(10)
+      )
+    case .anniversaries:
+      return .list(
+        height: .estimated(95),
+        numberOfItems: 3,
+        spacing: .fixed(10)
+      )
     }
   }
-  
-  var spacing: CGFloat {
+
+  var section: FavorCompositionalLayout.Section {
+    let header = FavorCompositionalLayout.BoundaryItem.header(height: .estimated(32))
+
     switch self {
-    case .giftStats: return .zero
-    case .setupProfile: return 8.0
-    case .prefers: return 10.0
-    case .anniversary: return 10.0
-    case .friend: return 26.0
-    }
-  }
-  
-  var columns: Int {
-    switch self {
-    case .prefers: return 5
-    default: return 1
-    }
-  }
-  
-  var orthogonalScrollingBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior {
-    switch self {
-    case .setupProfile: return .groupPaging
-    case .friend: return .continuous
-    default: return .none
-    }
-  }
-  
-  var widthStretchingDirection: UICollectionView.ScrollDirection {
-    switch self {
-    case .prefers: return .horizontal
-    default: return .vertical
+    case .profileSetupHelper:
+      return .base(
+        spacing: 8,
+        contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: .zero, trailing: 20),
+        orthogonalScrolling: .paging,
+        boundaryItems: [header]
+      )
+    case .preferences:
+      return .base(
+        spacing: 10,
+        contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: .zero, trailing: 20),
+        orthogonalScrolling: .continuous,
+        boundaryItems: [header]
+      )
+    case .anniversaries:
+      return .base(
+        spacing: 10,
+        contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: .zero, trailing: 20),
+        boundaryItems: [header]
+      )
     }
   }
 }
