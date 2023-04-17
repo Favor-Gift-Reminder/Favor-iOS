@@ -556,10 +556,10 @@
 		2EBCC8FA29EDB8C9008044DC /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
 				2EE07EC0296E8D3700048A3C /* Reactors */,
 				2EE07EBF296E8D3300048A3C /* Views */,
 				2EE07EBE296E8D2D00048A3C /* ViewControllers */,
-				2EC939DE2998B80200C8C47F /* MyPageSection.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";

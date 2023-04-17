@@ -56,7 +56,7 @@ final class MyPageViewController: BaseViewController, View {
     header.reactor = MyPageSectionHeaderViewReactor(section: section)
     return header
   })
-  private lazy var adapter = FavorLayoutAdapter(dataSource: self.dataSource)
+  private lazy var adapter = Adapter(dataSource: self.dataSource)
 
   // MARK: - UI Components
 

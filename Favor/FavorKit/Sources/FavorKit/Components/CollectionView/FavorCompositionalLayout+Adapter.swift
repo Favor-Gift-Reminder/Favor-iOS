@@ -1,5 +1,5 @@
 //
-//  FavorCompositionalLayoutAdapter.swift
+//  FavorCompositionalLayout+Adapter.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/17.
@@ -9,7 +9,7 @@ import UIKit
 
 import RxDataSources
 
-open class FavorLayoutAdapter<Section> where Section: SectionModelType, Section: Adaptive {
+open class Adapter<Section> where Section: SectionModelType, Section: Adaptive {
 
   // MARK: - Properties
 

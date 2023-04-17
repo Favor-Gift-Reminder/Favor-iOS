@@ -312,11 +312,13 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// 실제 사용될 Boundary Item을 만들어 반환해주는 Maker
     /// - Returns: `NSCollectionLayoutBoundarySupplementaryItem`
     public func make() -> NSCollectionLayoutBoundarySupplementaryItem {
-      return NSCollectionLayoutBoundarySupplementaryItem(
+      let boundaryItem = NSCollectionLayoutBoundarySupplementaryItem(
         layoutSize: self.layoutParameters.size,
         elementKind: self.layoutParameters.kind,
         alignment: self.layoutParameters.alignment
       )
+
+      return boundaryItem
     }
   }
 
