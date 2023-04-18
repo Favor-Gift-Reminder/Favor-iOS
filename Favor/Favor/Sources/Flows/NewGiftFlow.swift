@@ -35,6 +35,9 @@ final class NewGiftFlow: Flow {
     case .newGiftIsComplete:
       return self.popToTabBar()
       
+    case .newGiftFriendIsRequired:
+      return self.navigateToNewGiftFriend()
+      
     default:
       return .none
     }
@@ -53,6 +56,18 @@ private extension NewGiftFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: newGiftViewController,
       withNextStepper: newGiftReactor
+    ))
+  }
+  
+  func navigateToNewGiftFriend() -> FlowContributors {
+    let viewController = NewGiftFriendViewController()
+    let reactor = NewGiftFriendViewReactor()
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor
     ))
   }
 

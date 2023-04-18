@@ -121,6 +121,12 @@
 		2EF1586129E3CDF300D199DF /* FilterBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF1586029E3CDF300D199DF /* FilterBottomSheet.swift */; };
 		E524C18929E923B9004CCC40 /* NewGiftFriendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18829E923B9004CCC40 /* NewGiftFriendVC.swift */; };
 		E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */; };
+		E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18C29E93758004CCC40 /* NewGiftFriendEmptyCell.swift */; };
+		E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18E29E99C19004CCC40 /* NewGiftFriendCellReactor.swift */; };
+		E524C19229E9A34B004CCC40 /* NewGiftFriendViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19129E9A34B004CCC40 /* NewGiftFriendViewReactor.swift */; };
+		E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19329EA4014004CCC40 /* NewGiftFriendCell.swift */; };
+		E524C19629EAA50C004CCC40 /* NewGiftFriendHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19529EAA50C004CCC40 /* NewGiftFriendHeaderView.swift */; };
+		E524C19A29EACC8D004CCC40 /* NewGiftFriendHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19929EACC8D004CCC40 /* NewGiftFriendHeaderViewReactor.swift */; };
 		E52F565B29D5698A004E85A6 /* NewGiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */; };
 		E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
@@ -255,6 +261,12 @@
 		2EF1586029E3CDF300D199DF /* FilterBottomSheet.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FilterBottomSheet.swift; path = BottomSheet/FilterBottomSheet.swift; sourceTree = "<group>"; };
 		E524C18829E923B9004CCC40 /* NewGiftFriendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendVC.swift; sourceTree = "<group>"; };
 		E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendSection.swift; sourceTree = "<group>"; };
+		E524C18C29E93758004CCC40 /* NewGiftFriendEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendEmptyCell.swift; sourceTree = "<group>"; };
+		E524C18E29E99C19004CCC40 /* NewGiftFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendCellReactor.swift; sourceTree = "<group>"; };
+		E524C19129E9A34B004CCC40 /* NewGiftFriendViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendViewReactor.swift; sourceTree = "<group>"; };
+		E524C19329EA4014004CCC40 /* NewGiftFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendCell.swift; sourceTree = "<group>"; };
+		E524C19529EAA50C004CCC40 /* NewGiftFriendHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendHeaderView.swift; sourceTree = "<group>"; };
+		E524C19929EACC8D004CCC40 /* NewGiftFriendHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendHeaderViewReactor.swift; sourceTree = "<group>"; };
 		E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFlow.swift; sourceTree = "<group>"; };
 		E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftChoiceFriendButton.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
@@ -710,6 +722,7 @@
 			children = (
 				2EF1585429E1C06000D199DF /* Cells */,
 				E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */,
+				E524C19529EAA50C004CCC40 /* NewGiftFriendHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -717,7 +730,10 @@
 		2EE07EDB296E8E4800048A3C /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
+				E524C19029E9A31A004CCC40 /* CellReactros */,
 				E562610E299497C000D14020 /* NewGiftViewReactor.swift */,
+				E524C19129E9A34B004CCC40 /* NewGiftFriendViewReactor.swift */,
+				E524C19929EACC8D004CCC40 /* NewGiftFriendHeaderViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -762,6 +778,8 @@
 			children = (
 				2EF1585529E1C06000D199DF /* NewGiftEmptyCell.swift */,
 				2EF1585629E1C06000D199DF /* NewGiftPhotoCell.swift */,
+				E524C18C29E93758004CCC40 /* NewGiftFriendEmptyCell.swift */,
+				E524C19329EA4014004CCC40 /* NewGiftFriendCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -783,6 +801,14 @@
 				2EC939E62998C6D100C8C47F /* FavorAnniversaryCell.swift */,
 			);
 			path = Cells;
+			sourceTree = "<group>";
+		};
+		E524C19029E9A31A004CCC40 /* CellReactros */ = {
+			isa = PBXGroup;
+			children = (
+				E524C18E29E99C19004CCC40 /* NewGiftFriendCellReactor.swift */,
+			);
+			path = CellReactros;
 			sourceTree = "<group>";
 		};
 		E55CF7B8298A705F002940D1 /* Flows */ = {
@@ -993,6 +1019,7 @@
 				2ED8CB4729B0C30400E7B547 /* TermCell.swift in Sources */,
 				2EF1585729E1C06000D199DF /* NewGiftEmptyCell.swift in Sources */,
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
+				E524C19629EAA50C004CCC40 /* NewGiftFriendHeaderView.swift in Sources */,
 				E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */,
 				2E00561E29A8B131006CF302 /* MyPageSectionFooterView.swift in Sources */,
 				2EC939E32998C63200C8C47F /* FavorSetupProfileCell.swift in Sources */,
@@ -1045,6 +1072,7 @@
 				2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
+				E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */,
 				2E00561C29A7E720006CF302 /* FavorSelectionSection.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */,
@@ -1077,6 +1105,7 @@
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
 				2EC939DF2998B80200C8C47F /* MyPageSection.swift in Sources */,
+				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
 				2EC939F9299E160B00C8C47F /* MyPageHeaderView.swift in Sources */,
 				2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */,
 				2EC6E11F29BC6656006FBC11 /* ReminderFlow.swift in Sources */,
@@ -1087,10 +1116,13 @@
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
+				E524C19A29EACC8D004CCC40 /* NewGiftFriendHeaderViewReactor.swift in Sources */,
 				2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
+				E524C19229E9A34B004CCC40 /* NewGiftFriendViewReactor.swift in Sources */,
 				2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */,
+				E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

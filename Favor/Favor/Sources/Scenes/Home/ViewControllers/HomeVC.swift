@@ -21,7 +21,7 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Constants
   
   // MARK: - Properties
-
+  
   private lazy var dataSource = HomeDataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
@@ -200,7 +200,7 @@ private extension HomeViewController {
         widthDimension: cellSize.widthDimension,
         heightDimension: cellSize.heightDimension)
     )
-
+    
     let contentsGroup = UICollectionViewCompositionalLayout.group(
       direction: .horizontal,
       layoutSize: NSCollectionLayoutSize(

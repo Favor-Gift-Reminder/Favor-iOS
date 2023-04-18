@@ -354,6 +354,12 @@ final class NewGiftViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    // 친구 선택 클릭
+    self.choiceFrinedButton.rx.tap
+      .map { NewGiftViewReactor.Action.choiceFriendButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // TODO: 메모 텍스트 필드 포커싱 될 때, ScrollView의 높이 설정
     
     // MARK: - STATE
