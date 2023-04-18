@@ -1,5 +1,5 @@
 //
-//  FavorPrefersCell.swift
+//  ProfilePreferenceCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-class FavorPrefersCell: UICollectionViewCell, Reusable, View {
+class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   
@@ -47,7 +47,7 @@ class FavorPrefersCell: UICollectionViewCell, Reusable, View {
 
 // MARK: - Setup
 
-extension FavorPrefersCell: BaseView {
+extension ProfilePreferenceCell: BaseView {
   func setupStyles() {
     //
   }

@@ -23,11 +23,14 @@ open class Adapter<Section> where Section: SectionModelType, Section: Adaptive {
 
   // MARK: - Functions
 
+  public typealias ElementKind = String
+  public typealias DecorationItemClass = AnyClass
   public func build(
     scrollDirection: UICollectionView.ScrollDirection,
     sectionSpacing: CGFloat? = nil,
     header: FavorCompositionalLayout.BoundaryItem? = nil,
-    footer: FavorCompositionalLayout.BoundaryItem? = nil
+    footer: FavorCompositionalLayout.BoundaryItem? = nil,
+    background: [ElementKind: DecorationItemClass]? = nil
   ) -> UICollectionViewCompositionalLayout {
     let layoutConfiguration = UICollectionViewCompositionalLayoutConfiguration()
     layoutConfiguration.scrollDirection = scrollDirection
@@ -56,6 +59,10 @@ open class Adapter<Section> where Section: SectionModelType, Section: Adaptive {
       },
       configuration: layoutConfiguration
     )
+
+    if let background = background?.first {
+      layout.register(background.value, forDecorationViewOfKind: background.key)
+    }
 
     return layout
   }

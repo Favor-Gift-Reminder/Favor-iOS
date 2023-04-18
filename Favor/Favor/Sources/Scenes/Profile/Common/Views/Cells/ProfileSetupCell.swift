@@ -1,5 +1,5 @@
 //
-//  FavorSetupProfileCell.swift
+//  ProfileSetupCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/12.
@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import Reusable
 
-class FavorSetupProfileCell: UICollectionViewCell, Reusable, View {
+class ProfileSetupCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   
@@ -73,7 +73,7 @@ class FavorSetupProfileCell: UICollectionViewCell, Reusable, View {
 
 // MARK: - Setup
 
-extension FavorSetupProfileCell: BaseView {
+extension ProfileSetupCell: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.divider)
     self.layer.cornerRadius = 8

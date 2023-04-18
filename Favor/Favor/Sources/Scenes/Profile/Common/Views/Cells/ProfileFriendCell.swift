@@ -1,5 +1,5 @@
 //
-//  FriendCell.swift
+//  ProfileFriendCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/22.
@@ -12,24 +12,29 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class FriendCell: UICollectionViewCell, Reusable, View {
+final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
 
   // MARK: - Constants
-
-  var disposeBag = DisposeBag()
 
   // MARK: - Properties
 
   // MARK: - UI Components
 
-  private lazy var profileImageView: UIImageView = {
+  private lazy var stackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 8
+    return stackView
+  }()
+
+  private let profileImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.layer.cornerRadius = 30
     imageView.backgroundColor = .lightGray
     return imageView
   }()
 
-  private lazy var nameLabel: UILabel = {
+  private let nameLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 14)
     label.textColor = .favorColor(.icon)
@@ -53,7 +58,7 @@ final class FriendCell: UICollectionViewCell, Reusable, View {
 
   // MARK: - Binding
 
-  func bind(reactor: FriendCellReactor) {
+  func bind(reactor: ProfileFriendCellReactor) {
     // Action
 
     // State
@@ -62,11 +67,11 @@ final class FriendCell: UICollectionViewCell, Reusable, View {
 
   // MARK: - Functions
 
-  // MARK: - UI Setups
-
 }
 
-extension FriendCell: BaseView {
+// MARK: - UI Setups
+
+extension ProfileFriendCell: BaseView {
   func setupStyles() {
     // 
   }
@@ -76,20 +81,15 @@ extension FriendCell: BaseView {
       self.profileImageView,
       self.nameLabel
     ].forEach {
-      self.addSubview($0)
+      self.stackView.addArrangedSubview($0)
     }
+
+    self.addSubview(self.stackView)
   }
 
   func setupConstraints() {
-    self.profileImageView.snp.makeConstraints { make in
-      make.top.directionalHorizontalEdges.equalToSuperview()
-      make.centerX.equalToSuperview()
-      make.width.height.equalTo(60)
-    }
-
-    self.nameLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.profileImageView.snp.bottom).offset(8)
-      make.bottom.directionalHorizontalEdges.equalToSuperview()
+    self.stackView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
     }
   }
 }

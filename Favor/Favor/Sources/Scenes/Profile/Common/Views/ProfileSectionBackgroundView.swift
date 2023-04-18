@@ -1,42 +1,49 @@
 //
-//  BackgroundView.swift
+//  ProfileSectionBackgroundView.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/02/16.
+//  Created by 이창준 on 2023/04/18.
 //
 
 import UIKit
 
 import FavorKit
 import Reusable
+import SnapKit
 
-final class BackgroundView: UICollectionReusableView, Reusable {
-  
+final class ProfileSectionBackgroundView: UICollectionReusableView, Reusable {
+
+  // MARK: - Properties
+
+//  var sectionType: ProfileSection = .profileSetupHelper(_) {
+//
+//  }
+
   // MARK: - Initializer
-  
+
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
   }
-  
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 }
 
-// MARK: - Setup
+// MARK: - UI Setups
 
-extension BackgroundView: BaseView {
+extension ProfileSectionBackgroundView: BaseView {
   func setupStyles() {
-    self.backgroundColor = .favorColor(.background)
+    self.backgroundColor = .favorColor(.white)
   }
-  
+
   func setupLayouts() {
     //
   }
-  
+
   func setupConstraints() {
     //
   }

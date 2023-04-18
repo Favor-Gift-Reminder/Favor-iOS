@@ -29,7 +29,7 @@ final class EditMyPageViewController: BaseViewController, View {
 
   let favorSelectionDataSource = FavorSelectionDataSource(
     configureCell: { _, collectionView, indexPath, reactor in
-      let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorPrefersCell
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfilePreferenceCell
       cell.reactor = reactor
       return cell
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -38,14 +38,14 @@ final class EditMyPageViewController: BaseViewController, View {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as MyPageSectionHeaderView
+        ) as ProfileSectionHeader
         header.reactor = MyPageSectionHeaderViewReactor(title: dataSource.sectionModels[indexPath.item].header)
         return header
       case ElementKind.favorSelectionFooterElementKind:
         let footer = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as MyPageSectionFooterView
+        ) as ProfileSectionFooter
         footer.setupDescription("최대 5개까지 선택할 수 있습니다.")
         return footer
       default:
@@ -56,9 +56,9 @@ final class EditMyPageViewController: BaseViewController, View {
 
   let newAnniversaryDataSource = NewAnniversaryDataSource(configureCell: { _, collectionView, indexPath, reactor in
     guard let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: FavorAnniversaryCell.reuseIdentifier,
+      withReuseIdentifier: ProfileAnniversaryCell.reuseIdentifier,
       for: indexPath
-    ) as? FavorAnniversaryCell else { return UICollectionViewCell() }
+    ) as? ProfileAnniversaryCell else { return UICollectionViewCell() }
     cell.reactor = reactor
     return cell
   }, configureSupplementaryView: { _, collectionView, kind, indexPath in
@@ -135,18 +135,18 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // CollectionView Cell
     collectionView.register(
-      FavorPrefersCell.self,
-      forCellWithReuseIdentifier: FavorPrefersCell.reuseIdentifier
+      ProfilePreferenceCell.self,
+      forCellWithReuseIdentifier: ProfilePreferenceCell.reuseIdentifier
     )
 
     // Header
     collectionView.register(
-      supplementaryViewType: MyPageSectionHeaderView.self,
+      supplementaryViewType: ProfileSectionHeader.self,
       ofKind: ElementKind.favorSelectionHeaderElementKind
     )
     // Footer
     collectionView.register(
-      supplementaryViewType: MyPageSectionFooterView.self,
+      supplementaryViewType: ProfileSectionFooter.self,
       ofKind: ElementKind.favorSelectionFooterElementKind
     )
 
@@ -164,8 +164,8 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // CollectionView Cell
     collectionView.register(
-      FavorAnniversaryCell.self,
-      forCellWithReuseIdentifier: FavorAnniversaryCell.reuseIdentifier
+      ProfileAnniversaryCell.self,
+      forCellWithReuseIdentifier: ProfileAnniversaryCell.reuseIdentifier
     )
 
     // Header

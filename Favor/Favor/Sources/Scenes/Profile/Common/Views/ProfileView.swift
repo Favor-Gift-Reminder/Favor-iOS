@@ -1,5 +1,5 @@
 //
-//  MyPageHeaderView.swift
+//  ProfileView.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/16.
@@ -12,9 +12,11 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
-final class MyPageHeaderView: UIView, View {
+final class ProfileView: UIView, View {
   
   // MARK: - Constants
+
+  public static let height: CGFloat = 330.0
   
   // MARK: - Properties
   
@@ -92,9 +94,9 @@ final class MyPageHeaderView: UIView, View {
 
 // MARK: - Setup
 
-extension MyPageHeaderView: BaseView {
+extension ProfileView: BaseView {
   func setupStyles() {
-    //
+    self.backgroundColor = .favorColor(.main)
   }
 
   func setupLayouts() {
@@ -121,7 +123,7 @@ extension MyPageHeaderView: BaseView {
 
     self.profileImageButton.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
-      make.bottom.equalToSuperview().inset(58)
+      make.bottom.equalToSuperview().inset(60)
       make.width.height.equalTo(60)
     }
     

@@ -23,12 +23,12 @@ final class MyPageSectionHeaderViewReactor: Reactor {
   
   struct State {
     var title: String?
-    var sectionType: MyPageSection?
+    var sectionType: ProfileSection?
   }
   
   // MARK: - Initializer
   
-  init(section: MyPageSection) {
+  init(section: ProfileSection) {
     self.initialState = State(
       sectionType: section
     )

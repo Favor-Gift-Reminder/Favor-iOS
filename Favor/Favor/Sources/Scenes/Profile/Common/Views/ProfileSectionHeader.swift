@@ -1,5 +1,5 @@
 //
-//  MyPageSectionHeaderView.swift
+//  ProfileSectionHeader.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/13.
@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class MyPageSectionHeaderView: UICollectionReusableView, Reusable, View {
+final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   
@@ -54,22 +54,6 @@ final class MyPageSectionHeaderView: UICollectionReusableView, Reusable, View {
     // Action
     
     // State
-    reactor.state.map { $0.sectionType }
-      .filter { $0 != nil }
-      .bind(with: self, onNext: { owner, sectionType in
-        owner.headerTitle.text = sectionType?.headerTitle
-
-        if let buttonTitle = sectionType?.headerRightItemTitle {
-          var titleContainer = AttributeContainer()
-          titleContainer.foregroundColor = .favorColor(.explain)
-          titleContainer.font = .favorFont(.regular, size: 12)
-          owner.rightButton.configuration?.attributedTitle = AttributedString(buttonTitle, attributes: titleContainer)
-        } else {
-          owner.rightButton.isHidden = true
-        }
-      })
-      .disposed(by: self.disposeBag)
-
     reactor.state.map { $0.title }
       .filter { $0 != nil }
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -82,7 +66,7 @@ final class MyPageSectionHeaderView: UICollectionReusableView, Reusable, View {
 
 // MARK: - Setup
 
-extension MyPageSectionHeaderView: BaseView {
+extension ProfileSectionHeader: BaseView {
   func setupStyles() {
     //
   }

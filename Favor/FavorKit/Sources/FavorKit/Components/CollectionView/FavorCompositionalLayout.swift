@@ -89,7 +89,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     )
 
     /// 화면의 너비를 꽉 채우며 가로로 나열되는 아이템들을 담는 Group
-    /// -  Parameters:
+    /// - Parameters:
     ///   - height: Group의 `heightDimension`
     ///   - numberOfItems: Group 안에 포함된 Item들의 개수 (`Int`)
     ///   - spacing: Group 내부에 들어있는 Item들의 간격 (`NSCollectionLayoutSpacing`)
@@ -154,7 +154,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       case let .flow(height, numberOfItems, spacing, contentInsets):
         return (
           size: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
+            widthDimension: .estimated(1),
             heightDimension: height
           ),
           numberOfItems: numberOfItems,
@@ -217,7 +217,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       spacing: CGFloat? = nil,
       contentInsets: NSDirectionalEdgeInsets? = nil,
       orthogonalScrolling: UICollectionLayoutSectionOrthogonalScrollingBehavior? = nil,
-      boundaryItems: [BoundaryItem]? = nil
+      boundaryItems: [BoundaryItem]? = nil,
+      decorationItems: [DecorationItem]? = nil
     )
 
     /// 각 enum값의 파라미터들에 더 쉽게 접근하기 위한 wrapper-property
@@ -225,15 +226,17 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       spacing: CGFloat,
       contentInsets: NSDirectionalEdgeInsets,
       orthogonalScrolling: UICollectionLayoutSectionOrthogonalScrollingBehavior,
-      boundaryItems: [BoundaryItem]
+      boundaryItems: [BoundaryItem],
+      decorationItems: [DecorationItem]
     ) {
       switch self {
-      case let .base(spacing, contentInsets, orthogonalScrolling, boundaryItems):
+      case let .base(spacing, contentInsets, orthogonalScrolling, boundaryItems, decorationItems):
         return (
           spacing: spacing ?? .zero,
           contentInsets: contentInsets ?? .zero,
           orthogonalScrolling: orthogonalScrolling ?? .none,
-          boundaryItems: boundaryItems ?? []
+          boundaryItems: boundaryItems ?? [],
+          decorationItems: decorationItems ?? []
         )
       }
     }
@@ -249,6 +252,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       section.contentInsets = self.layoutParameters.contentInsets
       section.orthogonalScrollingBehavior = self.layoutParameters.orthogonalScrolling
       section.boundarySupplementaryItems = self.layoutParameters.boundaryItems.map { $0.make() }
+      section.decorationItems = self.layoutParameters.decorationItems.map { $0.make() }
 
       return section
     }
@@ -319,6 +323,58 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       )
 
       return boundaryItem
+    }
+  }
+
+  // MARK: - Decoration Item (Background & Badge)
+
+  /// Background와 Badge 등의
+  public enum DecorationItem {
+
+    /// Section을 꾸며주는 `BackgroundView`
+    /// - Parameters:
+    ///   - kind: BackgroundView의 `elementKind` (`String`)
+    case background(kind: String)
+
+    /// Section을 꾸며주는 Badge
+    /// - Parameters:
+    ///   - width: Badge의 `WidthDimension`
+    ///   - height: Badge의 `HeightDimension`
+    case badge(
+      width: NSCollectionLayoutDimension,
+      height: NSCollectionLayoutDimension
+    )
+
+    /// 각 enum값의 파라미터들에 더 쉽게 접근하기 위한 wrapper-property
+    private var size: NSCollectionLayoutSize {
+      switch self {
+      case let .badge(width, height):
+        return NSCollectionLayoutSize(
+          widthDimension: width,
+          heightDimension: height
+        )
+      default:
+        return NSCollectionLayoutSize(
+          widthDimension: .absolute(.zero),
+          heightDimension: .absolute(.zero)
+        )
+      }
+    }
+
+    /// 실제 사용될 Decoration Item을 만들어 반환해주는 Maker
+    /// - Returns: `NSCollectionLayoutDecorationItem`
+    public func make() -> NSCollectionLayoutDecorationItem {
+      switch self {
+      case let .background(kind):
+        return NSCollectionLayoutDecorationItem.background(elementKind: kind)
+      case let .badge(width, height):
+        return NSCollectionLayoutDecorationItem(
+          layoutSize: NSCollectionLayoutSize(
+            widthDimension: width,
+            heightDimension: height
+          )
+        )
+      }
     }
   }
 

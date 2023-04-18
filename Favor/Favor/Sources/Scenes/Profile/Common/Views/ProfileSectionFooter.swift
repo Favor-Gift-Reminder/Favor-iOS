@@ -1,5 +1,5 @@
 //
-//  MyPageSectionFooterView.swift
+//  ProfileSectionFooter.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/24.
@@ -11,7 +11,7 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class MyPageSectionFooterView: UICollectionReusableView, Reusable {
+final class ProfileSectionFooter: UICollectionReusableView, Reusable {
 
   // MARK: - UI Components
 
@@ -50,7 +50,7 @@ final class MyPageSectionFooterView: UICollectionReusableView, Reusable {
   }
 }
 
-extension MyPageSectionFooterView: BaseView {
+extension ProfileSectionFooter: BaseView {
   func setupStyles() {
     self.layoutMargins = UIEdgeInsets(top: 16, left: 0, bottom: 0, right: 0)
   }
