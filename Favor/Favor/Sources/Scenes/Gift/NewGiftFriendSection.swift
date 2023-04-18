@@ -10,28 +10,26 @@ import UIKit
 import RxDataSources
 
 enum NewGiftFriendSectionType: Equatable {
-  case selected
-  case friend
+  case selectedFriends
+  case friendList
 }
 
 struct NewGiftFriendSection {
-  typealias NewGiftFriendSectionModel = SectionModel<NewGiftFriendSectionType, NewGiftFriendSectionItem >
-
+  typealias NewGiftFriendSectionModel = SectionModel<NewGiftFriendSectionType, NewGiftFriendSectionItem>
+  
   enum NewGiftFriendSectionItem {
     case empty
-    case selected
-    case check
-    case plus
+    case friend(NewGiftFriendCellReactor)
   }
 }
 
 extension NewGiftFriendSectionType {
   var headerHeight: NSCollectionLayoutDimension {
     switch self {
-    case .selected:
-      return .absolute(30)
-    case .friend:
-      return .absolute(80)
+    case .selectedFriends:
+      return .absolute(54)
+    case .friendList:
+      return .absolute(100)
     }
   }
 }
