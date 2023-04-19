@@ -57,7 +57,7 @@ public class BaseProfileViewController: BaseViewController {
         for: indexPath
       ) as ProfileSectionHeader
       let section = dataSource[indexPath.section]
-      header.reactor = MyPageSectionHeaderViewReactor(section: section)
+      header.reactor = ProfileSectionHeaderReactor(section: section)
       return header
     default:
       return UICollectionReusableView()

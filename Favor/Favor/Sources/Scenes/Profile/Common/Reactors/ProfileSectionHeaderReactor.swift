@@ -1,5 +1,5 @@
 //
-//  MyPageSectionHeaderViewReactor.swift
+//  ProfileSectionHeaderReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/14.
@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class MyPageSectionHeaderViewReactor: Reactor {
+final class ProfileSectionHeaderReactor: Reactor {
   
   // MARK: - Properties
   
@@ -23,23 +23,17 @@ final class MyPageSectionHeaderViewReactor: Reactor {
   
   struct State {
     var title: String?
-    var sectionType: ProfileSection?
+    var rightButtonTitle: String?
   }
   
   // MARK: - Initializer
   
   init(section: ProfileSection) {
     self.initialState = State(
-      sectionType: section
+      title: section.headerTitle,
+      rightButtonTitle: section.rightButtonTitle
     )
   }
-
-  init(title: String) {
-    self.initialState = State(
-      title: title
-    )
-  }
-  
   
   // MARK: - Functions
   

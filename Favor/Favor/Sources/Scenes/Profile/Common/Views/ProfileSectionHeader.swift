@@ -29,7 +29,8 @@ final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
 
   private lazy var rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.baseForegroundColor = .favorColor(.explain)
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.subtext)
 
     let button = UIButton(configuration: config)
     return button
@@ -50,7 +51,7 @@ final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
   
   // MARK: - Binding
   
-  func bind(reactor: MyPageSectionHeaderViewReactor) {
+  func bind(reactor: ProfileSectionHeaderReactor) {
     // Action
     
     // State
@@ -59,6 +60,18 @@ final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, title in
         owner.headerTitle.text = title
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.rightButtonTitle }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, title in
+        owner.rightButton.configuration?.updateAttributedTitle(
+          title,
+          font: .favorFont(.regular, size: 12)
+        )
+        owner.rightButton.isHidden = title == nil
       })
       .disposed(by: self.disposeBag)
   }

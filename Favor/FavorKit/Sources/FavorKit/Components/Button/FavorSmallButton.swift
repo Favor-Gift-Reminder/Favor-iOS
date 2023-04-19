@@ -41,8 +41,6 @@ public final class FavorSmallButton: UIButton {
 extension FavorSmallButton {
   func setupStyles() {
     self.configuration = self.smallFavorButtonType.configuration
-    let imageConfig = UIImage.SymbolConfiguration(pointSize: 10)
-    self.setPreferredSymbolConfiguration(imageConfig, forImageIn: .normal)
   }
   
   func setupLayouts() {}
