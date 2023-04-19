@@ -68,12 +68,14 @@ public class APIManager {
 // MARK: - TYPE METHODS
 
 extension APIManager {
-  public static func decode<T: Decodable>(_ data: Data) -> T {
+  public static func decode<T: Decodable>(_ data: Data) throws -> T {
     let decoder = JSONDecoder()
-    guard let responseModel = try? decoder.decode(T.self, from: data) else {
-      fatalError("Decode Error")
+    do {
+      let responseModel = try decoder.decode(T.self, from: data)
+      return responseModel
+    } catch {
+      throw APIError.decodeError(error)
     }
-    return responseModel
   }
 
   public static func header(for header: HeaderType) -> [String: String] {

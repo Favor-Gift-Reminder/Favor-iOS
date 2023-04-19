@@ -138,16 +138,20 @@ private extension ReminderViewReactor {
       let reminders = networking.request(.getAllReminderList(userNo: 1)) // TODO: UserNo 변경
         .flatMap { reminders -> Observable<[Reminder]> in
           let responseData = reminders.data
-          let remote: ResponseDTO<[ReminderResponseDTO.Reminder]> = APIManager.decode(responseData)
-          return .just(remote.data.map {
-            Reminder(
-              reminderNo: $0.reminderNo,
-              title: $0.title,
-              date: $0.reminderDate.toDate("yyyy-MM-dd") ?? .now,
-              shouldNotify: $0.isAlarmSet,
-              friendNo: $0.friendNo
-            )
-          })
+          do {
+            let remote: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(responseData)
+            return .just(remote.data.map {
+              Reminder(
+                reminderNo: $0.reminderNo,
+                title: $0.reminderTitle,
+                date: $0.reminderDate,
+                shouldNotify: $0.isAlarmSet,
+                friendNo: $0.friendNo
+              )
+            })
+          } catch {
+            return .just([])
+          }
         }
         .asSingle()
       return reminders
