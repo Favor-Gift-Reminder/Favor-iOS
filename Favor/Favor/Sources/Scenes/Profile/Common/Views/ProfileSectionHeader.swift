@@ -82,7 +82,7 @@ extension ProfileSectionHeader: BaseView {
   
   func setupConstraints() {
     self.headerTitle.snp.makeConstraints { make in
-      make.top.leading.trailing.equalToSuperview()
+      make.bottom.leading.trailing.equalToSuperview()
     }
 
     self.rightButton.snp.makeConstraints { make in

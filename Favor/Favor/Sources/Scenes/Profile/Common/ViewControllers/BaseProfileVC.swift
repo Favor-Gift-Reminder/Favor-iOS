@@ -80,9 +80,11 @@ public class BaseProfileViewController: BaseViewController {
       frame: self.view.bounds,
       collectionViewLayout: self.adapter.build(
         scrollDirection: .vertical,
-        sectionSpacing: 40,
+        sectionSpacing: .zero,
         header: header,
-        background: [ProfileElementKind.sectionBackground: ProfileSectionBackgroundView.self]
+        background: [
+          ProfileElementKind.sectionWhiteBackground: ProfileSectionBackgroundView.self
+        ]
       )
     )
 
@@ -171,7 +173,7 @@ public class BaseProfileViewController: BaseViewController {
   // MARK: - UI Setups
 
   public override func setupStyles() {
-    super.setupStyles()
+    self.view.backgroundColor = .favorColor(.background)
   }
 
   public override func setupLayouts() {

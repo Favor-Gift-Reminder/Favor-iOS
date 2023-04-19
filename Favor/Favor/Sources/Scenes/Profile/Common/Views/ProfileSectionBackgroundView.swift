@@ -15,10 +15,6 @@ final class ProfileSectionBackgroundView: UICollectionReusableView, Reusable {
 
   // MARK: - Properties
 
-//  var sectionType: ProfileSection = .profileSetupHelper(_) {
-//
-//  }
-
   // MARK: - Initializer
 
   override init(frame: CGRect) {

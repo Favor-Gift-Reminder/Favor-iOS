@@ -13,7 +13,7 @@ import RxDataSources
 enum ProfileElementKind {
   static let collectionHeader = "Profile.CollectionHeader"
   static let collectionFooter = "Profile.CollectionFooter"
-  static let sectionBackground = "Profile.SectionBackground"
+  static let sectionWhiteBackground = "Profile.SectionWhiteBackground"
 }
 
 enum ProfileSectionItem {
@@ -143,11 +143,11 @@ extension ProfileSection: Adaptive {
 
   public var section: FavorCompositionalLayout.Section {
     let header = FavorCompositionalLayout.BoundaryItem.header(height: .estimated(32))
-    let background = FavorCompositionalLayout.DecorationItem.background(
-      kind: ProfileElementKind.sectionBackground
+    let whiteBackground = FavorCompositionalLayout.DecorationItem.background(
+      kind: ProfileElementKind.sectionWhiteBackground
     )
 
-    let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: .zero, trailing: 20)
+    let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20)
 
     switch self {
     case .profileSetupHelper:
@@ -155,32 +155,33 @@ extension ProfileSection: Adaptive {
         contentInsets: defaultInsets,
         orthogonalScrolling: .paging,
         boundaryItems: [header],
-        decorationItems: [background]
+        decorationItems: [whiteBackground]
       )
     case .preferences:
       return .base(
         contentInsets: defaultInsets,
         orthogonalScrolling: .continuous,
         boundaryItems: [header],
-        decorationItems: [background]
+        decorationItems: [whiteBackground]
       )
     case .anniversaries:
       return .base(
         spacing: 10,
         contentInsets: defaultInsets,
         boundaryItems: [header],
-        decorationItems: [background]
+        decorationItems: [whiteBackground]
       )
     case .memo:
       return .base(
         contentInsets: defaultInsets,
-        boundaryItems: [header]
+        boundaryItems: [header],
+        decorationItems: [whiteBackground]
       )
     case .friends:
       return .base(
         contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 66, trailing: 20),
         orthogonalScrolling: .continuous,
-        boundaryItems: [header]
+        boundaryItems: [FavorCompositionalLayout.BoundaryItem.header(height: .estimated(72))]
       )
     }
   }
