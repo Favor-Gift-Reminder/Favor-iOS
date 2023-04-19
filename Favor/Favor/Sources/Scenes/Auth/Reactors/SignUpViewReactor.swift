@@ -9,7 +9,6 @@ import OSLog
 
 import FavorKit
 import FavorNetworkKit
-import Moya
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -111,20 +110,27 @@ final class SignUpViewReactor: Reactor, Stepper {
       ])
       
     case .nextFlowRequested:
-      os_log(.debug, "Next button or return key from keyboard did tap.")
       if self.currentState.isNextButtonEnabled {
         let email = self.currentState.email
         let password = self.currentState.password
 
         return .concat([
           .just(.updateLoading(true)),
-          networking.request(.postSignUp(email: email, password: password))
-            .debug()
+          self.networking.request(.postSignUp(email: email, password: password))
             .flatMap { response -> Observable<Mutation> in
               do {
                 let data: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
-                print(data.data.userNo)
-                self.steps.accept(AppStep.setProfileIsRequired)
+                let decodedUser = User(
+                  userNo: data.data.userNo,
+                  email: data.data.email,
+                  userID: data.data.userID,
+                  name: data.data.name,
+                  favorList: data.data.favorList
+                )
+                Task {
+                  try await RealmManager.shared.recreate(decodedUser)
+                  self.steps.accept(AppStep.setProfileIsRequired)
+                }
                 return .just(.updateLoading(false))
               } catch {
                 return .empty()

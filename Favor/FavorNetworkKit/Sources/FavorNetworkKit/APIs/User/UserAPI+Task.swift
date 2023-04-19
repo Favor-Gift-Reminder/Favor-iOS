@@ -49,7 +49,7 @@ extension UserAPI {
     case .getUserId:
       return .requestPlain
 
-    case .patchProfile(let userId, let name, let userNo):
+    case let .patchProfile(userId, name, userNo):
       return .requestCompositeParameters(
         bodyParameters: [
           "userId": userId,

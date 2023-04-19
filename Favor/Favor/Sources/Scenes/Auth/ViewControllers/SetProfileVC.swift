@@ -120,6 +120,11 @@ final class SetProfileViewController: BaseViewController, View {
   
   func bind(reactor: SetProfileViewReactor) {
     // Action
+    self.rx.viewDidLoad
+      .map { Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.profileImageButton.rx.tapWithHaptic
       .map { Reactor.Action.profileImageButtonDidTap }
       .bind(to: reactor.action)
@@ -182,6 +187,26 @@ final class SetProfileViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, image in
         owner.profileImageButton.configuration?.image = image
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.userName }
+      .take(until: { !$0.isEmpty })
+      .concat(reactor.state.map { $0.userName }.take(1))
+      .observe(on: MainScheduler.asyncInstance)
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, name in
+        owner.nameTextField.textField.text = name
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.userId }
+      .take(until: { !$0.isEmpty })
+      .concat(reactor.state.map { $0.userId }.take(1))
+      .observe(on: MainScheduler.asyncInstance)
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, id in
+        owner.idTextField.textField.text = id
       })
       .disposed(by: self.disposeBag)
 

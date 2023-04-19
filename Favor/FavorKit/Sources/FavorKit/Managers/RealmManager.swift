@@ -105,6 +105,24 @@ public final class RealmManager: RealmCRUDable {
     }
   }
 
+  @discardableResult
+  public func recreate<T: Object>(_ object: T) async throws -> T {
+    typealias RealmContinuation = CheckedContinuation<T, Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
+          try self.realm.write {
+            self.realm.delete(self.realm.objects(T.self))
+            self.realm.add(object)
+          }
+          continuation.resume(returning: object.freeze())
+        } catch {
+          continuation.resume(throwing: error)
+        }
+      }
+    }
+  }
+
   /// RealmDB에서 주어진 `RealmObject`의 값들을 읽어옵니다.
   ///
   /// **Usage**
@@ -251,6 +269,40 @@ public final class RealmManager: RealmCRUDable {
             self.realm.delete(object)
           }
           continuation.resume(returning: object.freeze())
+        } catch {
+          continuation.resume(throwing: error)
+        }
+      }
+    }
+  }
+
+  /// RealmDB에 존재하는 인스턴스들을 삭제합니다.
+  ///
+  /// **Usage**
+  /// ``` Swift
+  /// Task {
+  ///   do {
+  ///     let users = try await RealmManager.shared.read(User.self)
+  ///     try await RealmManager.shared.delete(users)
+  ///   } catch {
+  ///     fatalError(error)
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - object: 삭제할 `RealmObject` 인스턴스
+  /// - Returns: ***@Discardable*** 삭제한 `RealmObject` 인스턴스
+  @discardableResult
+  public func delete<T: Object>(_ objects: [T]) async throws -> [T] {
+    typealias RealmContinuation = CheckedContinuation<[T], Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
+          try self.realm.write {
+            self.realm.delete(objects)
+          }
+          continuation.resume(returning: objects.map { $0.freeze() })
         } catch {
           continuation.resume(throwing: error)
         }
