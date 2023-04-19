@@ -20,7 +20,7 @@ public class User: Object {
   /// 회원 이름
   @Persisted public var name: String
   /// 회원 취향 태그
-  @Persisted public var favorList: MutableSet<Int>
+  @Persisted public var favorList: MutableSet<String>
   /// 선물 목록
   @Persisted public var giftList: List<Gift>
   /// 리마인더 목록
@@ -52,7 +52,7 @@ public class User: Object {
     email: String,
     userID: String,
     name: String,
-    favorList: [Int], // enum화?
+    favorList: [String], // enum화?
     userPhoto: Photo? = nil,
     backgroundPhoto: Photo? = nil
   ) {
