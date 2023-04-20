@@ -9,6 +9,7 @@ import OSLog
 import UIKit
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -19,13 +20,14 @@ final class SignInViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  let networking = UserNetworking()
 
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
   let passwordValidate = BehaviorRelay<ValidationResult>(value: .empty)
   
   enum Action {
-    case viewDidLoad
+    case viewNeedsLoaded
     case emailDidUpdate(String)
     case passwordDidUpdate(String)
     case nextFlowRequested
@@ -58,7 +60,7 @@ final class SignInViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewDidLoad:
+    case .viewNeedsLoaded:
       os_log(.debug, "View did load.")
       return .empty()
 
@@ -81,11 +83,10 @@ final class SignInViewReactor: Reactor, Stepper {
       ])
 
     case .nextFlowRequested:
-      os_log(.debug, "Sign in button did tap.")
+      // Login
       return .empty()
 
     case .findPasswordButtonDidTap:
-      os_log(.debug, "Find password button did tap.")
       self.steps.accept(AppStep.findPasswordIsRequired)
       return .empty()
     }
@@ -101,7 +102,6 @@ final class SignInViewReactor: Reactor, Stepper {
           emailValidate,
           passwordValidate
         ].allSatisfy({ $0 == .valid }) {
-          os_log(.debug, "Sign-In button became validate.")
           return .validateSignInButton(true)
         } else {
           return .validateSignInButton(false)
@@ -132,4 +132,10 @@ final class SignInViewReactor: Reactor, Stepper {
 
     return newState
   }
+}
+
+// MARK: - Privates
+
+private extension SignInViewReactor {
+  
 }
