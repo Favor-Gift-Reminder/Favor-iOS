@@ -1,5 +1,5 @@
 //
-//  FavorSetupProfileCellReactor.swift
+//  ProfilePreferenceCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class FavorSetupProfileCellReactor: Reactor {
+final class ProfilePreferenceCellReactor: Reactor {
   
   // MARK: - Properties
   

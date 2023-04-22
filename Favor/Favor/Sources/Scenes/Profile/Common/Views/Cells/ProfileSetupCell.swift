@@ -63,7 +63,7 @@ class ProfileSetupCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FavorSetupProfileCellReactor) {
+  func bind(reactor: ProfileSetupHelperCellReactor) {
     // Action
     
     // State

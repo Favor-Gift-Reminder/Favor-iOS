@@ -13,7 +13,7 @@ struct FavorSelectionSection {
 }
 
 extension FavorSelectionSection: SectionModelType {
-  typealias Item = FavorPrefersCellReactor
+  typealias Item = ProfilePreferenceCellReactor
 
   init(original: FavorSelectionSection, items: [Item]) {
     self = original

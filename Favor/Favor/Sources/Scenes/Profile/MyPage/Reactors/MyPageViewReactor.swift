@@ -14,13 +14,6 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-/// 필요한 데이터
-/// 유저 프로필 사진, 이름, 아이디
-/// 총 선물, 준 선물, 받은 선물
-/// 취향
-/// 기념일
-/// 친구 목록
-
 final class MyPageViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
@@ -37,24 +30,32 @@ final class MyPageViewReactor: Reactor, Stepper {
   
   enum Mutation {
     case updateUser(User)
+    case updatePreferenceSection([String])
+//    case updateAnniversarySection([String])
+    case updateFriendSection([Friend])
     case updateLoading(Bool)
   }
   
   struct State {
     var user = User()
-    var sections: [ProfileSection]
+    /// 0: 새 프로필
+    /// 1: 취향
+    /// 2: 기념일
+    /// 3: 친구
+    var sections: [ProfileSection] = []
+    var profileSetupHelperSection: ProfileSection = .profileSetupHelper([])
+    var preferencesSection: ProfileSection = .preferences([])
+    var anniversarySection: ProfileSection = .anniversaries([])
+    var friendSection: ProfileSection = .friends([])
     var isLoading: Bool = false
   }
   
   // MARK: - Initializer
   
   init() {
-    self.initialState = State(
-      sections: MyPageViewReactor.setupMockSection()
-    )
+    self.initialState = State()
     self.setupUserFetcher()
   }
-  
   
   // MARK: - Functions
   
@@ -65,10 +66,11 @@ final class MyPageViewReactor: Reactor, Stepper {
         .flatMap { (status, user) -> Observable<Mutation> in
           return .concat([
             .just(.updateUser(user)),
+            .just(.updatePreferenceSection(user.favorList.toArray())),
+            .just(.updateFriendSection(user.friendList.toArray())),
             .just(.updateLoading(status == .inProgress))
           ])
         }
-
 
     case .editButtonDidTap:
       os_log(.debug, "Edit button did tap.")
@@ -87,11 +89,62 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .updateUser(let user):
       newState.user = user
 
+    case .updatePreferenceSection(let preferences):
+      let preferenceSection = ProfileSection.preferences(
+        preferences.map { _ -> ProfileSectionItem in
+          return .preferences(ProfilePreferenceCellReactor())
+        }
+      )
+      newState.preferencesSection = preferenceSection
+
+    case .updateFriendSection(let friends):
+      let friendSection = ProfileSection.friends(
+        friends.map { _ -> ProfileSectionItem in
+          return .friends(ProfileFriendCellReactor())
+        }
+      )
+      newState.friendSection = friendSection
+
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
     }
 
     return newState
+  }
+
+  func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+      var newSections: [ProfileSection] = []
+      var profileSetupHelpers: [ProfileSectionItem] = []
+
+      // 취향
+      if !state.preferencesSection.items.isEmpty {
+        newSections.append(state.preferencesSection)
+      } else {
+        profileSetupHelpers.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.preference)))
+      }
+      // 기념일
+      if !state.anniversarySection.items.isEmpty {
+        newSections.append(state.anniversarySection)
+      } else {
+        profileSetupHelpers.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
+      }
+      // 친구
+      if state.friendSection.items.isEmpty { // 친구가 없을 때의 처리
+        let emptyFriendSection = ProfileSection.friends([.friends(ProfileFriendCellReactor())])
+        newSections.append(emptyFriendSection)
+      } else { // 친구가 있을 때는 다른 섹션과 동일하게 추가
+        newSections.append(state.friendSection)
+      }
+      // 새 프로필
+      if !profileSetupHelpers.isEmpty {
+        newSections.insert(.profileSetupHelper(profileSetupHelpers), at: .zero)
+      }
+
+      newState.sections = newSections
+      return newState
+    }
   }
 }
 
@@ -102,7 +155,7 @@ private extension MyPageViewReactor {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
-      let user = networking.request(.getUser(userNo: 1)) // TODO: UserNo 변경
+      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
         .flatMap { user -> Observable<User> in
           let userData = user.data
           do {
@@ -134,37 +187,5 @@ private extension MyPageViewReactor {
       os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(user)")
       try await RealmManager.shared.update(user)
     }
-  }
-}
-
-// MARK: - Privates
-
-private extension MyPageViewReactor {
-  
-}
-
-// MARK: - Temporaries
-
-extension MyPageViewReactor {
-  static func setupMockSection() -> [ProfileSection] {
-    let newProfile1 = ProfileSectionItem.profileSetupHelper(FavorSetupProfileCellReactor())
-    let newProfile2 = ProfileSectionItem.profileSetupHelper(FavorSetupProfileCellReactor())
-    let newProfileSection = ProfileSection.profileSetupHelper([newProfile1, newProfile2])
-    
-    let favor1 = ProfileSectionItem.preferences(FavorPrefersCellReactor())
-    let favor2 = ProfileSectionItem.preferences(FavorPrefersCellReactor())
-    let favor3 = ProfileSectionItem.preferences(FavorPrefersCellReactor())
-    let favorSection = ProfileSection.preferences([favor1, favor2, favor3])
-    
-    let anniversary1 = ProfileSectionItem.anniversaries(FavorAnniversaryCellReactor())
-    let anniversary2 = ProfileSectionItem.anniversaries(FavorAnniversaryCellReactor())
-    let anniversary3 = ProfileSectionItem.anniversaries(FavorAnniversaryCellReactor())
-    let anniversarySection = ProfileSection.anniversaries([anniversary1, anniversary2, anniversary3])
-
-    let friendSection = ProfileSection.friends(
-      (1...10).map { _ in ProfileSectionItem.friends(ProfileFriendCellReactor()) }
-    )
-    
-    return [newProfileSection, favorSection, anniversarySection, friendSection]
   }
 }

@@ -70,7 +70,7 @@ private extension EditMyPageViewReactor {
   func setupFavorSelectionMockSection() -> [FavorSelectionSection] {
     var items: [FavorSelectionSection.Item] = []
     (0 ..< 18).forEach { _ in
-      items.append(FavorPrefersCellReactor())
+      items.append(ProfilePreferenceCellReactor())
     }
     let favorSelectionSection = FavorSelectionSection(header: "취향", items: items)
 
@@ -80,7 +80,7 @@ private extension EditMyPageViewReactor {
   func setupNewAnniversaryMockSection() -> [NewAnniversarySection] {
     var items: [NewAnniversarySection.Item] = []
     (0 ..< 3).forEach { _ in
-      items.append(FavorAnniversaryCellReactor())
+      items.append(ProfileAnniversaryCellReactor())
     }
     let newAnniversarySection = NewAnniversarySection(header: "기념일", items: items)
 

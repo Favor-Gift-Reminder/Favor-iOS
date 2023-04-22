@@ -13,6 +13,7 @@
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562629A9220D006CF302 /* NewAnniversarySection.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
+		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
 		2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
@@ -75,9 +76,9 @@
 		2EC939EB299A7D4300C8C47F /* ProfileSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* ProfileSectionHeader.swift */; };
 		2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EE299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift */; };
 		2EC939F1299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift */; };
-		2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F2299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift */; };
-		2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */; };
-		2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift */; };
+		2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F2299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift */; };
+		2EC939F5299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift */; };
+		2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */; };
 		2EC939F9299E160B00C8C47F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* ProfileView.swift */; };
 		2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939FA299E163800C8C47F /* MyPageHeaderViewReactor.swift */; };
 		2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B3982983DF3900CDBC81 /* AppFlow.swift */; };
@@ -214,9 +215,9 @@
 		2EC939EA299A7D4300C8C47F /* ProfileSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeader.swift; sourceTree = "<group>"; };
 		2EC939EE299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderReactor.swift; sourceTree = "<group>"; };
 		2EC939F0299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGiftStatsCollectionHeaderReactor.swift; sourceTree = "<group>"; };
-		2EC939F2299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSetupProfileCellReactor.swift; sourceTree = "<group>"; };
-		2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorPrefersCellReactor.swift; sourceTree = "<group>"; };
-		2EC939F6299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorAnniversaryCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F2299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupHelperCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F4299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePreferenceCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAnniversaryCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F8299E160A00C8C47F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		2EC939FA299E163800C8C47F /* MyPageHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2ED22DAE296FF4A900ED6221 /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
@@ -289,6 +290,7 @@
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
+				2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */,
 				2EE3BA8729AB60B9004FDCC9 /* RxRealm in Frameworks */,
 				2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
@@ -372,10 +374,10 @@
 		2E6EBFB829A9B01700A924B9 /* CellReactors */ = {
 			isa = PBXGroup;
 			children = (
+				2EC939F2299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift */,
+				2EC939F4299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift */,
+				2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */,
 				2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */,
-				2EC939F4299CF6C400C8C47F /* FavorPrefersCellReactor.swift */,
-				2EC939F2299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift */,
-				2EC939F6299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift */,
 			);
 			path = CellReactors;
 			sourceTree = "<group>";
@@ -587,8 +589,8 @@
 		2EBCC8FD29EDB991008044DC /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				2EC939EE299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift */,
 				2E6EBFB829A9B01700A924B9 /* CellReactors */,
+				2EC939EE299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift */,
 				2EC939F0299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift */,
 			);
 			path = Reactors;
@@ -913,6 +915,7 @@
 				2EE3BA8629AB60B9004FDCC9 /* RxRealm */,
 				2E730C6929BA31F4003668D9 /* FavorNetworkKit */,
 				2EEFD5B629BB7B4300BA46BA /* FavorKit */,
+				2E3FA74229F37D8F003342CA /* OrderedCollections */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -976,6 +979,7 @@
 				2EE3BA6E29A9D7D3004FDCC9 /* XCRemoteSwiftPackageReference "Reusable" */,
 				2EE3BA8029AB60A4004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				2EE3BA8529AB60B9004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */,
+				2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1117,9 +1121,9 @@
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
-				2EC939F3299CF6A300C8C47F /* FavorSetupProfileCellReactor.swift in Sources */,
+				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
-				2EC939F5299CF6C400C8C47F /* FavorPrefersCellReactor.swift in Sources */,
+				2EC939F5299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift in Sources */,
 				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
@@ -1143,7 +1147,7 @@
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
 				2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */,
-				2EC939F7299CF6E800C8C47F /* FavorAnniversaryCellReactor.swift in Sources */,
+				2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 				2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */,
 				2E95E4B929E8FBF700A46C38 /* SearchUserResultCellReactor.swift in Sources */,
@@ -1430,6 +1434,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Moya/Moya";
@@ -1521,6 +1533,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		2E3FA74229F37D8F003342CA /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
 		2E63538A295D900F00B23A14 /* RxMoya */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2E635389295D900F00B23A14 /* XCRemoteSwiftPackageReference "Moya" */;

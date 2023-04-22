@@ -37,7 +37,7 @@ class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FavorPrefersCellReactor) {
+  func bind(reactor: ProfilePreferenceCellReactor) {
     // Action
     
     // State

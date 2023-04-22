@@ -17,9 +17,9 @@ enum ProfileElementKind {
 }
 
 enum ProfileSectionItem {
-  case profileSetupHelper(FavorSetupProfileCellReactor)
-  case preferences(FavorPrefersCellReactor)
-  case anniversaries(FavorAnniversaryCellReactor)
+  case profileSetupHelper(ProfileSetupHelperCellReactor)
+  case preferences(ProfilePreferenceCellReactor)
+  case anniversaries(ProfileAnniversaryCellReactor)
   case memo
   case friends(ProfileFriendCellReactor)
 }
@@ -30,6 +30,26 @@ enum ProfileSection {
   case anniversaries([ProfileSectionItem])
   case memo([ProfileSectionItem])
   case friends([ProfileSectionItem])
+
+  public var rawValue: String {
+    switch self {
+    case .profileSetupHelper: return "ProfileSetupHelper"
+    case .preferences: return "Preferences"
+    case .anniversaries: return "Anniversaries"
+    case .memo: return "Memo"
+    case .friends: return "Friends"
+    }
+  }
+
+  public var preferredIndex: Int {
+    switch self {
+    case .profileSetupHelper: return 0
+    case .preferences: return 0
+    case .anniversaries: return 1
+    case .memo: return 2
+    case .friends: return 3
+    }
+  }
 }
 
 extension ProfileSection: SectionModelType {

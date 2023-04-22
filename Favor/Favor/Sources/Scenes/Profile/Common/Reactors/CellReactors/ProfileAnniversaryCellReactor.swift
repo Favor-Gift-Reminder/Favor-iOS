@@ -1,5 +1,5 @@
 //
-//  FavorAnniversaryCellReactor.swift
+//  ProfileAnniversaryCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
@@ -7,7 +7,7 @@
 
 import ReactorKit
 
-final class FavorAnniversaryCellReactor: Reactor {
+final class ProfileAnniversaryCellReactor: Reactor {
   
   // MARK: - Properties
   

@@ -71,7 +71,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FavorAnniversaryCellReactor) {
+  func bind(reactor: ProfileAnniversaryCellReactor) {
     // Action
     
     // State
