@@ -41,6 +41,7 @@ public class BaseProfileViewController: BaseViewController {
       return UICollectionViewCell()
     case .friends(let reactor):
       let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFriendCell
+      cell.reactor = reactor
       return cell
     }
   }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in

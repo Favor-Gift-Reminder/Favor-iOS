@@ -99,8 +99,8 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     case .updateFriendSection(let friends):
       let friendSection = ProfileSection.friends(
-        friends.map { _ -> ProfileSectionItem in
-          return .friends(ProfileFriendCellReactor())
+        friends.map { friend -> ProfileSectionItem in
+          return .friends(ProfileFriendCellReactor(friend: friend))
         }
       )
       newState.friendSection = friendSection
@@ -131,12 +131,7 @@ final class MyPageViewReactor: Reactor, Stepper {
         profileSetupHelpers.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
       }
       // 친구
-      if state.friendSection.items.isEmpty { // 친구가 없을 때의 처리
-        let emptyFriendSection = ProfileSection.friends([.friends(ProfileFriendCellReactor())])
-        newSections.append(emptyFriendSection)
-      } else { // 친구가 있을 때는 다른 섹션과 동일하게 추가
-        newSections.append(state.friendSection)
-      }
+      newSections.append(state.friendSection)
       // 새 프로필
       if !profileSetupHelpers.isEmpty {
         newSections.insert(.profileSetupHelper(profileSetupHelpers), at: .zero)
@@ -166,7 +161,8 @@ private extension MyPageViewReactor {
               email: remoteUser.email,
               userID: remoteUser.userID,
               name: remoteUser.name,
-              favorList: remoteUser.favorList
+              favorList: remoteUser.favorList,
+              friendList: remoteUser.friendList.map { $0.toDomain() }
             )
             return .just(decodedUser)
           } catch {

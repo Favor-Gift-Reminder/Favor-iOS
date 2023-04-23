@@ -52,7 +52,8 @@ public class User: Object {
     email: String,
     userID: String,
     name: String,
-    favorList: [String], // enum화?
+    favorList: [String] = [], // enum화?
+    friendList: [Friend] = [],
     userPhoto: Photo? = nil,
     backgroundPhoto: Photo? = nil
   ) {
@@ -62,6 +63,9 @@ public class User: Object {
     self.userID = userID
     self.name = name
     self.favorList.insert(objectsIn: favorList)
+    let newFriendList = List<Friend>()
+    newFriendList.append(objectsIn: friendList)
+    self.friendList = newFriendList
     self.userPhoto = userPhoto
     self.backgroundPhoto = backgroundPhoto
   }

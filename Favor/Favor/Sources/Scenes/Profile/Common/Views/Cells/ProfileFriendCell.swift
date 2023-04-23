@@ -62,7 +62,13 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
     // Action
 
     // State
-
+    reactor.state.map { $0.friend }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, friend in
+        owner.nameLabel.text = friend.name
+//        owner.profileImageView.image = friend.profilePhoto
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions

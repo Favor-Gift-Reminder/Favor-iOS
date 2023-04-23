@@ -7,6 +7,8 @@
 
 import Foundation
 
+import FavorKit
+
 public struct FriendResponseDTO: Decodable {
   public let anniversaryList: [AnniversaryResponseDTO]
   public let favorList: [String]
@@ -44,5 +46,20 @@ public struct FriendResponseDTO: Decodable {
     self.isUser = try container.decode(Bool.self, forKey: .isUser)
     self.reminderList = try container.decode([ReminderResponseDTO].self, forKey: .reminderList)
     self.userNo = try container.decode(Int.self, forKey: .userNo)
+  }
+}
+
+// MARK: - Convert
+
+extension FriendResponseDTO {
+  public func toDomain() -> Friend {
+    return Friend(
+      friendNo: self.friendNo,
+      name: self.friendName,
+//      profilePhoto: <#T##Photo?#>,
+      memo: self.friendMemo,
+      friendUserNo: self.friendUserNo,
+      isUser: self.isUser
+    )
   }
 }
