@@ -161,16 +161,16 @@ private extension MyPageViewReactor {
           do {
             let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
             let remoteUser = remote.data
-            return .just(
-              User(
-                userNo: remoteUser.userNo,
-                email: remoteUser.email,
-                userID: remoteUser.userID,
-                name: remoteUser.name,
-                favorList: remoteUser.favorList
-              )
+            let decodedUser = User(
+              userNo: remoteUser.userNo,
+              email: remoteUser.email,
+              userID: remoteUser.userID,
+              name: remoteUser.name,
+              favorList: remoteUser.favorList
             )
+            return .just(decodedUser)
           } catch {
+            print(error)
             return .just(User())
           }
         }
