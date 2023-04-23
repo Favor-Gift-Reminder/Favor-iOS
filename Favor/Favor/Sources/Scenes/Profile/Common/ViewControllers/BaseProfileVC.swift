@@ -26,7 +26,7 @@ public class BaseProfileViewController: BaseViewController {
   let dataSource = ProfileDataSource(configureCell: { _, collectionView, indexPath, items in
     switch items {
     case .profileSetupHelper(let reactor):
-      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupCell
+      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
       cell.reactor = reactor
       return cell
     case .preferences(let reactor):
@@ -89,7 +89,7 @@ public class BaseProfileViewController: BaseViewController {
     )
 
     // CollectionViewCell
-    collectionView.register(cellType: ProfileSetupCell.self)
+    collectionView.register(cellType: ProfileSetupHelperCell.self)
     collectionView.register(cellType: ProfilePreferenceCell.self)
     collectionView.register(cellType: ProfileAnniversaryCell.self)
     collectionView.register(cellType: ProfileFriendCell.self)

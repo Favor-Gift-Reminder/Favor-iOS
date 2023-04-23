@@ -20,7 +20,7 @@ class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - UI Components
   
-  private lazy var button = FavorSmallButton(with: .darkWithHashTag("취향"))
+  private let button = FavorSmallButton(with: .darkWithHashTag("취향"))
   
   // MARK: - Initializer
   
@@ -41,7 +41,12 @@ class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
     // Action
     
     // State
-    
+    reactor.state.map { $0.preference }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, preference in
+        owner.button.configuration?.updateAttributedTitle(preference, font: .favorFont(.bold, size: 14))
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 

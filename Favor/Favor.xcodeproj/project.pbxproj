@@ -70,7 +70,7 @@
 		2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DC299684C000C8C47F /* MyPageFlow.swift */; };
 		2EC939DF2998B80200C8C47F /* ProfileSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DE2998B80200C8C47F /* ProfileSection.swift */; };
 		2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E02998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift */; };
-		2EC939E32998C63200C8C47F /* ProfileSetupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E22998C63200C8C47F /* ProfileSetupCell.swift */; };
+		2EC939E32998C63200C8C47F /* ProfileSetupHelperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E22998C63200C8C47F /* ProfileSetupHelperCell.swift */; };
 		2EC939E52998C68900C8C47F /* ProfilePreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E42998C68900C8C47F /* ProfilePreferenceCell.swift */; };
 		2EC939E72998C6D100C8C47F /* ProfileAnniversaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E62998C6D100C8C47F /* ProfileAnniversaryCell.swift */; };
 		2EC939EB299A7D4300C8C47F /* ProfileSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* ProfileSectionHeader.swift */; };
@@ -209,7 +209,7 @@
 		2EC939DC299684C000C8C47F /* MyPageFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageFlow.swift; sourceTree = "<group>"; };
 		2EC939DE2998B80200C8C47F /* ProfileSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSection.swift; sourceTree = "<group>"; };
 		2EC939E02998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGiftStatsCollectionHeader.swift; sourceTree = "<group>"; };
-		2EC939E22998C63200C8C47F /* ProfileSetupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupCell.swift; sourceTree = "<group>"; };
+		2EC939E22998C63200C8C47F /* ProfileSetupHelperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupHelperCell.swift; sourceTree = "<group>"; };
 		2EC939E42998C68900C8C47F /* ProfilePreferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePreferenceCell.swift; sourceTree = "<group>"; };
 		2EC939E62998C6D100C8C47F /* ProfileAnniversaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAnniversaryCell.swift; sourceTree = "<group>"; };
 		2EC939EA299A7D4300C8C47F /* ProfileSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeader.swift; sourceTree = "<group>"; };
@@ -832,7 +832,7 @@
 		E517803729A8E88A0011C220 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				2EC939E22998C63200C8C47F /* ProfileSetupCell.swift */,
+				2EC939E22998C63200C8C47F /* ProfileSetupHelperCell.swift */,
 				2EC939E42998C68900C8C47F /* ProfilePreferenceCell.swift */,
 				2EC939E62998C6D100C8C47F /* ProfileAnniversaryCell.swift */,
 				2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */,
@@ -1051,7 +1051,7 @@
 				2ED326C329B327DE001963D0 /* ValidateEmailCodeViewReactor.swift in Sources */,
 				E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */,
 				2E00561E29A8B131006CF302 /* ProfileSectionFooter.swift in Sources */,
-				2EC939E32998C63200C8C47F /* ProfileSetupCell.swift in Sources */,
+				2EC939E32998C63200C8C47F /* ProfileSetupHelperCell.swift in Sources */,
 				2EE1537B29E7E8790023FEA5 /* SelectedIndicatorBar.swift in Sources */,
 				2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,

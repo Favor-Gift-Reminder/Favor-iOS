@@ -91,8 +91,8 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     case .updatePreferenceSection(let preferences):
       let preferenceSection = ProfileSection.preferences(
-        preferences.map { _ -> ProfileSectionItem in
-          return .preferences(ProfilePreferenceCellReactor())
+        preferences.map { preference -> ProfileSectionItem in
+          return .preferences(ProfilePreferenceCellReactor(preference: preference))
         }
       )
       newState.preferencesSection = preferenceSection
@@ -184,7 +184,6 @@ private extension MyPageViewReactor {
     }
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { user in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(user)")
       try await RealmManager.shared.update(user)
     }
   }

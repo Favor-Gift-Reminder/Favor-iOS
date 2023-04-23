@@ -70,7 +70,7 @@ private extension EditMyPageViewReactor {
   func setupFavorSelectionMockSection() -> [FavorSelectionSection] {
     var items: [FavorSelectionSection.Item] = []
     (0 ..< 18).forEach { _ in
-      items.append(ProfilePreferenceCellReactor())
+      items.append(ProfilePreferenceCellReactor(preference: "귀여운"))
     }
     let favorSelectionSection = FavorSelectionSection(header: "취향", items: items)
 

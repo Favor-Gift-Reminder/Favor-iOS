@@ -22,13 +22,15 @@ final class ProfilePreferenceCellReactor: Reactor {
   }
   
   struct State {
-    
+    var preference: String
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  init(preference: String) {
+    self.initialState = State(
+      preference: preference
+    )
   }
   
   
