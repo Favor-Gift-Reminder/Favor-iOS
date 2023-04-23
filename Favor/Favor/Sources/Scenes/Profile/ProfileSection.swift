@@ -72,6 +72,14 @@ extension ProfileSection: SectionModelType {
     case .friends: return "친구"
     }
   }
+
+  var rightButtonTitle: String? {
+    switch self {
+    case .anniversaries: return "더보기"
+    case .friends: return "전체보기"
+    default: return nil
+    }
+  }
 }
 
 // MARK: - Adapter
@@ -146,7 +154,6 @@ extension ProfileSection: Adaptive {
     let whiteBackground = FavorCompositionalLayout.DecorationItem.background(
       kind: ProfileElementKind.sectionWhiteBackground
     )
-
     let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20)
 
     switch self {

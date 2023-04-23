@@ -59,7 +59,7 @@ final class AppFlow: Flow {
 private extension AppFlow {
   func navigateToRoot() -> FlowContributors {
     #if DEBUG
-    FTUXStorage.isSignedIn = true
+    FTUXStorage.isSignedIn = false
     #endif
     if FTUXStorage.isSignedIn {
       os_log(.debug, "🏁 Signed In: Navigating to tab bar flow.")

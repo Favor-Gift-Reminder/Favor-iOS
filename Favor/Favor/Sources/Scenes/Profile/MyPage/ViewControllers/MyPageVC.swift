@@ -21,6 +21,26 @@ final class MyPageViewController: BaseProfileViewController, View {
   // MARK: - Properties
 
   // MARK: - UI Components
+
+  private let editButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.edit)?.withRenderingMode(.alwaysTemplate)
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.white)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
+
+  private let settingButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.setting)?.withRenderingMode(.alwaysTemplate)
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.white)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
   
   // MARK: - Life Cycle
   
@@ -45,15 +65,38 @@ final class MyPageViewController: BaseProfileViewController, View {
   
   func bind(reactor: MyPageViewReactor) {
     // Action
-    
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.editButton.rx.tap
+      .map { Reactor.Action.editButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.settingButton.rx.tap
+      .map { Reactor.Action.settingButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     // State
 
   }
   
   // MARK: - Functions
 
+  override func setupNavigationBar() {
+    super.setupNavigationBar()
+
+    let rightBarItems = [self.settingButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
+    self.navigationItem.setRightBarButtonItems(rightBarItems, animated: false)
+    self.navigationController?.hidesBarsOnSwipe = true
+  }
+
   // MARK: - UI Setups
-  
+
 }
 
 // MARK: - Privates

@@ -10,6 +10,15 @@ import Foundation
 import RealmSwift
 
 extension Results {
+  public func toValue() async -> Element {
+    return await withCheckedContinuation { continuation in
+      DispatchQueue.realmThread.async {
+        guard self.count == 1 else { fatalError() }
+        continuation.resume(returning: self.first!)
+      }
+    }
+  }
+
   public func toArray() async -> [Element] {
     return await withCheckedContinuation { continuation in
       DispatchQueue.realmThread.async {

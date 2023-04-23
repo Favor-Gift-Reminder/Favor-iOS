@@ -39,7 +39,6 @@ final class EditMyPageViewController: BaseViewController, View {
           ofKind: kind,
           for: indexPath
         ) as ProfileSectionHeader
-        header.reactor = MyPageSectionHeaderViewReactor(title: dataSource.sectionModels[indexPath.item].header)
         return header
       case ElementKind.favorSelectionFooterElementKind:
         let footer = collectionView.dequeueReusableSupplementaryView(

@@ -26,7 +26,7 @@ public final class RealmManager: RealmCRUDable {
   /// 로컬 DB의 버전
   ///
   /// [~ Version History ~](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  private static let version: UInt64 = 4
+  private static let version: UInt64 = 5
 
   /// RealmManager에서 사용될 realm 인스턴스
   private var realm: Realm!
@@ -46,6 +46,12 @@ public final class RealmManager: RealmCRUDable {
               let searchDate = oldObject!["searchDate"] as! Date
               newObject!["searchText"] = searchText
               newObject!["searchDate"] = searchDate
+            })
+          }
+          if oldVersion < 5 {
+            migration.enumerateObjects(ofType: User.className(), { oldObject, newObject in
+              let favorList = oldObject!["favorList"] as! [Int]
+              newObject!["favorList"] = favorList
             })
           }
         }
@@ -89,6 +95,24 @@ public final class RealmManager: RealmCRUDable {
       self.realmQueue.async {
         do {
           try self.realm.write {
+            self.realm.add(object)
+          }
+          continuation.resume(returning: object.freeze())
+        } catch {
+          continuation.resume(throwing: error)
+        }
+      }
+    }
+  }
+
+  @discardableResult
+  public func recreate<T: Object>(_ object: T) async throws -> T {
+    typealias RealmContinuation = CheckedContinuation<T, Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
+          try self.realm.write {
+            self.realm.delete(self.realm.objects(T.self))
             self.realm.add(object)
           }
           continuation.resume(returning: object.freeze())
@@ -245,6 +269,40 @@ public final class RealmManager: RealmCRUDable {
             self.realm.delete(object)
           }
           continuation.resume(returning: object.freeze())
+        } catch {
+          continuation.resume(throwing: error)
+        }
+      }
+    }
+  }
+
+  /// RealmDB에 존재하는 인스턴스들을 삭제합니다.
+  ///
+  /// **Usage**
+  /// ``` Swift
+  /// Task {
+  ///   do {
+  ///     let users = try await RealmManager.shared.read(User.self)
+  ///     try await RealmManager.shared.delete(users)
+  ///   } catch {
+  ///     fatalError(error)
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - object: 삭제할 `RealmObject` 인스턴스
+  /// - Returns: ***@Discardable*** 삭제한 `RealmObject` 인스턴스
+  @discardableResult
+  public func delete<T: Object>(_ objects: [T]) async throws -> [T] {
+    typealias RealmContinuation = CheckedContinuation<[T], Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
+          try self.realm.write {
+            self.realm.delete(objects)
+          }
+          continuation.resume(returning: objects.map { $0.freeze() })
         } catch {
           continuation.resume(throwing: error)
         }

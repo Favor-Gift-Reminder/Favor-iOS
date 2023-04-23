@@ -49,7 +49,9 @@ public enum FavorSmallButtonType {
       titleString = title
       config.baseBackgroundColor = .favorColor(.icon)
       config.baseForegroundColor = .favorColor(.white)
-      config.image = .favorIcon(.hashtag)
+      config.image = .favorIcon(.hashtag)?
+        .withTintColor(.favorColor(.white), renderingMode: .alwaysTemplate)
+        .resize(newWidth: 16)
     case .gray(let title):
       titleString = title
       config.baseBackgroundColor = .favorColor(.button)

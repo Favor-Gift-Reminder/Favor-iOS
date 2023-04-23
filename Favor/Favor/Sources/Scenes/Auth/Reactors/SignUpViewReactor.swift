@@ -9,7 +9,6 @@ import OSLog
 
 import FavorKit
 import FavorNetworkKit
-import Moya
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -111,24 +110,25 @@ final class SignUpViewReactor: Reactor, Stepper {
       ])
       
     case .nextFlowRequested:
-      os_log(.debug, "Next button or return key from keyboard did tap.")
       if self.currentState.isNextButtonEnabled {
         let email = self.currentState.email
         let password = self.currentState.password
 
         return .concat([
           .just(.updateLoading(true)),
-          networking.request(.postSignUp(email: email, password: password))
-            .debug()
+          self.networking.request(.postSignUp(email: email, password: password))
+            .asObservable()
+            .catch({ error in
+              print(error)
+              return .empty()
+            })
             .flatMap { response -> Observable<Mutation> in
-              do {
-                let data: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
-                print(data.data.userNo)
-                self.steps.accept(AppStep.setProfileIsRequired)
-                return .just(.updateLoading(false))
-              } catch {
-                return .empty()
-              }
+              return self.refineAndUpdateUser(with: response.data)
+                .asObservable()
+                .flatMap { _ -> Observable<Mutation> in
+                  self.steps.accept(AppStep.setProfileIsRequired)
+                  return .just(.updateLoading(false))
+                }
             }
         ])
       }
@@ -185,5 +185,35 @@ final class SignUpViewReactor: Reactor, Stepper {
     }
     
     return newState
+  }
+}
+
+// MARK: - Privates
+
+private extension SignUpViewReactor {
+  func refineAndUpdateUser(with userData: Data) -> Single<()> {
+    return Single<()>.create { single in
+      let task = Task {
+        do {
+          let decodedData: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
+          let decodedUserData = decodedData.data
+          let decodedUser = User(
+            userNo: decodedUserData.userNo,
+            email: decodedUserData.email,
+            userID: decodedUserData.userID,
+            name: decodedUserData.name,
+            favorList: decodedUserData.favorList
+          )
+          try await RealmManager.shared.recreate(decodedUser)
+          single(.success(()))
+        } catch {
+          single(.failure(error))
+        }
+      }
+
+      return Disposables.create {
+        task.cancel()
+      }
+    }
   }
 }
