@@ -31,7 +31,7 @@ final class MyPageViewReactor: Reactor, Stepper {
   enum Mutation {
     case updateUser(User)
     case updatePreferenceSection([String])
-//    case updateAnniversarySection([String])
+    case updateAnniversarySection([Anniversary])
     case updateFriendSection([Friend])
     case updateLoading(Bool)
   }
@@ -67,6 +67,7 @@ final class MyPageViewReactor: Reactor, Stepper {
           return .concat([
             .just(.updateUser(user)),
             .just(.updatePreferenceSection(user.favorList.toArray())),
+            .just(.updateAnniversarySection(user.anniversaryList.toArray())),
             .just(.updateFriendSection(user.friendList.toArray())),
             .just(.updateLoading(status == .inProgress))
           ])
@@ -96,6 +97,14 @@ final class MyPageViewReactor: Reactor, Stepper {
         }
       )
       newState.preferencesSection = preferenceSection
+
+    case .updateAnniversarySection(let anniversaries):
+      let anniversarySection = ProfileSection.anniversaries(
+        anniversaries.map { anniversary -> ProfileSectionItem in
+          return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
+        }
+      )
+      newState.anniversarySection = anniversarySection
 
     case .updateFriendSection(let friends):
       let friendSection = ProfileSection.friends(
@@ -162,7 +171,8 @@ private extension MyPageViewReactor {
               userID: remoteUser.userID,
               name: remoteUser.name,
               favorList: remoteUser.favorList,
-              friendList: remoteUser.friendList.map { $0.toDomain() }
+              friendList: remoteUser.friendList.map { $0.toDomain() },
+              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() }
             )
             return .just(decodedUser)
           } catch {

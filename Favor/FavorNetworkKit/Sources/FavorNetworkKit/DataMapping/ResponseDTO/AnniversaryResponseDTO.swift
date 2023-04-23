@@ -7,11 +7,13 @@
 
 import Foundation
 
+import FavorKit
+
 public struct AnniversaryResponseDTO: Decodable {
   public let anniversaryDate: Date
   public let anniversaryNo: Int
   public let anniversaryTitle: String
-  public let isPinned: Bool
+  public let isPinned: Bool?
   public let userNo: Int
 
   private enum CodingKeys: CodingKey {
@@ -29,7 +31,20 @@ public struct AnniversaryResponseDTO: Decodable {
     self.anniversaryDate = anniversaryDate ?? .distantPast
     self.anniversaryNo = try container.decode(Int.self, forKey: .anniversaryNo)
     self.anniversaryTitle = try container.decode(String.self, forKey: .anniversaryTitle)
-    self.isPinned = try container.decode(Bool.self, forKey: .isPinned)
+    self.isPinned = try container.decodeIfPresent(Bool.self, forKey: .isPinned)
     self.userNo = try container.decode(Int.self, forKey: .userNo)
+  }
+}
+
+// MARK: - Convert
+
+extension AnniversaryResponseDTO {
+  public func toDomain() -> Anniversary {
+    return Anniversary(
+      anniversaryNo: self.anniversaryNo,
+      title: self.anniversaryTitle,
+      date: self.anniversaryDate,
+      isPinned: self.isPinned ?? false
+    )
   }
 }

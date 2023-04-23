@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/02/15.
 //
 
+import FavorKit
 import ReactorKit
 
 final class ProfileAnniversaryCellReactor: Reactor {
@@ -22,13 +23,15 @@ final class ProfileAnniversaryCellReactor: Reactor {
   }
   
   struct State {
-    
+    var anniversary: Anniversary
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  init(anniversary: Anniversary) {
+    self.initialState = State(
+      anniversary: anniversary
+    )
   }
   
   

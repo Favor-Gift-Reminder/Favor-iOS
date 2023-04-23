@@ -75,7 +75,13 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
     // Action
     
     // State
-    
+    reactor.state.map { $0.anniversary }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, anniversary in
+        owner.titleLabel.text = anniversary.title
+        owner.dateLabel.text = anniversary.date.toDTODateString()
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 

@@ -57,7 +57,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       newState.favorSelectionSections = self.setupFavorSelectionMockSection()
 
     case .updateNewAnniversaryDataSource:
-      newState.newAnniversarySections = self.setupNewAnniversaryMockSection()
+      newState.newAnniversarySections = []
     }
 
     return newState
@@ -75,15 +75,5 @@ private extension EditMyPageViewReactor {
     let favorSelectionSection = FavorSelectionSection(header: "취향", items: items)
 
     return [favorSelectionSection]
-  }
-
-  func setupNewAnniversaryMockSection() -> [NewAnniversarySection] {
-    var items: [NewAnniversarySection.Item] = []
-    (0 ..< 3).forEach { _ in
-      items.append(ProfileAnniversaryCellReactor())
-    }
-    let newAnniversarySection = NewAnniversarySection(header: "기념일", items: items)
-
-    return [newAnniversarySection]
   }
 }

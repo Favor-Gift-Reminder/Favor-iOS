@@ -25,6 +25,8 @@ public class User: Object {
   @Persisted public var giftList: List<Gift>
   /// 리마인더 목록
   @Persisted public var reminderList: List<Reminder>
+  /// 기념일 목록
+  @Persisted public var anniversaryList: List<Anniversary>
   /// 회원 친구 목록
   @Persisted public var friendList: List<Friend>
   /// 회원 사진
@@ -54,6 +56,7 @@ public class User: Object {
     name: String,
     favorList: [String] = [], // enum화?
     friendList: [Friend] = [],
+    anniversaryList: [Anniversary] = [],
     userPhoto: Photo? = nil,
     backgroundPhoto: Photo? = nil
   ) {
@@ -66,6 +69,9 @@ public class User: Object {
     let newFriendList = List<Friend>()
     newFriendList.append(objectsIn: friendList)
     self.friendList = newFriendList
+    let newAnniversaryList = List<Anniversary>()
+    newAnniversaryList.append(objectsIn: anniversaryList)
+    self.anniversaryList = newAnniversaryList
     self.userPhoto = userPhoto
     self.backgroundPhoto = backgroundPhoto
   }
