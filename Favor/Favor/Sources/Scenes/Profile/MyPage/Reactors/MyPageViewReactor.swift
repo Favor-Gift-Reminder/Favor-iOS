@@ -30,6 +30,8 @@ final class MyPageViewReactor: Reactor, Stepper {
   
   enum Mutation {
     case updateUser(User)
+    case updateUserName(String)
+    case updateUserID(String)
     case updatePreferenceSection([String])
     case updateAnniversarySection([Anniversary])
     case updateFriendSection([Friend])
@@ -38,6 +40,8 @@ final class MyPageViewReactor: Reactor, Stepper {
   
   struct State {
     var user = User()
+    var userName: String = ""
+    var userID: String = ""
     /// 0: 새 프로필
     /// 1: 취향
     /// 2: 기념일
@@ -66,6 +70,8 @@ final class MyPageViewReactor: Reactor, Stepper {
         .flatMap { (status, user) -> Observable<Mutation> in
           return .concat([
             .just(.updateUser(user)),
+            .just(.updateUserName(user.name)),
+            .just(.updateUserID(user.userID)),
             .just(.updatePreferenceSection(user.favorList.toArray())),
             .just(.updateAnniversarySection(user.anniversaryList.toArray())),
             .just(.updateFriendSection(user.friendList.toArray())),
@@ -89,6 +95,12 @@ final class MyPageViewReactor: Reactor, Stepper {
     switch mutation {
     case .updateUser(let user):
       newState.user = user
+
+    case .updateUserName(let name):
+      newState.userName = name
+
+    case .updateUserID(let id):
+      newState.userID = id
 
     case .updatePreferenceSection(let preferences):
       let preferenceSection = ProfileSection.preferences(

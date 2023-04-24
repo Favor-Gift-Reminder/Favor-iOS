@@ -82,7 +82,19 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.userName }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, name in
+        owner.profileView.rx.name.onNext(name)
+      })
+      .disposed(by: self.disposeBag)
 
+    reactor.state.map { $0.userID }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, id in
+        owner.profileView.rx.id.onNext(id)
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions

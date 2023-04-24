@@ -8,11 +8,11 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import RxCocoa
+import RxSwift
 import SnapKit
 
-final class ProfileView: UIView, View {
+public final class ProfileView: UIView {
   
   // MARK: - Constants
 
@@ -20,27 +20,27 @@ final class ProfileView: UIView, View {
   
   // MARK: - Properties
   
-  var disposeBag = DisposeBag()
-  
   // MARK: - UI Components
 
-  private lazy var backgroundImageView: UIImageView = {
+  private let backgroundImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "MyPageHeaderPlaceholder")
     imageView.contentMode = .scaleAspectFill
     return imageView
   }()
 
-  fileprivate lazy var profileImageButton: UIButton = {
+  fileprivate let profileImageButton: UIButton = {
     var config = UIButton.Configuration.filled()
-    config.baseBackgroundColor = .systemBlue
+    config.baseBackgroundColor = .favorColor(.line3)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = .favorIcon(.friend)?.resize(newWidth: 30).withRenderingMode(.alwaysTemplate)
     config.background.cornerRadius = 30
 
     let button = UIButton(configuration: config)
     return button
   }()
 
-  private lazy var nameLabel: UILabel = {
+  fileprivate let nameLabel: UILabel = {
     let label = UILabel()
     label.textColor = .favorColor(.white)
     label.font = .favorFont(.bold, size: 22)
@@ -48,7 +48,7 @@ final class ProfileView: UIView, View {
     return label
   }()
 
-  private lazy var idLabel: UILabel = {
+  fileprivate let idLabel: UILabel = {
     let label = UILabel()
     label.textColor = .favorColor(.line3)
     label.font = .favorFont(.regular, size: 16)
@@ -56,7 +56,7 @@ final class ProfileView: UIView, View {
     return label
   }()
 
-  private lazy var profileStackView: UIStackView = {
+  private let profileStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 10
@@ -78,13 +78,6 @@ final class ProfileView: UIView, View {
   
   // MARK: - Binding
   
-  func bind(reactor: MyPageHeaderViewReactor) {
-    // Action
-    
-    // State
-    
-  }
-  
   // MARK: - Functions
 
   func updateBackgroundAlpha(to alpha: CGFloat) {
@@ -95,11 +88,11 @@ final class ProfileView: UIView, View {
 // MARK: - Setup
 
 extension ProfileView: BaseView {
-  func setupStyles() {
+  public func setupStyles() {
     self.backgroundColor = .favorColor(.main)
   }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     [
       self.backgroundImageView,
       self.profileImageButton,
@@ -116,7 +109,7 @@ extension ProfileView: BaseView {
     }
   }
 
-  func setupConstraints() {
+  public func setupConstraints() {
     self.backgroundImageView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
@@ -131,5 +124,21 @@ extension ProfileView: BaseView {
       make.leading.equalTo(self.profileImageButton.snp.trailing).offset(16)
       make.centerY.equalTo(self.profileImageButton.snp.centerY)
     }
+  }
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: ProfileView {
+  public var name: Binder<String> {
+    return Binder(self.base, binding: { view, name in
+      view.nameLabel.text = name
+    })
+  }
+
+  public var id: Binder<String> {
+    return Binder(self.base, binding: { view, id in
+      view.idLabel.text = "@\(id)"
+    })
   }
 }
