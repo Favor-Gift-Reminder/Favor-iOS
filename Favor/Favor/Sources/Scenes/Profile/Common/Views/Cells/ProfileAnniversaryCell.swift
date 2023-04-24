@@ -22,7 +22,11 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
   private lazy var iconImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .center
-    imageView.image = .favorIcon(.congrat)
+    imageView.image = .favorIcon(.congrat)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 36)
+      .withTintColor(.favorColor(.icon))
+    imageView.contentMode = .center
     return imageView
   }()
   
@@ -105,12 +109,12 @@ extension ProfileAnniversaryCell: BaseView {
   
   func setupConstraints() {
     self.iconImageView.snp.makeConstraints { make in
-      make.height.width.equalTo(40)
-      make.leading.equalToSuperview().inset(32)
+      make.height.width.equalTo(48)
+      make.leading.equalToSuperview().inset(24)
       make.centerY.equalToSuperview()
     }
     self.vStack.snp.makeConstraints { make in
-      make.leading.equalTo(self.iconImageView.snp.trailing).offset(20)
+      make.leading.equalTo(self.iconImageView.snp.trailing).offset(16)
       make.centerY.equalToSuperview()
     }
   }

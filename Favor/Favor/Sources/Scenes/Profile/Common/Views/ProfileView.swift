@@ -33,7 +33,10 @@ public final class ProfileView: UIView {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.friend)?.resize(newWidth: 30).withRenderingMode(.alwaysTemplate)
+    config.image = .favorIcon(.friend)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 30)
+      .withTintColor(.favorColor(.white))
     config.background.cornerRadius = 30
 
     let button = UIButton(configuration: config)
@@ -89,7 +92,7 @@ public final class ProfileView: UIView {
 
 extension ProfileView: BaseView {
   public func setupStyles() {
-    self.backgroundColor = .favorColor(.main)
+    self.backgroundColor = .favorColor(.white)
   }
 
   public func setupLayouts() {
