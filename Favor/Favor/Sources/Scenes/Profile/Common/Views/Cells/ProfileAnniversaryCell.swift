@@ -79,7 +79,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, anniversary in
         owner.titleLabel.text = anniversary.title
-        owner.dateLabel.text = anniversary.date.toDTODateString()
+        owner.dateLabel.text = anniversary.date.toShortenDateString()
       })
       .disposed(by: self.disposeBag)
   }
@@ -89,7 +89,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
 
 extension ProfileAnniversaryCell: BaseView {
   func setupStyles() {
-    self.backgroundColor = .favorColor(.divider)
+    self.backgroundColor = .favorColor(.card)
     self.layer.cornerRadius = 24
     self.clipsToBounds = true
   }
