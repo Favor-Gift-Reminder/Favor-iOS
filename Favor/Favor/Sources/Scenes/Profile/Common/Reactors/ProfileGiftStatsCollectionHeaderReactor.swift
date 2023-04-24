@@ -5,32 +5,49 @@
 //  Created by 이창준 on 2023/02/15.
 //
 
+import FavorKit
 import ReactorKit
 
-final class ProfileGiftStatsCollectionHeaderReactor: Reactor {
+public final class ProfileGiftStatsCollectionHeaderReactor: Reactor {
   
   // MARK: - Properties
   
-  var initialState: State
+  public var initialState: State
   
-  enum Action {
+  public enum Action {
     
   }
   
-  enum Mutation {
+  public enum Mutation {
     
   }
   
-  struct State {
-    
+  public struct State {
+    var gifts: [Gift]
+    var totalGifts: Int = -1
+    var receivedGifts: Int = -1
+    var givenGifts: Int = -1
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  public init(gift: [Gift]) {
+    self.initialState = State(
+      gifts: gift
+    )
   }
   
   // MARK: - Functions
 
+  public func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+
+      newState.totalGifts = state.gifts.count
+      newState.receivedGifts = state.gifts.filter { $0.isGiven == false }.count
+      newState.givenGifts = state.gifts.filter { $0.isGiven == true }.count
+
+      return newState
+    }
+  }
 }

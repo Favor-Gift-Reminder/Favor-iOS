@@ -8,6 +8,7 @@
 import UIKit
 
 import FavorKit
+import ReactorKit
 import RxDataSources
 import SnapKit
 
@@ -23,7 +24,7 @@ public class BaseProfileViewController: BaseViewController {
 
   // MARK: - Properties
 
-  let dataSource = ProfileDataSource(configureCell: { _, collectionView, indexPath, items in
+  lazy var dataSource = ProfileDataSource(configureCell: { _, collectionView, indexPath, items in
     switch items {
     case .profileSetupHelper(let reactor):
       let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
@@ -44,13 +45,14 @@ public class BaseProfileViewController: BaseViewController {
       cell.reactor = reactor
       return cell
     }
-  }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+  }, configureSupplementaryView: { [] dataSource, collectionView, kind, indexPath in
     switch kind {
     case ProfileElementKind.collectionHeader:
       let header = collectionView.dequeueReusableSupplementaryView(
         ofKind: kind,
         for: indexPath
       ) as ProfileGiftStatsCollectionHeader
+      self.injectReactor(to: header)
       return header
     case UICollectionView.elementKindSectionHeader:
       let header = collectionView.dequeueReusableSupplementaryView(
@@ -169,6 +171,10 @@ public class BaseProfileViewController: BaseViewController {
       self.profileViewHeightConstraint?.update(offset: spaceBetweenTopAndContent)
       self.profileView.updateBackgroundAlpha(to: 1)
     }
+  }
+
+  func injectReactor(to view: UICollectionReusableView) {
+
   }
 
   // MARK: - UI Setups

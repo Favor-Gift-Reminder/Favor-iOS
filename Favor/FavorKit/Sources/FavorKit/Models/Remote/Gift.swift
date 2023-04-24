@@ -27,13 +27,13 @@ public class Gift: Object {
   /// 선물 메모
   @Persisted public var memo: String?
   /// 선물 카테고리
-  @Persisted public var category: Int?
+  @Persisted public var category: String?
   /// 선물 감정 기록
-  @Persisted public var emotion: Int?
+  @Persisted public var emotion: String?
   /// 선물 핀 여부
   @Persisted public var isPinned: Bool
   /// 선물과 관련된 친구 번호
-  @Persisted public var relatedFriend: Friend?
+  @Persisted public var friendList: List<Friend>
   /// 받은 선물 / 준 선물 여부 (받은 선물 = `true`)
   @Persisted public var isGiven: Bool
 
@@ -55,17 +55,17 @@ public class Gift: Object {
   ///   - category: *`Optional`* 선물 카테고리
   ///   - emotion: *`Optional`* 선물에 등록된 감정 기록
   ///   - isPinned: 선물 목록 혹은 타임라인에서의 핀 여부
-  ///   - relatedFriend: *`Optional`* 선물과 관련된 친구의 번호
+  ///   - friendList: 선물과 관련된 친구 리스트
   ///   - isGiven: 받은 선물 / 준 선물 여부 (`true`: 받은 선물)
   public convenience init(
-    _ giftNo: Int,
+    giftNo: Int,
     name: String,
     date: Date? = nil,
     memo: String? = nil,
-    category: Int? = nil, // enum화?
-    emotion: Int? = nil, // enum화?
+    category: String? = nil, // enum화?
+    emotion: String? = nil, // enum화?
     isPinned: Bool = false,
-    relatedFriend: Friend?,
+    friendList: [Friend] = [],
     isGiven: Bool = false
   ) {
     self.init()
@@ -76,7 +76,9 @@ public class Gift: Object {
     self.category = category
     self.emotion = emotion
     self.isPinned = isPinned
-    self.relatedFriend = relatedFriend
+    let newFriendList = List<Friend>()
+    newFriendList.append(objectsIn: friendList)
+    self.friendList = newFriendList
     self.isGiven = isGiven
   }
 }

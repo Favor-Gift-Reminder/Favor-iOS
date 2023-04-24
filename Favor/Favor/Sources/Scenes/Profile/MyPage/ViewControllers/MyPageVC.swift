@@ -95,6 +95,16 @@ final class MyPageViewController: BaseProfileViewController, View {
     self.navigationController?.hidesBarsOnSwipe = true
   }
 
+  override func injectReactor(to view: UICollectionReusableView) {
+    guard
+      let view = view as? ProfileGiftStatsCollectionHeader,
+      let reactor = self.reactor
+    else { return }
+    view.reactor = ProfileGiftStatsCollectionHeaderReactor(
+      gift: reactor.currentState.user.giftList.toArray()
+    )
+  }
+
   // MARK: - UI Setups
 
 }

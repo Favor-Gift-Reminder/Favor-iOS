@@ -55,8 +55,9 @@ public class User: Object {
     userID: String,
     name: String,
     favorList: [String] = [], // enum화?
-    friendList: [Friend] = [],
+    giftList: [Gift] = [],
     anniversaryList: [Anniversary] = [],
+    friendList: [Friend] = [],
     userPhoto: Photo? = nil,
     backgroundPhoto: Photo? = nil
   ) {
@@ -66,12 +67,15 @@ public class User: Object {
     self.userID = userID
     self.name = name
     self.favorList.insert(objectsIn: favorList)
-    let newFriendList = List<Friend>()
-    newFriendList.append(objectsIn: friendList)
-    self.friendList = newFriendList
+    let newGiftList = List<Gift>()
+    newGiftList.append(objectsIn: giftList)
+    self.giftList = newGiftList
     let newAnniversaryList = List<Anniversary>()
     newAnniversaryList.append(objectsIn: anniversaryList)
     self.anniversaryList = newAnniversaryList
+    let newFriendList = List<Friend>()
+    newFriendList.append(objectsIn: friendList)
+    self.friendList = newFriendList
     self.userPhoto = userPhoto
     self.backgroundPhoto = backgroundPhoto
   }

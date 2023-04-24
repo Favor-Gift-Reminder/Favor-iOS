@@ -7,6 +7,8 @@
 
 import Foundation
 
+import FavorKit
+
 public struct GiftResponseDTO: Decodable {
   public let category: String // Enum
   public let emotion: String // Enum
@@ -15,7 +17,7 @@ public struct GiftResponseDTO: Decodable {
   public let giftMemo: String
   public let giftName: String
   public let giftNo: Int
-  public let isGive: Bool
+  public let isGiven: Bool
   public let isPinned: Bool
   public let userNo: Int
 
@@ -27,7 +29,7 @@ public struct GiftResponseDTO: Decodable {
     case giftMemo
     case giftName
     case giftNo
-    case isGive
+    case isGiven
     case isPinned
     case userNo
   }
@@ -43,8 +45,25 @@ public struct GiftResponseDTO: Decodable {
     self.giftMemo = try container.decode(String.self, forKey: .giftMemo)
     self.giftName = try container.decode(String.self, forKey: .giftName)
     self.giftNo = try container.decode(Int.self, forKey: .giftNo)
-    self.isGive = try container.decode(Bool.self, forKey: .isGive)
+    self.isGiven = try container.decode(Bool.self, forKey: .isGiven)
     self.isPinned = try container.decode(Bool.self, forKey: .isPinned)
     self.userNo = try container.decode(Int.self, forKey: .userNo)
+  }
+}
+
+// MARK: - Convert
+
+extension GiftResponseDTO {
+  public func toDomain() -> Gift {
+    return Gift(
+      giftNo: self.giftNo,
+      name: self.giftName,
+      date: self.giftDate,
+      memo: self.giftMemo,
+      category: self.category,
+      emotion: self.emotion,
+      isPinned: self.isPinned,
+      isGiven: self.isGiven
+    )
   }
 }

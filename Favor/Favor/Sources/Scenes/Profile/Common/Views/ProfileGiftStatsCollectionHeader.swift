@@ -19,6 +19,8 @@ final class ProfileGiftStatsCollectionHeader: UICollectionReusableView, Reusable
   // MARK: - Properties
   
   var disposeBag = DisposeBag()
+
+  private let buttonFont: UIFont = .favorFont(.bold, size: 22)
   
   // MARK: - UI Components
   
@@ -52,7 +54,35 @@ final class ProfileGiftStatsCollectionHeader: UICollectionReusableView, Reusable
     // Action
     
     // State
-    
+    reactor.state.map { $0.totalGifts }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, totalGifts in
+        owner.totalGiftsButton.configuration?.updateAttributedTitle(
+          "\(totalGifts)",
+          font: self.buttonFont
+        )
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.receivedGifts }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, receivedGifts in
+        owner.receivedGiftsButton.configuration?.updateAttributedTitle(
+          "\(receivedGifts)",
+          font: self.buttonFont
+        )
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.givenGifts }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, givenGifts in
+        owner.givenGiftsButton.configuration?.updateAttributedTitle(
+          "\(givenGifts)",
+          font: self.buttonFont
+        )
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 

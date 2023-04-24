@@ -171,8 +171,9 @@ private extension MyPageViewReactor {
               userID: remoteUser.userID,
               name: remoteUser.name,
               favorList: remoteUser.favorList,
-              friendList: remoteUser.friendList.map { $0.toDomain() },
-              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() }
+              giftList: remoteUser.giftList.map { $0.toDomain() },
+              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
+              friendList: remoteUser.friendList.map { $0.toDomain() }
             )
             return .just(decodedUser)
           } catch {
