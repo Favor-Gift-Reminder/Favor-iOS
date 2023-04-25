@@ -270,6 +270,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     ///   - alignment: Header의 위치 (`NSRectAlignment`)
     case header(
       height: NSCollectionLayoutDimension,
+      contentInsets: NSDirectionalEdgeInsets = .zero,
       kind: String = UICollectionView.elementKindSectionHeader,
       alignment: NSRectAlignment = .top
     )
@@ -281,6 +282,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     ///   - alignment: Footer의 위치 (`NSRectAlignment`)
     case footer(
       height: NSCollectionLayoutDimension,
+      contentInsets: NSDirectionalEdgeInsets = .zero,
       kind: String = UICollectionView.elementKindSectionFooter,
       alignment: NSRectAlignment = .bottom
     )
@@ -288,25 +290,28 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// 각 enum값의 파라미터들에 더 쉽게 접근하기 위한 wrapper-property
     private var layoutParameters: (
       size: NSCollectionLayoutSize,
+      contentInsets: NSDirectionalEdgeInsets,
       kind: String,
       alignment: NSRectAlignment
     ) {
       switch self {
-      case let .header(height, kind, alignment):
+      case let .header(height, contentInsets, kind, alignment):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: height
           ),
+          contentInsets: contentInsets,
           kind: kind,
           alignment: alignment
         )
-      case let .footer(height, kind, alignment):
+      case let .footer(height, contentInsets, kind, alignment):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: height
           ),
+          contentInsets: contentInsets,
           kind: kind,
           alignment: alignment
         )
@@ -321,6 +326,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
         elementKind: self.layoutParameters.kind,
         alignment: self.layoutParameters.alignment
       )
+      boundaryItem.contentInsets = self.layoutParameters.contentInsets
 
       return boundaryItem
     }
