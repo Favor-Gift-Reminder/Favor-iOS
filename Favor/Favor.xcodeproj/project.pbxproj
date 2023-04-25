@@ -14,6 +14,10 @@
 		2E00562729A9220D006CF302 /* NewAnniversarySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562629A9220D006CF302 /* NewAnniversarySection.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
 		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
+		2E3FA74929F706FA003342CA /* EditMyPagePreferenceSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74829F706FA003342CA /* EditMyPagePreferenceSection.swift */; };
+		2E3FA74C29F7087D003342CA /* EditMyPagePreferenceCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74B29F7087D003342CA /* EditMyPagePreferenceCellReactor.swift */; };
+		2E3FA74F29F709D1003342CA /* EditMyPagePreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPagePreferenceCell.swift */; };
+		2E3FA75129F713A7003342CA /* EditMyPageSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75029F713A7003342CA /* EditMyPageSectionHeader.swift */; };
 		2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
@@ -159,6 +163,10 @@
 		2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2E00562629A9220D006CF302 /* NewAnniversarySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversarySection.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
+		2E3FA74829F706FA003342CA /* EditMyPagePreferenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPagePreferenceSection.swift; sourceTree = "<group>"; };
+		2E3FA74B29F7087D003342CA /* EditMyPagePreferenceCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPagePreferenceCellReactor.swift; sourceTree = "<group>"; };
+		2E3FA74E29F709D1003342CA /* EditMyPagePreferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPagePreferenceCell.swift; sourceTree = "<group>"; };
+		2E3FA75029F713A7003342CA /* EditMyPageSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageSectionHeader.swift; sourceTree = "<group>"; };
 		2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionBackgroundView.swift; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCellReactor.swift; sourceTree = "<group>"; };
@@ -330,6 +338,59 @@
 				E5B182792973FDC600229C50 /* OnboardingSlide.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		2E3FA74429F66B0C003342CA /* EditMyPage */ = {
+			isa = PBXGroup;
+			children = (
+				2E3FA74829F706FA003342CA /* EditMyPagePreferenceSection.swift */,
+				2E3FA74729F66B2A003342CA /* Reactors */,
+				2E3FA74629F66B24003342CA /* Views */,
+				2E3FA74529F66B1D003342CA /* ViewControllers */,
+			);
+			path = EditMyPage;
+			sourceTree = "<group>";
+		};
+		2E3FA74529F66B1D003342CA /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2E3FA74629F66B24003342CA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2E3FA74D29F709BE003342CA /* Cells */,
+				2E3FA75029F713A7003342CA /* EditMyPageSectionHeader.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2E3FA74729F66B2A003342CA /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2E3FA74A29F70868003342CA /* CellReactors */,
+				2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2E3FA74A29F70868003342CA /* CellReactors */ = {
+			isa = PBXGroup;
+			children = (
+				2E3FA74B29F7087D003342CA /* EditMyPagePreferenceCellReactor.swift */,
+			);
+			path = CellReactors;
+			sourceTree = "<group>";
+		};
+		2E3FA74D29F709BE003342CA /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2E3FA74E29F709D1003342CA /* EditMyPagePreferenceCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		2E6C90B229A607C300AF963A /* Cells */ = {
@@ -704,6 +765,7 @@
 				2EC939DE2998B80200C8C47F /* ProfileSection.swift */,
 				2EBCC8FB29EDB95C008044DC /* Common */,
 				2EBCC8FA29EDB8C9008044DC /* MyPage */,
+				2E3FA74429F66B0C003342CA /* EditMyPage */,
 				2E00561B29A7E720006CF302 /* FavorSelectionSection.swift */,
 				2E00562629A9220D006CF302 /* NewAnniversarySection.swift */,
 			);
@@ -714,7 +776,6 @@
 			isa = PBXGroup;
 			children = (
 				2EE07ECA296E8D8400048A3C /* MyPageVC.swift */,
-				2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -731,7 +792,6 @@
 			isa = PBXGroup;
 			children = (
 				2EC939DA29967F1900C8C47F /* MyPageViewReactor.swift */,
-				2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */,
 				2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */,
 			);
 			path = Reactors;
@@ -1079,12 +1139,16 @@
 				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */,
+				2E3FA75129F713A7003342CA /* EditMyPageSectionHeader.swift in Sources */,
+				2E3FA74929F706FA003342CA /* EditMyPagePreferenceSection.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */,
 				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */,
+				2E3FA74C29F7087D003342CA /* EditMyPagePreferenceCellReactor.swift in Sources */,
+				2E3FA74F29F709D1003342CA /* EditMyPagePreferenceCell.swift in Sources */,
 				2E6C90B129A607BD00AF963A /* ProfileFriendCell.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,

@@ -9,6 +9,7 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import RxDataSources
 import SnapKit
 

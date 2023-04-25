@@ -80,11 +80,11 @@ final class MyPageViewReactor: Reactor, Stepper {
         }
 
     case .editButtonDidTap:
-      os_log(.debug, "Edit button did tap.")
+      self.steps.accept(AppStep.editMyPageIsRequired(self.currentState.user))
       return .empty()
 
     case .settingButtonDidTap:
-      os_log(.debug, "Setting button did tap.")
+      self.steps.accept(AppStep.settingIsRequired)
       return .empty()
     }
   }
