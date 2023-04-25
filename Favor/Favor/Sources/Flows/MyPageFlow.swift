@@ -14,7 +14,7 @@ final class MyPageFlow: Flow {
   
   var root: Presentable { self.rootViewController }
   
-  private lazy var rootViewController: BaseNavigationController = {
+  private let rootViewController: BaseNavigationController = {
     let navigationController = BaseNavigationController()
     navigationController.isNavigationBarHidden = true
     return navigationController
@@ -45,7 +45,11 @@ final class MyPageFlow: Flow {
     let myPageVC = MyPageViewController()
     let myPageReactor = MyPageViewReactor()
     myPageVC.reactor = myPageReactor
-    self.rootViewController.setViewControllers([myPageVC], animated: true)
+
+    DispatchQueue.main.async {
+      self.rootViewController.setViewControllers([myPageVC], animated: true)
+    }
+
     return .one(flowContributor: .contribute(
       withNextPresentable: myPageVC,
       withNextStepper: myPageReactor
@@ -56,7 +60,12 @@ final class MyPageFlow: Flow {
     let editMyPageVC = EditMyPageViewController()
     let editMyPageReactor = EditMyPageViewReactor(user: user)
     editMyPageVC.reactor = editMyPageReactor
-    self.rootViewController.pushViewController(editMyPageVC, animated: true)
+
+    DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
+      self.rootViewController.pushViewController(editMyPageVC, animated: true)
+    }
+
     return .one(flowContributor: .contribute(
       withNextPresentable: editMyPageVC,
       withNextStepper: editMyPageReactor
@@ -71,7 +80,12 @@ final class MyPageFlow: Flow {
     let friendVC = FriendViewController()
     let friendReactor = FriendViewReactor()
     friendVC.reactor = friendReactor
-    self.rootViewController.pushViewController(friendVC, animated: true)
+    friendVC.title = "내 친구"
+
+    DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
+      self.rootViewController.pushViewController(friendVC, animated: true)
+    }
 
     return .one(flowContributor: .contribute(
       withNextPresentable: friendVC,

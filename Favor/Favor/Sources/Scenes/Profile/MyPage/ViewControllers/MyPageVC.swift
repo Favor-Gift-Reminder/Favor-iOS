@@ -104,7 +104,6 @@ final class MyPageViewController: BaseProfileViewController, View {
 
     let rightBarItems = [self.settingButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
     self.navigationItem.setRightBarButtonItems(rightBarItems, animated: false)
-    self.navigationController?.hidesBarsOnSwipe = true
   }
 
   override func injectReactor(to view: UICollectionReusableView) {
