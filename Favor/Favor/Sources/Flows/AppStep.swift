@@ -56,6 +56,7 @@ enum AppStep: Step {
   case myPageIsRequired
   case editMyPageIsRequired(User)
   case settingIsRequired
+  case friendIsRequired
   
   // MARK: - Test
   case testIsRequired

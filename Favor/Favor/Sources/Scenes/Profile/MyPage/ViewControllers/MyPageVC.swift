@@ -117,6 +117,12 @@ final class MyPageViewController: BaseProfileViewController, View {
     )
   }
 
+  override func headerRightButtonDidTap(at section: ProfileSection) {
+    guard let reactor = self.reactor else { return }
+
+    reactor.action.onNext(.headerRightButtonDidTap(section))
+  }
+
   // MARK: - UI Setups
 
 }

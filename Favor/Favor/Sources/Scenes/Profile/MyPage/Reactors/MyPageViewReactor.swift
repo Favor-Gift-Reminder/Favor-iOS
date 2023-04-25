@@ -26,6 +26,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     case viewNeedsLoaded
     case editButtonDidTap
     case settingButtonDidTap
+    case headerRightButtonDidTap(ProfileSection)
   }
   
   enum Mutation {
@@ -85,6 +86,14 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     case .settingButtonDidTap:
       self.steps.accept(AppStep.settingIsRequired)
+      return .empty()
+
+    case .headerRightButtonDidTap(let section):
+      switch section {
+      case .friends:
+        self.steps.accept(AppStep.friendIsRequired)
+      default: break
+      }
       return .empty()
     }
   }

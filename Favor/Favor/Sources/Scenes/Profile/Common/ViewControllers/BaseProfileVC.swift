@@ -62,6 +62,12 @@ public class BaseProfileViewController: BaseViewController {
       ) as ProfileSectionHeader
       let section = dataSource[indexPath.section]
       header.reactor = ProfileSectionHeaderReactor(section: section)
+      header.rx.rightButtonDidTap
+        .asDriver(onErrorRecover: { _ in return .empty()})
+        .drive(with: self, onNext: { owner, _ in
+          owner.headerRightButtonDidTap(at: section)
+        })
+        .disposed(by: header.disposeBag)
       return header
     default:
       return UICollectionReusableView()
@@ -174,9 +180,8 @@ public class BaseProfileViewController: BaseViewController {
     }
   }
 
-  func injectReactor(to view: UICollectionReusableView) {
-
-  }
+  public func injectReactor(to view: UICollectionReusableView) { }
+  func headerRightButtonDidTap(at section: ProfileSection) { }
 
   // MARK: - UI Setups
 

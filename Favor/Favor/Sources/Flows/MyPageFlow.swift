@@ -33,6 +33,9 @@ final class MyPageFlow: Flow {
     case .settingIsRequired:
       return self.navigateToSetting()
 
+    case .friendIsRequired:
+      return self.navigateToFriend()
+
     default:
       return .none
     }
@@ -62,5 +65,17 @@ final class MyPageFlow: Flow {
 
   private func navigateToSetting() -> FlowContributors {
     return .none
+  }
+
+  private func navigateToFriend() -> FlowContributors {
+    let friendVC = FriendViewController()
+    let friendReactor = FriendViewReactor()
+    friendVC.reactor = friendReactor
+    self.rootViewController.pushViewController(friendVC, animated: true)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendVC,
+      withNextStepper: friendReactor
+    ))
   }
 }
