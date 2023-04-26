@@ -72,14 +72,15 @@ final class HomeViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.reminderFetcher.fetch()
-        .flatMap { (status, reminders) -> Observable<Mutation> in
-          let upcomingSection = self.refineUpcoming(reminders: reminders.prefix(3).wrap())
-          return .concat([
-            .just(.updateUpcoming(upcomingSection)),
-            .just(.updateLoading(status == .inProgress))
-          ])
-        }
+      return .empty()
+//      return self.reminderFetcher.fetch()
+//        .flatMap { (status, reminders) -> Observable<Mutation> in
+//          let upcomingSection = self.refineUpcoming(reminders: reminders.prefix(3).wrap())
+//          return .concat([
+//            .just(.updateUpcoming(upcomingSection)),
+//            .just(.updateLoading(status == .inProgress))
+//          ])
+//        }
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
       self.steps.accept(AppStep.searchIsRequired)
@@ -87,7 +88,7 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case .itemSelected:
       return .empty()
-
+      
     case .rightButtonDidTap(let sectionType):
       let type = "\(sectionType)"
       os_log(.debug, "\(type)")
