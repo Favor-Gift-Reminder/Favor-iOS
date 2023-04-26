@@ -124,7 +124,7 @@ final class HomeViewController: BaseViewController, View {
         view.disposeBag = DisposeBag()
       })
       .disposed(by: self.disposeBag)
-
+    
     // State
     self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))

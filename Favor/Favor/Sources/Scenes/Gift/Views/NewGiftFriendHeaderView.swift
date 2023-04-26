@@ -35,7 +35,7 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Properties
   
   var disposeBag = DisposeBag()
-  
+
   // MARK: - Initializer
   
   override init(frame: CGRect) {

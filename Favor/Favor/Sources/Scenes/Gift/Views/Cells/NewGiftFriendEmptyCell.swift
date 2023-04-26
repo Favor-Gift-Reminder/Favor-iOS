@@ -17,8 +17,7 @@ final class NewGiftFriendEmptyCell: BaseCollectionViewCell, Reusable {
   
   private let imageView: UIImageView = {
     let iv = UIImageView()
-    iv.image = .favorIcon(.couple)
-    iv.tintColor = .favorColor(.line3)
+    iv.image = .favorIcon(.couple)?.withTintColor(.favorColor(.line3))
     return iv
   }()
   

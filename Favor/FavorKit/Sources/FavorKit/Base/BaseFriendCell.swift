@@ -32,9 +32,9 @@ open class BaseFriendCell: BaseCollectionViewCell, BaseView {
     }
   }
   
-  public var cellType: FriendCellType = .undefined {
+  public var userImage: FriendCellType = .undefined {
     didSet {
-      switch cellType {
+      switch userImage {
       case .undefined:
         self.imageView.isHidden = true
         self.circleView.isHidden = false
