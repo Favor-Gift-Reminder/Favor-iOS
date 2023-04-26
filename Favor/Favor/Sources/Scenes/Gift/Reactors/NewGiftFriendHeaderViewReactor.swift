@@ -11,8 +11,7 @@ final class NewGiftFriendHeaderViewReactor: Reactor {
   typealias Action = NoAction
   
   struct State {
-    var currentFriendCount: Int
-    var sectionType: NewGiftFriendSectionType
+    var sectionModel: NewGiftFriendSection.NewGiftFriendSectionModel
   }
   
   // MARK: - Properties
@@ -21,10 +20,9 @@ final class NewGiftFriendHeaderViewReactor: Reactor {
   
   // MARK: - Initialzier
   
-  init(section: NewGiftFriendSection.NewGiftFriendSectionModel) {
+  init(sectionModel: NewGiftFriendSection.NewGiftFriendSectionModel) {
     self.initialState = State(
-      currentFriendCount: section.items.count,
-      sectionType: section.model
+      sectionModel: sectionModel
     )
   }
 }

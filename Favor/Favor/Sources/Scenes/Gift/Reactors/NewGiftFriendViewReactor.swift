@@ -17,12 +17,13 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   
   enum Action {
     case viewDidLoad
-    case cellDidTap(IndexPath)
+    case cellDidTap(IndexPath, NewGiftFriendCell.RightButtonType)
   }
   
   enum Mutation {
     case setFriendList([Friend])
     case setSelectedFriends([Friend])
+    case removeSelectedFriend(Friend)
     case setLoading(Bool)
   }
   
@@ -59,10 +60,12 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case .viewDidLoad:
       return .just(.setFriendList([
         .init(friendNo: 0, name: "김응철", isUser: false),
-        .init(friendNo: 1, name: "김응철", isUser: false),
-        .init(friendNo: 2, name: "김응철", isUser: false),
-        .init(friendNo: 3, name: "김응철", isUser: false),
-        .init(friendNo: 4, name: "김응철", isUser: false)
+        .init(friendNo: 1, name: "이창준", isUser: false),
+        .init(friendNo: 2, name: "배가희", isUser: false),
+        .init(friendNo: 3, name: "조민수", isUser: false),
+        .init(friendNo: 4, name: "김현빈", isUser: false),
+        .init(friendNo: 5, name: "정은기", isUser: false),
+        .init(friendNo: 6, name: "이주원", isUser: false)
       ]))
 //      return self.friendFetcher.fetch()
 //        .flatMap { (status, friends) -> Observable<Mutation> in
@@ -73,12 +76,14 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
 //          ])
 //        }
       
-    case .cellDidTap(let indexPath):
-      switch indexPath.section {
-      case 0: // 선택된 친구 섹션
-        
+    case let .cellDidTap(indexPath, rightButtonType):
+      switch rightButtonType {
+      case .done:
         return .empty()
-      default: // 친구 섹션
+      case .remove:
+        let targetFriend = self.currentState.selectedFriends[indexPath.row]
+        return .just(.removeSelectedFriend(targetFriend))
+      case .add:
         let targetFriend = [self.currentState.currentFriendList[indexPath.row]]
         return .just(.setSelectedFriends(targetFriend))
       }
@@ -102,6 +107,18 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       let newSelectedFriends = newState.selectedFriends
       newState.selectedSection = self.refineSelectedFriendSection(newSelectedFriends)
       newState.friendListSection = self.refineFriendList(selectedFriends: newSelectedFriends)
+      
+    case .removeSelectedFriend(let friend):
+      var friendList = self.currentState.selectedFriends
+      friendList.enumerated().forEach {
+        if $1.friendNo == friend.friendNo {
+          friendList.remove(at: $0)
+        }
+      }
+      
+      newState.selectedFriends = friendList
+      newState.selectedSection = self.refineSelectedFriendSection(friendList)
+      newState.friendListSection = self.refineFriendList(selectedFriends: friendList)
     }
     
     return newState
