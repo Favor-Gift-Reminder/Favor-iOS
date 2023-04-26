@@ -18,8 +18,8 @@ final class NewGiftFriendViewController: BaseViewController, View {
   private enum Constants {
     static let emptyCellHeight: CGFloat = 93.0
     static let friendCellHeight: CGFloat = 48.0
-    static let interGroupSpacing: CGFloat = 40.0
-    static let footerHeight: CGFloat = 65.0
+    static let interGroupSpacing: CGFloat = 8.0
+    static let footerHeight: CGFloat = 91.0
   }
   
   // MARK: - UI Components
@@ -70,7 +70,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
   
   // MARK: - Properties
   
-  private let dataSource = DataSource(
+  private lazy var dataSource = DataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
       case .empty:
@@ -84,13 +84,12 @@ final class NewGiftFriendViewController: BaseViewController, View {
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       let sectionItem = dataSource[indexPath.section]
-      
       if kind == UICollectionView.elementKindSectionHeader {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as NewGiftFriendHeaderView
-        header.reactor = NewGiftFriendHeaderViewReactor(section: sectionItem.model)
+        header.reactor = NewGiftFriendHeaderViewReactor(section: sectionItem)
         return header
       } else {
         let footer = collectionView.dequeueReusableSupplementaryView(
@@ -123,15 +122,22 @@ final class NewGiftFriendViewController: BaseViewController, View {
   
   // MARK: - Bind
   
-  override func bind() {
-    super.bind()
-    
-    self.reactor?.state.map { [$0.selectedSection, $0.friendListSection] }
-    .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
-    .disposed(by: self.disposeBag)
-  }
-  
   func bind(reactor: NewGiftFriendViewReactor) {
+    // Action
+    self.rx.viewDidLoad
+      .map { NewGiftFriendViewReactor.Action.viewDidLoad }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.collectionView.rx.itemSelected
+      .map { NewGiftFriendViewReactor.Action.cellDidTap($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // State
+    reactor.state.map { [$0.selectedSection, $0.friendListSection] }
+      .bind(to: self.collectionView.rx.items(dataSource: dataSource))
+      .disposed(by: self.disposeBag)
   }
 }
 
@@ -141,9 +147,19 @@ private extension NewGiftFriendViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(
       sectionProvider: { [weak self] sectionIndex, _ in
+        guard
+          let sectionModel = self?.dataSource[sectionIndex],
+          let firstItem = sectionModel.items.first
+        else { fatalError("Section을 설정하는 도중 치명적인 에러 발생") }
+        
+        var isEmptySelectedFriend: Bool = false
+        if case NewGiftFriendSection.NewGiftFriendSectionItem.empty = firstItem {
+          isEmptySelectedFriend = true
+        }
+        
         return self?.createCollectionViewLayout(
-          sectionType: self?.dataSource[sectionIndex].model ?? .friendList,
-          isEmptySelectedFriend: true
+          sectionType: sectionModel.model,
+          isEmptySelectedFriend: isEmptySelectedFriend
         )
       }
     )
@@ -163,12 +179,18 @@ private extension NewGiftFriendViewController {
     )
     
     let activeItemSize: NSCollectionLayoutSize
+    let topContentInset: CGFloat
+    let bottomContentInset: CGFloat
     
     switch sectionType {
     case .selectedFriends:
       activeItemSize = isEmptySelectedFriend ? emptyItemSize : itemSize
+      topContentInset = 16.0
+      bottomContentInset = isEmptySelectedFriend ? 48.0 : 8.0
     case .friendList:
       activeItemSize = itemSize
+      topContentInset = 32.0
+      bottomContentInset = 16.0
     }
     
     let item = NSCollectionLayoutItem(layoutSize: activeItemSize)
@@ -183,13 +205,17 @@ private extension NewGiftFriendViewController {
     
     let section = NSCollectionLayoutSection(group: group)
     section.interGroupSpacing = Constants.interGroupSpacing
-    section.contentInsets = NSDirectionalEdgeInsets(top: 16, leading: 0, bottom: 16, trailing: 0)
+    section.contentInsets = NSDirectionalEdgeInsets(
+      top: topContentInset,
+      leading: 0,
+      bottom: bottomContentInset,
+      trailing: 0
+    )
     section.boundarySupplementaryItems = [self.createHeader(sectionType: sectionType)]
     
     if sectionType == .friendList {
       section.boundarySupplementaryItems.append(contentsOf: [self.createFooter()])
     }
-    
     return section
   }
   
