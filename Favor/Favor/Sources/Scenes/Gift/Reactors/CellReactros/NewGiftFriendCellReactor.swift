@@ -14,10 +14,23 @@ final class NewGiftFriendCellReactor: Reactor {
   typealias Action = NoAction
   
   struct State {
-    let profileImage: BaseFriendCell.FriendCellType = .undefined
-    let friendName: String = "안녕하세요"
-    let rightButtonState: NewGiftFriendCell.RightButtonType = .add
+    var rightButtonState: NewGiftFriendCell.RightButtonType = .add
+    var friend: Friend
   }
   
-  var initialState: State = State()
+  // MARK: - Properties
+  
+  var initialState: State
+  
+  // MARK: - Initializer
+  
+  init(
+    _ friend: Friend,
+    rightButtonState: NewGiftFriendCell.RightButtonType
+  ) {
+    self.initialState = State(
+      rightButtonState: rightButtonState,
+      friend: friend
+    )
+  }
 }
