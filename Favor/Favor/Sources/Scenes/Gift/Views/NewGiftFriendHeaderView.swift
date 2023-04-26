@@ -52,18 +52,28 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Bind
   
   func bind(reactor: NewGiftFriendHeaderViewReactor) {
-    reactor.state.map { $0.currentFriendCount }
-      .map { "\($0)" }
-      .asDriver(onErrorJustReturn: "")
-      .drive(with: self) { $0.countLabel.text = $1 }
-      .disposed(by: self.disposeBag)
-    
-    reactor.state.map { $0.sectionType }
-      .map { $0 == .selectedFriends }
-      .asDriver(onErrorJustReturn: false)
-      .drive(with: self) {
-        $0.searchBar.isHidden = $1 ? true : false
-        $0.titleLabel.text = $1 ? "선택한 친구" : "친구"
+    reactor.state.map { $0.sectionModel }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, sectionModel in
+        switch sectionModel.model {
+        case .friendList:
+          owner.titleLabel.text = "친구"
+          owner.searchBar.isHidden = false
+        case .selectedFriends:
+          owner.titleLabel.text = "선택한 친구"
+          owner.searchBar.isHidden = true
+        }
+
+        var count: Int = 0
+        sectionModel.items.forEach {
+          switch $0 {
+          case .empty:
+            break
+          case .friend:
+            count += 1
+          }
+        }
+        owner.countLabel.text = "\(count)"
       }
       .disposed(by: self.disposeBag)
   }
