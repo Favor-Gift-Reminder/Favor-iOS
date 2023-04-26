@@ -83,13 +83,13 @@ final class NewGiftFriendViewController: BaseViewController, View {
       }
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-      let sectionItem = dataSource[indexPath.section]
+      let sectionModel = dataSource[indexPath.section]
       if kind == UICollectionView.elementKindSectionHeader {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as NewGiftFriendHeaderView
-        header.reactor = NewGiftFriendHeaderViewReactor(section: sectionItem)
+        header.reactor = NewGiftFriendHeaderViewReactor(sectionModel: sectionModel)
         return header
       } else {
         let footer = collectionView.dequeueReusableSupplementaryView(
@@ -130,7 +130,16 @@ final class NewGiftFriendViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     self.collectionView.rx.itemSelected
-      .map { NewGiftFriendViewReactor.Action.cellDidTap($0) }
+      .withUnretained(self)
+      .map { owner, indexPath in
+        guard let cell = owner.collectionView.cellForItem(
+          at: indexPath
+        ) as? NewGiftFriendCell else {
+          fatalError()
+        }
+        return (indexPath, cell.currentButtonType)
+      }
+      .map { NewGiftFriendViewReactor.Action.cellDidTap($0, $1) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
