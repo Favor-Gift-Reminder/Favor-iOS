@@ -26,4 +26,27 @@ public enum Favor: String, CaseIterable {
   case unique = "독특한"
   case empty1 = "호호호"
   case empty2 = "하하하"
+
+  public static var allCases: [Favor] {
+    return [
+      .simple,
+      .useful,
+      .cute,
+      .sincere,
+      .longUsing,
+      .goodPriced,
+      .goodVibe,
+      .healthy,
+      .trendy,
+      .goodQuality,
+      .tasty,
+      .pricey,
+      .useless,
+      .adorable,
+      .comforting,
+      .unique,
+      .empty1,
+      .empty2
+    ]
+  }
 }

@@ -35,6 +35,7 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
       default: break
       }
     }
+    button.isUserInteractionEnabled = false
     return button
   }()
 
@@ -66,7 +67,17 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
     reactor.state.map { $0.favor }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, favor in
-        owner.preferenceButton.configuration?.updateAttributedTitle(favor, font: .favorFont(.bold, size: 12))
+        owner.preferenceButton.configuration?.updateAttributedTitle(
+          favor.rawValue,
+          font: .favorFont(.bold, size: 12)
+        )
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isSelected }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, isSelected in
+        owner.preferenceButton.isSelected = isSelected
       })
       .disposed(by: self.disposeBag)
   }

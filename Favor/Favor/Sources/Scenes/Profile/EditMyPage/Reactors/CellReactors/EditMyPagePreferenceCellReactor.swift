@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/04/25.
 //
 
+import FavorKit
 import ReactorKit
 
 final class EditMyPagePreferenceCellReactor: Reactor {
@@ -22,14 +23,16 @@ final class EditMyPagePreferenceCellReactor: Reactor {
   }
 
   struct State {
-    var favor: String
+    var favor: Favor
+    var isSelected: Bool
   }
 
   // MARK: - Initializer
 
-  public init(favor: String) {
+  public init(favor: Favor, isSelected: Bool = false) {
     self.initialState = State(
-      favor: favor
+      favor: favor,
+      isSelected: isSelected
     )
   }
 
