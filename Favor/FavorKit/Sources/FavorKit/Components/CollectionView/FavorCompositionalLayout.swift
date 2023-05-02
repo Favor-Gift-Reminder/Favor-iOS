@@ -75,18 +75,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
   // MARK: - Group
 
   /// Group의 타입과 그에 따른 값들을 정의해둔 enum입니다.
-  public enum Group {
-
-    /// Nested Group이라면 가장 상위에 있는 Group
-    /// - Parameters:
-    ///   - height: Group의 `heightDimension`
-    ///   - spacing: Group 내부에 들어있는 Item들의 간격 (`NSCollectionLayoutSpacing`)
-    ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
-    case container(
-      height: NSCollectionLayoutDimension,
-      spacing: NSCollectionLayoutSpacing? = nil,
-      contentInsets: NSDirectionalEdgeInsets? = nil
-    )
+  public indirect enum Group {
 
     /// 화면의 너비를 꽉 채우며 가로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
@@ -98,7 +87,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       height: NSCollectionLayoutDimension,
       numberOfItems: Int,
       spacing: NSCollectionLayoutSpacing? = nil,
-      contentInsets: NSDirectionalEdgeInsets? = nil
+      contentInsets: NSDirectionalEdgeInsets? = nil,
+      innerGroup: FavorCompositionalLayout.Group? = nil
     )
 
     /// 화면의 너비를 꽉 채우며 세로로 나열되는 아이템들을 담는 Group
@@ -111,7 +101,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       height: NSCollectionLayoutDimension,
       numberOfItems: Int,
       spacing: NSCollectionLayoutSpacing? = nil,
-      contentInsets: NSDirectionalEdgeInsets? = nil
+      contentInsets: NSDirectionalEdgeInsets? = nil,
+      innerGroup: FavorCompositionalLayout.Group? = nil
     )
 
     /// 모든 레이아웃 크기를 직접 설정하여 사용하는 Group
@@ -128,7 +119,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       direction: UICollectionView.ScrollDirection,
       numberOfItems: Int,
       spacing: NSCollectionLayoutSpacing? = nil,
-      contentInsets: NSDirectionalEdgeInsets? = nil
+      contentInsets: NSDirectionalEdgeInsets? = nil,
+      innerGroup: FavorCompositionalLayout.Group? = nil
     )
 
     /// 각 enum값의 파라미터들에 더 쉽게 접근하기 위한 wrapper-property
@@ -137,32 +129,23 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       numberOfItems: Int,
       direction: UICollectionView.ScrollDirection,
       spacing: NSCollectionLayoutSpacing,
-      contentInsets: NSDirectionalEdgeInsets
+      contentInsets: NSDirectionalEdgeInsets,
+      innerGroup: FavorCompositionalLayout.Group?
     ) {
       switch self {
-      case let .container(height, spacing, contentInsets):
+      case let .flow(height, numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
             heightDimension: height
           ),
-          numberOfItems: 1,
-          direction: .horizontal,
-          spacing: spacing ?? .fixed(.zero),
-          contentInsets: contentInsets ?? .zero
-        )
-      case let .flow(height, numberOfItems, spacing, contentInsets):
-        return (
-          size: NSCollectionLayoutSize(
-            widthDimension: .estimated(1),
-            heightDimension: height
-          ),
           numberOfItems: numberOfItems,
           direction: .horizontal,
           spacing: spacing ?? .fixed(.zero),
-          contentInsets: contentInsets ?? .zero
+          contentInsets: contentInsets ?? .zero,
+          innerGroup: innerGroup
         )
-      case let .list(height, numberOfItems, spacing, contentInsets):
+      case let .list(height, numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -171,9 +154,10 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           numberOfItems: numberOfItems,
           direction: .vertical,
           spacing: spacing ?? .fixed(.zero),
-          contentInsets: contentInsets ?? .zero
+          contentInsets: contentInsets ?? .zero,
+          innerGroup: innerGroup
         )
-      case let .contents(width, height, direction, numberOfItems, spacing, contentInsets):
+      case let .contents(width, height, direction, numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: width,
@@ -182,7 +166,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           numberOfItems: numberOfItems,
           direction: direction,
           spacing: spacing ?? .fixed(.zero),
-          contentInsets: contentInsets ?? .zero
+          contentInsets: contentInsets ?? .zero,
+          innerGroup: innerGroup
         )
       }
     }
@@ -193,7 +178,14 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       with item: NSCollectionLayoutItem
     ) -> NSCollectionLayoutGroup {
       let groupMaker = FavorCompositionalLayout.groupForAllVersions(direction: self.layoutParameters.direction)
-      let group = groupMaker(self.layoutParameters.size, item, self.layoutParameters.numberOfItems)
+
+      var group: NSCollectionLayoutGroup
+      if let innerGroup = self.layoutParameters.innerGroup {
+        let innerGroup = innerGroup.make(with: item)
+        group = groupMaker(self.layoutParameters.size, innerGroup, self.layoutParameters.numberOfItems)
+      } else {
+        group = groupMaker(self.layoutParameters.size, item, self.layoutParameters.numberOfItems)
+      }
 
       group.interItemSpacing = self.layoutParameters.spacing
       group.contentInsets = self.layoutParameters.contentInsets
@@ -210,9 +202,10 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// 기본적으로 사용되는 Section
     /// - Parameters:
     ///   - spacing: Section 내부에 들어있는 Group의 간격 (`CGFloat`)
-    ///   - contentInsets: Section의 내부 `NSDirectionalEdgeInsets`
+    ///   - contentInsets: Section의 내부 (`NSDirectionalEdgeInsets`)
     ///   - orthogonalScrolling: Section이 스크롤되는 방식 (`OrthogonalScrollingBehavior`)
     ///   - boundaryItems: Section의 Header나 Footer (`[BoundaryItem]`)
+    ///   - decorationItems: Section의 Background나 Badge (`[DecorationItem]`)
     case base(
       spacing: CGFloat? = nil,
       contentInsets: NSDirectionalEdgeInsets? = nil,
