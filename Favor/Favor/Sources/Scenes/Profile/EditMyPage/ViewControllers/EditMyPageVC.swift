@@ -68,6 +68,26 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - UI Components
 
+  private let cancelButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.updateAttributedTitle("취소", font: .favorFont(.bold, size: 18))
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.white)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
+
+  private let doneButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.updateAttributedTitle("완료", font: .favorFont(.bold, size: 18))
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.white)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
@@ -104,12 +124,17 @@ final class EditMyPageViewController: BaseViewController, View {
     )
 
     collectionView.showsVerticalScrollIndicator = false
-//    collectionView.showsHorizontalScrollIndicator = false
     collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
 
   // MARK: - Life Cycle
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    self.setupNavigationBar()
+  }
 
   // MARK: - Binding
 
@@ -159,5 +184,13 @@ final class EditMyPageViewController: BaseViewController, View {
 // MARK: - Privates
 
 private extension EditMyPageViewController {
-  
+  func setupNavigationBar() {
+    self.navigationItem.leftBarButtonItem = self.cancelButton.toBarButtonItem()
+    self.navigationItem.rightBarButtonItem = self.doneButton.toBarButtonItem()
+
+    let appearance = UINavigationBarAppearance()
+    appearance.configureWithTransparentBackground()
+    self.navigationController?.navigationBar.standardAppearance = appearance
+    self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+  }
 }

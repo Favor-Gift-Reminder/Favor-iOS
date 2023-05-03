@@ -22,6 +22,7 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
 
   private let preferenceButton: UIButton = {
     var config = UIButton.Configuration.filled()
+    config.titleLineBreakMode = .byTruncatingMiddle
 
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
@@ -35,6 +36,7 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
       default: break
       }
     }
+    button.titleLabel?.numberOfLines = 1
     button.isUserInteractionEnabled = false
     return button
   }()
@@ -56,12 +58,6 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
 
   func bind(reactor: EditMyPagePreferenceCellReactor) {
     // Action
-    self.preferenceButton.rx.tap
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.preferenceButton.isSelected.toggle()
-      })
-      .disposed(by: self.disposeBag)
 
     // State
     reactor.state.map { $0.favor }

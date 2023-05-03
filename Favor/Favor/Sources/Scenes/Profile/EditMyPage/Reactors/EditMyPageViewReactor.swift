@@ -57,13 +57,9 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     case .favorDidSelected(let indexPath):
       var newSelectedFavors = self.currentState.selectedFavors
       let count = newSelectedFavors.reduce(0) { count, dict in
-        if dict.value {
-          return count + 1
-        } else {
-          return count
-        }
+        return dict.value ? count + 1 : count
       }
-      if count >= 5 && newSelectedFavors.values[indexPath] == false {
+      if count >= 5 && !newSelectedFavors.values[indexPath] {
         return .empty()
       } else {
         newSelectedFavors.values[indexPath].toggle()
