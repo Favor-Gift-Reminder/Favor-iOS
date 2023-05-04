@@ -23,6 +23,7 @@ final class NewGiftViewReactor: Reactor, Stepper {
   
   enum Action {
     case cancelButtonDidTap
+    case choiceFriendButtonDidTap
     case giftReceivedButtonDidTap
     case giftGivenButtonDidTap
     case categoryDidChange(FavorCategory)
@@ -74,6 +75,10 @@ final class NewGiftViewReactor: Reactor, Stepper {
       
     case .titleTextFieldDidChange(let title):
       return .just(.setTitle(title))
+      
+    case .choiceFriendButtonDidTap:
+      self.steps.accept(AppStep.newGiftFriendIsRequired)
+      return .empty()
       
     case .categoryDidChange(let category):
       return .just(.setCategory(category))
