@@ -30,6 +30,10 @@ final class MyPageFlow: Flow {
     case .editMyPageIsRequired(let user):
       return self.navigateToEditMyPage(with: user)
 
+    case .editMyPageIsComplete:
+      self.rootViewController.popViewController(animated: true)
+      return .none
+
     case .settingIsRequired:
       return self.navigateToSetting()
 

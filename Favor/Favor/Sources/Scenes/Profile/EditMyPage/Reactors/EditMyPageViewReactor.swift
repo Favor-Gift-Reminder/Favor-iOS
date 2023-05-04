@@ -14,6 +14,13 @@ import RxFlow
 
 final class EditMyPageViewReactor: Reactor, Stepper {
 
+  // MARK: - Constants
+
+  private enum Constant {
+    static let numberOfFavors = 18
+    static let maximumSelectedFavor = 5
+  }
+
   // MARK: - Properties
 
   var initialState: State
@@ -21,26 +28,39 @@ final class EditMyPageViewReactor: Reactor, Stepper {
 
   enum Action {
     case viewNeedsLoaded
+    case cancelButtonDidTap
+    case doneButtonDidTap
+    case nameDidUpdate(String?)
+    case idDidUpdate(String?)
     case favorDidSelected(Int)
+    case doNothing
   }
 
   enum Mutation {
-    case updateSelectedFavors(OrderedDictionary<Favor, Bool>)
-    case updateFavor(EditMyPageSection)
+    case updateName(String?)
+    case updateID(String?)
+    case updateFavor([EditMyPageSectionItem])
   }
 
   struct State {
+    var user: User
     var sections: [EditMyPageSection] = []
-    var nameSection: EditMyPageSection = .name([.textField(placeholder: "이름")])
-    var idSection: EditMyPageSection = .id([.textField(placeholder: "아이디")])
+    var nameSection: EditMyPageSection = .name([.name(placeholder: "이름")])
+    var name: String?
+    var idSection: EditMyPageSection = .id([.id(placeholder: "아이디")])
+    var id: String?
     var favorSection: EditMyPageSection = .favor([])
-    var selectedFavors: OrderedDictionary<Favor, Bool> = [:]
   }
 
   // MARK: - Initializer
 
   init(user: User) {
-    self.initialState = State()
+    self.initialState = State(
+      user: user,
+      favorSection: .favor(Favor.allCases.map { favor in
+        return .favor(false, favor)
+      })
+    )
   }
 
 
@@ -49,35 +69,44 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      let selectedFavors: OrderedDictionary<Favor, Bool> = Favor.allCases.reduce(into: [:]) { result, favor in
-        result[favor] = false
-      }
-      return .just(.updateSelectedFavors(selectedFavors))
+      return .empty()
+
+    case .cancelButtonDidTap:
+      self.steps.accept(AppStep.editMyPageIsComplete)
+      return .empty()
+
+    case .doneButtonDidTap:
+      return .empty()
+
+    case .nameDidUpdate(let name):
+      return .just(.updateName(name))
+
+    case .idDidUpdate(let id):
+      return .just(.updateID(id))
 
     case .favorDidSelected(let indexPath):
-      var newSelectedFavors = self.currentState.selectedFavors
-      let count = newSelectedFavors.reduce(0) { count, dict in
-        return dict.value ? count + 1 : count
-      }
-      if count >= 5 && !newSelectedFavors.values[indexPath] {
-        return .empty()
-      } else {
-        newSelectedFavors.values[indexPath].toggle()
-        return .just(.updateSelectedFavors(newSelectedFavors))
-      }
-    }
-  }
+      var favorItems = self.currentState.favorSection.items
+      guard
+        case let EditMyPageSectionItem.favor(isSelected, favor) = favorItems[indexPath],
+        self.currentState.favorSection.items.count == Constant.numberOfFavors,
+        indexPath < favorItems.count
+      else { return .empty() }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    return mutation.flatMap { mutation -> Observable<Mutation> in
-      if case let Mutation.updateSelectedFavors(newSelectedFavors) = mutation {
-        return .concat(
-          .just(.updateSelectedFavors(newSelectedFavors)),
-          .just(.updateFavor(self.refinePreference(selectedFavors: newSelectedFavors)))
-        )
-      } else {
-        return .just(mutation)
+      // 이미 선택된 취향의 개수
+      let count = favorItems.filter { item in
+        guard case let EditMyPageSectionItem.favor(isSelected, _) = item else { return false }
+        return isSelected
+      }.count
+      // 선택된 취향의 개수가 5개 이상이고 선택된 Cell의 취향이 선택되지 않은 상태일 때 (5개 초과의 취향을 선택하고자 할 때)
+      if count >= Constant.maximumSelectedFavor && !isSelected {
+        return .empty()
       }
+
+      favorItems[indexPath] = .favor(!isSelected, favor)
+      return .just(.updateFavor(favorItems))
+
+    case .doNothing:
+      return .empty()
     }
   }
 
@@ -85,11 +114,14 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
-    case .updateSelectedFavors(let favorDictionary):
-      newState.selectedFavors = favorDictionary
+    case .updateName(let name):
+      newState.name = name
 
-    case .updateFavor(let favorSection):
-      newState.favorSection = favorSection
+    case .updateID(let id):
+      newState.id = id
+
+    case .updateFavor(let favorItems):
+      newState.favorSection = .favor(favorItems)
     }
 
     return newState
@@ -101,20 +133,5 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       newState.sections = [state.nameSection, state.idSection, state.favorSection]
       return newState
     }
-  }
-}
-
-// MARK: - Privates
-
-private extension EditMyPageViewReactor {
-  func refinePreference(selectedFavors: OrderedDictionary<Favor, Bool>) -> EditMyPageSection {
-    let favorItem = selectedFavors.map { selectedFavor -> EditMyPageSectionItem in
-      let reactor = EditMyPagePreferenceCellReactor(
-        favor: selectedFavor.key,
-        isSelected: selectedFavor.value
-      )
-      return .favor(reactor)
-    }
-    return .favor(favorItem)
   }
 }

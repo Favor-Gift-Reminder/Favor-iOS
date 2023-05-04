@@ -11,8 +11,9 @@ import FavorKit
 import RxDataSources
 
 enum EditMyPageSectionItem {
-  case textField(placeholder: String)
-  case favor(EditMyPagePreferenceCellReactor)
+  case name(placeholder: String)
+  case id(placeholder: String)
+  case favor(Bool, Favor)
 }
 
 enum EditMyPageSection {

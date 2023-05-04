@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OSLog
 
 import FavorKit
 import ReactorKit
@@ -24,16 +25,53 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Properties
 
-  private let dataSource: EditMyPageDataSource = EditMyPageDataSource(
-    configureCell: { _, collectionView, indexPath, item in
+  private lazy var dataSource: EditMyPageDataSource = EditMyPageDataSource(
+    configureCell: { [weak self] dataSource, collectionView, indexPath, item in
       switch item {
-      case .textField(let placeholder):
+      case .name(let placeholder):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
         cell.bind(placeholder: placeholder)
+
+        if let reactor = self?.reactor {
+          reactor.state.map { $0.name }
+            .distinctUntilChanged()
+            .bind(with: cell, onNext: { owner, name in
+              owner.bind(text: name)
+            })
+            .disposed(by: cell.disposeBag)
+
+//          cell.rx.text
+//            .distinctUntilChanged()
+//            .debug("Name text")
+//            .map { Reactor.Action.nameDidUpdate($0) }
+//            .bind(to: reactor.action)
+//            .disposed(by: cell.disposeBag)
+        }
         return cell
-      case .favor(let reactor):
+      case .id(let placeholder):
+        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
+        cell.bind(placeholder: placeholder)
+
+        if let reactor = self?.reactor {
+          reactor.state.map { $0.id }
+            .distinctUntilChanged()
+            .bind(with: cell, onNext: { owner, id in
+              owner.bind(text: id)
+            })
+            .disposed(by: cell.disposeBag)
+
+//          cell.rx.text
+//            .distinctUntilChanged()
+//            .debug("ID text")
+//            .map { Reactor.Action.idDidUpdate($0) }
+//            .bind(to: reactor.action)
+//            .disposed(by: cell.disposeBag)
+        }
+        return cell
+      case let .favor(isSelected, favor):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPagePreferenceCell
-        cell.reactor = reactor
+        cell.isButtonSelected = isSelected
+        cell.favor = favor
         return cell
       }
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -157,6 +195,16 @@ final class EditMyPageViewController: BaseViewController, View {
     // Action
     self.rx.viewDidLoad
       .map { Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.cancelButton.rx.tap
+      .map { Reactor.Action.cancelButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.doneButton.rx.tap
+      .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 

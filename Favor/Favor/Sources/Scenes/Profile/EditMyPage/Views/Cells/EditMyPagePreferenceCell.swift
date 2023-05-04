@@ -8,15 +8,22 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import Reusable
 import SnapKit
 
-final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
+final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Constants
 
   // MARK: - Properties
+
+  public var isButtonSelected: Bool = false {
+    didSet { self.preferenceButton.isSelected = self.isButtonSelected }
+  }
+
+  public var favor: Favor? {
+    didSet { self.updateTitle() }
+  }
 
   // MARK: - UI Components
 
@@ -54,30 +61,6 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable, View {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: - Binding
-
-  func bind(reactor: EditMyPagePreferenceCellReactor) {
-    // Action
-
-    // State
-    reactor.state.map { $0.favor }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, favor in
-        owner.preferenceButton.configuration?.updateAttributedTitle(
-          favor.rawValue,
-          font: .favorFont(.bold, size: 12)
-        )
-      })
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.isSelected }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, isSelected in
-        owner.preferenceButton.isSelected = isSelected
-      })
-      .disposed(by: self.disposeBag)
-  }
-
   // MARK: - Functions
 
 }
@@ -97,5 +80,16 @@ extension EditMyPagePreferenceCell: BaseView {
     self.preferenceButton.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
+  }
+}
+
+// MARK: - Privates
+
+private extension EditMyPagePreferenceCell {
+  func updateTitle() {
+    self.preferenceButton.configuration?.updateAttributedTitle(
+      self.favor?.rawValue,
+      font: .favorFont(.bold, size: 12)
+    )
   }
 }
