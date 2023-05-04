@@ -11,29 +11,39 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
+/// 기본적으로 검색 아이콘을 왼쪽에 갖고 있는 SearchBar입니다.
+///
+/// `hasButton` 프로퍼티를 통해 좌측에 뒤로가기 버튼을 없애거나 넣을 수 있습니다.
+/// 네비게이션 바를 대체할 때 `true`로 설정합니다.
 public class FavorSearchBar: UIView {
+  public typealias BackButtonHidden = Bool
+
+  // MARK: - Constants
   
   // MARK: - Properties
+
+  /// 뒤로가기 버튼 여부
+  public var hasBackButton: Bool = true {
+    didSet { self.updateBackButton() }
+  }
   
-  /// 왼쪽 버튼의 크기 (1:1 ratio)
-  public var leftItemSize: CGFloat = 40.0 {
-    didSet { self.updateLeftItem() }
+  /// 뒤로가기 버튼의 크기 (1:1 ratio)
+  public var backButtonSize: CGFloat = 40.0 {
+    didSet { self.updateBackButton() }
   }
   
   /// SearchBar의 높이
   public var searchBarHeight: CGFloat = 40.0
   
-  /// 왼쪽에 있는 아이콘의 이미지
-  public var leftItemImage: UIImage? = .favorIcon(.search) {
-    didSet { self.updateSearchItem() }
-  }
+  /// 뒤로가기 아이콘의 이미지
+  public var backButtonImage: UIImage? = .favorIcon(.left)
   
-  /// SearchBar에 내장되어 있는 TextField의 Corner Radius
+  /// TextField의 Corner Radius
   public var cornerRadius: CGFloat = 20.0 {
     didSet { self.updateTextField() }
   }
   
-  /// SearchBar에 내장되어 있는 TextField의 placeholder 텍스트
+  /// TextField의 placeholder 텍스트
   public var placeholder: String? {
     didSet { self.updateTextField() }
   }
@@ -42,34 +52,45 @@ public class FavorSearchBar: UIView {
   public var placeholderColor: UIColor = .favorColor(.explain) {
     didSet { self.updateTextField() }
   }
+
+  /// 왼쪽 아이템이 제거되는데 걸리는 TimeInterval
+  public var popDuration: TimeInterval = 0.3
+
+  /// 왼쪽 아이템이 추가되는데 걸리는 TimeInterval
+  public var pushDuration: TimeInterval = 0.4
   
   // MARK: - UI Components
-
-  /// SearchBar의 textField에 짧게 접근하기 위한 프로퍼티
-  public var textField: UITextField {
-    self.searchBar.searchTextField
-  }
   
-  public lazy var leftItem: UIButton = {
+  fileprivate lazy var backButton: UIButton = {
     var configuration = UIButton.Configuration.plain()
     configuration.baseForegroundColor = .favorColor(.icon)
-    configuration.image = .favorIcon(.left)
+    configuration.background.backgroundColor = .clear
+    configuration.image = self.backButtonImage
     
     let button = UIButton(configuration: configuration)
     return button
   }()
+
+  private let searchImageView: UIImageView = {
+    let imageView = UIImageView(image: .favorIcon(.search))
+    imageView.contentMode = .center
+    return imageView
+  }()
   
-  public lazy var searchBar: UISearchBar = {
-    let searchBar = UISearchBar()
-    searchBar.searchBarStyle = .minimal
-    searchBar.backgroundColor = .clear
-    searchBar.searchTextField.backgroundColor = .favorColor(.card)
-    searchBar.searchTextField.font = .favorFont(.regular, size: 16)
-    searchBar.searchTextField.textColor = .favorColor(.icon)
-    searchBar.searchTextField.clipsToBounds = true
-    searchBar.placeholder = "플레이스 홀더 메시지"
-    searchBar.autocapitalizationType = .none
-    return searchBar
+  public lazy var textField: UITextField = {
+    let textField = UITextField()
+    textField.backgroundColor = .favorColor(.card)
+    textField.font = .favorFont(.regular, size: 16)
+    textField.textColor = .favorColor(.icon)
+    textField.clipsToBounds = true
+    textField.placeholder = "플레이스 홀더 메시지"
+    textField.leftView = self.searchImageView
+    textField.leftViewMode = .always
+    textField.clearButtonMode = .always
+    textField.autocapitalizationType = .none
+    textField.enablesReturnKeyAutomatically = true
+    textField.returnKeyType = .search
+    return textField
   }()
   
   private lazy var searchStack: UIStackView = {
@@ -87,107 +108,142 @@ public class FavorSearchBar: UIView {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
-    self.setupBaseSearchBar()
+    self.updateTextField()
+    self.updateBackButton()
   }
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
-  private func setupBaseSearchBar() {
-    self.updateTextField()
-    self.updateSearchItem()
-  }
-  
   // MARK: - Functions
-  
-  private func updateLeftItem() {
-    self.leftItem.snp.updateConstraints { make in
-      make.height.width.equalTo(self.leftItemSize)
-    }
-  }
-  
-  public func updateLeftItemVisibility(isHidden: Bool) {
-    let duration = isHidden ? 0.3 : 0.4
-    let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
-      self.leftItem.isHidden = isHidden
-    }
-    animator.startAnimation()
-  }
-  
-  /// SearchBar에 내장되어 있는 TextField를 업데이트합니다.
-  private func updateTextField() {
-    self.searchBar.searchTextField.layer.cornerRadius = self.cornerRadius
 
-    var container = AttributeContainer()
-    container.font = .favorFont(.regular, size: 16)
-    container.foregroundColor = self.placeholderColor
-
-    let attributedString = AttributedString(self.placeholder ?? "", attributes: container)
-    self.searchBar.searchTextField.attributedPlaceholder = NSAttributedString(attributedString)
-    self.searchBar.searchTextPositionAdjustment = UIOffset(horizontal: 8, vertical: 0)
+  /// 뒤로가기 버튼의 숨김 여부를 설정합니다.
+  public func setBackButton(toHidden isHidden: BackButtonHidden, animated: Bool = true) {
+    self.toggleBackButton(isHidden: isHidden, animated: animated)
   }
-  
-  private func updateSearchItem() {
-    self.searchBar.setImage(self.leftItemImage, for: .search, state: .normal)
-    self.searchBar.setPositionAdjustment(UIOffset(horizontal: 16, vertical: 0), for: .search)
+
+  /// 뒤로가기 버튼을 보여줍니다.
+  public func showBackButton(animated: Bool = true) {
+    self.toggleBackButton(isHidden: false, animated: animated)
+  }
+
+  /// 뒤로가기 버튼을 숨깁니다.
+  public func hideBackButton(animated: Bool = true) {
+    self.toggleBackButton(isHidden: true, animated: animated)
   }
 }
 
 // MARK: - Setup
 
 extension FavorSearchBar {
-  func setupStyles() {
-    //
-  }
+  func setupStyles() { }
   
   func setupLayouts() {
     [
-      self.leftItem,
-      self.searchBar
+      self.backButton,
+      self.textField
     ].forEach {
       self.searchStack.addArrangedSubview($0)
     }
 
-    [
-      self.searchStack
-    ].forEach {
-      self.addSubview($0)
-    }
+    self.addSubview(self.searchStack)
   }
   
   func setupConstraints() {
     self.searchStack.snp.makeConstraints { make in
       make.edges.equalToSuperview()
-      make.height.equalTo(self.leftItemSize)
+      make.height.equalTo(self.backButtonSize)
     }
-    self.leftItem.snp.makeConstraints { make in
-      make.width.height.equalTo(self.leftItemSize)
+
+    self.backButton.snp.makeConstraints { make in
+      make.width.height.equalTo(self.backButtonSize)
     }
-    self.searchBar.snp.makeConstraints { make in
+
+    self.searchImageView.snp.makeConstraints { make in
+      make.width.equalTo(58)
+    }
+
+    self.textField.snp.makeConstraints { make in
       make.height.equalTo(self.searchBarHeight)
     }
   }
 }
 
+// MARK: - Privates
+
+private extension FavorSearchBar {
+  /// 뒤로 가기 버튼을 업데이트합니다.
+  func updateBackButton() {
+    if !self.hasBackButton {
+      self.searchStack.removeArrangedSubview(self.backButton)
+    } else {
+      if !self.searchStack.arrangedSubviews.contains(self.backButton) {
+        self.searchStack.insertArrangedSubview(self.backButton, at: 0)
+      }
+    }
+
+    self.backButton.snp.updateConstraints { make in
+      make.height.width.equalTo(self.backButtonSize)
+    }
+  }
+
+  func toggleBackButton(isHidden: BackButtonHidden, animated: Bool = true) {
+    let updateClosure = {
+      self.backButton.isHidden = isHidden
+    }
+
+    if animated {
+      let duration = isHidden ? self.popDuration : self.pushDuration
+      UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
+        updateClosure()
+      }.startAnimation()
+    } else {
+      updateClosure()
+    }
+  }
+
+  /// TextField를 업데이트합니다.
+  private func updateTextField() {
+    self.textField.layer.cornerRadius = self.cornerRadius
+
+    var container = AttributeContainer()
+    container.font = .favorFont(.regular, size: 16)
+    container.foregroundColor = self.placeholderColor
+
+    let attributedString = AttributedString(self.placeholder ?? "", attributes: container)
+    self.textField.attributedPlaceholder = NSAttributedString(attributedString)
+  }
+}
+
+// MARK: - Reactive
+
 public extension Reactive where Base: FavorSearchBar {
-  var leftItemDidTap: ControlEvent<()> {
-    let source = base.leftItem.rx.tap
+  var text: ControlProperty<String?> {
+    let source = base.textField.rx.text
+    let bindingObserver = Binder(self.base) { textField, text in
+      textField.textField.text = text
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
+  }
+
+  var backButtonDidTap: ControlEvent<()> {
+    let source = base.backButton.rx.tap
     return ControlEvent(events: source)
   }
 
   var editingDidBegin: ControlEvent<()> {
-    let source = base.searchBar.searchTextField.rx.controlEvent(.editingDidBegin)
+    let source = base.textField.rx.controlEvent(.editingDidBegin)
     return ControlEvent(events: source)
   }
 
   var editingDidEnd: ControlEvent<()> {
-    let source = base.searchBar.searchTextField.rx.controlEvent(.editingDidEnd)
+    let source = base.textField.rx.controlEvent(.editingDidEnd)
     return ControlEvent(events: source)
   }
 
   var editingDidEndOnExit: ControlEvent<()> {
-    let source = base.searchBar.searchTextField.rx.controlEvent(.editingDidEndOnExit)
+    let source = base.textField.rx.controlEvent(.editingDidEndOnExit)
     return ControlEvent(events: source)
   }
 }

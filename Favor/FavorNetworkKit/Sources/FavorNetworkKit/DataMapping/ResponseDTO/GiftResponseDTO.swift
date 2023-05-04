@@ -7,25 +7,44 @@
 
 import Foundation
 
-public enum GiftResponseDTO {
-  
-  /// 전체 선물
-  public struct AllGifts: Decodable {
-    public let giftNo: Int
-    public let isPinned: Bool
+public struct GiftResponseDTO: Decodable {
+  public let category: String // Enum
+  public let emotion: String // Enum
+  public let friendList: [FriendResponseDTO]
+  public let giftDate: Date
+  public let giftMemo: String
+  public let giftName: String
+  public let giftNo: Int
+  public let isGive: Bool
+  public let isPinned: Bool
+  public let userNo: Int
+
+  private enum CodingKeys: CodingKey {
+    case category
+    case emotion
+    case friendList
+    case giftDate
+    case giftMemo
+    case giftName
+    case giftNo
+    case isGive
+    case isPinned
+    case userNo
   }
-  
-  /// 단일 선물
-  public struct Gift: Decodable {
-    public let category: String
-    public let emotion: String
-    public let friendNo: Int
-    public let giftDate: String
-    public let giftMemo: String
-    public let giftName: String
-    public let giftNo: Int
-    public let isGiven: Bool
-    public let isPinned: Bool
-    public let userNo: Int
+
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.container(keyedBy: CodingKeys.self)
+    self.category = try container.decode(String.self, forKey: .category)
+    self.emotion = try container.decode(String.self, forKey: .emotion)
+    self.friendList = try container.decode([FriendResponseDTO].self, forKey: .friendList)
+    let giftDateString = try container.decode(String.self, forKey: .giftDate)
+    let giftDate = giftDateString.toDate("yyyy-MM-dd")
+    self.giftDate = giftDate ?? .distantPast
+    self.giftMemo = try container.decode(String.self, forKey: .giftMemo)
+    self.giftName = try container.decode(String.self, forKey: .giftName)
+    self.giftNo = try container.decode(Int.self, forKey: .giftNo)
+    self.isGive = try container.decode(Bool.self, forKey: .isGive)
+    self.isPinned = try container.decode(Bool.self, forKey: .isPinned)
+    self.userNo = try container.decode(Int.self, forKey: .userNo)
   }
 }

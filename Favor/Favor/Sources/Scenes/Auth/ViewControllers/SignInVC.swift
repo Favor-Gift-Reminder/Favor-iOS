@@ -71,6 +71,11 @@ final class SignInViewController: BaseViewController, View {
   
   func bind(reactor: SignInViewReactor) {
     // Action
+    self.rx.viewDidLoad
+      .map { Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.emailTextField.rx.text
       .orEmpty
       .distinctUntilChanged()

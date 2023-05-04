@@ -57,7 +57,7 @@ public class Fetcher<T> {
     }
 
     return .create { observer in
-      _Concurrency.Task {
+      let task = _Concurrency.Task {
         do {
           // 로컬에 저장된 데이터를 방출하며 status를 inProgress로 설정합니다.
           os_log(.debug, "📂 🟡 FETCHER STATUS: inProgress")
@@ -80,7 +80,9 @@ public class Fetcher<T> {
         }
       }
 
-      return Disposables.create()
+      return Disposables.create {
+        task.cancel()
+      }
     }
   }
 }

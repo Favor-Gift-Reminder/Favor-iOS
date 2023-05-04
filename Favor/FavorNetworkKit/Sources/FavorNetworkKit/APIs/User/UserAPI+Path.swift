@@ -42,8 +42,8 @@ extension UserAPI {
     case .getUserId(let userId):
       return "/users/id/\(userId)"
 
-    case .patchProfile:
-      return "/users/profile"
+    case let .patchProfile(_, _, userNo):
+      return "/users/profile/\(userNo)"
 
     case .getAllReminderList(let userNo):
       return "/users/reminder-list/\(userNo)"

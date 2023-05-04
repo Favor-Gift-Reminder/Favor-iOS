@@ -28,6 +28,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   let idValidate = BehaviorRelay<ValidationResult>(value: .empty)
   
   enum Action {
+    case viewNeedsLoaded
     case profileImageButtonDidTap
     case nameTextFieldDidUpdate(String)
     case idTextFieldDidUpdate(String)
@@ -36,6 +37,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   
   enum Mutation {
     case updateProfileImage(UIImage?)
+    case updateUserNo(Int)
     case updateUserName(String)
     case updateUserId(String)
     case updateNameValidationResult(Bool)
@@ -46,6 +48,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   
   struct State {
     var profileImage: UIImage?
+    var userNo: Int = .min
     var userName: String = ""
     var userId: String = ""
     var nameValidationResult: Bool = true
@@ -65,8 +68,18 @@ final class SetProfileViewReactor: Reactor, Stepper {
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .viewNeedsLoaded:
+      return self.fetchStagedUserInfo()
+        .asObservable()
+        .flatMap { user -> Observable<Mutation> in
+          return .concat([
+            .just(.updateUserNo(user.userNo)),
+            .just(.updateUserName(user.name)),
+            .just(.updateUserId(user.userID))
+          ])
+        }
+
     case .profileImageButtonDidTap:
-      os_log(.debug, "Choose profile image button did tap.")
       self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
       return Observable<Mutation>.empty()
 
@@ -88,23 +101,20 @@ final class SetProfileViewReactor: Reactor, Stepper {
       ])
       
     case .nextFlowRequested:
-      os_log(.debug, "Next button or return key from keyboard did tap.")
       if self.currentState.isNextButtonEnabled {
+        let userNo = self.currentState.userNo
         let userId = self.currentState.userId
         let userName = self.currentState.userName
         
-        // TODO: 로컬 데이터로 User Infomation을 저장해야함.
-        
         return .concat([
           .just(.updateLoading(true)),
-          networking.request(.patchProfile(
+          self.networking.request(.patchProfile(
             userId: userId,
             name: userName,
-            userNo: 0
+            userNo: userNo
           ))
-          .debug()
           .flatMap { _ -> Observable<Mutation> in
-            self.steps.accept(AppStep.termIsRequired(self.currentState.userName))
+            self.steps.accept(AppStep.termIsRequired(userName))
             return .just(.updateLoading(false))
           }
         ])
@@ -138,6 +148,9 @@ final class SetProfileViewReactor: Reactor, Stepper {
     case .updateProfileImage(let image):
       newState.profileImage = image
 
+    case .updateUserNo(let userNo):
+      newState.userNo = userNo
+
     case .updateUserName(let userName):
       newState.userName = userName
 
@@ -160,4 +173,25 @@ final class SetProfileViewReactor: Reactor, Stepper {
     return newState
   }
   
+}
+
+// MARK: - Privates
+
+private extension SetProfileViewReactor {
+  func fetchStagedUserInfo() -> Single<User> {
+    return Single<User>.create { single in
+      let task = Task {
+        do {
+          let user = try await RealmManager.shared.read(User.self).toValue()
+          single(.success(user))
+        } catch {
+          single(.failure(error))
+        }
+      }
+
+      return Disposables.create {
+        task.cancel()
+      }
+    }
+  }
 }

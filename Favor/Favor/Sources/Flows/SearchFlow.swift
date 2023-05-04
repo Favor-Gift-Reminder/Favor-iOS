@@ -34,11 +34,14 @@ final class SearchFlow: Flow {
     case .searchIsRequired:
       return self.navigateToSearch()
 
-    case .searchResultIsRequired:
-      return self.navigateToSearchResult()
-
     case .searchIsComplete:
       return self.navigateToHome()
+
+    case .searchResultIsRequired(let queryString):
+      return self.navigateToSearchResult(with: queryString)
+
+    case .searchResultIsComplete:
+      return self.popSearchResult()
 
     default:
       return .none
@@ -51,7 +54,7 @@ final class SearchFlow: Flow {
 private extension SearchFlow {
   func navigateToSearch() -> FlowContributors {
     let searchVC = SearchViewController()
-    let searchReactor = SearchViewReactor()
+    let searchReactor = SearchViewReactor(mode: .search)
     searchVC.reactor = searchReactor
 
     DispatchQueue.main.async {
@@ -65,15 +68,24 @@ private extension SearchFlow {
     ))
   }
 
-  func navigateToSearchResult() -> FlowContributors {
+  func navigateToSearchResult(with searchQuery: String) -> FlowContributors {
     let searchResultVC = SearchResultViewController()
-    let searchResultReactor = SearchResultViewReactor()
+    let searchResultReactor = SearchViewReactor(mode: .result, searchQuery: searchQuery)
     searchResultVC.reactor = searchResultReactor
-    self.rootViewController.navigationController?.pushViewController(searchResultVC, animated: true)
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchResultVC, animated: true)
+    }
+
     return .one(flowContributor: .contribute(
       withNextPresentable: searchResultVC,
       withNextStepper: searchResultReactor
     ))
+  }
+
+  func popSearchResult() -> FlowContributors {
+    self.rootViewController.popViewController(animated: true)
+    return .none
   }
 
   func navigateToHome() -> FlowContributors {

@@ -7,6 +7,7 @@
 
 import OSLog
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow
