@@ -88,7 +88,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       var favorItems = self.currentState.favorSection.items
       guard
         case let EditMyPageSectionItem.favor(isSelected, favor) = favorItems[indexPath],
-        self.currentState.favorSection.items.count == Constant.numberOfFavors,
+        favorItems.count == Constant.numberOfFavors,
         indexPath < favorItems.count
       else { return .empty() }
 
