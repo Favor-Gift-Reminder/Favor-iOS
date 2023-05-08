@@ -15,23 +15,12 @@ enum EditMyPageSectionItem: SectionModelItem {
 }
 
 enum EditMyPageSection {
-  case name([EditMyPageSectionItem])
-  case id([EditMyPageSectionItem])
-  case favor([EditMyPageSectionItem])
+  case name
+  case id
+  case favor
 }
 
 extension EditMyPageSection: SectionModelType {
-  public var items: [any SectionModelItem] {
-    switch self {
-    case .name(let items):
-      return items
-    case .id(let items):
-      return items
-    case .favor(let items):
-      return items
-    }
-  }
-
   public var header: String {
     switch self {
     case .name: return "이름"

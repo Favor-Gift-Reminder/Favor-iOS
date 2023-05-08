@@ -174,11 +174,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
 
     /// 실제 사용될 Group을 만들어 반환해주는 Maker
     /// - Returns: `NSCollectionLayoutGroup`
-    public func make(
-      with item: NSCollectionLayoutItem
-    ) -> NSCollectionLayoutGroup {
+    public func make(with item: NSCollectionLayoutItem) -> NSCollectionLayoutGroup {
       let groupMaker = FavorCompositionalLayout.groupForAllVersions(direction: self.layoutParameters.direction)
-
       var group: NSCollectionLayoutGroup
       if let innerGroup = self.layoutParameters.innerGroup {
         let innerGroup = innerGroup.make(with: item)
@@ -186,7 +183,6 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       } else {
         group = groupMaker(self.layoutParameters.size, item, self.layoutParameters.numberOfItems)
       }
-
       group.interItemSpacing = self.layoutParameters.spacing
       group.contentInsets = self.layoutParameters.contentInsets
 
@@ -236,17 +232,13 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
 
     /// 실제 사용될 Section을 만들어 반환해주는 Maker
     /// - Returns: `NSCollectionLayoutSection`
-    public func make(
-      with group: NSCollectionLayoutGroup
-    ) -> NSCollectionLayoutSection {
+    public func make(with group: NSCollectionLayoutGroup) -> NSCollectionLayoutSection {
       let section = NSCollectionLayoutSection(group: group)
-
       section.interGroupSpacing = self.layoutParameters.spacing
       section.contentInsets = self.layoutParameters.contentInsets
       section.orthogonalScrollingBehavior = self.layoutParameters.orthogonalScrolling
       section.boundarySupplementaryItems = self.layoutParameters.boundaryItems.map { $0.make() }
       section.decorationItems = self.layoutParameters.decorationItems.map { $0.make() }
-
       return section
     }
   }
@@ -320,7 +312,6 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
         alignment: self.layoutParameters.alignment
       )
       boundaryItem.contentInsets = self.layoutParameters.contentInsets
-
       return boundaryItem
     }
   }
@@ -376,9 +367,6 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       }
     }
   }
-
-  // MARK: - Functions
-
 }
 
 // MARK: - Privates

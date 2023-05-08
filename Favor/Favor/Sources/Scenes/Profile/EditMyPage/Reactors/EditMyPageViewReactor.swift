@@ -23,7 +23,6 @@ import RxCocoa
 import RxFlow
 
 final class EditMyPageViewReactor: Reactor, Stepper {
-  private typealias Item = EditMyPageSectionItem
 
   // MARK: - Constants
 
@@ -53,9 +52,10 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   struct State {
     var user: User
     var sections: [EditMyPageSection] = []
-    var nameSection: EditMyPageSection = .name([])
-    var idSection: EditMyPageSection = .id([])
-    var favorSection: EditMyPageSection = .favor([])
+    var items: [[EditMyPageSectionItem]] = []
+    var nameItems: [EditMyPageSectionItem] = []
+    var idItems: [EditMyPageSectionItem] = []
+    var favorItems: [EditMyPageSectionItem] = []
   }
 
   // MARK: - Initializer
@@ -63,11 +63,11 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   init(user: User) {
     self.initialState = State(
       user: user,
-      nameSection: .name([.textField(text: user.name, placeholder: "이름")]),
-      idSection: .id([.textField(text: user.userID, placeholder: "ID")]),
-      favorSection: .favor(Favor.allCases.map { favor in
+      nameItems: [.textField(text: user.name, placeholder: "이름")],
+      idItems: [.textField(text: user.userID, placeholder: "ID")],
+      favorItems: Favor.allCases.map { favor in
         return .favor(isSelected: false, favor: favor)
-      })
+      }
     )
   }
 
@@ -83,7 +83,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       return .empty()
 
     case let .doneButtonDidTap(with: (name, id)):
-      let favors = currentState.favorSection.items.compactMap { item -> String? in
+      let favors = currentState.favorItems.compactMap { item -> String? in
         guard
           case let EditMyPageSectionItem.favor(isSelected, favor) = item,
           isSelected
@@ -101,24 +101,22 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       }
 
     case .favorDidSelected(let indexPath):
+      var favorItems = self.currentState.favorItems
       guard
-        var favorItems = self.currentState.favorSection.items as? [EditMyPageSectionItem],
+        indexPath < favorItems.count,
         case let EditMyPageSectionItem.favor(isSelected, favor) = favorItems[indexPath],
-        favorItems.count == Constant.numberOfFavors,
-        indexPath < favorItems.count
+        favorItems.count == Constant.numberOfFavors
       else { return .empty() }
-      let favorItem = favorItems[indexPath]
 
       // 이미 선택된 취향의 개수
-      let selectedFavorsCount = favorItems.filter { item in
-        return isSelected
-      }.count
-      // 선택된 취향의 개수가 5개 이상이고 선택된 Cell의 취향이 선택되지 않은 상태일 때 (5개 초과의 취향을 선택하고자 할 때)
-      if selectedFavorsCount >= Constant.maximumSelectedFavor && !isSelected {
-        return .empty()
+      let selectedFavorsCount = favorItems.reduce(0) { count, favorItem in
+        guard case let EditMyPageSectionItem.favor(isSelected, _) = favorItem else { return count }
+        return isSelected ? count + 1 : count
       }
+      // 선택된 취향의 개수가 5개 이상이고 선택된 Cell의 취향이 선택되지 않은 상태일 때 (5개 초과의 취향을 선택하고자 할 때)
+      if selectedFavorsCount >= Constant.maximumSelectedFavor && !isSelected { return .empty() }
 
-      favorItems[indexPath] = Item.favor(isSelected: !isSelected, favor: favor)
+      favorItems[indexPath] = EditMyPageSectionItem.favor(isSelected: !isSelected, favor: favor)
       return .just(.updateFavor(favorItems))
 
     case .doNothing:
@@ -131,7 +129,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
 
     switch mutation {
     case .updateFavor(let favorItems):
-      newState.favorSection = EditMyPageSection.favor(favorItems)
+      newState.favorItems = favorItems
     }
 
     return newState
@@ -140,7 +138,8 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { (state: State) -> State in
       var newState = state
-      newState.sections = [state.nameSection, state.idSection, state.favorSection]
+      newState.sections = [.id, .name, .favor]
+      newState.items = [state.nameItems, state.idItems, state.favorItems]
       return newState
     }
   }

@@ -13,6 +13,10 @@ enum FriendSectionItem: SectionModelItem {
   case friend(FriendCellReactor)
 }
 
+enum FriendSection {
+  case friend([FriendSectionItem])
+}
+
 extension FriendSectionItem: Equatable, Hashable {
   static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
     switch (lhs, rhs) {
@@ -27,10 +31,6 @@ extension FriendSectionItem: Equatable, Hashable {
       hasher.combine(ObjectIdentifier(reactor))
     }
   }
-}
-
-enum FriendSection {
-  case friend([FriendSectionItem])
 }
 
 extension FriendSection: SectionModelType {

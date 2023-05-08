@@ -41,7 +41,7 @@ final class EditMyPageViewController: BaseViewController, View {
         }
       }
     )
-    dataSource.supplementaryViewProvider = { view, kind, indexPath in
+    dataSource.supplementaryViewProvider = { _, kind, indexPath in
       switch kind {
       case EditMyPageCollectionHeaderView.reuseIdentifier:
         let header = self.collectionView.dequeueReusableSupplementaryView(
@@ -54,15 +54,19 @@ final class EditMyPageViewController: BaseViewController, View {
           ofKind: kind,
           for: indexPath
         ) as FavorSectionHeaderView
-//        let headerTitle = dataSource[index.section].header
-//        header.updateTitle(headerTitle)
+        guard let headerTitle = dataSource.sectionIdentifier(for: indexPath.section)?.header else {
+          return UICollectionReusableView()
+        }
+        header.updateTitle(headerTitle)
         return header
       case UICollectionView.elementKindSectionFooter:
         let footer = self.collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as FavorSectionFooterView
-//        footer.footerDescription = dataSource[index.section].footer
+        if let description = dataSource.sectionIdentifier(for: indexPath.section)?.footer {
+          footer.footerDescription = description
+        }
         return footer
       default:
         return UICollectionReusableView()
@@ -71,53 +75,6 @@ final class EditMyPageViewController: BaseViewController, View {
     return dataSource
   }()
 
-//  private lazy var dataSource: EditMyPageDataSource = EditMyPageDataSource(
-//    configureCell: { [weak self] _, collectionView, indexPath, item in
-//      switch item {
-//      case let .name(name, placeholder):
-//        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
-//        cell.bind(placeholder: placeholder)
-//        cell.bind(text: name)
-//        return cell
-//      case let .id(name, placeholder):
-//        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
-//        cell.bind(placeholder: placeholder)
-//        cell.bind(text: name)
-//        return cell
-//      case let .favor(isSelected, favor):
-//        let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPagePreferenceCell
-//        cell.isButtonSelected = isSelected
-//        cell.favor = favor
-//        return cell
-//      }
-//    }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-//      switch kind {
-//      case EditMyPageCollectionHeaderView.reuseIdentifier:
-//        let header = collectionView.dequeueReusableSupplementaryView(
-//          ofKind: kind,
-//          for: indexPath
-//        ) as EditMyPageCollectionHeaderView
-//        return header
-//      case UICollectionView.elementKindSectionHeader:
-//        let header = collectionView.dequeueReusableSupplementaryView(
-//          ofKind: kind,
-//          for: indexPath
-//        ) as FavorSectionHeaderView
-//        let headerTitle = dataSource[indexPath.section].header
-//        header.updateTitle(headerTitle)
-//        return header
-//      case UICollectionView.elementKindSectionFooter:
-//        let footer = collectionView.dequeueReusableSupplementaryView(
-//          ofKind: kind,
-//          for: indexPath
-//        ) as FavorSectionFooterView
-//        footer.footerDescription = dataSource[indexPath.section].footer
-//        return footer
-//      default:
-//        return UICollectionReusableView()
-//      }
-//    }
-//  )
   private lazy var adapter: Adapter<EditMyPageSection, EditMyPageSectionItem> = {
     let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
     adapter.configuration = Adapter.Configuration(
@@ -212,10 +169,14 @@ final class EditMyPageViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.sections }
+    reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, sections in
+      .drive(with: self, onNext: { owner, sectionData in
         var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
+        snapshot.appendSections(sectionData.sections)
+        sectionData.items.enumerated().forEach { idx, item in
+          snapshot.appendItems(item, toSection: sectionData.sections[idx])
+        }
         owner.dataSource.apply(snapshot, animatingDifferences: false)
       })
       .disposed(by: self.disposeBag)

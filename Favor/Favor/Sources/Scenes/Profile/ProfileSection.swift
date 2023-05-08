@@ -23,6 +23,14 @@ enum ProfileSectionItem: SectionModelItem {
   case friends(ProfileFriendCellReactor)
 }
 
+enum ProfileSection {
+  case profileSetupHelper
+  case preferences
+  case anniversaries
+  case memo
+  case friends
+}
+
 extension ProfileSectionItem: Equatable, Hashable {
   static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
     switch (lhs, rhs) {
@@ -59,14 +67,6 @@ extension ProfileSectionItem: Equatable, Hashable {
       hasher.combine(ObjectIdentifier(reactor))
     }
   }
-}
-
-enum ProfileSection {
-  case profileSetupHelper
-  case preferences
-  case anniversaries
-  case memo
-  case friends
 }
 
 extension ProfileSection: SectionModelType {
