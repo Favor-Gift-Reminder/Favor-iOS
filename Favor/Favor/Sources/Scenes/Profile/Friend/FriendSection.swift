@@ -8,10 +8,25 @@
 import UIKit
 
 import FavorKit
-import RxDataSources
 
-enum FriendSectionItem {
+enum FriendSectionItem: SectionModelItem {
   case friend(FriendCellReactor)
+}
+
+extension FriendSectionItem: Equatable, Hashable {
+  static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
+    switch (lhs, rhs) {
+    case let (.friend(lhsValue), .friend(rhsValue)):
+      return lhsValue === rhsValue
+    }
+  }
+
+  func hash(into hasher: inout Hasher) {
+    switch self {
+    case .friend(let reactor):
+      hasher.combine(ObjectIdentifier(reactor))
+    }
+  }
 }
 
 enum FriendSection {
@@ -19,7 +34,7 @@ enum FriendSection {
 }
 
 extension FriendSection: SectionModelType {
-  public var items: [FriendSectionItem] {
+  public var items: [any SectionModelItem] {
     switch self {
     case .friend(let items):
       return items

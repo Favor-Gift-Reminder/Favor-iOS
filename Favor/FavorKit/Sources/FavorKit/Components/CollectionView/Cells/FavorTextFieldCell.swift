@@ -14,9 +14,13 @@ import SnapKit
 
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
 
+  public var text: String? {
+    self.textField.text
+  }
+
   // MARK: - UI Components
 
-  fileprivate let textField: UITextField = {
+  private let textField: UITextField = {
     let textField = UITextField()
     textField.autocapitalizationType = .none
     textField.autocorrectionType = .no
@@ -62,13 +66,5 @@ extension FavorTextFieldCell: BaseView {
     self.textField.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
-  }
-}
-
-// MARK: - Reactive
-
-extension Reactive where Base: FavorTextFieldCell {
-  public var text: ControlEvent<String?> {
-    return ControlEvent(events: base.textField.rx.text)
   }
 }

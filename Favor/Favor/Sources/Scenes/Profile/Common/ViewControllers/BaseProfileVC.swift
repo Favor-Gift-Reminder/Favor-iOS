@@ -14,7 +14,7 @@ import RxDataSources
 import SnapKit
 
 public class BaseProfileViewController: BaseViewController {
-  typealias ProfileDataSource = RxCollectionViewSectionedReloadDataSource<ProfileSection>
+  typealias ProfileDataSource = UICollectionViewDiffableDataSource<ProfileSection, ProfileSectionItem>
 
   // MARK: - Constants
 
@@ -25,55 +25,79 @@ public class BaseProfileViewController: BaseViewController {
 
   // MARK: - Properties
 
-  lazy var dataSource = ProfileDataSource(configureCell: { _, collectionView, indexPath, items in
-    switch items {
-    case .profileSetupHelper(let reactor):
-      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
-      cell.reactor = reactor
-      return cell
-    case .preferences(let reactor):
-      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfilePreferenceCell
-      cell.reactor = reactor
-      return cell
-    case .anniversaries(let reactor):
-      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversaryCell
-      cell.reactor = reactor
-      return cell
-    case .memo:
-      return UICollectionViewCell()
-    case .friends(let reactor):
-      let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFriendCell
-      cell.reactor = reactor
-      return cell
+  lazy var dataSource: ProfileDataSource = {
+    let dataSource = ProfileDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { collectionView, indexPath, item in
+        switch item {
+        case .profileSetupHelper(let reactor):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
+          cell.reactor = reactor
+          return cell
+        case .preferences(let reactor):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfilePreferenceCell
+          cell.reactor = reactor
+          return cell
+        case .anniversaries(let reactor):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversaryCell
+          cell.reactor = reactor
+          return cell
+        case .memo:
+          return UICollectionViewCell()
+        case .friends(let reactor):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFriendCell
+          cell.reactor = reactor
+          return cell
+        }
+      }
+    )
+    dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+      switch kind {
+      case ProfileElementKind.collectionHeader:
+        let header = collectionView.dequeueReusableSupplementaryView(
+          ofKind: kind,
+          for: indexPath
+        ) as ProfileGiftStatsCollectionHeader
+        self.injectReactor(to: header)
+        return header
+      case UICollectionView.elementKindSectionHeader:
+        let header = collectionView.dequeueReusableSupplementaryView(
+          ofKind: kind,
+          for: indexPath
+        ) as ProfileSectionHeader
+        guard let section = dataSource.sectionIdentifier(for: indexPath.section) else {
+          return UICollectionReusableView()
+        }
+        header.reactor = ProfileSectionHeaderReactor(section: section)
+        header.rx.rightButtonDidTap
+          .asDriver(onErrorRecover: { _ in return .empty()})
+          .drive(with: self, onNext: { owner, _ in
+            owner.headerRightButtonDidTap(at: section)
+          })
+          .disposed(by: header.disposeBag)
+        return header
+      default:
+        return UICollectionReusableView()
+      }
     }
-  }, configureSupplementaryView: { [] dataSource, collectionView, kind, indexPath in
-    switch kind {
-    case ProfileElementKind.collectionHeader:
-      let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        for: indexPath
-      ) as ProfileGiftStatsCollectionHeader
-      self.injectReactor(to: header)
-      return header
-    case UICollectionView.elementKindSectionHeader:
-      let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        for: indexPath
-      ) as ProfileSectionHeader
-      let section = dataSource[indexPath.section]
-      header.reactor = ProfileSectionHeaderReactor(section: section)
-      header.rx.rightButtonDidTap
-        .asDriver(onErrorRecover: { _ in return .empty()})
-        .drive(with: self, onNext: { owner, _ in
-          owner.headerRightButtonDidTap(at: section)
-        })
-        .disposed(by: header.disposeBag)
-      return header
-    default:
-      return UICollectionReusableView()
-    }
-  })
-  lazy var adapter = Adapter(dataSource: self.dataSource)
+    return dataSource
+  }()
+
+  lazy var adapter: Adapter<ProfileSection, ProfileSectionItem> = {
+    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
+    let header = FavorCompositionalLayout.BoundaryItem.header(
+      height: .estimated(128),
+      kind: ProfileElementKind.collectionHeader
+    )
+    adapter.configuration = Adapter.Configuration(
+      scrollDirection: .vertical,
+      header: header,
+      background: [
+        ProfileElementKind.sectionWhiteBackground: ProfileSectionBackgroundView.self
+      ]
+    )
+    return adapter
+  }()
 
   // MARK: - UI Components
 
@@ -81,21 +105,9 @@ public class BaseProfileViewController: BaseViewController {
   private var profileViewHeightConstraint: Constraint?
 
   lazy var collectionView: UICollectionView = {
-    let header = FavorCompositionalLayout.BoundaryItem.header(
-      height: .estimated(128),
-      kind: ProfileElementKind.collectionHeader
-    )
-
     let collectionView = UICollectionView(
       frame: self.view.bounds,
-      collectionViewLayout: self.adapter.build(
-        scrollDirection: .vertical,
-        sectionSpacing: .zero,
-        header: header,
-        background: [
-          ProfileElementKind.sectionWhiteBackground: ProfileSectionBackgroundView.self
-        ]
-      )
+      collectionViewLayout: UICollectionViewLayout()
     )
 
     // CollectionViewCell
@@ -129,6 +141,12 @@ public class BaseProfileViewController: BaseViewController {
   }()
 
   // MARK: - Life Cycle
+
+  public override func viewDidLoad() {
+    super.viewDidLoad()
+
+    self.adapter.adapt()
+  }
 
   public override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)

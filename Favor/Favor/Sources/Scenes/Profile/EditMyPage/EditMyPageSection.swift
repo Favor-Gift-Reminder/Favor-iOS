@@ -8,12 +8,10 @@
 import UIKit
 
 import FavorKit
-import RxDataSources
 
-enum EditMyPageSectionItem {
-  case name(placeholder: String)
-  case id(placeholder: String)
-  case favor(Bool, Favor)
+enum EditMyPageSectionItem: SectionModelItem {
+  case textField(text: String, placeholder: String)
+  case favor(isSelected: Bool, favor: Favor)
 }
 
 enum EditMyPageSection {
@@ -23,7 +21,7 @@ enum EditMyPageSection {
 }
 
 extension EditMyPageSection: SectionModelType {
-  public var items: [EditMyPageSectionItem] {
+  public var items: [any SectionModelItem] {
     switch self {
     case .name(let items):
       return items
@@ -46,17 +44,6 @@ extension EditMyPageSection: SectionModelType {
     switch self {
     case .name, .id: return nil
     case .favor: return "최대 5개까지 선택할 수 있습니다."
-    }
-  }
-
-  init(original: EditMyPageSection, items: [EditMyPageSectionItem]) {
-    switch original {
-    case .name:
-      self = .name(items)
-    case .id:
-      self = .id(items)
-    case .favor:
-      self = .favor(items)
     }
   }
 }

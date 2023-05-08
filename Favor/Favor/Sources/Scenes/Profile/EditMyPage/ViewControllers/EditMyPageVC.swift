@@ -6,16 +6,14 @@
 //
 
 import UIKit
-import OSLog
 
 import FavorKit
 import ReactorKit
 import Reusable
-import RxDataSources
 import SnapKit
 
 final class EditMyPageViewController: BaseViewController, View {
-  typealias EditMyPageDataSource = RxCollectionViewSectionedReloadDataSource<EditMyPageSection>
+  typealias EditMyPageDataSource = UICollectionViewDiffableDataSource<EditMyPageSection, EditMyPageSectionItem>
 
   // MARK: - Constants
 
@@ -25,84 +23,119 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Properties
 
-  private lazy var dataSource: EditMyPageDataSource = EditMyPageDataSource(
-    configureCell: { [weak self] dataSource, collectionView, indexPath, item in
-      switch item {
-      case .name(let placeholder):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
-        cell.bind(placeholder: placeholder)
-
-        if let reactor = self?.reactor {
-          reactor.state.map { $0.name }
-            .distinctUntilChanged()
-            .bind(with: cell, onNext: { owner, name in
-              owner.bind(text: name)
-            })
-            .disposed(by: cell.disposeBag)
-
-//          cell.rx.text
-//            .distinctUntilChanged()
-//            .debug("Name text")
-//            .map { Reactor.Action.nameDidUpdate($0) }
-//            .bind(to: reactor.action)
-//            .disposed(by: cell.disposeBag)
+  private lazy var dataSource: EditMyPageDataSource = {
+    let dataSource = EditMyPageDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { collectionView, indexPath, item in
+        switch item {
+        case let .textField(text, placeholder):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
+          cell.bind(placeholder: placeholder)
+          cell.bind(text: text)
+          return cell
+        case let .favor(isSelected, favor):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPagePreferenceCell
+          cell.isButtonSelected = isSelected
+          cell.favor = favor
+          return cell
         }
-        return cell
-      case .id(let placeholder):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
-        cell.bind(placeholder: placeholder)
-
-        if let reactor = self?.reactor {
-          reactor.state.map { $0.id }
-            .distinctUntilChanged()
-            .bind(with: cell, onNext: { owner, id in
-              owner.bind(text: id)
-            })
-            .disposed(by: cell.disposeBag)
-
-//          cell.rx.text
-//            .distinctUntilChanged()
-//            .debug("ID text")
-//            .map { Reactor.Action.idDidUpdate($0) }
-//            .bind(to: reactor.action)
-//            .disposed(by: cell.disposeBag)
-        }
-        return cell
-      case let .favor(isSelected, favor):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPagePreferenceCell
-        cell.isButtonSelected = isSelected
-        cell.favor = favor
-        return cell
       }
-    }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+    )
+    dataSource.supplementaryViewProvider = { view, kind, indexPath in
       switch kind {
       case EditMyPageCollectionHeaderView.reuseIdentifier:
-        let header = collectionView.dequeueReusableSupplementaryView(
+        let header = self.collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as EditMyPageCollectionHeaderView
         return header
       case UICollectionView.elementKindSectionHeader:
-        let header = collectionView.dequeueReusableSupplementaryView(
+        let header = self.collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as FavorSectionHeaderView
-        let headerTitle = dataSource[indexPath.section].header
-        header.updateTitle(headerTitle)
+//        let headerTitle = dataSource[index.section].header
+//        header.updateTitle(headerTitle)
         return header
       case UICollectionView.elementKindSectionFooter:
-        let footer = collectionView.dequeueReusableSupplementaryView(
+        let footer = self.collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as FavorSectionFooterView
-        footer.footerDescription = dataSource[indexPath.section].footer
+//        footer.footerDescription = dataSource[index.section].footer
         return footer
       default:
         return UICollectionReusableView()
       }
     }
-  )
-  private lazy var adapter = Adapter(dataSource: self.dataSource)
+    return dataSource
+  }()
+
+//  private lazy var dataSource: EditMyPageDataSource = EditMyPageDataSource(
+//    configureCell: { [weak self] _, collectionView, indexPath, item in
+//      switch item {
+//      case let .name(name, placeholder):
+//        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
+//        cell.bind(placeholder: placeholder)
+//        cell.bind(text: name)
+//        return cell
+//      case let .id(name, placeholder):
+//        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
+//        cell.bind(placeholder: placeholder)
+//        cell.bind(text: name)
+//        return cell
+//      case let .favor(isSelected, favor):
+//        let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPagePreferenceCell
+//        cell.isButtonSelected = isSelected
+//        cell.favor = favor
+//        return cell
+//      }
+//    }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
+//      switch kind {
+//      case EditMyPageCollectionHeaderView.reuseIdentifier:
+//        let header = collectionView.dequeueReusableSupplementaryView(
+//          ofKind: kind,
+//          for: indexPath
+//        ) as EditMyPageCollectionHeaderView
+//        return header
+//      case UICollectionView.elementKindSectionHeader:
+//        let header = collectionView.dequeueReusableSupplementaryView(
+//          ofKind: kind,
+//          for: indexPath
+//        ) as FavorSectionHeaderView
+//        let headerTitle = dataSource[indexPath.section].header
+//        header.updateTitle(headerTitle)
+//        return header
+//      case UICollectionView.elementKindSectionFooter:
+//        let footer = collectionView.dequeueReusableSupplementaryView(
+//          ofKind: kind,
+//          for: indexPath
+//        ) as FavorSectionFooterView
+//        footer.footerDescription = dataSource[indexPath.section].footer
+//        return footer
+//      default:
+//        return UICollectionReusableView()
+//      }
+//    }
+//  )
+  private lazy var adapter: Adapter<EditMyPageSection, EditMyPageSectionItem> = {
+    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
+    adapter.configuration = Adapter.Configuration(
+      scrollDirection: .vertical,
+      sectionSpacing: 40.0,
+      header: FavorCompositionalLayout.BoundaryItem.header(
+        height: .absolute(400),
+        contentInsets: NSDirectionalEdgeInsets(
+          top: .zero,
+          leading: .zero,
+          bottom: 40,
+          trailing: .zero
+        ),
+        kind: EditMyPageCollectionHeaderView.reuseIdentifier
+      )
+    )
+    return adapter
+  }()
 
   // MARK: - UI Components
 
@@ -129,20 +162,7 @@ final class EditMyPageViewController: BaseViewController, View {
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
-      collectionViewLayout: self.adapter.build(
-        scrollDirection: .vertical,
-        sectionSpacing: 40,
-        header: FavorCompositionalLayout.BoundaryItem.header(
-          height: .absolute(400),
-          contentInsets: NSDirectionalEdgeInsets(
-            top: .zero,
-            leading: .zero,
-            bottom: 40,
-            trailing: .zero
-          ),
-          kind: EditMyPageCollectionHeaderView.reuseIdentifier
-        )
-      )
+      collectionViewLayout: UICollectionViewLayout()
     )
 
     // Register
@@ -168,6 +188,12 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    self.adapter.adapt()
+  }
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -187,7 +213,11 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.sections }
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, sections in
+        var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
+        owner.dataSource.apply(snapshot, animatingDifferences: false)
+      })
       .disposed(by: self.disposeBag)
   }
 
@@ -204,7 +234,14 @@ final class EditMyPageViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.doneButton.rx.tap
-      .map { Reactor.Action.doneButtonDidTap }
+      .map { _ -> Reactor.Action in
+        guard
+          let nameCell = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? FavorTextFieldCell,
+          let idCell = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 1)) as? FavorTextFieldCell
+        else { return Reactor.Action.doNothing }
+        print(nameCell, idCell)
+        return Reactor.Action.doneButtonDidTap(with: (nameCell.text, idCell.text))
+      }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 

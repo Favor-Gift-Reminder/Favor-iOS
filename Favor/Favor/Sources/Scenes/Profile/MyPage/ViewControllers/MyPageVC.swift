@@ -10,7 +10,6 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
-import RxDataSources
 import RxGesture
 import SnapKit
 
@@ -58,8 +57,18 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.sections }
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+    reactor.state.map { state -> (sections: [ProfileSection], items: [[ProfileSectionItem]]) in
+      return (sections: state.sections, items: state.items)
+    }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, sectionData in
+        var snapshot: NSDiffableDataSourceSnapshot<ProfileSection, ProfileSectionItem> = .init()
+        snapshot.appendSections(sectionData.sections)
+        sectionData.items.enumerated().forEach { idx, items in
+          snapshot.appendItems(items, toSection: sectionData.sections[idx])
+        }
+        owner.dataSource.apply(snapshot, animatingDifferences: false)
+      })
       .disposed(by: self.disposeBag)
   }
   
@@ -121,13 +130,5 @@ final class MyPageViewController: BaseProfileViewController, View {
 
     reactor.action.onNext(.headerRightButtonDidTap(section))
   }
-
-  // MARK: - UI Setups
-
-}
-
-// MARK: - Privates
-
-private extension MyPageViewController {
 
 }

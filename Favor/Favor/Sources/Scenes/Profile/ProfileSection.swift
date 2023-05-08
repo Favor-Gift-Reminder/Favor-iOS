@@ -8,7 +8,6 @@
 import UIKit
 
 import FavorKit
-import RxDataSources
 
 enum ProfileElementKind {
   static let collectionHeader = "Profile.CollectionHeader"
@@ -16,7 +15,7 @@ enum ProfileElementKind {
   static let sectionWhiteBackground = "Profile.SectionWhiteBackground"
 }
 
-enum ProfileSectionItem {
+enum ProfileSectionItem: SectionModelItem {
   case profileSetupHelper(ProfileSetupHelperCellReactor)
   case preferences(ProfilePreferenceCellReactor)
   case anniversaries(ProfileAnniversaryCellReactor)
@@ -24,45 +23,53 @@ enum ProfileSectionItem {
   case friends(ProfileFriendCellReactor)
 }
 
+extension ProfileSectionItem: Equatable, Hashable {
+  static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
+    switch (lhs, rhs) {
+    case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
+      return lhsValue === rhsValue
+    case let (.preferences(lhsValue), .preferences(rhsValue)):
+      return lhsValue === rhsValue
+    case let (.anniversaries(lhsValue), .anniversaries(rhsValue)):
+      return lhsValue === rhsValue
+    case (.memo, .memo):
+      return true
+    case let (.friends(lhsValue), .friends(rhsValue)):
+      return lhsValue === rhsValue
+    default:
+      return false
+    }
+  }
+
+  func hash(into hasher: inout Hasher) {
+    switch self {
+    case let .profileSetupHelper(reactor):
+      hasher.combine("profileSetupHelper")
+      hasher.combine(ObjectIdentifier(reactor))
+    case let .preferences(reactor):
+      hasher.combine("preferences")
+      hasher.combine(ObjectIdentifier(reactor))
+    case let .anniversaries(reactor):
+      hasher.combine("anniversaries")
+      hasher.combine(ObjectIdentifier(reactor))
+    case .memo:
+      hasher.combine("memo")
+    case let .friends(reactor):
+      hasher.combine("friends")
+      hasher.combine(ObjectIdentifier(reactor))
+    }
+  }
+}
+
 enum ProfileSection {
-  case profileSetupHelper([ProfileSectionItem])
-  case preferences([ProfileSectionItem])
-  case anniversaries([ProfileSectionItem])
-  case memo([ProfileSectionItem])
-  case friends([ProfileSectionItem])
+  case profileSetupHelper
+  case preferences
+  case anniversaries
+  case memo
+  case friends
 }
 
 extension ProfileSection: SectionModelType {
-  public var items: [ProfileSectionItem] {
-    switch self {
-    case .profileSetupHelper(let items):
-      return items
-    case .preferences(let items):
-      return items
-    case .anniversaries(let items):
-      return items
-    case .memo(let items):
-      return items
-    case .friends(let items):
-      return items
-    }
-  }
-  
-  public init(original: ProfileSection, items: [ProfileSectionItem]) {
-    switch original {
-    case .profileSetupHelper:
-      self = .profileSetupHelper(items)
-    case .preferences:
-      self = .preferences(items)
-    case .anniversaries:
-      self = .anniversaries(items)
-    case .memo:
-      self = .memo(items)
-    case .friends:
-      self = .friends(items)
-    }
-  }
-
   var headerTitle: String? {
     switch self {
     case .profileSetupHelper: return "새 프로필"

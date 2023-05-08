@@ -48,10 +48,11 @@ final class MyPageViewReactor: Reactor, Stepper {
     /// 2: 기념일
     /// 3: 친구
     var sections: [ProfileSection] = []
-    var profileSetupHelperSection: ProfileSection = .profileSetupHelper([])
-    var preferencesSection: ProfileSection = .preferences([])
-    var anniversarySection: ProfileSection = .anniversaries([])
-    var friendSection: ProfileSection = .friends([])
+    var items: [[ProfileSectionItem]] = []
+    var profileSetupHelperItems: [ProfileSectionItem] = []
+    var preferencesItems: [ProfileSectionItem] = []
+    var anniversaryItems: [ProfileSectionItem] = []
+    var friendItems: [ProfileSectionItem] = []
     var isLoading: Bool = false
   }
   
@@ -112,28 +113,22 @@ final class MyPageViewReactor: Reactor, Stepper {
       newState.userID = id
 
     case .updatePreferenceSection(let preferences):
-      let preferenceSection = ProfileSection.preferences(
-        preferences.map { preference -> ProfileSectionItem in
-          return .preferences(ProfilePreferenceCellReactor(preference: preference))
-        }
-      )
-      newState.preferencesSection = preferenceSection
+      let preferenceSection = preferences.map { preference -> ProfileSectionItem in
+        return .preferences(ProfilePreferenceCellReactor(preference: preference))
+      }
+      newState.preferencesItems = preferenceSection
 
     case .updateAnniversarySection(let anniversaries):
-      let anniversarySection = ProfileSection.anniversaries(
-        anniversaries.map { anniversary -> ProfileSectionItem in
-          return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
-        }
-      )
-      newState.anniversarySection = anniversarySection
+      let anniversarySection = anniversaries.map { anniversary -> ProfileSectionItem in
+        return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
+      }
+      newState.anniversaryItems = anniversarySection
 
     case .updateFriendSection(let friends):
-      let friendSection = ProfileSection.friends(
-        friends.map { friend -> ProfileSectionItem in
-          return .friends(ProfileFriendCellReactor(friend: friend))
-        }
-      )
-      newState.friendSection = friendSection
+      let friendSection = friends.map { friend -> ProfileSectionItem in
+        return .friends(ProfileFriendCellReactor(friend: friend))
+      }
+      newState.friendItems = friendSection
 
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
@@ -146,28 +141,34 @@ final class MyPageViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
       var newSections: [ProfileSection] = []
-      var profileSetupHelpers: [ProfileSectionItem] = []
+      var newItems: [[ProfileSectionItem]] = []
+      var profileSetupHelperItems: [ProfileSectionItem] = []
 
       // 취향
-      if !state.preferencesSection.items.isEmpty {
-        newSections.append(state.preferencesSection)
+      if !state.preferencesItems.isEmpty {
+        newSections.append(.preferences)
+        newItems.append(state.preferencesItems)
       } else {
-        profileSetupHelpers.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.preference)))
+        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.preference)))
       }
       // 기념일
-      if !state.anniversarySection.items.isEmpty {
-        newSections.append(state.anniversarySection)
+      if !state.anniversaryItems.isEmpty {
+        newSections.append(.anniversaries)
+        newItems.append(state.anniversaryItems)
       } else {
-        profileSetupHelpers.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
+        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
       }
       // 친구
-      newSections.append(state.friendSection)
+      newSections.append(.friends)
+      newItems.append(state.friendItems)
       // 새 프로필
-      if !profileSetupHelpers.isEmpty {
-        newSections.insert(.profileSetupHelper(profileSetupHelpers), at: .zero)
+      if !profileSetupHelperItems.isEmpty {
+        newSections.insert(.profileSetupHelper, at: .zero)
+        newItems.insert(profileSetupHelperItems, at: .zero)
       }
 
       newState.sections = newSections
+      newState.items = newItems
       return newState
     }
   }
