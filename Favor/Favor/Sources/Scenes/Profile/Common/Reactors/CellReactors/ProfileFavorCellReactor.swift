@@ -1,13 +1,14 @@
 //
-//  ProfilePreferenceCellReactor.swift
+//  ProfileFavorCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
 //
 
+import FavorKit
 import ReactorKit
 
-final class ProfilePreferenceCellReactor: Reactor {
+final class ProfileFavorCellReactor: Reactor {
   
   // MARK: - Properties
   
@@ -22,14 +23,14 @@ final class ProfilePreferenceCellReactor: Reactor {
   }
   
   struct State {
-    var preference: String
+    var favor: Favor
   }
   
   // MARK: - Initializer
   
-  init(preference: String) {
+  init(favor: Favor) {
     self.initialState = State(
-      preference: preference
+      favor: favor
     )
   }
   

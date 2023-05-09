@@ -14,7 +14,7 @@
 		2E32E7B629FB5DE600202E31 /* FriendSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7B529FB5DE600202E31 /* FriendSectionHeader.swift */; };
 		2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */; };
 		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
-		2E3FA74F29F709D1003342CA /* EditMyPagePreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPagePreferenceCell.swift */; };
+		2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */; };
 		2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */; };
 		2E3FA75729F7C52D003342CA /* FriendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75629F7C52D003342CA /* FriendVC.swift */; };
 		2E3FA75929F7C561003342CA /* FriendViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75829F7C561003342CA /* FriendViewReactor.swift */; };
@@ -80,13 +80,13 @@
 		2EC939DF2998B80200C8C47F /* ProfileSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DE2998B80200C8C47F /* ProfileSection.swift */; };
 		2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E02998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift */; };
 		2EC939E32998C63200C8C47F /* ProfileSetupHelperCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E22998C63200C8C47F /* ProfileSetupHelperCell.swift */; };
-		2EC939E52998C68900C8C47F /* ProfilePreferenceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E42998C68900C8C47F /* ProfilePreferenceCell.swift */; };
+		2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E42998C68900C8C47F /* ProfileFavorCell.swift */; };
 		2EC939E72998C6D100C8C47F /* ProfileAnniversaryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E62998C6D100C8C47F /* ProfileAnniversaryCell.swift */; };
 		2EC939EB299A7D4300C8C47F /* ProfileSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EA299A7D4300C8C47F /* ProfileSectionHeader.swift */; };
 		2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939EE299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift */; };
 		2EC939F1299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F0299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift */; };
 		2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F2299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift */; };
-		2EC939F5299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift */; };
+		2EC939F5299CF6C400C8C47F /* ProfileFavorCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F4299CF6C400C8C47F /* ProfileFavorCellReactor.swift */; };
 		2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */; };
 		2EC939F9299E160B00C8C47F /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* ProfileView.swift */; };
 		2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B3982983DF3900CDBC81 /* AppFlow.swift */; };
@@ -168,7 +168,7 @@
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
 		2E32E7B529FB5DE600202E31 /* FriendSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSectionHeader.swift; sourceTree = "<group>"; };
 		2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageSection.swift; sourceTree = "<group>"; };
-		2E3FA74E29F709D1003342CA /* EditMyPagePreferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPagePreferenceCell.swift; sourceTree = "<group>"; };
+		2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageFavorCell.swift; sourceTree = "<group>"; };
 		2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageCollectionHeaderView.swift; sourceTree = "<group>"; };
 		2E3FA75629F7C52D003342CA /* FriendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendVC.swift; sourceTree = "<group>"; };
 		2E3FA75829F7C561003342CA /* FriendViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewReactor.swift; sourceTree = "<group>"; };
@@ -227,13 +227,13 @@
 		2EC939DE2998B80200C8C47F /* ProfileSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSection.swift; sourceTree = "<group>"; };
 		2EC939E02998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGiftStatsCollectionHeader.swift; sourceTree = "<group>"; };
 		2EC939E22998C63200C8C47F /* ProfileSetupHelperCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupHelperCell.swift; sourceTree = "<group>"; };
-		2EC939E42998C68900C8C47F /* ProfilePreferenceCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePreferenceCell.swift; sourceTree = "<group>"; };
+		2EC939E42998C68900C8C47F /* ProfileFavorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFavorCell.swift; sourceTree = "<group>"; };
 		2EC939E62998C6D100C8C47F /* ProfileAnniversaryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAnniversaryCell.swift; sourceTree = "<group>"; };
 		2EC939EA299A7D4300C8C47F /* ProfileSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeader.swift; sourceTree = "<group>"; };
 		2EC939EE299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionHeaderReactor.swift; sourceTree = "<group>"; };
 		2EC939F0299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGiftStatsCollectionHeaderReactor.swift; sourceTree = "<group>"; };
 		2EC939F2299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetupHelperCellReactor.swift; sourceTree = "<group>"; };
-		2EC939F4299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfilePreferenceCellReactor.swift; sourceTree = "<group>"; };
+		2EC939F4299CF6C400C8C47F /* ProfileFavorCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFavorCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAnniversaryCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F8299E160A00C8C47F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		2ED22DAE296FF4A900ED6221 /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
@@ -397,7 +397,7 @@
 		2E3FA74D29F709BE003342CA /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				2E3FA74E29F709D1003342CA /* EditMyPagePreferenceCell.swift */,
+				2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -498,7 +498,7 @@
 			isa = PBXGroup;
 			children = (
 				2EC939F2299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift */,
-				2EC939F4299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift */,
+				2EC939F4299CF6C400C8C47F /* ProfileFavorCellReactor.swift */,
 				2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */,
 				2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */,
 			);
@@ -953,7 +953,7 @@
 			isa = PBXGroup;
 			children = (
 				2EC939E22998C63200C8C47F /* ProfileSetupHelperCell.swift */,
-				2EC939E42998C68900C8C47F /* ProfilePreferenceCell.swift */,
+				2EC939E42998C68900C8C47F /* ProfileFavorCell.swift */,
 				2EC939E62998C6D100C8C47F /* ProfileAnniversaryCell.swift */,
 				2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */,
 			);
@@ -1212,7 +1212,7 @@
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */,
-				2E3FA74F29F709D1003342CA /* EditMyPagePreferenceCell.swift in Sources */,
+				2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */,
 				2E6C90B129A607BD00AF963A /* ProfileFriendCell.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
@@ -1243,7 +1243,7 @@
 				E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */,
 				2ED326AF29B0EE16001963D0 /* TermTableView.swift in Sources */,
 				2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */,
-				2EC939E52998C68900C8C47F /* ProfilePreferenceCell.swift in Sources */,
+				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendVC.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
@@ -1251,7 +1251,7 @@
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
-				2EC939F5299CF6C400C8C47F /* ProfilePreferenceCellReactor.swift in Sources */,
+				2EC939F5299CF6C400C8C47F /* ProfileFavorCellReactor.swift in Sources */,
 				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,

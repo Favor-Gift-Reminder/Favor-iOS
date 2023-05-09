@@ -1,5 +1,5 @@
 //
-//  EditMyPagePreferenceCell.swift
+//  EditMyPageFavorCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/25.
@@ -11,14 +11,14 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable {
+final class EditMyPageFavorCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Constants
 
   // MARK: - Properties
 
   public var isButtonSelected: Bool = false {
-    didSet { self.preferenceButton.isSelected = self.isButtonSelected }
+    didSet { self.favorButton.isSelected = self.isButtonSelected }
   }
 
   public var favor: Favor? {
@@ -27,7 +27,7 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - UI Components
 
-  private let preferenceButton: UIButton = {
+  private let favorButton: UIButton = {
     var config = UIButton.Configuration.filled()
     config.titleLineBreakMode = .byTruncatingMiddle
 
@@ -68,17 +68,17 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable {
 
 // MARK: - UI Setups
 
-extension EditMyPagePreferenceCell: BaseView {
+extension EditMyPageFavorCell: BaseView {
   func setupStyles() {
     self.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
   }
 
   func setupLayouts() {
-    self.addSubview(self.preferenceButton)
+    self.addSubview(self.favorButton)
   }
 
   func setupConstraints() {
-    self.preferenceButton.snp.makeConstraints { make in
+    self.favorButton.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
   }
@@ -86,9 +86,9 @@ extension EditMyPagePreferenceCell: BaseView {
 
 // MARK: - Privates
 
-private extension EditMyPagePreferenceCell {
+private extension EditMyPageFavorCell {
   func updateTitle() {
-    self.preferenceButton.configuration?.updateAttributedTitle(
+    self.favorButton.configuration?.updateAttributedTitle(
       self.favor?.rawValue,
       font: .favorFont(.bold, size: 12)
     )

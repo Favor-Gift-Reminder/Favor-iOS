@@ -34,7 +34,7 @@ final class EditMyPageViewController: BaseViewController, View {
           cell.bind(text: text)
           return cell
         case let .favor(isSelected, favor):
-          let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPagePreferenceCell
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPageFavorCell
           cell.isButtonSelected = isSelected
           cell.favor = favor
           return cell
@@ -124,7 +124,7 @@ final class EditMyPageViewController: BaseViewController, View {
 
     // Register
     collectionView.register(cellType: FavorTextFieldCell.self)
-    collectionView.register(cellType: EditMyPagePreferenceCell.self)
+    collectionView.register(cellType: EditMyPageFavorCell.self)
     collectionView.register(
       supplementaryViewType: EditMyPageCollectionHeaderView.self,
       ofKind: EditMyPageCollectionHeaderView.reuseIdentifier

@@ -33,7 +33,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     case updateUser(User)
     case updateUserName(String)
     case updateUserID(String)
-    case updatePreferenceSection([String])
+    case updateFavorSection([Favor])
     case updateAnniversarySection([Anniversary])
     case updateFriendSection([Friend])
     case updateLoading(Bool)
@@ -50,7 +50,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     var sections: [ProfileSection] = []
     var items: [[ProfileSectionItem]] = []
     var profileSetupHelperItems: [ProfileSectionItem] = []
-    var preferencesItems: [ProfileSectionItem] = []
+    var favorItems: [ProfileSectionItem] = []
     var anniversaryItems: [ProfileSectionItem] = []
     var friendItems: [ProfileSectionItem] = []
     var isLoading: Bool = false
@@ -74,7 +74,7 @@ final class MyPageViewReactor: Reactor, Stepper {
             .just(.updateUser(user)),
             .just(.updateUserName(user.name)),
             .just(.updateUserID(user.userID)),
-            .just(.updatePreferenceSection(user.favorList.toArray())),
+            .just(.updateFavorSection(user.favorList.map { Favor(rawValue: $0) ?? .cute })),
             .just(.updateAnniversarySection(user.anniversaryList.toArray())),
             .just(.updateFriendSection(user.friendList.toArray())),
             .just(.updateLoading(status == .inProgress))
@@ -112,11 +112,11 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .updateUserID(let id):
       newState.userID = id
 
-    case .updatePreferenceSection(let preferences):
-      let preferenceSection = preferences.map { preference -> ProfileSectionItem in
-        return .preferences(ProfilePreferenceCellReactor(preference: preference))
+    case .updateFavorSection(let favors):
+      let favorSection = favors.map { favor -> ProfileSectionItem in
+        return .favors(ProfileFavorCellReactor(favor: favor))
       }
-      newState.preferencesItems = preferenceSection
+      newState.favorItems = favorSection
 
     case .updateAnniversarySection(let anniversaries):
       let anniversarySection = anniversaries.map { anniversary -> ProfileSectionItem in
@@ -145,11 +145,11 @@ final class MyPageViewReactor: Reactor, Stepper {
       var profileSetupHelperItems: [ProfileSectionItem] = []
 
       // 취향
-      if !state.preferencesItems.isEmpty {
-        newSections.append(.preferences)
-        newItems.append(state.preferencesItems)
+      if !state.favorItems.isEmpty {
+        newSections.append(.favors)
+        newItems.append(state.favorItems)
       } else {
-        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.preference)))
+        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.favor)))
       }
       // 기념일
       if !state.anniversaryItems.isEmpty {

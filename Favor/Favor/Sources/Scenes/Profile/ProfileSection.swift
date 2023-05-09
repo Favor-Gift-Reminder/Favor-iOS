@@ -17,7 +17,7 @@ enum ProfileElementKind {
 
 enum ProfileSectionItem: SectionModelItem {
   case profileSetupHelper(ProfileSetupHelperCellReactor)
-  case preferences(ProfilePreferenceCellReactor)
+  case favors(ProfileFavorCellReactor)
   case anniversaries(ProfileAnniversaryCellReactor)
   case memo
   case friends(ProfileFriendCellReactor)
@@ -25,7 +25,7 @@ enum ProfileSectionItem: SectionModelItem {
 
 enum ProfileSection: SectionModelType {
   case profileSetupHelper
-  case preferences
+  case favors
   case anniversaries
   case memo
   case friends
@@ -36,7 +36,7 @@ extension ProfileSectionItem: Equatable, Hashable {
     switch (lhs, rhs) {
     case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
       return lhsValue === rhsValue
-    case let (.preferences(lhsValue), .preferences(rhsValue)):
+    case let (.favors(lhsValue), .favors(rhsValue)):
       return lhsValue === rhsValue
     case let (.anniversaries(lhsValue), .anniversaries(rhsValue)):
       return lhsValue === rhsValue
@@ -54,8 +54,8 @@ extension ProfileSectionItem: Equatable, Hashable {
     case let .profileSetupHelper(reactor):
       hasher.combine("profileSetupHelper")
       hasher.combine(ObjectIdentifier(reactor))
-    case let .preferences(reactor):
-      hasher.combine("preferences")
+    case let .favors(reactor):
+      hasher.combine("favors")
       hasher.combine(ObjectIdentifier(reactor))
     case let .anniversaries(reactor):
       hasher.combine("anniversaries")
@@ -73,7 +73,7 @@ extension ProfileSection {
   var headerTitle: String? {
     switch self {
     case .profileSetupHelper: return "새 프로필"
-    case .preferences: return "취향"
+    case .favors: return "취향"
     case .anniversaries: return "기념일"
     case .memo: return "메모"
     case .friends: return "친구"
@@ -99,7 +99,7 @@ extension ProfileSection: Adaptive {
         width: .absolute(250),
         height: .absolute(250)
       )
-    case .preferences:
+    case .favors:
       return .grid(
         width: .estimated(50),
         height: .absolute(32)
@@ -130,7 +130,7 @@ extension ProfileSection: Adaptive {
         numberOfItems: 2,
         spacing: .fixed(8)
       )
-    case .preferences:
+    case .favors:
       let innerGroup: FavorCompositionalLayout.Group = .flow(
         height: .absolute(32),
         numberOfItems: 3,
@@ -177,7 +177,7 @@ extension ProfileSection: Adaptive {
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )
-    case .preferences:
+    case .favors:
       return .base(
         contentInsets: defaultInsets,
         boundaryItems: [header],
