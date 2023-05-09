@@ -13,7 +13,7 @@ import Reusable
 import RxCocoa
 import SnapKit
 
-class HeaderView: UICollectionReusableView, Reusable, View {
+class HomeHeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - Properties
   
@@ -36,7 +36,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
   private lazy var firstLineStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
@@ -131,7 +131,7 @@ class HeaderView: UICollectionReusableView, Reusable, View {
 
 // MARK: - Setup
 
-extension HeaderView: BaseView {
+extension HomeHeaderView: BaseView {
   func setupStyles() {
     self.backgroundColor = .clear
   }
@@ -194,7 +194,7 @@ extension HeaderView: BaseView {
 
 // MARK: - Private Functions
 
-private extension HeaderView {
+private extension HomeHeaderView {
   func makeFilterButton(title: String) -> UIButton {
     var configuration = UIButton.Configuration.plain()
     var attributedTitle = AttributedString(title)
@@ -226,7 +226,7 @@ private extension HeaderView {
 
 // MARK: - Reactive
 
-extension Reactive where Base: HeaderView {
+extension Reactive where Base: HomeHeaderView {
   var rightButtonDidTap: ControlEvent<()> {
     return ControlEvent(events: base.rightButton.rx.tap)
   }

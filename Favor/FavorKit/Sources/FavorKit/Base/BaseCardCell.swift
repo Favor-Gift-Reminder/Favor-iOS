@@ -106,7 +106,6 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
   public override init(frame: CGRect) {
     super.init(frame: frame)
-
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()

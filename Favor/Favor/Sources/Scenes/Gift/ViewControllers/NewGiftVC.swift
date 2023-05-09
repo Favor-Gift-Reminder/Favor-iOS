@@ -21,12 +21,12 @@ final class NewGiftViewController: BaseViewController, View {
   typealias DataSource = RxCollectionViewSectionedReloadDataSource<NewGiftPhotoSection.NewGiftPhotoSectionModel>
   
   // MARK: - UI COMPONENTS
-
+  
   // Navigation Items
   private let doneButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.attributedTitle = AttributedString(
-      "완료",
+      "등록",
       attributes: .init([
         .font: UIFont.favorFont(.bold, size: 18)
       ])
@@ -51,6 +51,8 @@ final class NewGiftViewController: BaseViewController, View {
     target: nil,
     action: nil
   )
+  
+  private let friendImageView = UIImageView(image: .favorIcon(.friend))
 
   // View Items
   private let scrollView: UIScrollView = {
@@ -200,6 +202,7 @@ final class NewGiftViewController: BaseViewController, View {
     self.view.backgroundColor = .favorColor(.white)
     self.navigationItem.leftBarButtonItem = self.cancelButton
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+    self.navigationItem.titleView = self.friendImageView
   }
   
   override func setupLayouts() {
@@ -351,6 +354,12 @@ final class NewGiftViewController: BaseViewController, View {
       .do { $0.0.pinTimelineButton.isSelected.toggle() }
       .map { $0.0.pinTimelineButton.isSelected }
       .map { NewGiftViewReactor.Action.pinToggle($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 친구 선택 클릭
+    self.choiceFrinedButton.rx.tap
+      .map { NewGiftViewReactor.Action.choiceFriendButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
