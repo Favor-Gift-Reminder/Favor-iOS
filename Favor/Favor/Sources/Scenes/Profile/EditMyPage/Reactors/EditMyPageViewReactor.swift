@@ -55,7 +55,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       nameItems: [.textField(text: user.name, placeholder: "이름")],
       idItems: [.textField(text: user.userID, placeholder: "ID")],
       favorItems: Favor.allCases.map { favor in
-        return .favor(isSelected: false, favor: favor)
+        return .favor(isSelected: user.favorList.contains(favor.rawValue), favor: favor)
       }
     )
   }
@@ -86,6 +86,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
         userNo: UserInfoStorage.userNo
       ))
       .flatMap { _ -> Observable<Mutation> in
+        self.steps.accept(AppStep.editMyPageIsComplete)
         return .empty()
       }
 
