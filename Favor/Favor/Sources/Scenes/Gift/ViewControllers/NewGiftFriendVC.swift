@@ -68,6 +68,13 @@ final class NewGiftFriendViewController: BaseViewController, View {
     return cv
   }()
   
+  private lazy var tapGestureRecongnizer: UITapGestureRecognizer = {
+    let tg = UITapGestureRecognizer()
+    tg.addTarget(self, action: #selector(self.didTapBackgroundView))
+    tg.cancelsTouchesInView = false
+    return tg
+  }()
+  
   // MARK: - Properties
   
   private lazy var dataSource = DataSource(
@@ -90,6 +97,9 @@ final class NewGiftFriendViewController: BaseViewController, View {
           for: indexPath
         ) as NewGiftFriendHeaderView
         header.reactor = NewGiftFriendHeaderViewReactor(sectionModel: sectionModel)
+        header.searchTextChanged = { [weak self] in
+          self?.reactor?.action.onNext(.textFieldDidChange($0))
+        }
         return header
       } else {
         let footer = collectionView.dequeueReusableSupplementaryView(
@@ -111,6 +121,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
   override func setupLayouts() {
     super.setupLayouts()
     self.view.addSubview(self.collectionView)
+    self.view.addGestureRecognizer(self.tapGestureRecongnizer)
   }
   
   override func setupConstraints() {
@@ -148,6 +159,13 @@ final class NewGiftFriendViewController: BaseViewController, View {
       .bind(to: self.collectionView.rx.items(dataSource: dataSource))
       .disposed(by: self.disposeBag)
   }
+  
+  // MARK: - Functions
+  
+  @objc
+  private func didTapBackgroundView() {
+    self.view.endEditing(true)
+  }
 }
 
 // MARK: - Privates
@@ -155,18 +173,15 @@ final class NewGiftFriendViewController: BaseViewController, View {
 private extension NewGiftFriendViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(
-      sectionProvider: { [weak self] sectionIndex, _ in
-        guard
-          let sectionModel = self?.dataSource[sectionIndex],
-          let firstItem = sectionModel.items.first
-        else { fatalError("Section을 설정하는 도중 치명적인 에러 발생") }
-        
+      sectionProvider: { sectionIndex, _ in
+        let sectionModel = self.dataSource[sectionIndex]
+        let firstItem = sectionModel.items.first ?? .empty
         var isEmptySelectedFriend: Bool = false
         if case NewGiftFriendSection.NewGiftFriendSectionItem.empty = firstItem {
           isEmptySelectedFriend = true
         }
         
-        return self?.createCollectionViewLayout(
+        return self.createCollectionViewLayout(
           sectionType: sectionModel.model,
           isEmptySelectedFriend: isEmptySelectedFriend
         )

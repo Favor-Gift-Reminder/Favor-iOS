@@ -30,11 +30,16 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
     return lb
   }()
   
-  private let searchBar = FavorSearchBar()
+  private let searchBar: FavorSearchBar = {
+    let sb = FavorSearchBar()
+    sb.hasBackButton = false
+    return sb
+  }()
   
   // MARK: - Properties
   
   var disposeBag = DisposeBag()
+  var searchTextChanged: ((String) -> Void)?
 
   // MARK: - Initializer
   
@@ -52,6 +57,16 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Bind
   
   func bind(reactor: NewGiftFriendHeaderViewReactor) {
+    // Action
+    searchBar.rx.text
+      .orEmpty
+      .asDriver()
+      .drive(with: self) {
+        $0.searchTextChanged?($1)
+      }
+      .disposed(by: self.disposeBag)
+    
+    // State
     reactor.state.map { $0.sectionModel }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, sectionModel in
@@ -63,7 +78,7 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
           owner.titleLabel.text = "선택한 친구"
           owner.searchBar.isHidden = true
         }
-
+        
         var count: Int = 0
         sectionModel.items.forEach {
           switch $0 {
