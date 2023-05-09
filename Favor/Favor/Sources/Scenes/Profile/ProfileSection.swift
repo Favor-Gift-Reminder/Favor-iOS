@@ -123,7 +123,7 @@ extension ProfileSection: Adaptive {
   public var group: FavorCompositionalLayout.Group {
     switch self {
     case .profileSetupHelper:
-      return .contents(
+      return .custom(
         width: .estimated(250),
         height: .estimated(250),
         direction: .horizontal,

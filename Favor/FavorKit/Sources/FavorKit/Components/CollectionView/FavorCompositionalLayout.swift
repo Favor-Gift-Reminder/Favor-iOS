@@ -80,9 +80,10 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// 화면의 너비를 꽉 채우며 가로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
     ///   - height: Group의 `heightDimension`
-    ///   - numberOfItems: Group 안에 포함된 Item들의 개수 (`Int`)
-    ///   - spacing: Group 내부에 들어있는 Item들의 간격 (`NSCollectionLayoutSpacing`)
+    ///   - numberOfItems: Group 안에 포함된 Item들의 개수
+    ///   - spacing: Group 내부에 들어있는 Item들의 간격
     ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
+    ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group
     case flow(
       height: NSCollectionLayoutDimension,
       numberOfItems: Int,
@@ -94,9 +95,10 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// 화면의 너비를 꽉 채우며 세로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
     ///   - height: Group의 `heightDimension`
-    ///   - numberOfItems: Group 안에 포함된 Item들의 개수 (`Int`)
-    ///   - spacing: Group 내부에 들어있는 Item들의 간격 (`NSCollectionLayoutSpacing`)
+    ///   - numberOfItems: Group 안에 포함된 Item들의 개수
+    ///   - spacing: Group 내부에 들어있는 Item들의 간격
     ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
+    ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group
     case list(
       height: NSCollectionLayoutDimension,
       numberOfItems: Int,
@@ -105,15 +107,16 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       innerGroup: FavorCompositionalLayout.Group? = nil
     )
 
-    /// 모든 레이아웃 크기를 직접 설정하여 사용하는 Group
+    /// 모든 레이아웃 값을 직접 설정하여 사용하는 Group
     /// - Parameters:
     ///   - width: Group의 `widthDimension`
     ///   - height: Group의 `heightDimension`
-    ///   - direction: Group의 아이템들이 정렬되는 방향 (`UICollectionView.ScrollDirection`)
-    ///   - numberOfItems: Group 안에 포함된 Item들의 개수 (`Int`)
-    ///   - spacing: Group 내부에 들어있는 Item들의 간격 (`NSCollectionLayoutSpacing`)
+    ///   - direction: Group의 아이템들이 정렬되는 방향
+    ///   - numberOfItems: Group 안에 포함된 Item들의 개수
+    ///   - spacing: Group 내부에 들어있는 Item들의 간격
     ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
-    case contents(
+    ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group `Group`
+    case custom(
       width: NSCollectionLayoutDimension,
       height: NSCollectionLayoutDimension,
       direction: UICollectionView.ScrollDirection,
@@ -157,7 +160,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           contentInsets: contentInsets ?? .zero,
           innerGroup: innerGroup
         )
-      case let .contents(width, height, direction, numberOfItems, spacing, contentInsets, innerGroup):
+      case let .custom(width, height, direction, numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: width,
@@ -197,11 +200,11 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
 
     /// 기본적으로 사용되는 Section
     /// - Parameters:
-    ///   - spacing: Section 내부에 들어있는 Group의 간격 (`CGFloat`)
-    ///   - contentInsets: Section의 내부 (`NSDirectionalEdgeInsets`)
-    ///   - orthogonalScrolling: Section이 스크롤되는 방식 (`OrthogonalScrollingBehavior`)
-    ///   - boundaryItems: Section의 Header나 Footer (`[BoundaryItem]`)
-    ///   - decorationItems: Section의 Background나 Badge (`[DecorationItem]`)
+    ///   - spacing: Section 내부에 들어있는 Group의 간격
+    ///   - contentInsets: Section의 내부 `NSDirectionalEdgeInsets`
+    ///   - orthogonalScrolling: Section이 스크롤되는 방식
+    ///   - boundaryItems: Section의 Header나 Footer
+    ///   - decorationItems: Section의 Background나 Badge
     case base(
       spacing: CGFloat? = nil,
       contentInsets: NSDirectionalEdgeInsets? = nil,
@@ -251,8 +254,9 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// Section의 상단에 위치하는 Header
     /// - Parameters:
     ///   - height: Header의 `HeightDimension`
-    ///   - kind: Header의 `elementKind` (`String`)
-    ///   - alignment: Header의 위치 (`NSRectAlignment`)
+    ///   - contentInsets: Header의 내부 `NSDirectionalEdgeInsets`
+    ///   - kind: Header의 `elementKind`
+    ///   - alignment: Header의 위치
     case header(
       height: NSCollectionLayoutDimension,
       contentInsets: NSDirectionalEdgeInsets = .zero,
@@ -263,8 +267,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     /// Section의 하단에 위치하는 Footer
     /// - Parameters:
     ///   - height: Footer의 `HeightDimension`
-    ///   - kind: Footer의 `elementKind` (`String`)
-    ///   - alignment: Footer의 위치 (`NSRectAlignment`)
+    ///   - kind: Footer의 `elementKind`
+    ///   - alignment: Footer의 위치
     case footer(
       height: NSCollectionLayoutDimension,
       contentInsets: NSDirectionalEdgeInsets = .zero,
@@ -321,7 +325,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
   /// Background와 Badge 등의
   public enum DecorationItem {
 
-    /// Section을 꾸며주는 `BackgroundView`
+    /// Section을 꾸며주는 BackgroundView
     /// - Parameters:
     ///   - kind: BackgroundView의 `elementKind` (`String`)
     case background(kind: String)

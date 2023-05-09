@@ -57,7 +57,7 @@ extension EditMyPageSection: Adaptive {
         numberOfItems: 6,
         spacing: .fixed(10)
       )
-      return .contents(
+      return .custom(
         width: .estimated(500),
         height: .absolute(116),
         direction: .vertical,
