@@ -501,7 +501,6 @@
 			children = (
 				2EBB0152295E8CCA0072D158 /* Application */,
 				E5E423F229DC0D3400A6B48D /* BottomSheet */,
-				E5B182902974F39C00229C50 /* Common */,
 				2EF1585929E3CC3C00D199DF /* Dashboard */,
 				2E76F58629601EC3002FF001 /* Splash */,
 				2E1C5659296C24AE0067FC78 /* Auth */,
@@ -891,13 +890,6 @@
 			path = Flows;
 			sourceTree = "<group>";
 		};
-		E5B182902974F39C00229C50 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
@@ -1117,7 +1109,7 @@
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2EA3849E298D7C680081499C /* HomeHeaderView.swift in Sources */,
 				2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */,
-				2EA3849E298D7C680081499C /* HeaderView.swift in Sources */,
+				2EA3849E298D7C680081499C /* HomeHeaderView.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */,
@@ -1140,13 +1132,11 @@
 				2E00561C29A7E720006CF302 /* FavorSelectionSection.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
-				2EC371FC2995266B00D1007B /* SearchResultViewReactor.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				E524C18929E923B9004CCC40 /* NewGiftFriendVC.swift in Sources */,
-				2E9F989629C62CEA00789297 /* Reminder.swift in Sources */,
 				2EE1537729E5B00D0023FEA5 /* SearchRecentSection.swift in Sources */,
 				2E9C1B7029E9B6AF008122D7 /* BaseSearchVC.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
@@ -1173,9 +1163,9 @@
 				2E95E4B329E8F01C00A46C38 /* SearchGiftResultCellReactor.swift in Sources */,
 				2EC939FB299E163800C8C47F /* MyPageHeaderViewReactor.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
-				2EC939DF2998B80200C8C47F /* MyPageSection.swift in Sources */,
+				2EC939DF2998B80200C8C47F /* ProfileSection.swift in Sources */,
 				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
-				2EC939F9299E160B00C8C47F /* MyPageHeaderView.swift in Sources */,
+				2EC939F9299E160B00C8C47F /* ProfileView.swift in Sources */,
 				2EC939DF2998B80200C8C47F /* ProfileSection.swift in Sources */,
 				2EC939F9299E160B00C8C47F /* ProfileView.swift in Sources */,
 				2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */,

@@ -18,10 +18,12 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   enum Action {
     case viewDidLoad
     case cellDidTap(IndexPath, NewGiftFriendCell.RightButtonType)
+    case textFieldDidChange(String)
   }
   
   enum Mutation {
     case setFriendList([Friend])
+    case setFilteredFriendList([Friend])
     case setSelectedFriends([Friend])
     case removeSelectedFriend(Friend)
     case setLoading(Bool)
@@ -58,23 +60,14 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      return .just(.setFriendList([
-        .init(friendNo: 0, name: "김응철", isUser: false),
-        .init(friendNo: 1, name: "이창준", isUser: false),
-        .init(friendNo: 2, name: "배가희", isUser: false),
-        .init(friendNo: 3, name: "조민수", isUser: false),
-        .init(friendNo: 4, name: "김현빈", isUser: false),
-        .init(friendNo: 5, name: "정은기", isUser: false),
-        .init(friendNo: 6, name: "이주원", isUser: false)
-      ]))
-//      return self.friendFetcher.fetch()
-//        .flatMap { (status, friends) -> Observable<Mutation> in
-//          let friendListSection = self.refineFriendList(friends)
-//          return .concat([
-//            .just(.setFriendListSection(friendListSection)),
-//            .just(.setLoading(status == .inProgress))
-//          ])
-//        }
+      return self.friendFetcher.fetch()
+        .flatMap { (status, friends) -> Observable<Mutation> in
+          let friendListSection = self.refineFriendList_Initial(friends)
+          return .concat([
+            .just(.setFriendList(friends)),
+            .just(.setLoading(status == .inProgress))
+          ])
+        }
       
     case let .cellDidTap(indexPath, rightButtonType):
       switch rightButtonType {
@@ -87,6 +80,14 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
         let targetFriend = [self.currentState.currentFriendList[indexPath.row]]
         return .just(.setSelectedFriends(targetFriend))
       }
+      
+    case .textFieldDidChange(let text):
+      let filteredFriends = currentState.currentFriendList.filter {
+        $0.name.range(of: text, options: .caseInsensitive) != nil
+      }
+      return text.isEmpty ?
+        .just(.setFriendList(currentState.currentFriendList)) :
+        .just(.setFilteredFriendList(filteredFriends))
     }
   }
   
@@ -115,10 +116,12 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
           friendList.remove(at: $0)
         }
       }
-      
       newState.selectedFriends = friendList
       newState.selectedSection = self.refineSelectedFriendSection(friendList)
       newState.friendListSection = self.refineFriendList(selectedFriends: friendList)
+      
+    case .setFilteredFriendList(let filteredFriends):
+      break
     }
     
     return newState
@@ -151,8 +154,7 @@ private extension NewGiftFriendViewReactor {
       // TODO: UserNo 변경
         .flatMap { response -> Observable<[Friend]> in
           let responseData = response.data
-          let friends: ResponseDTO<[FriendResponseDTO.Friend]> =
-          APIManager.decode(responseData)
+          let friends: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(responseData)
           return .just(friends.data.map {
             Friend(
               friendNo: $0.friendNo,
