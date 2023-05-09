@@ -29,7 +29,6 @@ final class EditMyPageFavorCell: BaseCollectionViewCell, Reusable {
 
   private let favorButton: UIButton = {
     var config = UIButton.Configuration.filled()
-    config.titleLineBreakMode = .byTruncatingMiddle
 
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
