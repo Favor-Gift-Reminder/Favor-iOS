@@ -140,6 +140,7 @@ final class EditMyPageViewController: BaseViewController, View {
 
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInsetAdjustmentBehavior = .never
+    collectionView.contentInset = UIEdgeInsets(top: .zero, left: .zero, bottom: 64, right: .zero)
     return collectionView
   }()
 
@@ -222,7 +223,7 @@ final class EditMyPageViewController: BaseViewController, View {
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
       make.top.equalToSuperview()
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(60)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalToSuperview()
     }
   }
