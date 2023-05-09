@@ -12,7 +12,7 @@ import RealmSwift
 protocol RealmCRUDable {
   func create<T: Object>(_ object: T) async throws -> T
   func read<T: Object>(_ objectType: T.Type) async throws -> Results<T>
-  func update<T: Object>(_ object: T) async throws -> T
+  func update<T: Object>(_ object: T, update: Realm.UpdatePolicy) async throws -> T
   func delete<T: Object>(_ object: T) async throws -> T
 }
 
@@ -207,13 +207,13 @@ public final class RealmManager: RealmCRUDable {
   ///   - object: 업데이트할 `RealmObject` 인스턴스
   /// - Returns: ***@Discardable*** 업데이트한 `RealmObject` 인스턴스
   @discardableResult
-  public func update<T: Object>(_ object: T) async throws -> T {
+  public func update<T: Object>(_ object: T, update: Realm.UpdatePolicy = .modified) async throws -> T {
     typealias RealmContinuation = CheckedContinuation<T, Error>
     return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
       self.realmQueue.async {
         do {
           try self.realm.write {
-            self.realm.add(object, update: .modified)
+            self.realm.add(object, update: update)
           }
           continuation.resume(returning: object.freeze())
         } catch {

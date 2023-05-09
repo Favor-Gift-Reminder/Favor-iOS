@@ -213,7 +213,7 @@ private extension MyPageViewReactor {
     }
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { user in
-      try await RealmManager.shared.update(user)
+      try await RealmManager.shared.update(user, update: .all)
     }
   }
 }
