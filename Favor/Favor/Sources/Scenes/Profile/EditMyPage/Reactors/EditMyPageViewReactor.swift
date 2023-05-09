@@ -5,17 +5,6 @@
 //  Created by 이창준 on 2023/02/22.
 //
 
-/*
- Known Bugs: -
- 취향을 오른쪽으로 스크롤 한 상태에서 선택하면 Layout이 재정렬되는 문제
-  - Section Items를 다시 정의하기 때문으로 추정
- TextField를 편집한 뒤 취향을 선택하면 text가 초기값으로 되돌아가는 문제
-  - Section이 reload 되거나
-  - 새로운 section으로 교체된다.
- -> 둘 다 동일한 형태의 문제로 보임
-  - Section에 있는 값이 통째로 reload되거나 값 자체가 재정의 되고 있음
- */
-
 import FavorKit
 import FavorNetworkKit
 import ReactorKit

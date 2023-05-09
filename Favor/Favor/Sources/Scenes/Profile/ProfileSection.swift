@@ -23,7 +23,7 @@ enum ProfileSectionItem: SectionModelItem {
   case friends(ProfileFriendCellReactor)
 }
 
-enum ProfileSection {
+enum ProfileSection: SectionModelType {
   case profileSetupHelper
   case preferences
   case anniversaries
@@ -69,7 +69,7 @@ extension ProfileSectionItem: Equatable, Hashable {
   }
 }
 
-extension ProfileSection: SectionModelType {
+extension ProfileSection {
   var headerTitle: String? {
     switch self {
     case .profileSetupHelper: return "새 프로필"
@@ -131,10 +131,16 @@ extension ProfileSection: Adaptive {
         spacing: .fixed(8)
       )
     case .preferences:
-      return .flow(
-        height: .estimated(32),
+      let innerGroup: FavorCompositionalLayout.Group = .flow(
+        height: .absolute(32),
         numberOfItems: 3,
         spacing: .fixed(10)
+      )
+      return .list(
+        height: .estimated(32),
+        numberOfItems: 2,
+        spacing: .fixed(10),
+        innerGroup: innerGroup
       )
     case .anniversaries:
       return .list(
@@ -174,7 +180,6 @@ extension ProfileSection: Adaptive {
     case .preferences:
       return .base(
         contentInsets: defaultInsets,
-        orthogonalScrolling: .continuous,
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )

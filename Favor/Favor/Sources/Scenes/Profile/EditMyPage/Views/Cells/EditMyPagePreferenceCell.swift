@@ -45,6 +45,7 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable {
     }
     button.titleLabel?.numberOfLines = 1
     button.isUserInteractionEnabled = false
+    button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     return button
   }()
 
@@ -69,7 +70,7 @@ final class EditMyPagePreferenceCell: BaseCollectionViewCell, Reusable {
 
 extension EditMyPagePreferenceCell: BaseView {
   func setupStyles() {
-    //
+    self.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
   }
 
   func setupLayouts() {

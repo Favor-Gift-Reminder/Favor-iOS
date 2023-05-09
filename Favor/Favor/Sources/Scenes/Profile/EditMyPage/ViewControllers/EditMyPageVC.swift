@@ -178,6 +178,7 @@ final class EditMyPageViewController: BaseViewController, View {
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
         }
         owner.dataSource.apply(snapshot, animatingDifferences: false)
+        owner.collectionView.invalidateIntrinsicContentSize()
       })
       .disposed(by: self.disposeBag)
   }
