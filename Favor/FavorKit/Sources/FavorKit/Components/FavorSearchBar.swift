@@ -226,7 +226,7 @@ public extension Reactive where Base: FavorSearchBar {
     }
     return ControlProperty(values: source, valueSink: bindingObserver)
   }
-
+  
   var backButtonDidTap: ControlEvent<()> {
     let source = base.backButton.rx.tap
     return ControlEvent(events: source)

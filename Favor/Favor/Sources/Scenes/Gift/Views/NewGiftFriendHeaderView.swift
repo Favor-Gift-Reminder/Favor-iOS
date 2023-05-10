@@ -30,7 +30,7 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
     return lb
   }()
   
-  private let searchBar: FavorSearchBar = {
+  let searchBar: FavorSearchBar = {
     let sb = FavorSearchBar()
     sb.hasBackButton = false
     return sb
@@ -39,7 +39,7 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Properties
   
   var disposeBag = DisposeBag()
-  var searchTextChanged: ((String) -> Void)?
+  var textFieldChanged: ((String) -> Void)?
 
   // MARK: - Initializer
   
@@ -53,17 +53,17 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Bind
   
   func bind(reactor: NewGiftFriendHeaderViewReactor) {
     // Action
-    searchBar.rx.text
+    self.searchBar.rx.text
       .orEmpty
       .asDriver()
-      .drive(with: self) {
-        $0.searchTextChanged?($1)
-      }
+      .skip(1)
+      .debug()
+      .drive(with: self) { $0.textFieldChanged?($1) }
       .disposed(by: self.disposeBag)
     
     // State

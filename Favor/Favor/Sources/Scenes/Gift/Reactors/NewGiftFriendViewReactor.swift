@@ -22,8 +22,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   }
   
   enum Mutation {
-    case setFriendList([Friend])
-    case setFilteredFriendList([Friend])
+    case setFriends([Friend])
     case setSelectedFriends([Friend])
     case removeSelectedFriend(Friend)
     case setLoading(Bool)
@@ -38,9 +37,10 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       model: .friendList,
       items: []
     )
-    var currentFriendList: [Friend] = []
     var selectedFriends: [Friend] = []
+    var friends: [Friend] = []
     var isLoading: Bool = false
+    var shouldReloadHeader: Bool = true
   }
   
   // MARK: - Properties
@@ -49,8 +49,11 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   let friendFetcher = Fetcher<[Friend]>()
   
+  // 최초로 불러온 친구 목록 입니다.
+  var allFriends: [Friend] = []
+  
   // MARK: - Initializer
-
+  
   init() {
     self.setupFriendFetcher()
   }
@@ -62,14 +65,15 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case .viewDidLoad:
       return self.friendFetcher.fetch()
         .flatMap { (status, friends) -> Observable<Mutation> in
-          let friendListSection = self.refineFriendList_Initial(friends)
+          self.allFriends = friends
           return .concat([
-            .just(.setFriendList(friends)),
+            .just(.setFriends(friends)),
             .just(.setLoading(status == .inProgress))
           ])
         }
       
     case let .cellDidTap(indexPath, rightButtonType):
+      guard indexPath.row != -1 else { return .empty() }
       switch rightButtonType {
       case .done:
         return .empty()
@@ -77,17 +81,17 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
         let targetFriend = self.currentState.selectedFriends[indexPath.row]
         return .just(.removeSelectedFriend(targetFriend))
       case .add:
-        let targetFriend = [self.currentState.currentFriendList[indexPath.row]]
+        let targetFriend = [self.currentState.friends[indexPath.row]]
         return .just(.setSelectedFriends(targetFriend))
       }
       
     case .textFieldDidChange(let text):
-      let filteredFriends = currentState.currentFriendList.filter {
+      let filteredFriends = self.allFriends.filter {
         $0.name.range(of: text, options: .caseInsensitive) != nil
       }
       return text.isEmpty ?
-        .just(.setFriendList(currentState.currentFriendList)) :
-        .just(.setFilteredFriendList(filteredFriends))
+        .just(.setFriends(self.allFriends)) :
+        .just(.setFriends(filteredFriends))
     }
   }
   
@@ -98,9 +102,22 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case .setLoading(let isLoading):
       newState.isLoading = isLoading
       
-    case .setFriendList(let friends):
-      newState.currentFriendList = friends
-      newState.friendListSection = self.refineFriendList_Initial(friends)
+    case .setFriends(let friends):
+      let items = friends.map {
+        let reactor = NewGiftFriendCellReactor(
+          $0,
+          rightButtonState: .add
+        )
+        return NewGiftFriendSection.NewGiftFriendSectionItem.friend(reactor)
+      }
+      
+      let friendListSection = NewGiftFriendSection.NewGiftFriendSectionModel(
+        model: .friendList,
+        items: items
+      )
+      newState.friendListSection = friendListSection
+      newState.friends = friends
+      newState.shouldReloadHeader = false
       
     case .setSelectedFriends(let selectedFriends):
       newState.selectedFriends.append(contentsOf: selectedFriends)
@@ -119,9 +136,6 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       newState.selectedFriends = friendList
       newState.selectedSection = self.refineSelectedFriendSection(friendList)
       newState.friendListSection = self.refineFriendList(selectedFriends: friendList)
-      
-    case .setFilteredFriendList(let filteredFriends):
-      break
     }
     
     return newState
@@ -183,27 +197,10 @@ private extension NewGiftFriendViewReactor {
 // MARK: - Privates
 
 private extension NewGiftFriendViewReactor {
-  func refineFriendList_Initial(
-    _ friends: [Friend]
-  ) -> NewGiftFriendSection.NewGiftFriendSectionModel {
-    let items = friends.map {
-      let reactor = NewGiftFriendCellReactor(
-        $0,
-        rightButtonState: .add
-      )
-      return NewGiftFriendSection.NewGiftFriendSectionItem.friend(reactor)
-    }
-    
-    return NewGiftFriendSection.NewGiftFriendSectionModel(
-      model: .friendList,
-      items: items
-    )
-  }
-  
   func refineFriendList(
     selectedFriends: [Friend]
   ) -> NewGiftFriendSection.NewGiftFriendSectionModel {
-    let currentFriends = self.currentState.currentFriendList
+    let currentFriends = self.currentState.friends
     
     let items = currentFriends.map { selectedFriend in
       let reactor = NewGiftFriendCellReactor(

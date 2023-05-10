@@ -13,7 +13,6 @@ import Reusable
 import RxDataSources
 
 final class NewGiftFriendViewController: BaseViewController, View {
-  typealias DataSource = RxCollectionViewSectionedReloadDataSource<NewGiftFriendSection.NewGiftFriendSectionModel>
   
   private enum Constants {
     static let emptyCellHeight: CGFloat = 93.0
@@ -74,10 +73,18 @@ final class NewGiftFriendViewController: BaseViewController, View {
     tg.cancelsTouchesInView = false
     return tg
   }()
+
+  private let mainView: UIView = {
+    let view = UIView()
+    view.backgroundColor = .favorColor(.black)
+    return view
+  }()
+  
+  private var headerView: NewGiftFriendHeaderView?
   
   // MARK: - Properties
   
-  private lazy var dataSource = DataSource(
+  private lazy var dataSource: DataSource = DataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
       case .empty:
@@ -91,17 +98,20 @@ final class NewGiftFriendViewController: BaseViewController, View {
     },
     configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
       let sectionModel = dataSource[indexPath.section]
+      
       if kind == UICollectionView.elementKindSectionHeader {
+        // Header
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as NewGiftFriendHeaderView
         header.reactor = NewGiftFriendHeaderViewReactor(sectionModel: sectionModel)
-        header.searchTextChanged = { [weak self] in
+        header.textFieldChanged = { [weak self] in
           self?.reactor?.action.onNext(.textFieldDidChange($0))
         }
         return header
       } else {
+        // Footer
         let footer = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
@@ -115,17 +125,21 @@ final class NewGiftFriendViewController: BaseViewController, View {
   
   override func setupStyles() {
     super.setupStyles()
+    
     self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
   }
   
   override func setupLayouts() {
     super.setupLayouts()
+    
     self.view.addSubview(self.collectionView)
+    self.view.addSubview(self.mainView)
     self.view.addGestureRecognizer(self.tapGestureRecongnizer)
   }
   
   override func setupConstraints() {
     super.setupConstraints()
+    
     self.collectionView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
@@ -145,8 +159,9 @@ final class NewGiftFriendViewController: BaseViewController, View {
       .map { owner, indexPath in
         guard let cell = owner.collectionView.cellForItem(
           at: indexPath
-        ) as? NewGiftFriendCell else {
-          fatalError()
+        ) as? NewGiftFriendCell
+        else {
+          return (IndexPath(row: -1, section: 0), .done)
         }
         return (indexPath, cell.currentButtonType)
       }
@@ -156,7 +171,13 @@ final class NewGiftFriendViewController: BaseViewController, View {
     
     // State
     reactor.state.map { [$0.selectedSection, $0.friendListSection] }
+      .distinctUntilChanged()
+      .debug()
       .bind(to: self.collectionView.rx.items(dataSource: dataSource))
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
   

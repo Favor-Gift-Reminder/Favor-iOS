@@ -7,29 +7,33 @@
 
 import UIKit
 
-import RxDataSources
+import FavorKit
 
-enum NewGiftFriendSectionType: Equatable {
+enum NewGiftFriendSection: Hashable {
   case selectedFriends
-  case friendList
-}
-
-struct NewGiftFriendSection {
-  typealias NewGiftFriendSectionModel = SectionModel<NewGiftFriendSectionType, NewGiftFriendSectionItem>
+  case friends
   
-  enum NewGiftFriendSectionItem {
-    case empty
-    case friend(NewGiftFriendCellReactor)
-  }
-}
-
-extension NewGiftFriendSectionType {
+  /// 각 헤더의 높이 값 입니다.
   var headerHeight: NSCollectionLayoutDimension {
     switch self {
     case .selectedFriends:
       return .absolute(54)
-    case .friendList:
+    case .friends:
       return .absolute(100)
+    }
+  }
+}
+
+enum NewGiftFriendItem: Hashable {
+  case empty
+  case friend(NewGiftFriendCellReactor)
+  
+  var reactor: NewGiftFriendCellReactor? {
+    switch self {
+    case .empty:
+      return nil
+    case .friend(let reactor):
+      return reactor
     }
   }
 }
