@@ -12,11 +12,9 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class SearchGiftResultCell: UICollectionViewCell, View, Reusable { // TODO: BaseCollectionViewCell로 변경
+final class SearchGiftResultCell: BaseCollectionViewCell, View, Reusable {
 
   // MARK: - Properties
-
-  public var disposeBag = DisposeBag()
 
   // MARK: - UI Components
 

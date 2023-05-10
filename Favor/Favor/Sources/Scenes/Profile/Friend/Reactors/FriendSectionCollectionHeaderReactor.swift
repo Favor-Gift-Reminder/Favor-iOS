@@ -1,38 +1,36 @@
 //
-//  FavorAnniversaryCellReactor.swift
+//  FriendSectionCollectionHeaderReactor.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/02/15.
+//  Created by 이창준 on 2023/04/25.
 //
 
 import ReactorKit
 
-final class FavorAnniversaryCellReactor: Reactor {
-  
+final class FriendSectionCollectionHeaderReactor: Reactor {
+
   // MARK: - Properties
-  
+
   var initialState: State
-  
+
   enum Action {
-    
+
   }
-  
+
   enum Mutation {
-    
+
   }
-  
+
   struct State {
-    
+
   }
-  
+
   // MARK: - Initializer
-  
+
   init() {
     self.initialState = State()
   }
-  
-  
+
   // MARK: - Functions
-  
 
 }

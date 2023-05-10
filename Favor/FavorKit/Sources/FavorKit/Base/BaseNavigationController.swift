@@ -32,7 +32,7 @@ open class BaseNavigationController: UINavigationController {
 
   // MARK: - Functions
 
-  func setupNavigationAppearance() {
+  public func setupNavigationAppearance() {
     // Button Appearance
     let backButtonAppearance = UIBarButtonItemAppearance()
 

@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import RxCocoa
 import SnapKit
 
 final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
@@ -20,14 +21,14 @@ final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
   
   // MARK: - UI Components
   
-  private lazy var headerTitle: UILabel = {
+  private let headerTitle: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 20)
     label.text = "헤더 타이틀"
     return label
   }()
 
-  private lazy var rightButton: UIButton = {
+  fileprivate let rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.subtext)
@@ -102,5 +103,13 @@ extension ProfileSectionHeader: BaseView {
       make.centerY.equalTo(self.headerTitle.snp.centerY)
       make.trailing.equalToSuperview()
     }
+  }
+}
+
+// MARK: - Reactive
+
+extension Reactive where Base: ProfileSectionHeader {
+  var rightButtonDidTap: ControlEvent<()> {
+    return ControlEvent(events: base.rightButton.rx.tap)
   }
 }

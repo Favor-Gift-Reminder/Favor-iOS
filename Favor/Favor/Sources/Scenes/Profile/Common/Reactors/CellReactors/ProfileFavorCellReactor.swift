@@ -1,13 +1,14 @@
 //
-//  FavorSetupProfileCellReactor.swift
+//  ProfileFavorCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
 //
 
+import FavorKit
 import ReactorKit
 
-final class FavorSetupProfileCellReactor: Reactor {
+final class ProfileFavorCellReactor: Reactor {
   
   // MARK: - Properties
   
@@ -22,13 +23,15 @@ final class FavorSetupProfileCellReactor: Reactor {
   }
   
   struct State {
-    
+    var favor: Favor
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  init(favor: Favor) {
+    self.initialState = State(
+      favor: favor
+    )
   }
   
   

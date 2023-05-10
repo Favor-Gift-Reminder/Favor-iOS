@@ -1,13 +1,14 @@
 //
-//  FavorPrefersCellReactor.swift
+//  ProfileAnniversaryCellReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/02/15.
 //
 
+import FavorKit
 import ReactorKit
 
-final class FavorPrefersCellReactor: Reactor {
+final class ProfileAnniversaryCellReactor: Reactor {
   
   // MARK: - Properties
   
@@ -22,13 +23,15 @@ final class FavorPrefersCellReactor: Reactor {
   }
   
   struct State {
-    
+    var anniversary: Anniversary
   }
   
   // MARK: - Initializer
   
-  init() {
-    self.initialState = State()
+  init(anniversary: Anniversary) {
+    self.initialState = State(
+      anniversary: anniversary
+    )
   }
   
   

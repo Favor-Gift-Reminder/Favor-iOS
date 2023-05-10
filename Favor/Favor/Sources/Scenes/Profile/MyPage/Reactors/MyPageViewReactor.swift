@@ -14,13 +14,6 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-/// 필요한 데이터
-/// 유저 프로필 사진, 이름, 아이디
-/// 총 선물, 준 선물, 받은 선물
-/// 취향
-/// 기념일
-/// 친구 목록
-
 final class MyPageViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
@@ -33,28 +26,42 @@ final class MyPageViewReactor: Reactor, Stepper {
     case viewNeedsLoaded
     case editButtonDidTap
     case settingButtonDidTap
+    case headerRightButtonDidTap(ProfileSection)
   }
   
   enum Mutation {
     case updateUser(User)
+    case updateUserName(String)
+    case updateUserID(String)
+    case updateFavorSection([Favor])
+    case updateAnniversarySection([Anniversary])
+    case updateFriendSection([Friend])
     case updateLoading(Bool)
   }
   
   struct State {
     var user = User()
-    var sections: [ProfileSection]
+    var userName: String = ""
+    var userID: String = ""
+    /// 0: 새 프로필
+    /// 1: 취향
+    /// 2: 기념일
+    /// 3: 친구
+    var sections: [ProfileSection] = []
+    var items: [[ProfileSectionItem]] = []
+    var profileSetupHelperItems: [ProfileSectionItem] = []
+    var favorItems: [ProfileSectionItem] = []
+    var anniversaryItems: [ProfileSectionItem] = []
+    var friendItems: [ProfileSectionItem] = []
     var isLoading: Bool = false
   }
   
   // MARK: - Initializer
   
   init() {
-    self.initialState = State(
-      sections: MyPageViewReactor.setupMockSection()
-    )
+    self.initialState = State()
     self.setupUserFetcher()
   }
-  
   
   // MARK: - Functions
   
@@ -65,17 +72,29 @@ final class MyPageViewReactor: Reactor, Stepper {
         .flatMap { (status, user) -> Observable<Mutation> in
           return .concat([
             .just(.updateUser(user)),
+            .just(.updateUserName(user.name)),
+            .just(.updateUserID(user.userID)),
+            .just(.updateFavorSection(user.favorList.map { Favor(rawValue: $0) ?? .cute })),
+            .just(.updateAnniversarySection(user.anniversaryList.toArray())),
+            .just(.updateFriendSection(user.friendList.toArray())),
             .just(.updateLoading(status == .inProgress))
           ])
         }
 
-
     case .editButtonDidTap:
-      os_log(.debug, "Edit button did tap.")
+      self.steps.accept(AppStep.editMyPageIsRequired(self.currentState.user))
       return .empty()
 
     case .settingButtonDidTap:
-      os_log(.debug, "Setting button did tap.")
+      self.steps.accept(AppStep.settingIsRequired)
+      return .empty()
+
+    case .headerRightButtonDidTap(let section):
+      switch section {
+      case .friends:
+        self.steps.accept(AppStep.friendIsRequired)
+      default: break
+      }
       return .empty()
     }
   }
@@ -87,11 +106,71 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .updateUser(let user):
       newState.user = user
 
+    case .updateUserName(let name):
+      newState.userName = name
+
+    case .updateUserID(let id):
+      newState.userID = id
+
+    case .updateFavorSection(let favors):
+      let favorSection = favors.map { favor -> ProfileSectionItem in
+        return .favors(ProfileFavorCellReactor(favor: favor))
+      }
+      newState.favorItems = favorSection
+
+    case .updateAnniversarySection(let anniversaries):
+      let anniversarySection = anniversaries.map { anniversary -> ProfileSectionItem in
+        return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
+      }
+      newState.anniversaryItems = anniversarySection
+
+    case .updateFriendSection(let friends):
+      let friendSection = friends.map { friend -> ProfileSectionItem in
+        return .friends(ProfileFriendCellReactor(friend: friend))
+      }
+      newState.friendItems = friendSection
+
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
     }
 
     return newState
+  }
+
+  func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+      var newSections: [ProfileSection] = []
+      var newItems: [[ProfileSectionItem]] = []
+      var profileSetupHelperItems: [ProfileSectionItem] = []
+
+      // 취향
+      if !state.favorItems.isEmpty {
+        newSections.append(.favors)
+        newItems.append(state.favorItems)
+      } else {
+        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.favor)))
+      }
+      // 기념일
+      if !state.anniversaryItems.isEmpty {
+        newSections.append(.anniversaries)
+        newItems.append(state.anniversaryItems)
+      } else {
+        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
+      }
+      // 친구
+      newSections.append(.friends)
+      newItems.append(state.friendItems)
+      // 새 프로필
+      if !profileSetupHelperItems.isEmpty {
+        newSections.insert(.profileSetupHelper, at: .zero)
+        newItems.insert(profileSetupHelperItems, at: .zero)
+      }
+
+      newState.sections = newSections
+      newState.items = newItems
+      return newState
+    }
   }
 }
 
@@ -102,22 +181,25 @@ private extension MyPageViewReactor {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
-      let user = networking.request(.getUser(userNo: 1)) // TODO: UserNo 변경
+      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
         .flatMap { user -> Observable<User> in
           let userData = user.data
           do {
             let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
             let remoteUser = remote.data
-            return .just(
-              User(
-                userNo: remoteUser.userNo,
-                email: remoteUser.email,
-                userID: remoteUser.userID,
-                name: remoteUser.name,
-                favorList: remoteUser.favorList
-              )
+            let decodedUser = User(
+              userNo: remoteUser.userNo,
+              email: remoteUser.email,
+              userID: remoteUser.userID,
+              name: remoteUser.name,
+              favorList: remoteUser.favorList,
+              giftList: remoteUser.giftList.map { $0.toDomain() },
+              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
+              friendList: remoteUser.friendList.map { $0.toDomain() }
             )
+            return .just(decodedUser)
           } catch {
+            print(error)
             return .just(User())
           }
         }
@@ -131,40 +213,7 @@ private extension MyPageViewReactor {
     }
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { user in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(user)")
-      try await RealmManager.shared.update(user)
+      try await RealmManager.shared.update(user, update: .all)
     }
-  }
-}
-
-// MARK: - Privates
-
-private extension MyPageViewReactor {
-  
-}
-
-// MARK: - Temporaries
-
-extension MyPageViewReactor {
-  static func setupMockSection() -> [ProfileSection] {
-    let newProfile1 = ProfileSectionItem.profileSetupHelper(FavorSetupProfileCellReactor())
-    let newProfile2 = ProfileSectionItem.profileSetupHelper(FavorSetupProfileCellReactor())
-    let newProfileSection = ProfileSection.profileSetupHelper([newProfile1, newProfile2])
-    
-    let favor1 = ProfileSectionItem.preferences(FavorPrefersCellReactor())
-    let favor2 = ProfileSectionItem.preferences(FavorPrefersCellReactor())
-    let favor3 = ProfileSectionItem.preferences(FavorPrefersCellReactor())
-    let favorSection = ProfileSection.preferences([favor1, favor2, favor3])
-    
-    let anniversary1 = ProfileSectionItem.anniversaries(FavorAnniversaryCellReactor())
-    let anniversary2 = ProfileSectionItem.anniversaries(FavorAnniversaryCellReactor())
-    let anniversary3 = ProfileSectionItem.anniversaries(FavorAnniversaryCellReactor())
-    let anniversarySection = ProfileSection.anniversaries([anniversary1, anniversary2, anniversary3])
-
-    let friendSection = ProfileSection.friends(
-      (1...10).map { _ in ProfileSectionItem.friends(ProfileFriendCellReactor()) }
-    )
-    
-    return [newProfileSection, favorSection, anniversarySection, friendSection]
   }
 }

@@ -23,7 +23,7 @@ final class SearchGiftResultCellReactor: Reactor {
   }
 
   struct State {
-    var gift: Gift = Gift(0, name: "테스트", relatedFriend: nil)
+    var gift: Gift = Gift(giftNo: 0, name: "테스트")
   }
 
   // MARK: - Initializer

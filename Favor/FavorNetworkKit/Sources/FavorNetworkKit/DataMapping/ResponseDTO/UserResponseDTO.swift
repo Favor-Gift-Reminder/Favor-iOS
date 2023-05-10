@@ -19,7 +19,7 @@ public struct UserResponseDTO: Decodable {
   public let userNo: Int
   public let userID: String
 
-  private enum CodingKeys: CodingKey {
+  private enum CodingKeys: String, CodingKey {
     case anniversaryList
     case email
     case favorList
@@ -29,7 +29,7 @@ public struct UserResponseDTO: Decodable {
     case reminderList
     case role
     case userNo
-    case userID
+    case userID = "userid"
   }
 
   public init(from decoder: Decoder) throws {
