@@ -10,44 +10,30 @@ import UIKit
 import FavorKit
 
 enum FriendSectionItem: SectionModelItem {
-  case friend(FriendCellReactor)
+  case friend(Friend)
 }
 
-enum FriendSection {
-  case friend([FriendSectionItem])
+enum FriendSection: SectionModelType {
+  case friend
 }
 
 extension FriendSectionItem: Equatable, Hashable {
   static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
     switch (lhs, rhs) {
     case let (.friend(lhsValue), .friend(rhsValue)):
-      return lhsValue === rhsValue
+      return lhsValue.friendNo == rhsValue.friendNo
     }
   }
 
   func hash(into hasher: inout Hasher) {
     switch self {
-    case .friend(let reactor):
-      hasher.combine(ObjectIdentifier(reactor))
+    case .friend(let friend):
+      hasher.combine(friend.friendNo)
     }
   }
 }
 
-extension FriendSection: SectionModelType {
-  public var items: [any SectionModelItem] {
-    switch self {
-    case .friend(let items):
-      return items
-    }
-  }
-
-  public init(original: FriendSection, items: [FriendSectionItem]) {
-    switch original {
-    case .friend:
-      self = .friend(items)
-    }
-  }
-}
+// MARK: - Adapter
 
 extension FriendSection: Adaptive {
   var item: FavorCompositionalLayout.Item {
@@ -76,11 +62,14 @@ extension FriendSection: Adaptive {
     switch self {
     case .friend:
       return .base(
+        spacing: 8,
         contentInsets: NSDirectionalEdgeInsets(
-          top: 16, leading: 20, bottom: .zero, trailing: 20
+          top: 15, leading: .zero, bottom: 15, trailing: .zero
         ),
         boundaryItems: [
-          .header(height: .estimated(21))
+          .header(
+            height: .absolute(21.0)
+          )
         ]
       )
     }

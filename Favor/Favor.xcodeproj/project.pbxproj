@@ -20,8 +20,6 @@
 		2E3FA75929F7C561003342CA /* FriendViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75829F7C561003342CA /* FriendViewReactor.swift */; };
 		2E3FA75B29F80B63003342CA /* FriendSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75A29F80B63003342CA /* FriendSection.swift */; };
 		2E3FA75E29F80D3C003342CA /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75D29F80D3C003342CA /* FriendCell.swift */; };
-		2E3FA76329F819ED003342CA /* FriendSectionCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA76229F819ED003342CA /* FriendSectionCollectionHeader.swift */; };
-		2E3FA76529F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA76429F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift */; };
 		2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
@@ -182,8 +180,6 @@
 		2E3FA75829F7C561003342CA /* FriendViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewReactor.swift; sourceTree = "<group>"; };
 		2E3FA75A29F80B63003342CA /* FriendSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSection.swift; sourceTree = "<group>"; };
 		2E3FA75D29F80D3C003342CA /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
-		2E3FA76229F819ED003342CA /* FriendSectionCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSectionCollectionHeader.swift; sourceTree = "<group>"; };
-		2E3FA76429F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSectionCollectionHeaderReactor.swift; sourceTree = "<group>"; };
 		2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionBackgroundView.swift; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCellReactor.swift; sourceTree = "<group>"; };
@@ -441,7 +437,6 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75829F7C561003342CA /* FriendViewReactor.swift */,
-				2E3FA76429F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -450,7 +445,6 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75C29F80D30003342CA /* Cells */,
-				2E3FA76229F819ED003342CA /* FriendSectionCollectionHeader.swift */,
 				2E32E7B529FB5DE600202E31 /* FriendSectionHeader.swift */,
 			);
 			path = Views;
@@ -1259,7 +1253,6 @@
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
-				2E3FA76329F819ED003342CA /* FriendSectionCollectionHeader.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				E524C18929E923B9004CCC40 /* NewGiftFriendVC.swift in Sources */,
@@ -1299,7 +1292,6 @@
 				E55CF7C6298B8EBB002940D1 /* DashboardFlow.swift in Sources */,
 				2EC939F1299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
-				2E3FA76529F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift in Sources */,
 				2E95E4B129E8EFB400A46C38 /* SearchResultSection.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,

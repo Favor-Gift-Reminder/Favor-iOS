@@ -102,6 +102,7 @@ final class FriendCell: BaseCollectionViewCell, Pressable, Reusable {
 
 extension FriendCell: BaseView {
   func setupStyles() {
+    self.backgroundColor = self.idleBackgroundColor
     self.layer.cornerRadius = Metric.profileImageViewSize / 5
   }
 
