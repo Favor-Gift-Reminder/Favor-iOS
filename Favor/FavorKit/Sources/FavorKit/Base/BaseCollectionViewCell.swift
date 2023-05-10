@@ -12,4 +12,5 @@ import RxSwift
 open class BaseCollectionViewCell: UICollectionViewCell {
 
   public var disposeBag = DisposeBag()
+
 }
