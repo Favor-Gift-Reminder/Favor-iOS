@@ -261,7 +261,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       height: NSCollectionLayoutDimension,
       contentInsets: NSDirectionalEdgeInsets = .zero,
       kind: String = UICollectionView.elementKindSectionHeader,
-      alignment: NSRectAlignment = .top
+      alignment: NSRectAlignment = .top,
+      isPinned: Bool = false
     )
 
     /// Section의 하단에 위치하는 Footer
@@ -281,10 +282,11 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       size: NSCollectionLayoutSize,
       contentInsets: NSDirectionalEdgeInsets,
       kind: String,
-      alignment: NSRectAlignment
+      alignment: NSRectAlignment,
+      isPinned: Bool
     ) {
       switch self {
-      case let .header(height, contentInsets, kind, alignment):
+      case let .header(height, contentInsets, kind, alignment, isPinned):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
@@ -292,7 +294,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           ),
           contentInsets: contentInsets,
           kind: kind,
-          alignment: alignment
+          alignment: alignment,
+          isPinned: isPinned
         )
       case let .footer(height, contentInsets, kind, alignment):
         return (
@@ -302,7 +305,8 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           ),
           contentInsets: contentInsets,
           kind: kind,
-          alignment: alignment
+          alignment: alignment,
+          isPinned: false
         )
       }
     }
@@ -315,6 +319,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
         elementKind: self.layoutParameters.kind,
         alignment: self.layoutParameters.alignment
       )
+      boundaryItem.pinToVisibleBounds = self.layoutParameters.isPinned
       boundaryItem.contentInsets = self.layoutParameters.contentInsets
       return boundaryItem
     }
