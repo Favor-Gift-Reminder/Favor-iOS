@@ -7,44 +7,71 @@
 
 import UIKit
 
-import RxDataSources
+open class Adapter<Section, Item> where Section: SectionModelType, Section: Adaptive, Item: SectionModelItem {
 
-open class Adapter<Section> where Section: SectionModelType, Section: Adaptive {
+  // MARK: - Configuration
+
+  public struct Configuration {
+    public var scrollDirection: UICollectionView.ScrollDirection
+    public var sectionSpacing: CGFloat = .zero
+    public var header: FavorCompositionalLayout.BoundaryItem?
+    public var footer: FavorCompositionalLayout.BoundaryItem?
+    public var background: [ElementKind: DecorationItemClass]?
+
+    public init(
+      scrollDirection: UICollectionView.ScrollDirection,
+      sectionSpacing: CGFloat = .zero,
+      header: FavorCompositionalLayout.BoundaryItem? = nil,
+      footer: FavorCompositionalLayout.BoundaryItem? = nil,
+      background: [ElementKind: DecorationItemClass]? = nil
+    ) {
+      self.scrollDirection = scrollDirection
+      self.sectionSpacing = sectionSpacing
+      self.header = header
+      self.footer = footer
+      self.background = background
+    }
+  }
 
   // MARK: - Properties
 
-  private var dataSource: RxCollectionViewSectionedReloadDataSource<Section>
+  private var collectionView: UICollectionView
+  private var dataSource: UICollectionViewDiffableDataSource<Section, Item>
+  public var configuration = Configuration(scrollDirection: .vertical)
 
   // MARK: - Initializer
 
-  public init(dataSource: RxCollectionViewSectionedReloadDataSource<Section>) {
+  public init(
+    collectionView: UICollectionView,
+    dataSource: UICollectionViewDiffableDataSource<Section, Item>
+  ) {
+    self.collectionView = collectionView
     self.dataSource = dataSource
   }
 
   // MARK: - Functions
 
+  public func adapt() {
+    self.collectionView.collectionViewLayout = self.layout(configuration: self.configuration)
+    self.collectionView.invalidateIntrinsicContentSize()
+  }
+
   public typealias ElementKind = String
   public typealias DecorationItemClass = AnyClass
-  public func build(
-    scrollDirection: UICollectionView.ScrollDirection,
-    sectionSpacing: CGFloat? = nil,
-    header: FavorCompositionalLayout.BoundaryItem? = nil,
-    footer: FavorCompositionalLayout.BoundaryItem? = nil,
-    background: [ElementKind: DecorationItemClass]? = nil
-  ) -> UICollectionViewCompositionalLayout {
+  public func layout(configuration: Configuration) -> UICollectionViewCompositionalLayout {
     let layoutConfiguration = UICollectionViewCompositionalLayoutConfiguration()
-    layoutConfiguration.scrollDirection = scrollDirection
-    layoutConfiguration.interSectionSpacing = sectionSpacing ?? .zero
-    if let header {
+    layoutConfiguration.scrollDirection = configuration.scrollDirection
+    layoutConfiguration.interSectionSpacing = configuration.sectionSpacing
+    if let header = configuration.header {
       layoutConfiguration.boundarySupplementaryItems.append(header.make())
     }
-    if let footer {
+    if let footer = configuration.footer {
       layoutConfiguration.boundarySupplementaryItems.append(footer.make())
     }
 
     let layout = UICollectionViewCompositionalLayout(
       sectionProvider: { sectionIndex, _ in
-        let sectionType = self.dataSource[sectionIndex]
+        guard let sectionType = self.dataSource.sectionIdentifier(for: sectionIndex) else { fatalError() }
 
         // Item
         let item = sectionType.item.make()
@@ -60,7 +87,7 @@ open class Adapter<Section> where Section: SectionModelType, Section: Adaptive {
       configuration: layoutConfiguration
     )
 
-    if let background = background?.first {
+    if let background = configuration.background?.first {
       layout.register(background.value, forDecorationViewOfKind: background.key)
     }
 

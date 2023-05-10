@@ -10,7 +10,6 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
-import RxDataSources
 import RxGesture
 import SnapKit
 
@@ -58,8 +57,17 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.sections }
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
+    reactor.state.map { (sections: $0.sections, items: $0.items) }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, sectionData in
+        var snapshot: NSDiffableDataSourceSnapshot<ProfileSection, ProfileSectionItem> = .init()
+        snapshot.appendSections(sectionData.sections)
+        sectionData.items.enumerated().forEach { idx, items in
+          snapshot.appendItems(items, toSection: sectionData.sections[idx])
+        }
+        owner.dataSource.apply(snapshot, animatingDifferences: false)
+        owner.collectionView.collectionViewLayout.invalidateLayout()
+      })
       .disposed(by: self.disposeBag)
   }
   
@@ -82,7 +90,19 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.userName }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, name in
+        owner.profileView.rx.name.onNext(name)
+      })
+      .disposed(by: self.disposeBag)
 
+    reactor.state.map { $0.userID }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, id in
+        owner.profileView.rx.id.onNext(id)
+      })
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
@@ -92,15 +112,22 @@ final class MyPageViewController: BaseProfileViewController, View {
 
     let rightBarItems = [self.settingButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
     self.navigationItem.setRightBarButtonItems(rightBarItems, animated: false)
-    self.navigationController?.hidesBarsOnSwipe = true
   }
 
-  // MARK: - UI Setups
+  override func injectReactor(to view: UICollectionReusableView) {
+    guard
+      let view = view as? ProfileGiftStatsCollectionHeader,
+      let reactor = self.reactor
+    else { return }
+    view.reactor = ProfileGiftStatsCollectionHeaderReactor(
+      gift: reactor.currentState.user.giftList.toArray()
+    )
+  }
 
-}
+  override func headerRightButtonDidTap(at section: ProfileSection) {
+    guard let reactor = self.reactor else { return }
 
-// MARK: - Privates
-
-private extension MyPageViewController {
+    reactor.action.onNext(.headerRightButtonDidTap(section))
+  }
 
 }

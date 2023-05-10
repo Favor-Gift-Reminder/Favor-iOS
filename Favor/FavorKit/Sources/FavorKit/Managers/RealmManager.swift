@@ -12,7 +12,7 @@ import RealmSwift
 protocol RealmCRUDable {
   func create<T: Object>(_ object: T) async throws -> T
   func read<T: Object>(_ objectType: T.Type) async throws -> Results<T>
-  func update<T: Object>(_ object: T) async throws -> T
+  func update<T: Object>(_ object: T, update: Realm.UpdatePolicy) async throws -> T
   func delete<T: Object>(_ object: T) async throws -> T
 }
 
@@ -26,7 +26,7 @@ public final class RealmManager: RealmCRUDable {
   /// 로컬 DB의 버전
   ///
   /// [~ Version History ~](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  private static let version: UInt64 = 5
+  private static let version: UInt64 = 7
 
   /// RealmManager에서 사용될 realm 인스턴스
   private var realm: Realm!
@@ -52,6 +52,19 @@ public final class RealmManager: RealmCRUDable {
             migration.enumerateObjects(ofType: User.className(), { oldObject, newObject in
               let favorList = oldObject!["favorList"] as! [Int]
               newObject!["favorList"] = favorList
+            })
+          }
+          if oldVersion < 6 {
+            migration.enumerateObjects(ofType: User.className(), { _, newObject in
+              newObject!["anniversaryList"] = List<Anniversary>()
+            })
+          }
+          if oldVersion < 7 {
+            migration.enumerateObjects(ofType: Gift.className(), { oldObject, newObject in
+              let giftCategory = oldObject!["category"]
+              let giftEmotion = oldObject!["emotion"]
+              newObject!["category"] = giftCategory
+              newObject!["emotion"] = giftEmotion
             })
           }
         }
@@ -194,13 +207,13 @@ public final class RealmManager: RealmCRUDable {
   ///   - object: 업데이트할 `RealmObject` 인스턴스
   /// - Returns: ***@Discardable*** 업데이트한 `RealmObject` 인스턴스
   @discardableResult
-  public func update<T: Object>(_ object: T) async throws -> T {
+  public func update<T: Object>(_ object: T, update: Realm.UpdatePolicy = .modified) async throws -> T {
     typealias RealmContinuation = CheckedContinuation<T, Error>
     return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
       self.realmQueue.async {
         do {
           try self.realm.write {
-            self.realm.add(object, update: .modified)
+            self.realm.add(object, update: update)
           }
           continuation.resume(returning: object.freeze())
         } catch {

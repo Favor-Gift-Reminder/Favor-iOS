@@ -25,6 +25,8 @@ public class User: Object {
   @Persisted public var giftList: List<Gift>
   /// 리마인더 목록
   @Persisted public var reminderList: List<Reminder>
+  /// 기념일 목록
+  @Persisted public var anniversaryList: List<Anniversary>
   /// 회원 친구 목록
   @Persisted public var friendList: List<Friend>
   /// 회원 사진
@@ -52,7 +54,10 @@ public class User: Object {
     email: String,
     userID: String,
     name: String,
-    favorList: [String], // enum화?
+    favorList: [String] = [], // enum화?
+    giftList: [Gift] = [],
+    anniversaryList: [Anniversary] = [],
+    friendList: [Friend] = [],
     userPhoto: Photo? = nil,
     backgroundPhoto: Photo? = nil
   ) {
@@ -62,6 +67,15 @@ public class User: Object {
     self.userID = userID
     self.name = name
     self.favorList.insert(objectsIn: favorList)
+    let newGiftList = List<Gift>()
+    newGiftList.append(objectsIn: giftList)
+    self.giftList = newGiftList
+    let newAnniversaryList = List<Anniversary>()
+    newAnniversaryList.append(objectsIn: anniversaryList)
+    self.anniversaryList = newAnniversaryList
+    let newFriendList = List<Friend>()
+    newFriendList.append(objectsIn: friendList)
+    self.friendList = newFriendList
     self.userPhoto = userPhoto
     self.backgroundPhoto = backgroundPhoto
   }

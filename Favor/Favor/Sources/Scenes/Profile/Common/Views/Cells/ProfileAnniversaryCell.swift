@@ -22,7 +22,11 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
   private lazy var iconImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .center
-    imageView.image = .favorIcon(.congrat)
+    imageView.image = .favorIcon(.congrat)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 36)
+      .withTintColor(.favorColor(.icon))
+    imageView.contentMode = .center
     return imageView
   }()
   
@@ -71,11 +75,17 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FavorAnniversaryCellReactor) {
+  func bind(reactor: ProfileAnniversaryCellReactor) {
     // Action
     
     // State
-    
+    reactor.state.map { $0.anniversary }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, anniversary in
+        owner.titleLabel.text = anniversary.title
+        owner.dateLabel.text = anniversary.date.toShortenDateString()
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 
@@ -83,7 +93,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
 
 extension ProfileAnniversaryCell: BaseView {
   func setupStyles() {
-    self.backgroundColor = .favorColor(.divider)
+    self.backgroundColor = .favorColor(.card)
     self.layer.cornerRadius = 24
     self.clipsToBounds = true
   }
@@ -99,12 +109,12 @@ extension ProfileAnniversaryCell: BaseView {
   
   func setupConstraints() {
     self.iconImageView.snp.makeConstraints { make in
-      make.height.width.equalTo(40)
-      make.leading.equalToSuperview().inset(32)
+      make.height.width.equalTo(48)
+      make.leading.equalToSuperview().inset(24)
       make.centerY.equalToSuperview()
     }
     self.vStack.snp.makeConstraints { make in
-      make.leading.equalTo(self.iconImageView.snp.trailing).offset(20)
+      make.leading.equalTo(self.iconImageView.snp.trailing).offset(16)
       make.centerY.equalToSuperview()
     }
   }

@@ -8,7 +8,6 @@
 import UIKit
 
 import FavorKit
-import RxDataSources
 
 enum ProfileElementKind {
   static let collectionHeader = "Profile.CollectionHeader"
@@ -16,57 +15,65 @@ enum ProfileElementKind {
   static let sectionWhiteBackground = "Profile.SectionWhiteBackground"
 }
 
-enum ProfileSectionItem {
-  case profileSetupHelper(FavorSetupProfileCellReactor)
-  case preferences(FavorPrefersCellReactor)
-  case anniversaries(FavorAnniversaryCellReactor)
+enum ProfileSectionItem: SectionModelItem {
+  case profileSetupHelper(ProfileSetupHelperCellReactor)
+  case favors(ProfileFavorCellReactor)
+  case anniversaries(ProfileAnniversaryCellReactor)
   case memo
   case friends(ProfileFriendCellReactor)
 }
 
-enum ProfileSection {
-  case profileSetupHelper([ProfileSectionItem])
-  case preferences([ProfileSectionItem])
-  case anniversaries([ProfileSectionItem])
-  case memo([ProfileSectionItem])
-  case friends([ProfileSectionItem])
+enum ProfileSection: SectionModelType {
+  case profileSetupHelper
+  case favors
+  case anniversaries
+  case memo
+  case friends
 }
 
-extension ProfileSection: SectionModelType {
-  public var items: [ProfileSectionItem] {
-    switch self {
-    case .profileSetupHelper(let items):
-      return items
-    case .preferences(let items):
-      return items
-    case .anniversaries(let items):
-      return items
-    case .memo(let items):
-      return items
-    case .friends(let items):
-      return items
-    }
-  }
-  
-  public init(original: ProfileSection, items: [ProfileSectionItem]) {
-    switch original {
-    case .profileSetupHelper:
-      self = .profileSetupHelper(items)
-    case .preferences:
-      self = .preferences(items)
-    case .anniversaries:
-      self = .anniversaries(items)
-    case .memo:
-      self = .memo(items)
-    case .friends:
-      self = .friends(items)
+extension ProfileSectionItem: Equatable, Hashable {
+  static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
+    switch (lhs, rhs) {
+    case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
+      return lhsValue === rhsValue
+    case let (.favors(lhsValue), .favors(rhsValue)):
+      return lhsValue === rhsValue
+    case let (.anniversaries(lhsValue), .anniversaries(rhsValue)):
+      return lhsValue === rhsValue
+    case (.memo, .memo):
+      return true
+    case let (.friends(lhsValue), .friends(rhsValue)):
+      return lhsValue === rhsValue
+    default:
+      return false
     }
   }
 
+  func hash(into hasher: inout Hasher) {
+    switch self {
+    case let .profileSetupHelper(reactor):
+      hasher.combine("profileSetupHelper")
+      hasher.combine(ObjectIdentifier(reactor))
+    case let .favors(reactor):
+      hasher.combine("favors")
+      hasher.combine(ObjectIdentifier(reactor))
+    case let .anniversaries(reactor):
+      hasher.combine("anniversaries")
+      hasher.combine(ObjectIdentifier(reactor))
+    case .memo:
+      hasher.combine("memo")
+    case let .friends(reactor):
+      hasher.combine("friends")
+      hasher.combine(ObjectIdentifier(reactor))
+    }
+  }
+}
+
+extension ProfileSection {
   var headerTitle: String? {
     switch self {
     case .profileSetupHelper: return "새 프로필"
-    case .preferences: return "취향"
+    case .favors: return "취향"
     case .anniversaries: return "기념일"
     case .memo: return "메모"
     case .friends: return "친구"
@@ -92,7 +99,7 @@ extension ProfileSection: Adaptive {
         width: .absolute(250),
         height: .absolute(250)
       )
-    case .preferences:
+    case .favors:
       return .grid(
         width: .estimated(50),
         height: .absolute(32)
@@ -116,18 +123,24 @@ extension ProfileSection: Adaptive {
   public var group: FavorCompositionalLayout.Group {
     switch self {
     case .profileSetupHelper:
-      return .contents(
+      return .custom(
         width: .estimated(250),
         height: .estimated(250),
         direction: .horizontal,
         numberOfItems: 2,
         spacing: .fixed(8)
       )
-    case .preferences:
-      return .flow(
-        height: .estimated(32),
+    case .favors:
+      let innerGroup: FavorCompositionalLayout.Group = .flow(
+        height: .absolute(32),
         numberOfItems: 3,
         spacing: .fixed(10)
+      )
+      return .list(
+        height: .estimated(32),
+        numberOfItems: 2,
+        spacing: .fixed(10),
+        innerGroup: innerGroup
       )
     case .anniversaries:
       return .list(
@@ -164,10 +177,9 @@ extension ProfileSection: Adaptive {
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )
-    case .preferences:
+    case .favors:
       return .base(
         contentInsets: defaultInsets,
-        orthogonalScrolling: .continuous,
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )

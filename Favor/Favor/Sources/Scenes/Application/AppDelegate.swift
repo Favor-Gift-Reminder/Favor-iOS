@@ -19,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     FavorKit.registerFonts()
 
     RealmManager.shared.locateRealm()
+
+    print("Current User: \(UserInfoStorage.userNo)")
     
 		return true
 	}

@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
+class ProfileFavorCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   
@@ -20,7 +20,7 @@ class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - UI Components
   
-  private lazy var button = FavorSmallButton(with: .darkWithHashTag("취향"))
+  private let button = FavorSmallButton(with: .darkWithHashTag("취향"))
   
   // MARK: - Initializer
   
@@ -37,17 +37,25 @@ class ProfilePreferenceCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FavorPrefersCellReactor) {
+  func bind(reactor: ProfileFavorCellReactor) {
     // Action
     
     // State
-    
+    reactor.state.map { $0.favor }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, favor in
+        owner.button.configuration?.updateAttributedTitle(
+          favor.rawValue,
+          font: .favorFont(.bold, size: 14)
+        )
+      })
+      .disposed(by: self.disposeBag)
   }
 }
 
 // MARK: - Setup
 
-extension ProfilePreferenceCell: BaseView {
+extension ProfileFavorCell: BaseView {
   func setupStyles() {
     //
   }

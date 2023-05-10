@@ -12,4 +12,7 @@ enum UserDefaultsKey: String {
   case isFirstLaunch
   case isSignedIn
 
+  // MARK: - User Info
+
+  case userNo
 }
