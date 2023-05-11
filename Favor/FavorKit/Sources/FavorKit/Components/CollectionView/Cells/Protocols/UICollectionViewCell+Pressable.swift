@@ -33,7 +33,7 @@ extension Pressable {
         (1.0, self.idleBackgroundColor)
       }()
 
-      UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
+      UIViewPropertyAnimator(duration: 0.15, curve: .easeInOut) {
         owner.containerView.transform = CGAffineTransform(scaleX: scale, y: scale)
         owner.backgroundColor = backgroundColor
       }.startAnimation()

@@ -19,20 +19,20 @@ public protocol Tappable: GestureInteractable {
 
 extension Tappable {
   public func setupTapRecognizer() {
-    self.rx.tapGesture()
-      .subscribe(with: self, onNext: { owner, event in
-        let tapGestures: [UIGestureRecognizer.State] = [.recognized]
+    self.rx.longPressGesture(configuration: { recognizer, _ in
+      recognizer.minimumPressDuration = 0.0
+    })
+    .subscribe(with: self, onNext: { owner, event in
+      let tapGestures: [UIGestureRecognizer.State] = [.began]
 
-        let backgroundColor: UIColor = {
-          tapGestures.contains(event.state) ?
-          self.pressedBackgroundColor :
-          self.idleBackgroundColor
-        }()
+      let backgroundColor: UIColor = {
+        tapGestures.contains(event.state) ? self.pressedBackgroundColor : self.idleBackgroundColor
+      }()
 
-        UIViewPropertyAnimator(duration: 0.1, curve: .easeInOut) {
-          owner.backgroundColor = backgroundColor
-        }.startAnimation()
-      })
-      .disposed(by: self.disposeBag)
+      UIViewPropertyAnimator(duration: 0.02, curve: .easeInOut) {
+        owner.backgroundColor = backgroundColor
+      }.startAnimation()
+    })
+    .disposed(by: self.disposeBag)
   }
 }
