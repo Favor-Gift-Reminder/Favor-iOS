@@ -170,8 +170,8 @@ private extension NewGiftFriendViewReactor {
       return await friends.toArray()
     }
     // onLocalUpdate
-    self.friendFetcher.onLocalUpdate = { friends in
-      try await RealmManager.shared.updateAll(friends)
+    self.friendFetcher.onLocalUpdate = { _, remoteFriends in
+      try await RealmManager.shared.updateAll(remoteFriends)
     }
   }
 }

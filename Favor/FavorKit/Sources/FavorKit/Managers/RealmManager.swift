@@ -235,16 +235,16 @@ public final class RealmManager: RealmCRUDable {
   ///
   /// - Parameters:
   ///   - objects: 업데이트할 `RealmObject` 인스턴스들의 컬렉션
-  ///   - errorHandler: RealmDB에 주어진 인스턴스들을 업데이트하지 못했을 때 호출되는 `@escaping` 클로저
+  ///   - update: RealmDB에 이미 값이 있을 때 업데이트 하는 방식
   /// - Returns: ***@Discardable*** 업데이트된 `RealmObject` 인스턴스들의 컬렉션
   @discardableResult
-  public func updateAll<T: Object>(_ objects: [T]) async throws -> [T] {
+  public func updateAll<T: Object>(_ objects: [T], update: Realm.UpdatePolicy = .all) async throws -> [T] {
     typealias RealmContinuation = CheckedContinuation<[T], Error>
     return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
       self.realmQueue.async {
         do {
           try self.realm.write {
-            self.realm.add(objects, update: .all)
+            self.realm.add(objects, update: update)
           }
           let frozenObjects = objects.map { $0.freeze() }
           continuation.resume(returning: frozenObjects)

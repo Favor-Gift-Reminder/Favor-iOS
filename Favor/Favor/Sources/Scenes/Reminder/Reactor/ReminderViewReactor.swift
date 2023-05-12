@@ -162,9 +162,9 @@ private extension ReminderViewReactor {
       return await reminders.toArray()
     }
     // onLocalUpdate
-    self.reminderFetcher.onLocalUpdate = { reminders in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(reminders)")
-      try await RealmManager.shared.updateAll(reminders)
+    self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
+      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(remoteReminders)")
+      try await RealmManager.shared.updateAll(remoteReminders)
     }
   }
 }

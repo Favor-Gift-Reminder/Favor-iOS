@@ -212,8 +212,8 @@ private extension MyPageViewReactor {
       return await user.toValue()
     }
     // onLocalUpdate
-    self.userFetcher.onLocalUpdate = { user in
-      try await RealmManager.shared.update(user, update: .all)
+    self.userFetcher.onLocalUpdate = { _, remoteUser in
+      try await RealmManager.shared.update(remoteUser, update: .all)
     }
   }
 }
