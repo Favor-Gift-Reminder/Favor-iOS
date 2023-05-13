@@ -22,7 +22,7 @@ final class EditMyPageViewController: BaseViewController, View {
   }
 
   // MARK: - Properties
-
+  
   private lazy var dataSource: EditMyPageDataSource = {
     let dataSource = EditMyPageDataSource(
       collectionView: self.collectionView,
@@ -74,7 +74,7 @@ final class EditMyPageViewController: BaseViewController, View {
     }
     return dataSource
   }()
-
+  
   private lazy var adapter: Adapter<EditMyPageSection, EditMyPageSectionItem> = {
     let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
     adapter.configuration = Adapter.Configuration(
@@ -95,7 +95,7 @@ final class EditMyPageViewController: BaseViewController, View {
   }()
 
   // MARK: - UI Components
-
+  
   private let cancelButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.updateAttributedTitle("취소", font: .favorFont(.bold, size: 18))
@@ -121,7 +121,7 @@ final class EditMyPageViewController: BaseViewController, View {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-
+    
     // Register
     collectionView.register(cellType: FavorTextFieldCell.self)
     collectionView.register(cellType: EditMyPageFavorCell.self)
@@ -162,16 +162,16 @@ final class EditMyPageViewController: BaseViewController, View {
 
   override func bind() {
     guard let reactor = self.reactor else { return }
-
+    
     // Action
     self.collectionView.rx.itemSelected
       .map { Reactor.Action.favorDidSelected($0.item) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
         snapshot.appendSections(sectionData.sections)

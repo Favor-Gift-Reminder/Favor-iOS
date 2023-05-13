@@ -23,7 +23,7 @@ final class NewGiftFriendCell: BaseFriendCell, View, Reusable {
   
   private let rightImageView: UIImageView = {
     let iv = UIImageView()
-    iv.image = .favorIcon(.newGift)?.withTintColor(.favorColor(.line3))
+    iv.image = .favorIcon(.newGift)?.withTintColor(.favorColor(.divider))
     return iv
   }()
   
@@ -34,11 +34,11 @@ final class NewGiftFriendCell: BaseFriendCell, View, Reusable {
       let image: UIImage?
       switch currentButtonType {
       case .add:
-        image = .favorIcon(.newGift)?.withTintColor(.favorColor(.line3))
+        image = .favorIcon(.newGift)?.withTintColor(.favorColor(.divider))
       case .remove:
-        image = .favorIcon(.remove)?.withTintColor(.favorColor(.line3))
+        image = .favorIcon(.remove)?.withTintColor(.favorColor(.divider))
       case .done:
-        image = .favorIcon(.done)?.withTintColor(.favorColor(.line3))
+        image = .favorIcon(.done)?.withTintColor(.favorColor(.divider))
       }
       self.rightImageView.image = image
     }

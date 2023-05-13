@@ -10,17 +10,11 @@ import UIKit
 import FavorKit
 import ReactorKit
 
-final class NewGiftFriendCellReactor: Reactor, Hashable {
-  static func == (
-    lhs: NewGiftFriendCellReactor,
-    rhs: NewGiftFriendCellReactor
-  ) -> Bool {
-    return lhs.currentState == rhs.currentState
-  }
+final class NewGiftFriendCellReactor: Reactor {
   
   typealias Action = NoAction
   
-  struct State: Hashable {
+  struct State {
     var rightButtonState: NewGiftFriendCell.RightButtonType = .add
     var friend: Friend
   }
