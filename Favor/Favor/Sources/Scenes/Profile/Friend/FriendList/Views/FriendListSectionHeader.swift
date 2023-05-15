@@ -1,5 +1,5 @@
 //
-//  FriendSectionHeader.swift
+//  FriendListSectionHeader.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/28.
@@ -11,7 +11,7 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class FriendSectionHeader: BaseSectionHeader, Reusable {
+final class FriendListSectionHeader: BaseSectionHeader, Reusable {
 
   // MARK: - UI Components
 

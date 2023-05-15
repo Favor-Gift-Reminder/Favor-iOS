@@ -1,5 +1,5 @@
 //
-//  FriendViewReactor.swift
+//  FriendListViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/25.
@@ -13,7 +13,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class FriendViewReactor: BaseFriendReactor, Reactor, Stepper {
+final class FriendListViewReactor: BaseFriendReactor, Reactor, Stepper {
 
   // MARK: - Properties
 
@@ -94,7 +94,7 @@ final class FriendViewReactor: BaseFriendReactor, Reactor, Stepper {
 
 // MARK: - Privates
 
-private extension FriendViewReactor {
+private extension FriendListViewReactor {
   func fetchFriendList(with query: String) -> Single<[Friend]> {
     return Single<[Friend]>.create { single in
       let task = Task {

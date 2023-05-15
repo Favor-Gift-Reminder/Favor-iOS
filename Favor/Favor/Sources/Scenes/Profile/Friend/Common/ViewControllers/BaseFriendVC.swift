@@ -30,7 +30,7 @@ public class BaseFriendViewController: BaseViewController {
         switch item {
         case .friend(let friend):
           guard let viewType = self.viewType else {
-            fatalError("View Type for FriendViewController is required.")
+            fatalError("View Type for FriendListViewController is required.")
           }
           switch viewType {
           case .list:
@@ -57,7 +57,7 @@ public class BaseFriendViewController: BaseViewController {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as FriendSectionHeader
+        ) as FriendListSectionHeader
         return header
       default:
         return UICollectionReusableView()
@@ -83,7 +83,7 @@ public class BaseFriendViewController: BaseViewController {
     collectionView.register(cellType: FriendCell.self)
     collectionView.register(cellType: EditFriendCell.self)
     collectionView.register(
-      supplementaryViewType: FriendSectionHeader.self,
+      supplementaryViewType: FriendListSectionHeader.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
     collectionView.register(

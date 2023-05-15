@@ -37,11 +37,8 @@ final class MyPageFlow: Flow {
     case .settingIsRequired:
       return self.navigateToSetting()
 
-    case .friendIsRequired:
+    case .friendListIsRequired:
       return self.navigateToFriend()
-
-    case .editFriendIsRequired:
-      return self.navigateToEditFriend()
 
     default:
       return .none
@@ -84,37 +81,11 @@ final class MyPageFlow: Flow {
   }
 
   private func navigateToFriend() -> FlowContributors {
-    let friendVC = FriendViewController()
-    let friendReactor = FriendViewReactor()
-    friendVC.reactor = friendReactor
-    friendVC.title = "내 친구"
-    friendVC.viewType = .list
-
-    DispatchQueue.main.async {
-      self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.pushViewController(friendVC, animated: true)
-    }
+    let friendListFlow = FriendListFlow(rootViewController: self.rootViewController)
 
     return .one(flowContributor: .contribute(
-      withNextPresentable: friendVC,
-      withNextStepper: friendReactor
-    ))
-  }
-
-  private func navigateToEditFriend() -> FlowContributors {
-    let editFriendVC = EditFriendViewController()
-    let editFriendReactor = EditFriendViewReactor()
-    editFriendVC.reactor = editFriendReactor
-    editFriendVC.title = "삭제하기"
-    editFriendVC.viewType = .edit
-
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(editFriendVC, animated: true)
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: editFriendVC,
-      withNextStepper: editFriendReactor
+      withNextPresentable: friendListFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.friendListIsRequired)
     ))
   }
 }

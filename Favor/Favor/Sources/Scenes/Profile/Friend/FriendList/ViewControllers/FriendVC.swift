@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import SnapKit
 
-final class FriendViewController: BaseFriendViewController, View {
+final class FriendListViewController: BaseFriendViewController, View {
 
   // MARK: - Constants
 
@@ -51,7 +51,7 @@ final class FriendViewController: BaseFriendViewController, View {
 
   // MARK: - Binding
 
-  func bind(reactor: FriendViewReactor) {
+  func bind(reactor: FriendListViewReactor) {
     // Action
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
       .map { _ in Reactor.Action.viewNeedsLoaded }
@@ -93,7 +93,7 @@ final class FriendViewController: BaseFriendViewController, View {
         if let headerView = owner.collectionView.supplementaryView(
           forElementKind: UICollectionView.elementKindSectionHeader,
           at: IndexPath(item: 0, section: 0)
-        ) as? FriendSectionHeader {
+        ) as? FriendListSectionHeader {
           let numberOfFriends = friendItems.count
           headerView.bind(title: "전체", numberOfFriends: numberOfFriends)
         }
