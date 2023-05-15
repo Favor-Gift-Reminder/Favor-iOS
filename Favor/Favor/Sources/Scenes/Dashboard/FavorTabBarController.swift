@@ -16,7 +16,7 @@ final class FavorTabBarController: UITabBarController, Stepper {
   // MARK: - Properties
 
   var steps = PublishRelay<Step>()
-
+  
   // MARK: - Life Cycle
 
   public override func viewDidLoad() {
