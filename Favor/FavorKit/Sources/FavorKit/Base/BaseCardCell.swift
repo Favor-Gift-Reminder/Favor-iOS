@@ -19,11 +19,11 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
     /// 이미지가 친구의 프로필 사진인 셀
     case friend
     /// 이미지가 이벤트 아이콘인 셀
-    case event
+    case anniversary
 
     var inset: UIEdgeInsets {
       switch self {
-      case .event:
+      case .anniversary:
         return UIEdgeInsets(top: -6, left: -6, bottom: -6, right: -6)
       default:
         return .zero
@@ -169,7 +169,7 @@ private extension BaseCardCell {
     case .friend:
       self.profileDefaultImageView.isHidden = false
       self.imageView.layer.cornerRadius = Metric.iconImageSize / 2
-    case .event:
+    case .anniversary:
       self.profileDefaultImageView.isHidden = true
       self.imageView.layer.cornerRadius = 0
     }
