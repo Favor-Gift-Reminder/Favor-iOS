@@ -428,18 +428,10 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		2E3FA75229F7C4D1003342CA /* Friend */ = {
-			isa = PBXGroup;
-			children = (
-				2E3FA75A29F80B63003342CA /* FriendSection.swift */,
-				2E87B8CE2A0BC8CF00570386 /* Common */,
-			);
-			path = Friend;
-			sourceTree = "<group>";
-		};
 		2E3FA75329F7C50F003342CA /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2E87B8D22A0BC8FF00570386 /* BaseFriendVC.swift */,
 				2E3FA75629F7C52D003342CA /* FriendVC.swift */,
 				2E87B8D72A0BCCD400570386 /* EditFriendVC.swift */,
 			);
@@ -449,6 +441,7 @@
 		2E3FA75429F7C515003342CA /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
+				2E87B8E12A0CA06900570386 /* BaseFriendReactor.swift */,
 				2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */,
 				2E87B8D92A0BCE3200570386 /* EditFriendViewReactor.swift */,
 			);
@@ -567,52 +560,12 @@
 		2E87B8CD2A0BC88200570386 /* FriendList */ = {
 			isa = PBXGroup;
 			children = (
+				2E3FA75A29F80B63003342CA /* FriendSection.swift */,
 				2E3FA75429F7C515003342CA /* Reactors */,
 				2E3FA75529F7C522003342CA /* Views */,
 				2E3FA75329F7C50F003342CA /* ViewControllers */,
 			);
 			path = FriendList;
-			sourceTree = "<group>";
-		};
-		2E87B8CE2A0BC8CF00570386 /* Common */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8D12A0BC8E200570386 /* Reactors */,
-				2E87B8D02A0BC8DC00570386 /* Views */,
-				2E87B8CF2A0BC8D600570386 /* ViewControllers */,
-			);
-			path = Common;
-			sourceTree = "<group>";
-		};
-		2E87B8CF2A0BC8D600570386 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8D22A0BC8FF00570386 /* BaseFriendVC.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		2E87B8D02A0BC8DC00570386 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8DB2A0BD9FA00570386 /* Cells */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		2E87B8D12A0BC8E200570386 /* Reactors */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8E12A0CA06900570386 /* BaseFriendReactor.swift */,
-			);
-			path = Reactors;
-			sourceTree = "<group>";
-		};
-		2E87B8DB2A0BD9FA00570386 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Cells;
 			sourceTree = "<group>";
 		};
 		2E95E4B429E8F04500A46C38 /* CellReactors */ = {
@@ -898,7 +851,6 @@
 				2EBCC8FB29EDB95C008044DC /* Common */,
 				2EBCC8FA29EDB8C9008044DC /* MyPage */,
 				2E3FA74429F66B0C003342CA /* EditMyPage */,
-				2E3FA75229F7C4D1003342CA /* Friend */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
