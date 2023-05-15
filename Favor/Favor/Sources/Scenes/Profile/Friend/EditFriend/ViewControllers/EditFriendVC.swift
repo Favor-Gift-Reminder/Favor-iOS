@@ -19,14 +19,6 @@ final class EditFriendViewController: BaseFriendViewController, View {
 
   // MARK: - UI Components
 
-  private let doneButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.updateAttributedTitle("완료", font: .favorFont(.bold, size: 18))
-
-    let button = UIButton(configuration: config)
-    return button
-  }()
-
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -35,23 +27,12 @@ final class EditFriendViewController: BaseFriendViewController, View {
     self.adapter.adapt()
   }
 
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-
-    self.setupNavigationBar()
-  }
-
   // MARK: - Binding
 
   func bind(reactor: EditFriendViewReactor) {
     // Action
     self.rx.viewDidLoad
       .map { Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.doneButton.rx.tap
-      .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -93,9 +74,5 @@ final class EditFriendViewController: BaseFriendViewController, View {
       make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
-  }
-
-  private func setupNavigationBar() {
-    self.navigationItem.setRightBarButton(self.doneButton.toBarButtonItem(), animated: false)
   }
 }

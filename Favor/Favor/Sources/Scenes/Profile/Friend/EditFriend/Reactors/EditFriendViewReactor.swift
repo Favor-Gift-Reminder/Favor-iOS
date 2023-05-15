@@ -21,7 +21,6 @@ final class EditFriendViewReactor: BaseFriendReactor, Reactor, Stepper {
 
   enum Action {
     case viewNeedsLoaded
-    case doneButtonDidTap
     case deleteButtonDidTap(Friend)
   }
 
@@ -54,9 +53,6 @@ final class EditFriendViewReactor: BaseFriendReactor, Reactor, Stepper {
           }
           return .just(.updateFriendItems(friendItems))
         }
-
-    case .doneButtonDidTap:
-      return .empty()
 
     case .deleteButtonDidTap(let friend):
       return self.friendNetworking.request(.deleteFriend(friendNo: friend.friendNo))

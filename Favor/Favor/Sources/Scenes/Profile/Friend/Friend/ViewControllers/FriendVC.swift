@@ -22,7 +22,7 @@ final class FriendViewController: BaseFriendViewController, View {
   private let editButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
-    config.updateAttributedTitle("편집", font: .favorFont(.bold, size: 18))
+    config.updateAttributedTitle("삭제", font: .favorFont(.bold, size: 18))
 
     let button = UIButton(configuration: config)
     return button

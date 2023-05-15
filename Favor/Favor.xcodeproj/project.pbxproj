@@ -429,6 +429,7 @@
 		2E3FA75229F7C4D1003342CA /* Friend */ = {
 			isa = PBXGroup;
 			children = (
+				2E3FA75A29F80B63003342CA /* FriendSection.swift */,
 				2E87B8CE2A0BC8CF00570386 /* Common */,
 				2E87B8CD2A0BC88200570386 /* Friend */,
 				2E87B8CC2A0BC86900570386 /* EditFriend */,
@@ -572,7 +573,6 @@
 		2E87B8CD2A0BC88200570386 /* Friend */ = {
 			isa = PBXGroup;
 			children = (
-				2E3FA75A29F80B63003342CA /* FriendSection.swift */,
 				2E3FA75429F7C515003342CA /* Reactors */,
 				2E3FA75529F7C522003342CA /* Views */,
 				2E3FA75329F7C50F003342CA /* ViewControllers */,

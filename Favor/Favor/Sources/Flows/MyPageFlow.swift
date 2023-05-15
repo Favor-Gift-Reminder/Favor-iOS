@@ -105,7 +105,7 @@ final class MyPageFlow: Flow {
     let editFriendVC = EditFriendViewController()
     let editFriendReactor = EditFriendViewReactor()
     editFriendVC.reactor = editFriendReactor
-    editFriendVC.title = "편집하기"
+    editFriendVC.title = "삭제하기"
     editFriendVC.viewType = .edit
 
     DispatchQueue.main.async {

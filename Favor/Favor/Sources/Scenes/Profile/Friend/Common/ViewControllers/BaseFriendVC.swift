@@ -59,12 +59,6 @@ public class BaseFriendViewController: BaseViewController {
           for: indexPath
         ) as FriendSectionHeader
         return header
-      case EditFriendCollectionHeaderView.reuseIdentifier:
-        let header = collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          for: indexPath
-        ) as EditFriendCollectionHeaderView
-        return header
       default:
         return UICollectionReusableView()
       }
@@ -73,18 +67,7 @@ public class BaseFriendViewController: BaseViewController {
   }()
   public lazy var adapter: Adapter<FriendSection, FriendSectionItem> = {
     let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    var header: FavorCompositionalLayout.BoundaryItem? = {
-      self.viewType == .edit ?
-      .header(
-        height: .absolute(81),
-        kind: EditFriendCollectionHeaderView.reuseIdentifier
-      ) :
-      nil
-    }()
-    adapter.configuration = Adapter.Configuration(
-      scrollDirection: .vertical,
-      header: header
-    )
+    adapter.configuration = Adapter.Configuration(scrollDirection: .vertical)
     return adapter
   }()
 
