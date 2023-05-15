@@ -433,8 +433,6 @@
 			children = (
 				2E3FA75A29F80B63003342CA /* FriendSection.swift */,
 				2E87B8CE2A0BC8CF00570386 /* Common */,
-				2E87B8CD2A0BC88200570386 /* FriendList */,
-				2E87B8CC2A0BC86900570386 /* EditFriend */,
 			);
 			path = Friend;
 			sourceTree = "<group>";
@@ -443,6 +441,7 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75629F7C52D003342CA /* FriendVC.swift */,
+				2E87B8D72A0BCCD400570386 /* EditFriendVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -451,6 +450,7 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */,
+				2E87B8D92A0BCE3200570386 /* EditFriendViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -460,6 +460,7 @@
 			children = (
 				2E3FA75C29F80D30003342CA /* Cells */,
 				2E32E7B529FB5DE600202E31 /* FriendListSectionHeader.swift */,
+				2E87B8E32A0CAA2000570386 /* EditFriendCollectionHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -468,6 +469,7 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75D29F80D3C003342CA /* FriendCell.swift */,
+				2E87B8DF2A0C881A00570386 /* EditFriendCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -562,16 +564,6 @@
 			path = Favor;
 			sourceTree = "<group>";
 		};
-		2E87B8CC2A0BC86900570386 /* EditFriend */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8D62A0BCCC500570386 /* Reactors */,
-				2E87B8D52A0BCCC000570386 /* Views */,
-				2E87B8D42A0BCCB900570386 /* ViewControllers */,
-			);
-			path = EditFriend;
-			sourceTree = "<group>";
-		};
 		2E87B8CD2A0BC88200570386 /* FriendList */ = {
 			isa = PBXGroup;
 			children = (
@@ -616,42 +608,9 @@
 			path = Reactors;
 			sourceTree = "<group>";
 		};
-		2E87B8D42A0BCCB900570386 /* ViewControllers */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8D72A0BCCD400570386 /* EditFriendVC.swift */,
-			);
-			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		2E87B8D52A0BCCC000570386 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8DE2A0C881000570386 /* Cells */,
-				2E87B8E32A0CAA2000570386 /* EditFriendCollectionHeaderView.swift */,
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		2E87B8D62A0BCCC500570386 /* Reactors */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8D92A0BCE3200570386 /* EditFriendViewReactor.swift */,
-			);
-			path = Reactors;
-			sourceTree = "<group>";
-		};
 		2E87B8DB2A0BD9FA00570386 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
-		2E87B8DE2A0C881000570386 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				2E87B8DF2A0C881A00570386 /* EditFriendCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -723,6 +682,7 @@
 				2EE07ED4296E8DFF00048A3C /* Gift */,
 				2EE07EB9296E8CC700048A3C /* Home */,
 				2EE07E9F296C5F1D00048A3C /* Search */,
+				2E87B8CD2A0BC88200570386 /* FriendList */,
 				2EE07EBD296E8D2300048A3C /* Profile */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				2EE07EAA296E7BC100048A3C /* Reminder */,
