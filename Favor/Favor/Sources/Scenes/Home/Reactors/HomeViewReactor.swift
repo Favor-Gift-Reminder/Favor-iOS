@@ -25,7 +25,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let reminderFetcher = Fetcher<[Reminder]>()
+  let reminderFetcher = Fetcher<Reminder>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -171,8 +171,7 @@ private extension HomeViewReactor {
     }
     // onLocal
     self.reminderFetcher.onLocal = {
-      let reminders = try await RealmManager.shared.read(Reminder.self)
-      return await reminders.toArray()
+      return try await RealmManager.shared.read(Reminder.self)
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { _, remoteReminders in

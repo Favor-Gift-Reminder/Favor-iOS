@@ -45,7 +45,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   
   var initialState: State = State()
   var steps = PublishRelay<Step>()
-  let friendFetcher = Fetcher<[Friend]>()
+  let friendFetcher = Fetcher<Friend>()
   
   // MARK: - Initializer
 
@@ -166,8 +166,7 @@ private extension NewGiftFriendViewReactor {
     }
     // onLocal
     self.friendFetcher.onLocal = {
-      let friends = try await RealmManager.shared.read(Friend.self)
-      return await friends.toArray()
+      return try await RealmManager.shared.read(Friend.self)
     }
     // onLocalUpdate
     self.friendFetcher.onLocalUpdate = { _, remoteFriends in
