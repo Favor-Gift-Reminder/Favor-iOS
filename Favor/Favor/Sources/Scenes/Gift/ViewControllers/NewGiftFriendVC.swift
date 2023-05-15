@@ -70,7 +70,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
   
   // MARK: - Properties
   
-  private lazy var dataSource = DataSource(
+  private lazy var dataSource: DataSource = DataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
       case .empty:
