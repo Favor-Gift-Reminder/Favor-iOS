@@ -24,13 +24,15 @@ final class ProfileFriendCellReactor: Reactor {
 
   struct State {
     var friend: Friend
+    var isNewFriendCell: Bool
   }
 
   // MARK: - Initializer
 
-  init(friend: Friend) {
+  init(friend: Friend, isNewFriendCell: Bool = false) {
     self.initialState = State(
-      friend: friend
+      friend: friend,
+      isNewFriendCell: isNewFriendCell
     )
   }
 

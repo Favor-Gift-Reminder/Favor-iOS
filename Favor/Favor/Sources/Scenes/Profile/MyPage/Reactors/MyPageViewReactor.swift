@@ -160,8 +160,14 @@ final class MyPageViewReactor: Reactor, Stepper {
         profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
       }
       // 친구
+      // 친구 맨 앞에 친구 추가
+      let newFriend = Friend()
+      newState.friendItems.insert(
+        .friends(ProfileFriendCellReactor(friend: newFriend, isNewFriendCell: true)),
+        at: .zero
+      )
       newSections.append(.friends)
-      newItems.append(state.friendItems)
+      newItems.append(newState.friendItems)
       // 새 프로필
       if !profileSetupHelperItems.isEmpty {
         newSections.insert(.profileSetupHelper, at: .zero)
