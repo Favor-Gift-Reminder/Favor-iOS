@@ -1,30 +1,30 @@
 //
-//  FavorFriendCell.swift
-//  
+//  BaseFriendCell.swift
+//  Favor
 //
 //  Created by 김응철 on 2023/04/14.
 //
 
 import UIKit
 
-import ReactorKit
-import RxCocoa
-import RxGesture
-import RxSwift
 import SnapKit
 
-open class BaseFriendCell: BaseCollectionViewCell, BaseView {
+open class BaseFriendCell: BaseCollectionViewCell {
+
+  // MARK: - Constants
   
-  public enum FriendCellType {
+  public enum ProfileImageType {
     case undefined
-    case user(UIImage?)
+    case friend(UIImage?)
   }
   
-  enum Constants {
-    static let imageViewSize: CGFloat = 48.0
+  private enum Metric {
+    static let profileImageViewSize: CGFloat = 48.0
   }
   
   // MARK: - Properties
+
+  public var friendNo: Int?
   
   public var friendName: String = "" {
     didSet {
@@ -32,99 +32,112 @@ open class BaseFriendCell: BaseCollectionViewCell, BaseView {
     }
   }
   
-  public var userImage: FriendCellType = .undefined {
+  public var friendProfileImage: ProfileImageType = .undefined {
     didSet {
-      switch userImage {
+      switch self.friendProfileImage {
       case .undefined:
-        self.imageView.isHidden = true
-        self.circleView.isHidden = false
-        self.friendImageView.isHidden = false
-      case .user(let image):
-        self.imageView.image = image
-        self.imageView.isHidden = false
-        self.circleView.isHidden = true
-        self.friendImageView.isHidden = true
+        self.profileImageView.isHidden = true
+        self.friendIconImageView.isHidden = false
+      case .friend:
+//        self.profileImageView.image = profileImage
+        self.profileImageView.isHidden = false
+        self.friendIconImageView.isHidden = true
       }
     }
   }
   
   // MARK: - UI Components
-  
-  private let imageView: UIImageView = {
-    let iv = UIImageView()
-    iv.contentMode = .scaleAspectFit
-    iv.backgroundColor = .clear
-    iv.layer.cornerRadius = Constants.imageViewSize / 2
-    iv.layer.masksToBounds = true
-    return iv
+
+  public var containerView = UIView()
+
+  private let friendIconImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = .favorIcon(.friend)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: Metric.profileImageViewSize / 2)
+      .withTintColor(.favorColor(.white))
+    imageView.contentMode = .center
+    imageView.backgroundColor = .favorColor(.line3)
+    imageView.layer.cornerRadius = Metric.profileImageViewSize / 2
+    imageView.clipsToBounds = true
+    return imageView
   }()
   
-  private let circleView: UIView = {
-    let view = UIView()
-    view.backgroundColor = .favorColor(.line3)
-    view.layer.cornerRadius = Constants.imageViewSize / 2
-    return view
+  private let profileImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .scaleAspectFill
+    imageView.backgroundColor = .clear
+    imageView.layer.cornerRadius = Metric.profileImageViewSize / 2
+    imageView.clipsToBounds = true
+    return imageView
   }()
   
   private let nameLabel: UILabel = {
-    let lb = UILabel()
-    lb.font = .favorFont(.regular, size: 16)
-    lb.textColor = .favorColor(.icon)
-    return lb
+    let label = UILabel()
+    label.font = .favorFont(.regular, size: 16)
+    label.textColor = .favorColor(.icon)
+    label.text = "친구"
+    return label
   }()
-  
-  private let friendImageView: UIImageView = {
-    let iv = UIImageView()
-    iv.image = .favorIcon(.friend)?.withTintColor(.favorColor(.white))
-    return iv
-  }()
-  
+
   // MARK: - Initializer
-  
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
   }
-  
+
   required public init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
+
+  // MARK: - Functions
+
+  open func bind(with friend: Friend) {
+    self.friendNo = friend.friendNo
+    self.friendName = friend.name
+//    self.userImage = .friend(friend.profilePhoto)
+  }
+
   // MARK: - Setup
-  
-  open func setupStyles() {}
-  
+
+  open func setupStyles() {
+    self.layer.cornerRadius = Metric.profileImageViewSize / 4
+    self.clipsToBounds = true
+  }
+
   open func setupLayouts() {
+    self.contentView.addSubview(self.containerView)
+
     [
-      self.imageView,
-      self.circleView,
-      self.friendImageView,
+      self.friendIconImageView,
+      self.profileImageView,
       self.nameLabel
     ].forEach {
-      self.contentView.addSubview($0)
+      self.containerView.addSubview($0)
     }
   }
-  
+
   open func setupConstraints() {
-    self.imageView.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
+    self.containerView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+
+    self.profileImageView.snp.makeConstraints { make in
+      make.leading.equalToSuperview()
       make.centerY.equalToSuperview()
-      make.width.height.equalTo(Constants.imageViewSize)
+      make.width.height.equalTo(Metric.profileImageViewSize)
     }
-    
-    self.circleView.snp.makeConstraints { make in
-      make.edges.equalTo(self.imageView)
+
+    self.friendIconImageView.snp.makeConstraints { make in
+      make.center.equalTo(self.profileImageView)
+      make.width.height.equalTo(Metric.profileImageViewSize)
     }
-    
-    self.friendImageView.snp.makeConstraints { make in
-      make.center.equalTo(self.imageView)
-      make.width.height.equalTo(Constants.imageViewSize / 2)
-    }
-    
+
     self.nameLabel.snp.makeConstraints { make in
-      make.leading.equalTo(self.imageView.snp.trailing).offset(16.0)
+      make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
       make.centerY.equalToSuperview()
     }
   }

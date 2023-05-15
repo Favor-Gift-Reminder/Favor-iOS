@@ -9,50 +9,37 @@ import UIKit
 
 import FavorKit
 
-enum FriendSectionItem: SectionModelItem {
-  case friend(FriendCellReactor)
+public enum FriendSectionItem: SectionModelItem {
+  case friend(Friend)
 }
 
-enum FriendSection {
-  case friend([FriendSectionItem])
+public enum FriendSection: SectionModelType {
+  case friend
+  case editFriend
 }
 
 extension FriendSectionItem: Equatable, Hashable {
-  static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
+  public static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
     switch (lhs, rhs) {
     case let (.friend(lhsValue), .friend(rhsValue)):
-      return lhsValue === rhsValue
+      return lhsValue.friendNo == rhsValue.friendNo
     }
   }
 
-  func hash(into hasher: inout Hasher) {
+  public func hash(into hasher: inout Hasher) {
     switch self {
-    case .friend(let reactor):
-      hasher.combine(ObjectIdentifier(reactor))
+    case .friend(let friend):
+      hasher.combine(friend.friendNo)
     }
   }
 }
 
-extension FriendSection: SectionModelType {
-  public var items: [any SectionModelItem] {
-    switch self {
-    case .friend(let items):
-      return items
-    }
-  }
-
-  public init(original: FriendSection, items: [FriendSectionItem]) {
-    switch original {
-    case .friend:
-      self = .friend(items)
-    }
-  }
-}
+// MARK: - Adapter
 
 extension FriendSection: Adaptive {
-  var item: FavorCompositionalLayout.Item {
+  public var item: FavorCompositionalLayout.Item {
     switch self {
-    case .friend:
+    case .friend, .editFriend:
       return .listRow(
         height: .fractionalHeight(1.0),
         contentInsets: .zero
@@ -60,9 +47,9 @@ extension FriendSection: Adaptive {
     }
   }
 
-  var group: FavorCompositionalLayout.Group {
+  public var group: FavorCompositionalLayout.Group {
     switch self {
-    case .friend:
+    case .friend, .editFriend:
       return .list(
         height: .absolute(48),
         numberOfItems: 1,
@@ -72,16 +59,26 @@ extension FriendSection: Adaptive {
     }
   }
 
-  var section: FavorCompositionalLayout.Section {
+  public var section: FavorCompositionalLayout.Section {
     switch self {
     case .friend:
       return .base(
+        spacing: 8,
         contentInsets: NSDirectionalEdgeInsets(
-          top: 16, leading: 20, bottom: .zero, trailing: 20
+          top: 15, leading: .zero, bottom: 15, trailing: .zero
         ),
         boundaryItems: [
-          .header(height: .estimated(21))
+          .header(
+            height: .absolute(21.0)
+          )
         ]
+      )
+    case .editFriend:
+      return .base(
+        spacing: 8,
+        contentInsets: NSDirectionalEdgeInsets(
+          top: 15, leading: .zero, bottom: 15, trailing: .zero
+        )
       )
     }
   }

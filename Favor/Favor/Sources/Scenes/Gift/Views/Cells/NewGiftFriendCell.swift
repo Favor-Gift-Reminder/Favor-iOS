@@ -49,17 +49,16 @@ final class NewGiftFriendCell: BaseFriendCell, View, Reusable {
   func bind(reactor: NewGiftFriendCellReactor) {
     reactor.state.map { $0.friend }
       .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self) {
-        $0.friendName = $1.name
-        // TODO: 이미지 설정
-      }
+      .drive(with: self, onNext: { owner, friend in
+        owner.friendName = friend.name
+      }) // TODO: 이미지 설정
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.rightButtonState }
       .asDriver(onErrorJustReturn: .add)
-      .drive(with: self) {
-        $0.currentButtonType = $1
-      }
+      .drive(with: self, onNext: { owner, state in
+        owner.currentButtonType = state
+      })
       .disposed(by: self.disposeBag)
   }
   

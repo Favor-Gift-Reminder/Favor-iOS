@@ -20,9 +20,6 @@
 		2E3FA75929F7C561003342CA /* FriendViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75829F7C561003342CA /* FriendViewReactor.swift */; };
 		2E3FA75B29F80B63003342CA /* FriendSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75A29F80B63003342CA /* FriendSection.swift */; };
 		2E3FA75E29F80D3C003342CA /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75D29F80D3C003342CA /* FriendCell.swift */; };
-		2E3FA76129F80D68003342CA /* FriendCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA76029F80D68003342CA /* FriendCellReactor.swift */; };
-		2E3FA76329F819ED003342CA /* FriendSectionCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA76229F819ED003342CA /* FriendSectionCollectionHeader.swift */; };
-		2E3FA76529F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA76429F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift */; };
 		2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
@@ -43,6 +40,12 @@
 		2E87B8C92A0A501D00570386 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38499298D7C680081499C /* HomeHeaderView.swift */; };
 		2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DE2998B80200C8C47F /* ProfileSection.swift */; };
 		2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* ProfileView.swift */; };
+		2E87B8D32A0BC8FF00570386 /* BaseFriendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendVC.swift */; };
+		2E87B8D82A0BCCD400570386 /* EditFriendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D72A0BCCD400570386 /* EditFriendVC.swift */; };
+		2E87B8DA2A0BCE3200570386 /* EditFriendViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D92A0BCE3200570386 /* EditFriendViewReactor.swift */; };
+		2E87B8E02A0C881A00570386 /* EditFriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8DF2A0C881A00570386 /* EditFriendCell.swift */; };
+		2E87B8E22A0CA06900570386 /* BaseFriendReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8E12A0CA06900570386 /* BaseFriendReactor.swift */; };
+		2E87B8E42A0CAA2000570386 /* EditFriendCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8E32A0CAA2000570386 /* EditFriendCollectionHeaderView.swift */; };
 		2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
 		2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
 		2E95E4B129E8EFB400A46C38 /* SearchResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95E4B029E8EFB400A46C38 /* SearchResultSection.swift */; };
@@ -183,9 +186,6 @@
 		2E3FA75829F7C561003342CA /* FriendViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendViewReactor.swift; sourceTree = "<group>"; };
 		2E3FA75A29F80B63003342CA /* FriendSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSection.swift; sourceTree = "<group>"; };
 		2E3FA75D29F80D3C003342CA /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
-		2E3FA76029F80D68003342CA /* FriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCellReactor.swift; sourceTree = "<group>"; };
-		2E3FA76229F819ED003342CA /* FriendSectionCollectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSectionCollectionHeader.swift; sourceTree = "<group>"; };
-		2E3FA76429F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSectionCollectionHeaderReactor.swift; sourceTree = "<group>"; };
 		2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionBackgroundView.swift; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCellReactor.swift; sourceTree = "<group>"; };
@@ -199,6 +199,12 @@
 		2E7C30A4295D7C4500BAC43D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E7C30A7295D7C4500BAC43D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E7C30A9295D7C4500BAC43D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2E87B8D22A0BC8FF00570386 /* BaseFriendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFriendVC.swift; sourceTree = "<group>"; };
+		2E87B8D72A0BCCD400570386 /* EditFriendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFriendVC.swift; sourceTree = "<group>"; };
+		2E87B8D92A0BCE3200570386 /* EditFriendViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFriendViewReactor.swift; sourceTree = "<group>"; };
+		2E87B8DF2A0C881A00570386 /* EditFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFriendCell.swift; sourceTree = "<group>"; };
+		2E87B8E12A0CA06900570386 /* BaseFriendReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFriendReactor.swift; sourceTree = "<group>"; };
+		2E87B8E32A0CAA2000570386 /* EditFriendCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFriendCollectionHeaderView.swift; sourceTree = "<group>"; };
 		2E95E4B029E8EFB400A46C38 /* SearchResultSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSection.swift; sourceTree = "<group>"; };
 		2E95E4B229E8F01C00A46C38 /* SearchGiftResultCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGiftResultCellReactor.swift; sourceTree = "<group>"; };
 		2E95E4B629E8FB8000A46C38 /* SearchUserResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserResultCell.swift; sourceTree = "<group>"; };
@@ -424,9 +430,9 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75A29F80B63003342CA /* FriendSection.swift */,
-				2E3FA75429F7C515003342CA /* Reactors */,
-				2E3FA75529F7C522003342CA /* Views */,
-				2E3FA75329F7C50F003342CA /* ViewControllers */,
+				2E87B8CE2A0BC8CF00570386 /* Common */,
+				2E87B8CD2A0BC88200570386 /* Friend */,
+				2E87B8CC2A0BC86900570386 /* EditFriend */,
 			);
 			path = Friend;
 			sourceTree = "<group>";
@@ -442,9 +448,7 @@
 		2E3FA75429F7C515003342CA /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				2E3FA75F29F80D5B003342CA /* CellReactors */,
 				2E3FA75829F7C561003342CA /* FriendViewReactor.swift */,
-				2E3FA76429F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -453,7 +457,6 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75C29F80D30003342CA /* Cells */,
-				2E3FA76229F819ED003342CA /* FriendSectionCollectionHeader.swift */,
 				2E32E7B529FB5DE600202E31 /* FriendSectionHeader.swift */,
 			);
 			path = Views;
@@ -465,14 +468,6 @@
 				2E3FA75D29F80D3C003342CA /* FriendCell.swift */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		2E3FA75F29F80D5B003342CA /* CellReactors */ = {
-			isa = PBXGroup;
-			children = (
-				2E3FA76029F80D68003342CA /* FriendCellReactor.swift */,
-			);
-			path = CellReactors;
 			sourceTree = "<group>";
 		};
 		2E6C90B229A607C300AF963A /* Cells */ = {
@@ -563,6 +558,100 @@
 				2EA46B2929BA35570030904E /* Term-Info.plist */,
 			);
 			path = Favor;
+			sourceTree = "<group>";
+		};
+		2E87B8CC2A0BC86900570386 /* EditFriend */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8D62A0BCCC500570386 /* Reactors */,
+				2E87B8D52A0BCCC000570386 /* Views */,
+				2E87B8D42A0BCCB900570386 /* ViewControllers */,
+			);
+			path = EditFriend;
+			sourceTree = "<group>";
+		};
+		2E87B8CD2A0BC88200570386 /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				2E3FA75429F7C515003342CA /* Reactors */,
+				2E3FA75529F7C522003342CA /* Views */,
+				2E3FA75329F7C50F003342CA /* ViewControllers */,
+			);
+			path = Friend;
+			sourceTree = "<group>";
+		};
+		2E87B8CE2A0BC8CF00570386 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8D12A0BC8E200570386 /* Reactors */,
+				2E87B8D02A0BC8DC00570386 /* Views */,
+				2E87B8CF2A0BC8D600570386 /* ViewControllers */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		2E87B8CF2A0BC8D600570386 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8D22A0BC8FF00570386 /* BaseFriendVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2E87B8D02A0BC8DC00570386 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8DB2A0BD9FA00570386 /* Cells */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2E87B8D12A0BC8E200570386 /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8E12A0CA06900570386 /* BaseFriendReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2E87B8D42A0BCCB900570386 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8D72A0BCCD400570386 /* EditFriendVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2E87B8D52A0BCCC000570386 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8DE2A0C881000570386 /* Cells */,
+				2E87B8E32A0CAA2000570386 /* EditFriendCollectionHeaderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2E87B8D62A0BCCC500570386 /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8D92A0BCE3200570386 /* EditFriendViewReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2E87B8DB2A0BD9FA00570386 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		2E87B8DE2A0C881000570386 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2E87B8DF2A0C881A00570386 /* EditFriendCell.swift */,
+			);
+			path = Cells;
 			sourceTree = "<group>";
 		};
 		2E95E4B429E8F04500A46C38 /* CellReactors */ = {
@@ -1222,6 +1311,7 @@
 				E5B61F3529B37F260031046C /* (null) in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */,
+				2E87B8DA2A0BCE3200570386 /* EditFriendViewReactor.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
 				2EE1537929E7DC9F0023FEA5 /* SearchGiftResultCell.swift in Sources */,
@@ -1235,7 +1325,6 @@
 				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */,
-				2E3FA76129F80D68003342CA /* FriendCellReactor.swift in Sources */,
 				2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */,
 				2EA38494298D7C5F0081499C /* HeaderViewReactor.swift in Sources */,
 				2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */,
@@ -1244,7 +1333,9 @@
 				2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */,
 				2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */,
+				2E87B8E42A0CAA2000570386 /* EditFriendCollectionHeaderView.swift in Sources */,
 				2E6C90B129A607BD00AF963A /* ProfileFriendCell.swift in Sources */,
+				2E87B8E22A0CA06900570386 /* BaseFriendReactor.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */,
 				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
 				2EF1585829E1C06000D199DF /* NewGiftPhotoCell.swift in Sources */,
@@ -1256,6 +1347,7 @@
 				2EA384A2298D7CC10081499C /* HomeViewReactor.swift in Sources */,
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* ProfileFriendCellReactor.swift in Sources */,
+				2E87B8E02A0C881A00570386 /* EditFriendCell.swift in Sources */,
 				2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
@@ -1264,7 +1356,6 @@
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
-				2E3FA76329F819ED003342CA /* FriendSectionCollectionHeader.swift in Sources */,
 				2EA3849D298D7C680081499C /* TimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
 				E524C18929E923B9004CCC40 /* NewGiftFriendVC.swift in Sources */,
@@ -1280,6 +1371,7 @@
 				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendVC.swift in Sources */,
+				2E87B8D32A0BC8FF00570386 /* BaseFriendVC.swift in Sources */,
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */,
@@ -1288,6 +1380,7 @@
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* ProfileFavorCellReactor.swift in Sources */,
 				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
+				2E87B8D82A0BCCD400570386 /* EditFriendVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */,
 				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
@@ -1308,7 +1401,6 @@
 				E55CF7C6298B8EBB002940D1 /* DashboardFlow.swift in Sources */,
 				2EC939F1299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
-				2E3FA76529F81A42003342CA /* FriendSectionCollectionHeaderReactor.swift in Sources */,
 				2E95E4B129E8EFB400A46C38 /* SearchResultSection.swift in Sources */,
 				2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
