@@ -21,6 +21,7 @@ extension Tappable {
   public func setupTapRecognizer() {
     self.rx.longPressGesture(configuration: { recognizer, _ in
       recognizer.minimumPressDuration = 0.0
+      recognizer.cancelsTouchesInView = false
     })
     .subscribe(with: self, onNext: { owner, event in
       let tapGestures: [UIGestureRecognizer.State] = [.began]

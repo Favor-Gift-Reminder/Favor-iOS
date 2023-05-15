@@ -13,13 +13,12 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class FriendViewReactor: Reactor, Stepper {
+final class FriendViewReactor: BaseFriendReactor, Reactor, Stepper {
 
   // MARK: - Properties
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let friendsFetcher = Fetcher<[Friend]>()
 
   enum Action {
     case viewNeedsLoaded
@@ -39,9 +38,9 @@ final class FriendViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init() {
+  override init() {
     self.initialState = State()
-    self.setupFriendFetcher()
+    super.init()
   }
 
   // MARK: - Functions
@@ -51,14 +50,14 @@ final class FriendViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.friendsFetcher.fetch()
         .flatMap { (status, friends) -> Observable<Mutation> in
-          let friendItems = friends.map { friend -> FriendSectionItem in
+          let friendItems = friends.toArray().map { friend -> FriendSectionItem in
             return .friend(friend)
           }
           return .just(.updateFriendItems(friendItems))
         }
 
     case .editButtonDidTap:
-      os_log(.debug, "Edit button did tap.")
+      self.steps.accept(AppStep.editFriendIsRequired)
       return .empty()
 
     case .searchTextDidUpdate(let text):
@@ -89,50 +88,6 @@ final class FriendViewReactor: Reactor, Stepper {
       var newState = state
       newState.items.append(state.friendItems)
       return newState
-    }
-  }
-}
-
-// MARK: - Fetcher
-
-private extension FriendViewReactor {
-  func setupFriendFetcher() {
-    // onRemote
-    self.friendsFetcher.onRemote = {
-      let networking = UserNetworking()
-      let friends = networking.request(.getAllFriendList(userNo: UserInfoStorage.userNo))
-        .flatMap { friends -> Observable<[Friend]> in
-          let friendsData = friends.data
-          do {
-            let remote: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friendsData)
-            let remoteFriends = remote.data
-            let decodedFriends = remoteFriends.map { friend -> Friend in
-              return Friend(
-                friendNo: friend.friendNo,
-                name: friend.friendName,
-                profilePhoto: nil,
-                memo: friend.friendMemo,
-                friendUserNo: friend.friendUserNo,
-                isUser: friend.isUser
-              )
-            }
-            return .just(decodedFriends)
-          } catch {
-            print(error)
-            return .just([])
-          }
-        }
-        .asSingle()
-      return friends
-    }
-    // onLocal
-    self.friendsFetcher.onLocal = {
-      let friends = try await RealmManager.shared.read(Friend.self)
-      return await friends.toArray()
-    }
-    // onLocalUpdate
-    self.friendsFetcher.onLocalUpdate = { friends in
-      try await RealmManager.shared.updateAll(friends)
     }
   }
 }

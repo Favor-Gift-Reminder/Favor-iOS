@@ -11,7 +11,7 @@ import RealmSwift
 
 protocol RealmCRUDable {
   func create<T: Object>(_ object: T) async throws -> T
-  func read<T: Object>(_ objectType: T.Type) async throws -> Results<T>
+  func read<T: Object>(_ objectType: T.Type, freezeResults: Bool) async throws -> Results<T>
   func update<T: Object>(_ object: T, update: Realm.UpdatePolicy) async throws -> T
   func delete<T: Object>(_ object: T) async throws -> T
 }
@@ -151,14 +151,23 @@ public final class RealmManager: RealmCRUDable {
   ///
   /// - Parameters:
   ///   - objectType: 읽어올 `RealmObject`의 클래스 타입
+  ///   - freezeResults: 반환값을 `freeze` 한 뒤 반환할 지 선택하는 `Bool` 타입.
   /// - Returns: 주어진 `RealmObject` 클래스 타입의 모든 값을 읽어온 `Results`
-  public func read<T: Object>(_ objectType: T.Type) async throws -> Results<T> {
+  public func read<T: Object>(
+    _ objectType: T.Type,
+    freezeResults: Bool = true
+  ) async throws -> Results<T> {
     typealias RealmContinuation = CheckedContinuation<Results<T>, Error>
     return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
       self.realmQueue.async {
-        let frozenRealm = self.realm.freeze()
-        let frozenObjects = frozenRealm.objects(objectType)
-        continuation.resume(returning: frozenObjects)
+        if freezeResults {
+          let frozenRealm = self.realm.freeze()
+          let frozenObjects = frozenRealm.objects(objectType)
+          continuation.resume(returning: frozenObjects)
+        } else {
+          let objects = self.realm.objects(objectType)
+          continuation.resume(returning: objects)
+        }
       }
     }
   }
@@ -312,10 +321,31 @@ public final class RealmManager: RealmCRUDable {
     return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
       self.realmQueue.async {
         do {
+          let targetObjects = self.realm.objects(T.self).filter {
+            !objects.contains($0)
+          }
+          try self.realm.write {
+            self.realm.delete(targetObjects)
+          }
+          continuation.resume(returning: targetObjects.map { $0.freeze() })
+        } catch {
+          continuation.resume(throwing: error)
+        }
+      }
+    }
+  }
+
+  @discardableResult
+  public func delete<T>(_ objects: T) async throws -> T where T: Sequence, T.Element: Object {
+    typealias RealmContinuation = CheckedContinuation<T, Error>
+    return try await withCheckedThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        do {
           try self.realm.write {
             self.realm.delete(objects)
           }
-          continuation.resume(returning: objects.map { $0.freeze() })
+          guard let frozenObjects = objects.map({ $0.freeze() }) as? T else { fatalError() }
+          continuation.resume(returning: frozenObjects)
         } catch {
           continuation.resume(throwing: error)
         }

@@ -70,6 +70,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.userFetcher.fetch()
         .flatMap { (status, user) -> Observable<Mutation> in
+          guard let user = user.toArray().first else { return .empty() }
           return .concat([
             .just(.updateUser(user)),
             .just(.updateUserName(user.name)),
@@ -182,7 +183,7 @@ private extension MyPageViewReactor {
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
       let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
-        .flatMap { user -> Observable<User> in
+        .flatMap { user -> Observable<[User]> in
           let userData = user.data
           do {
             let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
@@ -197,10 +198,10 @@ private extension MyPageViewReactor {
               anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
               friendList: remoteUser.friendList.map { $0.toDomain() }
             )
-            return .just(decodedUser)
+            return .just([decodedUser])
           } catch {
             print(error)
-            return .just(User())
+            return .just([])
           }
         }
         .asSingle()
@@ -208,11 +209,11 @@ private extension MyPageViewReactor {
     }
     // onLocal
     self.userFetcher.onLocal = {
-      let user = try await RealmManager.shared.read(User.self)
-      return await user.toValue()
+      return try await RealmManager.shared.read(User.self)
     }
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { _, remoteUser in
+      guard let remoteUser = remoteUser.first else { return }
       try await RealmManager.shared.update(remoteUser, update: .all)
     }
   }

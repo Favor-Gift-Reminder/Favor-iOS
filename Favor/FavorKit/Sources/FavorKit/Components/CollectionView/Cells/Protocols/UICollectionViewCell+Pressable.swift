@@ -23,6 +23,7 @@ extension Pressable {
   public func setupLongPressRecognizer() {
     self.rx.longPressGesture(configuration: { recognizer, _ in
       recognizer.minimumPressDuration = TimeInterval(0.05)
+      recognizer.cancelsTouchesInView = false
     })
     .subscribe(with: self, onNext: { owner, event in
       let pressingGestures: [UIGestureRecognizer.State] = [.began]
