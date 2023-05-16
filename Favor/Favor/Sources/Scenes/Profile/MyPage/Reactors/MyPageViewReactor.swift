@@ -27,6 +27,9 @@ final class MyPageViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case settingButtonDidTap
     case headerRightButtonDidTap(ProfileSection)
+    case newFriendCellDidTap
+    case friendCellDidTap(Friend)
+    case doNothing
   }
   
   enum Mutation {
@@ -96,6 +99,16 @@ final class MyPageViewReactor: Reactor, Stepper {
         self.steps.accept(AppStep.friendListIsRequired)
       default: break
       }
+      return .empty()
+
+    case .friendCellDidTap(let friend):
+      print(friend)
+      return .empty()
+
+    case .newFriendCellDidTap:
+      return .empty()
+
+    case .doNothing:
       return .empty()
     }
   }
