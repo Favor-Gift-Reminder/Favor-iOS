@@ -62,7 +62,6 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
       .orEmpty
       .asDriver()
       .skip(1)
-      .debug()
       .drive(with: self) { $0.textFieldChanged?($1) }
       .disposed(by: self.disposeBag)
     

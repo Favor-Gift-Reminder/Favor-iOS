@@ -85,14 +85,12 @@ final class NewGiftFriendViewController: BaseViewController, View {
   // MARK: - UI Components
   
   // Navigation Items
-  private let doneButton: UIButton = {
+  private let finishButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4)
     config.attributedTitle = AttributedString(
       "완료",
-      attributes: .init([
-        .font: UIFont.favorFont(.bold, size: 18)
-      ])
+      attributes: .init([.font: UIFont.favorFont(.bold, size: 18)])
     )
     let btn = UIButton(configuration: config)
     btn.configurationUpdateHandler = {
@@ -105,6 +103,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
         break
       }
     }
+    btn.isEnabled = false
     return btn
   }()
   
@@ -146,7 +145,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
   override func setupStyles() {
     super.setupStyles()
     
-    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.doneButton)
+    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.finishButton)
   }
   
   override func setupLayouts() {
@@ -207,6 +206,11 @@ final class NewGiftFriendViewController: BaseViewController, View {
     
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isEnabledFinishButton }
+      .debug()
+      .bind(to: self.finishButton.rx.isEnabled)
       .disposed(by: self.disposeBag)
   }
   

@@ -25,6 +25,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case updateFriends([Friend])
     case updateSelectedFriends([Friend])
     case updateLoading(Bool)
+    case updateFinsihButtonState(Bool)
   }
   
   struct State {
@@ -35,6 +36,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     var currentFriends: [Friend] = []
     /// 선택된 친구 목록입니다.
     var selectedFriends: [Friend] = []
+    var isEnabledFinishButton: Bool = false
     var isLoading: Bool = false
   }
   
@@ -76,7 +78,6 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
           var selectedFriends = self.currentState.selectedFriends
           let friend = self.currentState.currentFriends[indexPath.row]
           selectedFriends.append(friend)
-          print(selectedFriends)
           return .just(.updateSelectedFriends(selectedFriends))
         case .done:
           return .empty()
@@ -107,6 +108,9 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       
     case .updateSelectedFriends(let friends):
       newState.selectedFriends = friends
+      
+    case .updateFinsihButtonState(let isEnabled):
+      newState.isEnabledFinishButton = isEnabled
     }
     
     return newState
@@ -117,8 +121,11 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-      var newItems: [[NewGiftFriendItem]] = []
       
+      // 친구 배열과 선택된 친구 배열을 참조하여
+      // 새로운 아이템 2차원 배열을 만듭니다.
+      var newItems: [[NewGiftFriendItem]] = []
+      // 친구 아이템
       let friendItems = state.currentFriends
         .map { friend in
           var buttonType: NewGiftFriendCell.RightButtonType = .add
@@ -129,15 +136,18 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
             NewGiftFriendCellReactor(friend, rightButtonState: buttonType)
           )
         }
-      
+      // 선택된 친구 아이템
       var selectedFriendItems = state.selectedFriends
         .map { NewGiftFriendItem.friend(NewGiftFriendCellReactor($0, rightButtonState: .remove)) }
       selectedFriendItems = selectedFriendItems.isEmpty ? [.empty] : selectedFriendItems
-      
+      // 마지막으로 각 아이템들을 2차원 배열 안에 주입합니다.
       newItems.append(selectedFriendItems)
       newItems.append(friendItems)
-      newState.items = newItems
       
+      // 선택된 친구들을 참조하여 완료 버튼의 상태를 바꾸고 상태값을 업데이트 합니다.
+      newState.isEnabledFinishButton = state.selectedFriends.isEmpty ? false : true
+      // 2차원 배열의 아이템을 새로운 State값에 주입합니다.
+      newState.items = newItems
       return newState
     }
   }
