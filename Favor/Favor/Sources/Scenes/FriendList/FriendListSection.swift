@@ -1,5 +1,5 @@
 //
-//  FriendSection.swift
+//  FriendListSection.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/25.
@@ -20,7 +20,7 @@ public enum FriendSection: SectionModelType {
   case editFriend
 }
 
-extension FriendSectionItem: Equatable, Hashable {
+extension FriendSectionItem {
   public static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
     switch (lhs, rhs) {
     case (.empty, .empty):

@@ -26,11 +26,11 @@ public enum AnniversaryListSection: SectionModelType {
 
 // MARK: - Hashable & Equatable
 
-extension AnniversaryListSectionItem: Hashable, Equatable {
+extension AnniversaryListSectionItem {
   public static func == (lhs: AnniversaryListSectionItem, rhs: AnniversaryListSectionItem) -> Bool {
     switch (lhs, rhs) {
     case let (.anniversary(lhsValue), .anniversary(rhsValue)):
-      return true
+      return lhsValue === rhsValue
     default:
       return false
     }
@@ -40,7 +40,7 @@ extension AnniversaryListSectionItem: Hashable, Equatable {
     switch self {
     case .empty:
       hasher.combine("Empty")
-    case .anniversary(let reactor):
+    case .anniversary:
       hasher.combine("Anniversary")
     }
   }

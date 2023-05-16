@@ -31,7 +31,7 @@ enum ProfileSection: SectionModelType {
   case friends
 }
 
-extension ProfileSectionItem: Equatable, Hashable {
+extension ProfileSectionItem {
   static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
     switch (lhs, rhs) {
     case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
