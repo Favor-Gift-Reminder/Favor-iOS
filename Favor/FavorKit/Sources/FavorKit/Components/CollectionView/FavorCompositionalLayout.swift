@@ -191,7 +191,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
             heightDimension: height
           ),
           numberOfItems: numberOfItems,
-          direction: .vertical,
+          direction: .horizontal,
           spacing: spacing ?? .fixed(.zero),
           contentInsets: contentInsets ?? .zero,
           innerGroup: innerGroup
