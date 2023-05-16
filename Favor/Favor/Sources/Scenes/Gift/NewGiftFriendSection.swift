@@ -23,7 +23,7 @@ enum NewGiftFriendItem {
   }
 }
 
-enum NewGiftFriendSection: Int, SectionModelType {
+enum NewGiftFriendSection: SectionModelType {
   case selectedFriends
   case friends
 }

@@ -145,7 +145,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
   override func setupStyles() {
     super.setupStyles()
     
-    self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: self.finishButton)
+    self.navigationItem.rightBarButtonItem = self.finishButton.toBarButtonItem()
   }
   
   override func setupLayouts() {
@@ -209,7 +209,6 @@ final class NewGiftFriendViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.isEnabledFinishButton }
-      .debug()
       .bind(to: self.finishButton.rx.isEnabled)
       .disposed(by: self.disposeBag)
   }

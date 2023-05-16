@@ -58,10 +58,9 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   
   func bind(reactor: NewGiftFriendHeaderViewReactor) {
     // Action
-    self.searchBar.rx.text
-      .orEmpty
+    self.searchBar.rx.text.orEmpty
       .asDriver()
-      .skip(1)
+      .skip(2)
       .drive(with: self) { $0.textFieldChanged?($1) }
       .disposed(by: self.disposeBag)
     
