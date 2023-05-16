@@ -72,13 +72,19 @@ final class AnniversaryListViewReactor: Reactor {
 
       // 고정
       if !state.pinnedItems.isEmpty {
+        guard !state.allItems.isEmpty else { fatalError() }
         newState.sections.append(.pinned)
         newState.items.append(state.pinnedItems)
       }
 
       // 전체
-      newState.sections.append(.all)
-      newState.items.append(state.allItems)
+      if !state.allItems.isEmpty {
+        newState.sections.append(.all)
+        newState.items.append(state.allItems)
+      } else { // Empty
+        newState.sections.append(.empty)
+        newState.items.append([.empty])
+      }
 
       return newState
     }

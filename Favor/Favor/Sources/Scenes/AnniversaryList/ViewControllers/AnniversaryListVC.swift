@@ -28,6 +28,10 @@ final class AnniversaryListViewController: BaseViewController, View {
       collectionView: self.collectionView,
       cellProvider: { collectionView, indexPath, item in
         switch item {
+        case .empty:
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
+          cell.bindEmptyData(image: nil, text: "내 기념일을 등록해보세요.")
+          return cell
         case .anniversary(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as AnniversaryListCell
           cell.reactor = reactor
@@ -65,6 +69,7 @@ final class AnniversaryListViewController: BaseViewController, View {
     )
 
     // Register
+    collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: AnniversaryListCell.self)
     collectionView.register(
       supplementaryViewType: FavorSectionHeaderView.self,

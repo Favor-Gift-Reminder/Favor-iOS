@@ -84,6 +84,7 @@ public class BaseFriendViewController: BaseViewController {
     )
 
     // Register
+    collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: FriendCell.self)
     collectionView.register(cellType: EditFriendCell.self)
     collectionView.register(
