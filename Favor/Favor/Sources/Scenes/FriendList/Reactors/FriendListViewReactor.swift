@@ -31,7 +31,7 @@ final class FriendListViewReactor: BaseFriendReactor, Reactor, Stepper {
   }
 
   struct State {
-    var sections: [FriendSection] = [.friend]
+    var sections: [FriendSection] = []
     var items: [[FriendSectionItem]] = []
     var friendItems: [FriendSectionItem] = []
   }
@@ -86,7 +86,14 @@ final class FriendListViewReactor: BaseFriendReactor, Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-      newState.items.append(state.friendItems)
+
+      if state.friendItems.isEmpty {
+        newState.sections.append(.empty)
+      } else {
+        newState.sections.append(.friend)
+        newState.items.append(state.friendItems)
+      }
+      
       return newState
     }
   }

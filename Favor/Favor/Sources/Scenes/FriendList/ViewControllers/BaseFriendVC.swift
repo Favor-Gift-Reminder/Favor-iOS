@@ -28,6 +28,10 @@ public class BaseFriendViewController: BaseViewController {
       collectionView: self.collectionView,
       cellProvider: { collectionView, indexPath, item in
         switch item {
+        case .empty:
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
+          cell.bindEmptyData(image: nil, text: "친구가 없군요? 토닥토닥..")
+          return cell
         case .friend(let friend):
           guard let viewType = self.viewType else {
             fatalError("View Type for FriendListViewController is required.")
