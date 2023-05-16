@@ -14,7 +14,14 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
   /// Item의 타입과 그에 따른 값들을 정의해둔 enum입니다.
   public enum Item {
 
-    /// List의 형태처럼 가로로 꽉 찬 형태의 Item입니다.
+    /// 하나의 Cell로 화면을 꽉 채우는 형태의 Item
+    /// - Parameters:
+    ///   - contentInsets: Item의 내부 `NSDirectionalEdgeInsets`
+    case full(
+      contentInsets: NSDirectionalEdgeInsets? = nil
+    )
+
+    /// List의 형태처럼 가로로 꽉 찬 형태의 Item
     /// - Parameters:
     ///   - height: Item의 `heightDimension`
     ///   - contentInsets: Item의 내부 `NSDirectionalEdgeInsets`
@@ -23,7 +30,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       contentInsets: NSDirectionalEdgeInsets? = nil
     )
 
-    /// 개별 크기의 사이즈를 가진 형태의 Item입니다.
+    /// 개별 크기의 사이즈를 가진 형태의 Item
     /// - Parameters:
     ///   - width: Item의 `widthDimension`
     ///   - height: Item의 `heightDimension`
@@ -40,6 +47,14 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       contentInsets: NSDirectionalEdgeInsets
     ) {
       switch self {
+      case let .full(contentInsets):
+        return (
+          size: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+          ),
+          contentInsets: contentInsets ?? .zero
+        )
       case let .listRow(height, contentInsets):
         return (
           size: NSCollectionLayoutSize(
@@ -76,6 +91,15 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
 
   /// Group의 타입과 그에 따른 값들을 정의해둔 enum입니다.
   public indirect enum Group {
+
+    /// 하나의 Cell로 화면을 꽉 채우는 형태의 Group
+    /// - Parameters:
+    ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
+    ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group
+    case full(
+      contentInsets: NSDirectionalEdgeInsets? = nil,
+      innerGroup: FavorCompositionalLayout.Group? = nil
+    )
 
     /// 화면의 너비를 꽉 채우며 가로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
@@ -136,10 +160,22 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       innerGroup: FavorCompositionalLayout.Group?
     ) {
       switch self {
-      case let .flow(height, numberOfItems, spacing, contentInsets, innerGroup):
+      case let .full(contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
+            heightDimension: .fractionalHeight(1.0)
+          ),
+          numberOfItems: 1,
+          direction: .horizontal,
+          spacing: .fixed(.zero),
+          contentInsets: contentInsets ?? .zero,
+          innerGroup: innerGroup
+        )
+      case let .flow(height, numberOfItems, spacing, contentInsets, innerGroup):
+        return (
+          size: NSCollectionLayoutSize(
+            widthDimension: .estimated(1),
             heightDimension: height
           ),
           numberOfItems: numberOfItems,
