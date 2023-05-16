@@ -95,6 +95,8 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     case .headerRightButtonDidTap(let section):
       switch section {
+      case .anniversaries:
+        self.steps.accept(AppStep.anniversaryListIsRequired)
       case .friends:
         self.steps.accept(AppStep.friendListIsRequired)
       default: break

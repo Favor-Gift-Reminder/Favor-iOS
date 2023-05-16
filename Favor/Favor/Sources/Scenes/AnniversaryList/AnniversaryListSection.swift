@@ -65,15 +65,22 @@ extension AnniversaryListSection: Adaptive {
     case .pinned, .all:
       return .list(
         height: .estimated(1),
-        numberOfItems: 1,
-        spacing: .fixed(10),
-        contentInsets: nil,
-        innerGroup: nil
+        numberOfItems: 1
       )
     }
   }
 
   public var section: FavorCompositionalLayout.Section {
-    return .base()
+    let header = FavorCompositionalLayout.BoundaryItem.header(height: .estimated(22))
+
+    switch self {
+    case .empty:
+      return .base()
+    case .pinned, .all:
+      return .base(
+        spacing: 10,
+        boundaryItems: [header]
+      )
+    }
   }
 }

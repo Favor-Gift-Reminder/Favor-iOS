@@ -10,14 +10,17 @@ import OrderedCollections
 import FavorKit
 import FavorNetworkKit
 import ReactorKit
+import RxCocoa
+import RxFlow
 
-final class AnniversaryListViewReactor: Reactor {
+final class AnniversaryListViewReactor: Reactor, Stepper {
   typealias Section = AnniversaryListSection
   typealias Item = AnniversaryListSectionItem
 
   // MARK: - Properties
 
   var initialState: State
+  var steps = PublishRelay<Step>()
 
   enum Action {
     case viewNeedsLoaded
@@ -30,7 +33,6 @@ final class AnniversaryListViewReactor: Reactor {
 
   struct State {
     var viewState: AnniversaryListViewController.ViewState = .list
-    var anniversaries: [Anniversary] = []
     var sections: [Section] = []
     var items: [[Item]] = []
     var pinnedItems: [Item] = []
@@ -48,7 +50,17 @@ final class AnniversaryListViewReactor: Reactor {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return .empty()
+      let anniversary = Anniversary(anniversaryNo: 48, title: "sdklfj", date: .now, isPinned: true)
+      let anniversary2 = Anniversary(anniversaryNo: 49, title: "sdklfj", date: .now, isPinned: false)
+      let anniversary3 = Anniversary(anniversaryNo: 50, title: "sdklfj", date: .now, isPinned: false)
+      return .concat(
+        .just(.updatePinnedSection([.anniversary(AnniversaryListCellReactor(anniversary: anniversary))])),
+        .just(.updateAllSection([
+          .anniversary(AnniversaryListCellReactor(anniversary: anniversary)),
+          .anniversary(AnniversaryListCellReactor(anniversary: anniversary2)),
+          .anniversary(AnniversaryListCellReactor(anniversary: anniversary3))
+        ]))
+      )
     }
   }
 
@@ -72,7 +84,6 @@ final class AnniversaryListViewReactor: Reactor {
 
       // 고정
       if !state.pinnedItems.isEmpty {
-        guard !state.allItems.isEmpty else { fatalError() }
         newState.sections.append(.pinned)
         newState.items.append(state.pinnedItems)
       }

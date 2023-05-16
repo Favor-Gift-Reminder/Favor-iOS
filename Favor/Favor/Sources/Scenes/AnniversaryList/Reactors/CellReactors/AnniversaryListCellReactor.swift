@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/05/16.
 //
 
+import FavorKit
 import ReactorKit
 
 public final class AnniversaryListCellReactor: Reactor {
@@ -22,13 +23,16 @@ public final class AnniversaryListCellReactor: Reactor {
   }
 
   public struct State {
-
+    var cellType: AnniversaryListCell.CellType = .list
+    var anniversary: Anniversary
   }
 
   // MARK: - Initializer
 
-  init() {
-    self.initialState = State()
+  init(anniversary: Anniversary) {
+    self.initialState = State(
+      anniversary: anniversary
+    )
   }
 
   // MARK: - Functions

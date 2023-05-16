@@ -34,6 +34,7 @@ final class AnniversaryListViewController: BaseViewController, View {
           return cell
         case .anniversary(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as AnniversaryListCell
+          cell.imageType = .anniversary
           cell.reactor = reactor
           return cell
         }
@@ -45,7 +46,7 @@ final class AnniversaryListViewController: BaseViewController, View {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as FavorSectionHeaderView
+        ) as AnniversaryListSectionHeaderView
         return header
       default:
         return UICollectionReusableView()
@@ -56,7 +57,10 @@ final class AnniversaryListViewController: BaseViewController, View {
 
   private lazy var adapter: Adapter<AnniversaryListSection, AnniversaryListSectionItem> = {
     let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(scrollDirection: .vertical)
+    adapter.configuration = Adapter.Configuration(
+      scrollDirection: .vertical,
+      sectionSpacing: 40
+    )
     return adapter
   }()
 
@@ -64,7 +68,7 @@ final class AnniversaryListViewController: BaseViewController, View {
 
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
-      frame: self.view.bounds,
+      frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
 
@@ -72,10 +76,11 @@ final class AnniversaryListViewController: BaseViewController, View {
     collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: AnniversaryListCell.self)
     collectionView.register(
-      supplementaryViewType: FavorSectionHeaderView.self,
+      supplementaryViewType: AnniversaryListSectionHeaderView.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
 
+    collectionView.showsHorizontalScrollIndicator = false
     return collectionView
   }()
 
@@ -91,9 +96,14 @@ final class AnniversaryListViewController: BaseViewController, View {
 
   func bind(reactor: AnniversaryListViewReactor) {
     // Action
+    self.rx.viewDidLoad
+      .map { Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
 
     // State
     reactor.state.map { $0.viewState }
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, state in
         owner.convert(to: state)
@@ -110,6 +120,29 @@ final class AnniversaryListViewController: BaseViewController, View {
         }
         owner.dataSource.apply(snapshot, animatingDifferences: true)
         owner.collectionView.collectionViewLayout.invalidateLayout()
+
+        // Update the header view
+        if let pinnedAnniversariesHeaderView = owner.collectionView.supplementaryView(
+          forElementKind: UICollectionView.elementKindSectionHeader,
+          at: IndexPath(item: 0, section: 0)
+        ) as? AnniversaryListSectionHeaderView {
+          let numberOfPinnedAnniversaries = sectionData.items[0].count
+          pinnedAnniversariesHeaderView.bind(
+            title: "고정됨",
+            numberOfFriends: numberOfPinnedAnniversaries
+          )
+        }
+
+        if let allAnniversariesHeaderView = owner.collectionView.supplementaryView(
+          forElementKind: UICollectionView.elementKindSectionHeader,
+          at: IndexPath(item: 0, section: 1)
+        ) as? AnniversaryListSectionHeaderView {
+          let numberOfAllAnniversaries = sectionData.items[1].count
+          allAnniversariesHeaderView.bind(
+            title: "전체",
+            numberOfFriends: numberOfAllAnniversaries
+          )
+        }
       })
       .disposed(by: self.disposeBag)
   }

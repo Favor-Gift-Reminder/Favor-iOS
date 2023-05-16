@@ -14,19 +14,26 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
   // MARK: - Constants
 
-  public enum CellType {
+  public enum ImageViewType {
     case undefined
     /// 이미지가 친구의 프로필 사진인 셀
     case friend
     /// 이미지가 이벤트 아이콘인 셀
     case anniversary
 
-    var inset: UIEdgeInsets {
+    public var imageSize: CGFloat {
       switch self {
-      case .anniversary:
-        return UIEdgeInsets(top: -6, left: -6, bottom: -6, right: -6)
-      default:
-        return .zero
+      case .undefined: return .zero
+      case .friend: return 24
+      case .anniversary: return 36
+      }
+    }
+
+    public var imageColor: UIColor {
+      switch self {
+      case .undefined: return .clear
+      case .friend: return .favorColor(.white)
+      case .anniversary: return .favorColor(.icon)
       }
     }
   }
@@ -38,7 +45,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   // MARK: - Properties
 
   /// Cell의 좌측에 위치한 아이콘에 들어가는 이미지의 타입
-  public var imageType: CellType = .undefined {
+  public var imageType: ImageViewType = .undefined {
     didSet { self.transformToType() }
   }
 
@@ -176,7 +183,10 @@ private extension BaseCardCell {
   }
 
   func updateImage() {
-    self.imageView.image = self.image?.withAlignmentRectInsets(self.imageType.inset)
+    self.imageView.image = self.image?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: self.imageType.imageSize)
+      .withTintColor(self.imageType.imageColor)
   }
 
   func updateLabels() {

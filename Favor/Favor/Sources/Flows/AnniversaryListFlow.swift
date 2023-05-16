@@ -45,9 +45,19 @@ final class AnniversaryListFlow: Flow {
 
 private extension AnniversaryListFlow {
   func navigateToAnniversaryList() -> FlowContributors {
+    let anniversaryListVC = AnniversaryListViewController()
+    let anniversaryListReactor = AnniversaryListViewReactor()
+    anniversaryListVC.reactor = anniversaryListReactor
+    anniversaryListVC.title = "내 기념일"
 
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(anniversaryListVC, animated: true)
+    }
 
-    return .none
+    return .one(flowContributor: .contribute(
+      withNextPresentable: anniversaryListVC,
+      withNextStepper: anniversaryListReactor
+    ))
   }
 
   func navigateToMyPage() -> FlowContributors {

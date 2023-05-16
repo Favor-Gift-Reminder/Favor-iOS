@@ -37,8 +37,11 @@ final class MyPageFlow: Flow {
     case .settingIsRequired:
       return self.navigateToSetting()
 
+    case .anniversaryListIsRequired:
+      return self.navigateToAnniversaryList()
+
     case .friendListIsRequired:
-      return self.navigateToFriend()
+      return self.navigateToFriendList()
 
     default:
       return .none
@@ -80,7 +83,16 @@ final class MyPageFlow: Flow {
     return .none
   }
 
-  private func navigateToFriend() -> FlowContributors {
+  private func navigateToAnniversaryList() -> FlowContributors {
+    let anniversaryListFlow = AnniversaryListFlow(rootViewController: self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: anniversaryListFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired)
+    ))
+  }
+
+  private func navigateToFriendList() -> FlowContributors {
     let friendListFlow = FriendListFlow(rootViewController: self.rootViewController)
 
     return .one(flowContributor: .contribute(

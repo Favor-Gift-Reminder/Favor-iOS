@@ -106,7 +106,7 @@ public class BaseProfileViewController: BaseViewController {
 
   lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
-      frame: self.view.bounds,
+      frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
 
