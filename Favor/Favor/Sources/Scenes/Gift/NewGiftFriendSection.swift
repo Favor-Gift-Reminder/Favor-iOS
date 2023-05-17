@@ -9,31 +9,46 @@ import UIKit
 
 import FavorKit
 
-enum NewGiftFriendSection: Hashable {
-  case selectedFriends
-  case friends
-  
-  /// 각 헤더의 높이 값 입니다.
-  var headerHeight: NSCollectionLayoutDimension {
-    switch self {
-    case .selectedFriends:
-      return .absolute(54)
-    case .friends:
-      return .absolute(100)
-    }
-  }
-}
-
-enum NewGiftFriendItem: Hashable {
+enum NewGiftFriendItem {
   case empty
   case friend(NewGiftFriendCellReactor)
-  
+
   var reactor: NewGiftFriendCellReactor? {
     switch self {
     case .empty:
       return nil
     case .friend(let reactor):
       return reactor
+    }
+  }
+}
+
+enum NewGiftFriendSection: SectionModelType {
+  case selectedFriends
+  case friends
+}
+
+// MARK: - Hashable
+
+extension NewGiftFriendItem: SectionModelItem {
+  static func == (lhs: NewGiftFriendItem, rhs: NewGiftFriendItem) -> Bool {
+    switch (lhs, rhs) {
+    case (.empty, .empty):
+      return true
+    case let (.friend(lhsReactor), .friend(rhsReactor)):
+      return lhsReactor === rhsReactor
+    default:
+      return false
+    }
+  }
+
+  func hash(into hasher: inout Hasher) {
+    switch self {
+    case .empty:
+      hasher.combine(0)
+    case .friend(let reactor):
+      hasher.combine(1)
+      hasher.combine(ObjectIdentifier(reactor))
     }
   }
 }

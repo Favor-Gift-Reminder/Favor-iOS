@@ -10,7 +10,7 @@ import UIKit
 import FavorKit
 import ReactorKit
 
-final class NewGiftFriendCellReactor: Reactor, Hashable {
+final class NewGiftFriendCellReactor: Reactor {
   static func == (
     lhs: NewGiftFriendCellReactor,
     rhs: NewGiftFriendCellReactor

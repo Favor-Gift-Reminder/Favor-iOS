@@ -62,9 +62,9 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case .viewDidLoad:
       return self.friendFetcher.fetch()
         .flatMap { (status, friends) -> Observable<Mutation> in
-          self.allFriends = friends
+          self.allFriends = friends.toArray()
           return .concat([
-            .just(.updateFriends(friends)),
+            .just(.updateFriends(friends.toArray())),
             .just(.updateLoading(status == .inProgress))
           ])
         }
