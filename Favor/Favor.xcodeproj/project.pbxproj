@@ -19,7 +19,7 @@
 		2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75629F7C52D003342CA /* FriendListVC.swift */; };
 		2E3FA75929F7C561003342CA /* FriendListViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */; };
 		2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75A29F80B63003342CA /* FriendListSection.swift */; };
-		2E3FA75E29F80D3C003342CA /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75D29F80D3C003342CA /* FriendCell.swift */; };
+		2E3FA75E29F80D3C003342CA /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75D29F80D3C003342CA /* FriendListCell.swift */; };
 		2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */; };
 		2E63538B295D900F00B23A14 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538A295D900F00B23A14 /* RxMoya */; };
 		2E63538E295D904000B23A14 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E63538D295D904000B23A14 /* Kingfisher */; };
@@ -193,7 +193,7 @@
 		2E3FA75629F7C52D003342CA /* FriendListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListVC.swift; sourceTree = "<group>"; };
 		2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListViewReactor.swift; sourceTree = "<group>"; };
 		2E3FA75A29F80B63003342CA /* FriendListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListSection.swift; sourceTree = "<group>"; };
-		2E3FA75D29F80D3C003342CA /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
+		2E3FA75D29F80D3C003342CA /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
 		2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionBackgroundView.swift; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCellReactor.swift; sourceTree = "<group>"; };
@@ -475,7 +475,7 @@
 		2E3FA75C29F80D30003342CA /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				2E3FA75D29F80D3C003342CA /* FriendCell.swift */,
+				2E3FA75D29F80D3C003342CA /* FriendListCell.swift */,
 				2E87B8DF2A0C881A00570386 /* EditFriendCell.swift */,
 			);
 			path = Cells;
@@ -1347,7 +1347,7 @@
 				E524C18929E923B9004CCC40 /* NewGiftFriendVC.swift in Sources */,
 				2EE1537729E5B00D0023FEA5 /* SearchRecentSection.swift in Sources */,
 				2E9C1B7029E9B6AF008122D7 /* BaseSearchVC.swift in Sources */,
-				2E3FA75E29F80D3C003342CA /* FriendCell.swift in Sources */,
+				2E3FA75E29F80D3C003342CA /* FriendListCell.swift in Sources */,
 				2E3FA75929F7C561003342CA /* FriendListViewReactor.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
@@ -1392,7 +1392,6 @@
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
 				2E9B4CC42A12844700C7E31E /* AnniversaryListViewReactor.swift in Sources */,
-				E524C19A29EACC8D004CCC40 /* NewGiftFriendHeaderViewReactor.swift in Sources */,
 				2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,

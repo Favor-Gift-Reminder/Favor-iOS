@@ -38,7 +38,7 @@ public class BaseFriendViewController: BaseViewController {
           }
           switch viewType {
           case .list:
-            let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendCell
+            let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListCell
             cell.bind(with: friend)
             return cell
           case .edit:
@@ -85,7 +85,7 @@ public class BaseFriendViewController: BaseViewController {
 
     // Register
     collectionView.register(cellType: FavorEmptyCell.self)
-    collectionView.register(cellType: FriendCell.self)
+    collectionView.register(cellType: FriendListCell.self)
     collectionView.register(cellType: EditFriendCell.self)
     collectionView.register(
       supplementaryViewType: FriendListSectionHeader.self,

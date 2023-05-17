@@ -1,5 +1,5 @@
 //
-//  FriendCell.swift
+//  FriendListCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/25.
@@ -10,7 +10,7 @@ import UIKit
 import FavorKit
 import Reusable
 
-final class FriendCell: BaseFriendCell, Pressable, Reusable {
+final class FriendListCell: BaseFriendCell, Pressable, Reusable {
 
   // MARK: - Constants
 
@@ -26,16 +26,6 @@ final class FriendCell: BaseFriendCell, Pressable, Reusable {
   var pressedBackgroundColor: UIColor = .favorColor(.background)
 
   // MARK: - UI Components
-
-  private let isUserIconImageView: UIImageView = {
-    let imageView = UIImageView()
-    imageView.image = .favorIcon(.favor)?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: 16)
-      .withTintColor(.favorColor(.main))
-    imageView.contentMode = .center
-    return imageView
-  }()
 
   private let rightImageView: UIImageView = {
     let imageView = UIImageView()
@@ -71,7 +61,6 @@ final class FriendCell: BaseFriendCell, Pressable, Reusable {
   public override func bind(with friend: Friend) {
     super.bind(with: friend)
 //    self.nameLabel.text = friend.name
-    self.isUserIconImageView.isHidden = !friend.isUser
   }
 
   // MARK: - UI Setups
@@ -79,12 +68,7 @@ final class FriendCell: BaseFriendCell, Pressable, Reusable {
   override func setupLayouts() {
     super.setupLayouts()
 
-    [
-      self.isUserIconImageView,
-      self.rightImageView
-    ].forEach {
-      self.rightIconStack.addArrangedSubview($0)
-    }
+    self.rightIconStack.addArrangedSubview(self.rightImageView)
 
     self.containerView.addSubview(self.rightIconStack)
   }
@@ -92,13 +76,8 @@ final class FriendCell: BaseFriendCell, Pressable, Reusable {
   override func setupConstraints() {
     super.setupConstraints()
 
-    [
-      self.isUserIconImageView,
-      self.rightImageView
-    ].forEach {
-      $0.snp.makeConstraints { make in
-        make.width.height.equalTo(Metric.rightImageViewSize)
-      }
+    self.rightImageView.snp.makeConstraints { make in
+      make.width.height.equalTo(Metric.rightImageViewSize)
     }
 
     self.rightIconStack.snp.makeConstraints { make in
