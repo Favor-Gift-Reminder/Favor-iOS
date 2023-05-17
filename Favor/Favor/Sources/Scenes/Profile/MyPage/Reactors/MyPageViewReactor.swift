@@ -109,7 +109,7 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     case .updateUserName(let name):
       newState.userName = name
-
+      
     case .updateUserID(let id):
       newState.userID = id
 
@@ -137,14 +137,14 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     return newState
   }
-
+  
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
       var newSections: [ProfileSection] = []
       var newItems: [[ProfileSectionItem]] = []
       var profileSetupHelperItems: [ProfileSectionItem] = []
-
+      
       // 취향
       if !state.favorItems.isEmpty {
         newSections.append(.favors)
