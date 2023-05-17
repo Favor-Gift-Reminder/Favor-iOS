@@ -31,6 +31,7 @@ final class HomeViewController: BaseViewController, View {
         return cell
       case .upcoming(let reactor): // 다가오는 기념일
         let cell = collectionView.dequeueReusableCell(for: indexPath) as UpcomingCell
+        cell.cellType = .reminder
         cell.reactor = reactor
         return cell
       case .timeline(let reactor): // 타임라인

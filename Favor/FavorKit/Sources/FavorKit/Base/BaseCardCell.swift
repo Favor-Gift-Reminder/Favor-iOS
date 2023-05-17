@@ -14,26 +14,21 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
   // MARK: - Constants
 
-  public enum ImageViewType {
-    case undefined
-    /// 이미지가 친구의 프로필 사진인 셀
-    case friend
-    /// 이미지가 이벤트 아이콘인 셀
+  public enum CellType {
     case anniversary
+    case reminder
 
     public var imageSize: CGFloat {
       switch self {
-      case .undefined: return .zero
-      case .friend: return 24
       case .anniversary: return 36
+      case .reminder: return 24
       }
     }
 
     public var imageColor: UIColor {
       switch self {
-      case .undefined: return .clear
-      case .friend: return .favorColor(.white)
       case .anniversary: return .favorColor(.icon)
+      case .reminder: return .favorColor(.white)
       }
     }
   }
@@ -45,7 +40,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   // MARK: - Properties
 
   /// Cell의 좌측에 위치한 아이콘에 들어가는 이미지의 타입
-  public var imageType: ImageViewType = .undefined {
+  public var cellType: CellType? {
     didSet { self.transformToType() }
   }
 
@@ -70,11 +65,13 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   private lazy var profileDefaultImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.backgroundColor = .favorColor(.line3)
-    imageView.image = .favorIcon(.friend)?.withTintColor(.favorColor(.white))
+    imageView.image = .favorIcon(.friend)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 24)
+      .withTintColor(.favorColor(.white))
     imageView.contentMode = .center
     imageView.layer.cornerRadius = Metric.iconImageSize / 2
     imageView.clipsToBounds = true
-    imageView.isHidden = true
     return imageView
   }()
 
@@ -171,22 +168,27 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
 private extension BaseCardCell {
   func transformToType() {
-    switch self.imageType {
-    case .undefined: break
-    case .friend:
-      self.profileDefaultImageView.isHidden = false
-      self.imageView.layer.cornerRadius = Metric.iconImageSize / 2
+    guard let cellType = self.cellType else {
+      fatalError("CellType of Card Cell should be defined.")
+    }
+    switch cellType {
     case .anniversary:
       self.profileDefaultImageView.isHidden = true
       self.imageView.layer.cornerRadius = 0
+    case .reminder:
+      self.profileDefaultImageView.isHidden = false
+      self.imageView.layer.cornerRadius = Metric.iconImageSize / 2
     }
   }
 
   func updateImage() {
+    guard let cellType = self.cellType else {
+      fatalError("CellType of Card Cell should be defined.")
+    }
     self.imageView.image = self.image?
       .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: self.imageType.imageSize)
-      .withTintColor(self.imageType.imageColor)
+      .resize(newWidth: cellType.imageSize)
+      .withTintColor(cellType.imageColor)
   }
 
   func updateLabels() {

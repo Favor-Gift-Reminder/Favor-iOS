@@ -23,18 +23,6 @@ final class ReminderCell: BaseCardCell, Reusable, View {
 
   private lazy var toggleSwitch = FavorSwitch()
 
-  // MARK: - Initializer
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    
-    self.imageType = .friend
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   // MARK: - Binding
 
   func bind(reactor: ReminderCellReactor) {

@@ -26,6 +26,7 @@ final class ReminderViewController: BaseViewController, View {
       switch item {
       case .reminder(let reactor):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as ReminderCell
+        cell.cellType = .reminder
         cell.reactor = reactor
         return cell
       }
