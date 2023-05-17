@@ -118,14 +118,12 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
 
     /// 화면의 너비를 꽉 채우며 세로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
-    ///   - height: Group의 `heightDimension`
     ///   - numberOfItems: Group 안에 포함된 Item들의 개수
     ///   - spacing: Group 내부에 들어있는 Item들의 간격
     ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
     ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group
     case list(
-      height: NSCollectionLayoutDimension,
-      numberOfItems: Int,
+      numberOfItems: Int? = nil,
       spacing: NSCollectionLayoutSpacing? = nil,
       contentInsets: NSDirectionalEdgeInsets? = nil,
       innerGroup: FavorCompositionalLayout.Group? = nil
@@ -184,14 +182,14 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           contentInsets: contentInsets ?? .zero,
           innerGroup: innerGroup
         )
-      case let .list(height, numberOfItems, spacing, contentInsets, innerGroup):
+      case let .list(numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: height
+            heightDimension: .estimated(1)
           ),
-          numberOfItems: numberOfItems,
-          direction: .horizontal,
+          numberOfItems: numberOfItems ?? 1,
+          direction: .vertical,
           spacing: spacing ?? .fixed(.zero),
           contentInsets: contentInsets ?? .zero,
           innerGroup: innerGroup

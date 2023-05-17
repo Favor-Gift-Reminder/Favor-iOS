@@ -133,20 +133,14 @@ extension ProfileSection: Adaptive {
         spacing: .fixed(10)
       )
       return .list(
-        height: .estimated(32),
         numberOfItems: 2,
         spacing: .fixed(10),
         innerGroup: innerGroup
       )
     case .anniversaries:
-      return .list(
-        height: .estimated(95),
-        numberOfItems: 3,
-        spacing: .fixed(10)
-      )
+      return .list(spacing: .fixed(10))
     case .memo:
       return .list(
-        height: .estimated(130),
         numberOfItems: 1
       )
     case .friends:
@@ -185,6 +179,7 @@ extension ProfileSection: Adaptive {
       return .base(
         spacing: 10,
         contentInsets: defaultInsets,
+        orthogonalScrolling: UICollectionLayoutSectionOrthogonalScrollingBehavior.none,
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )

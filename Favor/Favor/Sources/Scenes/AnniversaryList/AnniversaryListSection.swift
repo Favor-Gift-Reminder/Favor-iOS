@@ -63,10 +63,7 @@ extension AnniversaryListSection: Adaptive {
     case .empty:
       return .full()
     case .pinned, .all:
-      return .list(
-        height: .estimated(1),
-        numberOfItems: 1
-      )
+      return .list()
     }
   }
 

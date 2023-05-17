@@ -62,12 +62,7 @@ extension FriendSection: Adaptive {
     case .empty:
       return .full()
     case .friend, .editFriend:
-      return .list(
-        height: .absolute(48),
-        numberOfItems: 1,
-        spacing: .fixed(8),
-        contentInsets: .zero
-      )
+      return .list(spacing: .fixed(8))
     }
   }
 
