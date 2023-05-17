@@ -15,26 +15,44 @@ public final class AnniversaryListCellReactor: Reactor {
   public var initialState: State
 
   public enum Action {
-
+    case rightButtonDidTap
   }
 
   public enum Mutation {
-
+    case toggleIsPinned
   }
 
   public struct State {
-    var cellType: AnniversaryListCell.CellType = .list
+    var cellType: AnniversaryListCell.CellType
     var anniversary: Anniversary
   }
 
   // MARK: - Initializer
 
-  init(anniversary: Anniversary) {
+  init(cellType: AnniversaryListCell.CellType, anniversary: Anniversary) {
     self.initialState = State(
+      cellType: cellType,
       anniversary: anniversary
     )
   }
 
   // MARK: - Functions
 
+  public func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .rightButtonDidTap:
+      return .empty()
+    }
+  }
+
+  public func reduce(state: State, mutation: Mutation) -> State {
+    let newState = state
+
+    switch mutation {
+    case .toggleIsPinned:
+      newState.anniversary.isPinned.toggle()
+    }
+
+    return newState
+  }
 }

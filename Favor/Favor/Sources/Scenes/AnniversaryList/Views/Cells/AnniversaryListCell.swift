@@ -10,9 +10,10 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
+import RxCocoa
 import SnapKit
 
-final class AnniversaryListCell: BaseCardCell, View, Reusable {
+public final class AnniversaryListCell: BaseCardCell, View, Reusable {
 
   // MARK: - Constants
 
@@ -39,7 +40,7 @@ final class AnniversaryListCell: BaseCardCell, View, Reusable {
 
   // MARK: - UI Components
 
-  private let rightButton: UIButton = {
+  fileprivate let rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.line2)
@@ -49,12 +50,14 @@ final class AnniversaryListCell: BaseCardCell, View, Reusable {
     return button
   }()
 
-  // MARK: - Life Cycle
-
   // MARK: - Binding
 
-  func bind(reactor: AnniversaryListCellReactor) {
+  public func bind(reactor: AnniversaryListCellReactor) {
     // Action
+    self.rightButton.rx.tap
+      .map { Reactor.Action.rightButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
 
     // State
     reactor.state.map { (cellType: $0.cellType, isPinned: $0.anniversary.isPinned) }
@@ -63,19 +66,27 @@ final class AnniversaryListCell: BaseCardCell, View, Reusable {
         owner.convert(to: cellData.cellType, isPinned: cellData.isPinned)
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.anniversary }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, anniversary in
+        owner.title = anniversary.title
+        owner.subtitle = anniversary.date.toShortenDateString()
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
 
   // MARK: - UI Setups
 
-  override func setupLayouts() {
+  public override func setupLayouts() {
     super.setupLayouts()
 
     self.addSubview(self.rightButton)
   }
 
-  override func setupConstraints() {
+  public override func setupConstraints() {
     super.setupConstraints()
 
     self.rightButton.snp.makeConstraints { make in
@@ -95,5 +106,14 @@ private extension AnniversaryListCell {
       .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: Metric.rightButtonImageSize)
       .withTintColor(iconColor)
+  }
+}
+
+
+// MARK: - Reactive
+
+public extension Reactive where Base: AnniversaryListCell {
+  var rightButtonDidTap: ControlEvent<()> {
+    return ControlEvent(events: base.rightButton.rx.tap)
   }
 }

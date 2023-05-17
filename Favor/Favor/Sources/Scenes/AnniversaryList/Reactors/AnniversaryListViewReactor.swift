@@ -21,18 +21,22 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
+  let userFetcher = Fetcher<User>()
 
   enum Action {
     case viewNeedsLoaded
+    case rightButtonDidTap(Anniversary)
   }
 
   enum Mutation {
+    case updateAnniversaries([Anniversary])
     case updatePinnedSection([Item])
     case updateAllSection([Item])
   }
 
   struct State {
     var viewState: AnniversaryListViewController.ViewState = .list
+    var anniversaries: [Anniversary] = []
     var sections: [Section] = []
     var items: [[Item]] = []
     var pinnedItems: [Item] = []
@@ -43,6 +47,7 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
 
   init() {
     self.initialState = State()
+    self.setupUserFetcher()
   }
 
   // MARK: - Functions
@@ -50,17 +55,32 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      let anniversary = Anniversary(anniversaryNo: 48, title: "sdklfj", date: .now, isPinned: true)
-      let anniversary2 = Anniversary(anniversaryNo: 49, title: "sdklfj", date: .now, isPinned: false)
-      let anniversary3 = Anniversary(anniversaryNo: 50, title: "sdklfj", date: .now, isPinned: false)
-      return .concat(
-        .just(.updatePinnedSection([.anniversary(AnniversaryListCellReactor(anniversary: anniversary))])),
-        .just(.updateAllSection([
-          .anniversary(AnniversaryListCellReactor(anniversary: anniversary)),
-          .anniversary(AnniversaryListCellReactor(anniversary: anniversary2)),
-          .anniversary(AnniversaryListCellReactor(anniversary: anniversary3))
-        ]))
-      )
+      return self.userFetcher.fetch()
+        .flatMap { (state, user) -> Observable<Mutation> in
+          guard let user = user.first else { return .empty() }
+          let anniversaries = user.anniversaryList.toArray()
+          return .just(.updateAnniversaries(anniversaries))
+        }
+
+    case .rightButtonDidTap(let anniversary):
+      return .empty()
+    }
+  }
+
+  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+    return mutation.flatMap { mutate -> Observable<Mutation> in
+      switch mutate {
+      case .updateAnniversaries(let anniversaries):
+        let pinnedItems = anniversaries.filter { $0.isPinned }.map { $0.toItem(cellType: .list) }
+        let allItems = anniversaries.map { $0.toItem(cellType: .list) }
+        return .merge([
+          mutation,
+          .just(.updatePinnedSection(pinnedItems)),
+          .just(.updateAllSection(allItems))
+        ])
+      default:
+        return mutation
+      }
     }
   }
 
@@ -68,6 +88,9 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
+    case .updateAnniversaries(let anniversaries):
+      newState.anniversaries = anniversaries
+
     case .updatePinnedSection(let pinnedItems):
       newState.pinnedItems = pinnedItems
 
@@ -82,22 +105,71 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
 
-      // 고정
-      if !state.pinnedItems.isEmpty {
-        newState.sections.append(.pinned)
-        newState.items.append(state.pinnedItems)
+      // 비어있을 때
+      if state.allItems.isEmpty {
+        newState.sections = [.empty]
+        newState.items = [[.empty]]
+        return newState
       }
 
-      // 전체
-      if !state.allItems.isEmpty {
-        newState.sections.append(.all)
-        newState.items.append(state.allItems)
-      } else { // Empty
-        newState.sections.append(.empty)
-        newState.items.append([.empty])
-      }
+      newState.sections = [.pinned, .all]
+      newState.items = [state.pinnedItems, state.allItems]
 
       return newState
     }
+  }
+}
+
+// MARK: - Privates
+
+private extension AnniversaryListViewReactor {
+  func setupUserFetcher() {
+    // onRemote
+    self.userFetcher.onRemote = {
+      let networking = UserNetworking()
+      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
+        .flatMap { user -> Observable<[User]> in
+          let userData = user.data
+          do {
+            let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
+            let remoteUser = remote.data
+            let decodedUser = User(
+              userNo: remoteUser.userNo,
+              email: remoteUser.email,
+              userID: remoteUser.userID,
+              name: remoteUser.name,
+              favorList: remoteUser.favorList,
+              giftList: remoteUser.giftList.map { $0.toDomain() },
+              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
+              friendList: remoteUser.friendList.map { $0.toDomain() }
+            )
+            return .just([decodedUser])
+          } catch {
+            print(error)
+            return .just([])
+          }
+        }
+        .asSingle()
+      return user
+    }
+    // onLocal
+    self.userFetcher.onLocal = {
+      return try await RealmManager.shared.read(User.self)
+    }
+    // onLocalUpdate
+    self.userFetcher.onLocalUpdate = { _, remoteUser in
+      guard let remoteUser = remoteUser.first else { return }
+      try await RealmManager.shared.update(remoteUser, update: .all)
+    }
+  }
+}
+
+// MARK: - Anniversary Helper
+
+extension Anniversary {
+  fileprivate func toItem(
+    cellType: AnniversaryListCell.CellType
+  ) -> AnniversaryListSectionItem {
+    return .anniversary(AnniversaryListCellReactor(cellType: cellType, anniversary: self))
   }
 }

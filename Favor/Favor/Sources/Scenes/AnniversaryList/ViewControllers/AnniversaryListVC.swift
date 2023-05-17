@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/05/16.
 //
 
+import OSLog
 import UIKit
 
 import FavorKit
@@ -26,7 +27,7 @@ final class AnniversaryListViewController: BaseViewController, View {
   private lazy var dataSource: AnniversaryListDataSource = {
     let dataSource = AnniversaryListDataSource(
       collectionView: self.collectionView,
-      cellProvider: { collectionView, indexPath, item in
+      cellProvider: { [weak self] collectionView, indexPath, item in
         switch item {
         case .empty:
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
@@ -34,8 +35,18 @@ final class AnniversaryListViewController: BaseViewController, View {
           return cell
         case .anniversary(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as AnniversaryListCell
-          cell.imageType = .anniversary
           cell.reactor = reactor
+
+          cell.rx.rightButtonDidTap
+            .asDriver(onErrorRecover: { _ in return .empty()})
+            .drive(with: cell, onNext: { owner, _ in
+              guard
+                let self = self,
+                let viewReeactor = self.reactor
+              else { return }
+              viewReeactor.action.onNext(.rightButtonDidTap(reactor.currentState.anniversary))
+            })
+            .disposed(by: cell.disposeBag)
           return cell
         }
       }
@@ -47,6 +58,11 @@ final class AnniversaryListViewController: BaseViewController, View {
           ofKind: kind,
           for: indexPath
         ) as AnniversaryListSectionHeaderView
+        let currentSnapshot = self.dataSource.snapshot()
+        let section = currentSnapshot.sectionIdentifiers[indexPath.section]
+        let numberOfItems = currentSnapshot.numberOfItems(inSection: section)
+        let title = indexPath.section == .zero ? "고정됨" : "전체"
+        header.bind(title: title, numberOfFriends: numberOfItems)
         return header
       default:
         return UICollectionReusableView()
@@ -115,36 +131,13 @@ final class AnniversaryListViewController: BaseViewController, View {
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        var snapshot: NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem> = .init()
+        var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
         snapshot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
         }
         owner.dataSource.apply(snapshot, animatingDifferences: true)
         owner.collectionView.collectionViewLayout.invalidateLayout()
-
-        // Update the header view
-        if let pinnedAnniversariesHeaderView = owner.collectionView.supplementaryView(
-          forElementKind: UICollectionView.elementKindSectionHeader,
-          at: IndexPath(item: 0, section: 0)
-        ) as? AnniversaryListSectionHeaderView {
-          let numberOfPinnedAnniversaries = sectionData.items[0].count
-          pinnedAnniversariesHeaderView.bind(
-            title: "고정됨",
-            numberOfFriends: numberOfPinnedAnniversaries
-          )
-        }
-
-        if let allAnniversariesHeaderView = owner.collectionView.supplementaryView(
-          forElementKind: UICollectionView.elementKindSectionHeader,
-          at: IndexPath(item: 0, section: 1)
-        ) as? AnniversaryListSectionHeaderView {
-          let numberOfAllAnniversaries = sectionData.items[1].count
-          allAnniversariesHeaderView.bind(
-            title: "전체",
-            numberOfFriends: numberOfAllAnniversaries
-          )
-        }
       })
       .disposed(by: self.disposeBag)
   }
@@ -171,9 +164,9 @@ private extension AnniversaryListViewController {
   func convert(to state: ViewState) {
     switch state {
     case .list:
-      print("List")
+      os_log(.debug, "리스트,편집 보기 전환 기능이 아직 구현되지 않았습니다.: List로 변환")
     case .edit:
-      print("Edit")
+      os_log(.debug, "리스트,편집 보기 전환 기능이 아직 구현되지 않았습니다.: Edit로 변환")
     }
   }
 }
