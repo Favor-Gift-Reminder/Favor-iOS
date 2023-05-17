@@ -104,10 +104,11 @@ final class MyPageViewReactor: Reactor, Stepper {
       return .empty()
 
     case .friendCellDidTap(let friend):
-      print(friend)
+      os_log(.debug, "Friend did tap: \(friend).")
       return .empty()
 
     case .newFriendCellDidTap:
+      os_log(.debug, "New Friend did tap.")
       return .empty()
 
     case .doNothing:

@@ -75,9 +75,11 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // Cell 선택
-    self.collectionView.rx.modelSelected(ProfileSectionItem.self)
-      .map { model -> Reactor.Action in
-        switch model {
+
+    self.collectionView.rx.itemSelected
+      .map { indexPath -> Reactor.Action in
+        guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return .doNothing }
+        switch item {
         case .friends(let reactor):
           return reactor.currentState.isNewFriendCell ?
             .newFriendCellDidTap :
