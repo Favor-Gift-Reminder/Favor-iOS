@@ -37,8 +37,11 @@ final class MyPageFlow: Flow {
     case .settingIsRequired:
       return self.navigateToSetting()
 
-    case .friendIsRequired:
-      return self.navigateToFriend()
+    case .anniversaryListIsRequired:
+      return self.navigateToAnniversaryList()
+
+    case .friendListIsRequired:
+      return self.navigateToFriendList()
 
     default:
       return .none
@@ -80,20 +83,21 @@ final class MyPageFlow: Flow {
     return .none
   }
 
-  private func navigateToFriend() -> FlowContributors {
-    let friendVC = FriendViewController()
-    let friendReactor = FriendViewReactor()
-    friendVC.reactor = friendReactor
-    friendVC.title = "내 친구"
-
-    DispatchQueue.main.async {
-      self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.pushViewController(friendVC, animated: true)
-    }
+  private func navigateToAnniversaryList() -> FlowContributors {
+    let anniversaryListFlow = AnniversaryListFlow(rootViewController: self.rootViewController)
 
     return .one(flowContributor: .contribute(
-      withNextPresentable: friendVC,
-      withNextStepper: friendReactor
+      withNextPresentable: anniversaryListFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired)
+    ))
+  }
+
+  private func navigateToFriendList() -> FlowContributors {
+    let friendListFlow = FriendListFlow(rootViewController: self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendListFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.friendListIsRequired)
     ))
   }
 }

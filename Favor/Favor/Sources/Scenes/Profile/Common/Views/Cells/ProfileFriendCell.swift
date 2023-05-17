@@ -18,6 +18,22 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
 
   // MARK: - Properties
 
+  private let newFriendCellIcon: UIImage = {
+    let image: UIImage = .favorIcon(.addFriend)!
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 30)
+      .withTintColor(.favorColor(.white))
+    return image
+  }()
+
+  private let emptyProfileImageIcon: UIImage = {
+    let image: UIImage = .favorIcon(.friend)!
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 30)
+      .withTintColor(.favorColor(.white))
+    return image
+  }()
+
   // MARK: - UI Components
 
   private let stackView: UIStackView = {
@@ -32,10 +48,6 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
     let imageView = UIImageView()
     imageView.layer.cornerRadius = 30
     imageView.backgroundColor = .favorColor(.line3)
-    imageView.image = .favorIcon(.friend)?
-      .withRenderingMode(.alwaysTemplate)
-      .withTintColor(.favorColor(.white))
-      .resize(newWidth: 30)
     imageView.contentMode = .center
     return imageView
   }()
@@ -68,11 +80,17 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
     // Action
 
     // State
-    reactor.state.map { $0.friend }
+    reactor.state.map { (friend: $0.friend, isNewFriendCell: $0.isNewFriendCell) }
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, friend in
-        owner.nameLabel.text = friend.name
-//        owner.profileImageView.image = friend.profilePhoto
+      .drive(with: self, onNext: { owner, friendData in
+        let friend = friendData.friend
+        owner.nameLabel.text = friendData.isNewFriendCell ? "추가하기" : friend.name
+//        owner.nameLabel.text = "safsdf"
+//        owner.nameLabel.text = "" // friendData.isNewFriendCell ? "추가하기" : friend.name
+//        let profileImage = friend.profilePhoto ?? owner.emptyProfileImageIcon
+        owner.profileImageView.image = {
+          friendData.isNewFriendCell ? owner.newFriendCellIcon : owner.emptyProfileImageIcon
+        }()
       })
       .disposed(by: self.disposeBag)
   }

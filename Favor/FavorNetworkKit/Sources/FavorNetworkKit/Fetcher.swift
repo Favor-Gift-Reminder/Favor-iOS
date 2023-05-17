@@ -14,7 +14,7 @@ import RealmSwift
 import RxSwift
 
 /// - T: LocalDB class
-public class Fetcher<T> {
+public class Fetcher<T: Object> {
 
   // MARK: - Constants
 
@@ -25,11 +25,11 @@ public class Fetcher<T> {
   // MARK: - Properties
 
   /// 서버에서 데이터를 받아오는 클로저
-  public var onRemote: (() async throws -> Single<T>)?
+  public var onRemote: (() async throws -> Single<[T]>)?
   /// LocalDB에서 데이터를 받아오는 클로저
-  public var onLocal: (() async throws -> T)?
+  public var onLocal: (() async throws -> Results<T>)?
   /// LocalDB를 업데이트 하는 클로저
-  public var onLocalUpdate: ((T) async throws -> Void)?
+  public var onLocalUpdate: ((_ local: Results<T>, _ remote: [T]) async throws -> Void)?
 
   // MARK: - Initializer
 
@@ -47,7 +47,7 @@ public class Fetcher<T> {
   /// 5. 업데이트된 로컬 DB로부터 데이터를 `read`하고 방출합니다. (`status` = `.success`)
   /// 6. `request`가 실패했다면
   /// 7. 로컬 DB에 있는 데이터를 그대로 `read`하여 방출합니다. (`status` = `.failure`)
-  public func fetch() -> Observable<(Status, T)> {
+  public func fetch() -> Observable<(Status, Results<T>)> {
     guard
       let onRemote = self.onRemote,
       let onLocal = self.onLocal,
@@ -62,19 +62,19 @@ public class Fetcher<T> {
           // 로컬에 저장된 데이터를 방출하며 status를 inProgress로 설정합니다.
           os_log(.debug, "📂 🟡 FETCHER STATUS: inProgress")
 
-          let local = try await onLocal()
-          observer.onNext((.inProgress, local))
+          let localData = try await onLocal()
+          observer.onNext((.inProgress, localData))
 
           do {
             let remoteData = try await onRemote().value
             os_log(.debug, "🌐 FETCHER GOT REMOTE DATA: \(String(describing: remoteData))")
-            try await onLocalUpdate(remoteData)
+            try await onLocalUpdate(localData, remoteData)
 
             observer.onNext((.success, try await onLocal()))
             os_log(.debug, "📂 🟢 FETCHER STATUS: success")
             observer.onCompleted()
           } catch {
-            observer.onNext((.failure, local))
+            observer.onNext((.failure, localData))
             os_log(.error, "📂 🔴 FETCHER STATUS: failure")
           }
         } catch {

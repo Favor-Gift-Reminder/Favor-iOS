@@ -44,7 +44,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   
   var initialState: State = State()
   var steps = PublishRelay<Step>()
-  let friendFetcher = Fetcher<[Friend]>()
+  let friendFetcher = Fetcher<Friend>()
   
   /// 최초로 불러온 친구 목록 입니다.
   var allFriends: [Friend] = []
@@ -62,9 +62,9 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case .viewDidLoad:
       return self.friendFetcher.fetch()
         .flatMap { (status, friends) -> Observable<Mutation> in
-          self.allFriends = friends
+          self.allFriends = friends.toArray()
           return .concat([
-            .just(.updateFriends(friends)),
+            .just(.updateFriends(friends.toArray())),
             .just(.updateLoading(status == .inProgress))
           ])
         }
@@ -179,12 +179,11 @@ private extension NewGiftFriendViewReactor {
     }
     // onLocal
     self.friendFetcher.onLocal = {
-      let friends = try await RealmManager.shared.read(Friend.self)
-      return await friends.toArray()
+      return try await RealmManager.shared.read(Friend.self)
     }
     // onLocalUpdate
-    self.friendFetcher.onLocalUpdate = { friends in
-      try await RealmManager.shared.updateAll(friends)
+    self.friendFetcher.onLocalUpdate = { _, remoteFriends in
+      try await RealmManager.shared.updateAll(remoteFriends)
     }
   }
 }

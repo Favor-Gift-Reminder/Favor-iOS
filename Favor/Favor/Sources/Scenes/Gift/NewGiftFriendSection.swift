@@ -12,7 +12,7 @@ import FavorKit
 enum NewGiftFriendItem {
   case empty
   case friend(NewGiftFriendCellReactor)
-  
+
   var reactor: NewGiftFriendCellReactor? {
     switch self {
     case .empty:
@@ -41,7 +41,7 @@ extension NewGiftFriendItem: SectionModelItem {
       return false
     }
   }
-  
+
   func hash(into hasher: inout Hasher) {
     switch self {
     case .empty:

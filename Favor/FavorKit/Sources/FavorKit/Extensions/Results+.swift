@@ -26,4 +26,8 @@ extension Results {
       }
     }
   }
+
+  public func toArray() -> [Element] {
+    return Array(self)
+  }
 }

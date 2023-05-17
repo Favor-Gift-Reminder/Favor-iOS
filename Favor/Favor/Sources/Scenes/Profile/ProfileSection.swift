@@ -31,7 +31,7 @@ enum ProfileSection: SectionModelType {
   case friends
 }
 
-extension ProfileSectionItem: Equatable, Hashable {
+extension ProfileSectionItem {
   static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
     switch (lhs, rhs) {
     case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
@@ -52,18 +52,14 @@ extension ProfileSectionItem: Equatable, Hashable {
   func hash(into hasher: inout Hasher) {
     switch self {
     case let .profileSetupHelper(reactor):
-      hasher.combine("profileSetupHelper")
       hasher.combine(ObjectIdentifier(reactor))
     case let .favors(reactor):
-      hasher.combine("favors")
       hasher.combine(ObjectIdentifier(reactor))
     case let .anniversaries(reactor):
-      hasher.combine("anniversaries")
       hasher.combine(ObjectIdentifier(reactor))
     case .memo:
       hasher.combine("memo")
     case let .friends(reactor):
-      hasher.combine("friends")
       hasher.combine(ObjectIdentifier(reactor))
     }
   }
@@ -115,7 +111,7 @@ extension ProfileSection: Adaptive {
     case .friends:
       return .grid(
         width: .absolute(60),
-        height: .fractionalHeight(1.0)
+        height: .absolute(87)
       )
     }
   }
@@ -137,25 +133,21 @@ extension ProfileSection: Adaptive {
         spacing: .fixed(10)
       )
       return .list(
-        height: .estimated(32),
         numberOfItems: 2,
         spacing: .fixed(10),
         innerGroup: innerGroup
       )
     case .anniversaries:
-      return .list(
-        height: .estimated(95),
-        numberOfItems: 3,
-        spacing: .fixed(10)
-      )
+      return .list(spacing: .fixed(10))
     case .memo:
       return .list(
-        height: .estimated(130),
         numberOfItems: 1
       )
     case .friends:
-      return .flow(
-        height: .estimated(85),
+      return .custom(
+        width: .estimated(1),
+        height: .absolute(87),
+        direction: .horizontal,
         numberOfItems: 10,
         spacing: .fixed(26)
       )
@@ -187,6 +179,7 @@ extension ProfileSection: Adaptive {
       return .base(
         spacing: 10,
         contentInsets: defaultInsets,
+        orthogonalScrolling: UICollectionLayoutSectionOrthogonalScrollingBehavior.none,
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )

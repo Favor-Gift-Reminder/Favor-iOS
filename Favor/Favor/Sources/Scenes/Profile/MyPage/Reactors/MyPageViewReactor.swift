@@ -27,6 +27,9 @@ final class MyPageViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case settingButtonDidTap
     case headerRightButtonDidTap(ProfileSection)
+    case newFriendCellDidTap
+    case friendCellDidTap(Friend)
+    case doNothing
   }
   
   enum Mutation {
@@ -70,6 +73,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.userFetcher.fetch()
         .flatMap { (status, user) -> Observable<Mutation> in
+          guard let user = user.toArray().first else { return .empty() }
           return .concat([
             .just(.updateUser(user)),
             .just(.updateUserName(user.name)),
@@ -91,10 +95,23 @@ final class MyPageViewReactor: Reactor, Stepper {
 
     case .headerRightButtonDidTap(let section):
       switch section {
+      case .anniversaries:
+        self.steps.accept(AppStep.anniversaryListIsRequired)
       case .friends:
-        self.steps.accept(AppStep.friendIsRequired)
+        self.steps.accept(AppStep.friendListIsRequired)
       default: break
       }
+      return .empty()
+
+    case .friendCellDidTap(let friend):
+      os_log(.debug, "Friend did tap: \(friend).")
+      return .empty()
+
+    case .newFriendCellDidTap:
+      os_log(.debug, "New Friend did tap.")
+      return .empty()
+
+    case .doNothing:
       return .empty()
     }
   }
@@ -159,8 +176,14 @@ final class MyPageViewReactor: Reactor, Stepper {
         profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
       }
       // 친구
+      // 친구 맨 앞에 친구 추가
+      let newFriend = Friend()
+      newState.friendItems.insert(
+        .friends(ProfileFriendCellReactor(friend: newFriend, isNewFriendCell: true)),
+        at: .zero
+      )
       newSections.append(.friends)
-      newItems.append(state.friendItems)
+      newItems.append(newState.friendItems)
       // 새 프로필
       if !profileSetupHelperItems.isEmpty {
         newSections.insert(.profileSetupHelper, at: .zero)
@@ -182,7 +205,7 @@ private extension MyPageViewReactor {
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
       let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
-        .flatMap { user -> Observable<User> in
+        .flatMap { user -> Observable<[User]> in
           let userData = user.data
           do {
             let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
@@ -197,10 +220,10 @@ private extension MyPageViewReactor {
               anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
               friendList: remoteUser.friendList.map { $0.toDomain() }
             )
-            return .just(decodedUser)
+            return .just([decodedUser])
           } catch {
             print(error)
-            return .just(User())
+            return .just([])
           }
         }
         .asSingle()
@@ -208,12 +231,12 @@ private extension MyPageViewReactor {
     }
     // onLocal
     self.userFetcher.onLocal = {
-      let user = try await RealmManager.shared.read(User.self)
-      return await user.toValue()
+      return try await RealmManager.shared.read(User.self)
     }
     // onLocalUpdate
-    self.userFetcher.onLocalUpdate = { user in
-      try await RealmManager.shared.update(user, update: .all)
+    self.userFetcher.onLocalUpdate = { _, remoteUser in
+      guard let remoteUser = remoteUser.first else { return }
+      try await RealmManager.shared.update(remoteUser, update: .all)
     }
   }
 }

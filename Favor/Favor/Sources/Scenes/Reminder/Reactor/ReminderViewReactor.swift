@@ -21,7 +21,7 @@ final class ReminderViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let reminderFetcher = Fetcher<[Reminder]>()
+  let reminderFetcher = Fetcher<Reminder>()
 
   enum Action {
     case viewNeedsLoaded
@@ -69,7 +69,7 @@ final class ReminderViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.reminderFetcher.fetch()
         .flatMap { (status, reminders) -> Observable<Mutation> in
-          let filteredReminders = reminders.filter {
+          let filteredReminders = reminders.toArray().filter {
             let isYearMatch = $0.date.currentYear == self.currentState.selectedDate.year
             let isMonthMatch = $0.date.currentMonth == self.currentState.selectedDate.month
             return isYearMatch && isMonthMatch
@@ -158,13 +158,12 @@ private extension ReminderViewReactor {
     }
     // onLocal
     self.reminderFetcher.onLocal = {
-      let reminders = try await RealmManager.shared.read(Reminder.self)
-      return await reminders.toArray()
+      return try await RealmManager.shared.read(Reminder.self)
     }
     // onLocalUpdate
-    self.reminderFetcher.onLocalUpdate = { reminders in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(reminders)")
-      try await RealmManager.shared.updateAll(reminders)
+    self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
+      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(remoteReminders)")
+      try await RealmManager.shared.updateAll(remoteReminders)
     }
   }
 }

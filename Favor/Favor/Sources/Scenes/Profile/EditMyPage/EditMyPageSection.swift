@@ -50,7 +50,7 @@ extension EditMyPageSection: Adaptive {
   var group: FavorCompositionalLayout.Group {
     switch self {
     case .name, .id:
-      return .list(height: .absolute(19), numberOfItems: 1)
+      return .list()
     case .favor:
       let innerGroup: FavorCompositionalLayout.Group = .flow(
         height: .absolute(32),

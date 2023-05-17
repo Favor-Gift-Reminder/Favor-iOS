@@ -25,7 +25,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let reminderFetcher = Fetcher<[Reminder]>()
+  let reminderFetcher = Fetcher<Reminder>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -72,15 +72,14 @@ final class HomeViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return .empty()
-//      return self.reminderFetcher.fetch()
-//        .flatMap { (status, reminders) -> Observable<Mutation> in
-//          let upcomingSection = self.refineUpcoming(reminders: reminders.prefix(3).wrap())
-//          return .concat([
-//            .just(.updateUpcoming(upcomingSection)),
-//            .just(.updateLoading(status == .inProgress))
-//          ])
-//        }
+      return self.reminderFetcher.fetch()
+        .flatMap { (status, reminders) -> Observable<Mutation> in
+          let upcomingSection = self.refineUpcoming(reminders: reminders.toArray().prefix(3).wrap())
+          return .concat([
+            .just(.updateUpcoming(upcomingSection)),
+            .just(.updateLoading(status == .inProgress))
+          ])
+        }
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
       self.steps.accept(AppStep.searchIsRequired)
@@ -171,13 +170,12 @@ private extension HomeViewReactor {
     }
     // onLocal
     self.reminderFetcher.onLocal = {
-      let reminders = try await RealmManager.shared.read(Reminder.self)
-      return await reminders.toArray()
+      return try await RealmManager.shared.read(Reminder.self)
     }
     // onLocalUpdate
-    self.reminderFetcher.onLocalUpdate = { reminders in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(reminders)")
-      try await RealmManager.shared.updateAll(reminders)
+    self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
+      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(remoteReminders)")
+      try await RealmManager.shared.updateAll(remoteReminders)
     }
   }
 }
