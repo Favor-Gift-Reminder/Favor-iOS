@@ -44,32 +44,6 @@ final class MyPageViewController: BaseProfileViewController, View {
   // MARK: - Life Cycle
   
   // MARK: - Binding
-
-  override func bind() {
-    guard let reactor = self.reactor else { return }
-    
-    // Action
-    self.collectionView.rx.contentOffset
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, offset in
-        owner.updateProfileViewLayout(by: offset)
-      })
-      .disposed(by: self.disposeBag)
-    
-    // State
-    reactor.state.map { (sections: $0.sections, items: $0.items) }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, sectionData in
-        var snapshot: NSDiffableDataSourceSnapshot<ProfileSection, ProfileSectionItem> = .init()
-        snapshot.appendSections(sectionData.sections)
-        sectionData.items.enumerated().forEach { idx, items in
-          snapshot.appendItems(items, toSection: sectionData.sections[idx])
-        }
-        owner.dataSource.apply(snapshot, animatingDifferences: false)
-        owner.collectionView.collectionViewLayout.invalidateLayout()
-      })
-      .disposed(by: self.disposeBag)
-  }
   
   func bind(reactor: MyPageViewReactor) {
     // MARK: - Action
