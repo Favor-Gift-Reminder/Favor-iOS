@@ -30,7 +30,7 @@ final class MyPageViewController: BaseProfileViewController, View {
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
   private let settingButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(.setting)?.withRenderingMode(.alwaysTemplate)
