@@ -20,6 +20,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     RealmManager.shared.locateRealm()
 
+    #if DEBUG
+    UserInfoStorage.userNo = 26
+    #endif
     print("Current User: \(UserInfoStorage.userNo)")
     
 		return true
