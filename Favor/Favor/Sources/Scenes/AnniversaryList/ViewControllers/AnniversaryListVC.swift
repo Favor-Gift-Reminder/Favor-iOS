@@ -81,6 +81,8 @@ final class AnniversaryListViewController: BaseViewController, View {
     )
 
     collectionView.showsHorizontalScrollIndicator = false
+    collectionView.contentInset = UIEdgeInsets(top: 32, left: .zero, bottom: .zero, right: .zero)
+    collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
 

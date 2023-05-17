@@ -71,7 +71,10 @@ extension AnniversaryListSection: Adaptive {
   }
 
   public var section: FavorCompositionalLayout.Section {
-    let header = FavorCompositionalLayout.BoundaryItem.header(height: .estimated(22))
+    let header = FavorCompositionalLayout.BoundaryItem.header(
+      height: .absolute(37),
+      contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 15, trailing: .zero)
+    )
 
     switch self {
     case .empty:
