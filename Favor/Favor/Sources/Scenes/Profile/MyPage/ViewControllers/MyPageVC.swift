@@ -30,7 +30,7 @@ final class MyPageViewController: BaseProfileViewController, View {
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
   private let settingButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(.setting)?.withRenderingMode(.alwaysTemplate)
@@ -47,7 +47,7 @@ final class MyPageViewController: BaseProfileViewController, View {
 
   override func bind() {
     guard let reactor = self.reactor else { return }
-
+    
     // Action
     self.collectionView.rx.contentOffset
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -55,7 +55,7 @@ final class MyPageViewController: BaseProfileViewController, View {
         owner.updateProfileViewLayout(by: offset)
       })
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
