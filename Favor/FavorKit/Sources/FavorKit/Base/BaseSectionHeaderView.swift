@@ -1,5 +1,5 @@
 //
-//  BaseSectionHeader.swift
+//  BaseSectionHeaderView.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/28.
@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-open class BaseSectionHeader: UICollectionReusableView, BaseView {
+open class BaseSectionHeaderView: UICollectionReusableView, BaseView {
 
   // MARK: - UI Components
 

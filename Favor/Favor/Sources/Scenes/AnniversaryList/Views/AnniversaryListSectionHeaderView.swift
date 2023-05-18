@@ -11,7 +11,7 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class AnniversaryListSectionHeaderView: BaseSectionHeader, Reusable {
+final class AnniversaryListSectionHeaderView: BaseSectionHeaderView, Reusable {
 
   // MARK: - UI Components
 

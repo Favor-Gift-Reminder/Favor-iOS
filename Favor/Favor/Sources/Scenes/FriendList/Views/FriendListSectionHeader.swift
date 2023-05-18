@@ -11,7 +11,7 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class FriendListSectionHeader: BaseSectionHeader, Reusable {
+final class FriendListSectionHeader: BaseSectionHeaderView, Reusable {
 
   // MARK: - UI Components
 
