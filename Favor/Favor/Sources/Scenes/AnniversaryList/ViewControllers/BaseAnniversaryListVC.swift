@@ -46,12 +46,12 @@ public class BaseAnniversaryListViewController: BaseViewController {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as AnniversaryListSectionHeaderView
+        ) as FavorSectionHeaderView
         let currentSnapshot = self.dataSource.snapshot()
         let section = currentSnapshot.sectionIdentifiers[indexPath.section]
         let numberOfItems = currentSnapshot.numberOfItems(inSection: section)
         let title = indexPath.section == .zero ? "고정됨" : "전체"
-        header.bind(title: title, numberOfFriends: numberOfItems)
+        header.bind(title: title, digit: numberOfItems)
         return header
       default:
         return UICollectionReusableView()
@@ -81,7 +81,7 @@ public class BaseAnniversaryListViewController: BaseViewController {
     collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: AnniversaryListCell.self)
     collectionView.register(
-      supplementaryViewType: AnniversaryListSectionHeaderView.self,
+      supplementaryViewType: FavorSectionHeaderView.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
 

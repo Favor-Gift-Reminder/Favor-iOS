@@ -11,7 +11,6 @@
 		2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */; };
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
-		2E32E7B629FB5DE600202E31 /* FriendListSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7B529FB5DE600202E31 /* FriendListSectionHeader.swift */; };
 		2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */; };
 		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
 		2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */; };
@@ -61,7 +60,6 @@
 		2E9B4CC62A12855800C7E31E /* AnniversaryListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B4CC52A12855800C7E31E /* AnniversaryListCell.swift */; };
 		2E9B4CC82A1285E000C7E31E /* AnniversaryListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B4CC72A1285E000C7E31E /* AnniversaryListSection.swift */; };
 		2E9B4CCB2A12882500C7E31E /* AnniversaryListCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B4CCA2A12882500C7E31E /* AnniversaryListCellReactor.swift */; };
-		2E9B4CCE2A13989800C7E31E /* AnniversaryListSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9B4CCD2A13989800C7E31E /* AnniversaryListSectionHeaderView.swift */; };
 		2E9C1B7029E9B6AF008122D7 /* BaseSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E9C1B6F29E9B6AF008122D7 /* BaseSearchVC.swift */; };
 		2EA38492298D7C5F0081499C /* UpcomingCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */; };
 		2EA38493298D7C5F0081499C /* TimelineCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */; };
@@ -191,7 +189,6 @@
 		2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderView.swift; sourceTree = "<group>"; };
 		2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAnniversaryHeaderViewReactor.swift; sourceTree = "<group>"; };
 		2E1C5660296C29210067FC78 /* OnboardingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingVC.swift; sourceTree = "<group>"; };
-		2E32E7B529FB5DE600202E31 /* FriendListSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListSectionHeader.swift; sourceTree = "<group>"; };
 		2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageSection.swift; sourceTree = "<group>"; };
 		2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageFavorCell.swift; sourceTree = "<group>"; };
 		2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageCollectionHeaderView.swift; sourceTree = "<group>"; };
@@ -231,7 +228,6 @@
 		2E9B4CC52A12855800C7E31E /* AnniversaryListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListCell.swift; sourceTree = "<group>"; };
 		2E9B4CC72A1285E000C7E31E /* AnniversaryListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListSection.swift; sourceTree = "<group>"; };
 		2E9B4CCA2A12882500C7E31E /* AnniversaryListCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListCellReactor.swift; sourceTree = "<group>"; };
-		2E9B4CCD2A13989800C7E31E /* AnniversaryListSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListSectionHeaderView.swift; sourceTree = "<group>"; };
 		2E9C1B6F29E9B6AF008122D7 /* BaseSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSearchVC.swift; sourceTree = "<group>"; };
 		2EA3848F298D7C5F0081499C /* UpcomingCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UpcomingCellReactor.swift; sourceTree = "<group>"; };
 		2EA38490298D7C5F0081499C /* TimelineCellReactor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimelineCellReactor.swift; sourceTree = "<group>"; };
@@ -476,7 +472,6 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75C29F80D30003342CA /* Cells */,
-				2E32E7B529FB5DE600202E31 /* FriendListSectionHeader.swift */,
 				2E87B8E32A0CAA2000570386 /* EditFriendCollectionHeaderView.swift */,
 			);
 			path = Views;
@@ -637,7 +632,6 @@
 			isa = PBXGroup;
 			children = (
 				2E9B4CCC2A12887500C7E31E /* Cells */,
-				2E9B4CCD2A13989800C7E31E /* AnniversaryListSectionHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1281,7 +1275,6 @@
 				2EEC734A2A14F819007A29A5 /* EditAnniversaryListViewReactor.swift in Sources */,
 				2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */,
 				2EE1537329E5A6BE0023FEA5 /* SearchRecentCell.swift in Sources */,
-				2E32E7B629FB5DE600202E31 /* FriendListSectionHeader.swift in Sources */,
 				2EEC73482A14F808007A29A5 /* EditAnniversaryListVC.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
@@ -1401,7 +1394,6 @@
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
 				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
 				2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */,
-				2E9B4CCE2A13989800C7E31E /* AnniversaryListSectionHeaderView.swift in Sources */,
 				2EBCC8FF29EDBFDB008044DC /* UICollectionViewCompositionalLayout+.swift in Sources */,
 				2EC6E11F29BC6656006FBC11 /* ReminderFlow.swift in Sources */,
 				E55CF7C6298B8EBB002940D1 /* DashboardFlow.swift in Sources */,

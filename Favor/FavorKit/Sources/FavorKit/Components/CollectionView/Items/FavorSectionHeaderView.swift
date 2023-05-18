@@ -21,6 +21,21 @@ open class FavorSectionHeaderView: UICollectionReusableView, Reusable {
     return label
   }()
 
+  private let digitInfoLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.bold, size: 18)
+    label.text = "-1"
+    label.isHidden = true
+    return label
+  }()
+
+  private let labelStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 8
+    return stackView
+  }()
+
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -36,8 +51,10 @@ open class FavorSectionHeaderView: UICollectionReusableView, Reusable {
 
   // MARK: - Functions
 
-  public func updateTitle(_ title: String) {
+  public func bind(title: String, digit: Int? = nil) {
     self.titleLabel.text = title
+    self.digitInfoLabel.isHidden = digit == nil
+    self.digitInfoLabel.text = digit == nil ? nil : String(digit!)
   }
 }
 
@@ -49,12 +66,19 @@ extension FavorSectionHeaderView: BaseView {
   }
 
   public func setupLayouts() {
-    self.addSubview(self.titleLabel)
+    [
+      self.titleLabel,
+      self.digitInfoLabel
+    ].forEach {
+      self.labelStack.addArrangedSubview($0)
+    }
+
+    self.addSubview(self.labelStack)
   }
 
   public func setupConstraints() {
-    self.titleLabel.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+    self.labelStack.snp.makeConstraints { make in
+      make.directionalVerticalEdges.leading.equalToSuperview()
     }
   }
 }

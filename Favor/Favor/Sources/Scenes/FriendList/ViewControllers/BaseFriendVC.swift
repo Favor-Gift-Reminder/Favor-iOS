@@ -61,7 +61,7 @@ public class BaseFriendViewController: BaseViewController {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as FriendListSectionHeader
+        ) as FavorSectionHeaderView
         return header
       default:
         return UICollectionReusableView()
@@ -88,7 +88,7 @@ public class BaseFriendViewController: BaseViewController {
     collectionView.register(cellType: FriendListCell.self)
     collectionView.register(cellType: EditFriendCell.self)
     collectionView.register(
-      supplementaryViewType: FriendListSectionHeader.self,
+      supplementaryViewType: FavorSectionHeaderView.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
     collectionView.register(

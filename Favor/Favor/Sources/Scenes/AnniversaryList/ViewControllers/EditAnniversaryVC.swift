@@ -9,6 +9,7 @@ import UIKit
 
 import FavorKit
 import ReactorKit
+import Reusable
 import SnapKit
 
 final class EditAnniversaryViewController: BaseViewController, View {
@@ -18,6 +19,20 @@ final class EditAnniversaryViewController: BaseViewController, View {
   // MARK: - Properties
 
   // MARK: - UI Components
+
+  private lazy var collectionView: UICollectionView = {
+    let collectionView = UICollectionView(
+      frame: .zero,
+      collectionViewLayout: UICollectionViewLayout()
+    )
+
+    collectionView.register(
+      supplementaryViewType: FavorSectionHeaderView.self,
+      ofKind: UICollectionView.elementKindSectionHeader
+    )
+
+    return collectionView
+  }()
 
   // MARK: - Life Cycle
 
