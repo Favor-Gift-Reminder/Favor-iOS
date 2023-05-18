@@ -14,6 +14,8 @@ import SnapKit
 
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
 
+  // MARK: - Properties
+
   public var text: String? {
     self.textField.text
   }

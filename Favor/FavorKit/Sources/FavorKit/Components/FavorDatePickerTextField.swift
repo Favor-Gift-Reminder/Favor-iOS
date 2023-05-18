@@ -47,7 +47,7 @@ public final class FavorDatePickerTextField: UIView {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .equalSpacing
-    stackView.alignment = .leading
+    stackView.alignment = .center
     stackView.spacing = 4
     return stackView
   }()
@@ -195,6 +195,7 @@ extension FavorDatePickerTextField: BaseView {
   public func setupConstraints() {
     self.contentsStack.snp.makeConstraints { make in
       make.edges.equalToSuperview()
+      make.centerY.equalToSuperview()
     }
 
     self.downButton.snp.makeConstraints { make in
