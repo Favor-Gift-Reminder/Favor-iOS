@@ -9,11 +9,15 @@ import UIKit
 
 import FavorKit
 
+// MARK: - Item
+
 public enum EditAnniversarySectionItem: SectionModelItem {
   case name
   case category
   case date
 }
+
+// MARK: - Section
 
 public enum EditAnniversarySection: SectionModelType {
   case name

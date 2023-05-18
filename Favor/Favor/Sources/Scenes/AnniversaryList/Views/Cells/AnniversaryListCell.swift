@@ -103,9 +103,9 @@ private extension AnniversaryListCell {
   func convert(to type: CellType, isPinned: Bool) {
     // type == .list이고 isPinned일때만 .icon
     // 아니면 line2
-    let iconColor: UIColor = !isPinned && type == .list ?
-      .favorColor(.line2) :
-      .favorColor(.icon)
+    let iconColor: UIColor = isPinned && type == .list ?
+      .favorColor(.icon) :
+      .favorColor(.line2)
     self.rightButton.configuration?.image = type.rightButtonImage?
       .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: Metric.rightButtonImageSize)

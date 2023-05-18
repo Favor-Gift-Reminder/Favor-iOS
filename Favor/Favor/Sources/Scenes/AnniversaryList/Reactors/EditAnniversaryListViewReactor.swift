@@ -92,7 +92,7 @@ final class EditAnniversaryListViewReactor: Reactor, Stepper {
         newState.section = .empty
         newState.items = [.empty]
       } else {
-        newState.section = .all
+        newState.section = .edit
       }
 
       return newState

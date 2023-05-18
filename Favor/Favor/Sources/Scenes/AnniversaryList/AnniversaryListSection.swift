@@ -22,6 +22,7 @@ public enum AnniversaryListSection: SectionModelType {
   case empty
   case pinned
   case all
+  case edit
 }
 
 // MARK: - Hashable & Equatable
@@ -53,7 +54,7 @@ extension AnniversaryListSection: Adaptive {
     switch self {
     case .empty:
       return .full()
-    case .pinned, .all:
+    case .pinned, .all, .edit:
       return .listRow(height: .absolute(95))
     }
   }
@@ -62,7 +63,7 @@ extension AnniversaryListSection: Adaptive {
     switch self {
     case .empty:
       return .full()
-    case .pinned, .all:
+    case .pinned, .all, .edit:
       return .list()
     }
   }
@@ -81,6 +82,8 @@ extension AnniversaryListSection: Adaptive {
         spacing: 10,
         boundaryItems: [header]
       )
+    case .edit:
+      return .base(spacing: 10)
     }
   }
 }
