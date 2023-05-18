@@ -8,6 +8,8 @@
 import UIKit
 
 import Reusable
+import RxCocoa
+import RxSwift
 import SnapKit
 
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
@@ -65,5 +67,13 @@ extension FavorTextFieldCell: BaseView {
     self.textField.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
+  }
+}
+
+// MARK: - Reactive
+
+public extension Reactive where Base: FavorTextFieldCell {
+  var text: ControlEvent<String?> {
+    return ControlEvent(events: base.textField.rx.text)
   }
 }
