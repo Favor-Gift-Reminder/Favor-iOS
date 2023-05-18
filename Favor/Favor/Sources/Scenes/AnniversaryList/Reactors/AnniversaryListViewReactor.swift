@@ -5,7 +5,7 @@
 //  Created by 이창준 on 2023/05/16.
 //
 
-import OrderedCollections
+import OSLog
 
 import FavorKit
 import FavorNetworkKit
@@ -25,6 +25,7 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
 
   enum Action {
     case viewNeedsLoaded
+    case editButtonDidTap
     case rightButtonDidTap(Anniversary)
   }
 
@@ -35,7 +36,6 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
   }
 
   struct State {
-    var viewState: AnniversaryListViewController.ViewState = .list
     var anniversaries: [Anniversary] = []
     var sections: [Section] = []
     var items: [[Item]] = []
@@ -62,24 +62,36 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
           return .just(.updateAnniversaries(anniversaries))
         }
 
+    case .editButtonDidTap:
+      self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
+      return .empty()
+
     case .rightButtonDidTap(let anniversary):
+      print(anniversary)
       return .empty()
     }
   }
 
   func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    return mutation.flatMap { mutate -> Observable<Mutation> in
-      switch mutate {
+    return mutation.flatMap { originalMutation -> Observable<Mutation> in
+      switch originalMutation {
       case .updateAnniversaries(let anniversaries):
-        let pinnedItems = anniversaries.filter { $0.isPinned }.map { $0.toItem(cellType: .list) }
-        let allItems = anniversaries.map { $0.toItem(cellType: .list) }
-        return .merge([
-          mutation,
+        let (pinnedItems: pinnedItems, allItems: allItems) = anniversaries
+          .reduce(into: (pinnedItems: [Item](), allItems: [Item]())) { result, anniversary in
+            // 고정됨 부분과 전체 부분의 값이 같더라도 cell의 reactor는 달라야하기 때문에
+            // 각각 생성해줍니다.
+            result.allItems.append(anniversary.toItem(cellType: .list))
+            if anniversary.isPinned {
+              result.pinnedItems.append(anniversary.toItem(cellType: .list))
+            }
+          }
+        return .concat(
+          .just(originalMutation),
           .just(.updatePinnedSection(pinnedItems)),
           .just(.updateAllSection(allItems))
-        ])
+        )
       default:
-        return mutation
+        return .just(originalMutation)
       }
     }
   }
@@ -112,8 +124,16 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
         return newState
       }
 
-      newState.sections = [.pinned, .all]
-      newState.items = [state.pinnedItems, state.allItems]
+      // 고정됨
+      if !state.pinnedItems.isEmpty {
+        newState.sections = [.pinned]
+        newState.items = [state.pinnedItems]
+      }
+      // 전체
+      if !state.allItems.isEmpty {
+        newState.sections.append(.all)
+        newState.items.append(state.allItems)
+      }
 
       return newState
     }

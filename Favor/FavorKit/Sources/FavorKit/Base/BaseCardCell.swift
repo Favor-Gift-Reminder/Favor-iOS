@@ -15,7 +15,9 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   // MARK: - Constants
 
   public enum CellType {
+    /// 기념일 아이콘을 사용
     case anniversary
+    /// 리마인더 대상의 프로필 사진을 사용
     case reminder
 
     public var imageSize: CGFloat {
@@ -78,7 +80,11 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.backgroundColor = .clear
-    imageView.contentMode = .scaleAspectFill
+    imageView.image = .favorIcon(.favor)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 36)
+      .withTintColor(.favorColor(.icon))
+    imageView.contentMode = .center
     imageView.clipsToBounds = true
     return imageView
   }()

@@ -32,6 +32,12 @@ final class AnniversaryListFlow: Flow {
     case .anniversaryListIsRequired:
       return self.navigateToAnniversaryList()
 
+    case .editAnniversaryListIsRequired(let anniversaries):
+      return self.navigateToEditAnniversaryList(with: anniversaries)
+
+    case .editAnniversaryIsRequired(let anniversary):
+      return self.navigateToEditAnniversary(with: anniversary)
+
     case .anniversaryListIsComplete:
       return self.navigateToMyPage()
 
@@ -57,6 +63,38 @@ private extension AnniversaryListFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: anniversaryListVC,
       withNextStepper: anniversaryListReactor
+    ))
+  }
+
+  func navigateToEditAnniversaryList(with anniversaries: [Anniversary]) -> FlowContributors {
+    let editAnniversaryListVC = EditAnniversaryListViewController()
+    let editAnniversaryListReactor = EditAnniversaryListViewReactor(with: anniversaries)
+    editAnniversaryListVC.reactor = editAnniversaryListReactor
+    editAnniversaryListVC.title = "편집하기"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(editAnniversaryListVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: editAnniversaryListVC,
+      withNextStepper: editAnniversaryListReactor
+    ))
+  }
+
+  func navigateToEditAnniversary(with anniversary: Anniversary) -> FlowContributors {
+    let editAnniversaryVC = EditAnniversaryViewController()
+    let editAnniversaryReactor = EditAnniversaryViewReactor(with: anniversary)
+    editAnniversaryVC.reactor = editAnniversaryReactor
+    editAnniversaryVC.title = "기념일 수정"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(editAnniversaryVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: editAnniversaryVC,
+      withNextStepper: editAnniversaryReactor
     ))
   }
 
