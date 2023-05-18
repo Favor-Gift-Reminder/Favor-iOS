@@ -57,6 +57,7 @@ private extension AnniversaryListFlow {
     anniversaryListVC.title = "내 기념일"
 
     DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
       self.rootViewController.pushViewController(anniversaryListVC, animated: true)
     }
 
@@ -73,6 +74,7 @@ private extension AnniversaryListFlow {
     editAnniversaryListVC.title = "편집하기"
 
     DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
       self.rootViewController.pushViewController(editAnniversaryListVC, animated: true)
     }
 
@@ -89,6 +91,7 @@ private extension AnniversaryListFlow {
     editAnniversaryVC.title = "기념일 수정"
 
     DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
       self.rootViewController.pushViewController(editAnniversaryVC, animated: true)
     }
 
