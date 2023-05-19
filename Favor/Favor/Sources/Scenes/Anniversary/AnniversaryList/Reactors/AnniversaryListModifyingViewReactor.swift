@@ -1,16 +1,17 @@
 //
-//  EditAnniversaryListViewReactor.swift
+//  AnniversaryListModifyingViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/17.
 //
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class EditAnniversaryListViewReactor: Reactor, Stepper {
+final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor, Reactor, Stepper {
   typealias Section = AnniversaryListSection
   typealias Item = AnniversaryListSectionItem
 
@@ -21,6 +22,7 @@ final class EditAnniversaryListViewReactor: Reactor, Stepper {
 
   enum Action {
     case viewNeedsLoaded
+    case newButtonDidTap
     case editButtonDidTap(Anniversary)
   }
 
@@ -41,6 +43,7 @@ final class EditAnniversaryListViewReactor: Reactor, Stepper {
     self.initialState = State(
       anniversaries: anniversaries
     )
+    super.init()
   }
 
   // MARK: - Functions
@@ -48,7 +51,15 @@ final class EditAnniversaryListViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return .just(.updateAnniversaries(self.currentState.anniversaries))
+      return self.userFetcher.fetch()
+        .flatMap { (status, user) -> Observable<Mutation> in
+          guard let user = user.toArray().first else { return .empty() }
+          return .just(.updateAnniversaries(user.anniversaryList.toArray()))
+        }
+
+    case .newButtonDidTap:
+      self.steps.accept(AppStep.newAnniversaryIsRequired)
+      return .empty()
 
     case .editButtonDidTap(let anniversary):
       self.steps.accept(AppStep.editAnniversaryIsRequired(anniversary))

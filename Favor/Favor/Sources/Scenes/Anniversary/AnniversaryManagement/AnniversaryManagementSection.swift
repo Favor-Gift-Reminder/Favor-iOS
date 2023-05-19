@@ -1,5 +1,5 @@
 //
-//  EditAnniversarySection.swift
+//  AnniversaryManagementSection.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/18.
@@ -11,7 +11,7 @@ import FavorKit
 
 // MARK: - Item
 
-public enum EditAnniversarySectionItem: SectionModelItem {
+public enum AnniversaryManagementSectionItem: SectionModelItem {
   case name
   case category
   case date
@@ -19,7 +19,7 @@ public enum EditAnniversarySectionItem: SectionModelItem {
 
 // MARK: - Section
 
-public enum EditAnniversarySection: SectionModelType {
+public enum AnniversaryManagementSection: SectionModelType {
   case name
   case category
   case date
@@ -27,17 +27,17 @@ public enum EditAnniversarySection: SectionModelType {
 
 // MARK: - Hashable
 
-extension EditAnniversarySectionItem {
+extension AnniversaryManagementSectionItem {
 
 }
 
-extension EditAnniversarySection {
+extension AnniversaryManagementSection {
 
 }
 
 // MARK: - Properties
 
-extension EditAnniversarySection {
+extension AnniversaryManagementSection {
   public var headerTitle: String {
     switch self {
     case .name: return "제목"
@@ -49,7 +49,7 @@ extension EditAnniversarySection {
 
 // MARK: - Adaptive
 
-extension EditAnniversarySection: Adaptive {
+extension AnniversaryManagementSection: Adaptive {
   public var item: FavorCompositionalLayout.Item {
     return .listRow(height: .absolute(50))
   }

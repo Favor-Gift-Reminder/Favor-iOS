@@ -11,6 +11,7 @@ import Moya
 import RxMoya
 import RxSwift
 
+public typealias AnniversaryNetworking = Networking<AnniversaryAPI>
 public typealias FriendNetworking = Networking<FriendAPI>
 public typealias GiftNetworking = Networking<GiftAPI>
 public typealias ReminderNetworking = Networking<ReminderAPI>

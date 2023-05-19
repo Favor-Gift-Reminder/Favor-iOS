@@ -35,11 +35,17 @@ final class AnniversaryListFlow: Flow {
     case .editAnniversaryListIsRequired(let anniversaries):
       return self.navigateToEditAnniversaryList(with: anniversaries)
 
+    case .newAnniversaryIsRequired:
+      return self.navigateToEditAnniversary(.new)
+
     case .editAnniversaryIsRequired(let anniversary):
-      return self.navigateToEditAnniversary(with: anniversary)
+      return self.navigateToEditAnniversary(.edit, with: anniversary)
+
+    case .editAnniversaryIsComplete(let anniversary):
+      return self.popFromAnniversaryModifying()
 
     case .anniversaryListIsComplete:
-      return self.navigateToMyPage()
+      return self.popFromAnniversaryList()
 
     default:
       return .none
@@ -68,42 +74,63 @@ private extension AnniversaryListFlow {
   }
 
   func navigateToEditAnniversaryList(with anniversaries: [Anniversary]) -> FlowContributors {
-    let editAnniversaryListVC = EditAnniversaryListViewController()
-    let editAnniversaryListReactor = EditAnniversaryListViewReactor(with: anniversaries)
-    editAnniversaryListVC.reactor = editAnniversaryListReactor
-    editAnniversaryListVC.title = "편집하기"
+    let anniversaryListModifyingVC = AnniversaryListModifyingViewController()
+    let anniversaryListModifyingReactor = AnniversaryListModifyingViewReactor(with: anniversaries)
+    anniversaryListModifyingVC.reactor = anniversaryListModifyingReactor
+    anniversaryListModifyingVC.title = "편집하기"
 
     DispatchQueue.main.async {
       self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.pushViewController(editAnniversaryListVC, animated: true)
+      self.rootViewController.pushViewController(anniversaryListModifyingVC, animated: true)
     }
 
     return .one(flowContributor: .contribute(
-      withNextPresentable: editAnniversaryListVC,
-      withNextStepper: editAnniversaryListReactor
+      withNextPresentable: anniversaryListModifyingVC,
+      withNextStepper: anniversaryListModifyingReactor
     ))
   }
 
-  func navigateToEditAnniversary(with anniversary: Anniversary) -> FlowContributors {
-    let editAnniversaryVC = EditAnniversaryViewController()
-    let editAnniversaryReactor = EditAnniversaryViewReactor(with: anniversary)
-    editAnniversaryVC.reactor = editAnniversaryReactor
-    editAnniversaryVC.title = "기념일 수정"
+  func navigateToEditAnniversary(
+    _ viewType: AnniversaryManagementViewController.ViewType,
+    with anniversary: Anniversary? = nil
+  ) -> FlowContributors {
+    let anniversaryManagementVC = AnniversaryManagementViewController()
+    var anniversaryManagementReactor: AnniversaryManagementViewReactor
+    switch viewType {
+    case .edit:
+      guard let anniversary else { return .none }
+      anniversaryManagementReactor = AnniversaryManagementViewReactor(with: anniversary)
+    case .new:
+      anniversaryManagementReactor = AnniversaryManagementViewReactor()
+    }
+    anniversaryManagementVC.reactor = anniversaryManagementReactor
 
     DispatchQueue.main.async {
       self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.pushViewController(editAnniversaryVC, animated: true)
+      self.rootViewController.pushViewController(anniversaryManagementVC, animated: true)
     }
 
     return .one(flowContributor: .contribute(
-      withNextPresentable: editAnniversaryVC,
-      withNextStepper: editAnniversaryReactor
+      withNextPresentable: anniversaryManagementVC,
+      withNextStepper: anniversaryManagementReactor
     ))
   }
 
-  func navigateToMyPage() -> FlowContributors {
+  func popFromAnniversaryModifying() -> FlowContributors {
     DispatchQueue.main.async {
-      self.rootViewController.popViewController(animated: true)
+      if self.rootViewController.topViewController is AnniversaryManagementViewController {
+        self.rootViewController.popViewController(animated: true)
+      }
+    }
+
+    return .none
+  }
+
+  func popFromAnniversaryList() -> FlowContributors {
+    DispatchQueue.main.async {
+      if self.rootViewController.topViewController is AnniversaryListViewController {
+        self.rootViewController.popViewController(animated: true)
+      }
     }
     return .end(forwardToParentFlowWithStep: AppStep.anniversaryListIsComplete)
   }

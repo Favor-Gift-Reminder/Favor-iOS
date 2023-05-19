@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import SnapKit
 
-final class EditAnniversaryListViewController: BaseAnniversaryListViewController, View {
+final class AnniversaryListModifyingViewController: BaseAnniversaryListViewController, View {
 
   // MARK: - Constants
 
@@ -19,14 +19,38 @@ final class EditAnniversaryListViewController: BaseAnniversaryListViewController
 
   // MARK: - UI Components
 
+  private let newButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.icon)
+    config.image = .favorIcon(.newGift)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 20)
+
+    let button = UIButton(configuration: config)
+    button.contentMode = .center
+    return button
+  }()
+
   // MARK: - Life Cycle
+
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    self.setupNavigationBar()
+  }
 
   // MARK: - Binding
 
-  func bind(reactor: EditAnniversaryListViewReactor) {
+  func bind(reactor: AnniversaryListModifyingViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.newButton.rx.tap
+      .map { Reactor.Action.newButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -52,4 +76,7 @@ final class EditAnniversaryListViewController: BaseAnniversaryListViewController
 
   // MARK: - UI Setups
 
+  private func setupNavigationBar() {
+    self.navigationItem.setRightBarButton(self.newButton.toBarButtonItem(), animated: false)
+  }
 }

@@ -49,3 +49,9 @@ public enum AnniversaryAPI {
   ///   - userNo: 기념일을 생성하는 회원의 DB 넘버 - `Path`
   case postAnniversary(AnniversaryRequestDTO, userNo: Int)
 }
+
+extension AnniversaryAPI: BaseTargetType {
+  public var path: String { self.getPath() }
+  public var method: Moya.Method { self.getMethod() }
+  public var task: Moya.Task { self.getTask() }
+}

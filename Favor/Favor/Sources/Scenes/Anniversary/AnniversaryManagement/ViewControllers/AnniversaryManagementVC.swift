@@ -1,5 +1,5 @@
 //
-//  EditAnniversaryVC.swift
+//  AnniversaryManagementVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/18.
@@ -12,15 +12,26 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class EditAnniversaryViewController: BaseViewController, View {
-  typealias EditAnniversaryDataSource = UICollectionViewDiffableDataSource<EditAnniversarySection, EditAnniversarySectionItem>
+final class AnniversaryManagementViewController: BaseViewController, View {
+  typealias AnniversaryManagementDataSource = UICollectionViewDiffableDataSource<AnniversaryManagementSection, AnniversaryManagementSectionItem>
 
   // MARK: - Constants
 
+  public enum ViewType {
+    case new, edit
+
+    var title: String {
+      switch self {
+      case .new: return "새 기념일"
+      case .edit: return "기념일 수정"
+      }
+    }
+  }
+
   // MARK: - Properties
 
-  private lazy var dataSource: EditAnniversaryDataSource = {
-    let dataSource = EditAnniversaryDataSource(
+  private lazy var dataSource: AnniversaryManagementDataSource = {
+    let dataSource = AnniversaryManagementDataSource(
       collectionView: self.collectionView,
       cellProvider: { [weak self] collectionView, indexPath, item in
         guard
@@ -33,7 +44,7 @@ final class EditAnniversaryViewController: BaseViewController, View {
           cell.bind(placeholder: "내 기념일 이름 (최대 10자)")
 
           cell.rx.text
-            .map { Reactor.Action.nameDidUpdate($0) }
+            .map { Reactor.Action.titleDidUpdate($0) }
             .bind(to: reactor.action)
             .disposed(by: cell.disposeBag)
 
@@ -44,6 +55,12 @@ final class EditAnniversaryViewController: BaseViewController, View {
           return cell
         case .date:
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorDateSelectorCell
+
+          cell.rx.date
+            .map { Reactor.Action.dateDidUpdate($0) }
+            .bind(to: reactor.action)
+            .disposed(by: cell.disposeBag)
+
           return cell
         }
       })
@@ -83,7 +100,7 @@ final class EditAnniversaryViewController: BaseViewController, View {
     return button
   }()
 
-  private lazy var adapter: Adapter<EditAnniversarySection, EditAnniversarySectionItem> = {
+  private lazy var adapter: Adapter<AnniversaryManagementSection, AnniversaryManagementSectionItem> = {
     let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
     adapter.configuration = Adapter.Configuration(
       scrollDirection: .vertical,
@@ -135,7 +152,7 @@ final class EditAnniversaryViewController: BaseViewController, View {
 
   // MARK: - Binding
 
-  func bind(reactor: EditAnniversaryViewReactor) {
+  func bind(reactor: AnniversaryManagementViewReactor) {
     // Action
     self.doneButton.rx.tap
       .map { Reactor.Action.doneButtonDidTap }
@@ -148,10 +165,18 @@ final class EditAnniversaryViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.viewType }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, viewType in
+        owner.title = viewType.title
+        owner.deleteButton.isHidden = viewType == .new
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        var snapshot = NSDiffableDataSourceSnapshot<EditAnniversarySection, EditAnniversarySectionItem>()
+        var snapshot = NSDiffableDataSourceSnapshot<AnniversaryManagementSection, AnniversaryManagementSectionItem>()
         snapshot.appendSections(sectionData.sections)
         sectionData.sections.enumerated().forEach { idx, section in
           snapshot.appendItems([sectionData.items[idx]], toSection: section)

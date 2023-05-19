@@ -13,7 +13,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class AnniversaryListViewReactor: Reactor, Stepper {
+final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor, Stepper {
   typealias Section = AnniversaryListSection
   typealias Item = AnniversaryListSectionItem
 
@@ -21,7 +21,6 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let userFetcher = Fetcher<User>()
 
   enum Action {
     case viewNeedsLoaded
@@ -45,9 +44,9 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init() {
+  override init() {
     self.initialState = State()
-    self.setupUserFetcher()
+    super.init()
   }
 
   // MARK: - Functions
@@ -136,50 +135,6 @@ final class AnniversaryListViewReactor: Reactor, Stepper {
       }
 
       return newState
-    }
-  }
-}
-
-// MARK: - Privates
-
-private extension AnniversaryListViewReactor {
-  func setupUserFetcher() {
-    // onRemote
-    self.userFetcher.onRemote = {
-      let networking = UserNetworking()
-      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
-        .flatMap { user -> Observable<[User]> in
-          let userData = user.data
-          do {
-            let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
-            let remoteUser = remote.data
-            let decodedUser = User(
-              userNo: remoteUser.userNo,
-              email: remoteUser.email,
-              userID: remoteUser.userID,
-              name: remoteUser.name,
-              favorList: remoteUser.favorList,
-              giftList: remoteUser.giftList.map { $0.toDomain() },
-              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
-              friendList: remoteUser.friendList.map { $0.toDomain() }
-            )
-            return .just([decodedUser])
-          } catch {
-            print(error)
-            return .just([])
-          }
-        }
-        .asSingle()
-      return user
-    }
-    // onLocal
-    self.userFetcher.onLocal = {
-      return try await RealmManager.shared.read(User.self)
-    }
-    // onLocalUpdate
-    self.userFetcher.onLocalUpdate = { _, remoteUser in
-      guard let remoteUser = remoteUser.first else { return }
-      try await RealmManager.shared.update(remoteUser, update: .all)
     }
   }
 }

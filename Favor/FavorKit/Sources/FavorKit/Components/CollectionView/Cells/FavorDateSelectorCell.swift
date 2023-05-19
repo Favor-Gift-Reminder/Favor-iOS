@@ -8,13 +8,15 @@
 import UIKit
 
 import Reusable
+import RxCocoa
+import RxSwift
 import SnapKit
 
 open class FavorDateSelectorCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - UI Components
 
-  private let datePicker: FavorDatePickerTextField = {
+  fileprivate let datePicker: FavorDatePickerTextField = {
     let datePicker = FavorDatePickerTextField()
     return datePicker
   }()
@@ -47,5 +49,13 @@ extension FavorDateSelectorCell: BaseView {
       make.directionalVerticalEdges.equalToSuperview()
       make.leading.equalToSuperview()
     }
+  }
+}
+
+// MARK: - Reactive
+
+public extension Reactive where Base: FavorDateSelectorCell {
+  var date: ControlEvent<Date> {
+    return ControlEvent(events: base.datePicker.rx.date)
   }
 }
