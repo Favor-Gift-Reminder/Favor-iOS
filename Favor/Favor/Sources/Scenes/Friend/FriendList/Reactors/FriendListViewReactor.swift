@@ -13,7 +13,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class FriendListViewReactor: BaseFriendReactor, Reactor, Stepper {
+final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
 
   // MARK: - Properties
 

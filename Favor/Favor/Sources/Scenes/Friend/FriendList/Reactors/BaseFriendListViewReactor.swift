@@ -1,5 +1,5 @@
 //
-//  BaseFriendReactor.swift
+//  BaseFriendListViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/11.
@@ -10,7 +10,7 @@ import FavorNetworkKit
 import RealmSwift
 import RxSwift
 
-public class BaseFriendReactor {
+public class BaseFriendListViewReactor {
 
   // MARK: - Properties
 

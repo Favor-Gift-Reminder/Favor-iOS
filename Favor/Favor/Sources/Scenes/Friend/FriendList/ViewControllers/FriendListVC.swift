@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import SnapKit
 
-final class FriendListViewController: BaseFriendViewController, View {
+final class FriendListViewController: BaseFriendListViewController, View {
 
   // MARK: - Constants
 

@@ -1,5 +1,5 @@
 //
-//  EditFriendViewReactor.swift
+//  FriendListModifyingViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/10.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class EditFriendViewReactor: BaseFriendReactor, Reactor, Stepper {
+final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
 
   // MARK: - Properties
 
