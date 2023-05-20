@@ -73,7 +73,7 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
         owner.steps.accept(AppStep.filterIsComplete(.latest))
       })
       .disposed(by: self.disposeBag)
-
+    
     self.oldestButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
