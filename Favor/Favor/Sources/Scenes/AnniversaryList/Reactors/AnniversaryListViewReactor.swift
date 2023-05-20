@@ -82,7 +82,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     return mutation.flatMap { originalMutation -> Observable<Mutation> in
       switch originalMutation {
       case .updateAnniversaries(let anniversaries):
-        let (pinnedItems: pinnedItems, allItems: allItems) = anniversaries
+        let (pinnedItems: pinnedItems, allItems: allItems) = anniversaries.sort()
           .reduce(into: (pinnedItems: [Item](), allItems: [Item]())) { result, anniversary in
             // 고정됨 부분과 전체 부분의 값이 같더라도 cell의 reactor는 달라야하기 때문에
             // 각각 생성해줍니다.

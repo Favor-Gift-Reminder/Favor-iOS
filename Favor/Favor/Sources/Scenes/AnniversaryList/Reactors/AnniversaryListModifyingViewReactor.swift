@@ -73,7 +73,7 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
       case .updateAnniversaries(let anniversaries):
         return .concat(
           .just(originalMutation),
-          .just(.updateItems(anniversaries.map { $0.toItem() }))
+          .just(.updateItems(anniversaries.sort().map { $0.toItem() }))
         )
       default:
         return .just(originalMutation)
