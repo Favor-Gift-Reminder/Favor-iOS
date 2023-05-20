@@ -708,7 +708,7 @@
 				2EF1585929E3CC3C00D199DF /* Dashboard */,
 				2E76F58629601EC3002FF001 /* Splash */,
 				2E1C5659296C24AE0067FC78 /* Auth */,
-				2EE07ED4296E8DFF00048A3C /* NewGift */,
+				2EE07ED4296E8DFF00048A3C /* Gift */,
 				2EE07EB9296E8CC700048A3C /* Home */,
 				2EE07E9F296C5F1D00048A3C /* Search */,
 				E593C8232A176AF800711C0F /* Friend */,
@@ -957,7 +957,7 @@
 			path = Reactors;
 			sourceTree = "<group>";
 		};
-		2EE07ED4296E8DFF00048A3C /* NewGift */ = {
+		2EE07ED4296E8DFF00048A3C /* Gift */ = {
 			isa = PBXGroup;
 			children = (
 				E562610329939E8800D14020 /* NewGiftPhotoSection.swift */,
@@ -966,7 +966,7 @@
 				2EE07EDB296E8E4800048A3C /* Reactors */,
 				2EE07ED5296E8E0C00048A3C /* ViewControllers */,
 			);
-			path = NewGift;
+			path = Gift;
 			sourceTree = "<group>";
 		};
 		2EE07ED5296E8E0C00048A3C /* ViewControllers */ = {
