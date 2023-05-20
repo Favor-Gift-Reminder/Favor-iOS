@@ -21,6 +21,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
 
   var initialState: State
   var steps = PublishRelay<Step>()
+  let networking = AnniversaryNetworking()
 
   enum Action {
     case viewNeedsLoaded
@@ -65,9 +66,15 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
       return .empty()
 
-    case .rightButtonDidTap(let anniversary):
-      print(anniversary)
-      return .empty()
+    case .rightButtonDidTap(let anniversary): // TODO: UI 변경 시점에 대한 고민 필요
+      return self.requestToggleAnniversaryPin(with: anniversary)
+        .asObservable()
+        .flatMap { anniversary -> Observable<Mutation> in
+          let newAnniversaries = self.currentState.anniversaries.map {
+            $0.anniversaryNo == anniversary.anniversaryNo ? anniversary : $0
+          }
+          return .just(.updateAnniversaries(newAnniversaries))
+        }
     }
   }
 
@@ -79,9 +86,9 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
           .reduce(into: (pinnedItems: [Item](), allItems: [Item]())) { result, anniversary in
             // 고정됨 부분과 전체 부분의 값이 같더라도 cell의 reactor는 달라야하기 때문에
             // 각각 생성해줍니다.
-            result.allItems.append(anniversary.toItem(cellType: .list))
+            result.allItems.append(anniversary.toItem())
             if anniversary.isPinned {
-              result.pinnedItems.append(anniversary.toItem(cellType: .list))
+              result.pinnedItems.append(anniversary.toItem())
             }
           }
         return .concat(
@@ -139,12 +146,43 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   }
 }
 
+// MARK: - Privates
+
+private extension AnniversaryListViewReactor {
+  func requestToggleAnniversaryPin(with anniversary: Anniversary) -> Single<Anniversary> {
+    return Single<Anniversary>.create { single in
+      let networking = AnniversaryNetworking()
+      let requestDTO = AnniversaryUpdateRequestDTO(
+        anniversaryTitle: anniversary.title,
+        anniversaryDate: anniversary.date.toDTODateString(),
+        isPinned: !anniversary.isPinned
+      )
+
+      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.anniversaryNo))
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
+            let anniversary = responseDTO.data.toDomain()
+            single(.success(anniversary))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+}
+
 // MARK: - Anniversary Helper
 
 extension Anniversary {
-  fileprivate func toItem(
-    cellType: AnniversaryListCell.CellType
-  ) -> AnniversaryListSectionItem {
-    return .anniversary(AnniversaryListCellReactor(cellType: cellType, anniversary: self))
+  fileprivate func toItem() -> AnniversaryListSectionItem {
+    return .anniversary(AnniversaryListCellReactor(cellType: .list, anniversary: self))
   }
 }

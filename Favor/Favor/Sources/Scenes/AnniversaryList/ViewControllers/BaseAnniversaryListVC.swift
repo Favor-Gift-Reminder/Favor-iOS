@@ -40,7 +40,8 @@ public class BaseAnniversaryListViewController: BaseViewController {
         }
       }
     )
-    dataSource.supplementaryViewProvider = { collectionView, kind, indexPath in
+    dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+      guard let self = self else { return UICollectionReusableView() }
       switch kind {
       case UICollectionView.elementKindSectionHeader:
         let header = collectionView.dequeueReusableSupplementaryView(

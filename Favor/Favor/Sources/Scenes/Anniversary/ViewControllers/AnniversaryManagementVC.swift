@@ -39,9 +39,10 @@ final class AnniversaryManagementViewController: BaseViewController, View {
           let reactor = self.reactor
         else { return UICollectionViewCell() }
         switch item {
-        case .name:
+        case .name(let title):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
           cell.bind(placeholder: "내 기념일 이름 (최대 10자)")
+          cell.bind(text: title)
 
           cell.rx.text
             .map { Reactor.Action.titleDidUpdate($0) }

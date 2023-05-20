@@ -51,7 +51,7 @@ extension FriendSection: Adaptive {
       return .full()
     case .friend, .editFriend:
       return .listRow(
-        height: .fractionalHeight(1.0),
+        height: .absolute(48),
         contentInsets: .zero
       )
     }

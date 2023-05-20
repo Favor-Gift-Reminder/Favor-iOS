@@ -42,7 +42,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
     var anniversaryCategory: String?
     var anniversaryDate: Date?
     var sections: [Section] = [.name, .category, .date]
-    var items: [Item] = [.name, .category, .date]
+    var items: [Item]
   }
 
   // MARK: - Initializer
@@ -53,14 +53,16 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
       viewType: .edit,
       anniversaryTitle: anniversary.title,
       anniversaryCategory: "생일/축하",
-      anniversaryDate: anniversary.date
+      anniversaryDate: anniversary.date,
+      items: [.name(anniversary.title), .category, .date(anniversary.date.toShortenDateString())]
     )
   }
 
   /// ViewType이 `.new`일 경우 사용되는 생성자
   init() {
     self.initialState = State(
-      viewType: .new
+      viewType: .new,
+      items: [.name(""), .category, .date("")]
     )
   }
 
@@ -69,14 +71,19 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .doneButtonDidTap:
-      return self.requestNewAnniversary()
-        .asObservable()
-        .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
-          print(anniversary)
-          // TODO: 성공 / 실패 여부에 따라 accept / not, accept시 데이터 넘겨 toast 메시지
-          self.steps.accept(AppStep.editAnniversaryIsComplete(anniversary))
-          return .empty()
-        }
+      switch self.currentState.viewType {
+      case .new:
+        return self.requestNewAnniversary()
+          .asObservable()
+          .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
+            print(anniversary)
+            // TODO: 성공 / 실패 여부에 따라 accept / not, accept시 데이터 넘겨 toast 메시지
+            self.steps.accept(AppStep.editAnniversaryIsComplete(anniversary))
+            return .empty()
+          }
+      case .edit:
+        return .empty()
+      }
 
     case .titleDidUpdate(let title):
       return .just(.updateAnniversaryTitle(title ?? ""))
@@ -144,6 +151,23 @@ private extension AnniversaryManagementViewReactor {
 
       return Disposables.create {
         disposable.dispose()
+      }
+    }
+  }
+
+  func requestPatchAnniversary(_ anniversary: Anniversary) -> Single<Anniversary> {
+    return Single<Anniversary>.create { single in
+      let networking = AnniversaryNetworking()
+      let requestDTO = AnniversaryUpdateRequestDTO(
+        anniversaryTitle: anniversary.title,
+        anniversaryDate: anniversary.date.toDTODateString(),
+        isPinned: anniversary.isPinned
+      )
+      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.anniversaryNo))
+        .asSingle()
+
+      return Disposables.create {
+        //
       }
     }
   }

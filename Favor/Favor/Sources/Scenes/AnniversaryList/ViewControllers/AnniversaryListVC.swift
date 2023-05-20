@@ -58,6 +58,9 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
         snapshot.appendSections(sectionData.sections)
+        if sectionData.sections.contains(.pinned) {
+          snapshot.reloadSections([.pinned])
+        }
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
         }

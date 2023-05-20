@@ -500,23 +500,7 @@
 			path = FriendList;
 			sourceTree = "<group>";
 		};
-		2E634E292A17569700DD51ED /* FriendManagement */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = FriendManagement;
-			sourceTree = "<group>";
-		};
-		2E634E2A2A175D8A00DD51ED /* Anniversary */ = {
-			isa = PBXGroup;
-			children = (
-				2E634E2B2A175D9800DD51ED /* AnniversaryManagement */,
-				2E9B4CBB2A1282F900C7E31E /* AnniversaryList */,
-			);
-			path = Anniversary;
-			sourceTree = "<group>";
-		};
-		2E634E2B2A175D9800DD51ED /* AnniversaryManagement */ = {
+		2E634E2B2A175D9800DD51ED /* Anniversary */ = {
 			isa = PBXGroup;
 			children = (
 				2E70654F2A160AF2007B1C94 /* AnniversaryManagementSection.swift */,
@@ -524,7 +508,7 @@
 				2E634E2F2A175EDD00DD51ED /* Views */,
 				2E634E2C2A175EC200DD51ED /* ViewControllers */,
 			);
-			path = AnniversaryManagement;
+			path = Anniversary;
 			sourceTree = "<group>";
 		};
 		2E634E2C2A175EC200DD51ED /* ViewControllers */ = {
@@ -643,8 +627,6 @@
 		2E87B8CD2A0BC88200570386 /* Friend */ = {
 			isa = PBXGroup;
 			children = (
-				2E634E292A17569700DD51ED /* FriendManagement */,
-				2E634E282A17566B00DD51ED /* FriendList */,
 			);
 			path = Friend;
 			sourceTree = "<group>";
@@ -764,7 +746,8 @@
 		2EBB014B295E8C770072D158 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				2E634E2A2A175D8A00DD51ED /* Anniversary */,
+				2E634E2B2A175D9800DD51ED /* Anniversary */,
+				2E9B4CBB2A1282F900C7E31E /* AnniversaryList */,
 				2EBB0152295E8CCA0072D158 /* Application */,
 				E5E423F229DC0D3400A6B48D /* BottomSheet */,
 				2EF1585929E3CC3C00D199DF /* Dashboard */,
@@ -773,6 +756,7 @@
 				2EE07ED4296E8DFF00048A3C /* Gift */,
 				2EE07EB9296E8CC700048A3C /* Home */,
 				2EE07E9F296C5F1D00048A3C /* Search */,
+				2E634E282A17566B00DD51ED /* FriendList */,
 				2E87B8CD2A0BC88200570386 /* Friend */,
 				2EE07EBD296E8D2300048A3C /* Profile */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,

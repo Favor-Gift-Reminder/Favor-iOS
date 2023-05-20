@@ -73,7 +73,7 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
       case .updateAnniversaries(let anniversaries):
         return .concat(
           .just(originalMutation),
-          .just(.updateItems(anniversaries.map { $0.toItem(cellType: .edit) }))
+          .just(.updateItems(anniversaries.map { $0.toItem() }))
         )
       default:
         return .just(originalMutation)
@@ -114,9 +114,7 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
 // MARK: - Anniversary Helper
 
 extension Anniversary {
-  fileprivate func toItem(
-    cellType: AnniversaryListCell.CellType
-  ) -> AnniversaryListSectionItem {
-    return .anniversary(AnniversaryListCellReactor(cellType: cellType, anniversary: self))
+  fileprivate func toItem() -> AnniversaryListSectionItem {
+    return .anniversary(AnniversaryListCellReactor(cellType: .edit, anniversary: self))
   }
 }

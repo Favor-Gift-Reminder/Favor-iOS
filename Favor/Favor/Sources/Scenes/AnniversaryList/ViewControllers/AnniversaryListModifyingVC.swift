@@ -61,7 +61,7 @@ final class AnniversaryListModifyingViewController: BaseAnniversaryListViewContr
         var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
         snapshot.appendSections([sectionData.section])
         snapshot.appendItems(sectionData.items, toSection: sectionData.section)
-        owner.dataSource.apply(snapshot)
+        owner.dataSource.apply(snapshot, animatingDifferences: true)
         owner.collectionView.collectionViewLayout.invalidateLayout()
       })
       .disposed(by: self.disposeBag)
