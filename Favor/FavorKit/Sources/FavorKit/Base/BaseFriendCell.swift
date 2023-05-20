@@ -119,14 +119,14 @@ open class BaseFriendCell: BaseCollectionViewCell {
       self.containerView.addSubview($0)
     }
   }
-
+  
   open func setupConstraints() {
     self.containerView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
 
     self.profileImageView.snp.makeConstraints { make in
-      make.leading.equalToSuperview()
+      make.leading.equalToSuperview().inset(20.0)
       make.centerY.equalToSuperview()
       make.width.height.equalTo(Metric.profileImageViewSize)
     }

@@ -19,7 +19,7 @@ final class NewGiftFlow: Flow {
   }
 
   private let rootViewController = BaseNavigationController()
-
+  
   // MARK: - Navigate
   
   func navigate(to step: Step) -> FlowContributors {
@@ -37,6 +37,9 @@ final class NewGiftFlow: Flow {
       
     case .newGiftFriendIsRequired:
       return self.navigateToNewGiftFriend()
+      
+    case .friendManagementIsRequired:
+      return self.navigateToFriendManagement()
       
     default:
       return .none
@@ -62,6 +65,18 @@ private extension NewGiftFlow {
   func navigateToNewGiftFriend() -> FlowContributors {
     let viewController = NewGiftFriendViewController()
     let reactor = NewGiftFriendViewReactor()
+    viewController.reactor = reactor
+    self.rootViewController.pushViewController(viewController, animated: true)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: viewController,
+      withNextStepper: reactor
+    ))
+  }
+  
+  func navigateToFriendManagement() -> FlowContributors {
+    let viewController = FriendManagementViewController(.new)
+    let reactor = FriendManagementViewReactor()
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     
