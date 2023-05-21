@@ -54,11 +54,6 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
 
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
-//      .distinctUntilChanged { a, b in
-//        let a = a.items.map { $0 }
-//        return true
-//      }
-      .debounce(.nanoseconds(500), scheduler: MainScheduler.instance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
         // initial Snapshot과 final Snapshot 생성
