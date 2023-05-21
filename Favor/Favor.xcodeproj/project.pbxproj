@@ -163,6 +163,10 @@
 		E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610329939E8800D14020 /* NewGiftPhotoSection.swift */; };
 		E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610E299497C000D14020 /* NewGiftViewReactor.swift */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
+		E593C8252A176B4500711C0F /* FriendManagementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E593C8242A176B4500711C0F /* FriendManagementVC.swift */; };
+		E59AB0982A17778700F0AC7D /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = E59AB0972A17778700F0AC7D /* Then */; };
+		E59AB09A2A17858C00F0AC7D /* FriendFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AB0992A17858C00F0AC7D /* FriendFlow.swift */; };
+		E59AB09C2A178ADE00F0AC7D /* FriendManagementViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */; };
 		E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AC13929EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift */; };
 		E5A18E7E2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
@@ -328,6 +332,9 @@
 		E562610329939E8800D14020 /* NewGiftPhotoSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftPhotoSection.swift; sourceTree = "<group>"; };
 		E562610E299497C000D14020 /* NewGiftViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftViewReactor.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
+		E593C8242A176B4500711C0F /* FriendManagementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManagementVC.swift; sourceTree = "<group>"; };
+		E59AB0992A17858C00F0AC7D /* FriendFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendFlow.swift; sourceTree = "<group>"; };
+		E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManagementViewReactor.swift; sourceTree = "<group>"; };
 		E59AC13929EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendFooterView.swift; sourceTree = "<group>"; };
 		E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendHeaderViewReactor.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
@@ -340,6 +347,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59AB0982A17778700F0AC7D /* Then in Frameworks */,
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
@@ -703,6 +711,7 @@
 				2EE07ED4296E8DFF00048A3C /* Gift */,
 				2EE07EB9296E8CC700048A3C /* Home */,
 				2EE07E9F296C5F1D00048A3C /* Search */,
+				E593C8232A176AF800711C0F /* Friend */,
 				2E87B8CD2A0BC88200570386 /* FriendList */,
 				2EE07EBD296E8D2300048A3C /* Profile */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
@@ -1077,12 +1086,38 @@
 				2EA384B92992371C0081499C /* SearchFlow.swift */,
 				2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */,
 				2EC6E11E29BC6656006FBC11 /* ReminderFlow.swift */,
+				E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */,
 				2EC939DC299684C000C8C47F /* MyPageFlow.swift */,
+				E59AB0992A17858C00F0AC7D /* FriendFlow.swift */,
 				2E9B4CB92A1277BC00C7E31E /* FriendListFlow.swift */,
 				2E9B4CBF2A12831A00C7E31E /* AnniversaryListFlow.swift */,
-				E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */,
 			);
 			path = Flows;
+			sourceTree = "<group>";
+		};
+		E593C8232A176AF800711C0F /* Friend */ = {
+			isa = PBXGroup;
+			children = (
+				E593C8272A176BD000711C0F /* Reactors */,
+				E593C8262A176BC400711C0F /* ViewControllers */,
+			);
+			path = Friend;
+			sourceTree = "<group>";
+		};
+		E593C8262A176BC400711C0F /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				E593C8242A176B4500711C0F /* FriendManagementVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		E593C8272A176BD000711C0F /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */,
+			);
+			path = Reactors;
 			sourceTree = "<group>";
 		};
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
@@ -1136,6 +1171,7 @@
 				2E730C6929BA31F4003668D9 /* FavorNetworkKit */,
 				2EEFD5B629BB7B4300BA46BA /* FavorKit */,
 				2E3FA74229F37D8F003342CA /* OrderedCollections */,
+				E59AB0972A17778700F0AC7D /* Then */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1200,6 +1236,7 @@
 				2EE3BA8029AB60A4004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				2EE3BA8529AB60B9004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */,
 				2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */,
+				E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1297,11 +1334,13 @@
 				2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */,
 				2E87B8DA2A0BCE3200570386 /* EditFriendViewReactor.swift in Sources */,
 				2E9B4CC62A12855800C7E31E /* AnniversaryListCell.swift in Sources */,
+				E59AB09A2A17858C00F0AC7D /* FriendFlow.swift in Sources */,
 				E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */,
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
 				2EE1537929E7DC9F0023FEA5 /* SearchGiftResultCell.swift in Sources */,
 				2EC6E11D29BC65BF006FBC11 /* HomeFlow.swift in Sources */,
 				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
+				E59AB09C2A178ADE00F0AC7D /* FriendManagementViewReactor.swift in Sources */,
 				E52F565B29D5698A004E85A6 /* NewGiftFlow.swift in Sources */,
 				2EA3849C298D7C680081499C /* UpcomingCell.swift in Sources */,
 				2EC939E72998C6D100C8C47F /* ProfileAnniversaryCell.swift in Sources */,
@@ -1357,6 +1396,7 @@
 				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */,
+				E593C8252A176B4500711C0F /* FriendManagementVC.swift in Sources */,
 				2E87B8D32A0BC8FF00570386 /* BaseFriendVC.swift in Sources */,
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
@@ -1778,6 +1818,14 @@
 				minimumVersion = 6.1.0;
 			};
 		};
+		E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then.git";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1858,6 +1906,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */;
 			productName = RSKPlaceholderTextView;
+		};
+		E59AB0972A17778700F0AC7D /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -50,7 +50,7 @@ public final class ProfileView: UIView {
     label.text = "이름"
     return label
   }()
-
+  
   fileprivate let idLabel: UILabel = {
     let label = UILabel()
     label.textColor = .favorColor(.line3)

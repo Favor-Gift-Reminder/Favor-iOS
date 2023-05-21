@@ -20,13 +20,13 @@ final class EditFriendViewController: BaseFriendViewController, View {
   // MARK: - UI Components
 
   // MARK: - Life Cycle
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
     self.adapter.adapt()
   }
-
+  
   // MARK: - Binding
 
   func bind(reactor: EditFriendViewReactor) {
