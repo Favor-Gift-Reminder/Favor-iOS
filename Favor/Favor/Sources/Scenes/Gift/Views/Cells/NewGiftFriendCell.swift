@@ -76,7 +76,7 @@ final class NewGiftFriendCell: BaseFriendCell, View, Reusable {
     self.rightImageView.snp.makeConstraints { make in
       make.width.height.equalTo(18.0)
       make.centerY.equalToSuperview()
-      make.trailing.equalToSuperview().inset(25.0)
+      make.trailing.equalToSuperview()
     }
   }
 }
