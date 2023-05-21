@@ -278,9 +278,9 @@ private extension NewGiftFriendViewController {
     section.interGroupSpacing = Metric.interGroupSpacing
     section.contentInsets = NSDirectionalEdgeInsets(
       top: topContentInset,
-      leading: 0,
+      leading: 20.0,
       bottom: bottomContentInset,
-      trailing: 0
+      trailing: 20.0
     )
     section.boundarySupplementaryItems = [self.createHeader(section: sectionType)]
     
