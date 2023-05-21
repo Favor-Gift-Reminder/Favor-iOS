@@ -23,16 +23,21 @@ public class BaseAnniversaryListViewController: BaseViewController {
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
           cell.bindEmptyData(image: nil, text: "내 기념일을 등록해보세요.")
           return cell
-        case .anniversary(let reactor):
+        case let .anniversary(cellType, anniversary, section):
+          let cellModel = AnniversaryListCellModel(
+            item: anniversary,
+            cellType: cellType,
+            sectionType: section
+          )
           let cell = collectionView.dequeueReusableCell(for: indexPath) as AnniversaryListCell
-          cell.reactor = reactor
-          cell.cellType = .anniversary
+          cell.cardCellType = .anniversary
+          cell.bind(cellModel)
 
-          cell.rx.rightButtonDidTap
+          cell.rx.anniversaryModifyButtonDidTap
             .asDriver(onErrorRecover: { _ in return .empty()})
-            .drive(with: cell, onNext: { _, _ in
-              guard let self = self else { return }
-              self.handleAnniversaryData(reactor.currentState.anniversary)
+            .drive(with: cell, onNext: { _, anniversary in
+              guard let self, let anniversary else { return }
+              self.handleAnniversaryData(anniversary)
             })
             .disposed(by: cell.disposeBag)
 

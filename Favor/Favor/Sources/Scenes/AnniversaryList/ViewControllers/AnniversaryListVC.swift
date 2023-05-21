@@ -54,18 +54,35 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
 
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
+//      .distinctUntilChanged { a, b in
+//        let a = a.items.map { $0 }
+//        return true
+//      }
+      .debounce(.nanoseconds(500), scheduler: MainScheduler.instance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
-        snapshot.appendSections(sectionData.sections)
+        // initial Snapshot과 final Snapshot 생성
+        let initialSnapshot = owner.dataSource.snapshot()
+        var finalSnapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
+        finalSnapshot.appendSections(sectionData.sections)
         if sectionData.sections.contains(.pinned) {
-          snapshot.reloadSections([.pinned])
+          finalSnapshot.reloadSections([.pinned])
         }
         sectionData.items.enumerated().forEach { idx, item in
-          snapshot.appendItems(item, toSection: sectionData.sections[idx])
+          finalSnapshot.appendItems(item, toSection: sectionData.sections[idx])
         }
-        owner.dataSource.apply(snapshot, animatingDifferences: true)
-        owner.collectionView.collectionViewLayout.invalidateLayout()
+
+        // 고정된 Section이 보일때만 animate
+        let visibleSections: [AnniversaryListSection] = owner.collectionView.indexPathsForVisibleItems
+          .compactMap { owner.dataSource.sectionIdentifier(for: $0.section) }
+        let isPinnedSectionVisibleBefore = !initialSnapshot.sectionIdentifiers.contains(.pinned)
+        DispatchQueue.main.async {
+          owner.dataSource.apply(
+            finalSnapshot,
+            animatingDifferences: visibleSections.contains(.pinned) || isPinnedSectionVisibleBefore
+          )
+          owner.collectionView.collectionViewLayout.invalidateLayout()
+        }
       })
       .disposed(by: self.disposeBag)
   }

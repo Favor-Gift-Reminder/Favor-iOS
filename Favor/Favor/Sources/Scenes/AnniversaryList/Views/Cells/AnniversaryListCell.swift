@@ -8,12 +8,12 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import Reusable
 import RxCocoa
+import RxSwift
 import SnapKit
 
-public final class AnniversaryListCell: BaseCardCell, View, Reusable {
+public final class AnniversaryListCell: BaseCardCell, Reusable {
 
   // MARK: - Constants
 
@@ -38,6 +38,10 @@ public final class AnniversaryListCell: BaseCardCell, View, Reusable {
 
   // MARK: - Properties
 
+  public var cellModel: AnniversaryListCellModel? {
+    didSet { self.updateCell() }
+  }
+
   // MARK: - UI Components
 
   fileprivate let rightButton: UIButton = {
@@ -50,33 +54,11 @@ public final class AnniversaryListCell: BaseCardCell, View, Reusable {
     return button
   }()
 
-  // MARK: - Binding
-
-  public func bind(reactor: AnniversaryListCellReactor) {
-    // Action
-    self.rightButton.rx.tap
-      .map { Reactor.Action.rightButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    // State
-    reactor.state.map { (cellType: $0.cellType, isPinned: $0.anniversary.isPinned) }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, cellData in
-        owner.convert(to: cellData.cellType, isPinned: cellData.isPinned)
-      })
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.anniversary }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, anniversary in
-        owner.title = anniversary.title
-        owner.subtitle = anniversary.date.toShortenDateString()
-      })
-      .disposed(by: self.disposeBag)
-  }
-
   // MARK: - Functions
+
+  public func bind(_ cellModel: AnniversaryListCellModel) {
+    self.cellModel = cellModel
+  }
 
   // MARK: - UI Setups
 
@@ -100,13 +82,17 @@ public final class AnniversaryListCell: BaseCardCell, View, Reusable {
 // MARK: - Privates
 
 private extension AnniversaryListCell {
-  func convert(to type: CellType, isPinned: Bool) {
+  func updateCell() {
+    guard let cellModel else { return }
+    self.title = cellModel.item.title
+    self.subtitle = cellModel.item.date.toShortenDateString()
+
     // type == .list이고 isPinned일때만 .icon
     // 아니면 line2
-    let iconColor: UIColor = isPinned && type == .list ?
+    let iconColor: UIColor = cellModel.item.isPinned && cellModel.cellType == .list ?
       .favorColor(.icon) :
       .favorColor(.line2)
-    self.rightButton.configuration?.image = type.rightButtonImage?
+    self.rightButton.configuration?.image = cellModel.cellType.rightButtonImage?
       .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: Metric.rightButtonImageSize)
       .withTintColor(iconColor)
@@ -117,7 +103,10 @@ private extension AnniversaryListCell {
 // MARK: - Reactive
 
 public extension Reactive where Base: AnniversaryListCell {
-  var rightButtonDidTap: ControlEvent<()> {
-    return ControlEvent(events: base.rightButton.rx.tap)
+  var anniversaryModifyButtonDidTap: ControlEvent<Anniversary?> {
+    let source = base.rightButton.rx.tap.map { [weak base] in
+      return base?.cellModel?.item
+    }
+    return ControlEvent(events: source)
   }
 }

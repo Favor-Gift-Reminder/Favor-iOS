@@ -14,7 +14,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
   // MARK: - Constants
 
-  public enum CellType {
+  public enum CardCellType {
     /// 기념일 아이콘을 사용
     case anniversary
     /// 리마인더 대상의 프로필 사진을 사용
@@ -42,7 +42,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   // MARK: - Properties
 
   /// Cell의 좌측에 위치한 아이콘에 들어가는 이미지의 타입
-  public var cellType: CellType? {
+  public var cardCellType: CardCellType? {
     didSet { self.transformToType() }
   }
 
@@ -174,7 +174,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
 
 private extension BaseCardCell {
   func transformToType() {
-    guard let cellType = self.cellType else {
+    guard let cellType = self.cardCellType else {
       fatalError("CellType of Card Cell should be defined.")
     }
     switch cellType {
@@ -188,7 +188,7 @@ private extension BaseCardCell {
   }
 
   func updateImage() {
-    guard let cellType = self.cellType else {
+    guard let cellType = self.cardCellType else {
       fatalError("CellType of Card Cell should be defined.")
     }
     self.imageView.image = self.image?

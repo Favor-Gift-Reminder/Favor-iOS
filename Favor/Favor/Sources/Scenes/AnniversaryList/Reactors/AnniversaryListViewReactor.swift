@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/05/16.
 //
 
+import OrderedCollections
 import OSLog
 
 import FavorKit
@@ -37,6 +38,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
 
   struct State {
     var anniversaries: [Anniversary] = []
+    var model: OrderedDictionary<Section, [Item]> = [:]
     var sections: [Section] = []
     var items: [[Item]] = []
     var pinnedItems: [Item] = []
@@ -86,9 +88,9 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
           .reduce(into: (pinnedItems: [Item](), allItems: [Item]())) { result, anniversary in
             // 고정됨 부분과 전체 부분의 값이 같더라도 cell의 reactor는 달라야하기 때문에
             // 각각 생성해줍니다.
-            result.allItems.append(anniversary.toItem())
+            result.allItems.append(anniversary.toItem(forSection: .all))
             if anniversary.isPinned {
-              result.pinnedItems.append(anniversary.toItem())
+              result.pinnedItems.append(anniversary.toItem(forSection: .pinned))
             }
           }
         return .concat(
@@ -182,7 +184,7 @@ private extension AnniversaryListViewReactor {
 // MARK: - Anniversary Helper
 
 extension Anniversary {
-  fileprivate func toItem() -> AnniversaryListSectionItem {
-    return .anniversary(AnniversaryListCellReactor(cellType: .list, anniversary: self))
+  fileprivate func toItem(forSection section: AnniversaryListSection) -> AnniversaryListSectionItem {
+    return .anniversary(.list, anniversary: self, for: section)
   }
 }

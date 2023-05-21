@@ -13,7 +13,20 @@ import FavorKit
 
 public enum AnniversaryListSectionItem: SectionModelItem {
   case empty
-  case anniversary(AnniversaryListCellReactor)
+  case anniversary(
+    _ type: AnniversaryListCell.CellType,
+    anniversary: Anniversary,
+    for: AnniversaryListSection
+  )
+
+  var value: Anniversary? {
+    switch self {
+    case .empty:
+      return nil
+    case let .anniversary(_, anniversary, _):
+      return anniversary
+    }
+  }
 }
 
 // MARK: - Section
@@ -30,8 +43,8 @@ public enum AnniversaryListSection: SectionModelType {
 extension AnniversaryListSectionItem {
   public static func == (lhs: AnniversaryListSectionItem, rhs: AnniversaryListSectionItem) -> Bool {
     switch (lhs, rhs) {
-    case let (.anniversary(lhsValue), .anniversary(rhsValue)):
-      return lhsValue === rhsValue
+    case let (.anniversary(_, lhsData, lhsIsPinned), .anniversary(_, rhsData, rhsIsPinned)):
+      return (lhsData.anniversaryNo == rhsData.anniversaryNo) && (lhsData.isPinned == rhsData.isPinned) && (lhsIsPinned == rhsIsPinned)
     default:
       return false
     }
@@ -41,8 +54,9 @@ extension AnniversaryListSectionItem {
     switch self {
     case .empty:
       hasher.combine("Empty")
-    case .anniversary:
-      hasher.combine("Anniversary")
+    case let .anniversary(_, anniversary, _):
+      hasher.combine(anniversary.anniversaryNo)
+      hasher.combine(anniversary.isPinned)
     }
   }
 }
