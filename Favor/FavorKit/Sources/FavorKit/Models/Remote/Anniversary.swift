@@ -86,7 +86,6 @@ extension Array where Element: Anniversary {
         lhs.date > rhs.date
       }
 
-    print(upcomingAnniversaries, expiredAnniversaries)
     return upcomingAnniversaries + expiredAnniversaries
   }
 }

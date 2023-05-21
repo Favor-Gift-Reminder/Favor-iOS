@@ -68,15 +68,32 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
       return .empty()
 
-    case .rightButtonDidTap(let anniversary): // TODO: UI 변경 시점에 대한 고민 필요
-      return self.requestToggleAnniversaryPin(with: anniversary)
-        .asObservable()
-        .flatMap { anniversary -> Observable<Mutation> in
-          let newAnniversaries = self.currentState.anniversaries.map {
-            $0.anniversaryNo == anniversary.anniversaryNo ? anniversary : $0
+    case .rightButtonDidTap(let anniversary):
+      // 1. 현재 상태의 값을 백업
+      let originalAnniversaries = self.currentState.anniversaries
+      // 2. UI 우선 업데이트 - `anniversary`의 데이터를 변경하여 우선 업데이트
+      let newAnniversaries = originalAnniversaries.map { (originalAnniversary: Anniversary) in
+        let updatedAnniversary = Anniversary(
+          anniversaryNo: originalAnniversary.anniversaryNo,
+          title: originalAnniversary.title,
+          date: originalAnniversary.date,
+          isPinned: !originalAnniversary.isPinned
+        )
+        return originalAnniversary == anniversary ? updatedAnniversary : originalAnniversary
+      }
+      // 3. 서버 통신 - 완료되면 `anniversary`의 데이터를 변경하여 업데이트
+      return .concat([
+        .just(.updateAnniversaries(newAnniversaries)),
+        self.requestToggleAnniversaryPin(with: anniversary)
+          .asObservable()
+          .flatMap { _ -> Observable<Mutation> in
+            return .empty()
           }
-          return .just(.updateAnniversaries(newAnniversaries))
-        }
+          .catch { error -> Observable<Mutation> in
+            print(error)
+            return .just(.updateAnniversaries(originalAnniversaries))
+          }
+      ])
     }
   }
 
