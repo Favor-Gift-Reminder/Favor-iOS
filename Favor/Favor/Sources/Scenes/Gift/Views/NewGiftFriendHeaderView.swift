@@ -58,11 +58,14 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   
   func bind(reactor: NewGiftFriendHeaderViewReactor) {
     // Action
-    self.searchBar.rx.text.orEmpty
-      .asDriver()
-      .skip(2)
-      .drive(with: self) { $0.textFieldChanged?($1) }
-      .disposed(by: self.disposeBag)
+    if reactor.currentState.section == .friends {
+      self.searchBar.rx.text.orEmpty
+        .observe(on: MainScheduler.asyncInstance)
+        .asDriver(onErrorJustReturn: "")
+        .skip(2)
+        .drive(with: self) { $0.textFieldChanged?($1) }
+        .disposed(by: self.disposeBag)
+    }
     
     // State
     reactor.state.map { $0.section }
