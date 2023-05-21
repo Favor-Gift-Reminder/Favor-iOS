@@ -15,7 +15,7 @@ public class FavorProfileImageView: UIView {
   
   public enum Metric {
     static let wholeSize: CGFloat = 120.0
-    static let plusViewSize: CGFloat = 40.0
+    static let circlePhotoSize: CGFloat = 40.0
   }
   
   // MARK: - UI Components
@@ -33,15 +33,17 @@ public class FavorProfileImageView: UIView {
     $0.isUserInteractionEnabled = false
   }
   
-  /// + 버튼이 포함되어 있는 둥근 뷰 입니다.
-  private let plusView: UIButton = UIButton().then {
+  /// 사진 이미지가 포함되어 있는 둥근 뷰 입니다.
+  private let circlePhotoView: UIButton = UIButton().then {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.add)?
+    config.image = .favorIcon(.photo)?
       .withTintColor(.favorColor(.white))
-      .resize(newWidth: 24.0)
-    config.background.cornerRadius = Metric.plusViewSize / 2
+      .resize(newWidth: 16.0)
+    config.background.cornerRadius = Metric.circlePhotoSize / 2
+    config.background.strokeWidth = 3
+    config.background.strokeColor = .favorColor(.white)
     $0.configuration = config
     $0.isUserInteractionEnabled = false
   }
@@ -70,13 +72,13 @@ public class FavorProfileImageView: UIView {
   /// 숨길경우, 알파처리가 되어있는 사진 아이콘이 나타납니다.
   public var isHiddenPlusView: Bool = false {
     didSet {
-      plusView.isHidden = isHiddenPlusView
+      circlePhotoView.isHidden = isHiddenPlusView
       dimmedPhotoView.isHidden = !isHiddenPlusView
     }
   }
   
   /// 이미지를 등록합니다.
-  public var image: UIImage? = nil {
+  public var image: UIImage? {
     didSet { self.imageView.image = image }
   }
   
@@ -102,7 +104,7 @@ extension FavorProfileImageView: BaseView {
   public func setupLayouts() {
     [
       self.mainFriendView,
-      self.plusView,
+      self.circlePhotoView,
       self.imageView,
       self.dimmedPhotoView
     ].forEach {
@@ -119,8 +121,8 @@ extension FavorProfileImageView: BaseView {
       make.edges.equalToSuperview()
     }
     
-    self.plusView.snp.makeConstraints { make in
-      make.width.height.equalTo(Metric.plusViewSize)
+    self.circlePhotoView.snp.makeConstraints { make in
+      make.width.height.equalTo(Metric.circlePhotoSize)
       make.bottom.trailing.equalToSuperview()
     }
     
