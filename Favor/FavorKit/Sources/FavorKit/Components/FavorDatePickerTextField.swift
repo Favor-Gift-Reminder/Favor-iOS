@@ -169,6 +169,7 @@ public final class FavorDatePickerTextField: UIView {
       .drive(with: self, onNext: { owner, _ in
         owner.textField.becomeFirstResponder()
         owner.isDateSet = true
+        owner.datePicker.setDate(owner.date.value ?? .now, animated: false)
       })
       .disposed(by: self.disposeBag)
   }
