@@ -84,9 +84,12 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
 
   // MARK: - Functions
 
-  override func handleAnniversaryData(_ anniversary: Anniversary) {
-    guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.rightButtonDidTap(anniversary))
+  override func cellButtonTapped(cell: UICollectionViewCell, with model: AnniversaryListCellModel?) {
+    guard
+      let reactor = self.reactor,
+      let anniversary = model?.item
+    else { return }
+    reactor.action.onNext(.pinButtonDidTap(anniversary))
   }
 
   // MARK: - UI Setups

@@ -69,8 +69,11 @@ final class AnniversaryListModifyingViewController: BaseAnniversaryListViewContr
 
   // MARK: - Functions
 
-  override func handleAnniversaryData(_ anniversary: Anniversary) {
-    guard let reactor = self.reactor else { return }
+  override func cellButtonTapped(cell: UICollectionViewCell, with model: AnniversaryListCellModel?) {
+    guard
+      let anniversary = model?.item,
+      let reactor = self.reactor
+    else { return }
     reactor.action.onNext(.editButtonDidTap(anniversary))
   }
 

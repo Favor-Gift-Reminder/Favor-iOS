@@ -26,7 +26,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   enum Action {
     case viewNeedsLoaded
     case editButtonDidTap
-    case rightButtonDidTap(Anniversary)
+    case pinButtonDidTap(Anniversary)
   }
 
   enum Mutation {
@@ -66,7 +66,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
       return .empty()
 
-    case .rightButtonDidTap(let tappedAnniversary):
+    case .pinButtonDidTap(let tappedAnniversary):
       // 1. 현재 상태의 값을 백업
       let originalAnniversaries = self.currentState.anniversaries
       guard

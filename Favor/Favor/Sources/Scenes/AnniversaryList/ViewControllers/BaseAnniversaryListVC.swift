@@ -9,7 +9,7 @@ import UIKit
 
 import FavorKit
 
-public class BaseAnniversaryListViewController: BaseViewController {
+public class BaseAnniversaryListViewController: BaseViewController, CellButtonDelegate {
   public typealias AnniversaryListDataSource = UICollectionViewDiffableDataSource<AnniversaryListSection, AnniversaryListSectionItem>
 
   // MARK: - Properties
@@ -30,17 +30,9 @@ public class BaseAnniversaryListViewController: BaseViewController {
             sectionType: section
           )
           let cell = collectionView.dequeueReusableCell(for: indexPath) as AnniversaryListCell
+          cell.delegate = self
           cell.cardCellType = .anniversary
           cell.bind(cellModel)
-
-          cell.rx.anniversaryModifyButtonDidTap
-            .asDriver(onErrorRecover: { _ in return .empty()})
-            .drive(with: cell, onNext: { _, anniversary in
-              guard let self, let anniversary else { return }
-              self.handleAnniversaryData(anniversary)
-            })
-            .disposed(by: cell.disposeBag)
-
           return cell
         }
       }
@@ -108,7 +100,7 @@ public class BaseAnniversaryListViewController: BaseViewController {
 
   // MARK: - Functions
 
-  public func handleAnniversaryData(_ anniversary: Anniversary) { }
+  public func cellButtonTapped(cell: UICollectionViewCell, with model: AnniversaryListCellModel?) { }
 
   // MARK: - UI Setups
 

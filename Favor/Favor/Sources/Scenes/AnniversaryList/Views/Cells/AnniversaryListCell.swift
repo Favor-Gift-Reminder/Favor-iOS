@@ -13,7 +13,15 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
+public protocol CellButtonDelegate: AnyObject {
+  func cellButtonTapped(cell: UICollectionViewCell, with model: AnniversaryListCellModel?)
+}
+
 public final class AnniversaryListCell: BaseCardCell, Reusable {
+
+  // MARK: - Properties
+
+  public weak var delegate: CellButtonDelegate?
 
   // MARK: - Constants
 
@@ -54,10 +62,31 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
     return button
   }()
 
+  // MARK: - Initializer
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+
+    self.bind()
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   // MARK: - Functions
 
   public func bind(_ cellModel: AnniversaryListCellModel) {
     self.cellModel = cellModel
+  }
+
+  public func bind() {
+    self.rightButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.cellButtonTapped(cell: self, with: self.cellModel)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - UI Setups
@@ -96,17 +125,5 @@ private extension AnniversaryListCell {
       .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: Metric.rightButtonImageSize)
       .withTintColor(iconColor)
-  }
-}
-
-
-// MARK: - Reactive
-
-public extension Reactive where Base: AnniversaryListCell {
-  var anniversaryModifyButtonDidTap: ControlEvent<Anniversary?> {
-    let source = base.rightButton.rx.tap.map { [weak base] in
-      return base?.cellModel?.item
-    }
-    return ControlEvent(events: source)
   }
 }
