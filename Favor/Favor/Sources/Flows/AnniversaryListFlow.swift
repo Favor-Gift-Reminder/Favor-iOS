@@ -36,12 +36,12 @@ final class AnniversaryListFlow: Flow {
       return self.navigateToEditAnniversaryList(with: anniversaries)
 
     case .newAnniversaryIsRequired:
-      return self.navigateToEditAnniversary(.new)
+      return self.navigateToAnniversaryManagement(.new)
 
-    case .editAnniversaryIsRequired(let anniversary):
-      return self.navigateToEditAnniversary(.edit, with: anniversary)
+    case .anniversaryManagementIsRequired(let anniversary):
+      return self.navigateToAnniversaryManagement(.edit, with: anniversary)
 
-    case .editAnniversaryIsComplete(let anniversary):
+    case .anniversaryManagementIsComplete(let anniversary):
       return self.popFromAnniversaryModifying()
 
     case .anniversaryListIsComplete:
@@ -90,7 +90,7 @@ private extension AnniversaryListFlow {
     ))
   }
 
-  func navigateToEditAnniversary(
+  func navigateToAnniversaryManagement(
     _ viewType: AnniversaryManagementViewController.ViewType,
     with anniversary: Anniversary? = nil
   ) -> FlowContributors {

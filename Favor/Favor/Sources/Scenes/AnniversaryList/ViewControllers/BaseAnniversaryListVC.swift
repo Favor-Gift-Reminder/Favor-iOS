@@ -9,7 +9,7 @@ import UIKit
 
 import FavorKit
 
-public class BaseAnniversaryListViewController: BaseViewController, CellButtonDelegate {
+public class BaseAnniversaryListViewController: BaseViewController, CellModelTransferDelegate {
   public typealias AnniversaryListDataSource = UICollectionViewDiffableDataSource<AnniversaryListSection, AnniversaryListSectionItem>
 
   // MARK: - Properties
@@ -100,7 +100,7 @@ public class BaseAnniversaryListViewController: BaseViewController, CellButtonDe
 
   // MARK: - Functions
 
-  public func cellButtonTapped(cell: UICollectionViewCell, with model: AnniversaryListCellModel?) { }
+  public func transfer(_ model: (any CellModel)?, from cell: UICollectionViewCell) { }
 
   // MARK: - UI Setups
 

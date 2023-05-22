@@ -78,7 +78,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
           .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
             print(anniversary)
             // TODO: 성공 / 실패 여부에 따라 accept / not, accept시 데이터 넘겨 toast 메시지
-            self.steps.accept(AppStep.editAnniversaryIsComplete(anniversary))
+            self.steps.accept(AppStep.anniversaryManagementIsComplete(anniversary))
             return .empty()
           }
       case .edit:

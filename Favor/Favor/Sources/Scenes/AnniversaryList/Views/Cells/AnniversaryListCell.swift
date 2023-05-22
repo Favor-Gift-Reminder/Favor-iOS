@@ -13,15 +13,11 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-public protocol CellButtonDelegate: AnyObject {
-  func cellButtonTapped(cell: UICollectionViewCell, with model: AnniversaryListCellModel?)
-}
-
 public final class AnniversaryListCell: BaseCardCell, Reusable {
 
   // MARK: - Properties
 
-  public weak var delegate: CellButtonDelegate?
+  public weak var delegate: CellModelTransferDelegate?
 
   // MARK: - Constants
 
@@ -84,7 +80,7 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
     self.rightButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.cellButtonTapped(cell: self, with: self.cellModel)
+        owner.delegate?.transfer(self.cellModel, from: self)
       })
       .disposed(by: self.disposeBag)
   }

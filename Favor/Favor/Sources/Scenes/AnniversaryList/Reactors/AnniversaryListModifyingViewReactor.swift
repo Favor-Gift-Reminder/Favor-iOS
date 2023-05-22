@@ -62,7 +62,7 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
       return .empty()
 
     case .editButtonDidTap(let anniversary):
-      self.steps.accept(AppStep.editAnniversaryIsRequired(anniversary))
+      self.steps.accept(AppStep.anniversaryManagementIsRequired(anniversary))
       return .empty()
     }
   }
