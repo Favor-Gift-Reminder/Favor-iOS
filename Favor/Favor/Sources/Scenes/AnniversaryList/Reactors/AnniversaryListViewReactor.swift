@@ -68,32 +68,43 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
       return .empty()
 
-    case .rightButtonDidTap(let anniversary):
+    case .rightButtonDidTap(let tappedAnniversary):
       // 1. 현재 상태의 값을 백업
       let originalAnniversaries = self.currentState.anniversaries
+      guard
+        let originalTargetAnniversary = originalAnniversaries.first(where: { anniversary in
+          anniversary.anniversaryNo == tappedAnniversary.anniversaryNo
+        }),
+        originalTargetAnniversary.isPinned == tappedAnniversary.isPinned
+      else { return .empty() }
+      
       // 2. UI 우선 업데이트 - `anniversary`의 데이터를 변경하여 우선 업데이트
       let newAnniversaries = originalAnniversaries.map { (originalAnniversary: Anniversary) in
-        let updatedAnniversary = Anniversary(
-          anniversaryNo: originalAnniversary.anniversaryNo,
-          title: originalAnniversary.title,
-          date: originalAnniversary.date,
-          isPinned: !originalAnniversary.isPinned
-        )
-        return originalAnniversary == anniversary ? updatedAnniversary : originalAnniversary
+        if originalAnniversary.anniversaryNo == tappedAnniversary.anniversaryNo {
+          return Anniversary(
+            anniversaryNo: originalAnniversary.anniversaryNo,
+            title: originalAnniversary.title,
+            date: originalAnniversary.date,
+            isPinned: !originalAnniversary.isPinned
+          )
+        } else {
+          return originalAnniversary
+        }
       }
+
       // 3. 서버 통신 - 완료되면 `anniversary`의 데이터를 변경하여 업데이트
-      return .concat([
+      return .concat(
         .just(.updateAnniversaries(newAnniversaries)),
-        self.requestToggleAnniversaryPin(with: anniversary)
+        self.requestToggleAnniversaryPin(with: tappedAnniversary)
           .asObservable()
           .flatMap { _ -> Observable<Mutation> in
             return .empty()
           }
           .catch { error -> Observable<Mutation> in
-            print(error)
+            os_log(.error, "🚨 Failure: \(error)")
             return .just(.updateAnniversaries(originalAnniversaries))
           }
-      ])
+      )
     }
   }
 
@@ -178,6 +189,7 @@ private extension AnniversaryListViewReactor {
       )
 
       let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.anniversaryNo))
+        .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
