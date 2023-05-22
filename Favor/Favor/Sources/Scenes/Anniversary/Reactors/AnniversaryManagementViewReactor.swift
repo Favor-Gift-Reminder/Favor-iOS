@@ -54,7 +54,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
       anniversaryTitle: anniversary.title,
       anniversaryCategory: "생일/축하",
       anniversaryDate: anniversary.date,
-      items: [.name(anniversary.title), .category, .date(anniversary.date.toShortenDateString())]
+      items: [.name(anniversary.title), .category, .date(anniversary.date)]
     )
   }
 
@@ -62,7 +62,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
   init() {
     self.initialState = State(
       viewType: .new,
-      items: [.name(""), .category, .date("")]
+      items: [.name(""), .category, .date(.now)]
     )
   }
 

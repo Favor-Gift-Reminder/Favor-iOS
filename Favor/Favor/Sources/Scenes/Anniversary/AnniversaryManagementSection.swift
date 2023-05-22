@@ -14,7 +14,7 @@ import FavorKit
 public enum AnniversaryManagementSectionItem: SectionModelItem {
   case name(String?)
   case category
-  case date(String?)
+  case date(Date?)
 }
 
 // MARK: - Section
@@ -23,16 +23,6 @@ public enum AnniversaryManagementSection: SectionModelType {
   case name
   case category
   case date
-}
-
-// MARK: - Hashable
-
-extension AnniversaryManagementSectionItem {
-
-}
-
-extension AnniversaryManagementSection {
-
 }
 
 // MARK: - Properties

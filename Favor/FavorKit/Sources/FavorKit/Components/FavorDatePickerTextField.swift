@@ -122,6 +122,7 @@ public final class FavorDatePickerTextField: UIView {
   public func updateDate(_ date: Date?) {
     if let date {
       self.datePicker.setDate(date, animated: true)
+      self.textField.text = date.toDateString()
     } else {
       self.optionalDate.accept(date)
     }

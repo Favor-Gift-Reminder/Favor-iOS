@@ -10,6 +10,10 @@ import UIKit
 import Reusable
 import SnapKit
 
+public protocol FavorSelectorCellDelegate: AnyObject {
+  func selectorDidUpdate(from cell: FavorSelectorCell, _ data: String)
+}
+
 open class FavorSelectorCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Properties

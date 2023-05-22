@@ -12,9 +12,15 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
+public protocol FavorTextFieldCellDelegate: AnyObject {
+  func textFieldDidUpdate(from cell: FavorTextFieldCell, _ text: String?)
+}
+
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Properties
+
+  public weak var delegate: FavorTextFieldCellDelegate?
 
   public var text: String? {
     self.textField.text
@@ -38,10 +44,22 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    self.bind()
   }
 
   public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Functions
+
+  private func bind() {
+    self.textField.rx.text
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, text in
+        owner.delegate?.textFieldDidUpdate(from: self, text)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Bind
@@ -69,13 +87,5 @@ extension FavorTextFieldCell: BaseView {
     self.textField.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
-  }
-}
-
-// MARK: - Reactive
-
-public extension Reactive where Base: FavorTextFieldCell {
-  var text: ControlEvent<String?> {
-    return ControlEvent(events: base.textField.rx.text)
   }
 }

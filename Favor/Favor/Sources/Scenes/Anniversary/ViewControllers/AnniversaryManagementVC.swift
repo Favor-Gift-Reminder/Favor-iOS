@@ -41,27 +41,18 @@ final class AnniversaryManagementViewController: BaseViewController, View {
         switch item {
         case .name(let title):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
+          cell.delegate = self
           cell.bind(placeholder: "내 기념일 이름 (최대 10자)")
           cell.bind(text: title)
-
-          cell.rx.text
-            .map { Reactor.Action.titleDidUpdate($0) }
-            .bind(to: reactor.action)
-            .disposed(by: cell.disposeBag)
-
           return cell
         case .category:
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorSelectorCell
           cell.bind(unselectedTitle: "종류 선택")
           return cell
-        case .date:
+        case .date(let date):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorDateSelectorCell
-
-          cell.rx.date
-            .map { Reactor.Action.dateDidUpdate($0) }
-            .bind(to: reactor.action)
-            .disposed(by: cell.disposeBag)
-
+          cell.delegate = self
+          cell.bind(date: date)
           return cell
         }
       })
@@ -215,5 +206,23 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-32)
     }
+  }
+}
+
+// MARK: - FavorTextFieldCell
+
+extension AnniversaryManagementViewController: FavorTextFieldCellDelegate {
+  func textFieldDidUpdate(from cell: FavorTextFieldCell, _ text: String?) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.titleDidUpdate(text))
+  }
+}
+
+// MARK: - FavorDateSelectorCell
+
+extension AnniversaryManagementViewController: FavorDateSelectorCellDelegate {
+  func dateSelectorDidUpdate(from cell: FavorDateSelectorCell, _ date: Date?) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.dateDidUpdate(date))
   }
 }
