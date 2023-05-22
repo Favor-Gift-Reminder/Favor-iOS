@@ -48,7 +48,7 @@ public final class ToastManager {
 
   private func showToast(
     _ toast: FavorToastMessageView,
-    at viewController: BaseViewController,
+    at viewController: Toastable,
     completion: (() -> Void)? = nil
   ) {
     toast.alpha = 0.0
@@ -78,7 +78,7 @@ public final class ToastManager {
   /// ToastView를 최상단 VC 위에 띄웁니다.
   public func showNewToast(
     _ toast: FavorToastMessageView,
-    at viewController: BaseViewController,
+    at viewController: Toastable,
     duration: ToastManager.duration = .short,
     completion: (() -> Void)? = nil
   ) {
@@ -98,7 +98,7 @@ public final class ToastManager {
 
   public func hideToast(
     _ toast: FavorToastMessageView,
-    from viewController: BaseViewController,
+    from viewController: Toastable,
     duration: ToastManager.duration? = nil
   ) {
     let animator = UIViewPropertyAnimator(duration: self.popOutDuration, curve: .easeInOut) {

@@ -1,5 +1,5 @@
 //
-//  AnniversaryListFlow.swift
+//  AnniversaryFlow.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/16.
@@ -10,7 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
-final class AnniversaryListFlow: Flow {
+final class AnniversaryFlow: Flow {
 
   // MARK: - Properties
 
@@ -42,7 +42,7 @@ final class AnniversaryListFlow: Flow {
       return self.navigateToAnniversaryManagement(.edit, with: anniversary)
 
     case .anniversaryManagementIsComplete(let anniversary):
-      return self.popFromAnniversaryModifying()
+      return self.popFromAnniversaryModifying(with: anniversary)
 
     case .anniversaryListIsComplete:
       return self.popFromAnniversaryList()
@@ -55,7 +55,7 @@ final class AnniversaryListFlow: Flow {
 
 // MARK: - Navigates
 
-private extension AnniversaryListFlow {
+private extension AnniversaryFlow {
   func navigateToAnniversaryList() -> FlowContributors {
     let anniversaryListVC = AnniversaryListViewController()
     let anniversaryListReactor = AnniversaryListViewReactor()
@@ -116,10 +116,16 @@ private extension AnniversaryListFlow {
     ))
   }
 
-  func popFromAnniversaryModifying() -> FlowContributors {
+  func popFromAnniversaryModifying(with anniversary: Anniversary?) -> FlowContributors {
     DispatchQueue.main.async {
       if self.rootViewController.topViewController is AnniversaryManagementViewController {
         self.rootViewController.popViewController(animated: true)
+        guard
+          let anniversaryListModifyingVC = self.rootViewController.topViewController
+            as? AnniversaryListModifyingViewController,
+          let anniversary = anniversary
+        else { return }
+        anniversaryListModifyingVC.viewNeedsLoaded(with: .anniversaryModifed(anniversary.title))
       }
     }
 

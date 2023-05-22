@@ -60,6 +60,7 @@ final class AnniversaryListModifyingViewController: BaseAnniversaryListViewContr
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
         snapshot.appendSections([sectionData.section])
+        snapshot.reloadSections([sectionData.section])
         snapshot.appendItems(sectionData.items, toSection: sectionData.section)
         owner.dataSource.apply(snapshot, animatingDifferences: true)
         owner.collectionView.collectionViewLayout.invalidateLayout()
@@ -68,6 +69,13 @@ final class AnniversaryListModifyingViewController: BaseAnniversaryListViewContr
   }
 
   // MARK: - Functions
+
+  override func viewNeedsLoaded(with toast: ToastMessage? = nil) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.viewNeedsLoaded)
+
+    self.presentToast(toast, duration: .short)
+  }
 
   override func transfer(_ model: (any CellModel)?, from cell: UICollectionViewCell) {
     guard

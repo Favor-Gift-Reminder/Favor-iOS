@@ -15,8 +15,12 @@ public final class FavorToastMessageView: UIView {
 
   // MARK: - Properties
 
-  public var width: CGFloat = 375 {
+  public var width: CGFloat = 375.0 {
     didSet { self.updateWidth() }
+  }
+
+  public var height: CGFloat = 44.0 {
+    didSet { self.updateHeight() }
   }
 
   public var message: String? {
@@ -29,7 +33,7 @@ public final class FavorToastMessageView: UIView {
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
-    label.font = .favorFont(.regular, size: 14)
+    label.font = .favorFont(.bold, size: 16)
     label.textColor = .favorColor(.white)
     label.textAlignment = .center
     label.numberOfLines = 1
@@ -72,8 +76,8 @@ extension FavorToastMessageView: BaseView {
       .flexibleTopMargin,
       .flexibleBottomMargin
     ]
-    self.layer.cornerRadius = 20
-    self.backgroundColor = .favorColor(.titleAndLine)
+    self.layer.cornerRadius = self.height / 2
+    self.backgroundColor = .favorColor(.sub)
   }
 
   public func setupLayouts() {
@@ -82,7 +86,8 @@ extension FavorToastMessageView: BaseView {
 
   public func setupConstraints() {
     self.snp.makeConstraints { make in
-      make.height.equalTo(40)
+      make.width.equalTo(self.width)
+      make.height.equalTo(self.height)
     }
 
     self.titleLabel.snp.makeConstraints { make in
@@ -97,6 +102,12 @@ private extension FavorToastMessageView {
   func updateWidth() {
     self.snp.updateConstraints { make in
       make.width.equalTo(self.width)
+    }
+  }
+
+  func updateHeight() {
+    self.snp.updateConstraints { make in
+      make.height.equalTo(self.height)
     }
   }
 

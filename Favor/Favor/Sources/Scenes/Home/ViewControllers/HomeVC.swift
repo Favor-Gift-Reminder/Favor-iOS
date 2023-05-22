@@ -146,13 +146,13 @@ final class HomeViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state.map { $0.toastMessage }
-      .compactMap { $0 }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, message in
-        owner.presentToast(message, duration: .short)
-      })
-      .disposed(by: self.disposeBag)
+//    reactor.state.map { $0.toastMessage }
+//      .compactMap { $0 }
+//      .asDriver(onErrorRecover: { _ in return .empty()})
+//      .drive(with: self, onNext: { owner, message in
+//        owner.presentToast(message, duration: .short)
+//      })
+//      .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
