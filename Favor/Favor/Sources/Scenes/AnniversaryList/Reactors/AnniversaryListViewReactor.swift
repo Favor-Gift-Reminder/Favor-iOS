@@ -5,7 +5,6 @@
 //  Created by 이창준 on 2023/05/16.
 //
 
-import OrderedCollections
 import OSLog
 
 import FavorKit
@@ -38,7 +37,6 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
 
   struct State {
     var anniversaries: [Anniversary] = []
-    var model: OrderedDictionary<Section, [Item]> = [:]
     var sections: [Section] = []
     var items: [[Item]] = []
     var pinnedItems: [Item] = []
