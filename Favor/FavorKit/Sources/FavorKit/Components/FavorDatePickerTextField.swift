@@ -17,12 +17,13 @@ public final class FavorDatePickerTextField: UIView {
 
   private let disposeBag = DisposeBag()
 
+  fileprivate let date = BehaviorRelay<Date?>(value: nil)
+
   public var pickerMode: UIDatePicker.Mode = .date {
     didSet { self.datePicker.datePickerMode = self.pickerMode }
   }
 
-  /// DatePicker의 `date` 프로퍼티를 Optional하게 래핑한 프로퍼티
-  fileprivate let optionalDate = BehaviorRelay<Date?>(value: nil)
+  private var isDateSet: Bool = false
 
   public var placeholder: String = "선택" {
     didSet {
@@ -41,7 +42,7 @@ public final class FavorDatePickerTextField: UIView {
     didSet { self.downButton.isSelected = self.isSelected }
   }
 
-  // MARK: - UI
+  // MARK: - UI Components
 
   private let contentsStack: UIStackView = {
     let stackView = UIStackView()
@@ -120,12 +121,8 @@ public final class FavorDatePickerTextField: UIView {
   // MARK: - FUNCTIONS
 
   public func updateDate(_ date: Date?) {
-    if let date {
-      self.datePicker.setDate(date, animated: true)
-      self.textField.text = date.toDateString()
-    } else {
-      self.optionalDate.accept(date)
-    }
+    self.isDateSet = date != nil
+    self.date.accept(date)
   }
 
   public func updateIsUserInteractable(to isInteractable: Bool) {
@@ -140,21 +137,22 @@ public final class FavorDatePickerTextField: UIView {
   // MARK: - BINDING
 
   private func bind() {
+    self.date
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, date in
+        if let date {
+          let dateString = owner.pickerMode == .time ? date.toTimeString() : date.toDateString()
+          owner.textField.text = dateString
+        }
+      })
+      .disposed(by: self.disposeBag)
+
     self.datePicker.rx.date
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
-        let dateString = self.pickerMode == .time ? date.toTimeString() : date.toDateString()
-        owner.textField.text = dateString
-        owner.optionalDate.accept(date)
-      })
-      .disposed(by: self.disposeBag)
-
-    self.optionalDate
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, date in
-        if date == nil {
-          owner.textField.text = nil
+        if owner.isDateSet {
+          owner.date.accept(date)
         }
       })
       .disposed(by: self.disposeBag)
@@ -170,6 +168,7 @@ public final class FavorDatePickerTextField: UIView {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.textField.becomeFirstResponder()
+        owner.isDateSet = true
       })
       .disposed(by: self.disposeBag)
   }
@@ -208,15 +207,11 @@ extension FavorDatePickerTextField: BaseView {
 // MARK: - Reactive
 
 public extension Reactive where Base: FavorDatePickerTextField {
-  /// DatePicker가 nil이 될 수 없을 때 사용되는 프로퍼티
-  var date: ControlEvent<Date> {
-    let source = base.datePicker.rx.date
-    return ControlEvent(events: source)
-  }
-
-  /// DatePicker가 nil이 될 필요가 있을 때 사용되는 프로퍼티
-  var optionalDate: ControlEvent<Date?> {
-    let source = base.optionalDate
-    return ControlEvent(events: source)
+  var date: ControlProperty<Date?> {
+    let source = base.date
+    let bindingObserver = Binder(self.base) { picker, date in
+      picker.date.accept(date)
+    }
+    return ControlProperty(values: source, valueSink: bindingObserver)
   }
 }

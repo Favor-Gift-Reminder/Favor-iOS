@@ -72,6 +72,11 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
   public func bind(text: String?) {
     self.textField.text = text
   }
+
+  @discardableResult
+  open override func becomeFirstResponder() -> Bool {
+    self.textField.becomeFirstResponder()
+  }
 }
 
 // MARK: - UI Setups
