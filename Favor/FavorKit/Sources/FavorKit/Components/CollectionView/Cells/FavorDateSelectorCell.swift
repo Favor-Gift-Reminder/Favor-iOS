@@ -26,6 +26,7 @@ open class FavorDateSelectorCell: BaseCollectionViewCell, Reusable {
 
   fileprivate let datePicker: FavorDatePickerTextField = {
     let datePicker = FavorDatePickerTextField()
+    datePicker.placeholder = "날짜 선택"
     return datePicker
   }()
 
@@ -46,7 +47,7 @@ open class FavorDateSelectorCell: BaseCollectionViewCell, Reusable {
   // MARK: - Functions
 
   private func bind() {
-    self.datePicker.rx.optionalDate
+    self.datePicker.rx.date
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
         owner.delegate?.dateSelectorDidUpdate(from: self, date)
@@ -57,7 +58,6 @@ open class FavorDateSelectorCell: BaseCollectionViewCell, Reusable {
   // MARK: - Bind
 
   public func bind(date: Date?) {
-    print(date)
     self.datePicker.updateDate(date)
   }
 }

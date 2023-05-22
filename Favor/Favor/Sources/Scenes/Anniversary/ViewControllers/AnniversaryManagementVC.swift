@@ -142,6 +142,12 @@ final class AnniversaryManagementViewController: BaseViewController, View {
     self.setupNavigationBar()
   }
 
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+
+    self.makeTitleTextFieldFirstResponder()
+  }
+
   // MARK: - Binding
 
   func bind(reactor: AnniversaryManagementViewReactor) {
@@ -177,6 +183,13 @@ final class AnniversaryManagementViewController: BaseViewController, View {
         owner.collectionView.collectionViewLayout.invalidateLayout()
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isDoneButtonEnabled }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, isDoneButtonEnabled in
+        owner.doneButton.isEnabled = isDoneButtonEnabled
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -206,6 +219,17 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-32)
     }
+  }
+}
+
+// MARK: - Privates
+
+private extension AnniversaryManagementViewController {
+  func makeTitleTextFieldFirstResponder() {
+    guard let titleCell = self.collectionView.cellForItem(
+      at: IndexPath(item: .zero, section: .zero)
+    ) as? FavorTextFieldCell else { return }
+    titleCell.becomeFirstResponder()
   }
 }
 
