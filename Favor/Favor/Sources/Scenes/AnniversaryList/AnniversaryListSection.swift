@@ -38,6 +38,21 @@ public enum AnniversaryListSection: SectionModelType {
   case edit
 }
 
+// MARK: - Properties
+
+extension AnniversaryListSection {
+  public var header: String {
+    switch self {
+    case .pinned:
+      return "고정됨"
+    case .all:
+      return "전체"
+    default:
+      return ""
+    }
+  }
+}
+
 // MARK: - Hashable & Equatable
 
 extension AnniversaryListSectionItem {

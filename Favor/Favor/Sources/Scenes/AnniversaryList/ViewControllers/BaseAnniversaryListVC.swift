@@ -48,8 +48,7 @@ public class BaseAnniversaryListViewController: BaseViewController, CellModelTra
         let currentSnapshot = self.dataSource.snapshot()
         let section = currentSnapshot.sectionIdentifiers[indexPath.section]
         let numberOfItems = currentSnapshot.numberOfItems(inSection: section)
-        let title = indexPath.section == .zero ? "고정됨" : "전체"
-        header.bind(title: title, digit: numberOfItems)
+        header.bind(title: section.header, digit: numberOfItems)
         return header
       default:
         return UICollectionReusableView()
