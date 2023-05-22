@@ -42,8 +42,8 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
 
   func bind(reactor: AnniversaryListViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
