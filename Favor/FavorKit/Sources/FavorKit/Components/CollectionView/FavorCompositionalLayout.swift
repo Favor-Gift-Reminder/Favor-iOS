@@ -8,7 +8,7 @@
 import UIKit
 
 public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout {
-
+  
   // MARK: - Item
   
   /// Item의 타입과 그에 따른 값들을 정의해둔 enum입니다.

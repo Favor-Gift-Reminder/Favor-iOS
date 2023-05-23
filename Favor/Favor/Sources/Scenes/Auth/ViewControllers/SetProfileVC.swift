@@ -260,7 +260,7 @@ final class SetProfileViewController: BaseViewController, View {
     ].forEach {
       self.textFieldStack.addArrangedSubview($0)
     }
-
+    
     [
       self.profileImageButton,
       self.plusImageView,

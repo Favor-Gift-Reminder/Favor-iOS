@@ -62,6 +62,9 @@ enum AppStep: Step {
   case friendListIsRequired
   case editFriendIsRequired
   case friendListIsComplete
+  
+  // MARK: - FriendPage
+  case friendManagementIsRequired(FriendManagementViewController.ViewControllerType)
 
   // MARK: - AnniversaryList
   case anniversaryListIsRequired
