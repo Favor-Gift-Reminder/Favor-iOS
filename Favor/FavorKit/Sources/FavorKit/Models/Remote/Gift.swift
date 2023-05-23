@@ -81,4 +81,27 @@ public class Gift: Object {
     self.friendList = newFriendList
     self.isGiven = isGiven
   }
+
+  // MARK: - Sort
+
+  public enum SortType {
+    case isPinned
+  }
+}
+
+// MARK: - Array Extension
+
+extension Array where Element: Gift {
+  public func sort(by type: Gift.SortType) -> (positive: Self, negative: Self) {
+    switch type {
+    case .isPinned:
+      return self.sortByIsPinned()
+    }
+  }
+
+  private func sortByIsPinned() -> (positive: Self, negative: Self) {
+    let pinnedGifts = self.filter { $0.isPinned }
+    let unpinnedGifts = self.filter { !$0.isPinned }
+    return (pinnedGifts, unpinnedGifts)
+  }
 }

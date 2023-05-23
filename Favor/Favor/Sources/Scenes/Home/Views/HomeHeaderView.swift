@@ -98,7 +98,7 @@ class HomeHeaderView: UICollectionReusableView, Reusable, View {
     
     // State
     reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming }
+      .map { $0 == .upcoming(isEmpty: false) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isUpcoming in
         // Header Title
@@ -170,9 +170,9 @@ extension HomeHeaderView: BaseView {
   
   func setupConstraints() {
     self.firstLineStack.snp.makeConstraints { make in
-      make.top.equalToSuperview().inset(40)
-      make.height.equalTo(32)
+      make.top.equalToSuperview()
       make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(32)
     }
 
     self.secondLineStack.snp.makeConstraints { make in

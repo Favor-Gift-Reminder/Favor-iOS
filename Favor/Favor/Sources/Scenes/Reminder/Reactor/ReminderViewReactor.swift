@@ -174,25 +174,8 @@ private extension ReminderViewReactor {
   func extractUpcoming(
     from reminders: [Reminder]
   ) -> (ReminderSection.ReminderSectionModel, ReminderSection.ReminderSectionModel) {
-    var upcomingReminders: [Reminder] = []
-    var pastReminders: [Reminder] = []
-
-    reminders.forEach { reminder in
-      let reminderDateComponents = Calendar.current.dateComponents(
-        [.year, .month, .day],
-        from: reminder.date
-      )
-      let currentDateComponents = Calendar.current.dateComponents(
-        [.year, .month, .day],
-        from: .now
-      )
-      if reminderDateComponents >= currentDateComponents {
-        upcomingReminders.append(reminder)
-      } else {
-        pastReminders.append(reminder)
-      }
-    }
-
+    let (upcomingReminders, pastReminders) = reminders.sort()
+    
     let upcomingItems = upcomingReminders.map { data in
       let reactor = ReminderCellReactor(reminder: data)
       return ReminderSection.ReminderSectionItem.reminder(reactor)
