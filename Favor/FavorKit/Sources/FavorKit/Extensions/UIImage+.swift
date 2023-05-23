@@ -45,12 +45,13 @@ extension UIImage {
     case down
     case left
     case right
-
+    
     case birth
     case congrat
     case couple
-    case employed
+    case employ
     case graduate
+    case gift
     case housewarm
     case pass
   }
