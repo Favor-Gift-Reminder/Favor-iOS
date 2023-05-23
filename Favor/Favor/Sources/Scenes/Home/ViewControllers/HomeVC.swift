@@ -149,6 +149,17 @@ final class HomeViewController: BaseViewController, View {
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
+
+    self.collectionView.rx.itemSelected
+      .map { indexPath in
+        let currentSnapshot = self.dataSource.snapshot()
+        let sections = currentSnapshot.sectionIdentifiers
+        let items = currentSnapshot.itemIdentifiers(inSection: sections[indexPath.section])
+        let selectedItem = items[indexPath.item]
+        return Reactor.Action.itemSelected(selectedItem)
+      }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
@@ -157,9 +168,6 @@ final class HomeViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeSectionItem>()
         snapshot.appendSections(sectionData.sections)
-//        if case let HomeSection.timeline(isEmpty) = sectionData.sections[1] {
-//          snapshot.reloadSections([.timeline(isEmpty: isEmpty)])
-//        }
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
         }

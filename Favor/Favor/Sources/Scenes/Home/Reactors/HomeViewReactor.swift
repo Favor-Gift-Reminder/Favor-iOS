@@ -34,7 +34,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case searchButtonDidTap
     case rightButtonDidTap(HomeSection)
     case filterButtonDidSelected(GiftFilterType)
-    case itemSelected(IndexPath)
+    case itemSelected(Item)
   }
   
   enum Mutation {
@@ -93,7 +93,6 @@ final class HomeViewReactor: Reactor, Stepper {
         return .concat([
           .just(.updateReminders(reminders)),
           .just(.updateGifts(gifts))
-//          .just(.updateLoading(true))
         ])
       }
 
@@ -113,33 +112,17 @@ final class HomeViewReactor: Reactor, Stepper {
     case .filterButtonDidSelected(let filterType):
       return .just(.updateFilterType(filterType))
 
-    case .itemSelected:
+    case .itemSelected(let item):
+      if case let Item.upcoming(upcoming) = item {
+        guard case let Item.Upcoming.reminder(reminder) = upcoming else { return .empty() }
+        print(reminder)
+      } else if case let Item.timeline(timeline) = item {
+        guard case let Item.Timeline.gift(gift) = timeline else { return .empty() }
+        print(gift)
+      }
       return .empty()
     }
   }
-
-//  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-//    return mutation.flatMap { originalMutation -> Observable<Mutation> in
-//      switch originalMutation {
-//      case .updateGifts(let gifts):
-//        let filteredGifts = gifts.filter(by: self.currentState.filterType)
-//        let (pinnedGifts, unpinnedGifts) = filteredGifts.sort(by: .isPinned)
-//        let pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
-//        let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
-//
-//        // Load 최대 개수 만큼만 반환
-//        let croppedTimelines = (pinnedTimelines + unpinnedTimelines)
-//          .prefix(self.currentState.maxTimelineItems)
-//          .wrap()
-//        return .concat(
-//          .just(originalMutation),
-//          .just(.updateTimelineSection(croppedTimelines))
-//        )
-//      default:
-//        return .just(originalMutation)
-//      }
-//    }
-//  }
 
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
