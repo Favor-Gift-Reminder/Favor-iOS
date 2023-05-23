@@ -18,8 +18,8 @@ final class ProfileSetupHelperCellReactor: Reactor {
 
     public var iconImage: UIImage? {
       switch self {
-      case .favor: return .favorIcon(.heartedPerson)
-      case .anniversary: return .favorIcon(.heartedPerson)
+      case .favor: return .favorIcon(.favor)
+      case .anniversary: return .favorIcon(.favor)
       }
     }
 
