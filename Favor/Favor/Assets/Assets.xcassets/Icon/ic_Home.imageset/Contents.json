@@ -1,23 +1,16 @@
 {
   "images" : [
     {
-      "filename" : "ic_home.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "ic_home_2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "ic_Home_3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
+      "filename" : "ic_home.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
+  },
+  "properties" : {
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }
