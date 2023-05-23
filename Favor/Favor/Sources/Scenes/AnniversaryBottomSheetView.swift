@@ -35,7 +35,7 @@ final class AnniversaryBottomSheetView: UIView {
   // MARK: - Properties
   
   /// 현재 뷰가 가지고 있는 AnniversaryType입니다.
-  let anniversaryType: AnniversaryType
+  let anniversaryType: AnniversaryCategory
   
   /// 선택이 되면 색깔이 바뀝니다.
   var isSelected: Bool = false {
@@ -57,7 +57,7 @@ final class AnniversaryBottomSheetView: UIView {
   
   // MARK: - Initializer
   
-  init(_ anniversaryType: AnniversaryType) {
+  init(_ anniversaryType: AnniversaryCategory) {
     self.anniversaryType = anniversaryType
     super.init(frame: .zero)
     self.setupStyles()

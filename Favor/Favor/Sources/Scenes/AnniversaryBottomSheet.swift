@@ -19,7 +19,7 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   
   private let iconViews: [AnniversaryBottomSheetView] = {
     var views = [AnniversaryBottomSheetView]()
-    AnniversaryType.allCases.forEach { views.append(AnniversaryBottomSheetView($0)) }
+    AnniversaryCategory.allCases.forEach { views.append(AnniversaryBottomSheetView($0)) }
     return views
   }()
   
@@ -37,7 +37,7 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   // MARK: - Properties
   
   /// 현재 선택되어 있는 AnniversaryType입니다.
-  private var currentAnniversary: AnniversaryType {
+  private var currentAnniversary: AnniversaryCategory {
     didSet { self.updateView() }
   }
   
@@ -47,7 +47,7 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   
   /// 생성자로 AnniversaryType을 파라미터로 전해줍니다.
   /// 하지만, 새 기념일을 생성할 경우에는 기본값인 nil을 전해주면 됩니다.
-  init(_ anniversaryType: AnniversaryType? = nil) {
+  init(_ anniversaryType: AnniversaryCategory? = nil) {
     self.currentAnniversary = anniversaryType == nil ? .couple : anniversaryType!
     super.init(nibName: nil, bundle: nil)
   }

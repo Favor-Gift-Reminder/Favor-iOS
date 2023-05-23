@@ -78,6 +78,6 @@ enum AppStep: Step {
   case memoBottomSheetIsComplete(String)
   case filterBottomSheetIsRequired(SortType)
   case filterBottomSheetIsComplete(SortType)
-  case anniversaryBottomSheetIsRequired(AnniversaryType?)
-  case anniversaryBottomSheetIsComplete(AnniversaryType)  
+  case anniversaryBottomSheetIsRequired(AnniversaryCategory?)
+  case anniversaryBottomSheetIsComplete(AnniversaryCategory)  
 }
