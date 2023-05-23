@@ -13,7 +13,20 @@ import FavorKit
 
 public enum AnniversaryListSectionItem: SectionModelItem {
   case empty
-  case anniversary(AnniversaryListCellReactor)
+  case anniversary(
+    _ type: AnniversaryListCell.CellType,
+    anniversary: Anniversary,
+    for: AnniversaryListSection
+  )
+
+  var value: Anniversary? {
+    switch self {
+    case .empty:
+      return nil
+    case let .anniversary(_, anniversary, _):
+      return anniversary
+    }
+  }
 }
 
 // MARK: - Section
@@ -22,6 +35,22 @@ public enum AnniversaryListSection: SectionModelType {
   case empty
   case pinned
   case all
+  case edit
+}
+
+// MARK: - Properties
+
+extension AnniversaryListSection {
+  public var header: String {
+    switch self {
+    case .pinned:
+      return "고정됨"
+    case .all:
+      return "전체"
+    default:
+      return ""
+    }
+  }
 }
 
 // MARK: - Hashable & Equatable
@@ -29,8 +58,8 @@ public enum AnniversaryListSection: SectionModelType {
 extension AnniversaryListSectionItem {
   public static func == (lhs: AnniversaryListSectionItem, rhs: AnniversaryListSectionItem) -> Bool {
     switch (lhs, rhs) {
-    case let (.anniversary(lhsValue), .anniversary(rhsValue)):
-      return lhsValue === rhsValue
+    case let (.anniversary(_, lhsData, lhsIsPinned), .anniversary(_, rhsData, rhsIsPinned)):
+      return (lhsData.anniversaryNo == rhsData.anniversaryNo) && (lhsData.isPinned == rhsData.isPinned) && (lhsIsPinned == rhsIsPinned)
     default:
       return false
     }
@@ -40,8 +69,9 @@ extension AnniversaryListSectionItem {
     switch self {
     case .empty:
       hasher.combine("Empty")
-    case .anniversary:
-      hasher.combine("Anniversary")
+    case let .anniversary(_, anniversary, _):
+      hasher.combine(anniversary.anniversaryNo)
+      hasher.combine(anniversary.isPinned)
     }
   }
 }
@@ -53,7 +83,7 @@ extension AnniversaryListSection: Adaptive {
     switch self {
     case .empty:
       return .full()
-    case .pinned, .all:
+    case .pinned, .all, .edit:
       return .listRow(height: .absolute(95))
     }
   }
@@ -62,7 +92,7 @@ extension AnniversaryListSection: Adaptive {
     switch self {
     case .empty:
       return .full()
-    case .pinned, .all:
+    case .pinned, .all, .edit:
       return .list()
     }
   }
@@ -81,6 +111,8 @@ extension AnniversaryListSection: Adaptive {
         spacing: 10,
         boundaryItems: [header]
       )
+    case .edit:
+      return .base(spacing: 10)
     }
   }
 }

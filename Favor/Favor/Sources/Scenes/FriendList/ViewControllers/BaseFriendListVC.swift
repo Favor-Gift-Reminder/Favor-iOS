@@ -1,5 +1,5 @@
 //
-//  BaseFriendVC.swift
+//  BaseFriendListVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/10.
@@ -9,7 +9,7 @@ import UIKit
 
 import FavorKit
 
-public class BaseFriendViewController: BaseViewController {
+public class BaseFriendListViewController: BaseViewController {
   public typealias FriendDataSource = UICollectionViewDiffableDataSource<FriendSection, FriendSectionItem>
 
   // MARK: - Constants
@@ -42,7 +42,7 @@ public class BaseFriendViewController: BaseViewController {
             cell.bind(with: friend)
             return cell
           case .edit:
-            let cell = collectionView.dequeueReusableCell(for: indexPath) as EditFriendCell
+            let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListModifyingCell
             cell.bind(with: friend)
             cell.deleteButton.rx.tap
               .subscribe(with: cell, onNext: { _, _ in
@@ -61,7 +61,7 @@ public class BaseFriendViewController: BaseViewController {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as FriendListSectionHeader
+        ) as FavorSectionHeaderView
         return header
       default:
         return UICollectionReusableView()
@@ -86,14 +86,10 @@ public class BaseFriendViewController: BaseViewController {
     // Register
     collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: FriendListCell.self)
-    collectionView.register(cellType: EditFriendCell.self)
+    collectionView.register(cellType: FriendListModifyingCell.self)
     collectionView.register(
-      supplementaryViewType: FriendListSectionHeader.self,
+      supplementaryViewType: FavorSectionHeaderView.self,
       ofKind: UICollectionView.elementKindSectionHeader
-    )
-    collectionView.register(
-      supplementaryViewType: EditFriendCollectionHeaderView.self,
-      ofKind: EditFriendCollectionHeaderView.reuseIdentifier
     )
 
     collectionView.showsVerticalScrollIndicator = false

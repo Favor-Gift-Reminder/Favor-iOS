@@ -22,7 +22,7 @@ public protocol Pressable: GestureInteractable {
 extension Pressable {
   public func setupLongPressRecognizer() {
     self.rx.longPressGesture(configuration: { recognizer, _ in
-      recognizer.minimumPressDuration = TimeInterval(0.05)
+      recognizer.minimumPressDuration = TimeInterval(0.02)
       recognizer.cancelsTouchesInView = false
     })
     .subscribe(with: self, onNext: { owner, event in
@@ -34,7 +34,7 @@ extension Pressable {
         (1.0, self.idleBackgroundColor)
       }()
 
-      UIViewPropertyAnimator(duration: 0.15, curve: .easeInOut) {
+      UIViewPropertyAnimator(duration: 0.12, curve: .easeInOut) {
         owner.containerView.transform = CGAffineTransform(scaleX: scale, y: scale)
         owner.backgroundColor = backgroundColor
       }.startAnimation()

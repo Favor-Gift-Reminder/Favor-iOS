@@ -69,6 +69,10 @@ enum AppStep: Step {
   // MARK: - AnniversaryList
   case anniversaryListIsRequired
   case anniversaryListIsComplete
+  case editAnniversaryListIsRequired([Anniversary])
+  case newAnniversaryIsRequired
+  case anniversaryManagementIsRequired(Anniversary)
+  case anniversaryManagementIsComplete(ToastMessage)
   
   // MARK: - Test
   case testIsRequired

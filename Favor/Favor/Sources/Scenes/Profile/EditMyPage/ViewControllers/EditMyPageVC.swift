@@ -57,7 +57,7 @@ final class EditMyPageViewController: BaseViewController, View {
         guard let headerTitle = dataSource.sectionIdentifier(for: indexPath.section)?.header else {
           return UICollectionReusableView()
         }
-        header.updateTitle(headerTitle)
+        header.bind(title: headerTitle)
         return header
       case UICollectionView.elementKindSectionFooter:
         let footer = self.collectionView.dequeueReusableSupplementaryView(

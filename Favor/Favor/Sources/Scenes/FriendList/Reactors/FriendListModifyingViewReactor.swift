@@ -1,5 +1,5 @@
 //
-//  EditFriendViewReactor.swift
+//  FriendListModifyingViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/10.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class EditFriendViewReactor: BaseFriendReactor, Reactor, Stepper {
+final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
 
   // MARK: - Properties
 
@@ -46,7 +46,7 @@ final class EditFriendViewReactor: BaseFriendReactor, Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.friendsFetcher.fetch()
+      return self.friendFetcher.fetch()
         .flatMap { (status, friends) -> Observable<Mutation> in
           let friendItems = friends.toArray().map { friend -> FriendSectionItem in
             return .friend(friend)
@@ -60,7 +60,7 @@ final class EditFriendViewReactor: BaseFriendReactor, Reactor, Stepper {
           do {
             let response: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
             print(response.responseMessage)
-            return self.friendsFetcher.fetch()
+            return self.friendFetcher.fetch()
               .flatMap { (status, friends) -> Observable<Mutation> in
                 let friendItems = friends.toArray().map { friend -> FriendSectionItem in
                   return .friend(friend)

@@ -1,5 +1,5 @@
 //
-//  EditFriendVC.swift
+//  FriendListModifyingViewController.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/10.
@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import SnapKit
 
-final class EditFriendViewController: BaseFriendViewController, View {
+final class FriendListModifyingViewController: BaseFriendListViewController, View {
 
   // MARK: - Constants
 
@@ -29,7 +29,7 @@ final class EditFriendViewController: BaseFriendViewController, View {
   
   // MARK: - Binding
 
-  func bind(reactor: EditFriendViewReactor) {
+  func bind(reactor: FriendListModifyingViewReactor) {
     // Action
     self.rx.viewDidLoad
       .map { Reactor.Action.viewNeedsLoaded }

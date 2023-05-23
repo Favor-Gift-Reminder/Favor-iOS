@@ -171,7 +171,8 @@ final class MyPageViewReactor: Reactor, Stepper {
       // 기념일
       if !state.anniversaryItems.isEmpty {
         newSections.append(.anniversaries)
-        newItems.append(state.anniversaryItems)
+        // TODO: 고정된 아이템만 or 없으면 상단 세 개
+        newItems.append(state.anniversaryItems.prefix(3).wrap())
       } else {
         profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
       }

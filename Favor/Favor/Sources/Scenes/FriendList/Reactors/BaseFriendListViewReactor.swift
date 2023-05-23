@@ -1,5 +1,5 @@
 //
-//  BaseFriendReactor.swift
+//  BaseFriendListViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/11.
@@ -10,11 +10,11 @@ import FavorNetworkKit
 import RealmSwift
 import RxSwift
 
-public class BaseFriendReactor {
+public class BaseFriendListViewReactor {
 
   // MARK: - Properties
 
-  public let friendsFetcher = Fetcher<Friend>()
+  public let friendFetcher = Fetcher<Friend>()
 
   // MARK: - Initializer
 
@@ -26,7 +26,7 @@ public class BaseFriendReactor {
 
   public func setupFriendFetcher() {
     // onRemote
-    self.friendsFetcher.onRemote = {
+    self.friendFetcher.onRemote = {
       let networking = UserNetworking()
       let friends = networking.request(.getAllFriendList(userNo: UserInfoStorage.userNo))
         .flatMap { friends -> Observable<[Friend]> in
@@ -54,11 +54,11 @@ public class BaseFriendReactor {
       return friends
     }
     // onLocal
-    self.friendsFetcher.onLocal = {
+    self.friendFetcher.onLocal = {
       return try await RealmManager.shared.read(Friend.self)
     }
     // onLocalUpdate
-    self.friendsFetcher.onLocalUpdate = { _, remoteFriends in
+    self.friendFetcher.onLocalUpdate = { _, remoteFriends in
       try await RealmManager.shared.delete(remoteFriends)
       try await RealmManager.shared.updateAll(remoteFriends, update: .modified)
     }

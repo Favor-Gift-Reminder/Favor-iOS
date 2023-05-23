@@ -84,7 +84,7 @@ final class MyPageFlow: Flow {
   }
 
   private func navigateToAnniversaryList() -> FlowContributors {
-    let anniversaryListFlow = AnniversaryListFlow(rootViewController: self.rootViewController)
+    let anniversaryListFlow = AnniversaryFlow(rootViewController: self.rootViewController)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: anniversaryListFlow,

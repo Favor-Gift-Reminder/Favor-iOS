@@ -31,6 +31,7 @@ final class HomeViewController: BaseViewController, View {
         return cell
       case .upcoming(let reactor): // 다가오는 기념일
         let cell = collectionView.dequeueReusableCell(for: indexPath) as UpcomingCell
+        cell.cardCellType = .reminder
         cell.reactor = reactor
         return cell
       case .timeline(let reactor): // 타임라인
@@ -145,13 +146,13 @@ final class HomeViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state.map { $0.toastMessage }
-      .compactMap { $0 }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, message in
-        owner.presentToast(message, duration: .short)
-      })
-      .disposed(by: self.disposeBag)
+//    reactor.state.map { $0.toastMessage }
+//      .compactMap { $0 }
+//      .asDriver(onErrorRecover: { _ in return .empty()})
+//      .drive(with: self, onNext: { owner, message in
+//        owner.presentToast(message, duration: .short)
+//      })
+//      .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)

@@ -1,5 +1,5 @@
 //
-//  EditFriendCell.swift
+//  FriendListModifyingCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/05/11.
@@ -11,7 +11,7 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class EditFriendCell: BaseFriendCell, Reusable {
+final class FriendListModifyingCell: BaseFriendCell, Reusable {
 
   // MARK: - Constants
 

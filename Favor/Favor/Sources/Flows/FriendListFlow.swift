@@ -65,8 +65,8 @@ private extension FriendListFlow {
   }
 
   private func navigateToEditFriend() -> FlowContributors {
-    let editFriendVC = EditFriendViewController()
-    let editFriendReactor = EditFriendViewReactor()
+    let editFriendVC = FriendListModifyingViewController()
+    let editFriendReactor = FriendListModifyingViewReactor()
     editFriendVC.reactor = editFriendReactor
     editFriendVC.title = "삭제하기"
     editFriendVC.viewType = .edit
