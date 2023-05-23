@@ -74,23 +74,13 @@ public class Reminder: Object {
 
 extension Array where Element: Reminder {
   public func sort() -> (future: Self, past: Self) {
-    var future: Self = []
-    var past: Self = []
-
-    self.forEach { reminder in
-      let reminderDateComponents = Calendar.current.dateComponents(
-        [.year, .month, .day],
-        from: reminder.date
-      )
-      let currentDateComponents = Calendar.current.dateComponents(
-        [.year, .month, .day],
-        from: .now
-      )
-
-      if reminderDateComponents >= currentDateComponents {
-        future.append(reminder)
+    let today = Calendar.current.startOfDay(for: .now)
+    let (future, past) = self.reduce(into: (future: Self(), past: Self())) { result, reminder in
+      let reminderDate = Calendar.current.startOfDay(for: reminder.date)
+      if reminderDate >= today {
+        result.future.append(reminder)
       } else {
-        past.append(reminder)
+        result.past.append(reminder)
       }
     }
 
