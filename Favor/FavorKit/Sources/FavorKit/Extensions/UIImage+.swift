@@ -14,19 +14,19 @@ extension UIImage {
     case addFriend
     case addNoti
     case check
-    case checked
+    case checkFilled
     case close
     case delete
     case deleteCard
     case deselect
     case done
     case edit
+    case etc
     case favor
     case filter
     case friend
     case gallery
     case hashtag
-    case heartedPerson
     case hide
     case home
     case more
@@ -40,8 +40,7 @@ extension UIImage {
     case share
     case show
     case uncheck
-    case photo
-
+    
     case down
     case left
     case right
@@ -50,9 +49,9 @@ extension UIImage {
     case congrat
     case couple
     case employ
-    case graduate
+    case gradu
     case gift
-    case housewarm
+    case house
     case pass
   }
 

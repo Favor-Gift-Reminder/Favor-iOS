@@ -10,21 +10,21 @@ import UIKit
 public enum AnniversaryCategory: CaseIterable {
   case couple
   case congrat
-  case graduate
+  case gradu
   case pass
   case employ
-  case housewarm
+  case house
   case birth
-
+  
   public var text: String {
     switch self {
     case .birth: return "출산"
     case .congrat: return "축하/생일"
     case .couple: return "연인"
-    case .graduate: return "졸업"
+    case .gradu: return "졸업"
     case .employ: return "입사/승진"
     case .pass: return "합격"
-    case .housewarm: return "이사/집들이"
+    case .house: return "이사/집들이"
     }
   }
   
@@ -38,10 +38,10 @@ public enum AnniversaryCategory: CaseIterable {
       return .favorIcon(.couple)
     case .employ:
       return .favorIcon(.employ)
-    case .graduate:
-      return .favorIcon(.graduate)
-    case .housewarm:
-      return .favorIcon(.housewarm)
+    case .gradu:
+      return .favorIcon(.gradu)
+    case .house:
+      return .favorIcon(.house)
     case .pass:
       return .favorIcon(.pass)
     }
