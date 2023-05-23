@@ -18,8 +18,23 @@ public class Fetcher<T: Object> {
 
   // MARK: - Constants
 
-  public enum Status {
-    case inProgress, success, failure
+  public enum Status: Equatable {
+    case inProgress
+    case success
+    case failure(Error)
+
+    public static func == (lhs: Fetcher<T>.Status, rhs: Fetcher<T>.Status) -> Bool {
+      switch (lhs, rhs) {
+      case (.inProgress, .inProgress):
+        return true
+      case (.success, .success):
+        return true
+      case let (.failure(lhsError), .failure(rhsError)):
+        return lhsError == rhsError
+      default:
+        return false
+      }
+    }
   }
 
   // MARK: - Properties
@@ -74,7 +89,7 @@ public class Fetcher<T: Object> {
             os_log(.debug, "📂 🟢 FETCHER STATUS: success")
             observer.onCompleted()
           } catch {
-            observer.onNext((.failure, localData))
+            observer.onNext((.failure(error), localData))
             os_log(.error, "📂 🔴 FETCHER STATUS: failure")
           }
         } catch {
