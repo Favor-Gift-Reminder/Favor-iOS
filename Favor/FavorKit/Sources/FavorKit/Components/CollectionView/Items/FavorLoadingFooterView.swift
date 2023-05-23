@@ -16,7 +16,11 @@ public final class FavorLoadingFooterView: UICollectionReusableView, Reusable {
 
   // MARK: - UI Components
 
-  private let spinner = UIActivityIndicatorView(style: .medium)
+  private let spinner: UIActivityIndicatorView = {
+    let spinner = UIActivityIndicatorView(style: .medium)
+    spinner.hidesWhenStopped = true
+    return spinner
+  }()
 
   // MARK: - Initializer
 
@@ -29,6 +33,12 @@ public final class FavorLoadingFooterView: UICollectionReusableView, Reusable {
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Functions
+
+  public func switchSpinning(to isAnimating: Bool) {
+    isAnimating ? self.spinner.startAnimating() : self.spinner.stopAnimating()
   }
 }
 

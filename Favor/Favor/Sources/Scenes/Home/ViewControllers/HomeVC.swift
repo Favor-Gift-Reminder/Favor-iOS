@@ -49,12 +49,16 @@ final class HomeViewController: BaseViewController, View {
         }
       })
     dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+      guard let self = self else { return UICollectionReusableView() }
       switch kind {
       case UICollectionView.elementKindSectionHeader:
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
         ) as HomeHeaderView
+        header.delegate = self
+        let currentSnapshot = self.dataSource.snapshot()
+        header.section = currentSnapshot.sectionIdentifiers[indexPath.section]
         return header
       case UICollectionView.elementKindSectionFooter:
         let footer = collectionView.dequeueReusableSupplementaryView(
@@ -100,6 +104,7 @@ final class HomeViewController: BaseViewController, View {
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
+    collectionView.contentInset = UIEdgeInsets(top: 16, left: .zero, bottom: 16, right: .zero)
     return collectionView
   }()
   
@@ -132,29 +137,6 @@ final class HomeViewController: BaseViewController, View {
 
   // MARK: - Binding
   
-  override func bind() {
-//    self.collectionView.rx.didEndDisplayingCell
-//      .asDriver(onErrorRecover: { _ in return .empty()})
-//      .drive(with: self, onNext: { _, endDisplayingCell in
-//        let (cell, _) = endDisplayingCell
-//        guard let cell = cell as? BaseCollectionViewCell else { return }
-//        cell.disposeBag = DisposeBag()
-//      })
-//      .disposed(by: self.disposeBag)
-//
-//    self.collectionView.rx.didEndDisplayingSupplementaryView
-//      .asDriver(onErrorRecover: { _ in return .empty()})
-//      .drive(with: self, onNext: { _, endDisplayingView in
-//        let (view, _, _) = endDisplayingView
-//        guard let view = view as? HomeHeaderView else { return }
-//        view.disposeBag = DisposeBag()
-//      })
-//      .disposed(by: self.disposeBag)
-    
-    // State
-
-  }
-  
   func bind(reactor: HomeViewReactor) {
     // Action
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
@@ -175,6 +157,9 @@ final class HomeViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeSectionItem>()
         snapshot.appendSections(sectionData.sections)
+//        if case let HomeSection.timeline(isEmpty) = sectionData.sections[1] {
+//          snapshot.reloadSections([.timeline(isEmpty: isEmpty)])
+//        }
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
         }
@@ -197,5 +182,19 @@ private extension HomeViewController {
   func setupNavigationBar() {
     self.navigationItem.setRightBarButton(self.searchButton, animated: false)
     self.navigationController?.setNavigationBarHidden(false, animated: false)
+  }
+}
+
+// MARK: - HomeHeaderView
+
+extension HomeViewController: HomeHeaderViewDelegate {
+  func rightButtonDidTap(from view: HomeHeaderView, for section: HomeSection) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.rightButtonDidTap(section))
+  }
+
+  func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.filterButtonDidSelected(filterType))
   }
 }

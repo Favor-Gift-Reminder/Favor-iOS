@@ -28,20 +28,31 @@ enum HomeSectionItem: SectionModelItem {
 
 // MARK: - Section
 
-enum HomeSection: SectionModelType {
+public enum HomeSection: SectionModelType {
   case upcoming(isEmpty: Bool)
   case timeline(isEmpty: Bool)
 }
 
-// MARK: - Properties
+// MARK: - Hashable
 
 extension HomeSection {
-  public var header: String {
+  public static func == (lhs: Self, rhs: Self) -> Bool {
+    switch (lhs, rhs) {
+    case (.upcoming, .upcoming):
+      return true
+    case (.timeline, .timeline):
+      return true
+    default:
+      return false
+    }
+  }
+
+  public func hash(into hasher: inout Hasher) {
     switch self {
     case .upcoming:
-      return "다가오는 기념일"
+      hasher.combine("upcoming")
     case .timeline:
-      return "타임라인"
+      hasher.combine("timeline")
     }
   }
 }
@@ -49,7 +60,7 @@ extension HomeSection {
 // MARK: - Adapter
 
 extension HomeSection: Adaptive {
-  var item: FavorCompositionalLayout.Item {
+  public var item: FavorCompositionalLayout.Item {
     switch self {
     case .upcoming(let isEmpty):
       if isEmpty {
@@ -66,7 +77,7 @@ extension HomeSection: Adaptive {
     }
   }
 
-  var group: FavorCompositionalLayout.Group {
+  public var group: FavorCompositionalLayout.Group {
     switch self {
     case .upcoming(let isEmpty):
       if isEmpty {
@@ -91,7 +102,7 @@ extension HomeSection: Adaptive {
     }
   }
 
-  var section: FavorCompositionalLayout.Section {
+  public var section: FavorCompositionalLayout.Section {
     switch self {
     case .upcoming(let isEmpty):
       let header: FavorCompositionalLayout.BoundaryItem = .header(height: .absolute(32.0))
@@ -109,17 +120,17 @@ extension HomeSection: Adaptive {
     case .timeline(let isEmpty):
       if isEmpty {
         return .base(
-          contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: 64, trailing: 20),
+          contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),
           boundaryItems: [
             .header(height: .absolute(68))
           ]
         )
       } else {
         return .base(
-          contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: 64, trailing: 20),
+          contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),
           boundaryItems: [
             .header(
-              height: .absolute(68),
+              height: .absolute(68.0 + 16.0),
               contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 16, trailing: .zero)
             ),
             .footer(height: .absolute(120))

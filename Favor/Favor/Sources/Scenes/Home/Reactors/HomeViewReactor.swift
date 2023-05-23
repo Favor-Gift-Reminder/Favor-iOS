@@ -32,6 +32,8 @@ final class HomeViewReactor: Reactor, Stepper {
   enum Action {
     case viewNeedsLoaded
     case searchButtonDidTap
+    case rightButtonDidTap(HomeSection)
+    case filterButtonDidSelected(GiftFilterType)
     case itemSelected(IndexPath)
   }
   
@@ -41,6 +43,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case updateUpcomingSection([Item])
     case updateGifts([Gift])
     case updateTimelineSection([Item])
+    case updateFilterType(GiftFilterType)
     case updateLoading(Bool)
   }
   
@@ -59,6 +62,7 @@ final class HomeViewReactor: Reactor, Stepper {
     var maxTimelineItems: Int = 10
     var currentSortType: SortType
 
+    var filterType: GiftFilterType = .all
     var isLoading: Bool = false
   }
   
@@ -98,39 +102,44 @@ final class HomeViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.searchIsRequired)
       return .empty()
 
+    case .rightButtonDidTap(let section):
+      if case Section.upcoming = section {
+        self.steps.accept(AppStep.reminderIsRequired)
+      } else if case Section.timeline = section {
+        // Filter
+      }
+      return .empty()
+
+    case .filterButtonDidSelected(let filterType):
+      return .just(.updateFilterType(filterType))
+
     case .itemSelected:
       return .empty()
     }
   }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    return mutation.flatMap { originalMutation -> Observable<Mutation> in
-      switch originalMutation {
-      case .updateReminders(let reminders):
-        let (futureReminders, _) = reminders.sort()
-        let upcomingThreeReminders: [Reminder] = futureReminders.prefix(3).wrap()
-        let upcomings: [Item] = upcomingThreeReminders.map { .upcoming(.reminder($0)) }
-        return .concat(
-          .just(originalMutation),
-          .just(.updateUpcomingSection(upcomings))
-        )
-      case .updateGifts(let gifts):
-        let (pinnedGifts, unpinnedGifts) = gifts.sort(by: .isPinned)
-        let pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
-        let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
-
-        let croppedTimelines = (pinnedTimelines + unpinnedTimelines)
-          .prefix(self.currentState.maxTimelineItems)
-          .wrap()
-        return .concat(
-          .just(originalMutation),
-          .just(.updateTimelineSection(croppedTimelines))
-        )
-      default:
-        return .just(originalMutation)
-      }
-    }
-  }
+//  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+//    return mutation.flatMap { originalMutation -> Observable<Mutation> in
+//      switch originalMutation {
+//      case .updateGifts(let gifts):
+//        let filteredGifts = gifts.filter(by: self.currentState.filterType)
+//        let (pinnedGifts, unpinnedGifts) = filteredGifts.sort(by: .isPinned)
+//        let pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
+//        let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
+//
+//        // Load 최대 개수 만큼만 반환
+//        let croppedTimelines = (pinnedTimelines + unpinnedTimelines)
+//          .prefix(self.currentState.maxTimelineItems)
+//          .wrap()
+//        return .concat(
+//          .just(originalMutation),
+//          .just(.updateTimelineSection(croppedTimelines))
+//        )
+//      default:
+//        return .just(originalMutation)
+//      }
+//    }
+//  }
 
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
@@ -151,6 +160,9 @@ final class HomeViewReactor: Reactor, Stepper {
     case .updateTimelineSection(let items):
       newState.timelineItems = items
 
+    case .updateFilterType(let filterType):
+      newState.filterType = filterType
+
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
     }
@@ -164,16 +176,34 @@ final class HomeViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
 
+      // Upcoming 데이터를 조건에 따라 Item으로 변환합니다.
+      let (futureReminders, _) = state.reminders.sort()
+      let upcomingThreeReminders: [Reminder] = futureReminders.prefix(3).wrap()
+      let upcomingItems: [Item] = upcomingThreeReminders.map { .upcoming(.reminder($0)) }
       // Upcoming이 비어있을 경우 .empty 데이터 추가
-      newState.sections.append(.upcoming(isEmpty: state.upcomingItems.isEmpty))
-      if state.upcomingItems.isEmpty {
+      newState.sections.append(.upcoming(isEmpty: upcomingItems.isEmpty))
+      if upcomingItems.isEmpty {
         newState.upcomingItems = [.upcoming(.empty(nil, "이벤트가 없습니다."))]
+      } else {
+        newState.upcomingItems = upcomingItems
       }
+
+      // Timeline 데이터를 조건에 따라 Item으로 변환합니다.
+      let filteredGifts = state.gifts.filter(by: state.filterType)
+      let (pinnedGifts, unpinnedGifts) = filteredGifts.sort(by: .isPinned)
+      let pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
+      let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
+      let totalTimelines: [Item] = pinnedTimelines + unpinnedTimelines
+      // Load 최대 개수 만큼만 반환
+      let croppedTimelines = totalTimelines.prefix(self.currentState.maxTimelineItems).wrap()
       // Timeline이 비어있을 경우 .empty 데이터 추가
-      newState.sections.append(.timeline(isEmpty: state.timelineItems.isEmpty))
-      if state.timelineItems.isEmpty {
+      newState.sections.append(.timeline(isEmpty: croppedTimelines.isEmpty))
+      if croppedTimelines.isEmpty {
         newState.timelineItems = [.timeline(.empty(nil, "선물 기록이 없습니다."))]
+      } else {
+        newState.timelineItems = croppedTimelines
       }
+
       newState.items = [newState.upcomingItems, newState.timelineItems]
 
       return newState
