@@ -30,13 +30,13 @@ final class ReminderEditViewReactor: Reactor, Stepper {
   enum Action {
     case viewDidLoad
     case doneButtonDidTap
-    case datePickerDidUpdate(Date)
+    case datePickerDidUpdate(Date?)
     case notifyTimePickerDidUpdate(Date?)
     case notifySwitchDidToggle(Bool)
   }
 
   enum Mutation {
-    case updateReminderDate(Date)
+    case updateReminderDate(Date?)
     case updateNotifyTime(Date?)
     case updateShouldNotify(Bool)
   }
@@ -97,7 +97,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 
     switch mutation {
     case .updateReminderDate(let date):
-      newState.reminderEditor.date = date
+      newState.reminderEditor.date = date ?? .distantPast
 
     case .updateNotifyTime(let time):
       newState.reminderEditor.notifyTime = time

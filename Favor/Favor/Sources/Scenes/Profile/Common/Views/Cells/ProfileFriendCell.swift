@@ -33,7 +33,7 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
       .withTintColor(.favorColor(.white))
     return image
   }()
-
+  
   // MARK: - UI Components
 
   private let stackView: UIStackView = {

@@ -40,23 +40,22 @@ extension UIImage {
     case share
     case show
     case uncheck
-    
+
     case down
     case left
     case right
-    
+
     case birth
     case congrat
     case couple
-    case employ
-    case gradu
-    case gift
-    case house
+    case employed
+    case graduate
+    case housewarm
     case pass
   }
 
   public static func favorIcon(_ icon: FavorIcon) -> UIImage? {
-    return UIImage(named: "ic_\(icon.rawValue)")
+    return UIImage(named: "ic_\(String(describing: icon.rawValue).lowercased())")
   }
 
   public func resize(newWidth: CGFloat) -> UIImage {

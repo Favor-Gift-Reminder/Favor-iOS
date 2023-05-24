@@ -9,8 +9,8 @@ import UIKit
 
 public func registerFonts() {
   let fonts = [
-    "Pretendard-Bold.otf",
-    "Pretendard-Regular.otf"
+    "SUIT-Bold.otf",
+    "SUIT-Regular.otf"
   ]
 
   fonts.forEach {
@@ -21,8 +21,8 @@ public func registerFonts() {
 extension UIFont {
   
   public enum FavorFont: String {
-    case bold = "Pretendard-Bold"
-    case regular = "Pretendard-Regular"
+    case bold = "SUIT-Bold"
+    case regular = "SUIT-Regular"
   }
   
   /// 폰트를 적용하는 전역 메서드 입니다.

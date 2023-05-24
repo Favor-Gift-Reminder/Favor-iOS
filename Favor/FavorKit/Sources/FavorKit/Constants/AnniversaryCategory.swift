@@ -47,4 +47,3 @@ public enum AnniversaryCategory: CaseIterable {
     }
   }
 }
-

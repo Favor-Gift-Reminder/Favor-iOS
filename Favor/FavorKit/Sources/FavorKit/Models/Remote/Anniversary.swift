@@ -51,3 +51,41 @@ public final class Anniversary: Object {
     self.isPinned = isPinned
   }
 }
+
+// MARK: - Array Extension
+
+extension Array where Element: Anniversary {
+
+  /// 기념일 배열을 아래 규칙에 따라 정렬합니다.
+  /// ```
+  /// 다가오는 기념일
+  /// · 가장 가까운 기념일
+  /// · ~
+  /// · 가장 먼 기념일
+  /// 지난 기념일
+  /// · 가장 최근에 지난 기념일
+  /// · ~
+  /// · 가장 오래 지난 기념일
+  /// ```
+  public func sort() -> Self {
+    let today = Date().withoutTime()
+
+    let upcomingAnniversaries = self
+      .filter { anniversary in
+        anniversary.date.withoutTime() >= today
+      }
+      .sorted { lhs, rhs in
+        lhs.date < rhs.date
+      }
+
+    let expiredAnniversaries = self
+      .filter { anniversary in
+        anniversary.date.withoutTime() < today
+      }
+      .sorted { lhs, rhs in
+        lhs.date > rhs.date
+      }
+
+    return upcomingAnniversaries + expiredAnniversaries
+  }
+}

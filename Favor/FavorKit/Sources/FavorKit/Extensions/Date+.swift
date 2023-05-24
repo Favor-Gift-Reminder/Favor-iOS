@@ -16,6 +16,13 @@ extension Date {
     Int(self.toMonthString()) ?? 0
   }
 
+  public func withoutTime() -> Self {
+    let calendar = Calendar.current
+    let dateCommponents = calendar.dateComponents([.year, .month, .day], from: self)
+    guard let dateWithoutTime = calendar.date(from: dateCommponents) else { return self }
+    return dateWithoutTime
+  }
+
   public func toDateString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy년 M월 d일"

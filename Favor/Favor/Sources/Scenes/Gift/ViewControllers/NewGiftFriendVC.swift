@@ -73,6 +73,10 @@ final class NewGiftFriendViewController: BaseViewController, View {
           ofKind: kind,
           for: indexPath
         ) as NewGiftFriendFooterView
+        // 탭 이벤트
+        footer.tapCompletion = { [weak self] in
+          self?.reactor?.action.onNext(.addFriendDidTap)
+        }
         return footer
       default:
         return UICollectionReusableView()
@@ -144,7 +148,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
   
   override func setupStyles() {
     super.setupStyles()
-    
+
     self.navigationItem.rightBarButtonItem = self.finishButton.toBarButtonItem()
   }
   

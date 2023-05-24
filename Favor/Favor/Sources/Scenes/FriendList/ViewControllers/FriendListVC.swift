@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import SnapKit
 
-final class FriendListViewController: BaseFriendViewController, View {
+final class FriendListViewController: BaseFriendListViewController, View {
 
   // MARK: - Constants
 
@@ -93,9 +93,9 @@ final class FriendListViewController: BaseFriendViewController, View {
         if let headerView = owner.collectionView.supplementaryView(
           forElementKind: UICollectionView.elementKindSectionHeader,
           at: IndexPath(item: 0, section: 0)
-        ) as? FriendListSectionHeader {
+        ) as? FavorSectionHeaderView {
           let numberOfFriends = friendItems.count
-          headerView.bind(title: "전체", numberOfFriends: numberOfFriends)
+          headerView.bind(title: "전체", digit: numberOfFriends)
         }
       })
       .disposed(by: self.disposeBag)

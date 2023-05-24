@@ -35,8 +35,18 @@ final class NewGiftFriendFooterView: UICollectionReusableView, Reusable {
     return iv
   }()
   
+  private lazy var tapGesture: UITapGestureRecognizer = {
+    let tg = UITapGestureRecognizer()
+    tg.addTarget(self, action: #selector(self.didTapFooterView))
+    return tg
+  }()
+  
   private let divider = FavorDivider()
-
+  
+  // MARK: - Properties
+  
+  var tapCompletion: (() -> Void)?
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -49,11 +59,19 @@ final class NewGiftFriendFooterView: UICollectionReusableView, Reusable {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+  
+  // MARK: - Selectors
+  
+  @objc
+  private func didTapFooterView() {
+    self.tapCompletion?()
+  }
 }
 
 extension NewGiftFriendFooterView: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.white)
+    self.addGestureRecognizer(self.tapGesture)
   }
   
   func setupLayouts() {
@@ -69,12 +87,12 @@ extension NewGiftFriendFooterView: BaseView {
   
   func setupConstraints() {
     self.divider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview()
+      make.leading.trailing.equalToSuperview().inset(20.0)
       make.top.equalToSuperview()
     }
     
     self.circleView.snp.makeConstraints { make in
-      make.leading.equalToSuperview()
+      make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.divider.snp.bottom).offset(16)
       make.width.height.equalTo(48.0)
     }

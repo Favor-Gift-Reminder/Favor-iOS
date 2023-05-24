@@ -9,12 +9,10 @@ import UIKit
 
 import class RxSwift.DisposeBag
 
-open class BaseViewController: UIViewController {
+open class BaseViewController: UIViewController, Toastable {
 
   /// A dispose bag. 각 ViewController에 종속적이다.
   public final var disposeBag = DisposeBag()
-
-  private var toast: FavorToastMessageView?
 
   open override func viewDidLoad() {
     super.viewDidLoad()
@@ -71,19 +69,10 @@ open class BaseViewController: UIViewController {
   }
 
   open func bind() { }
-}
 
-// MARK: - Toast
+  // MARK: - Toast
 
-public extension BaseViewController {
-  func presentToast(_ message: String, duration: ToastManager.duration) {
-    self.toast = ToastManager.shared.prepareToast(message)
-    guard let toast = self.toast else { return }
-    ToastManager.shared.showNewToast(toast, at: self)
-  }
+  public var toast: FavorToastMessageView?
 
-  func dismissToast() {
-    guard let toast = self.toast else { return }
-    ToastManager.shared.hideToast(toast, from: self)
-  }
+  open func viewNeedsLoaded(with toast: ToastMessage? = nil) { }
 }

@@ -94,7 +94,7 @@ open class BaseFriendCell: BaseCollectionViewCell {
   }
 
   // MARK: - Functions
-
+  
   open func bind(with friend: Friend) {
     self.friendNo = friend.friendNo
     self.friendName = friend.name
@@ -119,18 +119,18 @@ open class BaseFriendCell: BaseCollectionViewCell {
       self.containerView.addSubview($0)
     }
   }
-
+  
   open func setupConstraints() {
     self.containerView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
-
+    
     self.profileImageView.snp.makeConstraints { make in
       make.leading.equalToSuperview()
       make.centerY.equalToSuperview()
       make.width.height.equalTo(Metric.profileImageViewSize)
     }
-
+    
     self.friendIconImageView.snp.makeConstraints { make in
       make.center.equalTo(self.profileImageView)
       make.width.height.equalTo(Metric.profileImageViewSize)
@@ -142,3 +142,4 @@ open class BaseFriendCell: BaseCollectionViewCell {
     }
   }
 }
+

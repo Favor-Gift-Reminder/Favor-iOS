@@ -19,6 +19,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case viewDidLoad
     case cellDidTap(IndexPath, NewGiftFriendCell.RightButtonType)
     case textFieldDidChange(String)
+    case addFriendDidTap
   }
   
   enum Mutation {
@@ -93,6 +94,10 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       self.allFriends :
       self.allFriends.filter { $0.name.contains(text) }
       return .just(.updateFriends(friends))
+      
+    case .addFriendDidTap:
+      self.steps.accept(AppStep.friendManagementIsRequired(.new))
+      return .empty()
     }
   }
   
