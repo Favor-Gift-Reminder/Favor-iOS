@@ -81,4 +81,7 @@ enum AppStep: Step {
   case newGiftIsRequired
   case newGiftIsComplete
   case newGiftFriendIsRequired
+
+  // MARK: - Gift
+  case giftDetailIsRequired(Gift)
 }
