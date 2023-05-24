@@ -56,7 +56,7 @@ open class BaseBottomSheet: BaseViewController {
     return btn
   }()
 
-   public let finishButton: UIButton = UIButton().then {
+  public let finishButton: UIButton = UIButton().then {
     var config = UIButton.Configuration.plain()
     var container = AttributeContainer()
     container.font = .favorFont(.bold, size: 18)
