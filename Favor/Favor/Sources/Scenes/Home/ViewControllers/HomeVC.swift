@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2022/12/30.
 //
 
+import Network
 import UIKit
 
 import FavorKit
@@ -20,6 +21,28 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Constants
   
   // MARK: - Properties
+
+  private var currentNetworkStatus: NWPath.Status = .unsatisfied
+
+  private lazy var networkMonitor: NWPathMonitor = {
+    let monitor = NWPathMonitor()
+    monitor.pathUpdateHandler = { path in
+      print(path.status)
+//      switch path.status {
+//      case .satisfied:
+//        print("🌐 connected")
+//        guard
+//          self.currentNetworkStatus != .satisfied,
+//          let reactor = self.reactor
+//        else { return }
+//        reactor.action.onNext(.viewNeedsLoaded)
+//        self.currentNetworkStatus = .satisfied
+//      default:
+//        print("🌐 Disconnected")
+//      }
+    }
+    return monitor
+  }()
 
   private lazy var dataSource: HomeDataSource = {
     let dataSource = HomeDataSource(
@@ -120,6 +143,14 @@ final class HomeViewController: BaseViewController, View {
     super.viewWillAppear(animated)
 
     self.setupNavigationBar()
+
+    self.networkMonitor.start(queue: DispatchQueue(label: "NetworkMonitor"))
+  }
+
+  override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+
+    self.networkMonitor.cancel()
   }
   
   // MARK: - Setup
@@ -211,17 +242,6 @@ final class HomeViewController: BaseViewController, View {
 
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.isTimelineLoading }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, isLoading in
-        guard let loadingView = owner.collectionView.supplementaryView(
-          forElementKind: UICollectionView.elementKindSectionFooter,
-          at: IndexPath(item: .zero, section: 1)
-        ) as? FavorLoadingFooterView else { return }
-        loadingView.switchSpinning(to: isLoading)
-      })
       .disposed(by: self.disposeBag)
   }
 }

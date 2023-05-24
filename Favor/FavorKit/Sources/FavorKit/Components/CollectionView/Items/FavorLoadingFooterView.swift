@@ -46,7 +46,7 @@ public final class FavorLoadingFooterView: UICollectionReusableView, Reusable {
 
 extension FavorLoadingFooterView: BaseView {
   public func setupStyles() {
-    self.backgroundColor = .clear
+//    self.backgroundColor = .clear
   }
 
   public func setupLayouts() {

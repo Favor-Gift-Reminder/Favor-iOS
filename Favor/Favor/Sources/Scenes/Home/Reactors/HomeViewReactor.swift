@@ -97,7 +97,8 @@ final class HomeViewReactor: Reactor, Stepper {
         let gifts = fetchedData.gifts
         return .concat([
           .just(.updateReminders(reminders)),
-          .just(.updateGifts(gifts))
+          .just(.updateGifts(gifts)),
+          .just(.updateTimelineLoading(false))
         ])
       }
 
