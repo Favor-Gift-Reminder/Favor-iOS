@@ -70,7 +70,7 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.currentSortType = .latest
-        owner.steps.accept(AppStep.filterIsComplete(.latest))
+        owner.steps.accept(AppStep.filterBottomSheetIsComplete(.latest))
       })
       .disposed(by: self.disposeBag)
     
@@ -78,7 +78,7 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.currentSortType = .oldest
-        owner.steps.accept(AppStep.filterIsComplete(.oldest))
+        owner.steps.accept(AppStep.filterBottomSheetIsComplete(.oldest))
       })
       .disposed(by: self.disposeBag)
   }

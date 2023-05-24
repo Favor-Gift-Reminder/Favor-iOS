@@ -17,10 +17,10 @@ public final class FavorCategoryView: UIScrollView {
   
   private lazy var lightGiftButton = self.button("가벼운 선물", selectedImage: nil)
   private lazy var birthDayButton = self.button("생일", selectedImage: .favorIcon(.congrat))
-  private lazy var houseWarmButton = self.button("집들이", selectedImage: .favorIcon(.housewarm))
+  private lazy var houseWarmButton = self.button("집들이", selectedImage: .favorIcon(.house))
   private lazy var testButton = self.button("시험", selectedImage: nil)
-  private lazy var promotionButton = self.button("승진", selectedImage: .favorIcon(.employed))
-  private lazy var graduationButton = self.button("졸업", selectedImage: .favorIcon(.graduate))
+  private lazy var promotionButton = self.button("승진", selectedImage: .favorIcon(.employ))
+  private lazy var graduationButton = self.button("졸업", selectedImage: .favorIcon(.gradu))
   private lazy var etcButton = self.button("기타", selectedImage: nil)
   
   private lazy var buttons: [FavorSmallButton] = {
