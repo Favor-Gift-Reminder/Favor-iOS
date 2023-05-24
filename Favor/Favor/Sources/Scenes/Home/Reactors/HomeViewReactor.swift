@@ -34,7 +34,9 @@ final class HomeViewReactor: Reactor, Stepper {
     case searchButtonDidTap
     case rightButtonDidTap(HomeSection)
     case filterButtonDidSelected(GiftFilterType)
+    case updateMaxTimelineItems((current: Int, unit: Int))
     case itemSelected(Item)
+    case timelineNeedsLoaded(Bool)
   }
   
   enum Mutation {
@@ -43,8 +45,10 @@ final class HomeViewReactor: Reactor, Stepper {
     case updateUpcomingSection([Item])
     case updateGifts([Gift])
     case updateTimelineSection([Item])
+    case updateMaxTimelineItems((current: Int, unit: Int))
     case updateFilterType(GiftFilterType)
     case updateLoading(Bool)
+    case updateTimelineLoading(Bool)
   }
   
   struct State {
@@ -59,11 +63,12 @@ final class HomeViewReactor: Reactor, Stepper {
     // Timeline
     var gifts: [Gift] = []
     var timelineItems: [Item] = []
-    var maxTimelineItems: Int = 10
+    var maxTimelineItems: (current: Int, unit: Int) = (current: 10, unit: 10)
     var currentSortType: SortType
 
     var filterType: GiftFilterType = .all
     var isLoading: Bool = false
+    var isTimelineLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -112,6 +117,9 @@ final class HomeViewReactor: Reactor, Stepper {
     case .filterButtonDidSelected(let filterType):
       return .just(.updateFilterType(filterType))
 
+    case let .updateMaxTimelineItems((currentMaxItems, unit)):
+      return .just(.updateMaxTimelineItems((current: currentMaxItems, unit: unit)))
+
     case .itemSelected(let item):
       if case let Item.upcoming(upcoming) = item {
         guard case let Item.Upcoming.reminder(reminder) = upcoming else { return .empty() }
@@ -121,6 +129,9 @@ final class HomeViewReactor: Reactor, Stepper {
         print(gift)
       }
       return .empty()
+
+    case .timelineNeedsLoaded(let isLoading):
+      return .just(.updateTimelineLoading(isLoading))
     }
   }
 
@@ -143,11 +154,17 @@ final class HomeViewReactor: Reactor, Stepper {
     case .updateTimelineSection(let items):
       newState.timelineItems = items
 
+    case let .updateMaxTimelineItems((maxItems, unit)):
+      newState.maxTimelineItems = (current: maxItems, unit: unit)
+
     case .updateFilterType(let filterType):
       newState.filterType = filterType
 
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
+
+    case .updateTimelineLoading(let isLoading):
+      newState.isTimelineLoading = isLoading
     }
 
     return newState
@@ -178,7 +195,7 @@ final class HomeViewReactor: Reactor, Stepper {
       let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
       let totalTimelines: [Item] = pinnedTimelines + unpinnedTimelines
       // Load 최대 개수 만큼만 반환
-      let croppedTimelines = totalTimelines.prefix(self.currentState.maxTimelineItems).wrap()
+      let croppedTimelines = totalTimelines.prefix(self.currentState.maxTimelineItems.current).wrap()
       // Timeline이 비어있을 경우 .empty 데이터 추가
       newState.sections.append(.timeline(isEmpty: croppedTimelines.isEmpty))
       if croppedTimelines.isEmpty {

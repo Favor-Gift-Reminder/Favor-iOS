@@ -160,6 +160,37 @@ final class HomeViewController: BaseViewController, View {
       }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
+
+    // 스크롤 로드
+    let maxTimelines = reactor.state
+      .flatMap { state -> Observable<(current: Int, unit: Int)> in
+        return .just(state.maxTimelineItems)
+      }
+    let willDisplayCell = self.collectionView.rx.willDisplayCell
+    Observable.combineLatest(maxTimelines, willDisplayCell)
+    .compactMap { maxTimelines, willDisplayCell in
+      return (
+        maxItems: maxTimelines.current, unit: maxTimelines.unit,
+        cell: willDisplayCell.cell, indexPath: willDisplayCell.at
+      )
+    }
+    .observe(on: MainScheduler.asyncInstance)
+    .asDriver(onErrorRecover: { _ in return .empty()})
+    .drive(with: self, onNext: { owner, data in
+      let (maxItems, unit, _, indexPath) = (data.maxItems, data.unit, data.cell, data.indexPath)
+
+      guard
+        indexPath.item > 0,
+        (indexPath.item + 1 - 4) / unit == maxItems / unit - 1,
+        let reactor = owner.reactor
+      else { return }
+
+      if indexPath.item >= maxItems - 4 {
+        reactor.action.onNext(.updateMaxTimelineItems((current: maxItems + unit, unit: unit)))
+        reactor.action.onNext(.timelineNeedsLoaded(true))
+      }
+    })
+    .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
@@ -180,6 +211,17 @@ final class HomeViewController: BaseViewController, View {
 
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.isTimelineLoading }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, isLoading in
+        guard let loadingView = owner.collectionView.supplementaryView(
+          forElementKind: UICollectionView.elementKindSectionFooter,
+          at: IndexPath(item: .zero, section: 1)
+        ) as? FavorLoadingFooterView else { return }
+        loadingView.switchSpinning(to: isLoading)
+      })
       .disposed(by: self.disposeBag)
   }
 }
