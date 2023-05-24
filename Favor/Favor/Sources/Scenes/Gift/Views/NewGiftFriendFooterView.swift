@@ -87,12 +87,12 @@ extension NewGiftFriendFooterView: BaseView {
   
   func setupConstraints() {
     self.divider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview()
+      make.leading.trailing.equalToSuperview().inset(20.0)
       make.top.equalToSuperview()
     }
     
     self.circleView.snp.makeConstraints { make in
-      make.leading.equalToSuperview()
+      make.leading.equalToSuperview().inset(20)
       make.top.equalTo(self.divider.snp.bottom).offset(16)
       make.width.height.equalTo(48.0)
     }
