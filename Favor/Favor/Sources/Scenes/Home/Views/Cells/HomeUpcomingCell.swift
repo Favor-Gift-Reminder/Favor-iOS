@@ -1,5 +1,5 @@
 //
-//  UpcomingCell.swift
+//  HomeUpcomingCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/31.
@@ -8,32 +8,18 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import Reusable
 import SnapKit
 
-final class UpcomingCell: BaseCardCell, Reusable, View {
+final class HomeUpcomingCell: BaseCardCell, Reusable {
   
   // MARK: - Properties
   
   // MARK: - UI Components
 
-  private lazy var toggleSwitch = FavorSwitch()
-  
-  // MARK: - Binding
-  
-  func bind(reactor: UpcomingCellReactor) {
-    // Action
+  private let toggleSwitch = FavorSwitch()
 
-    // State
-    reactor.state.map { $0.reminder }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, reminder in
-        owner.title = reminder.title
-        owner.subtitle = reminder.date.toDateString()
-      })
-      .disposed(by: self.disposeBag)
-  }
+  // MARK: - Functions
 
   // MARK: - UI Setup
 

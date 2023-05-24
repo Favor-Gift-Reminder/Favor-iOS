@@ -69,3 +69,21 @@ public class Reminder: Object {
     self.friendNo = friendNo
   }
 }
+
+// MARK: - Array Extension
+
+extension Array where Element: Reminder {
+  public func sort() -> (future: Self, past: Self) {
+    let today = Calendar.current.startOfDay(for: .now)
+    let (future, past) = self.reduce(into: (future: Self(), past: Self())) { result, reminder in
+      let reminderDate = Calendar.current.startOfDay(for: reminder.date)
+      if reminderDate >= today {
+        result.future.append(reminder)
+      } else {
+        result.past.append(reminder)
+      }
+    }
+
+    return (future: future, past: past)
+  }
+}

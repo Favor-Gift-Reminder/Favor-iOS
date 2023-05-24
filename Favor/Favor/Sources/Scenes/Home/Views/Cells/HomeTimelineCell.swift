@@ -1,5 +1,5 @@
 //
-//  TimelineCell.swift
+//  HomeTimelineCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/31.
@@ -8,12 +8,17 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import Reusable
 import RxCocoa
 import SnapKit
 
-final class TimelineCell: BaseCollectionViewCell, Reusable, View {
+final class HomeTimelineCell: BaseCollectionViewCell, Reusable {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let pinnedIconSize: CGFloat = 32.0
+  }
   
   // MARK: - Properties
   
@@ -45,23 +50,12 @@ final class TimelineCell: BaseCollectionViewCell, Reusable, View {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-  
-  // MARK: - Binding
-  
-  func bind(reactor: TimelineCellReactor) {
-    // Action
-    
-    // State
-    reactor.state.map { $0.gift }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, gift in
-        owner.pinnedIconView.isHidden = !gift.isPinned
-      })
-      .disposed(by: self.disposeBag)
-  }
+
+  // MARK: - Functions
+
 }
 
-extension TimelineCell: BaseView {
+extension HomeTimelineCell: BaseView {
   func setupStyles() {
     //
   }
@@ -81,7 +75,7 @@ extension TimelineCell: BaseView {
     }
 
     self.pinnedIconView.snp.makeConstraints { make in
-      make.width.height.equalTo(32)
+      make.width.height.equalTo(Metric.pinnedIconSize)
       make.top.trailing.equalToSuperview().inset(8)
     }
   }

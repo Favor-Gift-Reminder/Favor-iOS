@@ -11,21 +11,20 @@ import UIKit
 import FavorKit
 import FavorNetworkKit
 import ReactorKit
+import RealmSwift
 import RxCocoa
 import RxFlow
 
-/*
- Fetcher가 fetch하는 시점
- - 뷰가 시작될 때 (viewDidLoad)
-*/
-
 final class HomeViewReactor: Reactor, Stepper {
+  typealias Section = HomeSection
+  typealias Item = HomeSectionItem
   
   // MARK: - Properties
   
   var initialState: State
   var steps = PublishRelay<Step>()
   let reminderFetcher = Fetcher<Reminder>()
+  let giftFetcher = Fetcher<Gift>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -33,29 +32,43 @@ final class HomeViewReactor: Reactor, Stepper {
   enum Action {
     case viewNeedsLoaded
     case searchButtonDidTap
-    case itemSelected(IndexPath)
-    case rightButtonDidTap(HomeSectionType)
+    case rightButtonDidTap(HomeSection)
+    case filterButtonDidSelected(GiftFilterType)
+    case updateMaxTimelineItems((current: Int, unit: Int))
+    case itemSelected(Item)
+    case timelineNeedsLoaded(Bool)
   }
   
   enum Mutation {
     case popNewToast(String)
-    case updateUpcoming(HomeSection.HomeSectionModel)
-    case updateTimeline(HomeSection.HomeSectionModel)
+    case updateReminders([Reminder])
+    case updateUpcomingSection([Item])
+    case updateGifts([Gift])
+    case updateTimelineSection([Item])
+    case updateMaxTimelineItems((current: Int, unit: Int))
+    case updateFilterType(GiftFilterType)
     case updateLoading(Bool)
+    case updateTimelineLoading(Bool)
   }
   
   struct State {
     @Pulse var toastMessage: String?
-    var upcomingSection = HomeSection.HomeSectionModel(
-      model: .upcoming,
-      items: []
-    )
-    var timelineSection = HomeSection.HomeSectionModel(
-      model: .timeline,
-      items: []
-    )
+    var sections: [Section] = []
+    var items: [[Item]] = []
+
+    // Upcoming
+    var reminders: [Reminder] = []
+    var upcomingItems: [Item] = []
+
+    // Timeline
+    var gifts: [Gift] = []
+    var timelineItems: [Item] = []
+    var maxTimelineItems: (current: Int, unit: Int) = (current: 10, unit: 10)
     var currentSortType: SortType
+
+    var filterType: GiftFilterType = .all
     var isLoading: Bool = false
+    var isTimelineLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -65,6 +78,7 @@ final class HomeViewReactor: Reactor, Stepper {
       currentSortType: self.currentSortType.value
     )
     self.setupReminderFetcher()
+    self.setupGiftFetcher()
   }
   
   // MARK: - Functions
@@ -72,32 +86,53 @@ final class HomeViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.reminderFetcher.fetch()
-        .flatMap { (status, reminders) -> Observable<Mutation> in
-          let upcomingSection = self.refineUpcoming(reminders: reminders.toArray().prefix(3).wrap())
-          return .concat([
-            .just(.updateUpcoming(upcomingSection)),
-            .just(.updateLoading(status == .inProgress))
-          ])
-        }
+      let fetchedDatas: Observable<(reminders: [Reminder], gifts: [Gift])> = .zip(
+        self.reminderFetcher.fetch(),
+        self.giftFetcher.fetch(),
+        resultSelector: { reminderResult, giftResult -> ([Reminder], [Gift]) in
+          return (reminderResult.results.toArray(), giftResult.results.toArray())
+        })
+      return fetchedDatas.flatMap { fetchedData -> Observable<Mutation> in
+        let reminders = fetchedData.reminders
+        let gifts = fetchedData.gifts
+        return .concat([
+          .just(.updateReminders(reminders)),
+          .just(.updateGifts(gifts)),
+          .just(.updateTimelineLoading(false))
+        ])
+      }
+
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
       self.steps.accept(AppStep.searchIsRequired)
       return .empty()
 
-    case .itemSelected:
-      return .empty()
-      
-    case .rightButtonDidTap(let sectionType):
-      let type = "\(sectionType)"
-      os_log(.debug, "\(type)")
-      switch sectionType {
-      case .upcoming:
+    case .rightButtonDidTap(let section):
+      if case Section.upcoming = section {
         self.steps.accept(AppStep.reminderIsRequired)
-      case .timeline:
-        self.steps.accept(AppStep.filterIsRequired(self.currentSortType.value))
+      } else if case Section.timeline = section {
+        // Filter
       }
       return .empty()
+
+    case .filterButtonDidSelected(let filterType):
+      return .just(.updateFilterType(filterType))
+
+    case let .updateMaxTimelineItems((currentMaxItems, unit)):
+      return .just(.updateMaxTimelineItems((current: currentMaxItems, unit: unit)))
+
+    case .itemSelected(let item):
+      if case let Item.upcoming(upcoming) = item {
+        guard case let Item.Upcoming.reminder(reminder) = upcoming else { return .empty() }
+        print(reminder)
+      } else if case let Item.timeline(timeline) = item {
+        guard case let Item.Timeline.gift(gift) = timeline else { return .empty() }
+        print(gift)
+      }
+      return .empty()
+
+    case .timelineNeedsLoaded(let isLoading):
+      return .just(.updateTimelineLoading(isLoading))
     }
   }
 
@@ -108,14 +143,29 @@ final class HomeViewReactor: Reactor, Stepper {
     case .popNewToast(let message):
       newState.toastMessage = message
 
-    case .updateUpcoming(let model):
-      newState.upcomingSection = model
-      
-    case .updateTimeline(let model):
-      newState.timelineSection = model
+    case .updateReminders(let reminders):
+      newState.reminders = reminders
+
+    case .updateUpcomingSection(let items):
+      newState.upcomingItems = items
+
+    case .updateGifts(let gifts):
+      newState.gifts = gifts
+
+    case .updateTimelineSection(let items):
+      newState.timelineItems = items
+
+    case let .updateMaxTimelineItems((maxItems, unit)):
+      newState.maxTimelineItems = (current: maxItems, unit: unit)
+
+    case .updateFilterType(let filterType):
+      newState.filterType = filterType
 
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
+
+    case .updateTimelineLoading(let isLoading):
+      newState.isTimelineLoading = isLoading
     }
 
     return newState
@@ -126,14 +176,37 @@ final class HomeViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
+
+      // Upcoming 데이터를 조건에 따라 Item으로 변환합니다.
+      let (futureReminders, _) = state.reminders.sort()
+      let upcomingThreeReminders: [Reminder] = futureReminders.prefix(3).wrap()
+      let upcomingItems: [Item] = upcomingThreeReminders.map { .upcoming(.reminder($0)) }
       // Upcoming이 비어있을 경우 .empty 데이터 추가
-      if state.upcomingSection.items.isEmpty {
-        newState.upcomingSection.items.append(.empty(nil, "이벤트가 없습니다."))
+      newState.sections.append(.upcoming(isEmpty: upcomingItems.isEmpty))
+      if upcomingItems.isEmpty {
+        newState.upcomingItems = [.upcoming(.empty(nil, "이벤트가 없습니다."))]
+      } else {
+        newState.upcomingItems = upcomingItems
       }
+
+      // Timeline 데이터를 조건에 따라 Item으로 변환합니다.
+      let filteredGifts = state.gifts.filter(by: state.filterType)
+      let (pinnedGifts, unpinnedGifts) = filteredGifts.sort(by: .isPinned)
+      let pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
+      let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
+      let totalTimelines: [Item] = pinnedTimelines + unpinnedTimelines
+      // Load 최대 개수 만큼만 반환
+      let croppedTimelines = totalTimelines.prefix(self.currentState.maxTimelineItems.current).wrap()
       // Timeline이 비어있을 경우 .empty 데이터 추가
-      if state.timelineSection.items.isEmpty {
-        newState.timelineSection.items.append(.empty(nil, "선물 기록이 없습니다."))
+      newState.sections.append(.timeline(isEmpty: croppedTimelines.isEmpty))
+      if croppedTimelines.isEmpty {
+        newState.timelineItems = [.timeline(.empty(nil, "선물 기록이 없습니다."))]
+      } else {
+        newState.timelineItems = croppedTimelines
       }
+
+      newState.items = [newState.upcomingItems, newState.timelineItems]
+
       return newState
     }
   }
@@ -147,23 +220,9 @@ private extension HomeViewReactor {
     self.reminderFetcher.onRemote = {
       let networking = UserNetworking()
       let reminders = networking.request(.getAllReminderList(userNo: UserInfoStorage.userNo))
-        .flatMap { reminders -> Observable<[Reminder]> in
-          let responseData = reminders.data
-          do {
-            let decodedRemote: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(responseData)
-            return .just(decodedRemote.data.map {
-              Reminder(
-                reminderNo: $0.reminderNo,
-                title: $0.reminderTitle,
-                date: $0.reminderDate,
-                shouldNotify: $0.isAlarmSet,
-                friendNo: $0.friendNo
-              )
-            })
-          } catch let error as APIError {
-            os_log(.error, "\(error.description)")
-            return .just([])
-          }
+        .flatMap { response -> Observable<[Reminder]> in
+          let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { $0.toDomain() })
         }
         .asSingle()
       return reminders
@@ -174,34 +233,29 @@ private extension HomeViewReactor {
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(remoteReminders)")
-      try await RealmManager.shared.updateAll(remoteReminders)
+      try await RealmManager.shared.updateAll(remoteReminders, update: .all)
     }
   }
-}
 
-// MARK: - Privates
-
-private extension HomeViewReactor {
-  func refineUpcoming(reminders: [Reminder]) -> HomeSection.HomeSectionModel {
-    let upcomingItems = reminders.map {
-      let reactor = UpcomingCellReactor(reminder: $0)
-      return HomeSection.HomeSectionItem.upcoming(reactor)
+  func setupGiftFetcher() {
+    // onRemote
+    self.giftFetcher.onRemote = {
+      let networking = UserNetworking()
+      let gifts = networking.request(.getAllGifts(userNo: UserInfoStorage.userNo))
+        .flatMap { response -> Observable<[Gift]> in
+          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { $0.toDomain() })
+        }
+        .asSingle()
+      return gifts
     }
-    return HomeSection.HomeSectionModel(
-      model: .upcoming,
-      items: upcomingItems
-    )
-  }
-
-  func refineTimeline(gifts: [Gift]) -> HomeSection.HomeSectionModel {
-    let timelineItems = gifts.map {
-      let reactor = TimelineCellReactor(gift: $0)
-      return HomeSection.HomeSectionItem.timeline(reactor)
+    // onLocal
+    self.giftFetcher.onLocal = {
+      return try await RealmManager.shared.read(Gift.self)
     }
-    return HomeSection.HomeSectionModel(
-      model: .timeline,
-      items: timelineItems
-    )
+    // onLocalUpdate
+    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
+      try await RealmManager.shared.updateAll(remoteGifts, update: .all)
+    }
   }
 }

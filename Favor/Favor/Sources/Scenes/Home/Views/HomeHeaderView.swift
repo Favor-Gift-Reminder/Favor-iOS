@@ -8,36 +8,55 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import Reusable
 import RxCocoa
+import RxSwift
 import SnapKit
 
-class HomeHeaderView: UICollectionReusableView, Reusable, View {
+public protocol HomeHeaderViewDelegate: AnyObject {
+  func rightButtonDidTap(from view: HomeHeaderView, for section: HomeSection)
+  func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType)
+}
+
+public class HomeHeaderView: UICollectionReusableView, Reusable {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let rightButtonSize: CGFloat = 32.0
+  }
   
   // MARK: - Properties
   
   public var disposeBag = DisposeBag()
+
+  public weak var delegate: HomeHeaderViewDelegate?
+
+  public var section: HomeSection {
+    didSet { self.updateToSection() }
+  }
+
+  private let selectedFilter = PublishRelay<GiftFilterType>()
   
   // MARK: - UI Components
   
-  private lazy var titleLabel: UILabel = {
+  private let titleLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 22.0)
     label.text = "헤더 타이틀"
     return label
   }()
 
-  fileprivate lazy var rightButton: UIButton = {
+  private let rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.updateAttributedTitle("버튼", font: .favorFont(.bold, size: 18))
-    config.baseForegroundColor = .favorColor(.titleAndLine)
+    config.background.backgroundColor = .clear
+    config.baseForegroundColor = .favorColor(.icon)
 
     let button = UIButton(configuration: config)
     return button
   }()
   
-  private lazy var firstLineStack: UIStackView = {
+  private let firstLineStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .fillProportionally
@@ -49,12 +68,11 @@ class HomeHeaderView: UICollectionReusableView, Reusable, View {
     button.isSelected = true
     return button
   }()
-  private lazy var getButton: UIButton = self.makeFilterButton(title: "받은 선물")
-  private lazy var giveButton: UIButton = self.makeFilterButton(title: "준 선물")
-  
+  private lazy var receivedButton: UIButton = self.makeFilterButton(title: "받은 선물")
+  private lazy var givenButton: UIButton = self.makeFilterButton(title: "준 선물")
   private var buttons: [UIButton] = []
   
-  private lazy var secondLineStack: UIStackView = {
+  private let secondLineStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.distribution = .fillProportionally
@@ -66,10 +84,12 @@ class HomeHeaderView: UICollectionReusableView, Reusable, View {
   // MARK: - Initializer
   
   override init(frame: CGRect) {
+    self.section = .timeline(isEmpty: true)
     super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    self.bind()
   }
   
   required init?(coder: NSCoder) {
@@ -77,53 +97,40 @@ class HomeHeaderView: UICollectionReusableView, Reusable, View {
   }
   
   // MARK: - Binding
-  
-  func bind(reactor: HeaderViewReactor) {
-    // TODO: Action들 VC로 뺴기
+
+  public func bind() {
     // Action
-    self.allButton.rx.tap
-      .map { Reactor.Action.allButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.getButton.rx.tap
-      .map { Reactor.Action.getButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    self.giveButton.rx.tap
-      .map { Reactor.Action.giveButotnDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    // State
-    reactor.state.map { $0.sectionType }
-      .map { $0 == .upcoming }
+    self.rightButton.rx.tap
+      .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, isUpcoming in
-        // Header Title
-        owner.titleLabel.text = isUpcoming ? "다가오는 기념일" : "타임라인"
-        // Filter Buttons
-        owner.secondLineStack.isHidden = isUpcoming ? true : false
-        // Right Button
-        owner.rightButton.configurationUpdateHandler = { button in
-          var config = button.configuration
-          config?.contentInsets = .zero
-          config?.baseForegroundColor = isUpcoming ? .favorColor(.subtext) : .favorColor(.icon)
-          let title = isUpcoming ? "더보기" : nil
-          config?.updateAttributedTitle(title, font: .favorFont(.regular, size: 12))
-          config?.image = isUpcoming ? nil : .favorIcon(.filter)
-          button.configuration = config
-        }
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.rightButtonDidTap(from: owner, for: owner.section)
       })
       .disposed(by: self.disposeBag)
-    
-    reactor.state.map { $0.selectedButtonIndex }
+
+    self.allButton.rx.tap
+      .map { .all }
+      .bind(to: self.selectedFilter)
+      .disposed(by: self.disposeBag)
+
+    self.receivedButton.rx.tap
+      .map { .received }
+      .bind(to: self.selectedFilter)
+      .disposed(by: self.disposeBag)
+
+    self.givenButton.rx.tap
+      .map { .given }
+      .bind(to: self.selectedFilter)
+      .disposed(by: self.disposeBag)
+
+    self.selectedFilter
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, buttonIndex in
-        owner.buttons.enumerated().forEach { currentIndex, button in
-          button.isSelected = (currentIndex == buttonIndex) ? true : false
-        }
+      .drive(with: self, onNext: { owner, selectedFilter in
+        owner.allButton.isSelected = owner.allButton == owner.buttons[selectedFilter.rawValue]
+        owner.receivedButton.isSelected = owner.receivedButton == owner.buttons[selectedFilter.rawValue]
+        owner.givenButton.isSelected = owner.givenButton == owner.buttons[selectedFilter.rawValue]
+        owner.delegate?.filterDidSelected(from: owner, to: selectedFilter)
       })
       .disposed(by: self.disposeBag)
   }
@@ -132,11 +139,11 @@ class HomeHeaderView: UICollectionReusableView, Reusable, View {
 // MARK: - Setup
 
 extension HomeHeaderView: BaseView {
-  func setupStyles() {
+  public func setupStyles() {
     self.backgroundColor = .clear
   }
   
-  func setupLayouts() {
+  public func setupLayouts() {
     [
       self.titleLabel,
       self.rightButton
@@ -146,16 +153,16 @@ extension HomeHeaderView: BaseView {
 
     [
       self.allButton,
-      self.getButton,
-      self.giveButton
+      self.receivedButton,
+      self.givenButton
     ].forEach {
       self.buttons.append($0)
     }
 
     [
       self.allButton,
-      self.getButton,
-      self.giveButton
+      self.receivedButton,
+      self.givenButton
     ].forEach {
       self.secondLineStack.addArrangedSubview($0)
     }
@@ -168,11 +175,11 @@ extension HomeHeaderView: BaseView {
     }
   }
   
-  func setupConstraints() {
+  public func setupConstraints() {
     self.firstLineStack.snp.makeConstraints { make in
-      make.top.equalToSuperview().inset(40)
-      make.height.equalTo(32)
+      make.top.equalToSuperview()
       make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(Metric.rightButtonSize)
     }
 
     self.secondLineStack.snp.makeConstraints { make in
@@ -182,7 +189,7 @@ extension HomeHeaderView: BaseView {
     }
 
     self.rightButton.snp.makeConstraints { make in
-      make.width.height.equalTo(32)
+      make.width.height.equalTo(Metric.rightButtonSize)
     }
     self.rightButton.setContentHuggingPriority(.defaultHigh, for: .horizontal)
 
@@ -195,39 +202,50 @@ extension HomeHeaderView: BaseView {
 // MARK: - Private Functions
 
 private extension HomeHeaderView {
+  func updateToSection() {
+    var isUpcoming: Bool
+    if case HomeSection.timeline = self.section {
+      isUpcoming = false
+    } else {
+      isUpcoming = true
+    }
+    // Header Title
+    self.titleLabel.text = isUpcoming ? "다가오는 기념일" : "타임라인"
+    // Filter Buttons
+    self.secondLineStack.isHidden = isUpcoming ? true : false
+    // Right Button
+    self.rightButton.configurationUpdateHandler = { button in
+      var config = button.configuration
+      config?.contentInsets = .zero
+      config?.baseForegroundColor = isUpcoming ? .favorColor(.subtext) : .favorColor(.icon)
+      let title = isUpcoming ? "더보기" : nil
+      config?.updateAttributedTitle(title, font: .favorFont(.regular, size: 12))
+      config?.image = isUpcoming ? nil : .favorIcon(.filter)
+      button.configuration = config
+    }
+  }
+
   func makeFilterButton(title: String) -> UIButton {
     var configuration = UIButton.Configuration.plain()
     var attributedTitle = AttributedString(title)
     attributedTitle.font = .favorFont(.bold, size: 16)
     configuration.attributedTitle = attributedTitle
-    configuration.baseBackgroundColor = .clear
+    configuration.background.backgroundColor = .clear
     configuration.baseForegroundColor = .favorColor(.titleAndLine)
     configuration.contentInsets = .zero
     
-    let handler: UIButton.ConfigurationUpdateHandler = { button in
+    let button = UIButton(configuration: configuration)
+    button.configurationUpdateHandler = { button in
       switch button.state {
       case .selected:
-        button.configuration?.background.backgroundColor = .clear
         button.configuration?.baseForegroundColor = .favorColor(.titleAndLine)
       case .normal:
-        button.configuration?.background.backgroundColor = .clear
         button.configuration?.baseForegroundColor = .favorColor(.explain)
       default:
         break
       }
     }
     
-    let button = UIButton(configuration: configuration)
-    button.configurationUpdateHandler = handler
-    
     return button
-  }
-}
-
-// MARK: - Reactive
-
-extension Reactive where Base: HomeHeaderView {
-  var rightButtonDidTap: ControlEvent<()> {
-    return ControlEvent(events: base.rightButton.rx.tap)
   }
 }

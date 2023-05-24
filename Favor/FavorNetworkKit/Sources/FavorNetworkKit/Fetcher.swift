@@ -18,8 +18,23 @@ public class Fetcher<T: Object> {
 
   // MARK: - Constants
 
-  public enum Status {
-    case inProgress, success, failure
+  public enum Status: Equatable {
+    case inProgress
+    case success
+    case failure(Error)
+
+    public static func == (lhs: Fetcher<T>.Status, rhs: Fetcher<T>.Status) -> Bool {
+      switch (lhs, rhs) {
+      case (.inProgress, .inProgress):
+        return true
+      case (.success, .success):
+        return true
+      case let (.failure(lhsError), .failure(rhsError)):
+        return lhsError == rhsError
+      default:
+        return false
+      }
+    }
   }
 
   // MARK: - Properties
@@ -47,7 +62,7 @@ public class Fetcher<T: Object> {
   /// 5. 업데이트된 로컬 DB로부터 데이터를 `read`하고 방출합니다. (`status` = `.success`)
   /// 6. `request`가 실패했다면
   /// 7. 로컬 DB에 있는 데이터를 그대로 `read`하여 방출합니다. (`status` = `.failure`)
-  public func fetch() -> Observable<(Status, Results<T>)> {
+  public func fetch() -> Observable<(status: Status, results: Results<T>)> {
     guard
       let onRemote = self.onRemote,
       let onLocal = self.onLocal,
@@ -74,7 +89,7 @@ public class Fetcher<T: Object> {
             os_log(.debug, "📂 🟢 FETCHER STATUS: success")
             observer.onCompleted()
           } catch {
-            observer.onNext((.failure, localData))
+            observer.onNext((.failure(error), localData))
             os_log(.error, "📂 🔴 FETCHER STATUS: failure")
           }
         } catch {

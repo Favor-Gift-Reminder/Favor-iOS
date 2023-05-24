@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2022/12/30.
 //
 
+import Network
 import UIKit
 
 import FavorKit
@@ -15,122 +16,157 @@ import RxDataSources
 import SnapKit
 
 final class HomeViewController: BaseViewController, View {
-  typealias Reactor = HomeViewReactor
-  typealias HomeDataSource = RxCollectionViewSectionedReloadDataSource<HomeSection.HomeSectionModel>
+  typealias HomeDataSource = UICollectionViewDiffableDataSource<HomeSection, HomeSectionItem>
   
   // MARK: - Constants
   
   // MARK: - Properties
-  
-  private lazy var dataSource = HomeDataSource(
-    configureCell: { _, collectionView, indexPath, item in
-      switch item {
-      case let .empty(image, text): // Empty Cell
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
-        cell.bindEmptyData(image: image, text: text)
-        return cell
-      case .upcoming(let reactor): // 다가오는 기념일
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as UpcomingCell
-        cell.cardCellType = .reminder
-        cell.reactor = reactor
-        return cell
-      case .timeline(let reactor): // 타임라인
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as TimelineCell
-        cell.reactor = reactor
-        return cell
-      }
-    },
-    configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
-      let sectionItem = dataSource[indexPath.section]
-      let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        for: indexPath) as HomeHeaderView
-      header.reactor = HeaderViewReactor(section: sectionItem.model)
-      header.rx.rightButtonDidTap
-        .map { Reactor.Action.rightButtonDidTap(sectionItem.model) }
-        .bind(to: self.reactor!.action)
-        .disposed(by: header.disposeBag)
-      return header
+
+  private var currentNetworkStatus: NWPath.Status = .unsatisfied
+
+  private lazy var networkMonitor: NWPathMonitor = {
+    let monitor = NWPathMonitor()
+    monitor.pathUpdateHandler = { path in
+      print(path.status)
+//      switch path.status {
+//      case .satisfied:
+//        print("🌐 connected")
+//        guard
+//          self.currentNetworkStatus != .satisfied,
+//          let reactor = self.reactor
+//        else { return }
+//        reactor.action.onNext(.viewNeedsLoaded)
+//        self.currentNetworkStatus = .satisfied
+//      default:
+//        print("🌐 Disconnected")
+//      }
     }
-  )
+    return monitor
+  }()
+
+  private lazy var dataSource: HomeDataSource = {
+    let dataSource = HomeDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { [weak self] collectionView, indexPath, item in
+        switch item {
+        case .upcoming(let upcomingData):
+          switch upcomingData {
+          case let .empty(image, title):
+            let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
+            cell.bindEmptyData(image: image, text: title)
+            return cell
+          case let .reminder(reminder):
+            let cell = collectionView.dequeueReusableCell(for: indexPath) as HomeUpcomingCell
+            return cell
+          }
+        case .timeline(let giftData):
+          switch giftData {
+          case let .empty(image, title):
+            let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
+            cell.bindEmptyData(image: image, text: title)
+            return cell
+          case let .gift(gift):
+            let cell = collectionView.dequeueReusableCell(for: indexPath) as HomeTimelineCell
+            return cell
+          }
+        }
+      })
+    dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+      guard let self = self else { return UICollectionReusableView() }
+      switch kind {
+      case UICollectionView.elementKindSectionHeader:
+        let header = collectionView.dequeueReusableSupplementaryView(
+          ofKind: kind,
+          for: indexPath
+        ) as HomeHeaderView
+        header.delegate = self
+        let currentSnapshot = self.dataSource.snapshot()
+        header.section = currentSnapshot.sectionIdentifiers[indexPath.section]
+        return header
+      case UICollectionView.elementKindSectionFooter:
+        let footer = collectionView.dequeueReusableSupplementaryView(
+          ofKind: kind,
+          for: indexPath
+        ) as FavorLoadingFooterView
+        return footer
+      default:
+        return UICollectionReusableView()
+      }
+    }
+    return dataSource
+  }()
   
   // MARK: - UI Components
 
-  private lazy var searchButton = FavorBarButtonItem(.search)
-  
+  private let searchButton = FavorBarButtonItem(.search)
+
+  private lazy var adapter: Adapter<HomeSection, HomeSectionItem> = {
+    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
+    return adapter
+  }()
+
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
-      frame: self.view.bounds,
-      collectionViewLayout: self.setupCollectionViewLayout()
+      frame: .zero,
+      collectionViewLayout: UICollectionViewLayout()
     )
 
     // register
     collectionView.register(cellType: FavorEmptyCell.self)
-    collectionView.register(cellType: UpcomingCell.self)
-    collectionView.register(cellType: TimelineCell.self)
+    collectionView.register(cellType: HomeUpcomingCell.self)
+    collectionView.register(cellType: HomeTimelineCell.self)
     collectionView.register(
       supplementaryViewType: HomeHeaderView.self,
-      ofKind: HomeHeaderView.reuseIdentifier
+      ofKind: UICollectionView.elementKindSectionHeader
+    )
+    collectionView.register(
+      supplementaryViewType: FavorLoadingFooterView.self,
+      ofKind: UICollectionView.elementKindSectionFooter
     )
 
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
+    collectionView.contentInset = UIEdgeInsets(top: 16, left: .zero, bottom: 16, right: .zero)
     return collectionView
   }()
   
   // MARK: - Life Cycle
 
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    self.adapter.adapt()
+  }
+
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
     self.setupNavigationBar()
+
+    self.networkMonitor.start(queue: DispatchQueue(label: "NetworkMonitor"))
+  }
+
+  override func viewDidDisappear(_ animated: Bool) {
+    super.viewDidDisappear(animated)
+
+    self.networkMonitor.cancel()
   }
   
   // MARK: - Setup
   
   override func setupLayouts() {
-    [
-      self.collectionView
-    ].forEach {
-      self.view.addSubview($0)
-    }
+    self.view.addSubview(self.collectionView)
   }
   
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide)
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
-      make.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
+      make.directionalHorizontalEdges.equalToSuperview()
     }
   }
 
   // MARK: - Binding
-  
-  override func bind() {
-    self.collectionView.rx.didEndDisplayingCell
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { _, endDisplayingCell in
-        let (cell, _) = endDisplayingCell
-        guard let cell = cell as? BaseCollectionViewCell else { return }
-        cell.disposeBag = DisposeBag()
-      })
-      .disposed(by: self.disposeBag)
-
-    self.collectionView.rx.didEndDisplayingSupplementaryView
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { _, endDisplayingView in
-        let (view, _, _) = endDisplayingView
-        guard let view = view as? HomeHeaderView else { return }
-        view.disposeBag = DisposeBag()
-      })
-      .disposed(by: self.disposeBag)
-    
-    // State
-    self.reactor?.state.map { [$0.upcomingSection, $0.timelineSection] }
-      .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
-      .disposed(by: self.disposeBag)
-  }
   
   func bind(reactor: HomeViewReactor) {
     // Action
@@ -144,15 +180,65 @@ final class HomeViewController: BaseViewController, View {
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
+
+    self.collectionView.rx.itemSelected
+      .map { indexPath in
+        let currentSnapshot = self.dataSource.snapshot()
+        let sections = currentSnapshot.sectionIdentifiers
+        let items = currentSnapshot.itemIdentifiers(inSection: sections[indexPath.section])
+        let selectedItem = items[indexPath.item]
+        return Reactor.Action.itemSelected(selectedItem)
+      }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    // 스크롤 로드
+    let maxTimelines = reactor.state
+      .flatMap { state -> Observable<(current: Int, unit: Int)> in
+        return .just(state.maxTimelineItems)
+      }
+    let willDisplayCell = self.collectionView.rx.willDisplayCell
+    Observable.combineLatest(maxTimelines, willDisplayCell)
+    .compactMap { maxTimelines, willDisplayCell in
+      return (
+        maxItems: maxTimelines.current, unit: maxTimelines.unit,
+        cell: willDisplayCell.cell, indexPath: willDisplayCell.at
+      )
+    }
+    .observe(on: MainScheduler.asyncInstance)
+    .asDriver(onErrorRecover: { _ in return .empty()})
+    .drive(with: self, onNext: { owner, data in
+      let (maxItems, unit, _, indexPath) = (data.maxItems, data.unit, data.cell, data.indexPath)
+
+      guard
+        indexPath.item > 0,
+        (indexPath.item + 1 - 4) / unit == maxItems / unit - 1,
+        let reactor = owner.reactor
+      else { return }
+
+      if indexPath.item >= maxItems - 4 {
+        reactor.action.onNext(.updateMaxTimelineItems((current: maxItems + unit, unit: unit)))
+        reactor.action.onNext(.timelineNeedsLoaded(true))
+      }
+    })
+    .disposed(by: self.disposeBag)
     
     // State
-//    reactor.state.map { $0.toastMessage }
-//      .compactMap { $0 }
-//      .asDriver(onErrorRecover: { _ in return .empty()})
-//      .drive(with: self, onNext: { owner, message in
-//        owner.presentToast(message, duration: .short)
-//      })
-//      .disposed(by: self.disposeBag)
+    reactor.state.map { (sections: $0.sections, items: $0.items) }
+      .debug()
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, sectionData in
+        var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeSectionItem>()
+        snapshot.appendSections(sectionData.sections)
+        sectionData.items.enumerated().forEach { idx, item in
+          snapshot.appendItems(item, toSection: sectionData.sections[idx])
+        }
+        
+        DispatchQueue.main.async {
+          owner.dataSource.apply(snapshot)
+        }
+      })
+      .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
@@ -164,89 +250,21 @@ final class HomeViewController: BaseViewController, View {
 
 private extension HomeViewController {
   func setupNavigationBar() {
-    self.navigationItem.rightBarButtonItems = [
-      self.searchButton
-    ]
+    self.navigationItem.setRightBarButton(self.searchButton, animated: false)
     self.navigationController?.setNavigationBarHidden(false, animated: false)
   }
-  
-  func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
-    return UICollectionViewCompositionalLayout(sectionProvider: { [weak self] sectionIndex, _ in
-      guard
-        let sectionType = self?.dataSource[sectionIndex].model,
-        // dataSource는 절대로 비어있지 않습니다. 실제 값이 비어있더라도 reactor에서 .empty 값을 대체하여 넣어줍니다.
-        let sectionFirstItem = self?.dataSource[sectionIndex].items.first
-      else { fatalError("Fatal error occured while setting up section datas.") }
+}
 
-      var isSectionEmpty: Bool = false
-      if case HomeSection.HomeSectionItem.empty(_, _) = sectionFirstItem {
-        isSectionEmpty = true
-      }
-      return self?.createCollectionViewLayout(sectionType: sectionType, isEmpty: isSectionEmpty)
-    })
+// MARK: - HomeHeaderView
+
+extension HomeViewController: HomeHeaderViewDelegate {
+  func rightButtonDidTap(from view: HomeHeaderView, for section: HomeSection) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.rightButtonDidTap(section))
   }
 
-  func createCollectionViewLayout(
-    sectionType: HomeSectionType,
-    isEmpty: Bool
-  ) -> NSCollectionLayoutSection {
-    let emptyItem = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(FavorEmptyCell.totalHeight))
-    )
-
-    let (cellSize, columns, spacing) = self.getSectionSize(sectionType: sectionType)
-    let item = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: cellSize.widthDimension,
-        heightDimension: cellSize.heightDimension)
-    )
-    
-    let contentsGroup = UICollectionViewCompositionalLayout.group(
-      direction: .horizontal,
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: cellSize.heightDimension),
-      subItem: item,
-      count: columns
-    )
-    contentsGroup.interItemSpacing = .fixed(spacing)
-
-    // CollectionView에 출력될 아이템 (비어있다면 emptyItem, 컨텐츠가 있다면 contentsGroup)
-    let activeItems: [NSCollectionLayoutItem] = isEmpty ? [emptyItem] : [contentsGroup]
-    let group = NSCollectionLayoutGroup.vertical(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(50) // Auto Height
-      ),
-      subitems: activeItems
-    )
-
-    let section = NSCollectionLayoutSection(group: group)
-    section.interGroupSpacing = spacing
-
-    // header
-    section.boundarySupplementaryItems = [self.createHeader(sectionType: sectionType)]
-
-    return section
-  }
-
-  /// Section Type에 따라 지정된 Layout 값들을 불러오는 메서드
-  func getSectionSize(sectionType: HomeSectionType) -> (NSCollectionLayoutSize, Int, CGFloat) {
-    return (sectionType.cellSize, sectionType.columns, sectionType.spacing)
-  }
-  
-  // 헤더 생성
-  func createHeader(sectionType: HomeSectionType) -> NSCollectionLayoutBoundarySupplementaryItem {
-    let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: .init(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: sectionType.headerHeight
-      ),
-      elementKind: HomeHeaderView.reuseIdentifier,
-      alignment: .top
-    )
-    return sectionHeader
+  func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.filterButtonDidSelected(filterType))
   }
 }
