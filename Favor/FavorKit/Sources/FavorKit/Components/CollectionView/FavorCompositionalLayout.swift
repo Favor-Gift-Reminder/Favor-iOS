@@ -101,7 +101,22 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       innerGroup: FavorCompositionalLayout.Group? = nil
     )
 
-    /// 화면의 너비를 꽉 채우며 가로로 나열되는 아이템들을 담는 Group
+    /// 가로를 꽉 채우는 바둑판 형태의 Group
+    /// - Parameters:
+    ///   - height: Group의 `heightDimension`
+    ///   - numberOfItems: Group 안에 포함된 Item들의 개수
+    ///   - spacing: Group 내부에 들어있는 Item들의 간격
+    ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
+    ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group
+    case grid(
+      height: NSCollectionLayoutDimension,
+      numberOfItems: Int,
+      spacing: NSCollectionLayoutSpacing? = nil,
+      contentInsets: NSDirectionalEdgeInsets? = nil,
+      innerGroup: FavorCompositionalLayout.Group? = nil
+    )
+
+    /// 가로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
     ///   - height: Group의 `heightDimension`
     ///   - numberOfItems: Group 안에 포함된 Item들의 개수
@@ -116,13 +131,15 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       innerGroup: FavorCompositionalLayout.Group? = nil
     )
 
-    /// 화면의 너비를 꽉 채우며 세로로 나열되는 아이템들을 담는 Group
+    /// 세로로 나열되는 아이템들을 담는 Group
     /// - Parameters:
+    ///   - width: Group의 `widthDimension`
     ///   - numberOfItems: Group 안에 포함된 Item들의 개수
     ///   - spacing: Group 내부에 들어있는 Item들의 간격
     ///   - contentInsets: Group의 내부 `NSDirectionalEdgeInsets`
     ///   - innerGroup: Nested Group을 사용할 경우 내부에 포함된 Group
     case list(
+      width: NSCollectionLayoutDimension? = nil,
       numberOfItems: Int? = nil,
       spacing: NSCollectionLayoutSpacing? = nil,
       contentInsets: NSDirectionalEdgeInsets? = nil,
@@ -170,6 +187,18 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           contentInsets: contentInsets ?? .zero,
           innerGroup: innerGroup
         )
+      case let .grid(height, numberOfItems, spacing, contentInsets, innerGroup):
+        return (
+          size: NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: height
+          ),
+          numberOfItems: numberOfItems,
+          direction: .horizontal,
+          spacing: spacing ?? .fixed(.zero),
+          contentInsets: contentInsets ?? .zero,
+          innerGroup: innerGroup
+        )
       case let .flow(height, numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
@@ -182,10 +211,10 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
           contentInsets: contentInsets ?? .zero,
           innerGroup: innerGroup
         )
-      case let .list(numberOfItems, spacing, contentInsets, innerGroup):
+      case let .list(width, numberOfItems, spacing, contentInsets, innerGroup):
         return (
           size: NSCollectionLayoutSize(
-            widthDimension: .fractionalWidth(1.0),
+            widthDimension: width ?? .fractionalWidth(1.0),
             heightDimension: .estimated(1)
           ),
           numberOfItems: numberOfItems ?? 1,

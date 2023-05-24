@@ -97,7 +97,11 @@ extension HomeSection: Adaptive {
           direction: .horizontal,
           numberOfItems: 1)
       } else {
-        return .list(numberOfItems: 2, spacing: .fixed(5), contentInsets: .zero, innerGroup: nil)
+        return .grid(
+          height: .fractionalWidth(0.5),
+          numberOfItems: 2,
+          spacing: .fixed(5)
+        )
       }
     }
   }
@@ -127,6 +131,7 @@ extension HomeSection: Adaptive {
         )
       } else {
         return .base(
+          spacing: 5,
           contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),
           boundaryItems: [
             .header(
