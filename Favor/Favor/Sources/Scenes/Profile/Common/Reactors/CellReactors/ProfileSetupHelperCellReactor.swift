@@ -22,7 +22,7 @@ final class ProfileSetupHelperCellReactor: Reactor {
       case .anniversary: return .favorIcon(.favor)
       }
     }
-
+    
     public var description: String {
       switch self {
       case .favor: return "5가지 취향 키워드를 등록해보세요."
