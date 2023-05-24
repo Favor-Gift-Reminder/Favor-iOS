@@ -95,7 +95,7 @@ final class HomeViewReactor: Reactor, Stepper {
       case .upcoming:
         self.steps.accept(AppStep.reminderIsRequired)
       case .timeline:
-        self.steps.accept(AppStep.filterBottomSheetIsRequired(self.currentSortType.value))
+        self.steps.accept(AppStep.filterIsRequired(self.currentSortType.value))
       }
       return .empty()
     }

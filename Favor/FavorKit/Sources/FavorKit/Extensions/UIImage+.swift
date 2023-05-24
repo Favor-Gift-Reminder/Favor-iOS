@@ -40,17 +40,17 @@ extension UIImage {
     case share
     case show
     case uncheck
+
     case down
     case left
     case right
-    
+
     case birth
     case congrat
     case couple
-    case employ
-    case gradu
-    case gift
-    case house
+    case employed
+    case graduate
+    case housewarm
     case pass
   }
 
