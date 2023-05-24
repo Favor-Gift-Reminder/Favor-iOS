@@ -38,7 +38,7 @@ public class FavorProfileImageView: UIView {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.photo)?
+    config.image = .favorIcon(.gallery)?
       .withTintColor(.favorColor(.white))
       .resize(newWidth: 16.0)
     config.background.cornerRadius = Metric.circlePhotoSize / 2
@@ -53,7 +53,7 @@ public class FavorProfileImageView: UIView {
     config.background.cornerRadius = Metric.wholeSize / 2
     config.baseBackgroundColor = .favorColor(.black).withAlphaComponent(0.3)
     config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.photo)?
+    config.image = .favorIcon(.gallery)?
       .withTintColor(.favorColor(.white))
       .resize(newWidth: 28.0)
     $0.configuration = config

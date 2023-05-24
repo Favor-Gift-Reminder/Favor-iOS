@@ -16,7 +16,7 @@ final class NewGiftEmptyCell: UICollectionViewCell, Reusable {
   // MARK: - UI
   
   private let photoImageView: UIImageView = {
-    let image = UIImage.favorIcon(.photo)?
+    let image = UIImage.favorIcon(.gallery)?
       .resize(newWidth: 40)
       .withTintColor(.favorColor(.white), renderingMode: .alwaysOriginal)
     return UIImageView(image: image)

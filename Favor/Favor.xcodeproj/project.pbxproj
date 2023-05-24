@@ -203,6 +203,8 @@
 		2E634E232A16108E00DD51ED /* FilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVC.swift; sourceTree = "<group>"; };
 		2E634E262A172D0200DD51ED /* BaseAnniversaryListViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAnniversaryListViewReactor.swift; sourceTree = "<group>"; };
 		2E634E302A18E24F00DD51ED /* AnniversaryListCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListCellModel.swift; sourceTree = "<group>"; };
+		2E6089442A1C5A2C0096B7F2 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		2E6089452A1C5A2C0096B7F2 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		2E6C90B029A607BD00AF963A /* ProfileFriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCell.swift; sourceTree = "<group>"; };
 		2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCellReactor.swift; sourceTree = "<group>"; };
 		2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageVC.swift; sourceTree = "<group>"; };
@@ -1153,6 +1155,8 @@
 			isa = PBXGroup;
 			children = (
 				2E634E232A16108E00DD51ED /* FilterVC.swift */,
+				2E6089442A1C5A2C0096B7F2 /* Pretendard-Bold.otf */,
+				2E6089452A1C5A2C0096B7F2 /* Pretendard-Regular.otf */,
 				2EBCC8FE29EDBFDB008044DC /* UICollectionViewCompositionalLayout+.swift */,
 				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
