@@ -11,6 +11,8 @@
 		2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */; };
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
+		2E1DBE442A1E6D2900C9BC30 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
+		2E1DBE452A1E6D9200C9BC30 /* NewGiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260EE298F4D4F00D14020 /* NewGiftVC.swift */; };
 		2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */; };
 		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
 		2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */; };
@@ -45,7 +47,6 @@
 		2E87B8C92A0A501D00570386 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38499298D7C680081499C /* HomeHeaderView.swift */; };
 		2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DE2998B80200C8C47F /* ProfileSection.swift */; };
 		2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* ProfileView.swift */; };
-		2E87B8D32A0BC8FF00570386 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
 		2E87B8D82A0BCCD400570386 /* FriendListModifyingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D72A0BCCD400570386 /* FriendListModifyingVC.swift */; };
 		2E87B8DA2A0BCE3200570386 /* FriendListModifyingViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D92A0BCE3200570386 /* FriendListModifyingViewReactor.swift */; };
 		2E87B8E02A0C881A00570386 /* FriendListModifyingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8DF2A0C881A00570386 /* FriendListModifyingCell.swift */; };
@@ -159,7 +160,6 @@
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
 		E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C3298B5CDF002940D1 /* AppStpper.swift */; };
 		E55CF7C6298B8EBB002940D1 /* DashboardFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C5298B8EBB002940D1 /* DashboardFlow.swift */; };
-		E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56260EE298F4D4F00D14020 /* NewGiftVC.swift */; };
 		E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */ = {isa = PBXBuildFile; productRef = E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */; };
 		E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610329939E8800D14020 /* NewGiftPhotoSection.swift */; };
 		E562610F299497C000D14020 /* NewGiftViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E562610E299497C000D14020 /* NewGiftViewReactor.swift */; };
@@ -1355,6 +1355,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E1DBE452A1E6D9200C9BC30 /* NewGiftVC.swift in Sources */,
+				2E1DBE442A1E6D2900C9BC30 /* BaseFriendListVC.swift in Sources */,
 				2E634E252A16108E00DD51ED /* FilterVC.swift in Sources */,
 				2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */,
 				2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */,
@@ -1439,7 +1441,6 @@
 				2E87B8E02A0C881A00570386 /* FriendListModifyingCell.swift in Sources */,
 				2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
-				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
 				E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
@@ -1462,9 +1463,7 @@
 				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */,
-				2E87B8D32A0BC8FF00570386 /* BaseFriendListVC.swift in Sources */,
 				E593C8252A176B4500711C0F /* FriendManagementVC.swift in Sources */,
-				2E87B8D32A0BC8FF00570386 /* BaseFriendListVC.swift in Sources */,
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */,
