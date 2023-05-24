@@ -666,13 +666,6 @@
 			path = Favor;
 			sourceTree = "<group>";
 		};
-		2E87B8CD2A0BC88200570386 /* Friend */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Friend;
-			sourceTree = "<group>";
-		};
 		2E95E4B429E8F04500A46C38 /* CellReactors */ = {
 			isa = PBXGroup;
 			children = (
@@ -791,7 +784,6 @@
 				2EE07E9F296C5F1D00048A3C /* Search */,
 				2E634E282A17566B00DD51ED /* FriendList */,
 				E593C8232A176AF800711C0F /* Friend */,
-				2E87B8CD2A0BC88200570386 /* Friend */,
 				2EE07EBD296E8D2300048A3C /* Profile */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				2EE07EAA296E7BC100048A3C /* Reminder */,
