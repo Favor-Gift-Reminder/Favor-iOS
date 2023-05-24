@@ -8,14 +8,8 @@
 import UIKit
 
 import SnapKit
-import Then
 
 open class BaseBottomSheet: BaseViewController {
-  
-  enum Metric {
-    static let bottomSheetHeight: CGFloat = 294.0
-    static let dismissibleHeight: CGFloat = 200.0
-  }
   
   // MARK: - UI
   
@@ -23,7 +17,6 @@ open class BaseBottomSheet: BaseViewController {
     let view = UIView()
     view.backgroundColor = .favorColor(.white)
     view.layer.cornerRadius = 24
-    view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     view.clipsToBounds = true
     return view
   }()
@@ -56,23 +49,6 @@ open class BaseBottomSheet: BaseViewController {
     return btn
   }()
   
-   public let finishButton: UIButton = UIButton().then {
-    var config = UIButton.Configuration.plain()
-    var container = AttributeContainer()
-    container.font = .favorFont(.bold, size: 18)
-    config.attributedTitle = AttributedString("완료", attributes: container)
-    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-    $0.configuration = config
-    $0.configurationUpdateHandler = {
-      switch $0.state {
-      case .disabled:
-        $0.configuration?.baseForegroundColor = .favorColor(.line2)
-      default:
-        $0.configuration?.baseForegroundColor = .favorColor(.icon)
-      }
-    }
-  }
-  
   private lazy var tapGesture: UITapGestureRecognizer = {
     let tg = UITapGestureRecognizer(
       target: self,
@@ -93,8 +69,10 @@ open class BaseBottomSheet: BaseViewController {
   
   // MARK: - PROPERTIES
   
-  public var containerViewHeight: Constraint?
-  public var containerViewBottomInset: Constraint?
+  private var containerViewHeight: Constraint?
+  private var containerViewBottomInset: Constraint?
+  private let maxHeight: CGFloat = 294
+  private let dismissibleHeight: CGFloat = 200
   
   // MARK: - LIFE CYCLE
   
@@ -123,7 +101,6 @@ open class BaseBottomSheet: BaseViewController {
     [
       self.titleLabel,
       self.cancelButton,
-      self.finishButton
     ].forEach {
       self.containerView.addSubview($0)
     }
@@ -136,10 +113,8 @@ open class BaseBottomSheet: BaseViewController {
     
     self.containerView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview()
-      self.containerViewBottomInset = make.bottom.equalToSuperview()
-        .inset(-Metric.bottomSheetHeight)
-        .constraint
-      self.containerViewHeight = make.height.equalTo(Metric.bottomSheetHeight).constraint
+      self.containerViewBottomInset = make.bottom.equalToSuperview().inset(-self.maxHeight).constraint
+      self.containerViewHeight = make.height.equalTo(self.maxHeight).constraint
     }
     
     self.titleLabel.snp.makeConstraints { make in
@@ -151,36 +126,31 @@ open class BaseBottomSheet: BaseViewController {
       make.leading.equalToSuperview().inset(20)
       make.centerY.equalTo(self.titleLabel)
     }
-    
-    self.finishButton.snp.makeConstraints { make in
-      make.trailing.equalToSuperview().inset(20)
-      make.centerY.equalTo(self.titleLabel)
-    }
   }
   
   // MARK: - SELECTORS
   
   @objc
-  open func dismissBottomSheet() {
+  private func dismissBottomSheet() {
     self.animateDismissView()
   }
   
   @objc
   private func handlePanGesture(_ gesture: UIPanGestureRecognizer) {
     let translation = gesture.translation(in: self.view)
-    let newHeight = Metric.bottomSheetHeight - translation.y
+    let newHeight = self.maxHeight - translation.y
     
     switch gesture.state {
     case .changed:
-      if newHeight < Metric.bottomSheetHeight {
+      if newHeight < self.maxHeight {
         self.containerViewHeight?.update(offset: newHeight)
         self.view.layoutIfNeeded()
       }
     case .ended:
-      if newHeight < Metric.dismissibleHeight {
+      if newHeight < self.dismissibleHeight {
         self.animateDismissView()
       } else {
-        self.animateContainerHeight(Metric.bottomSheetHeight)
+        self.animateContainerHeight(self.maxHeight)
       }
     default:
       break
@@ -189,7 +159,20 @@ open class BaseBottomSheet: BaseViewController {
   
   // MARK: - HELPERS
   
-  /// 창을 종료할 때, dismiss(animated:)가 아닌 이 메서드를 호출해야합니다.
+  func animatePresentContainerView() {
+    UIView.animate(withDuration: 0.3) {
+      self.containerViewBottomInset?.update(inset: 0)
+      self.view.layoutIfNeeded()
+    }
+  }
+  
+  func animateShowDimmedView() {
+    dimmedView.alpha = 0
+    UIView.animate(withDuration: 0.4) {
+      self.dimmedView.alpha = 0.6
+    }
+  }
+  
   public func animateDismissView() {
     UIView.animate(withDuration: 0.3) {
       self.containerViewBottomInset?.update(inset: -294)
@@ -204,21 +187,7 @@ open class BaseBottomSheet: BaseViewController {
     }
   }
   
-  private func animatePresentContainerView() {
-    UIView.animate(withDuration: 0.3) {
-      self.containerViewBottomInset?.update(inset: 0)
-      self.view.layoutIfNeeded()
-    }
-  }
-  
-  private func animateShowDimmedView() {
-    dimmedView.alpha = 0
-    UIView.animate(withDuration: 0.4) {
-      self.dimmedView.alpha = 0.6
-    }
-  }
-  
-  private func animateContainerHeight(_ height: CGFloat) {
+  func animateContainerHeight(_ height: CGFloat) {
     UIView.animate(withDuration: 0.4) {
       self.containerViewHeight?.update(offset: height)
       self.view.layoutIfNeeded()

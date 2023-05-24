@@ -58,14 +58,11 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   
   func bind(reactor: NewGiftFriendHeaderViewReactor) {
     // Action
-    if reactor.currentState.section == .friends {
-      self.searchBar.rx.text.orEmpty
-        .observe(on: MainScheduler.asyncInstance)
-        .asDriver(onErrorJustReturn: "")
-        .skip(2)
-        .drive(with: self) { $0.textFieldChanged?($1) }
-        .disposed(by: self.disposeBag)
-    }
+    self.searchBar.rx.text.orEmpty
+      .asDriver()
+      .skip(2)
+      .drive(with: self) { $0.textFieldChanged?($1) }
+      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.section }
@@ -107,7 +104,7 @@ extension NewGiftFriendHeaderView: BaseView {
   
   func setupConstraints() {
     self.titleLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview()
+      make.leading.equalToSuperview().inset(20)
       make.top.equalToSuperview().inset(32)
     }
     
@@ -118,7 +115,7 @@ extension NewGiftFriendHeaderView: BaseView {
     
     self.searchBar.snp.makeConstraints { make in
       make.top.equalTo(self.titleLabel.snp.bottom).offset(16)
-      make.leading.trailing.equalToSuperview()
+      make.leading.trailing.equalToSuperview().inset(20)
     }
   }
 }
