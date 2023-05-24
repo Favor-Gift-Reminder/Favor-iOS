@@ -37,11 +37,11 @@ public enum AnniversaryCategory: CaseIterable {
     case .couple:
       return .favorIcon(.couple)
     case .employ:
-      return .favorIcon(.employ)
+      return .favorIcon(.employed)
     case .gradu:
-      return .favorIcon(.gradu)
+      return .favorIcon(.graduate)
     case .house:
-      return .favorIcon(.house)
+      return .favorIcon(.housewarm)
     case .pass:
       return .favorIcon(.pass)
     }

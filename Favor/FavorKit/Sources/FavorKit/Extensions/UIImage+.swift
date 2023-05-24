@@ -30,8 +30,10 @@ extension UIImage {
     case hide
     case home
     case more
+    case gift
     case newGift
     case noti
+    case pick
     case pin
     case remove
     case search
