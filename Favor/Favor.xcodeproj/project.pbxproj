@@ -176,8 +176,12 @@
 		E5A18E7E2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */; };
 		E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5B182792973FDC600229C50 /* OnboardingSlide.swift */; };
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
+		E5CC8F722A1B14200016D8EB /* MemoBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CC8F712A1B14200016D8EB /* MemoBottomSheet.swift */; };
+		E5CC8F752A1B207F0016D8EB /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = E5CC8F742A1B207F0016D8EB /* Then */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
+		E5FFB91D2A1C637B0088A7A3 /* AnniversaryBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFB91C2A1C637B0088A7A3 /* AnniversaryBottomSheet.swift */; };
+		E5FFB9212A1C69320088A7A3 /* AnniversaryBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FFB9202A1C69320088A7A3 /* AnniversaryBottomSheetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -350,8 +354,11 @@
 		E59AC13929EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendFooterView.swift; sourceTree = "<group>"; };
 		E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendHeaderViewReactor.swift; sourceTree = "<group>"; };
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
+		E5CC8F712A1B14200016D8EB /* MemoBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoBottomSheet.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		E5FFB91C2A1C637B0088A7A3 /* AnniversaryBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryBottomSheet.swift; sourceTree = "<group>"; };
+		E5FFB9202A1C69320088A7A3 /* AnniversaryBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryBottomSheetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -360,6 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E59AB0982A17778700F0AC7D /* Then in Frameworks */,
+				E5CC8F752A1B207F0016D8EB /* Then in Frameworks */,
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
@@ -1194,9 +1202,28 @@
 		E5E423F229DC0D3400A6B48D /* BottomSheet */ = {
 			isa = PBXGroup;
 			children = (
-				2EF1586029E3CDF300D199DF /* FilterBottomSheet.swift */,
+				E5FFB91F2A1C68F00088A7A3 /* Views */,
+				E5FFB91E2A1C68BF0088A7A3 /* ViewControllers */,
 			);
 			name = BottomSheet;
+			sourceTree = "<group>";
+		};
+		E5FFB91E2A1C68BF0088A7A3 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2EF1586029E3CDF300D199DF /* FilterBottomSheet.swift */,
+				E5CC8F712A1B14200016D8EB /* MemoBottomSheet.swift */,
+				E5FFB91C2A1C637B0088A7A3 /* AnniversaryBottomSheet.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		E5FFB91F2A1C68F00088A7A3 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E5FFB9202A1C69320088A7A3 /* AnniversaryBottomSheetView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1234,6 +1261,7 @@
 				2EEFD5B629BB7B4300BA46BA /* FavorKit */,
 				2E3FA74229F37D8F003342CA /* OrderedCollections */,
 				E59AB0972A17778700F0AC7D /* Then */,
+				E5CC8F742A1B207F0016D8EB /* Then */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1299,6 +1327,7 @@
 				2EE3BA8529AB60B9004FDCC9 /* XCRemoteSwiftPackageReference "RxRealm" */,
 				2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */,
 				E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */,
+				E5CC8F732A1B207F0016D8EB /* XCRemoteSwiftPackageReference "Then" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1362,6 +1391,7 @@
 				2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */,
 				2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */,
 				2E87B8C92A0A501D00570386 /* HomeHeaderView.swift in Sources */,
+				E5FFB91D2A1C637B0088A7A3 /* AnniversaryBottomSheet.swift in Sources */,
 				2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */,
 				2EEC734A2A14F819007A29A5 /* AnniversaryListModifyingViewReactor.swift in Sources */,
 				2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */,
@@ -1379,6 +1409,7 @@
 				E524C19629EAA50C004CCC40 /* NewGiftFriendHeaderView.swift in Sources */,
 				E52F565D29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift in Sources */,
 				2E00561E29A8B131006CF302 /* ProfileSectionFooter.swift in Sources */,
+				E5CC8F722A1B14200016D8EB /* MemoBottomSheet.swift in Sources */,
 				2EC939E32998C63200C8C47F /* ProfileSetupHelperCell.swift in Sources */,
 				2EE1537B29E7E8790023FEA5 /* SelectedIndicatorBar.swift in Sources */,
 				2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */,
@@ -1440,6 +1471,8 @@
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* ProfileFriendCellReactor.swift in Sources */,
 				2E87B8E02A0C881A00570386 /* FriendListModifyingCell.swift in Sources */,
+				E5FFB9212A1C69320088A7A3 /* AnniversaryBottomSheetView.swift in Sources */,
+				2E87B8E02A0C881A00570386 /* EditFriendCell.swift in Sources */,
 				2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E56260EF298F4D4F00D14020 /* NewGiftVC.swift in Sources */,
@@ -1891,6 +1924,11 @@
 			repositoryURL = "https://github.com/devxoul/Then.git";
 			requirement = {
 				kind = upToNextMinorVersion;
+		E5CC8F732A1B207F0016D8EB /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then.git";
+			requirement = {
+				kind = upToNextMajorVersion;
 				minimumVersion = 3.0.0;
 			};
 		};
@@ -1978,6 +2016,9 @@
 		E59AB0972A17778700F0AC7D /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */;
+		E5CC8F742A1B207F0016D8EB /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5CC8F732A1B207F0016D8EB /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */

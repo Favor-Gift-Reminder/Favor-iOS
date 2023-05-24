@@ -12,10 +12,10 @@ import RxFlow
 
 enum AppStep: Step {
   case imagePickerIsRequired(PHPickerManager)
-
+  
   // MARK: - Root
   case rootIsRequired
-
+  
   // MARK: - Auth
   case authIsRequired
   case findPasswordIsRequired
@@ -35,15 +35,13 @@ enum AppStep: Step {
   
   // MARK: - Home
   case homeIsRequired
-  case filterIsRequired(SortType)
-  case filterIsComplete(SortType)
   
   // MARK: - Search
   case searchIsRequired
   case searchIsComplete
   case searchResultIsRequired(String)
   case searchResultIsComplete
-
+  
   // MARK: - Reminder
   case reminderIsRequired
   case newReminderIsRequired
@@ -57,7 +55,7 @@ enum AppStep: Step {
   case editMyPageIsRequired(User)
   case editMyPageIsComplete
   case settingIsRequired
-
+  
   // MARK: - FriendList
   case friendListIsRequired
   case editFriendIsRequired
@@ -65,7 +63,7 @@ enum AppStep: Step {
   
   // MARK: - FriendPage
   case friendManagementIsRequired(FriendManagementViewController.ViewControllerType)
-
+  
   // MARK: - AnniversaryList
   case anniversaryListIsRequired
   case anniversaryListIsComplete
@@ -81,4 +79,12 @@ enum AppStep: Step {
   case newGiftIsRequired
   case newGiftIsComplete
   case newGiftFriendIsRequired
+  
+  // MARK: - BottomSheet
+  case memoBottomSheetIsRequired(String)
+  case memoBottomSheetIsComplete(String)
+  case filterBottomSheetIsRequired(SortType)
+  case filterBottomSheetIsComplete(SortType)
+  case anniversaryBottomSheetIsRequired(AnniversaryCategory?)
+  case anniversaryBottomSheetIsComplete(AnniversaryCategory)  
 }
