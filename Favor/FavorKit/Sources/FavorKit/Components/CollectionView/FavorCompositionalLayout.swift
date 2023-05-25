@@ -7,6 +7,7 @@
 
 import UIKit
 
+// swiftlint:disable type_body_length
 public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout {
   
   // MARK: - Item
@@ -388,7 +389,7 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     }
   }
 
-  // MARK: - Decoration Item (Background & Badge)
+  // MARK: - Decoration Item (Background)
 
   /// Background와 Badge 등의
   public enum DecorationItem {
@@ -398,29 +399,12 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
     ///   - kind: BackgroundView의 `elementKind` (`String`)
     case background(kind: String)
 
-    /// Section을 꾸며주는 Badge
-    /// - Parameters:
-    ///   - width: Badge의 `WidthDimension`
-    ///   - height: Badge의 `HeightDimension`
-    case badge(
-      width: NSCollectionLayoutDimension,
-      height: NSCollectionLayoutDimension
-    )
-
     /// 각 enum값의 파라미터들에 더 쉽게 접근하기 위한 wrapper-property
     private var size: NSCollectionLayoutSize {
-      switch self {
-      case let .badge(width, height):
-        return NSCollectionLayoutSize(
-          widthDimension: width,
-          heightDimension: height
-        )
-      default:
-        return NSCollectionLayoutSize(
-          widthDimension: .absolute(.zero),
-          heightDimension: .absolute(.zero)
-        )
-      }
+      return NSCollectionLayoutSize(
+        widthDimension: .absolute(.zero),
+        heightDimension: .absolute(.zero)
+      )
     }
 
     /// 실제 사용될 Decoration Item을 만들어 반환해주는 Maker
@@ -429,17 +413,11 @@ public final class FavorCompositionalLayout: UICollectionViewCompositionalLayout
       switch self {
       case let .background(kind):
         return NSCollectionLayoutDecorationItem.background(elementKind: kind)
-      case let .badge(width, height):
-        return NSCollectionLayoutDecorationItem(
-          layoutSize: NSCollectionLayoutSize(
-            widthDimension: width,
-            heightDimension: height
-          )
-        )
       }
     }
   }
 }
+// swiftlint:enable type_body_length
 
 // MARK: - Privates
 
