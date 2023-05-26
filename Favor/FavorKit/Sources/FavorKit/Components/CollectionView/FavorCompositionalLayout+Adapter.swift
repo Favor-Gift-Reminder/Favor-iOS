@@ -43,8 +43,9 @@ open class Adapter<Section, Item> where Section: SectionModelType, Section: Adap
 
   public init(
     collectionView: UICollectionView,
-    dataSource: UICollectionViewDiffableDataSource<Section, Item>
+    dataSource: UICollectionViewDiffableDataSource<Section, Item>?
   ) {
+    guard let dataSource else { fatalError() }
     self.collectionView = collectionView
     self.dataSource = dataSource
   }

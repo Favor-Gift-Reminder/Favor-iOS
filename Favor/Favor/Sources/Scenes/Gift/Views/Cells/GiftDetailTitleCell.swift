@@ -1,0 +1,124 @@
+//
+//  GiftDetailTitleCell.swift
+//  Favor
+//
+//  Created by 이창준 on 2023/05/26.
+//
+
+import UIKit
+
+import FavorKit
+import Reusable
+import SnapKit
+
+final class GiftDetailTitleCell: BaseCollectionViewCell {
+
+  // MARK: - Properties
+
+  public var gift: Gift? {
+    didSet { self.updateGift() }
+  }
+
+  // MARK: - UI Components
+
+  private let titleLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.bold, size: 22)
+    label.text = "집들이"
+    return label
+  }()
+  
+  private let pinButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.background.backgroundColor = .clear
+    config.image = .favorIcon(.pin)
+    config.contentInsets = .zero
+
+    let button = UIButton(configuration: config)
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.baseForegroundColor = .favorColor(.line2)
+      case .selected:
+        button.configuration?.baseForegroundColor = .favorColor(.icon)
+      default:
+        break
+      }
+    }
+    return button
+  }()
+
+  private let titleStack: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 10
+    return stackView
+  }()
+
+  private let dateLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.regular, size: 14)
+    label.text = "2023. 1. 1"
+    return label
+  }()
+
+  private let stackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 16
+    stackView.alignment = .leading
+    return stackView
+  }()
+
+  // MARK: - Initializer
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Functions
+
+  private func updateGift() {
+    guard let gift = self.gift else { return }
+    self.titleLabel.text = gift.name
+    self.pinButton.isSelected = gift.isPinned
+    self.dateLabel.text = gift.date?.toShortenDateString()
+  }
+}
+
+// MARK: - UI Setups
+
+extension GiftDetailTitleCell: BaseView {
+  func setupStyles() { }
+
+  func setupLayouts() {
+    [
+      self.titleLabel,
+      self.pinButton
+    ].forEach {
+      self.titleStack.addArrangedSubview($0)
+    }
+
+    [
+      self.titleStack,
+      self.dateLabel
+    ].forEach {
+      self.stackView.addArrangedSubview($0)
+    }
+
+    self.addSubview(self.stackView)
+  }
+
+  func setupConstraints() {
+    self.stackView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+  }
+}

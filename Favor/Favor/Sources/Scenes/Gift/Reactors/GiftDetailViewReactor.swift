@@ -11,6 +11,7 @@ import RxCocoa
 import RxFlow
 
 final class GiftDetailViewReactor: Reactor, Stepper {
+  typealias Item = GiftDetailSectionItem
 
   // MARK: - Properties
 
@@ -18,7 +19,9 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
 
   enum Action {
-
+    case editButtonDidTap
+    case deleteButtonDidTap
+    case shareButtonDidTap
   }
 
   enum Mutation {
@@ -27,6 +30,8 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
   struct State {
     var gift: Gift
+    var items: [[Item]] = []
+    var imageItems: [Item] = []
   }
 
   // MARK: - Initializer
@@ -39,4 +44,18 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
   // MARK: - Functions
 
+  func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+
+      if state.gift.photoList.toArray().isEmpty {
+        newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
+      } else {
+        newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
+      }
+      newState.items = [newState.imageItems, [.title], [.tags], [.memo]]
+
+      return newState
+    }
+  }
 }

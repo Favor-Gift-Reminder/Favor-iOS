@@ -13,7 +13,7 @@ public enum FavorSmallButtonType {
   case gray(String)
   case grayWithGift(String)
   case grayWithUser(String, image: UIImage?)
-  case grayWithEmotion(UIImage)
+  case grayWithEmotion(UIImage?)
   case hashtag(String)
   
   public var configuration: UIButton.Configuration {

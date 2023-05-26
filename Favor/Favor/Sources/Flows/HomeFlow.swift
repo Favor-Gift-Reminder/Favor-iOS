@@ -36,6 +36,9 @@ final class HomeFlow: Flow {
     case .reminderIsRequired:
       return self.navigateToReminder()
 
+    case .giftDetailIsRequired(let gift):
+      return self.navigateToGift(with: gift)
+
     default: return .none
     }
   }
@@ -84,6 +87,15 @@ private extension HomeFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: filterBottomSheet,
       withNextStepper: filterBottomSheet
+    ))
+  }
+
+  func navigateToGift(with gift: Gift) -> FlowContributors {
+    let giftFlow = GiftFlow(rootViewController: self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: giftFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.giftDetailIsRequired(gift))
     ))
   }
   

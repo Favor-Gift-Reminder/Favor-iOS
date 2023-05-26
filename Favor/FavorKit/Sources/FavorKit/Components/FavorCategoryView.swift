@@ -181,7 +181,7 @@ private extension FavorCategoryView {
         $0.configuration = FavorSmallButtonType.gray(title).configuration
       case .selected:
         let image = selectedImage?.withTintColor(.favorColor(.white))
-        $0.configuration = FavorSmallButtonType.darkWithIcon(
+        $0.configuration = FavorSmallButtonType.dark(
           title,
           image: image
         ).configuration

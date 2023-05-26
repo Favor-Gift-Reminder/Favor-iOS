@@ -48,7 +48,6 @@ private extension GiftFlow {
     let giftDetailVC = GiftDetailViewController()
     let giftDetailReactor = GiftDetailViewReactor(gift: gift)
     giftDetailVC.reactor = giftDetailReactor
-    giftDetailVC.title = "선물"
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(giftDetailVC, animated: true)
