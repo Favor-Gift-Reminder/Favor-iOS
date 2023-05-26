@@ -8,11 +8,9 @@
 import UIKit
 
 import FavorKit
-import Reusable
-import RxCocoa
 import SnapKit
 
-final class HomeTimelineCell: BaseCollectionViewCell, Reusable {
+final class HomeTimelineCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 
@@ -53,12 +51,14 @@ final class HomeTimelineCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Functions
 
+  public func bind(with gift: Gift) {
+    // Image
+    self.pinnedIconView.isHidden = !gift.isPinned
+  }
 }
 
 extension HomeTimelineCell: BaseView {
-  func setupStyles() {
-    //
-  }
+  func setupStyles() { }
   
   func setupLayouts() {
     [

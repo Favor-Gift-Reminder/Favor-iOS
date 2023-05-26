@@ -12,7 +12,6 @@ import FavorKit
 import ReactorKit
 import Reusable
 import RxCocoa
-import RxDataSources
 import SnapKit
 
 final class HomeViewController: BaseViewController, View {
@@ -44,57 +43,7 @@ final class HomeViewController: BaseViewController, View {
     return monitor
   }()
 
-  private lazy var dataSource: HomeDataSource = {
-    let dataSource = HomeDataSource(
-      collectionView: self.collectionView,
-      cellProvider: { [weak self] collectionView, indexPath, item in
-        switch item {
-        case .upcoming(let upcomingData):
-          switch upcomingData {
-          case let .empty(image, title):
-            let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
-            cell.bindEmptyData(image: image, text: title)
-            return cell
-          case let .reminder(reminder):
-            let cell = collectionView.dequeueReusableCell(for: indexPath) as HomeUpcomingCell
-            return cell
-          }
-        case .timeline(let giftData):
-          switch giftData {
-          case let .empty(image, title):
-            let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
-            cell.bindEmptyData(image: image, text: title)
-            return cell
-          case let .gift(gift):
-            let cell = collectionView.dequeueReusableCell(for: indexPath) as HomeTimelineCell
-            return cell
-          }
-        }
-      })
-    dataSource.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
-      guard let self = self else { return UICollectionReusableView() }
-      switch kind {
-      case UICollectionView.elementKindSectionHeader:
-        let header = collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          for: indexPath
-        ) as HomeHeaderView
-        header.delegate = self
-        let currentSnapshot = self.dataSource.snapshot()
-        header.section = currentSnapshot.sectionIdentifiers[indexPath.section]
-        return header
-      case UICollectionView.elementKindSectionFooter:
-        let footer = collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          for: indexPath
-        ) as FavorLoadingFooterView
-        return footer
-      default:
-        return UICollectionReusableView()
-      }
-    }
-    return dataSource
-  }()
+  private var dataSource: HomeDataSource?
   
   // MARK: - UI Components
 
@@ -111,19 +60,6 @@ final class HomeViewController: BaseViewController, View {
       collectionViewLayout: UICollectionViewLayout()
     )
 
-    // register
-    collectionView.register(cellType: FavorEmptyCell.self)
-    collectionView.register(cellType: HomeUpcomingCell.self)
-    collectionView.register(cellType: HomeTimelineCell.self)
-    collectionView.register(
-      supplementaryViewType: HomeHeaderView.self,
-      ofKind: UICollectionView.elementKindSectionHeader
-    )
-    collectionView.register(
-      supplementaryViewType: FavorLoadingFooterView.self,
-      ofKind: UICollectionView.elementKindSectionFooter
-    )
-
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
@@ -136,6 +72,7 @@ final class HomeViewController: BaseViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    self.setupDataSource()
     self.adapter.adapt()
   }
 
@@ -183,7 +120,8 @@ final class HomeViewController: BaseViewController, View {
 
     self.collectionView.rx.itemSelected
       .map { indexPath in
-        let currentSnapshot = self.dataSource.snapshot()
+        guard let dataSource = self.dataSource else { fatalError() }
+        let currentSnapshot = dataSource.snapshot()
         let sections = currentSnapshot.sectionIdentifiers
         let items = currentSnapshot.itemIdentifiers(inSection: sections[indexPath.section])
         let selectedItem = items[indexPath.item]
@@ -224,10 +162,17 @@ final class HomeViewController: BaseViewController, View {
     .disposed(by: self.disposeBag)
     
     // State
-    reactor.state.map { (sections: $0.sections, items: $0.items) }
+    let sectonData = reactor.state
+      .flatMap { state -> Observable<(sections: [HomeSection], items: [[HomeSectionItem]])> in
+        return .just((sections: state.sections, items: state.items))
+      }
+    let viewDidLoad = self.rx.viewDidLoad
+    Observable.combineLatest(sectonData, viewDidLoad)
       .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, sectionData in
+      .drive(with: self, onNext: { owner, data in
+        let sectionData = data.0
+        guard let dataSource = owner.dataSource else { return }
         var snapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeSectionItem>()
         snapshot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, item in
@@ -235,7 +180,7 @@ final class HomeViewController: BaseViewController, View {
         }
         
         DispatchQueue.main.async {
-          owner.dataSource.apply(snapshot)
+          dataSource.apply(snapshot)
         }
       })
       .disposed(by: self.disposeBag)
@@ -252,6 +197,93 @@ private extension HomeViewController {
   func setupNavigationBar() {
     self.navigationItem.setRightBarButton(self.searchButton, animated: false)
     self.navigationController?.setNavigationBarHidden(false, animated: false)
+  }
+
+  func setupDataSource() {
+    let emptyCellRegistrationg = UICollectionView.CellRegistration
+      <FavorEmptyCell, HomeSectionItem> { [weak self] cell, _, item in
+        guard let self = self else { return }
+        if case let HomeSectionItem.upcoming(.empty(image, title)) = item {
+          cell.bindEmptyData(image: image, text: title)
+        } else if case let HomeSectionItem.timeline(.empty(image, title)) = item {
+          cell.bindEmptyData(image: image, text: title)
+        }
+    }
+
+    let upcomingCellRegistration = UICollectionView.CellRegistration
+      <HomeUpcomingCell, HomeSectionItem> { [weak self] cell, _, item in
+        guard
+          let self = self,
+          case let HomeSectionItem.upcoming(.reminder(reminder)) = item
+        else { return }
+        cell.bind(with: reminder)
+    }
+
+    let timelineCellRegistration = UICollectionView.CellRegistration
+      <HomeTimelineCell, HomeSectionItem> { [weak self] cell, indexPath, item in
+        guard
+          let self = self,
+          case let HomeSectionItem.timeline(.gift(gift)) = item
+        else { return }
+        cell.bind(with: gift)
+    }
+
+    self.dataSource = HomeDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { collectionView, indexPath, item in
+        switch item {
+        case .upcoming(let upcomingData):
+          switch upcomingData {
+          case .empty:
+            return collectionView.dequeueConfiguredReusableCell(
+              using: emptyCellRegistrationg, for: indexPath, item: item)
+          case .reminder:
+            return collectionView.dequeueConfiguredReusableCell(
+              using: upcomingCellRegistration, for: indexPath, item: item)
+          }
+        case .timeline(let giftData):
+          switch giftData {
+          case .empty:
+            return collectionView.dequeueConfiguredReusableCell(
+              using: emptyCellRegistrationg, for: indexPath, item: item)
+          case .gift:
+            return collectionView.dequeueConfiguredReusableCell(
+              using: timelineCellRegistration, for: indexPath, item: item)
+          }
+        }
+      })
+
+    let headerRegistration = UICollectionView.SupplementaryRegistration<HomeHeaderView>(
+      elementKind: UICollectionView.elementKindSectionHeader
+    ) { [weak self] header, _, indexPath in
+      guard
+        let self = self,
+        let dataSource = self.dataSource
+      else { return }
+      header.delegate = self
+      let currentSnapshot = dataSource.snapshot()
+      header.section = currentSnapshot.sectionIdentifiers[indexPath.section]
+    }
+
+    let footerRegistration = UICollectionView.SupplementaryRegistration<FavorLoadingFooterView>(
+      elementKind: UICollectionView.elementKindSectionFooter
+    ) { [weak self] footer, elementKind, indexPath in
+      guard let self = self else { return }
+    }
+
+    self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+      guard let self = self else { return UICollectionReusableView() }
+      switch kind {
+      case UICollectionView.elementKindSectionHeader:
+        return collectionView.dequeueConfiguredReusableSupplementary(
+          using: headerRegistration, for: indexPath)
+      case UICollectionView.elementKindSectionFooter:
+        return collectionView.dequeueConfiguredReusableSupplementary(
+          using: footerRegistration, for: indexPath)
+      default:
+        return UICollectionReusableView()
+      }
+    }
   }
 }
 

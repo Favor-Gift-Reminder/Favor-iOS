@@ -8,18 +8,15 @@
 import UIKit
 
 import FavorKit
-import Reusable
 import SnapKit
 
-final class HomeUpcomingCell: BaseCardCell, Reusable {
+final class HomeUpcomingCell: BaseCardCell {
   
   // MARK: - Properties
   
   // MARK: - UI Components
 
   private let toggleSwitch = FavorSwitch()
-
-  // MARK: - Functions
 
   // MARK: - UI Setup
 
@@ -38,5 +35,13 @@ final class HomeUpcomingCell: BaseCardCell, Reusable {
       make.width.equalTo(40)
       make.height.equalTo(24)
     }
+  }
+
+  // MARK: - Functions
+
+  public func bind(with reminder: Reminder) {
+    self.cardCellType = .reminder
+    self.title = reminder.title
+    self.subtitle = reminder.date.toDday()
   }
 }

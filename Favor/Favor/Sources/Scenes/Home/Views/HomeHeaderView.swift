@@ -8,7 +8,6 @@
 import UIKit
 
 import FavorKit
-import Reusable
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -18,7 +17,7 @@ public protocol HomeHeaderViewDelegate: AnyObject {
   func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType)
 }
 
-public class HomeHeaderView: UICollectionReusableView, Reusable {
+public class HomeHeaderView: UICollectionReusableView {
 
   // MARK: - Constants
 
