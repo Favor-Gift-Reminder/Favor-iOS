@@ -23,7 +23,7 @@ public final class FavorSmallButton: UIButton {
   
   // MARK: - INITIALIZER
   
-  public init(with smallFavorButtonType: FavorSmallButtonType, title: String = "") {
+  public init(with smallFavorButtonType: FavorSmallButtonType) {
     self.smallFavorButtonType = smallFavorButtonType
     super.init(frame: .zero)
     self.setupStyles()
