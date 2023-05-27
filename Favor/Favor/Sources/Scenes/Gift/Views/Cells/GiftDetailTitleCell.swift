@@ -9,11 +9,19 @@ import UIKit
 
 import FavorKit
 import Reusable
+import RxCocoa
+import RxSwift
 import SnapKit
+
+public protocol GiftDetailTitleCellDelegate: AnyObject {
+  func pinButtonDidTap()
+}
 
 final class GiftDetailTitleCell: BaseCollectionViewCell {
 
   // MARK: - Properties
+
+  public weak var delegate: GiftDetailTitleCellDelegate?
 
   public var gift: Gift? {
     didSet { self.updateGift() }
@@ -77,10 +85,22 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    self.bind()
   }
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Bind
+
+  func bind() {
+    self.pinButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.pinButtonDidTap()
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions

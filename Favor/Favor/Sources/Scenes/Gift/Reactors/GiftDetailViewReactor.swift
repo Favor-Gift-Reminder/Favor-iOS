@@ -22,6 +22,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case deleteButtonDidTap
     case shareButtonDidTap
+    case isPinnedButtonDidTap
   }
 
   enum Mutation {
@@ -43,6 +44,23 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   }
 
   // MARK: - Functions
+
+  func mutate(action: Action) -> Observable<Mutation> {
+    switch action {
+    case .editButtonDidTap:
+      return .empty()
+
+    case .deleteButtonDidTap:
+      return .empty()
+
+    case .shareButtonDidTap:
+      return .empty()
+
+    case .isPinnedButtonDidTap:
+      print("Pinned button did tap.")
+      return .empty()
+    }
+  }
 
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in

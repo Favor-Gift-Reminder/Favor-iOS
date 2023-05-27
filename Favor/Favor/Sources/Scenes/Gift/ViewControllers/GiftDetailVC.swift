@@ -167,6 +167,7 @@ private extension GiftDetailViewController {
         let self = self,
         let reactor = self.reactor
       else { return }
+      cell.delegate = self
       cell.gift = reactor.currentState.gift
     }
 
@@ -232,5 +233,14 @@ private extension GiftDetailViewController {
         return UICollectionReusableView()
       }
     }
+  }
+}
+
+// MARK: - GiftDetailTitleCell
+
+extension GiftDetailViewController: GiftDetailTitleCellDelegate {
+  func pinButtonDidTap() {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.isPinnedButtonDidTap)
   }
 }
