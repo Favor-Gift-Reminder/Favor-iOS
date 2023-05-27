@@ -14,6 +14,12 @@ import SnapKit
 
 final class GiftDetailMemoCell: BaseCollectionViewCell {
 
+  // MARK: - Properties
+
+  public var gift: Gift? {
+    didSet { self.updateGift() }
+  }
+
   // MARK: - UI Components
 
   private let memoTextView: RSKPlaceholderTextView = {
@@ -47,6 +53,14 @@ final class GiftDetailMemoCell: BaseCollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: - Functions
+
+  private func updateGift() {
+    guard let gift = self.gift else { return }
+    self.memoTextView.text = "Lorem reprehenderit exercitation duis. Eiusmod mollit proident anim labore eu quis. Amet dolor adipisicing et do ullamco dolore nisi non ad occaecat ex ex. Culpa exercitation laborum ut duis reprehenderit veniam laboris culpa amet eiusmod labore sint dolore exercitation in. Eiusmod reprehenderit occaecat fugiat labore tempor in excepteur ea deserunt adipisicing aliquip amet nulla eu dolor. Sunt dolore aute ipsum est ex aute sint id irure deserunt in adipisicing. Sit tempor anim laboris quis sint magna consectetur aliqua dolore commodo. Culpa ex reprehenderit deserunt voluptate officia dolor adipisicing proident. Lorem reprehenderit exercitation duis. Eiusmod mollit proident anim labore eu quis. Amet dolor adipisicing et do ullamco dolore nisi non ad occaecat ex ex. Culpa exercitation laborum ut duis reprehenderit veniam laboris culpa amet eiusmod labore sint dolore exercitation in. Eiusmod reprehenderit occaecat fugiat labore tempor in excepteur ea deserunt adipisicing aliquip amet nulla eu dolor. Sunt dolore aute ipsum est ex aute sint id irure deserunt in adipisicing. Sit tempor anim laboris quis sint magna consectetur aliqua dolore commodo. Culpa ex reprehenderit deserunt voluptate officia dolor adipisicing proident."
+    //gift.memo
+  }
 }
 
 // MARK: - UI Setups
@@ -61,7 +75,7 @@ extension GiftDetailMemoCell: BaseView {
   func setupConstraints() {
     self.memoTextView.snp.makeConstraints { make in
       make.top.directionalHorizontalEdges.equalToSuperview()
-      make.bottom.greaterThanOrEqualToSuperview()
+      make.bottom.equalToSuperview()
     }
   }
 }

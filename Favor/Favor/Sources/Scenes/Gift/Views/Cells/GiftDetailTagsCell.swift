@@ -50,8 +50,6 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
 
   private func updateGift() {
     guard let gift = self.gift else { return }
-    let friends = gift.friendList.toArray()
-    guard let firstFriend = friends.first else { return }
 
 //    self.emotionButton.configuration?.image = gift.emotion
     self.categoryButton.configuration?.updateAttributedTitle(
@@ -62,6 +60,8 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       gift.isGiven ? "준 선물" : "받은 선물",
       font: .favorFont(.regular, size: 12)
     )
+    let friends = gift.friendList.toArray()
+    guard let firstFriend = friends.first else { return }
     let friendsTitle = friends.count == 1 ? firstFriend.name : "\(firstFriend.name) 외 \(friends.count)"
     self.relatedFriendsButton.configuration?.updateAttributedTitle(
       friendsTitle,

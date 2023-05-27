@@ -5,7 +5,6 @@
 //  Created by 이창준 on 2022/12/30.
 //
 
-import Network
 import UIKit
 
 import FavorKit
@@ -20,28 +19,6 @@ final class HomeViewController: BaseViewController, View {
   // MARK: - Constants
   
   // MARK: - Properties
-
-  private var currentNetworkStatus: NWPath.Status = .unsatisfied
-
-  private lazy var networkMonitor: NWPathMonitor = {
-    let monitor = NWPathMonitor()
-    monitor.pathUpdateHandler = { path in
-      print(path.status)
-//      switch path.status {
-//      case .satisfied:
-//        print("🌐 connected")
-//        guard
-//          self.currentNetworkStatus != .satisfied,
-//          let reactor = self.reactor
-//        else { return }
-//        reactor.action.onNext(.viewNeedsLoaded)
-//        self.currentNetworkStatus = .satisfied
-//      default:
-//        print("🌐 Disconnected")
-//      }
-    }
-    return monitor
-  }()
 
   private var dataSource: HomeDataSource?
   
@@ -80,14 +57,6 @@ final class HomeViewController: BaseViewController, View {
     super.viewWillAppear(animated)
 
     self.setupNavigationBar()
-
-    self.networkMonitor.start(queue: DispatchQueue(label: "NetworkMonitor"))
-  }
-
-  override func viewDidDisappear(_ animated: Bool) {
-    super.viewDidDisappear(animated)
-
-    self.networkMonitor.cancel()
   }
   
   // MARK: - Setup
@@ -168,7 +137,6 @@ final class HomeViewController: BaseViewController, View {
       }
     let viewDidLoad = self.rx.viewDidLoad
     Observable.combineLatest(sectonData, viewDidLoad)
-      .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, data in
         let sectionData = data.0
@@ -267,12 +235,12 @@ private extension HomeViewController {
 
     let footerRegistration = UICollectionView.SupplementaryRegistration<FavorLoadingFooterView>(
       elementKind: UICollectionView.elementKindSectionFooter
-    ) { [weak self] footer, elementKind, indexPath in
+    ) { [weak self] footer, _, indexPath in
       guard let self = self else { return }
     }
 
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
-      guard let self = self else { return UICollectionReusableView() }
+      guard self != nil else { return UICollectionReusableView() }
       switch kind {
       case UICollectionView.elementKindSectionHeader:
         return collectionView.dequeueConfiguredReusableSupplementary(

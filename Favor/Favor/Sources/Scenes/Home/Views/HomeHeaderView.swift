@@ -100,7 +100,6 @@ public class HomeHeaderView: UICollectionReusableView {
   public func bind() {
     // Action
     self.rightButton.rx.tap
-      .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.delegate?.rightButtonDidTap(from: owner, for: owner.section)

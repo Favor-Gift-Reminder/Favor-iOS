@@ -39,7 +39,10 @@ public final class GiftDetailImageCell: BaseCollectionViewCell {
 
 extension GiftDetailImageCell: BaseView {
   public func setupStyles() {
-    let colors: [UIColor] = [.systemRed, .systemBlue, .systemMint, .systemPink, .systemRed]
+    let colors: [UIColor] = [
+      .systemRed, .systemBlue, .systemMint, .systemPink, .systemRed, .systemPink, .systemYellow,
+      .systemBrown, .systemPurple, .systemIndigo, .systemOrange, .favorColor(.main)
+    ]
     self.backgroundColor = colors.randomElement()
   }
 

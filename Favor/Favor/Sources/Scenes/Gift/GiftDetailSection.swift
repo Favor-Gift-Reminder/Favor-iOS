@@ -57,7 +57,12 @@ extension GiftDetailSectionItem {
 
 extension GiftDetailSection: Adaptive {
   public var item: FavorCompositionalLayout.Item {
-    return .full()
+    switch self {
+    case .image, .title, .tags:
+      return .full()
+    case .memo:
+      return .listRow(height: .estimated(60))
+    }
   }
 
   public var group: FavorCompositionalLayout.Group {
@@ -76,7 +81,10 @@ extension GiftDetailSection: Adaptive {
   public var section: FavorCompositionalLayout.Section {
     switch self {
     case .image:
-      return .base(orthogonalScrolling: .groupPaging)
+      return .base(
+        orthogonalScrolling: .groupPaging,
+        boundaryItems: [.footer(height: .absolute(0.01))]
+      )
     case .title, .tags:
       return .base(
         contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20)
