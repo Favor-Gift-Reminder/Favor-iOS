@@ -35,8 +35,6 @@ enum AppStep: Step {
   
   // MARK: - Home
   case homeIsRequired
-  case filterIsRequired(SortType)
-  case filterIsComplete(SortType)
   
   // MARK: - Search
   case searchIsRequired
@@ -84,4 +82,12 @@ enum AppStep: Step {
 
   // MARK: - Gift
   case giftDetailIsRequired(Gift)
+
+  // MARK: - BottomSheet
+  case memoBottomSheetIsRequired(String)
+  case memoBottomSheetIsComplete(String)
+  case filterBottomSheetIsRequired(SortType)
+  case filterBottomSheetIsComplete(SortType)
+  case anniversaryBottomSheetIsRequired(AnniversaryCategory?)
+  case anniversaryBottomSheetIsComplete(AnniversaryCategory)
 }
