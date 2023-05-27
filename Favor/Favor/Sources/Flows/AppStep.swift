@@ -81,4 +81,8 @@ enum AppStep: Step {
   case newGiftIsRequired
   case newGiftIsComplete
   case newGiftFriendIsRequired
+  
+  // MARK: - Popup
+  case alertPopupIsRequired(AlertPopup.PopupType)
+  case alertPopupIsComplete(isConfirmed: Bool)
 }
