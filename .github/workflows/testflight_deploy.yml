@@ -41,8 +41,8 @@ jobs:
           API_SECRET: ${{ secrets.API_SECRET }}
           TERM_SECRET: ${{ secrets.TERM_SECRET }}
         run: |
-          echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}NetworkKit/Sources/${{ env.PROJECT }}NetworkKit/API-Info.plist
-          echo $TERM_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/Term-Info.plist
+          echo $API_SECRET | base64 -D -o ${{ env.XC_SCHEME }}/${{ env.PROJECT }}NetworkKit/Sources/${{ env.PROJECT }}NetworkKit/API-Info.plist
+          echo $TERM_SECRET | base64 -D -o ${{ env.XC_SCHEME }}/${{ env.PROJECT }}/Term-Info.plist
           ls -al ${{ env.PROJECT }}
       - name: Configure Keychain 
         # 키체인 초기화 - 임시 키체인 생성
