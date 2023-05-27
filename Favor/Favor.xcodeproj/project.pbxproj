@@ -178,6 +178,9 @@
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
+		E5FB769C2A21C13900BF3197 /* BasePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FB769B2A21C13900BF3197 /* BasePopup.swift */; };
+		E5FB769E2A21C22700BF3197 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FB769D2A21C22700BF3197 /* AlertPopup.swift */; };
+		E5FB76A02A21C76200BF3197 /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -352,6 +355,9 @@
 		E5B182792973FDC600229C50 /* OnboardingSlide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingSlide.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		E5FB769B2A21C13900BF3197 /* BasePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePopup.swift; sourceTree = "<group>"; };
+		E5FB769D2A21C22700BF3197 /* AlertPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
+		E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -769,6 +775,7 @@
 				2EE07E9F296C5F1D00048A3C /* Search */,
 				2E634E282A17566B00DD51ED /* FriendList */,
 				E593C8232A176AF800711C0F /* Friend */,
+				E5FB769A2A21C0FE00BF3197 /* Popup */,
 				2EE07EBD296E8D2300048A3C /* Profile */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				2EE07EAA296E7BC100048A3C /* Reminder */,
@@ -1196,6 +1203,16 @@
 			name = BottomSheet;
 			sourceTree = "<group>";
 		};
+		E5FB769A2A21C0FE00BF3197 /* Popup */ = {
+			isa = PBXGroup;
+			children = (
+				E5FB769B2A21C13900BF3197 /* BasePopup.swift */,
+				E5FB769D2A21C22700BF3197 /* AlertPopup.swift */,
+				E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */,
+			);
+			path = Popup;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1468,6 +1485,7 @@
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */,
+				E5FB769C2A21C13900BF3197 /* BasePopup.swift in Sources */,
 				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2E9B4CC22A12841C00C7E31E /* AnniversaryListVC.swift in Sources */,
@@ -1483,6 +1501,8 @@
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
 				2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */,
 				2E95E4B329E8F01C00A46C38 /* SearchGiftResultCellReactor.swift in Sources */,
+				E5FB769E2A21C22700BF3197 /* AlertPopup.swift in Sources */,
+				E5FB76A02A21C76200BF3197 /* ReminderDatePopup.swift in Sources */,
 				2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */,
 				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
 				2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */,
