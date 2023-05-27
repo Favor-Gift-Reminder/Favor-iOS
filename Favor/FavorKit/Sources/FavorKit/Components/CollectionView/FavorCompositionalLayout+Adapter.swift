@@ -9,30 +9,6 @@ import UIKit
 
 open class Adapter<Section, Item> where Section: SectionModelType, Section: Adaptive, Item: SectionModelItem {
 
-  // MARK: - Configuration
-
-  public struct Configuration {
-    public var scrollDirection: UICollectionView.ScrollDirection
-    public var sectionSpacing: CGFloat = .zero
-    public var header: FavorCompositionalLayout.BoundaryItem?
-    public var footer: FavorCompositionalLayout.BoundaryItem?
-    public var background: [ElementKind: DecorationItemClass]?
-
-    public init(
-      scrollDirection: UICollectionView.ScrollDirection,
-      sectionSpacing: CGFloat = .zero,
-      header: FavorCompositionalLayout.BoundaryItem? = nil,
-      footer: FavorCompositionalLayout.BoundaryItem? = nil,
-      background: [ElementKind: DecorationItemClass]? = nil
-    ) {
-      self.scrollDirection = scrollDirection
-      self.sectionSpacing = sectionSpacing
-      self.header = header
-      self.footer = footer
-      self.background = background
-    }
-  }
-
   // MARK: - Properties
 
   private var collectionView: UICollectionView
@@ -82,6 +58,10 @@ open class Adapter<Section, Item> where Section: SectionModelType, Section: Adap
 
         // Section
         let section = sectionType.section.make(with: group)
+        if
+          let (sectionIdentifier, handler) = configuration.visibleItemsInvalidationHandler,
+          sectionType == sectionIdentifier
+        { section.visibleItemsInvalidationHandler = handler }
 
         return section
       },
@@ -93,5 +73,35 @@ open class Adapter<Section, Item> where Section: SectionModelType, Section: Adap
     }
 
     return layout
+  }
+}
+
+// MARK: - Configuration
+
+extension Adapter {
+  public struct Configuration {
+    public var scrollDirection: UICollectionView.ScrollDirection
+    public var sectionSpacing: CGFloat = .zero
+    public var header: FavorCompositionalLayout.BoundaryItem?
+    public var footer: FavorCompositionalLayout.BoundaryItem?
+    public var background: [ElementKind: DecorationItemClass]?
+
+    public init(
+      scrollDirection: UICollectionView.ScrollDirection,
+      sectionSpacing: CGFloat = .zero,
+      header: FavorCompositionalLayout.BoundaryItem? = nil,
+      footer: FavorCompositionalLayout.BoundaryItem? = nil,
+      background: [ElementKind: DecorationItemClass]? = nil
+    ) {
+      self.scrollDirection = scrollDirection
+      self.sectionSpacing = sectionSpacing
+      self.header = header
+      self.footer = footer
+      self.background = background
+    }
+
+    public var visibleItemsInvalidationHandler: (
+      to: Section,
+      ([NSCollectionLayoutVisibleItem], CGPoint, NSCollectionLayoutEnvironment) -> Void)?
   }
 }
