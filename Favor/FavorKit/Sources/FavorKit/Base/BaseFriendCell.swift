@@ -142,4 +142,3 @@ open class BaseFriendCell: BaseCollectionViewCell {
     }
   }
 }
-
