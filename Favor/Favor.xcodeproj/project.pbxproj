@@ -39,6 +39,8 @@
 		2E6C90B529A607FA00AF963A /* ProfileFriendCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */; };
 		2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */; };
 		2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */; };
+		2E6E28C32A23B32000E25DB6 /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6E28C22A23B32000E25DB6 /* ImageViewer */; };
+		2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28C42A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift */; };
 		2E7065482A15FA6F007B1C94 /* AnniversaryManagementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7065472A15FA6F007B1C94 /* AnniversaryManagementVC.swift */; };
 		2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7065492A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift */; };
 		2E7065502A160AF2007B1C94 /* AnniversaryManagementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E70654F2A160AF2007B1C94 /* AnniversaryManagementSection.swift */; };
@@ -226,6 +228,8 @@
 		2E6C90B429A607FA00AF963A /* ProfileFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFriendCellReactor.swift; sourceTree = "<group>"; };
 		2E6C90BB29A6239600AF963A /* EditMyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageVC.swift; sourceTree = "<group>"; };
 		2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageViewReactor.swift; sourceTree = "<group>"; };
+		2E6E28C12A23B2A500E25DB6 /* ImageViewer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ImageViewer; path = ../../../../Downloads/ImageViewer; sourceTree = "<group>"; };
+		2E6E28C42A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDetailPhotoHeaderView.swift; sourceTree = "<group>"; };
 		2E7065472A15FA6F007B1C94 /* AnniversaryManagementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryManagementVC.swift; sourceTree = "<group>"; };
 		2E7065492A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryManagementViewReactor.swift; sourceTree = "<group>"; };
 		2E70654F2A160AF2007B1C94 /* AnniversaryManagementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryManagementSection.swift; sourceTree = "<group>"; };
@@ -379,6 +383,7 @@
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
+				2E6E28C32A23B32000E25DB6 /* ImageViewer in Frameworks */,
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
@@ -647,6 +652,7 @@
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
+				2E6E28C12A23B2A500E25DB6 /* ImageViewer */,
 				2EEFD5B529BB7B3900BA46BA /* FavorKit */,
 				2E730C6829BA311C003668D9 /* FavorNetworkKit */,
 				E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */,
@@ -932,6 +938,7 @@
 			children = (
 				2E1C81AE2A1EE7B600D4128E /* Cells */,
 				2E1C81B32A1F008100D4128E /* GiftDetailPageFooterView.swift */,
+				2E6E28C42A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1295,6 +1302,7 @@
 				2EEFD5B629BB7B4300BA46BA /* FavorKit */,
 				2E3FA74229F37D8F003342CA /* OrderedCollections */,
 				E59AB0972A17778700F0AC7D /* Then */,
+				2E6E28C22A23B32000E25DB6 /* ImageViewer */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1478,6 +1486,7 @@
 				2EA3849C298D7C680081499C /* HomeUpcomingCell.swift in Sources */,
 				2EC939E72998C6D100C8C47F /* ProfileAnniversaryCell.swift in Sources */,
 				E5A18E7E2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift in Sources */,
+				2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */,
 				2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */,
 				2ED326AD29B0DB9D001963D0 /* TermSection.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */,
@@ -1999,6 +2008,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */;
 			productName = RxDataSources;
+		};
+		2E6E28C22A23B32000E25DB6 /* ImageViewer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageViewer;
 		};
 		2E730C6929BA31F4003668D9 /* FavorNetworkKit */ = {
 			isa = XCSwiftPackageProductDependency;
