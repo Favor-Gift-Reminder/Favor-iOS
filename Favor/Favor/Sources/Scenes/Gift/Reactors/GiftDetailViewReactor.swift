@@ -22,7 +22,9 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case deleteButtonDidTap
     case shareButtonDidTap
+    case giftPhotoDidSelected(Int)
     case isPinnedButtonDidTap
+    case doNothing
   }
 
   enum Mutation {
@@ -56,8 +58,16 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case .shareButtonDidTap:
       return .empty()
 
+    case .giftPhotoDidSelected(let item):
+      let total = self.currentState.gift.photoList.count
+      self.steps.accept(AppStep.giftDetailPhotoIsRequired(item, total))
+      return .empty()
+
     case .isPinnedButtonDidTap:
       print("Pinned button did tap.")
+      return .empty()
+
+    case .doNothing:
       return .empty()
     }
   }

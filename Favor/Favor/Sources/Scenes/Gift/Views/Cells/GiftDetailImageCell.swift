@@ -43,7 +43,7 @@ extension GiftDetailImageCell: BaseView {
       .systemRed, .systemBlue, .systemMint, .systemPink, .systemRed, .systemPink, .systemYellow,
       .systemBrown, .systemPurple, .systemIndigo, .systemOrange, .favorColor(.main)
     ]
-    self.backgroundColor = colors.randomElement()
+    self.imageView.backgroundColor = colors.randomElement()
   }
 
   public func setupLayouts() {

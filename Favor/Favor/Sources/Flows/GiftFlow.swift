@@ -8,6 +8,7 @@
 import UIKit
 
 import FavorKit
+import ImageViewer
 import RxFlow
 
 final class GiftFlow: Flow {
@@ -35,6 +36,9 @@ final class GiftFlow: Flow {
     case .giftDetailIsRequired(let gift):
       return self.navigateToGiftDetail(with: gift)
 
+    case let .giftDetailPhotoIsRequired(selectedItem, total):
+      return self.navigateToGiftDetailPhoto(with: selectedItem, total: total)
+
     default:
       return .none
     }
@@ -57,5 +61,30 @@ private extension GiftFlow {
       withNextPresentable: giftDetailVC,
       withNextStepper: giftDetailReactor
     ))
+  }
+
+  func navigateToGiftDetailPhoto(with item: Int, total: Int) -> FlowContributors {
+    guard
+      let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController
+    else { return .none }
+
+    let galleryVC = GalleryViewController(
+      startIndex: item,
+      itemsDataSource: giftDetailVC,
+      configuration: giftDetailVC.galleryConfiguration()
+    )
+    let headerView = GiftDetailPhotoHeaderView()
+    headerView.total = total
+    
+    galleryVC.headerView = headerView
+    galleryVC.landedPageAtIndexCompletion = { index in
+      headerView.currentIndex = index
+    }
+
+    DispatchQueue.main.async {
+      giftDetailVC.presentImageGallery(galleryVC)
+    }
+
+    return .none
   }
 }

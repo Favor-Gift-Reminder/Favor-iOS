@@ -8,6 +8,7 @@
 import UIKit
 
 import FavorKit
+import ImageViewer
 import ReactorKit
 import RxCocoa
 import SnapKit
@@ -89,6 +90,21 @@ final class GiftDetailViewController: BaseViewController, View {
 
     self.shareButton.rx.tap
       .map { Reactor.Action.shareButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.collectionView.rx.itemSelected
+      .map { [weak self] indexPath in
+        guard
+          let self = self,
+          let dataSource = self.dataSource
+        else { return Reactor.Action.doNothing }
+        let section = dataSource.snapshot().sectionIdentifiers[indexPath.section]
+        if case GiftDetailSection.image = section {
+          return Reactor.Action.giftPhotoDidSelected(indexPath.item)
+        }
+        return Reactor.Action.doNothing
+      }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -242,5 +258,44 @@ extension GiftDetailViewController: GiftDetailTitleCellDelegate {
   func pinButtonDidTap() {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.isPinnedButtonDidTap)
+  }
+}
+
+// MARK: - GalleryView
+
+extension GiftDetailViewController: GalleryItemsDataSource {
+  public func presentGalleryImageViewer(startingIndex: Int) {
+    
+  }
+
+  func itemCount() -> Int {
+    guard let reactor = self.reactor else { return 1 }
+    return reactor.currentState.gift.photoList.count
+  }
+
+  func provideGalleryItem(_ index: Int) -> ImageViewer.GalleryItem {
+    return GalleryItem.image { $0(UIImage(named: "MyPageHeaderPlaceholder")) }
+  }
+
+  public func galleryConfiguration() -> GalleryConfiguration {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.down)?
+      .withRenderingMode(.alwaysTemplate)
+    config.baseForegroundColor = .favorColor(.white)
+    let closeButton = UIButton(configuration: config)
+    return [
+      .closeButtonMode(.custom(closeButton)),
+      .closeLayout(.pinLeft(28, 22)),
+      .deleteButtonMode(.none),
+      .thumbnailsButtonMode(.none),
+      .pagingMode(.standard),
+      .presentationStyle(.fade),
+      .hideDecorationViewsOnLaunch(false),
+      .swipeToDismissMode(.vertical),
+      .activityViewByLongPress(false),
+      .maximumZoomScale(3.0),
+      .swipeToDismissThresholdVelocity(500),
+      .doubleTapToZoomDuration(0.3)
+    ]
   }
 }
