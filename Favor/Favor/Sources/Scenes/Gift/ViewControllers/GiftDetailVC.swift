@@ -120,11 +120,11 @@ final class GiftDetailViewController: BaseViewController, View {
         snapshot.appendSections(sections)
         items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sections[idx])
-          owner.collectionView.collectionViewLayout.invalidateLayout()
         }
 
         DispatchQueue.main.async {
           dataSource.apply(snapshot)
+          owner.collectionView.collectionViewLayout.invalidateLayout()
         }
       })
       .disposed(by: self.disposeBag)

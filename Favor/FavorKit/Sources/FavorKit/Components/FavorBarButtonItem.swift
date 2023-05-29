@@ -21,7 +21,7 @@ public class FavorBarButtonItem: UIBarButtonItem {
 
   // MARK: - UI Components
 
-  fileprivate lazy var button = UIButton()
+  fileprivate var button = UIButton()
 
   // MARK: - Initializer
 
@@ -40,7 +40,7 @@ public class FavorBarButtonItem: UIBarButtonItem {
     self.setupConstraints()
   }
 
-  public convenience init(_ title: String) {
+  public convenience init(_ title: String?) {
     self.init()
     self.button = self.makeButton(with: title)
 
@@ -52,6 +52,14 @@ public class FavorBarButtonItem: UIBarButtonItem {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  public func update(_ icon: UIImage.FavorIcon) {
+    self.button = self.makeButton(with: icon)
+  }
+
+  public func update(_ title: String?) {
+    self.button = self.makeButton(with: title)
+  }
 }
 
 // MARK: - UI Setup
@@ -61,6 +69,7 @@ extension FavorBarButtonItem: BaseView {
 
   public func setupLayouts() {
     self.customView = self.button
+    self.button.isUserInteractionEnabled = true
   }
 
   public func setupConstraints() {
@@ -81,9 +90,10 @@ private extension FavorBarButtonItem {
     return button
   }
 
-  func makeButton(with title: String) -> UIButton {
+  func makeButton(with title: String?) -> UIButton {
     var config = UIButton.Configuration.plain()
     config.updateAttributedTitle(title, font: .favorFont(.bold, size: 18))
+    config.contentInsets = .zero
 
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
@@ -96,15 +106,7 @@ private extension FavorBarButtonItem {
         break
       }
     }
+    button.contentMode = .center
     return button
-  }
-}
-
-// MARK: - ReactorKit
-
-public extension Reactive where Base: FavorBarButtonItem {
-  var tap: ControlEvent<()> {
-    let source = base.button.rx.tap
-    return ControlEvent(events: source)
   }
 }

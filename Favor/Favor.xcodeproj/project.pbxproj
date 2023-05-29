@@ -41,6 +41,14 @@
 		2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */; };
 		2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28C42A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift */; };
 		2E6E28D22A23CE7200E25DB6 /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6E28D12A23CE7200E25DB6 /* ImageViewer */; };
+		2E6E28D42A24363300E25DB6 /* GiftManagementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28D32A24363300E25DB6 /* GiftManagementVC.swift */; };
+		2E6E28D62A24369B00E25DB6 /* GiftManagementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28D52A24369B00E25DB6 /* GiftManagementSection.swift */; };
+		2E6E28D82A243B1F00E25DB6 /* GiftManagementViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28D72A243B1F00E25DB6 /* GiftManagementViewReactor.swift */; };
+		2E6E28DA2A24432C00E25DB6 /* GiftManagementCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28D92A24432C00E25DB6 /* GiftManagementCollectionHeaderView.swift */; };
+		2E6E28DC2A24603100E25DB6 /* GiftManagementCategoryViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28DB2A24603100E25DB6 /* GiftManagementCategoryViewCell.swift */; };
+		2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28DD2A24636600E25DB6 /* GiftManagementPhotoCell.swift */; };
+		2E6E28E02A24694700E25DB6 /* GiftManagementMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28DF2A24694700E25DB6 /* GiftManagementMemoCell.swift */; };
+		2E6E28E42A246C6600E25DB6 /* GiftManagementPinCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6E28E32A246C6600E25DB6 /* GiftManagementPinCell.swift */; };
 		2E7065482A15FA6F007B1C94 /* AnniversaryManagementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7065472A15FA6F007B1C94 /* AnniversaryManagementVC.swift */; };
 		2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7065492A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift */; };
 		2E7065502A160AF2007B1C94 /* AnniversaryManagementSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E70654F2A160AF2007B1C94 /* AnniversaryManagementSection.swift */; };
@@ -230,6 +238,14 @@
 		2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageViewReactor.swift; sourceTree = "<group>"; };
 		2E6E28C42A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDetailPhotoHeaderView.swift; sourceTree = "<group>"; };
 		2E6E28D02A23CDFA00E25DB6 /* ImageViewer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ImageViewer; path = ../../../ImageViewer; sourceTree = "<group>"; };
+		2E6E28D32A24363300E25DB6 /* GiftManagementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GiftManagementVC.swift; path = Favor/Sources/Scenes/NewGift/VIewControllers/GiftManagementVC.swift; sourceTree = SOURCE_ROOT; };
+		2E6E28D52A24369B00E25DB6 /* GiftManagementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementSection.swift; sourceTree = "<group>"; };
+		2E6E28D72A243B1F00E25DB6 /* GiftManagementViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementViewReactor.swift; sourceTree = "<group>"; };
+		2E6E28D92A24432C00E25DB6 /* GiftManagementCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementCollectionHeaderView.swift; sourceTree = "<group>"; };
+		2E6E28DB2A24603100E25DB6 /* GiftManagementCategoryViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementCategoryViewCell.swift; sourceTree = "<group>"; };
+		2E6E28DD2A24636600E25DB6 /* GiftManagementPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementPhotoCell.swift; sourceTree = "<group>"; };
+		2E6E28DF2A24694700E25DB6 /* GiftManagementMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementMemoCell.swift; sourceTree = "<group>"; };
+		2E6E28E32A246C6600E25DB6 /* GiftManagementPinCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementPinCell.swift; sourceTree = "<group>"; };
 		2E7065472A15FA6F007B1C94 /* AnniversaryManagementVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryManagementVC.swift; sourceTree = "<group>"; };
 		2E7065492A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryManagementViewReactor.swift; sourceTree = "<group>"; };
 		2E70654F2A160AF2007B1C94 /* AnniversaryManagementSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryManagementSection.swift; sourceTree = "<group>"; };
@@ -1094,6 +1110,7 @@
 		2EE07ED4296E8DFF00048A3C /* NewGift */ = {
 			isa = PBXGroup;
 			children = (
+				2E6E28D52A24369B00E25DB6 /* GiftManagementSection.swift */,
 				E562610329939E8800D14020 /* NewGiftPhotoSection.swift */,
 				E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */,
 				2EE07EDA296E8E4400048A3C /* Views */,
@@ -1106,6 +1123,7 @@
 		2EE07ED5296E8E0C00048A3C /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				2E6E28D32A24363300E25DB6 /* GiftManagementVC.swift */,
 				E56260EE298F4D4F00D14020 /* NewGiftVC.swift */,
 				E524C18829E923B9004CCC40 /* NewGiftFriendVC.swift */,
 				2EE07ED8296E8E3400048A3C /* ShareVC.swift */,
@@ -1120,6 +1138,7 @@
 				E52F565C29D5CBAA004E85A6 /* NewGiftChoiceFriendButton.swift */,
 				E524C19529EAA50C004CCC40 /* NewGiftFriendHeaderView.swift */,
 				E59AC13929EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift */,
+				2E6E28D92A24432C00E25DB6 /* GiftManagementCollectionHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1128,6 +1147,7 @@
 			isa = PBXGroup;
 			children = (
 				E524C19029E9A31A004CCC40 /* CellReactros */,
+				2E6E28D72A243B1F00E25DB6 /* GiftManagementViewReactor.swift */,
 				E562610E299497C000D14020 /* NewGiftViewReactor.swift */,
 				E524C19129E9A34B004CCC40 /* NewGiftFriendViewReactor.swift */,
 				E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */,
@@ -1177,6 +1197,10 @@
 				2EF1585629E1C06000D199DF /* NewGiftPhotoCell.swift */,
 				E524C18C29E93758004CCC40 /* NewGiftFriendEmptyCell.swift */,
 				E524C19329EA4014004CCC40 /* NewGiftFriendCell.swift */,
+				2E6E28DB2A24603100E25DB6 /* GiftManagementCategoryViewCell.swift */,
+				2E6E28DD2A24636600E25DB6 /* GiftManagementPhotoCell.swift */,
+				2E6E28DF2A24694700E25DB6 /* GiftManagementMemoCell.swift */,
+				2E6E28E32A246C6600E25DB6 /* GiftManagementPinCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1469,7 +1493,9 @@
 				2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */,
 				2E1C81B42A1F008100D4128E /* GiftDetailPageFooterView.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
+				2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */,
 				2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */,
+				2E6E28E02A24694700E25DB6 /* GiftManagementMemoCell.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
 				2EE0D58F29786C1C0064E932 /* TermVC.swift in Sources */,
 				2ED326BB29B2F765001963D0 /* FindPasswordVC.swift in Sources */,
@@ -1534,6 +1560,7 @@
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
 				E583C5912A1E627800DC219A /* FilterBottomSheet.swift in Sources */,
+				2E6E28D62A24369B00E25DB6 /* GiftManagementSection.swift in Sources */,
 				2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */,
 				2EA3849D298D7C680081499C /* HomeTimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
@@ -1542,7 +1569,9 @@
 				2E9C1B7029E9B6AF008122D7 /* BaseSearchVC.swift in Sources */,
 				2E3FA75E29F80D3C003342CA /* FriendListCell.swift in Sources */,
 				2EEC734C2A14F90A007A29A5 /* BaseAnniversaryListVC.swift in Sources */,
+				2E6E28D82A243B1F00E25DB6 /* GiftManagementViewReactor.swift in Sources */,
 				2E3FA75929F7C561003342CA /* FriendListViewReactor.swift in Sources */,
+				2E6E28D42A24363300E25DB6 /* GiftManagementVC.swift in Sources */,
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				E562610429939E8800D14020 /* NewGiftPhotoSection.swift in Sources */,
@@ -1559,6 +1588,7 @@
 				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2E9B4CC22A12841C00C7E31E /* AnniversaryListVC.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* NewPasswordVC.swift in Sources */,
+				2E6E28DC2A24603100E25DB6 /* GiftManagementCategoryViewCell.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* ProfileFavorCellReactor.swift in Sources */,
 				2E9B4CBA2A1277BC00C7E31E /* FriendListFlow.swift in Sources */,
 				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
@@ -1577,6 +1607,7 @@
 				2EC6E11F29BC6656006FBC11 /* ReminderFlow.swift in Sources */,
 				2E1C81B22A1EEC3100D4128E /* GiftDetailSection.swift in Sources */,
 				E55CF7C6298B8EBB002940D1 /* DashboardFlow.swift in Sources */,
+				2E6E28E42A246C6600E25DB6 /* GiftManagementPinCell.swift in Sources */,
 				2EC939F1299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2E95E4B129E8EFB400A46C38 /* SearchResultSection.swift in Sources */,
@@ -1587,6 +1618,7 @@
 				2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */,
 				E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */,
 				E524C19229E9A34B004CCC40 /* NewGiftFriendViewReactor.swift in Sources */,
+				2E6E28DA2A24432C00E25DB6 /* GiftManagementCollectionHeaderView.swift in Sources */,
 				E583C58F2A1E619F00DC219A /* AnniversaryBottomSheetView.swift in Sources */,
 				E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */,
 				2E634E312A18E24F00DD51ED /* AnniversaryListCellModel.swift in Sources */,

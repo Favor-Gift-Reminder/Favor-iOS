@@ -51,14 +51,18 @@ final class NewGiftFlow: Flow {
 
 private extension NewGiftFlow {
   func navigateToNewGift() -> FlowContributors {
-    let newGiftViewController = NewGiftViewController()
-    let newGiftReactor = NewGiftViewReactor(pickerManager: PHPickerManager())
-    newGiftViewController.reactor = newGiftReactor
-    self.rootViewController.pushViewController(newGiftViewController, animated: false)
+    let giftManagementVC = GiftManagementViewController()
+    let giftManagementReactor = GiftManagementViewReactor(pickerManager: PHPickerManager())
+    giftManagementVC.viewType = .new
+    giftManagementVC.reactor = giftManagementReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(giftManagementVC, animated: false)
+    }
     
     return .one(flowContributor: .contribute(
-      withNextPresentable: newGiftViewController,
-      withNextStepper: newGiftReactor
+      withNextPresentable: giftManagementVC,
+      withNextStepper: giftManagementReactor
     ))
   }
   
