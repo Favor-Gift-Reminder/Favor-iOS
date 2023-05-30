@@ -8,6 +8,7 @@
 import OSLog
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -60,9 +61,15 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .deleteButtonDidTap:
-      return .empty()
+      return self.requestDeleteGift(self.currentState.gift)
+        .asObservable()
+        .flatMap { gift -> Observable<Mutation> in
+          self.steps.accept(AppStep.giftDetailIsComplete(gift))
+          return .empty()
+        }
 
     case .shareButtonDidTap:
+      os_log(.debug, "Share button did tap.")
       return .empty()
 
     case .giftPhotoDidSelected(let item):
@@ -107,6 +114,32 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       newState.items = [newState.imageItems, [.title], [.tags], [.memo]]
 
       return newState
+    }
+  }
+}
+
+// MARK: - Privates
+
+private extension GiftDetailViewReactor {
+  func requestDeleteGift(_ gift: Gift) -> Single<Gift> {
+    return Single<Gift>.create { single in
+      let networking = GiftNetworking()
+      let disposable = networking.request(.deleteGift(giftNo: gift.giftNo))
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.toDomain()))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
     }
   }
 }

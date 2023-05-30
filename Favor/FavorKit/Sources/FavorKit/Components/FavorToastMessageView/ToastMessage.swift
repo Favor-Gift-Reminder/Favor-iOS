@@ -9,6 +9,10 @@ import Foundation
 
 public enum ToastMessage {
 
+  // MARK: - Gift
+
+  case giftDeleted(String)
+
   // MARK: - Anniversary List
 
   case anniversaryAdded(String)
@@ -23,6 +27,9 @@ public enum ToastMessage {
 extension ToastMessage {
   public var description: String? {
     switch self {
+    case .giftDeleted(let giftName):
+      return "\"\(giftName)\" 삭제 완료!"
+
     case .anniversaryAdded(let anniversaryTitle):
       return "\"\(anniversaryTitle)\" 추가 완료!"
     case .anniversaryModifed(let anniversaryTitle):

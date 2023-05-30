@@ -39,6 +39,9 @@ final class GiftFlow: Flow {
     case let .giftDetailPhotoIsRequired(selectedItem, total):
       return self.navigateToGiftDetailPhoto(with: selectedItem, total: total)
 
+    case .giftDetailIsComplete(let gift):
+      return self.popToHome(with: gift)
+
     case .giftManagementIsRequired(let gift):
       return self.navigateToGiftManagement(with: gift)
 
@@ -92,6 +95,16 @@ private extension GiftFlow {
     }
 
     return .none
+  }
+
+  func popToHome(with gift: Gift) -> FlowContributors {
+    DispatchQueue.main.async {
+      self.rootViewController.popViewController(animated: true)
+      guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return }
+      homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
+    }
+
+    return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
   }
 
   func navigateToGiftManagement(with gift: Gift?) -> FlowContributors {

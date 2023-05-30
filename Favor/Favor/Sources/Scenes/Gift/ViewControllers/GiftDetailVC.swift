@@ -35,8 +35,20 @@ final class GiftDetailViewController: BaseViewController, View {
     let button = UIButton(configuration: config)
     return button
   }()
-  private let deleteButton = FavorBarButtonItem(.delete)
-  private let shareButton = FavorBarButtonItem(.share)
+  private let deleteButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.delete)?
+      .withRenderingMode(.alwaysTemplate)
+    let button = UIButton(configuration: config)
+    return button
+  }()
+  private let shareButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.share)?
+      .withRenderingMode(.alwaysTemplate)
+    let button = UIButton(configuration: config)
+    return button
+  }()
 
   // Image Carousel
   private lazy var collectionView: UICollectionView = {
@@ -154,7 +166,11 @@ final class GiftDetailViewController: BaseViewController, View {
 
   private func setupNavigationBar() {
     self.navigationItem.setRightBarButtonItems(
-      [self.shareButton, self.deleteButton, self.editButton.toBarButtonItem()],
+      [
+        self.shareButton.toBarButtonItem(),
+        self.deleteButton.toBarButtonItem(),
+        self.editButton.toBarButtonItem()
+      ],
       animated: false
     )
   }
