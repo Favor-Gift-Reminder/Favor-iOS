@@ -39,6 +39,12 @@ final class GiftFlow: Flow {
     case let .giftDetailPhotoIsRequired(selectedItem, total):
       return self.navigateToGiftDetailPhoto(with: selectedItem, total: total)
 
+    case .giftManagementIsRequired(let gift):
+      return self.navigateToGiftManagement(with: gift)
+
+    case .giftManagementIsComplete:
+      return self.popToGiftDetail()
+
     default:
       return .none
     }
@@ -84,6 +90,32 @@ private extension GiftFlow {
     DispatchQueue.main.async {
       giftDetailVC.presentImageGallery(galleryVC)
     }
+
+    return .none
+  }
+
+  func navigateToGiftManagement(with gift: Gift?) -> FlowContributors {
+    guard let gift = gift else { return .none }
+    let giftManagementVC = GiftManagementViewController()
+    let giftManagementReactor = GiftManagementViewReactor(with: gift, pickerManager: PHPickerManager())
+    giftManagementVC.reactor = giftManagementReactor
+    giftManagementVC.viewType = .edit
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(giftManagementVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: giftManagementVC,
+      withNextStepper: giftManagementReactor
+    ))
+  }
+
+  func popToGiftDetail() -> FlowContributors {
+    // TODO: 메모리 해제
+    DispatchQueue.main.async {
+      self.rootViewController.popViewController(animated: true)
+    } 
 
     return .none
   }

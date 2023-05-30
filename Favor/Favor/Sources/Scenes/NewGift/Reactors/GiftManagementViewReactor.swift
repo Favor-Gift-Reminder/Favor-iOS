@@ -44,6 +44,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
   struct State {
     var giftType: GiftManagementViewController.GiftType = .received
+    var gift: Gift?
     var category: FavorCategory = .lightGift
     var title: String?
     var photos: [UIImage] = []
@@ -58,7 +59,17 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   init(pickerManager: PHPickerManager) {
     self.initialState = State()
     self.pickerManager = pickerManager
+  }
 
+  init(with gift: Gift, pickerManager: PHPickerManager) {
+    self.initialState = State(
+      gift: gift,
+//      category: gift.category, // TODO: Category 프로퍼티 enum화
+      title: gift.name,
+//      photos: gift.photoList.toArray(),
+      isPinned: gift.isPinned
+    )
+    self.pickerManager = pickerManager
   }
 
   // MARK: - Functions
@@ -66,7 +77,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .cancelButtonDidTap:
-      self.steps.accept(AppStep.newGiftIsComplete)
+      self.steps.accept(AppStep.giftManagementIsComplete)
       return .empty()
 
     case .giftTypeButtonDidTap(let isGiven):

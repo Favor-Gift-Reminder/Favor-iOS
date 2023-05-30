@@ -29,10 +29,10 @@ final class NewGiftFlow: Flow {
     case .imagePickerIsRequired(let manager):
       return self.presentPHPicker(manager: manager)
       
-    case .newGiftIsRequired:
+    case .giftManagementIsRequired:
       return self.navigateToNewGift()
 
-    case .newGiftIsComplete:
+    case .giftManagementIsComplete:
       return self.popToTabBar()
       
     case .newGiftFriendIsRequired:

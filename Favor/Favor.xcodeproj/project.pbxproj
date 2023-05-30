@@ -134,7 +134,6 @@
 		2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECA296E8D8400048A3C /* MyPageVC.swift */; };
 		2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECC296E8D9A00048A3C /* SettingVC.swift */; };
 		2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECE296E8DB500048A3C /* ReminderVC.swift */; };
-		2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ED8296E8E3400048A3C /* ShareVC.swift */; };
 		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
 		2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */; };
 		2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */; };
@@ -324,7 +323,6 @@
 		2EE07ECA296E8D8400048A3C /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
 		2EE07ECC296E8D9A00048A3C /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		2EE07ECE296E8DB500048A3C /* ReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVC.swift; sourceTree = "<group>"; };
-		2EE07ED8296E8E3400048A3C /* ShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareVC.swift; sourceTree = "<group>"; };
 		2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInVC.swift; sourceTree = "<group>"; };
 		2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInViewReactor.swift; sourceTree = "<group>"; };
 		2EE0D58029751EBD0064E932 /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
@@ -1104,7 +1102,6 @@
 			children = (
 				2E6E28D32A24363300E25DB6 /* GiftManagementVC.swift */,
 				E524C18829E923B9004CCC40 /* NewGiftFriendVC.swift */,
-				2EE07ED8296E8E3400048A3C /* ShareVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1511,7 +1508,6 @@
 				2E1C81B82A209FAD00D4128E /* GiftDetailTitleCell.swift in Sources */,
 				2E87B8E22A0CA06900570386 /* BaseFriendListViewReactor.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */,
-				2EE07ED9296E8E3400048A3C /* ShareVC.swift in Sources */,
 				2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */,
 				2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */,
 				2EBCC90229EE85F6008044DC /* BaseProfileVC.swift in Sources */,

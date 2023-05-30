@@ -28,7 +28,13 @@ final class GiftDetailViewController: BaseViewController, View {
   // MARK: - UI Components
 
   // Navigation Bar
-  private let editButton = FavorBarButtonItem(.edit)
+  private let editButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.edit)?
+      .withRenderingMode(.alwaysTemplate)
+    let button = UIButton(configuration: config)
+    return button
+  }()
   private let deleteButton = FavorBarButtonItem(.delete)
   private let shareButton = FavorBarButtonItem(.share)
 
@@ -79,6 +85,7 @@ final class GiftDetailViewController: BaseViewController, View {
   func bind(reactor: GiftDetailViewReactor) {
     // Action
     self.editButton.rx.tap
+      .debug()
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -147,7 +154,7 @@ final class GiftDetailViewController: BaseViewController, View {
 
   private func setupNavigationBar() {
     self.navigationItem.setRightBarButtonItems(
-      [self.shareButton, self.deleteButton, self.editButton],
+      [self.shareButton, self.deleteButton, self.editButton.toBarButtonItem()],
       animated: false
     )
   }
@@ -193,6 +200,7 @@ private extension GiftDetailViewController {
         let self = self,
         let reactor = self.reactor
       else { return }
+      cell.delegate = self
       cell.gift = reactor.currentState.gift
     }
 
@@ -258,6 +266,25 @@ extension GiftDetailViewController: GiftDetailTitleCellDelegate {
   func pinButtonDidTap() {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.isPinnedButtonDidTap)
+  }
+}
+
+// MARK: - GiftDetailTagsCell
+
+extension GiftDetailViewController: GiftDetailTagsCellDelegate {
+  func tagDidSelected(_ tag: GiftTags) {
+    guard let reactor = self.reactor else { return }
+    switch tag {
+    case .emotion:
+      reactor.action.onNext(.emotionTagDidTap)
+    case .category(let category):
+      reactor.action.onNext(.categoryTagDidTap(category))
+    case .isGiven(let isGiven):
+      reactor.action.onNext(.isGivenTagDidTap(isGiven))
+    case .friends(let friends):
+      reactor.action.onNext(.friendsTagDidTap(friends))
+    }
+    return
   }
 }
 

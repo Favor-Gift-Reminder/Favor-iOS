@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/05/25.
 //
 
+import OSLog
+
 import FavorKit
 import ReactorKit
 import RxCocoa
@@ -24,6 +26,10 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case shareButtonDidTap
     case giftPhotoDidSelected(Int)
     case isPinnedButtonDidTap
+    case emotionTagDidTap
+    case categoryTagDidTap(FavorCategory)
+    case isGivenTagDidTap(Bool)
+    case friendsTagDidTap([Friend])
     case doNothing
   }
 
@@ -50,6 +56,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .editButtonDidTap:
+      self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift))
       return .empty()
 
     case .deleteButtonDidTap:
@@ -64,7 +71,23 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .isPinnedButtonDidTap:
-      print("Pinned button did tap.")
+      os_log(.debug, "Pin button did tap.")
+      return .empty()
+
+    case .emotionTagDidTap:
+      os_log(.debug, "Emotion tag did tap.")
+      return .empty()
+
+    case .categoryTagDidTap(let category):
+      os_log(.debug, "Category tag did tap: \(String(describing: category)).")
+      return .empty()
+
+    case .isGivenTagDidTap(let isGiven):
+      os_log(.debug, "IsGiven tag did tap: \(isGiven).")
+      return .empty()
+
+    case .friendsTagDidTap(let friends):
+      os_log(.debug, "Friends tag did tap: \(String(describing: friends)).")
       return .empty()
 
     case .doNothing:

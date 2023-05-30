@@ -74,13 +74,11 @@ enum AppStep: Step {
   
   // MARK: - Test
   case testIsRequired
-  
-  // MARK: - NewGift
-  case newGiftIsRequired
-  case newGiftIsComplete
-  case newGiftFriendIsRequired
 
   // MARK: - Gift
+  case giftManagementIsRequired(Gift? = nil)
+  case giftManagementIsComplete
+  case newGiftFriendIsRequired
   case giftDetailIsRequired(Gift)
   case giftDetailPhotoIsRequired(Int, Int)
 

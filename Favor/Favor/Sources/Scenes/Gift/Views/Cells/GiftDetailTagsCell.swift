@@ -8,12 +8,19 @@
 import UIKit
 
 import FavorKit
-import Reusable
+import RxCocoa
+import RxSwift
 import SnapKit
+
+public protocol GiftDetailTagsCellDelegate: AnyObject {
+  func tagDidSelected(_ tag: GiftTags)
+}
 
 final class GiftDetailTagsCell: BaseCollectionViewCell {
 
   // MARK: - Properties
+
+  public weak var delegate: GiftDetailTagsCellDelegate?
 
   public var gift: Gift? {
     didSet { self.updateGift() }
@@ -40,10 +47,46 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    self.bind()
   }
 
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Bind
+
+  private func bind() {
+    self.emotionButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.tagDidSelected(.emotion)
+      })
+      .disposed(by: self.disposeBag)
+
+    self.categoryButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        guard let gift = self.gift else { return }
+        owner.delegate?.tagDidSelected(.category(FavorCategory(rawValue: gift.category ?? "etc") ?? .etc))
+      })
+      .disposed(by: self.disposeBag)
+
+    self.isGivenButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        guard let gift = self.gift else { return }
+        owner.delegate?.tagDidSelected(.isGiven(gift.isGiven))
+      })
+      .disposed(by: self.disposeBag)
+
+    self.relatedFriendsButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        guard let gift = self.gift else { return }
+        owner.delegate?.tagDidSelected(.friends(gift.friendList.toArray()))
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
