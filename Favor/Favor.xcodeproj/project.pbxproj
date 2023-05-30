@@ -68,6 +68,9 @@
 		2E8C663F29BB95C400006CBF /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58029751EBD0064E932 /* SignUpVC.swift */; };
 		2E8C664029BB95DB00006CBF /* FindPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BC29B2F78B001963D0 /* FindPasswordViewReactor.swift */; };
 		2E946FDF2A2585BA00D0EED8 /* ImageViewer in Frameworks */ = {isa = PBXBuildFile; productRef = 2E946FDE2A2585BA00D0EED8 /* ImageViewer */; };
+		2E946FE12A25999700D0EED8 /* GiftShareVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E946FE02A25999700D0EED8 /* GiftShareVC.swift */; };
+		2E946FE32A2599CA00D0EED8 /* GiftShareViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E946FE22A2599CA00D0EED8 /* GiftShareViewReactor.swift */; };
+		2E946FE52A25AE2900D0EED8 /* GiftShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E946FE42A25AE2900D0EED8 /* GiftShareView.swift */; };
 		2E95E4B129E8EFB400A46C38 /* SearchResultSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95E4B029E8EFB400A46C38 /* SearchResultSection.swift */; };
 		2E95E4B329E8F01C00A46C38 /* SearchGiftResultCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95E4B229E8F01C00A46C38 /* SearchGiftResultCellReactor.swift */; };
 		2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E95E4B629E8FB8000A46C38 /* SearchUserResultCell.swift */; };
@@ -255,6 +258,9 @@
 		2E87B8D92A0BCE3200570386 /* FriendListModifyingViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListModifyingViewReactor.swift; sourceTree = "<group>"; };
 		2E87B8DF2A0C881A00570386 /* FriendListModifyingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListModifyingCell.swift; sourceTree = "<group>"; };
 		2E87B8E12A0CA06900570386 /* BaseFriendListViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseFriendListViewReactor.swift; sourceTree = "<group>"; };
+		2E946FE02A25999700D0EED8 /* GiftShareVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftShareVC.swift; sourceTree = "<group>"; };
+		2E946FE22A2599CA00D0EED8 /* GiftShareViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftShareViewReactor.swift; sourceTree = "<group>"; };
+		2E946FE42A25AE2900D0EED8 /* GiftShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftShareView.swift; sourceTree = "<group>"; };
 		2E95E4B029E8EFB400A46C38 /* SearchResultSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultSection.swift; sourceTree = "<group>"; };
 		2E95E4B229E8F01C00A46C38 /* SearchGiftResultCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGiftResultCellReactor.swift; sourceTree = "<group>"; };
 		2E95E4B629E8FB8000A46C38 /* SearchUserResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchUserResultCell.swift; sourceTree = "<group>"; };
@@ -931,6 +937,7 @@
 			isa = PBXGroup;
 			children = (
 				2EC358E02A1E77AC000313BB /* GiftDetailVC.swift */,
+				2E946FE02A25999700D0EED8 /* GiftShareVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -941,6 +948,7 @@
 				2E1C81AE2A1EE7B600D4128E /* Cells */,
 				2E1C81B32A1F008100D4128E /* GiftDetailPageFooterView.swift */,
 				2E6E28C42A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift */,
+				2E946FE42A25AE2900D0EED8 /* GiftShareView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -949,6 +957,7 @@
 			isa = PBXGroup;
 			children = (
 				2EC358E22A1E786A000313BB /* GiftDetailViewReactor.swift */,
+				2E946FE22A2599CA00D0EED8 /* GiftShareViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -1459,6 +1468,7 @@
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
 				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
 				2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */,
+				2E946FE32A2599CA00D0EED8 /* GiftShareViewReactor.swift in Sources */,
 				2E1C81B42A1F008100D4128E /* GiftDetailPageFooterView.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */,
@@ -1519,6 +1529,7 @@
 				2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */,
 				2E6C90B529A607FA00AF963A /* ProfileFriendCellReactor.swift in Sources */,
 				2E87B8E02A0C881A00570386 /* FriendListModifyingCell.swift in Sources */,
+				2E946FE12A25999700D0EED8 /* GiftShareVC.swift in Sources */,
 				2EA73C4529DCA249005097C0 /* ReminderEditor.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */,
@@ -1586,6 +1597,7 @@
 				E583C58F2A1E619F00DC219A /* AnniversaryBottomSheetView.swift in Sources */,
 				E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */,
 				2E634E312A18E24F00DD51ED /* AnniversaryListCellModel.swift in Sources */,
+				2E946FE52A25AE2900D0EED8 /* GiftShareView.swift in Sources */,
 				2E9B4CC82A1285E000C7E31E /* AnniversaryListSection.swift in Sources */,
 				2E95E4B929E8FBF700A46C38 /* SearchUserResultCellReactor.swift in Sources */,
 			);

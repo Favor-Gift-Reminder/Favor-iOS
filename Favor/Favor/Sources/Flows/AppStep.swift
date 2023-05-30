@@ -82,6 +82,7 @@ enum AppStep: Step {
   case giftDetailIsRequired(Gift)
   case giftDetailIsComplete(Gift)
   case giftDetailPhotoIsRequired(Int, Int)
+  case giftShareIsRequired(Gift)
 
   // MARK: - BottomSheet
   case memoBottomSheetIsRequired(String)

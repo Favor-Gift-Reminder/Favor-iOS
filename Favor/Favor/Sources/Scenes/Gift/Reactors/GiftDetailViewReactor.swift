@@ -69,7 +69,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
         }
 
     case .shareButtonDidTap:
-      os_log(.debug, "Share button did tap.")
+      self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift))
       return .empty()
 
     case .giftPhotoDidSelected(let item):

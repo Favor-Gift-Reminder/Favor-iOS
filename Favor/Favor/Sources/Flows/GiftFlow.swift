@@ -48,6 +48,9 @@ final class GiftFlow: Flow {
     case .giftManagementIsComplete:
       return self.popToGiftDetail()
 
+    case .giftShareIsRequired(let gift):
+      return self.navigateToGiftShare(with: gift)
+
     default:
       return .none
     }
@@ -131,5 +134,21 @@ private extension GiftFlow {
     } 
 
     return .none
+  }
+
+  func navigateToGiftShare(with gift: Gift) -> FlowContributors {
+    let giftShareVC = GiftShareViewController()
+    let giftShareReactor = GiftShareViewReactor(gift: gift)
+    giftShareVC.reactor = giftShareReactor
+    giftShareVC.title = "선물 한 컷"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(giftShareVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: giftShareVC,
+      withNextStepper: giftShareReactor
+    ))
   }
 }

@@ -11,6 +11,13 @@ extension UIView {
   public func round(corners: UIRectCorner, radius: CGFloat) {
     _ = self._round(corners: corners, radius: radius)
   }
+
+  public func toImage() -> UIImage {
+    let renderer = UIGraphicsImageRenderer(bounds: bounds)
+    return renderer.image { rendererContext in
+      layer.render(in: rendererContext.cgContext)
+    }
+  }
 }
 
 private extension UIView {
