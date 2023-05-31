@@ -26,6 +26,16 @@ final class GiftShareViewController: BaseViewController, View {
 
   // MARK: - UI Components
 
+  private let shareShadowView: UIView = {
+    let view = UIView()
+    view.layer.shadowRadius = 24
+    view.layer.shadowOpacity = 0.2
+    view.layer.shadowOffset = CGSize(width: 8, height: 8)
+    view.layer.shadowColor = UIColor.favorColor(.white).cgColor
+    view.layer.shadowPath = UIBezierPath(rect: view.bounds).cgPath
+    view.layer.masksToBounds = false
+    return view
+  }()
   private let shareImageView = GiftShareView()
 
   private let shareLabel: UILabel = {
@@ -50,6 +60,11 @@ final class GiftShareViewController: BaseViewController, View {
   }()
 
   // MARK: - Life Cycle
+
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    self.setupShadowPath()
+  }
 
   // MARK: - Binding
 
@@ -112,6 +127,7 @@ final class GiftShareViewController: BaseViewController, View {
     }
 
     [
+      self.shareShadowView,
       self.shareImageView,
       self.shareLabel,
       self.shareButtonStack
@@ -125,6 +141,11 @@ final class GiftShareViewController: BaseViewController, View {
       make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.shareViewTopInset)
       make.directionalHorizontalEdges.equalToSuperview().inset(Metric.shareViewHorizontalInset)
       make.centerX.equalToSuperview()
+    }
+
+    self.shareShadowView.snp.makeConstraints { make in
+      make.edges.equalTo(self.shareImageView)
+      make.center.equalTo(self.shareImageView)
     }
 
     self.shareButtonStack.snp.makeConstraints { make in
@@ -158,6 +179,13 @@ private extension GiftShareViewController {
       make.height.greaterThanOrEqualTo(button.snp.width)
     }
     return button
+  }
+
+  func setupShadowPath() {
+    self.shareShadowView.layer.shadowPath = UIBezierPath(
+      rect: self.shareShadowView.bounds).cgPath
+    self.shareShadowView.layer.shouldRasterize = true
+    self.shareShadowView.layer.rasterizationScale = UIScreen.main.scale
   }
 }
 
