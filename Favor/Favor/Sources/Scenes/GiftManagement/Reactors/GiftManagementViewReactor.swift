@@ -49,6 +49,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var category: FavorCategory = .lightGift
     var photos: [UIImage] = []
     var date: Date?
+    var memo: String?
     var isPinned: Bool = false
 
     var sections: [Section] = [.title, .category, .photos, .friends, .date, .memo, .pin]
@@ -69,6 +70,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       category: gift.category,
 //      photos: gift.photoList.toArray(),
       date: gift.date,
+      memo: gift.memo,
       isPinned: gift.isPinned
     )
     self.pickerManager = pickerManager

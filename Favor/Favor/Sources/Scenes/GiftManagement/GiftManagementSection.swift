@@ -110,7 +110,7 @@ extension GiftManagementSection: Composable {
     case .date:
       return .full()
     case .memo:
-      return .full()
+      return .listRow(height: .estimated(113))
     case .pin:
       return .full()
     }
@@ -133,7 +133,7 @@ extension GiftManagementSection: Composable {
     case .date:
       return .grid(height: .absolute(20), numberOfItems: 1)
     case .memo:
-      return .grid(height: .estimated(130), numberOfItems: 1)
+      return .fullList(height: .estimated(113))
     case .pin:
       return .grid(height: .absolute(22), numberOfItems: 1)
     }

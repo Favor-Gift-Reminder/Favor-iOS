@@ -250,8 +250,13 @@ private extension GiftManagementViewController {
     }
 
     let memoCellRegistration = UICollectionView.CellRegistration
-    <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] _, _, _ in
-      guard self != nil else { return }
+    <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
+      guard
+        let self = self,
+        let reactor = self.reactor
+      else { return }
+      cell.delegate = self
+      cell.bind(with: reactor.currentState.memo)
     }
 
     let pinCellRegistration = UICollectionView.CellRegistration
@@ -378,6 +383,14 @@ extension GiftManagementViewController: FavorSelectorCellDelegate {
   func selectorDidTap(from cell: FavorSelectorCell) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.friendsSelectorButtonDidTap)
+  }
+}
+
+// MARK: - Memo Cell
+
+extension GiftManagementViewController: GiftManagementMemoCellDelegate {
+  func memoDidChange() {
+    self.collectionView.collectionViewLayout.invalidateLayout()
   }
 }
 
