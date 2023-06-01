@@ -40,7 +40,7 @@ final class FriendListViewController: BaseFriendListViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   override func viewWillAppear(_ animated: Bool) {

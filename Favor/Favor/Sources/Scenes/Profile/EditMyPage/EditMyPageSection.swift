@@ -7,20 +7,27 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
-enum EditMyPageSectionItem: SectionModelItem {
+// MARK: - Item
+
+enum EditMyPageSectionItem: ComposableItem {
   case textField(text: String, placeholder: String)
   case favor(isSelected: Bool, favor: Favor)
 }
 
-enum EditMyPageSection {
+// MARK: - Section
+
+enum EditMyPageSection: ComposableSection {
   case name
   case id
   case favor
 }
 
-extension EditMyPageSection: SectionModelType {
+// MARK: - Properties
+
+extension EditMyPageSection {
   public var header: String {
     switch self {
     case .name: return "이름"
@@ -37,8 +44,10 @@ extension EditMyPageSection: SectionModelType {
   }
 }
 
-extension EditMyPageSection: Adaptive {
-  var item: FavorCompositionalLayout.Item {
+// MARK: - Composer
+
+extension EditMyPageSection: Composable {
+  var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .name, .id:
       return .listRow(height: .absolute(19))
@@ -47,12 +56,12 @@ extension EditMyPageSection: Adaptive {
     }
   }
 
-  var group: FavorCompositionalLayout.Group {
+  var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .name, .id:
       return .list()
     case .favor:
-      let innerGroup: FavorCompositionalLayout.Group = .flow(
+      let innerGroup: UICollectionViewComposableLayout.Group = .flow(
         height: .absolute(32),
         numberOfItems: 6,
         spacing: .fixed(10)
@@ -68,7 +77,7 @@ extension EditMyPageSection: Adaptive {
     }
   }
 
-  var section: FavorCompositionalLayout.Section {
+  var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .name, .id:
       return .base(

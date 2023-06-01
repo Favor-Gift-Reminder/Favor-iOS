@@ -7,11 +7,12 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 // MARK: - Item
 
-public enum AnniversaryManagementSectionItem: SectionModelItem {
+public enum AnniversaryManagementSectionItem: ComposableItem {
   case name(String?)
   case category
   case date(Date?)
@@ -19,7 +20,7 @@ public enum AnniversaryManagementSectionItem: SectionModelItem {
 
 // MARK: - Section
 
-public enum AnniversaryManagementSection: SectionModelType {
+public enum AnniversaryManagementSection: ComposableSection {
   case name
   case category
   case date
@@ -39,18 +40,18 @@ extension AnniversaryManagementSection {
 
 // MARK: - Adaptive
 
-extension AnniversaryManagementSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension AnniversaryManagementSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     return .listRow(height: .absolute(50))
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     return .list()
   }
 
-  public var section: FavorCompositionalLayout.Section {
-    let header: FavorCompositionalLayout.BoundaryItem = .header(height: .absolute(22))
-    let footer: FavorCompositionalLayout.BoundaryItem = .footer(height: .absolute(1))
+  public var section: UICollectionViewComposableLayout.Section {
+    let header: UICollectionViewComposableLayout.BoundaryItem = .header(height: .absolute(22))
+    let footer: UICollectionViewComposableLayout.BoundaryItem = .footer(height: .absolute(1))
     return .base(boundaryItems: [header, footer])
   }
 }

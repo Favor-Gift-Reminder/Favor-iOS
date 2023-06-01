@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ImageViewer
 import ReactorKit
@@ -63,18 +64,18 @@ final class GiftDetailViewController: BaseViewController, View {
     return collectionView
   }()
 
-  private lazy var adapter: Adapter<GiftDetailSection, GiftDetailSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(
+  private lazy var composer: Composer<GiftDetailSection, GiftDetailSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    composer.configuration = Composer.Configuration(
       scrollDirection: .vertical,
       sectionSpacing: 24
     )
-    adapter.configuration.visibleItemsInvalidationHandler = (to: .image, { [weak self] _, offset, _ in
+    composer.configuration.visibleItemsInvalidationHandler = (to: .image, { [weak self] _, offset, _ in
       guard let self = self else { return }
       let page = Int(round(offset.x / self.view.bounds.width))
       self.currentPage.accept(page)
     })
-    return adapter
+    return composer
   }()
 
   // MARK: - Life Cycle
@@ -83,7 +84,7 @@ final class GiftDetailViewController: BaseViewController, View {
     super.viewDidLoad()
 
     self.setupDataSource()
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   override func viewWillAppear(_ animated: Bool) {

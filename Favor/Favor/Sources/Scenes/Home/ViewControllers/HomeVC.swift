@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
 import Reusable
@@ -26,9 +27,9 @@ final class HomeViewController: BaseViewController, View {
 
   private let searchButton = FavorBarButtonItem(.search)
 
-  private lazy var adapter: Adapter<HomeSection, HomeSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    return adapter
+  private lazy var composer: Composer<HomeSection, HomeSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    return composer
   }()
 
   private lazy var collectionView: UICollectionView = {
@@ -50,7 +51,7 @@ final class HomeViewController: BaseViewController, View {
     super.viewDidLoad()
 
     self.setupDataSource()
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   override func viewWillAppear(_ animated: Bool) {

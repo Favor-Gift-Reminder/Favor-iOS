@@ -7,11 +7,12 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 // MARK: - Item
 
-public enum GiftManagementSectionItem: SectionModelItem {
+public enum GiftManagementSectionItem: ComposableItem {
   case title
   case category
   case photo(UIImage?)
@@ -23,7 +24,7 @@ public enum GiftManagementSectionItem: SectionModelItem {
 
 // MARK: - Section
 
-public enum GiftManagementSection: SectionModelType {
+public enum GiftManagementSection: ComposableSection {
   case title
   case category
   case photos
@@ -93,10 +94,10 @@ extension GiftManagementSectionItem: Hashable {
   }
 }
 
-// MARK: - Adaptive
+// MARK: - Composable
 
-extension GiftManagementSection: Adaptive {
-  public var item: FavorKit.FavorCompositionalLayout.Item {
+extension GiftManagementSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .title:
       return .full()
@@ -115,7 +116,7 @@ extension GiftManagementSection: Adaptive {
     }
   }
 
-  public var group: FavorKit.FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .title:
       return .grid(height: .absolute(20), numberOfItems: 1)
@@ -138,14 +139,14 @@ extension GiftManagementSection: Adaptive {
     }
   }
 
-  public var section: FavorKit.FavorCompositionalLayout.Section {
-    let sectionHeader: FavorCompositionalLayout.BoundaryItem = .header(
+  public var section: UICollectionViewComposableLayout.Section {
+    let sectionHeader: UICollectionViewComposableLayout.BoundaryItem = .header(
       height: .absolute(22)
     )
-    let sectionFooter: FavorCompositionalLayout.BoundaryItem = .footer(
+    let sectionFooter: UICollectionViewComposableLayout.BoundaryItem = .footer(
       height: .absolute(1)
     )
-    let defaultSection: FavorCompositionalLayout.Section = .base(
+    let defaultSection: UICollectionViewComposableLayout.Section = .base(
       spacing: nil,
       contentInsets: NSDirectionalEdgeInsets(
         top: 15, leading: 20, bottom: 15, trailing: 20),

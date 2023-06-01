@@ -7,11 +7,12 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 // MARK: - Item
 
-enum HomeSectionItem: SectionModelItem {
+enum HomeSectionItem: ComposableItem {
   case upcoming(Upcoming)
   case timeline(Timeline)
 
@@ -28,7 +29,7 @@ enum HomeSectionItem: SectionModelItem {
 
 // MARK: - Section
 
-public enum HomeSection: SectionModelType {
+public enum HomeSection: ComposableSection {
   case upcoming(isEmpty: Bool)
   case timeline(isEmpty: Bool)
 }
@@ -57,10 +58,10 @@ extension HomeSection {
   }
 }
 
-// MARK: - Adapter
+// MARK: - Composer
 
-extension HomeSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension HomeSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .upcoming(let isEmpty):
       if isEmpty {
@@ -77,7 +78,7 @@ extension HomeSection: Adaptive {
     }
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .upcoming(let isEmpty):
       if isEmpty {
@@ -106,10 +107,10 @@ extension HomeSection: Adaptive {
     }
   }
 
-  public var section: FavorCompositionalLayout.Section {
+  public var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .upcoming(let isEmpty):
-      let header: FavorCompositionalLayout.BoundaryItem = .header(height: .absolute(32.0))
+      let header: UICollectionViewComposableLayout.BoundaryItem = .header(height: .absolute(32.0))
       if isEmpty {
         return .base(
           contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),

@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 enum ProfileElementKind {
@@ -15,7 +16,9 @@ enum ProfileElementKind {
   static let sectionWhiteBackground = "Profile.SectionWhiteBackground"
 }
 
-enum ProfileSectionItem: SectionModelItem {
+// MARK: - Item
+
+enum ProfileSectionItem: ComposableItem {
   case profileSetupHelper(ProfileSetupHelperCellReactor)
   case favors(ProfileFavorCellReactor)
   case anniversaries(ProfileAnniversaryCellReactor)
@@ -23,13 +26,17 @@ enum ProfileSectionItem: SectionModelItem {
   case friends(ProfileFriendCellReactor)
 }
 
-enum ProfileSection: SectionModelType {
+// MARK: - Section
+
+enum ProfileSection: ComposableSection {
   case profileSetupHelper
   case favors
   case anniversaries
   case memo
   case friends
 }
+
+// MARK: - Hashable
 
 extension ProfileSectionItem {
   static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
@@ -65,6 +72,8 @@ extension ProfileSectionItem {
   }
 }
 
+// MARK: - Properties
+
 extension ProfileSection {
   var headerTitle: String? {
     switch self {
@@ -85,10 +94,10 @@ extension ProfileSection {
   }
 }
 
-// MARK: - Adapter
+// MARK: - Composer
 
-extension ProfileSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension ProfileSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .profileSetupHelper:
       return .grid(
@@ -116,7 +125,7 @@ extension ProfileSection: Adaptive {
     }
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .profileSetupHelper:
       return .custom(
@@ -127,7 +136,7 @@ extension ProfileSection: Adaptive {
         spacing: .fixed(8)
       )
     case .favors:
-      let innerGroup: FavorCompositionalLayout.Group = .flow(
+      let innerGroup: UICollectionViewComposableLayout.Group = .flow(
         height: .absolute(32),
         numberOfItems: 3,
         spacing: .fixed(10)
@@ -154,9 +163,9 @@ extension ProfileSection: Adaptive {
     }
   }
 
-  public var section: FavorCompositionalLayout.Section {
-    let header = FavorCompositionalLayout.BoundaryItem.header(height: .estimated(32))
-    let whiteBackground = FavorCompositionalLayout.DecorationItem.background(
+  public var section: UICollectionViewComposableLayout.Section {
+    let header = UICollectionViewComposableLayout.BoundaryItem.header(height: .estimated(32))
+    let whiteBackground = UICollectionViewComposableLayout.DecorationItem.background(
       kind: ProfileElementKind.sectionWhiteBackground
     )
     let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20)
@@ -193,7 +202,7 @@ extension ProfileSection: Adaptive {
       return .base(
         contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 66, trailing: 20),
         orthogonalScrolling: .continuous,
-        boundaryItems: [FavorCompositionalLayout.BoundaryItem.header(height: .estimated(72))]
+        boundaryItems: [UICollectionViewComposableLayout.BoundaryItem.header(height: .estimated(72))]
       )
     }
   }

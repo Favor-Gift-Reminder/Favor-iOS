@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
 import Reusable
@@ -92,13 +93,13 @@ final class AnniversaryManagementViewController: BaseViewController, View {
     return button
   }()
 
-  private lazy var adapter: Adapter<AnniversaryManagementSection, AnniversaryManagementSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(
+  private lazy var composer: Composer<AnniversaryManagementSection, AnniversaryManagementSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    composer.configuration = Composer.Configuration(
       scrollDirection: .vertical,
       sectionSpacing: 40
     )
-    return adapter
+    return composer
   }()
 
   private lazy var collectionView: UICollectionView = {
@@ -133,7 +134,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   override func viewWillAppear(_ animated: Bool) {

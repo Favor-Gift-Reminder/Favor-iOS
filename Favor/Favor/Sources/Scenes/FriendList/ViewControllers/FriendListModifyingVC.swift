@@ -24,7 +24,7 @@ final class FriendListModifyingViewController: BaseFriendListViewController, Vie
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.adapter.adapt()
+    self.composer.compose()
   }
   
   // MARK: - Binding

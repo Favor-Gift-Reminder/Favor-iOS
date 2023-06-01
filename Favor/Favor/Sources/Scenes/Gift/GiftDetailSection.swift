@@ -7,11 +7,12 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 // MARK: - Item
 
-public enum GiftDetailSectionItem: SectionModelItem {
+public enum GiftDetailSectionItem: ComposableItem {
   case image(UIImage?)
   case title
   case tags
@@ -20,7 +21,7 @@ public enum GiftDetailSectionItem: SectionModelItem {
 
 // MARK: - Section
 
-public enum GiftDetailSection: SectionModelType {
+public enum GiftDetailSection: ComposableSection {
   case image
   case title
   case tags
@@ -53,10 +54,10 @@ extension GiftDetailSectionItem {
   }
 }
 
-// MARK: - Adaptive
+// MARK: - Composable
 
-extension GiftDetailSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension GiftDetailSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .image, .title, .tags:
       return .full()
@@ -65,7 +66,7 @@ extension GiftDetailSection: Adaptive {
     }
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .image:
       return .grid(height: .absolute(330), numberOfItems: 1)
@@ -78,7 +79,7 @@ extension GiftDetailSection: Adaptive {
     }
   }
 
-  public var section: FavorCompositionalLayout.Section {
+  public var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .image:
       return .base(

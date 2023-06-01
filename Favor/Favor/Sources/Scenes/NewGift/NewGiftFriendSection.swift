@@ -7,9 +7,12 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
-enum NewGiftFriendItem {
+// MARK: - Item
+
+enum NewGiftFriendItem: ComposableItem {
   case empty
   case friend(NewGiftFriendCellReactor)
 
@@ -23,14 +26,16 @@ enum NewGiftFriendItem {
   }
 }
 
-enum NewGiftFriendSection: SectionModelType {
+// MARK: - Section
+
+enum NewGiftFriendSection: ComposableSection {
   case selectedFriends
   case friends
 }
 
 // MARK: - Hashable
 
-extension NewGiftFriendItem: SectionModelItem {
+extension NewGiftFriendItem {
   static func == (lhs: NewGiftFriendItem, rhs: NewGiftFriendItem) -> Bool {
     switch (lhs, rhs) {
     case (.empty, .empty):

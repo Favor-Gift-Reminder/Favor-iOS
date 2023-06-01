@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
 import Reusable
@@ -83,20 +84,20 @@ public class BaseProfileViewController: BaseViewController {
     return dataSource
   }()
 
-  lazy var adapter: Adapter<ProfileSection, ProfileSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    let header = FavorCompositionalLayout.BoundaryItem.header(
+  lazy var composer: Composer<ProfileSection, ProfileSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    let header = UICollectionViewComposableLayout.BoundaryItem.header(
       height: .estimated(128),
       kind: ProfileElementKind.collectionHeader
     )
-    adapter.configuration = Adapter.Configuration(
+    composer.configuration = Composer.Configuration(
       scrollDirection: .vertical,
       header: header,
       background: [
         ProfileElementKind.sectionWhiteBackground: ProfileSectionBackgroundView.self
       ]
     )
-    return adapter
+    return composer
   }()
 
   // MARK: - UI Components
@@ -145,7 +146,7 @@ public class BaseProfileViewController: BaseViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   public override func viewWillAppear(_ animated: Bool) {

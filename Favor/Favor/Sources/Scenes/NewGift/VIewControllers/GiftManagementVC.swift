@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
 import SnapKit
@@ -88,9 +89,9 @@ final class GiftManagementViewController: BaseViewController, View {
     return collectionView
   }()
 
-  private lazy var adapter: Adapter<GiftManagementSection, GiftManagementSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(
+  private lazy var composer: Composer<GiftManagementSection, GiftManagementSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    composer.configuration = Composer.Configuration(
       scrollDirection: .vertical,
       sectionSpacing: 40,
       header: .header(
@@ -99,7 +100,7 @@ final class GiftManagementViewController: BaseViewController, View {
         kind: GiftManagementCollectionHeaderView.identifier
       )
     )
-    return adapter
+    return composer
   }()
 
   // MARK: - Life Cycle
@@ -107,7 +108,7 @@ final class GiftManagementViewController: BaseViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
     self.setupDataSource()
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   override func viewWillAppear(_ animated: Bool) {
