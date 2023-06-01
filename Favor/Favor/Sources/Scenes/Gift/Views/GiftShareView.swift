@@ -93,7 +93,7 @@ final class GiftShareView: UIView {
 
 extension GiftShareView: BaseView {
   func setupStyles() {
-    self.layer.cornerRadius = 8
+    self.layer.cornerRadius = 16
     self.clipsToBounds = true
   }
 

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nomatterjun/Composer.git",
       "state" : {
-        "revision" : "afb1256f5689e34f3e7f54d696b375a40e22c9fd",
-        "version" : "1.0.0"
+        "revision" : "cc0922e0da66c7c118b4d3bc27548c2dd2ec72ca",
+        "version" : "1.0.1"
       }
     },
     {

@@ -69,20 +69,20 @@ extension GiftDetailSection: Composable {
   public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .image:
-      return .grid(height: .absolute(330), numberOfItems: 1)
+      return .fullList(height: .absolute(330))
     case .title:
-      return .grid(height: .absolute(60), numberOfItems: 1)
+      return .fullList(height: .absolute(60))
     case .tags:
-      return .grid(height: .absolute(32), numberOfItems: 1)
+      return .fullList(height: .absolute(32))
     case .memo:
-      return .grid(height: .estimated(60), numberOfItems: 1)
+      return .fullList(height: .absolute(60))
     }
   }
 
   public var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .image:
-      return .base(
+    return .base(
         orthogonalScrolling: .groupPaging,
         boundaryItems: [.footer(height: .absolute(0.01))]
       )
