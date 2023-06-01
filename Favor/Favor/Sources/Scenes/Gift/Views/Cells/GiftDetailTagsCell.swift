@@ -68,7 +68,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         guard let gift = self.gift else { return }
-        owner.delegate?.tagDidSelected(.category(FavorCategory(rawValue: gift.category ?? "etc") ?? .etc))
+        owner.delegate?.tagDidSelected(.category(gift.category))
       })
       .disposed(by: self.disposeBag)
 
@@ -96,7 +96,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
 
 //    self.emotionButton.configuration?.image = gift.emotion
     self.categoryButton.configuration?.updateAttributedTitle(
-      gift.category,
+      gift.category.rawValue,
       font: .favorFont(.regular, size: 12)
     )
     self.isGivenButton.configuration?.updateAttributedTitle(

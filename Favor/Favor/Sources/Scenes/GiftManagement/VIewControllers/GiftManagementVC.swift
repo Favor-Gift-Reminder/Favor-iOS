@@ -85,7 +85,7 @@ final class GiftManagementViewController: BaseViewController, View {
 
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
-    collectionView.contentInset = UIEdgeInsets(top: 16, left: .zero, bottom: 16, right: .zero)
+    collectionView.contentInset = UIEdgeInsets(top: 16, left: .zero, bottom: 74, right: .zero)
     return collectionView
   }()
 
@@ -206,15 +206,23 @@ private extension GiftManagementViewController {
     // Cells
     let titleCellRegistration = UICollectionView.CellRegistration
     <FavorTextFieldCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard let self = self else { return }
-      cell.bind(placeholder: "선물 이름 (최대 20자)")
+      guard
+        let self = self,
+        let reactor = self.reactor
+      else { return }
       cell.delegate = self
+      cell.bind(placeholder: "선물 이름 (최대 20자)")
+      cell.bind(text: reactor.currentState.title)
     }
 
     let categoryCellRegistration = UICollectionView.CellRegistration
     <GiftManagementCategoryViewCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard let self = self else { return }
+      guard
+        let self = self,
+        let reactor = self.reactor
+      else { return }
       cell.delegate = self
+      cell.bind(with: reactor.currentState.category)
     }
 
     let photoCellRegistration = UICollectionView.CellRegistration
@@ -223,8 +231,8 @@ private extension GiftManagementViewController {
         let self = self,
         case let GiftManagementSectionItem.photo(image) = itemIdentifier
       else { return }
-      cell.bind(with: image)
       cell.delegate = self
+      cell.bind(with: image)
     }
 
     let friendCellRegistration = UICollectionView.CellRegistration
@@ -233,13 +241,17 @@ private extension GiftManagementViewController {
     }
 
     let dateCellRegistration = UICollectionView.CellRegistration
-    <FavorDateSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, itemIdentifier in
-      //
+    <FavorDateSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
+      guard
+        let self = self,
+        let reactor = self.reactor
+      else { return }
+      cell.bind(date: reactor.currentState.date)
     }
 
     let memoCellRegistration = UICollectionView.CellRegistration
-    <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] cell, indexPath, itemIdentifier in
-      //
+    <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] _, _, _ in
+      guard self != nil else { return }
     }
 
     let pinCellRegistration = UICollectionView.CellRegistration
@@ -251,6 +263,7 @@ private extension GiftManagementViewController {
     self.dataSource = GiftManagementDataSource(
       collectionView: self.collectionView,
       cellProvider: { [weak self] collectionView, indexPath, item in
+        guard self != nil else { return UICollectionViewCell() }
         switch item {
         case .title:
           return collectionView.dequeueConfiguredReusableCell(
@@ -281,7 +294,7 @@ private extension GiftManagementViewController {
     let collectionHeaderRegistration: UICollectionView.SupplementaryRegistration<GiftManagementCollectionHeaderView> =
     UICollectionView.SupplementaryRegistration(
       elementKind: GiftManagementCollectionHeaderView.identifier
-    ) { [weak self] header, _, indexPath in
+    ) { [weak self] header, _, _ in
       guard let self = self else { return }
       header.delegate = self
     }
@@ -300,12 +313,12 @@ private extension GiftManagementViewController {
     let sectionFooterRegistration: UICollectionView.SupplementaryRegistration<FavorSectionFooterView> =
     UICollectionView.SupplementaryRegistration(
       elementKind: UICollectionView.elementKindSectionFooter
-    ) { footer, _, indexPath in
+    ) { _, _, _ in
       //
     }
 
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
-      guard let self = self else { return UICollectionReusableView() }
+      guard self != nil else { return UICollectionReusableView() }
       switch kind {
       case GiftManagementCollectionHeaderView.identifier:
         return collectionView.dequeueConfiguredReusableSupplementary(
@@ -327,7 +340,7 @@ private extension GiftManagementViewController {
 
 extension GiftManagementViewController: GiftManagementCollectionHeaderViewDelegate {
   func giftTypeButtonDidTap(isGiven: Bool) {
-    guard let reactor = self.reactor else { return }
+//    guard let reactor = self.reactor else { return }
   }
 }
 

@@ -55,6 +55,12 @@ final class GiftManagementCategoryViewCell: BaseCollectionViewCell {
       })
       .disposed(by: self.disposeBag)
   }
+
+  // MARK: - Functions
+
+  public func bind(with category: FavorCategory) {
+    self.categoryView.setSelectedCategory(category)
+  }
 }
 
 // MARK: - UI Setups

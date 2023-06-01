@@ -7,8 +7,8 @@
 
 import Foundation
 
-public enum FavorCategory: String {
-  case lightGift = "가벼운 선물"
+public enum FavorCategory: String, Codable {
+  case lightGift = "가벼운선물"
   case birthDay = "생일"
   case houseWarm = "집들이"
   case test = "시험"

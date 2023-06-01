@@ -45,9 +45,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   struct State {
     var giftType: GiftManagementViewController.GiftType = .received
     var gift: Gift?
-    var category: FavorCategory = .lightGift
     var title: String?
+    var category: FavorCategory = .lightGift
     var photos: [UIImage] = []
+    var date: Date?
     var isPinned: Bool = false
 
     var sections: [Section] = [.title, .category, .photos, .friends, .date, .memo, .pin]
@@ -64,9 +65,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   init(with gift: Gift, pickerManager: PHPickerManager) {
     self.initialState = State(
       gift: gift,
-//      category: gift.category, // TODO: Category 프로퍼티 enum화
       title: gift.name,
+      category: gift.category,
 //      photos: gift.photoList.toArray(),
+      date: gift.date,
       isPinned: gift.isPinned
     )
     self.pickerManager = pickerManager
