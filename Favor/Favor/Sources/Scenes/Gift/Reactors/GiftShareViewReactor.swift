@@ -22,7 +22,6 @@ final class GiftShareViewReactor: Reactor, Stepper {
 
   enum Action {
     case instagramButtonDidTap(UIImage?, UIImage)
-    case facebookButtonDidTap
     case photosButtonDidTap
   }
 
@@ -50,9 +49,6 @@ final class GiftShareViewReactor: Reactor, Stepper {
       self.share(to: .instagram(background, sticker))
       return .empty()
 
-    case .facebookButtonDidTap:
-      return .empty()
-
     case .photosButtonDidTap:
       return .empty()
     }
@@ -71,8 +67,6 @@ private extension GiftShareViewReactor {
     switch target {
     case let .instagram(background, sticker):
       self.shareToInstagram(background: background, sticker: sticker)
-    case .facebook:
-      return
     case .photos:
       return
     }

@@ -43,18 +43,17 @@ final class GiftShareViewController: BaseViewController, View {
     label.font = .favorFont(.bold, size: 14)
     label.textColor = .favorColor(.white)
     label.textAlignment = .center
-    label.text = "스토리로 공유하기"
+    label.text = "공유하기"
     return label
   }()
 
-  private lazy var instagramButton = self.shareButton(.instagram())
-  private lazy var facebookButton = self.shareButton(.facebook)
+  private lazy var instagramButton = self.shareButton(.instagram(nil, nil))
   private lazy var photosButton = self.shareButton(.photos)
 
   private let shareButtonStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
-    stackView.spacing = 24
+    stackView.spacing = 48
     stackView.alignment = .center
     return stackView
   }()
@@ -76,11 +75,6 @@ final class GiftShareViewController: BaseViewController, View {
         let backgroundImage = self.shareImageView.currentImage?.toBlurredBackgroundImage(self.view.frame)
         return Reactor.Action.instagramButtonDidTap(backgroundImage, stickerImage)
       }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.facebookButton.rx.tap
-      .map { Reactor.Action.facebookButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -120,7 +114,6 @@ final class GiftShareViewController: BaseViewController, View {
   override func setupLayouts() {
     [
       self.instagramButton,
-      self.facebookButton,
       self.photosButton
     ].forEach {
       self.shareButtonStack.addArrangedSubview($0)
@@ -178,6 +171,7 @@ private extension GiftShareViewController {
       make.width.equalTo(Metric.shareButtonWidth)
       make.height.greaterThanOrEqualTo(button.snp.width)
     }
+    button.titleLabel?.numberOfLines = 1
     return button
   }
 
