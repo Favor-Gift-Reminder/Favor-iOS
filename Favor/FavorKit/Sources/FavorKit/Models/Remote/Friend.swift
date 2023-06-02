@@ -25,6 +25,10 @@ public class Friend: Object {
   @Persisted public var friendUserNo: Int?
   /// 친구의 회원 여부 (회원 = `true`)
   @Persisted public var isUser: Bool
+  /// 친구의 기념일 목록
+  @Persisted public var anniversaryList: List<Anniversary>
+  /// 친구의 취향 태그
+  @Persisted public var favorList: MutableSet<String>
 
   public override class func propertiesMapping() -> [String: String] {
     [
@@ -35,7 +39,7 @@ public class Friend: Object {
   }
 
   // MARK: - Initializer
-
+  
   /// - Parameters:
   ///   - friendNo: ***PK*** 친구 번호
   ///   - name: 친구 이름
@@ -46,6 +50,8 @@ public class Friend: Object {
   public convenience init(
     friendNo: Int,
     name: String,
+    anniversaryList: [Anniversary] = [],
+    favorList: [String] = [],
     profilePhoto: Photo? = nil,
     memo: String? = nil,
     friendUserNo: Int? = nil,
@@ -58,5 +64,9 @@ public class Friend: Object {
     self.memo = memo
     self.friendUserNo = friendUserNo
     self.isUser = isUser
+    self.favorList.insert(objectsIn: favorList)
+    let newAnniversaryList = List<Anniversary>()
+    newAnniversaryList.append(objectsIn: anniversaryList)
+    self.anniversaryList = newAnniversaryList
   }
 }
