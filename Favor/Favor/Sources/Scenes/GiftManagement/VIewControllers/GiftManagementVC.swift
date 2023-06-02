@@ -37,11 +37,20 @@ final class GiftManagementViewController: BaseViewController, View {
 
   public enum GiftType {
     case received, given
+
+    var header: String {
+      switch self {
+      case .received: return "받은 사람"
+      case .given: return "준 사람"
+      }
+    }
   }
 
   // MARK: - Properties
 
   private var dataSource: GiftManagementDataSource?
+
+  private var giftType: GiftType?
 
   // MARK: - UI Components
 
@@ -175,6 +184,14 @@ final class GiftManagementViewController: BaseViewController, View {
           .withRenderingMode(.alwaysTemplate)
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.giftType }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, giftType in
+        owner.giftType = giftType
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -303,7 +320,7 @@ private extension GiftManagementViewController {
       header.delegate = self
     }
 
-    let sectionHeaderRegistration: UICollectionView.SupplementaryRegistration<FavorSectionHeaderView> =
+    let sectionHeaderRegistration: UICollectionView.SupplementaryRegistration<FavorSectionHeaderCell> =
     UICollectionView.SupplementaryRegistration(
       elementKind: UICollectionView.elementKindSectionHeader
     ) { [weak self] header, _, indexPath in
@@ -311,7 +328,18 @@ private extension GiftManagementViewController {
         let self = self,
         let section = self.dataSource?.snapshot().sectionIdentifiers[indexPath.section]
       else { return }
-      header.bind(title: section.header)
+
+      header.configurationUpdateHandler = { header, _ in
+        guard
+          let header = header as? FavorSectionHeaderCell,
+          let giftType = self.giftType
+        else { return }
+        if case GiftManagementSection.friends = section {
+          header.bind(title: giftType.header)
+        } else {
+          header.bind(title: section.header)
+        }
+      }
     }
 
     let sectionFooterRegistration: UICollectionView.SupplementaryRegistration<FavorSectionFooterView> =
@@ -344,7 +372,8 @@ private extension GiftManagementViewController {
 
 extension GiftManagementViewController: GiftManagementCollectionHeaderViewDelegate {
   func giftTypeButtonDidTap(isGiven: Bool) {
-//    guard let reactor = self.reactor else { return }
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.giftTypeButtonDidTap(isGiven: isGiven))
   }
 }
 

@@ -28,7 +28,7 @@ public enum GiftManagementSection: ComposableSection {
   case title
   case category
   case photos
-  case friends
+  case friends(isGiven: Bool)
   case date
   case memo
   case pin
@@ -90,6 +90,29 @@ extension GiftManagementSectionItem: Hashable {
       hasher.combine("memo")
     case .pin:
       hasher.combine("pin")
+    }
+  }
+}
+
+extension GiftManagementSection: Hashable {
+  public static func == (lhs: Self, rhs: Self) -> Bool {
+    switch (lhs, rhs) {
+    case (.title, .title):
+      return true
+    case (.category, .category):
+      return true
+    case (.photos, .photos):
+      return true
+    case let (.friends(lhsIsGiven), .friends(rhsIsGiven)):
+      return lhsIsGiven == rhsIsGiven
+    case (.date, .date):
+      return true
+    case (.memo, .memo):
+      return true
+    case (.pin, .pin):
+      return true
+    default:
+      return false
     }
   }
 }

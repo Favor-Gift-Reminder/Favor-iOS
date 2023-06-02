@@ -54,7 +54,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var memo: String?
     var isPinned: Bool = false
 
-    var sections: [Section] = [.title, .category, .photos, .friends, .date, .memo, .pin]
+    var sections: [Section] = [.title, .category, .photos, .friends(isGiven: false), .date, .memo, .pin]
     var items: [[Item]] = []
   }
 
@@ -137,6 +137,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     switch mutation {
     case .updateGiftType(let isGiven):
+      if let index = newState.sections.firstIndex(of: .friends(isGiven: !isGiven)) {
+        let newFriendsSection: Section = .friends(isGiven: isGiven)
+        newState.sections[index] = newFriendsSection
+      }
       newState.giftType = isGiven ? .given : .received
 
     case .updateTitle(let title):

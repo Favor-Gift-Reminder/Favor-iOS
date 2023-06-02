@@ -135,6 +135,7 @@
 		2ED326C729B32C32001963D0 /* NewPasswordViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326C629B32C32001963D0 /* NewPasswordViewReactor.swift */; };
 		2ED8CB4429B0BD3F00E7B547 /* TermViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */; };
 		2ED8CB4729B0C30400E7B547 /* TermCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED8CB4629B0C30400E7B547 /* TermCell.swift */; };
+		2EDB7FFE2A29BA8300347A2A /* FavorSectionHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EDB7FFD2A29BA8300347A2A /* FavorSectionHeaderCell.swift */; };
 		2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECA296E8D8400048A3C /* MyPageVC.swift */; };
 		2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECC296E8D9A00048A3C /* SettingVC.swift */; };
 		2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECE296E8DB500048A3C /* ReminderVC.swift */; };
@@ -327,6 +328,7 @@
 		2ED326C629B32C32001963D0 /* NewPasswordViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPasswordViewReactor.swift; sourceTree = "<group>"; };
 		2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermViewReactor.swift; sourceTree = "<group>"; };
 		2ED8CB4629B0C30400E7B547 /* TermCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermCell.swift; sourceTree = "<group>"; };
+		2EDB7FFD2A29BA8300347A2A /* FavorSectionHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorSectionHeaderCell.swift; sourceTree = "<group>"; };
 		2EE07ECA296E8D8400048A3C /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
 		2EE07ECC296E8D9A00048A3C /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		2EE07ECE296E8DB500048A3C /* ReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVC.swift; sourceTree = "<group>"; };
@@ -1183,6 +1185,7 @@
 				2E6E28E32A246C6600E25DB6 /* GiftManagementPinCell.swift */,
 				E524C18C29E93758004CCC40 /* NewGiftFriendEmptyCell.swift */,
 				E524C19329EA4014004CCC40 /* NewGiftFriendCell.swift */,
+				2EDB7FFD2A29BA8300347A2A /* FavorSectionHeaderCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -1476,6 +1479,7 @@
 				2E1C81B42A1F008100D4128E /* GiftDetailPageFooterView.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */,
+				2EDB7FFE2A29BA8300347A2A /* FavorSectionHeaderCell.swift in Sources */,
 				2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */,
 				2E6E28E02A24694700E25DB6 /* GiftManagementMemoCell.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
