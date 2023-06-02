@@ -24,12 +24,15 @@ public class BaseProfileViewController: BaseViewController {
   }
 
   // MARK: - Properties
-
+  
   lazy var dataSource: ProfileDataSource = {
     let dataSource = ProfileDataSource(
       collectionView: self.collectionView,
       cellProvider: { collectionView, indexPath, item in
         switch item {
+        case .anniversarySetupHelper:
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversarySetupHelperCell
+          return cell
         case .profileSetupHelper(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
           cell.reactor = reactor
@@ -42,8 +45,10 @@ public class BaseProfileViewController: BaseViewController {
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversaryCell
           cell.reactor = reactor
           return cell
-        case .memo:
-          return UICollectionViewCell()
+        case .memo(let memo):
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileMemoCell
+          cell.configure(with: memo)
+          return cell
         case .friends(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFriendCell
           cell.reactor = reactor
@@ -109,12 +114,14 @@ public class BaseProfileViewController: BaseViewController {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-
+    
     // CollectionViewCell
     collectionView.register(cellType: ProfileSetupHelperCell.self)
+    collectionView.register(cellType: ProfileAnniversarySetupHelperCell.self)
     collectionView.register(cellType: ProfileFavorCell.self)
     collectionView.register(cellType: ProfileAnniversaryCell.self)
     collectionView.register(cellType: ProfileFriendCell.self)
+    collectionView.register(cellType: ProfileMemoCell.self)
 
     // SupplementaryView
     collectionView.register(
@@ -125,7 +132,7 @@ public class BaseProfileViewController: BaseViewController {
       supplementaryViewType: ProfileSectionHeader.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
-
+    
     // Configure
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
@@ -157,8 +164,8 @@ public class BaseProfileViewController: BaseViewController {
   // MARK: - Functions
 
   public func setupNavigationBar() {
-    guard let navigationController = self.navigationController else { return }
-
+    guard let navigationController = self.navigationController as? BaseNavigationController else { return }
+    
     navigationController.setNavigationBarHidden(false, animated: false)
 
     let appearance = UINavigationBarAppearance()
@@ -166,7 +173,7 @@ public class BaseProfileViewController: BaseViewController {
     navigationController.navigationBar.standardAppearance = appearance
     navigationController.navigationBar.scrollEdgeAppearance = appearance
   }
-
+  
   /// CollectionView의 contentOffset에 따라 ProfileView의 크기와 흐림도를 업데이트합니다.
   /// - Parameters:
   ///   - offset: CollectionView의 `contentOffset`
@@ -177,7 +184,7 @@ public class BaseProfileViewController: BaseViewController {
     let isContentBelowTopOfScreen = offset.y < 0
     /// ProfileView의 height보다 아래로 더 스크롤 됐는 지 여부
     let isScrollViewInMiddleOfBounds = (offset.y - Metric.profileViewOverliedHeight) > -ProfileView.height
-
+    
     // 컨텐츠가 `ProfileView`의 최대 높이 범위(330) 안에 있는 경우
     // ProfileView의 높이 변화
     if isContentBelowTopOfScreen, isScrollViewInMiddleOfBounds {
@@ -204,9 +211,9 @@ public class BaseProfileViewController: BaseViewController {
   // MARK: - UI Setups
 
   public override func setupStyles() {
-    self.view.backgroundColor = .favorColor(.background)
+    self.view.backgroundColor = .favorColor(.white)
   }
-
+  
   public override func setupLayouts() {
     [
       self.profileView,
