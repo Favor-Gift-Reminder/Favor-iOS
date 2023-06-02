@@ -82,7 +82,7 @@ extension GiftDetailSection: Composable {
   public var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .image:
-    return .base(
+      return .base(
         orthogonalScrolling: .groupPaging,
         boundaryItems: [.footer(height: .absolute(0.01))]
       )

@@ -171,7 +171,7 @@ private extension HomeViewController {
   func setupDataSource() {
     let emptyCellRegistrationg = UICollectionView.CellRegistration
       <FavorEmptyCell, HomeSectionItem> { [weak self] cell, _, item in
-        guard let self = self else { return }
+        guard self != nil else { return }
         if case let HomeSectionItem.upcoming(.empty(image, title)) = item {
           cell.bindEmptyData(image: image, text: title)
         } else if case let HomeSectionItem.timeline(.empty(image, title)) = item {
@@ -182,16 +182,16 @@ private extension HomeViewController {
     let upcomingCellRegistration = UICollectionView.CellRegistration
       <HomeUpcomingCell, HomeSectionItem> { [weak self] cell, _, item in
         guard
-          let self = self,
+          self != nil,
           case let HomeSectionItem.upcoming(.reminder(reminder)) = item
         else { return }
         cell.bind(with: reminder)
     }
 
     let timelineCellRegistration = UICollectionView.CellRegistration
-      <HomeTimelineCell, HomeSectionItem> { [weak self] cell, indexPath, item in
+      <HomeTimelineCell, HomeSectionItem> { [weak self] cell, _, item in
         guard
-          let self = self,
+          self != nil,
           case let HomeSectionItem.timeline(.gift(gift)) = item
         else { return }
         cell.bind(with: gift)
@@ -236,8 +236,8 @@ private extension HomeViewController {
 
     let footerRegistration = UICollectionView.SupplementaryRegistration<FavorLoadingFooterView>(
       elementKind: UICollectionView.elementKindSectionFooter
-    ) { [weak self] footer, _, indexPath in
-      guard let self = self else { return }
+    ) { [weak self] _, _, _ in
+      guard self != nil else { return }
     }
 
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in

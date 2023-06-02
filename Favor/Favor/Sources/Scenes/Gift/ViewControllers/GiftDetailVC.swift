@@ -82,7 +82,6 @@ final class GiftDetailViewController: BaseViewController, View {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
     self.setupDataSource()
     self.composer.compose()
   }
@@ -193,7 +192,7 @@ final class GiftDetailViewController: BaseViewController, View {
 private extension GiftDetailViewController {
   func setupDataSource() {
     let imageCellRegistration = UICollectionView.CellRegistration
-    <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] cell, _, itemIdentifier in
+    <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] _, _, itemIdentifier in
       guard
         self != nil,
         case let GiftDetailSectionItem.image(image) = itemIdentifier

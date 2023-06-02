@@ -20,7 +20,7 @@ public protocol DisplaceableView {
     func convert(_ point: CGPoint, to view: UIView?) -> CGPoint
 }
 
-public protocol GalleryDisplacedViewsDataSource: class {
+public protocol GalleryDisplacedViewsDataSource: AnyObject {
 
     func provideDisplacementItem(atIndex index: Int) -> DisplaceableView?
 }

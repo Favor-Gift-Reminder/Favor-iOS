@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol GalleryItemsDelegate: class {
+public protocol GalleryItemsDelegate: AnyObject {
 
     func removeGalleryItem(at index: Int)
 }

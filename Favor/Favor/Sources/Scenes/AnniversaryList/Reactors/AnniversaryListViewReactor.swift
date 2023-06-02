@@ -56,7 +56,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     switch action {
     case .viewNeedsLoaded:
       return self.userFetcher.fetch()
-        .flatMap { (state, user) -> Observable<Mutation> in
+        .flatMap { (_, user) -> Observable<Mutation> in
           guard let user = user.first else { return .empty() }
           let anniversaries = user.anniversaryList.toArray()
           return .just(.updateAnniversaries(anniversaries))

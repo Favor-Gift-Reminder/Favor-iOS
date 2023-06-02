@@ -112,7 +112,7 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
     
     self.finishButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self) { owner, _ in
+      .drive(with: self) { _, _ in
 //        owner.steps.accept(AppStep.anniversaryBottomSheetIsComplete(owner.currentAnniversary))
       }
       .disposed(by: self.disposeBag)

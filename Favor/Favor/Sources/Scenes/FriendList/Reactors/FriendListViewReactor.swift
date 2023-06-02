@@ -49,7 +49,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     switch action {
     case .viewNeedsLoaded:
       return self.friendFetcher.fetch()
-        .flatMap { (status, friends) -> Observable<Mutation> in
+        .flatMap { (_, friends) -> Observable<Mutation> in
           let friendItems = friends.toArray().map { friend -> FriendSectionItem in
             return .friend(friend)
           }
