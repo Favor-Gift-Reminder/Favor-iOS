@@ -171,7 +171,6 @@ private extension GiftShareViewController {
       make.width.equalTo(Metric.shareButtonWidth)
       make.height.greaterThanOrEqualTo(button.snp.width)
     }
-    button.titleLabel?.numberOfLines = 1
     return button
   }
 

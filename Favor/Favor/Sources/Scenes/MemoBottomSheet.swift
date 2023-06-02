@@ -8,12 +8,12 @@
 import UIKit
 
 import FavorKit
-import Then
 import RSKPlaceholderTextView
 import RxCocoa
 import RxFlow
 import RxSwift
 import SnapKit
+import Then
 
 // TODO: [] RxFlow 구현
 
