@@ -17,8 +17,8 @@ open class BaseBottomSheet: BaseViewController {
     static let dismissibleHeight: CGFloat = 200.0
   }
 
-  // MARK: - UI
-
+  // MARK: - UI Components
+  
   public let containerView: UIView = {
     let view = UIView()
     view.backgroundColor = .favorColor(.white)
@@ -27,11 +27,11 @@ open class BaseBottomSheet: BaseViewController {
     view.clipsToBounds = true
     return view
   }()
-
+  
   private let dimmedView: UIView = {
     let view = UIView()
     view.backgroundColor = .favorColor(.black)
-    view.alpha = 0.6
+    view.alpha = 0.0
     return view
   }()
 

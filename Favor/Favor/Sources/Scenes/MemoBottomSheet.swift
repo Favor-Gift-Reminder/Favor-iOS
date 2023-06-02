@@ -54,12 +54,12 @@ final class MemoBottomSheet: BaseBottomSheet, Stepper {
   // MARK: - Properties
   
   var steps = PublishRelay<Step>()
-  private let memo: String
+  private let memo: String?
   private var isKeyboardShowed: Bool = false
   
   // MARK: - Initializer
   
-  init(_ memo: String) {
+  init(_ memo: String?) {
     self.memo = memo
     super.init(nibName: nil, bundle: nil)
   }
@@ -76,7 +76,7 @@ final class MemoBottomSheet: BaseBottomSheet, Stepper {
     self.updateTitle("메모 수정")
     self.cancelButton.isHidden = true
     self.textView.text = self.memo
-    self.finishButton.isEnabled = !self.memo.isEmpty
+    self.finishButton.isEnabled = self.memo == nil ? false : true
   }
   
   override func setupLayouts() {
@@ -159,8 +159,8 @@ final class MemoBottomSheet: BaseBottomSheet, Stepper {
     self.finishButton.rx.tap
       .asDriver()
       .drive(with: self) { owner, _ in
-        let text = owner.textView.text!
-//        owner.steps.accept(AppStep.memoBottomSheetIsComplete(text))
+        let text = owner.textView.text
+        owner.steps.accept(AppStep.memoBottomSheetIsComplete(text))
       }
       .disposed(by: self.disposeBag)
   }
