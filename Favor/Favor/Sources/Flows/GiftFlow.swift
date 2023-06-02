@@ -113,9 +113,10 @@ private extension GiftFlow {
   func navigateToGiftManagement(with gift: Gift?) -> FlowContributors {
     guard let gift = gift else { return .none }
     let giftManagementVC = GiftManagementViewController()
-    let giftManagementReactor = GiftManagementViewReactor(with: gift, pickerManager: PHPickerManager())
+    let giftManagementReactor = GiftManagementViewReactor(
+      .edit, with: gift, pickerManager: PHPickerManager()
+    )
     giftManagementVC.reactor = giftManagementReactor
-    giftManagementVC.viewType = .edit
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(giftManagementVC, animated: true)

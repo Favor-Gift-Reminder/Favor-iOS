@@ -24,6 +24,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
   enum Action {
     case cancelButtonDidTap
+    case doneButtonDidTap
     case giftTypeButtonDidTap(isGiven: Bool)
     case itemSelected(IndexPath)
     case titleDidUpdate(String?)
@@ -43,6 +44,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   }
 
   struct State {
+    var viewType: GiftManagementViewController.ViewType
     var giftType: GiftManagementViewController.GiftType = .received
     var gift: Gift?
     var title: String?
@@ -58,13 +60,16 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init(pickerManager: PHPickerManager) {
-    self.initialState = State()
+  init(_ viewType: GiftManagementViewController.ViewType, pickerManager: PHPickerManager) {
+    self.initialState = State(
+      viewType: viewType
+    )
     self.pickerManager = pickerManager
   }
 
-  init(with gift: Gift, pickerManager: PHPickerManager) {
+  init(_ viewType: GiftManagementViewController.ViewType, with gift: Gift, pickerManager: PHPickerManager) {
     self.initialState = State(
+      viewType: viewType,
       gift: gift,
       title: gift.name,
       category: gift.category,
@@ -82,6 +87,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     switch action {
     case .cancelButtonDidTap:
       self.steps.accept(AppStep.giftManagementIsComplete)
+      return .empty()
+
+    case .doneButtonDidTap:
       return .empty()
 
     case .giftTypeButtonDidTap(let isGiven):

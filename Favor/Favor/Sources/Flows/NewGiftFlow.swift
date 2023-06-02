@@ -52,8 +52,7 @@ final class NewGiftFlow: Flow {
 private extension NewGiftFlow {
   func navigateToNewGift() -> FlowContributors {
     let giftManagementVC = GiftManagementViewController()
-    let giftManagementReactor = GiftManagementViewReactor(pickerManager: PHPickerManager())
-    giftManagementVC.viewType = .new
+    let giftManagementReactor = GiftManagementViewReactor(.new, pickerManager: PHPickerManager())
     giftManagementVC.reactor = giftManagementReactor
 
     DispatchQueue.main.async {

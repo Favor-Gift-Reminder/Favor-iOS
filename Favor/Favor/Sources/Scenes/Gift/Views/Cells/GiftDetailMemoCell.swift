@@ -58,8 +58,7 @@ final class GiftDetailMemoCell: BaseCollectionViewCell {
 
   private func updateGift() {
     guard let gift = self.gift else { return }
-    self.memoTextView.text = "Lorem reprehenderit exercitation duis. Eiusmod mollit proident anim labore eu quis. Amet dolor adipisicing et do ullamco dolore nisi non ad occaecat ex ex. Culpa exercitation laborum ut duis reprehenderit veniam laboris culpa amet eiusmod labore sint dolore exercitation in. Eiusmod reprehenderit occaecat fugiat labore tempor in excepteur ea deserunt adipisicing aliquip amet nulla eu dolor. Sunt dolore aute ipsum est ex aute sint id irure deserunt in adipisicing. Sit tempor anim laboris quis sint magna consectetur aliqua dolore commodo. Culpa ex reprehenderit deserunt voluptate officia dolor adipisicing proident. Lorem reprehenderit exercitation duis. Eiusmod mollit proident anim labore eu quis. Amet dolor adipisicing et do ullamco dolore nisi non ad occaecat ex ex. Culpa exercitation laborum ut duis reprehenderit veniam laboris culpa amet eiusmod labore sint dolore exercitation in. Eiusmod reprehenderit occaecat fugiat labore tempor in excepteur ea deserunt adipisicing aliquip amet nulla eu dolor. Sunt dolore aute ipsum est ex aute sint id irure deserunt in adipisicing. Sit tempor anim laboris quis sint magna consectetur aliqua dolore commodo. Culpa ex reprehenderit deserunt voluptate officia dolor adipisicing proident."
-    //gift.memo
+    self.memoTextView.text = gift.memo
   }
 }
 

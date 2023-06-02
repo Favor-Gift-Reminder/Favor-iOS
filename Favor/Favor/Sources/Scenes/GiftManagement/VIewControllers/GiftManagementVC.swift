@@ -41,11 +41,6 @@ final class GiftManagementViewController: BaseViewController, View {
 
   // MARK: - Properties
 
-  /// 선물 등록/수정 페이지 여부
-  public var viewType: ViewType? {
-    didSet { self.updateViewType() }
-  }
-
   private var dataSource: GiftManagementDataSource?
 
   // MARK: - UI Components
@@ -125,6 +120,11 @@ final class GiftManagementViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
+    self.doneButton.rx.tap
+      .map { Reactor.Action.doneButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.collectionView.rx.itemSelected
       .map { [weak self] indexPath in
         guard
@@ -162,6 +162,19 @@ final class GiftManagementViewController: BaseViewController, View {
         }
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.viewType }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, viewType in
+        owner.doneButton.configuration?.updateAttributedTitle(
+          viewType.doneButtonTitle,
+          font: .favorFont(.bold, size: 18)
+        )
+        owner.cancelButton.configuration?.image = .favorIcon(viewType.cancelButtonImage)?
+          .withRenderingMode(.alwaysTemplate)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -182,20 +195,6 @@ final class GiftManagementViewController: BaseViewController, View {
     self.navigationItem.setRightBarButton(self.doneButton.toBarButtonItem(), animated: false)
     self.navigationItem.setLeftBarButton(self.cancelButton.toBarButtonItem(), animated: false)
     self.navigationItem.titleView = self.giftImageView
-  }
-}
-
-// MARK: - Privates
-
-private extension GiftManagementViewController {
-  func updateViewType() {
-    guard let viewType = self.viewType else { return }
-    self.doneButton.configuration?.updateAttributedTitle(
-      viewType.doneButtonTitle,
-      font: .favorFont(.bold, size: 18)
-    )
-    self.cancelButton.configuration?.image = .favorIcon(viewType.cancelButtonImage)?
-      .withRenderingMode(.alwaysTemplate)
   }
 }
 
