@@ -228,7 +228,7 @@ private extension GiftManagementViewController {
       else { return }
       cell.delegate = self
       cell.bind(placeholder: "선물 이름 (최대 20자)")
-      cell.bind(text: reactor.currentState.title)
+      cell.bind(text: reactor.currentState.gift.name)
     }
 
     let categoryCellRegistration = UICollectionView.CellRegistration
@@ -238,7 +238,7 @@ private extension GiftManagementViewController {
         let reactor = self.reactor
       else { return }
       cell.delegate = self
-      cell.bind(with: reactor.currentState.category)
+      cell.bind(with: reactor.currentState.gift.category)
     }
 
     let photoCellRegistration = UICollectionView.CellRegistration
@@ -262,7 +262,7 @@ private extension GiftManagementViewController {
         let self = self,
         let reactor = self.reactor
       else { return }
-      cell.bind(date: reactor.currentState.date)
+      cell.bind(date: reactor.currentState.gift.date)
     }
 
     let memoCellRegistration = UICollectionView.CellRegistration
@@ -272,7 +272,7 @@ private extension GiftManagementViewController {
         let reactor = self.reactor
       else { return }
       cell.delegate = self
-      cell.bind(with: reactor.currentState.memo)
+      cell.bind(with: reactor.currentState.gift.memo)
     }
 
     let pinCellRegistration = UICollectionView.CellRegistration

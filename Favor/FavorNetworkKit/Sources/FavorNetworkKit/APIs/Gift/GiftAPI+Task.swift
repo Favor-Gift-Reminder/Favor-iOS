@@ -22,16 +22,10 @@ extension GiftAPI {
     case .deleteGift:
       return .requestPlain
 
-    case .patchGift(let giftRequestDTO, let friendNo, _):
-      return .requestCompositeParameters(
-        bodyParameters: giftRequestDTO.toDictionary(),
-        bodyEncoding: JSONEncoding.default,
-        urlParameters: [
-          "friendNo": friendNo
-        ]
-      )
+    case .patchGift(let giftRequestDTO, _):
+      return .requestJSONEncodable(giftRequestDTO)
       
-    case .postGift(let giftRequestDTO, _, _):
+    case .postGift(let giftRequestDTO, _):
       return .requestJSONEncodable(giftRequestDTO)
     }
   }

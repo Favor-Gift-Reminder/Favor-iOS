@@ -21,11 +21,11 @@ extension GiftAPI {
     case .deleteGift(let giftNo):
       return "/gifts/\(giftNo)"
 
-    case .patchGift(_, _, let giftNo):
+    case .patchGift(_, let giftNo):
       return "/gifts/\(giftNo)"
       
-    case .postGift(_, let friendNo, let userNo):
-      return "/gifts/\(userNo)/\(friendNo)"
+    case .postGift(_, let userNo):
+      return "/gifts/\(userNo)"
     }
   }
 }
