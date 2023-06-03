@@ -223,10 +223,7 @@ private extension GiftManagementViewController {
     // Cells
     let titleCellRegistration = UICollectionView.CellRegistration
     <FavorTextFieldCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.bind(placeholder: "선물 이름 (최대 20자)")
       cell.bind(text: reactor.currentState.gift.name)
@@ -234,20 +231,14 @@ private extension GiftManagementViewController {
 
     let categoryCellRegistration = UICollectionView.CellRegistration
     <GiftManagementCategoryViewCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.bind(with: reactor.currentState.gift.category)
     }
 
     let photoCellRegistration = UICollectionView.CellRegistration
     <GiftManagementPhotoCell, GiftManagementSectionItem> { [weak self] cell, _, itemIdentifier in
-      guard
-        let self = self,
-        case let GiftManagementSectionItem.photo(image) = itemIdentifier
-      else { return }
+      guard let self = self, case let GiftManagementSectionItem.photo(image) = itemIdentifier else { return }
       cell.delegate = self
       cell.bind(with: image)
     }
@@ -259,19 +250,13 @@ private extension GiftManagementViewController {
 
     let dateCellRegistration = UICollectionView.CellRegistration
     <FavorDateSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.bind(date: reactor.currentState.gift.date)
     }
 
     let memoCellRegistration = UICollectionView.CellRegistration
     <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.bind(with: reactor.currentState.gift.memo)
     }

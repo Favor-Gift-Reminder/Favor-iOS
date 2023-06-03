@@ -199,39 +199,27 @@ private extension GiftDetailViewController {
   func setupDataSource() {
     let imageCellRegistration = UICollectionView.CellRegistration
     <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] _, _, itemIdentifier in
-      guard
-        self != nil,
-        case let GiftDetailSectionItem.image(image) = itemIdentifier
-      else { return }
+      guard self != nil, case let GiftDetailSectionItem.image(image) = itemIdentifier else { return }
       // Image
     }
 
     let titleCellRegistration = UICollectionView.CellRegistration
     <GiftDetailTitleCell, GiftDetailSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.gift = reactor.currentState.gift
     }
 
     let tagsCellRegistration = UICollectionView.CellRegistration
     <GiftDetailTagsCell, GiftDetailSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.gift = reactor.currentState.gift
     }
 
     let memoCellRegistration = UICollectionView.CellRegistration
     <GiftDetailMemoCell, GiftDetailSectionItem> { [weak self] cell, _, _ in
-      guard
-        let self = self,
-        let reactor = self.reactor
-      else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.gift = reactor.currentState.gift
     }
 

@@ -58,7 +58,7 @@ open class FavorDateSelectorCell: BaseCollectionViewCell, Reusable {
   // MARK: - Bind
 
   public func bind(date: Date?) {
-    self.datePicker.updateDate(date ?? .distantPast)
+    self.datePicker.updateDate(date)
   }
 }
 
