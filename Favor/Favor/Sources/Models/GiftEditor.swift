@@ -80,7 +80,7 @@ extension GiftEditor {
 }
 
 extension Gift {
-  public func toDomain() -> GiftEditor {
+  public func toEditor() -> GiftEditor {
     GiftEditor(
       giftNo: self.giftNo,
       name: self.name,

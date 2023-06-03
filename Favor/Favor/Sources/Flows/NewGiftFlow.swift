@@ -31,15 +31,18 @@ final class NewGiftFlow: Flow {
       
     case .giftManagementIsRequired:
       return self.navigateToNewGift()
-
-    case .giftManagementIsComplete:
-      return self.popToTabBar()
       
     case .newGiftFriendIsRequired:
       return self.navigateToNewGiftFriend()
       
     case .friendManagementIsRequired:
       return self.navigateToFriendManagement()
+
+    case .newGiftIsComplete(let gift):
+      return .none
+
+    case .giftManagementIsCompleteWithNoChanges:
+      return self.popToTabBar()
       
     default:
       return .none
@@ -93,6 +96,7 @@ private extension NewGiftFlow {
     self.rootViewController.dismiss(animated: true)
 
     return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
+    // MARK: - Toast
   }
   
   func presentPHPicker(manager: PHPickerManager) -> FlowContributors {

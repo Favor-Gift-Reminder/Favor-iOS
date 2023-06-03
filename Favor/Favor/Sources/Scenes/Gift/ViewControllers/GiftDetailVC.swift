@@ -162,9 +162,10 @@ final class GiftDetailViewController: BaseViewController, View {
 
   // MARK: - Functions
 
-  public func update(gift: Gift) {
+  public func update(gift: GiftEditor) {
     guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.updateGift(gift))
+    reactor.action.onNext(.giftNeedsUpdated(gift))
+    self.presentToast(.giftEdited(gift.name), duration: .short)
   }
 
   // MARK: - UI Setups

@@ -46,7 +46,10 @@ final class GiftFlow: Flow {
     case .giftManagementIsRequired(let gift):
       return self.navigateToGiftManagement(with: gift)
 
-    case .giftManagementIsComplete:
+    case .giftManagementIsCompleteWithNoChanges:
+      return self.popToGiftDetail()
+
+    case .newGiftIsComplete(let gift):
       return self.popToGiftDetail()
 
     case .editGiftIsComplete(let gift):
@@ -132,14 +135,13 @@ private extension GiftFlow {
     ))
   }
 
-  func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
+  func popToGiftDetail(with gift: GiftEditor? = nil) -> FlowContributors {
     // TODO: 메모리 해제
     DispatchQueue.main.async {
       self.rootViewController.popViewController(animated: true)
       if
         let gift,
         let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
-        os_log(.debug, "Updating gift to \(gift)")
         giftDetailVC.update(gift: gift)
       }
     } 

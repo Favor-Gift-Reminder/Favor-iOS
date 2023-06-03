@@ -67,7 +67,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   init(_ viewType: GiftManagementViewController.ViewType, with gift: Gift, pickerManager: PHPickerManager) {
     self.initialState = State(
       viewType: viewType,
-      gift: gift.toDomain()
+      gift: gift.toEditor()
     )
     self.pickerManager = pickerManager
   }
@@ -77,7 +77,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .cancelButtonDidTap:
-      self.steps.accept(AppStep.giftManagementIsComplete)
+      self.steps.accept(AppStep.giftManagementIsCompleteWithNoChanges)
       return .empty()
 
     case .doneButtonDidTap:
@@ -86,8 +86,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         return self.requestPostGift(self.currentState.gift)
           .asObservable()
           .flatMap { gift -> Observable<Mutation> in
-            self.steps.accept(AppStep.giftManagementIsComplete)
-            os_log(.debug, "\(gift)")
+            self.steps.accept(AppStep.newGiftIsComplete(gift))
             return .empty()
           }
           .catch { error in
@@ -99,7 +98,6 @@ final class GiftManagementViewReactor: Reactor, Stepper {
           .asObservable()
           .flatMap { gift -> Observable<Mutation> in
             self.steps.accept(AppStep.editGiftIsComplete(gift))
-            os_log(.debug, "\(gift)")
             return .empty()
           }
           .catch { error in
@@ -194,8 +192,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension GiftManagementViewReactor {
-  func requestPostGift(_ gift: GiftEditor) -> Single<Gift> {
-    return Single<Gift>.create { single in
+  func requestPostGift(_ gift: GiftEditor) -> Single<GiftEditor> {
+    return Single<GiftEditor>.create { single in
       let networking = GiftNetworking()
       let requestDTO = GiftRequestDTO(
         giftName: gift.name,
@@ -213,7 +211,7 @@ private extension GiftManagementViewReactor {
         .subscribe(with: self, onSuccess: { _, response in
           do {
             let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.toDomain()))
+            single(.success(responseDTO.data.toDomain().toEditor()))
           } catch {
             single(.failure(error))
           }
@@ -225,8 +223,8 @@ private extension GiftManagementViewReactor {
     }
   }
 
-  func requestPatchGift(_ gift: GiftEditor) -> Single<Gift> {
-    return Single<Gift>.create { single in
+  func requestPatchGift(_ gift: GiftEditor) -> Single<GiftEditor> {
+    return Single<GiftEditor>.create { single in
       let networking = GiftNetworking()
       let requestDTO = GiftUpdateRequestDTO(
         giftName: gift.name,
@@ -244,7 +242,7 @@ private extension GiftManagementViewReactor {
         .subscribe(with: self, onSuccess: { _, response in
           do {
             let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.toDomain()))
+            single(.success(responseDTO.data.toDomain().toEditor()))
           } catch {
             single(.failure(error))
           }

@@ -25,7 +25,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case deleteButtonDidTap
     case shareButtonDidTap
-    case updateGift(Gift)
+    case giftNeedsUpdated(GiftEditor)
     case giftPhotoDidSelected(Int)
     case isPinnedButtonDidTap
     case emotionTagDidTap
@@ -36,7 +36,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   }
 
   enum Mutation {
-    case updateGift(Gift)
+    case updateGift(GiftEditor)
   }
 
   struct State {
@@ -49,7 +49,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
   init(gift: Gift) {
     self.initialState = State(
-      gift: gift.toDomain()
+      gift: gift.toEditor()
     )
   }
 
@@ -73,7 +73,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift.toModel()))
       return .empty()
 
-    case .updateGift(let gift):
+    case .giftNeedsUpdated(let gift):
       return .just(.updateGift(gift))
 
     case .giftPhotoDidSelected(let item):
@@ -111,7 +111,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
     switch mutation {
     case .updateGift(let gift):
-      newState.gift = gift.toDomain()
+      newState.gift = gift
     }
 
     return newState

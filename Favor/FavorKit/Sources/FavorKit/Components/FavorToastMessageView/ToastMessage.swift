@@ -11,6 +11,7 @@ public enum ToastMessage {
 
   // MARK: - Gift
 
+  case giftEdited(String)
   case giftDeleted(String)
 
   // MARK: - Anniversary List
@@ -27,6 +28,8 @@ public enum ToastMessage {
 extension ToastMessage {
   public var description: String? {
     switch self {
+    case .giftEdited(let giftName):
+      return "\"\(giftName)\" 수정 완료!"
     case .giftDeleted(let giftName):
       return "\"\(giftName)\" 삭제 완료!"
 
