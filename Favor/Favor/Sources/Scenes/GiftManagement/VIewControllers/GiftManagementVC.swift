@@ -251,6 +251,7 @@ private extension GiftManagementViewController {
     let dateCellRegistration = UICollectionView.CellRegistration
     <FavorDateSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }
+      cell.delegate = self
       cell.bind(date: reactor.currentState.gift.date)
     }
 
@@ -400,11 +401,21 @@ extension GiftManagementViewController: FavorSelectorCellDelegate {
   }
 }
 
+// MARK: - Date Cell
+
+extension GiftManagementViewController: FavorDateSelectorCellDelegate {
+  func dateSelectorDidUpdate(from cell: FavorKit.FavorDateSelectorCell, _ date: Date?) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.dateDidUpdate(date))
+  }
+}
+
 // MARK: - Memo Cell
 
 extension GiftManagementViewController: GiftManagementMemoCellDelegate {
-  func memoDidChange() {
-    self.collectionView.collectionViewLayout.invalidateLayout()
+  func memoDidUpdate(_ memo: String?) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.memoDidUpdate(memo))
   }
 }
 

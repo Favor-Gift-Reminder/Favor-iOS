@@ -14,7 +14,7 @@ import RxSwift
 import SnapKit
 
 public protocol GiftManagementMemoCellDelegate: AnyObject {
-  func memoDidChange()
+  func memoDidUpdate(_ memo: String?)
 }
 
 final class GiftManagementMemoCell: BaseCollectionViewCell {
@@ -67,7 +67,7 @@ final class GiftManagementMemoCell: BaseCollectionViewCell {
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.memoDidChange()
+        owner.delegate?.memoDidUpdate(owner.memoView.text)
       })
       .disposed(by: self.disposeBag)
   }

@@ -33,6 +33,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case categoryDidUpdate(FavorCategory)
     case photoDidSelected(Item)
     case friendsSelectorButtonDidTap
+    case dateDidUpdate(Date?)
+    case memoDidUpdate(String?)
     case pinButtonDidTap(Bool)
     case doNothing
   }
@@ -42,6 +44,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case updateTitle(String?)
     case updateCategory(FavorCategory)
     case updatePhotos([UIImage])
+    case updateDate(Date?)
+    case updateMemo(String?)
     case updateIsPinned(Bool)
   }
 
@@ -131,6 +135,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.newGiftFriendIsRequired)
       return .empty()
 
+    case .dateDidUpdate(let date):
+      return .just(.updateDate(date))
+
+    case .memoDidUpdate(let memo):
+      return .just(.updateMemo(memo))
+
     case .pinButtonDidTap(let isPinned):
       return .just(.updateIsPinned(isPinned))
 
@@ -166,6 +176,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     case .updatePhotos(let photos):
       newState.gift.photoList = photos
+
+    case .updateDate(let date):
+      newState.gift.date = date
+
+    case .updateMemo(let memo):
+      newState.gift.memo = memo
 
     case .updateIsPinned(let isPinned):
       newState.gift.isPinned = isPinned
