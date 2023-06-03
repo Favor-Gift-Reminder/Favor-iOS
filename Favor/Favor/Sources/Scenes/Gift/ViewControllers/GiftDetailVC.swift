@@ -162,6 +162,11 @@ final class GiftDetailViewController: BaseViewController, View {
 
   // MARK: - Functions
 
+  public func update(gift: Gift) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.updateGift(gift))
+  }
+
   // MARK: - UI Setups
 
   private func setupNavigationBar() {

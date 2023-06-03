@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OSLog
 
 import FavorKit
 import FavorNetworkKit
@@ -48,13 +49,6 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var viewType: GiftManagementViewController.ViewType
     var giftType: GiftManagementViewController.GiftType = .received
     var gift: GiftEditor
-//    let giftNo: Int
-//    var title: String?
-//    var category: FavorCategory = .lightGift
-//    var photos: [UIImage] = []
-//    var date: Date?
-//    var memo: String?
-//    var isPinned: Bool = false
 
     var sections: [Section] = [.title, .category, .photos, .friends(isGiven: false), .date, .memo, .pin]
     var items: [[Item]] = []
@@ -92,16 +86,33 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         return self.requestPostGift(self.currentState.gift)
           .asObservable()
           .flatMap { gift -> Observable<Mutation> in
+            self.steps.accept(AppStep.giftManagementIsComplete)
+            os_log(.debug, "\(gift)")
+            return .empty()
+          }
+          .catch { error in
+            os_log(.error, "🚨 Failure: \(error)")
             return .empty()
           }
       case .edit:
-        return .empty()
+        return self.requestPatchGift(self.currentState.gift)
+          .asObservable()
+          .flatMap { gift -> Observable<Mutation> in
+            self.steps.accept(AppStep.editGiftIsComplete(gift))
+            os_log(.debug, "\(gift)")
+            return .empty()
+          }
+          .catch { error in
+            os_log(.error, "🚨 Failure: \(error)")
+            return .empty()
+          }
       }
 
     case .giftTypeButtonDidTap(let isGiven):
       return .just(.updateGiftType(isGiven: isGiven))
 
     case .itemSelected(let indexPath):
+      print(indexPath)
       return .empty()
 
     case .titleDidUpdate(let title):
@@ -214,7 +225,7 @@ private extension GiftManagementViewReactor {
     }
   }
 
-  func requestPatchGift(_ gift: Gift) -> Single<Gift> {
+  func requestPatchGift(_ gift: GiftEditor) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
       let requestDTO = GiftUpdateRequestDTO(
@@ -225,7 +236,7 @@ private extension GiftManagementViewReactor {
         emotion: gift.emotion ?? "기뻐요",
         isPinned: gift.isPinned,
         isGiven: gift.isGiven,
-        friendNoList: gift.friendList.toArray().map { $0.friendNo }
+        friendNoList: gift.friendList.map { $0.friendNo }
       )
 
       let disposable = networking.request(.patchGift(requestDTO, giftNo: gift.giftNo))

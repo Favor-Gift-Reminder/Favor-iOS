@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OSLog
 
 import FavorKit
 import ImageViewer
@@ -47,6 +48,9 @@ final class GiftFlow: Flow {
 
     case .giftManagementIsComplete:
       return self.popToGiftDetail()
+
+    case .editGiftIsComplete(let gift):
+      return self.popToGiftDetail(with: gift)
 
     case .giftShareIsRequired(let gift):
       return self.navigateToGiftShare(with: gift)
@@ -128,10 +132,16 @@ private extension GiftFlow {
     ))
   }
 
-  func popToGiftDetail() -> FlowContributors {
+  func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
     // TODO: 메모리 해제
     DispatchQueue.main.async {
       self.rootViewController.popViewController(animated: true)
+      if
+        let gift,
+        let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
+        os_log(.debug, "Updating gift to \(gift)")
+        giftDetailVC.update(gift: gift)
+      }
     } 
 
     return .none

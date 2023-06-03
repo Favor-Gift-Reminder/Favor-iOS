@@ -130,6 +130,7 @@ final class GiftManagementViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.doneButton.rx.tap
+      .debug("Done Button")
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)

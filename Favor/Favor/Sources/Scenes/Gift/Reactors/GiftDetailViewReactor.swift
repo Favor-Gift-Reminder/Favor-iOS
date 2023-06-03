@@ -25,6 +25,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case deleteButtonDidTap
     case shareButtonDidTap
+    case updateGift(Gift)
     case giftPhotoDidSelected(Int)
     case isPinnedButtonDidTap
     case emotionTagDidTap
@@ -35,11 +36,11 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   }
 
   enum Mutation {
-
+    case updateGift(Gift)
   }
 
   struct State {
-    var gift: Gift
+    var gift: GiftEditor
     var items: [[Item]] = []
     var imageItems: [Item] = []
   }
@@ -48,7 +49,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
   init(gift: Gift) {
     self.initialState = State(
-      gift: gift
+      gift: gift.toDomain()
     )
   }
 
@@ -57,7 +58,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .editButtonDidTap:
-      self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift))
+      self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift.toModel()))
       return .empty()
 
     case .deleteButtonDidTap:
@@ -69,8 +70,11 @@ final class GiftDetailViewReactor: Reactor, Stepper {
         }
 
     case .shareButtonDidTap:
-      self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift))
+      self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift.toModel()))
       return .empty()
+
+    case .updateGift(let gift):
+      return .just(.updateGift(gift))
 
     case .giftPhotoDidSelected(let item):
       let total = self.currentState.gift.photoList.count
@@ -102,11 +106,22 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     }
   }
 
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+
+    switch mutation {
+    case .updateGift(let gift):
+      newState.gift = gift.toDomain()
+    }
+
+    return newState
+  }
+
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
 
-      if state.gift.photoList.toArray().isEmpty {
+      if state.gift.photoList.isEmpty {
         newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
       } else {
         newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
@@ -121,7 +136,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension GiftDetailViewReactor {
-  func requestDeleteGift(_ gift: Gift) -> Single<Gift> {
+  func requestDeleteGift(_ gift: GiftEditor) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
       let disposable = networking.request(.deleteGift(giftNo: gift.giftNo))

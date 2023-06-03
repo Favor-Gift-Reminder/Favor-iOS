@@ -23,7 +23,7 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
 
   public weak var delegate: GiftDetailTitleCellDelegate?
 
-  public var gift: Gift? {
+  public var gift: GiftEditor = GiftEditor() {
     didSet { self.updateGift() }
   }
 
@@ -106,7 +106,6 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   // MARK: - Functions
 
   private func updateGift() {
-    guard let gift = self.gift else { return }
     self.titleLabel.text = gift.name
     self.pinButton.isSelected = gift.isPinned
     self.dateLabel.text = gift.date?.toShortenDateString()

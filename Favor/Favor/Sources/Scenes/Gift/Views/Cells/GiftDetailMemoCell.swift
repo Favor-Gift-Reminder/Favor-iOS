@@ -16,7 +16,7 @@ final class GiftDetailMemoCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  public var gift: Gift? {
+  public var gift: GiftEditor = GiftEditor() {
     didSet { self.updateGift() }
   }
 
@@ -57,8 +57,7 @@ final class GiftDetailMemoCell: BaseCollectionViewCell {
   // MARK: - Functions
 
   private func updateGift() {
-    guard let gift = self.gift else { return }
-    self.memoTextView.text = gift.memo
+    self.memoTextView.text = self.gift.memo
   }
 }
 

@@ -22,7 +22,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
 
   public weak var delegate: GiftDetailTagsCellDelegate?
 
-  public var gift: Gift? {
+  public var gift: GiftEditor = GiftEditor() {
     didSet { self.updateGift() }
   }
 
@@ -67,24 +67,21 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.categoryButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        guard let gift = self.gift else { return }
-        owner.delegate?.tagDidSelected(.category(gift.category))
+        owner.delegate?.tagDidSelected(.category(self.gift.category))
       })
       .disposed(by: self.disposeBag)
 
     self.isGivenButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        guard let gift = self.gift else { return }
-        owner.delegate?.tagDidSelected(.isGiven(gift.isGiven))
+        owner.delegate?.tagDidSelected(.isGiven(self.gift.isGiven))
       })
       .disposed(by: self.disposeBag)
 
     self.relatedFriendsButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        guard let gift = self.gift else { return }
-        owner.delegate?.tagDidSelected(.friends(gift.friendList.toArray()))
+        owner.delegate?.tagDidSelected(.friends(self.gift.friendList))
       })
       .disposed(by: self.disposeBag)
   }
@@ -92,8 +89,6 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   // MARK: - Functions
 
   private func updateGift() {
-    guard let gift = self.gift else { return }
-
 //    self.emotionButton.configuration?.image = gift.emotion
     self.categoryButton.configuration?.updateAttributedTitle(
       gift.category.rawValue,
@@ -103,7 +98,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       gift.isGiven ? "준 선물" : "받은 선물",
       font: .favorFont(.regular, size: 12)
     )
-    let friends = gift.friendList.toArray()
+    let friends = gift.friendList
     guard let firstFriend = friends.first else { return }
     let friendsTitle = friends.count == 1 ? firstFriend.name : "\(firstFriend.name) 외 \(friends.count)"
     self.relatedFriendsButton.configuration?.updateAttributedTitle(
