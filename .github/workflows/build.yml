@@ -10,12 +10,12 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
         matrix:
           include:
-            - xcode: "14.2"
-              ios: "16.2"
+            - xcode: "14.3"
+              ios: "16.4"
               simulator: "iPhone 13 Pro"
 
     steps:
