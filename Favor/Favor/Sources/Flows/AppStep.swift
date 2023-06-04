@@ -93,4 +93,8 @@ enum AppStep: Step {
   case filterBottomSheetIsComplete(SortType)
   case anniversaryBottomSheetIsRequired(AnniversaryCategory?)
   case anniversaryBottomSheetIsComplete(AnniversaryCategory)
+  
+  // MARK: - Popup
+  case alertPopupIsRequired(AlertPopup.PopupType)
+  case alertPopupIsComplete(isConfirmed: Bool)
 }
