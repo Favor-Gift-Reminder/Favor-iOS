@@ -264,8 +264,9 @@ private extension GiftManagementViewController {
 
     let pinCellRegistration = UICollectionView.CellRegistration
     <GiftManagementPinCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
-      guard let self = self else { return }
+      guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
+      cell.bind(with: reactor.currentState.gift.isPinned)
     }
 
     self.dataSource = GiftManagementDataSource(
@@ -422,8 +423,8 @@ extension GiftManagementViewController: GiftManagementMemoCellDelegate {
 // MARK: - Pin Cell
 
 extension GiftManagementViewController: GiftManagementPinCellDelegate {
-  func pinButtonDidTap(from cell: GiftManagementPinCell) {
+  func pinButtonDidTap(from cell: GiftManagementPinCell, isPinned: Bool) {
     guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.pinButtonDidTap(cell.isPinned))
+    reactor.action.onNext(.pinButtonDidTap(isPinned))
   }
 }

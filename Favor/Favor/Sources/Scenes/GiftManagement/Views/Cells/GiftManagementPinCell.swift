@@ -13,7 +13,7 @@ import RxSwift
 import SnapKit
 
 public protocol GiftManagementPinCellDelegate: AnyObject {
-  func pinButtonDidTap(from cell: GiftManagementPinCell)
+  func pinButtonDidTap(from cell: GiftManagementPinCell, isPinned: Bool)
 }
 
 public final class GiftManagementPinCell: BaseCollectionViewCell {
@@ -91,9 +91,15 @@ public final class GiftManagementPinCell: BaseCollectionViewCell {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.pinButton.isSelected.toggle()
-        owner.delegate?.pinButtonDidTap(from: self)
+        owner.delegate?.pinButtonDidTap(from: self, isPinned: self.isPinned)
       })
       .disposed(by: self.disposeBag)
+  }
+
+  // MARK: - Functions
+
+  public func bind(with isPinned: Bool) {
+    self.pinButton.isSelected = isPinned
   }
 }
 

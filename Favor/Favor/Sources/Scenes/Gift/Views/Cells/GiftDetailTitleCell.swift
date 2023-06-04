@@ -39,7 +39,7 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   private let pinButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
-    config.image = .favorIcon(.pin)
+    config.image = .favorIcon(.pin)?.withRenderingMode(.alwaysTemplate)
     config.contentInsets = .zero
 
     let button = UIButton(configuration: config)
@@ -106,9 +106,9 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   // MARK: - Functions
 
   private func updateGift() {
-    self.titleLabel.text = gift.name
-    self.pinButton.isSelected = gift.isPinned
-    self.dateLabel.text = gift.date?.toShortenDateString()
+    self.titleLabel.text = self.gift.name
+    self.pinButton.isSelected = self.gift.isPinned
+    self.dateLabel.text = self.gift.date?.toShortenDateString()
   }
 }
 

@@ -97,7 +97,6 @@ final class GiftDetailViewController: BaseViewController, View {
   func bind(reactor: GiftDetailViewReactor) {
     // Action
     self.editButton.rx.tap
-      .debug()
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
