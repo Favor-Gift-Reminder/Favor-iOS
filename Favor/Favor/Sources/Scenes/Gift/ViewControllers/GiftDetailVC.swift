@@ -207,6 +207,14 @@ private extension GiftDetailViewController {
       guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.gift = reactor.currentState.gift
+
+      cell.configurationUpdateHandler = { cell, _ in
+        guard
+          let cell = cell as? GiftDetailTitleCell,
+          let reactor = self.reactor
+        else { return }
+        cell.gift = reactor.currentState.gift
+      }
     }
 
     let tagsCellRegistration = UICollectionView.CellRegistration

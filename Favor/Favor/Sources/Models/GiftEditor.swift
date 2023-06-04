@@ -8,6 +8,7 @@
 import UIKit
 
 import FavorKit
+import FavorNetworkKit
 
 public struct GiftEditor {
   let giftNo: Int
@@ -91,6 +92,21 @@ extension Gift {
       isPinned: self.isPinned,
       friendList: self.friendList.toArray(),
       isGiven: self.isGiven
+    )
+  }
+}
+
+extension GiftEditor {
+  public func toUpdateRequestDTO() -> GiftUpdateRequestDTO {
+    GiftUpdateRequestDTO(
+      giftName: self.name,
+      giftDate: self.date?.toDTODateString() ?? Date.now.toDTODateString(),
+      giftMemo: self.memo ?? "",
+      category: self.category.rawValue,
+      emotion: self.emotion ?? "기뻐요",
+      isPinned: self.isPinned,
+      isGiven: self.isGiven,
+      friendNoList: self.friendList.map { $0.friendNo }
     )
   }
 }

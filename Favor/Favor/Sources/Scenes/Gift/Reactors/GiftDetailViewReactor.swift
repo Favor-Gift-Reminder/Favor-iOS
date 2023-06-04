@@ -82,8 +82,17 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .isPinnedButtonDidTap:
-      os_log(.debug, "Pin button did tap.")
-      return .empty()
+      var updatedGift = self.currentState.gift
+      updatedGift.isPinned.toggle()
+      return self.requestToggleIsPinned(updatedGift)
+        .asObservable()
+        .flatMap { gift -> Observable<Mutation> in
+          return .just(.updateGift(gift.toEditor()))
+        }
+        .catch { error in
+          print(error)
+          return .empty()
+        }
 
     case .emotionTagDidTap:
       os_log(.debug, "Emotion tag did tap.")
@@ -140,6 +149,30 @@ private extension GiftDetailViewReactor {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
       let disposable = networking.request(.deleteGift(giftNo: gift.giftNo))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.toDomain()))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+
+  func requestToggleIsPinned(_ gift: GiftEditor) -> Single<Gift> {
+    return Single<Gift>.create { single in
+      let networking = GiftNetworking()
+      let disposable = networking.request(.patchGift(gift.toUpdateRequestDTO(), giftNo: gift.giftNo))
+        .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
