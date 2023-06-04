@@ -26,10 +26,35 @@ jobs:
       env:
         API_SECRET: ${{ secrets.API_SECRET }}
         TERM_SECRET: ${{ secrets.TERM_SECRET }}
+        AUTHKEY_SECRET: ${{ secrets.APPSTORE_AUTHKEY }}
       run: |
         echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}NetworkKit/Sources/${{ env.PROJECT }}NetworkKit/API-Info.plist
         echo $TERM_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/Term-Info.plist
+        mkdir ~/.private_keys/
+        echo $AUTHKEY_SECRET | base64 -D -o ~/.private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8
         ls -al ${{ env.PROJECT }}
+        
+    - name : Configure Code Signing
+      run: |
+        # certificate 복호화
+        gpg -d -o "$DECRYPTED_CERT_FILE_PATH" --pinentry-mode=loopback --passphrase "$CERT_ENCRYPTION_KEY" "$ENCRYPTED_CERT_FILE_PATH"
+        # provisioning 복호화
+        gpg -d -o "$DECRYPTED_PROVISION_FILE_PATH" --pinentry-mode=loopback --passphrase "$PROVISIONING_ENCRYPTION_KEY" "$ENCRYPTED_PROVISION_FILE_PATH"
+
+        # security를 사용하여 인증서와 개인 키를 새로 만든 키 체인으로 가져옴
+        security import "$DECRYPTED_CERT_FILE_PATH" -k "$KEYCHAIN" -P "$CERT_EXPORT_KEY" -A
+        security set-key-partition-list -S apple-tool:,apple: -s -k "" "$KEYCHAIN"
+
+        # Xcode에서 찾을 수 있는 프로비저닝 프로필 설치하기 위해 우선 프로비저닝 디렉토리를 생성
+        mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+        # 디버깅 용 echo 명령어
+        echo `ls .github/secrets/*.mobileprovision`
+          # 모든 프로비저닝 프로파일을 rename 하고 위에서 만든 디렉토리로 복사하는 과정
+          for PROVISION in `ls .github/secrets/*.mobileprovision`
+          do
+            UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
+          cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+        done
 
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode}}.app && /usr/bin/xcodebuild -version
