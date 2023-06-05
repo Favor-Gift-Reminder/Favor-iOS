@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class FriendPageFlow: Flow {
   
   // MARK: - Properties
@@ -58,10 +59,8 @@ extension FriendPageFlow {
     let reactor = FriendPageViewReactor(friend)
     friendPageVC.reactor = reactor
     
-    DispatchQueue.main.async {
-      self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.pushViewController(friendPageVC, animated: true)
-    }
+    self.rootViewController.setupNavigationAppearance()
+    self.rootViewController.pushViewController(friendPageVC, animated: true)
     
     return .one(flowContributor: .contribute(
       withNextPresentable: friendPageVC,

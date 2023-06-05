@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class NewGiftFlow: Flow {
 
   // MARK: - Properties
@@ -22,6 +23,7 @@ final class NewGiftFlow: Flow {
   
   // MARK: - Navigate
   
+  @MainActor
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
@@ -53,21 +55,21 @@ final class NewGiftFlow: Flow {
 // MARK: - Navigates
 
 private extension NewGiftFlow {
+  @MainActor
   func navigateToNewGift() -> FlowContributors {
     let giftManagementVC = GiftManagementViewController()
     let giftManagementReactor = GiftManagementViewReactor(.new, pickerManager: PHPickerManager())
     giftManagementVC.reactor = giftManagementReactor
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(giftManagementVC, animated: false)
-    }
+    self.rootViewController.pushViewController(giftManagementVC, animated: false)
     
     return .one(flowContributor: .contribute(
       withNextPresentable: giftManagementVC,
       withNextStepper: giftManagementReactor
     ))
   }
-  
+
+  @MainActor
   func navigateToNewGiftFriend() -> FlowContributors {
     let viewController = NewGiftFriendViewController()
     let reactor = NewGiftFriendViewReactor()
@@ -79,7 +81,8 @@ private extension NewGiftFlow {
       withNextStepper: reactor
     ))
   }
-  
+
+  @MainActor
   func navigateToFriendManagement() -> FlowContributors {
     let viewController = FriendManagementViewController(.new)
     let reactor = FriendManagementViewReactor()
@@ -92,6 +95,7 @@ private extension NewGiftFlow {
     ))
   }
 
+  @MainActor
   func popToTabBar(with gift: GiftEditor? = nil) -> FlowContributors {
     self.rootViewController.dismiss(animated: true)
 

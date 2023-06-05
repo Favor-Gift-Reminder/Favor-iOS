@@ -134,18 +134,21 @@ extension ProfileView: BaseView {
 // MARK: - Reactive
 
 extension Reactive where Base: ProfileView {
+  @MainActor
   public var name: Binder<String> {
     return Binder(self.base, binding: { view, name in
       view.nameLabel.text = name
     })
   }
 
+  @MainActor
   public var id: Binder<String> {
     return Binder(self.base, binding: { view, id in
       view.idLabel.text = "@\(id)"
     })
   }
-  
+
+  @MainActor
   public var backgroundImage: Binder<UIImage?> {
     return Binder(self.base) { view, image in
       view.backgroundImageView.image = image

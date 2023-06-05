@@ -153,7 +153,6 @@
 		2EE1537729E5B00D0023FEA5 /* SearchRecentSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1537629E5B00D0023FEA5 /* SearchRecentSection.swift */; };
 		2EE1537929E7DC9F0023FEA5 /* SearchGiftResultCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1537829E7DC9F0023FEA5 /* SearchGiftResultCell.swift */; };
 		2EE1537B29E7E8790023FEA5 /* SelectedIndicatorBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE1537A29E7E8790023FEA5 /* SelectedIndicatorBar.swift */; };
-		2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */; };
 		2EE3BA7029A9D7D4004FDCC9 /* Reusable in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA6F29A9D7D4004FDCC9 /* Reusable */; };
 		2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8129AB60A4004FDCC9 /* Realm */; };
 		2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 2EE3BA8329AB60A4004FDCC9 /* RealmSwift */; };
@@ -357,7 +356,6 @@
 		2EE1537629E5B00D0023FEA5 /* SearchRecentSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRecentSection.swift; sourceTree = "<group>"; };
 		2EE1537829E7DC9F0023FEA5 /* SearchGiftResultCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGiftResultCell.swift; sourceTree = "<group>"; };
 		2EE1537A29E7E8790023FEA5 /* SelectedIndicatorBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedIndicatorBar.swift; sourceTree = "<group>"; };
-		2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutFactory.swift; sourceTree = "<group>"; };
 		2EE3BAA829AF11E5004FDCC9 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		2EE6B3982983DF3900CDBC81 /* AppFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFlow.swift; sourceTree = "<group>"; };
 		2EEC73472A14F808007A29A5 /* AnniversaryListModifyingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListModifyingVC.swift; sourceTree = "<group>"; };
@@ -1319,7 +1317,6 @@
 				2E6089442A1C5A2C0096B7F2 /* Pretendard-Bold.otf */,
 				2E6089452A1C5A2C0096B7F2 /* Pretendard-Regular.otf */,
 				2EBCC8FE29EDBFDB008044DC /* UICollectionViewCompositionalLayout+.swift */,
-				2EE3BA6C29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift */,
 			);
 			path = Deprecated;
 			sourceTree = "<group>";
@@ -1641,7 +1638,6 @@
 				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
 				2E87B8D82A0BCCD400570386 /* FriendListModifyingVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
-				2EE3BA6D29A9CC41004FDCC9 /* CompositionalLayoutFactory.swift in Sources */,
 				2E59BB0B2A28C92500A9AF9F /* GiftManagementVC.swift in Sources */,
 				2EB3E71929D49008008D10A0 /* ReminderHeaderView.swift in Sources */,
 				2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */,
@@ -1857,6 +1853,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1895,6 +1892,7 @@
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};

@@ -9,6 +9,7 @@ import UIKit.UIImage
 
 import RxDataSources
 
+@MainActor
 enum ReminderSectionType {
   case upcoming
   case past

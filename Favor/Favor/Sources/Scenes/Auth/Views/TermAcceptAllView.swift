@@ -104,6 +104,7 @@ extension TermAcceptAllView: BaseView {
 }
 
 extension Reactive where Base: TermAcceptAllView {
+  @MainActor
   var tap: ControlEvent<()> {
     let source = base.button.rx.tap
     return ControlEvent(events: source)

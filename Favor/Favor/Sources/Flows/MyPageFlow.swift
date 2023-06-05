@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class MyPageFlow: Flow {
   
   var root: Presentable { self.rootViewController }

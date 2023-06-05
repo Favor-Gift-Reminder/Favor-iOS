@@ -10,12 +10,13 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class DashboardFlow: Flow {
   
   var root: Presentable { self.rootViewController }
   
   let rootViewController = FavorTabBarController()
-  
+
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     

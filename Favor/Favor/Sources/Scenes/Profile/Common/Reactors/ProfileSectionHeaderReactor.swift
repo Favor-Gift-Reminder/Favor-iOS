@@ -7,6 +7,7 @@
 
 import ReactorKit
 
+@MainActor
 final class ProfileSectionHeaderReactor: Reactor {
   
   // MARK: - Properties

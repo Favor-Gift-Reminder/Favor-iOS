@@ -12,6 +12,7 @@ import RxCocoa
 import RxFlow
 import RxSwift
 
+@MainActor
 final class SearchFlow: Flow {
 
   // MARK: - Properties

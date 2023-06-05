@@ -13,6 +13,7 @@ import RxCocoa
 import RxFlow
 import RxSwift
 
+@MainActor
 final class AppFlow: Flow {
   
   // MARK: - Properties
