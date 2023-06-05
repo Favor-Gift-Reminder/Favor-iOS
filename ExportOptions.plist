@@ -14,7 +14,7 @@
 		<string>Favor GitHubActions Deploy</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>Apple Distribution</string>
+	<string>D1A0458AB1EFFDCC500FB99039DF8E77BDABCBE9</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
