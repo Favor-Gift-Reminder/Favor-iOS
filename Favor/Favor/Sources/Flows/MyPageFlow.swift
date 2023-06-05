@@ -33,7 +33,7 @@ final class MyPageFlow: Flow {
     case .editMyPageIsComplete:
       self.rootViewController.popViewController(animated: true)
       return .none
-
+      
     case .settingIsRequired:
       return self.navigateToSetting()
 
@@ -42,12 +42,17 @@ final class MyPageFlow: Flow {
 
     case .friendListIsRequired:
       return self.navigateToFriendList()
+      
+    case .friendPageIsRequired(let friend):
+      return self.navigateToFriendPage(friend)
 
     default:
       return .none
     }
   }
-  
+}
+
+extension MyPageFlow {
   private func navigateToMyPage() -> FlowContributors {
     let myPageVC = MyPageViewController()
     let myPageReactor = MyPageViewReactor()
@@ -62,7 +67,7 @@ final class MyPageFlow: Flow {
       withNextStepper: myPageReactor
     ))
   }
-
+  
   private func navigateToEditMyPage(with user: User) -> FlowContributors {
     let editMyPageVC = EditMyPageViewController()
     let editMyPageReactor = EditMyPageViewReactor(user: user)
@@ -85,7 +90,7 @@ final class MyPageFlow: Flow {
 
   private func navigateToAnniversaryList() -> FlowContributors {
     let anniversaryListFlow = AnniversaryFlow(rootViewController: self.rootViewController)
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: anniversaryListFlow,
       withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired)
@@ -98,6 +103,15 @@ final class MyPageFlow: Flow {
     return .one(flowContributor: .contribute(
       withNextPresentable: friendListFlow,
       withNextStepper: OneStepper(withSingleStep: AppStep.friendListIsRequired)
+    ))
+  }
+
+  private func navigateToFriendPage(_ friend: Friend) -> FlowContributors {
+    let friendPageFlow = FriendPageFlow(rootViewController: self.rootViewController)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendPageFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.friendPageIsRequired(friend))
     ))
   }
 }

@@ -26,15 +26,15 @@ public final class RealmManager: RealmCRUDable {
   /// 로컬 DB의 버전
   ///
   /// [~ Version History ~](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  private static let version: UInt64 = 7
-
+  private static let version: UInt64 = 8
+  
   /// RealmManager에서 사용될 realm 인스턴스
   private var realm: Realm!
   /// Realm의 transaction은 해당 realm 인스턴스가 생성된 쓰레드에서 이루어져야 합니다.
   public let realmQueue = DispatchQueue.realmThread
-
+  
   // MARK: - Initializer
-
+  
   private init() {
     do {
       let config = Realm.Configuration(
@@ -66,6 +66,12 @@ public final class RealmManager: RealmCRUDable {
               newObject!["category"] = giftCategory
               newObject!["emotion"] = giftEmotion
             })
+          }
+          if oldVersion < 8 {
+            migration.enumerateObjects(ofType: Friend.className()) { _, newObject in
+              newObject!["anniversaryList"] = List<Anniversary>()
+              newObject!["favorList"] = List<String>()
+            }
           }
         }
       )
@@ -171,7 +177,7 @@ public final class RealmManager: RealmCRUDable {
       }
     }
   }
-
+  
   /// RealmDB에서 주어진 PK 값의 `RealmObject` 인스턴스를 읽어옵니다.
   ///
   /// **Usage**
@@ -231,7 +237,7 @@ public final class RealmManager: RealmCRUDable {
       }
     }
   }
-
+  
   /// RealmDB에 존재하는 `RealmObject` 인스턴스의 값들을 업데이트합니다.
   /// 만약 값이 없다면, 새로운 인스턴스들로 추가합니다.
   ///
