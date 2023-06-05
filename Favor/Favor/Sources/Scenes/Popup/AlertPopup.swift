@@ -8,9 +8,11 @@
 import UIKit
 
 import FavorKit
+import RxCocoa
+import RxFlow
 import SnapKit
 
-final class AlertPopup: BasePopup {
+final class AlertPopup: BasePopup, Stepper {
   
   enum PopupType {
     case register
@@ -64,6 +66,7 @@ final class AlertPopup: BasePopup {
   // MARK: - Properties
   
   private let popupType: PopupType
+  var steps = PublishRelay<Step>()
   
   // MARK: - Initializer
   
@@ -102,6 +105,26 @@ final class AlertPopup: BasePopup {
       make.height.equalTo(Metric.buttonStackHeight)
       make.bottom.equalToSuperview().inset(Metric.buttonStackBottomInset)
     }
+  }
+  
+  // MARK: - Bind
+  
+  override func bind() {
+    super.bind()
+    
+    self.confirmButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in
+        owner.steps.accept(AppStep.alertPopupIsComplete(isConfirmed: true))
+      }
+      .disposed(by: self.disposeBag)
+    
+    self.cancelButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in
+        owner.steps.accept(AppStep.alertPopupIsComplete(isConfirmed: false))
+      }
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions

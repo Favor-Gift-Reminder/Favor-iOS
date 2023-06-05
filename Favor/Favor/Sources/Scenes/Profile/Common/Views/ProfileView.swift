@@ -22,10 +22,11 @@ public final class ProfileView: UIView {
   
   // MARK: - UI Components
 
-  private let backgroundImageView: UIImageView = {
+  let backgroundImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = UIImage(named: "MyPageHeaderPlaceholder")
     imageView.contentMode = .scaleAspectFill
+    imageView.backgroundColor = .favorColor(.background)
     return imageView
   }()
 
@@ -42,8 +43,8 @@ public final class ProfileView: UIView {
     let button = UIButton(configuration: config)
     return button
   }()
-
-  fileprivate let nameLabel: UILabel = {
+  
+  let nameLabel: UILabel = {
     let label = UILabel()
     label.textColor = .favorColor(.white)
     label.font = .favorFont(.bold, size: 22)
@@ -51,7 +52,7 @@ public final class ProfileView: UIView {
     return label
   }()
   
-  fileprivate let idLabel: UILabel = {
+  let idLabel: UILabel = {
     let label = UILabel()
     label.textColor = .favorColor(.line3)
     label.font = .favorFont(.regular, size: 16)
@@ -82,7 +83,7 @@ public final class ProfileView: UIView {
   // MARK: - Binding
   
   // MARK: - Functions
-
+  
   func updateBackgroundAlpha(to alpha: CGFloat) {
     self.backgroundImageView.alpha = alpha
   }
@@ -143,5 +144,11 @@ extension Reactive where Base: ProfileView {
     return Binder(self.base, binding: { view, id in
       view.idLabel.text = "@\(id)"
     })
+  }
+  
+  public var backgroundImage: Binder<UIImage?> {
+    return Binder(self.base) { view, image in
+      view.backgroundImageView.image = image
+    }
   }
 }

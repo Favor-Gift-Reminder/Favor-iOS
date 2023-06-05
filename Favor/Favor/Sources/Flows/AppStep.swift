@@ -63,7 +63,8 @@ enum AppStep: Step {
   
   // MARK: - FriendPage
   case friendManagementIsRequired(FriendManagementViewController.ViewControllerType)
-
+  case friendPageIsRequired(Friend)
+  
   // MARK: - AnniversaryList
   case anniversaryListIsRequired
   case anniversaryListIsComplete
@@ -87,8 +88,8 @@ enum AppStep: Step {
   case giftShareIsRequired(Gift)
 
   // MARK: - BottomSheet
-  case memoBottomSheetIsRequired(String)
-  case memoBottomSheetIsComplete(String)
+  case memoBottomSheetIsRequired(String?)
+  case memoBottomSheetIsComplete(String?)
   case filterBottomSheetIsRequired(SortType)
   case filterBottomSheetIsComplete(SortType)
   case anniversaryBottomSheetIsRequired(AnniversaryCategory?)
@@ -97,4 +98,5 @@ enum AppStep: Step {
   // MARK: - Popup
   case alertPopupIsRequired(AlertPopup.PopupType)
   case alertPopupIsComplete(isConfirmed: Bool)
+  
 }

@@ -92,7 +92,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .settingButtonDidTap:
       self.steps.accept(AppStep.settingIsRequired)
       return .empty()
-
+      
     case .headerRightButtonDidTap(let section):
       switch section {
       case .anniversaries:
@@ -104,7 +104,7 @@ final class MyPageViewReactor: Reactor, Stepper {
       return .empty()
 
     case .friendCellDidTap(let friend):
-      os_log(.debug, "Friend did tap: \(friend).")
+      self.steps.accept(AppStep.friendPageIsRequired(friend))
       return .empty()
 
     case .newFriendCellDidTap:
@@ -134,7 +134,7 @@ final class MyPageViewReactor: Reactor, Stepper {
         return .favors(ProfileFavorCellReactor(favor: favor))
       }
       newState.favorItems = favorSection
-
+      
     case .updateAnniversarySection(let anniversaries):
       let anniversarySection = anniversaries.map { anniversary -> ProfileSectionItem in
         return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))

@@ -111,10 +111,12 @@ class BasePopup: BaseViewController {
       delay: 0,
       options: .curveEaseInOut,
       animations: {
-      self.dimmedView.alpha = 0
-      self.containerView.alpha = 0
-      self.view.layoutIfNeeded()
-    }) { _ in self.dismiss(animated: false) }
+        self.dimmedView.alpha = 0
+        self.containerView.alpha = 0
+        self.view.layoutIfNeeded()
+      },
+      completion: { _ in self.dismiss(animated: false) }
+    )
   }
   
   /// 배경의 알파 값을 조절하는 애니메이션 메서드입니다.

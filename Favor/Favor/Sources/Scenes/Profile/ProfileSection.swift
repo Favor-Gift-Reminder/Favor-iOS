@@ -20,15 +20,17 @@ enum ProfileElementKind {
 
 enum ProfileSectionItem: ComposableItem {
   case profileSetupHelper(ProfileSetupHelperCellReactor)
+  case anniversarySetupHelper
   case favors(ProfileFavorCellReactor)
   case anniversaries(ProfileAnniversaryCellReactor)
-  case memo
+  case memo(String?)
   case friends(ProfileFriendCellReactor)
 }
 
 // MARK: - Section
 
 enum ProfileSection: ComposableSection {
+  case anniversarySetupHelper
   case profileSetupHelper
   case favors
   case anniversaries
@@ -55,7 +57,7 @@ extension ProfileSectionItem {
       return false
     }
   }
-
+  
   func hash(into hasher: inout Hasher) {
     switch self {
     case let .profileSetupHelper(reactor):
@@ -64,10 +66,12 @@ extension ProfileSectionItem {
       hasher.combine(ObjectIdentifier(reactor))
     case let .anniversaries(reactor):
       hasher.combine(ObjectIdentifier(reactor))
-    case .memo:
-      hasher.combine("memo")
+    case .memo(let memo):
+      hasher.combine(memo)
     case let .friends(reactor):
       hasher.combine(ObjectIdentifier(reactor))
+    default:
+      break
     }
   }
 }
@@ -77,7 +81,8 @@ extension ProfileSectionItem {
 extension ProfileSection {
   var headerTitle: String? {
     switch self {
-    case .profileSetupHelper: return "새 프로필"
+    case .profileSetupHelper, .anniversarySetupHelper:
+      return "새 프로필"
     case .favors: return "취향"
     case .anniversaries: return "기념일"
     case .memo: return "메모"
@@ -99,6 +104,8 @@ extension ProfileSection {
 extension ProfileSection: Composable {
   public var item: UICollectionViewComposableLayout.Item {
     switch self {
+    case .anniversarySetupHelper:
+      return .listRow(height: .absolute(250))
     case .profileSetupHelper:
       return .grid(
         width: .absolute(250),
@@ -127,6 +134,10 @@ extension ProfileSection: Composable {
 
   public var group: UICollectionViewComposableLayout.Group {
     switch self {
+    case .anniversarySetupHelper:
+      return .list(
+        numberOfItems: 1
+      )
     case .profileSetupHelper:
       return .custom(
         width: .estimated(250),
@@ -149,9 +160,7 @@ extension ProfileSection: Composable {
     case .anniversaries:
       return .list(spacing: .fixed(10))
     case .memo:
-      return .list(
-        numberOfItems: 1
-      )
+      return .fullList(height: .estimated(130))
     case .friends:
       return .custom(
         width: .estimated(1),
@@ -171,6 +180,12 @@ extension ProfileSection: Composable {
     let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20)
 
     switch self {
+    case .anniversarySetupHelper:
+      return .base(
+        contentInsets: defaultInsets,
+        boundaryItems: [header],
+        decorationItems: [whiteBackground]
+      )
     case .profileSetupHelper:
       return .base(
         contentInsets: defaultInsets,

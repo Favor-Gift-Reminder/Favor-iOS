@@ -56,7 +56,9 @@ extension FriendResponseDTO {
     return Friend(
       friendNo: self.friendNo,
       name: self.friendName,
-//      profilePhoto: <#T##Photo?#>,
+      anniversaryList: self.anniversaryList.map { $0.toDomain() },
+      favorList: self.favorList,
+      profilePhoto: nil,
       memo: self.friendMemo,
       friendUserNo: self.friendUserNo,
       isUser: self.isUser

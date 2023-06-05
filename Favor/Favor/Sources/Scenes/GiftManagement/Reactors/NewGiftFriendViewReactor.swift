@@ -134,7 +134,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       let friendItems = state.currentFriends
         .map { friend in
           var buttonType: NewGiftFriendCell.RightButtonType = .add
-          if let _ = state.selectedFriends.first(where: { $0.friendNo == friend.friendNo }) {
+          if state.selectedFriends.first(where: { $0.friendNo == friend.friendNo }) != nil {
             buttonType = .done
           }
           return NewGiftFriendItem.friend(
