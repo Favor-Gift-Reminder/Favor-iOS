@@ -2,6 +2,26 @@ name: build
 
 env:
   PROJECT: 'Favor'
+  # app archive 및 export 에 쓰일 환경 변수 설정
+  XC_PROJECT: ${{ 'Favor/Favor.xcodeproj' }}
+  XC_SCHEME: ${{ 'Favor' }}
+  XC_ARCHIVE: ${{ 'Favor.xcarchive' }}
+  XC_IPA: ${{ 'Favor.ipa' }}
+
+  # certificate 
+  ENCRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/certificate.p12.gpg' }}
+  DECRYPTED_CERT_FILE_PATH: ${{ '.github/secrets/certificate.p12' }}
+  CERT_ENCRYPTION_KEY: ${{ secrets.CERTS_ENCRYPTION_PW }} # gpg로 파일 암호화할 때 사용한 암호
+
+  # provisioning
+  ENCRYPTED_PROVISION_FILE_PATH: ${{ '.github/secrets/Favor_GitHubActions_Deploy.mobileprovision.gpg' }}
+  DECRYPTED_PROVISION_FILE_PATH: ${{ '.github/secrets/Favor_GitHubActions_Deploy.mobileprovision' }}
+  PROVISIONING_ENCRYPTION_KEY: ${{ secrets.PROVISION_ENCRYPTION_PW }} # gpg로 파일 암호화할 때 사용한 암호
+
+  # certification export key
+  CERT_EXPORT_KEY: ${{ secrets.CERT_EXPORT_PW }}
+
+  KEYCHAIN: ${{ 'test.keychain' }}
 
 on:
   pull_request:
@@ -10,12 +30,12 @@ on:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-13
     strategy:
         matrix:
           include:
-            - xcode: "14.2"
-              ios: "16.2"
+            - xcode: "14.3"
+              ios: "16.4"
               simulator: "iPhone 13 Pro"
 
     steps:
@@ -26,10 +46,44 @@ jobs:
       env:
         API_SECRET: ${{ secrets.API_SECRET }}
         TERM_SECRET: ${{ secrets.TERM_SECRET }}
+        AUTHKEY_SECRET: ${{ secrets.APPSTORE_AUTHKEY }}
       run: |
         echo $API_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}NetworkKit/Sources/${{ env.PROJECT }}NetworkKit/API-Info.plist
         echo $TERM_SECRET | base64 -D -o ${{ env.PROJECT }}/${{ env.PROJECT }}/Term-Info.plist
+        mkdir ~/.private_keys/
+        echo $AUTHKEY_SECRET | base64 -D -o ~/.private_keys/AuthKey_${{ secrets.APPSTORE_API_KEY_ID }}.p8
         ls -al ${{ env.PROJECT }}
+        
+    - name: Configure Keychain 
+      # 키체인 초기화 - 임시 키체인 생성
+      run: |
+        security create-keychain -p "" ${{ env.KEYCHAIN }}
+        security list-keychains -s ${{ env.KEYCHAIN }}
+        security default-keychain -s ${{ env.KEYCHAIN }}
+        security unlock-keychain -p "" ${{ env.KEYCHAIN }}
+        security set-keychain-settings
+        
+    - name : Configure Code Signing
+      run: |
+        # certificate 복호화
+        gpg -d -o ${{ env.DECRYPTED_CERT_FILE_PATH }} --pinentry-mode=loopback --passphrase ${{ env.CERT_ENCRYPTION_KEY }} ${{ env.ENCRYPTED_CERT_FILE_PATH }}
+        # provisioning 복호화
+        gpg -d -o ${{ env.DECRYPTED_PROVISION_FILE_PATH }} --pinentry-mode=loopback --passphrase ${{ env.PROVISIONING_ENCRYPTION_KEY }} ${{ env.ENCRYPTED_PROVISION_FILE_PATH }}
+
+        # security를 사용하여 인증서와 개인 키를 새로 만든 키 체인으로 가져옴
+        security import ${{ env.DECRYPTED_CERT_FILE_PATH }} -k ${{ env.KEYCHAIN }} -P ${{ env.CERT_EXPORT_KEY }} -A
+        security set-key-partition-list -S apple-tool:,apple: -s -k "" ${{ env.KEYCHAIN }}
+
+        # Xcode에서 찾을 수 있는 프로비저닝 프로필 설치하기 위해 우선 프로비저닝 디렉토리를 생성
+        mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+        # 디버깅 용 echo 명령어
+        echo `ls .github/secrets/*.mobileprovision`
+          # 모든 프로비저닝 프로파일을 rename 하고 위에서 만든 디렉토리로 복사하는 과정
+          for PROVISION in `ls .github/secrets/*.mobileprovision`
+          do
+            UUID=`/usr/libexec/PlistBuddy -c 'Print :UUID' /dev/stdin <<< $(security cms -D -i ./$PROVISION)`
+          cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
+        done
 
     - name: Select Xcode ${{ matrix.xcode }}
       run: sudo xcode-select -switch /Applications/Xcode_${{ matrix.xcode}}.app && /usr/bin/xcodebuild -version

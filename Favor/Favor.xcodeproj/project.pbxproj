@@ -11,6 +11,7 @@
 		2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562229A91EEE006CF302 /* NewAnniversaryHeaderView.swift */; };
 		2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E00562429A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift */; };
 		2E1C5661296C29210067FC78 /* OnboardingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C5660296C29210067FC78 /* OnboardingVC.swift */; };
+		2E2DB8CC2A2D78D700E6F5C6 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
 		2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */; };
 		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
 		2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */; };
@@ -45,7 +46,6 @@
 		2E87B8C92A0A501D00570386 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA38499298D7C680081499C /* HomeHeaderView.swift */; };
 		2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DE2998B80200C8C47F /* ProfileSection.swift */; };
 		2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F8299E160A00C8C47F /* ProfileView.swift */; };
-		2E87B8D32A0BC8FF00570386 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
 		2E87B8D82A0BCCD400570386 /* FriendListModifyingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D72A0BCCD400570386 /* FriendListModifyingVC.swift */; };
 		2E87B8DA2A0BCE3200570386 /* FriendListModifyingViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D92A0BCE3200570386 /* FriendListModifyingViewReactor.swift */; };
 		2E87B8E02A0C881A00570386 /* FriendListModifyingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8DF2A0C881A00570386 /* FriendListModifyingCell.swift */; };
@@ -1411,6 +1411,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E2DB8CC2A2D78D700E6F5C6 /* BaseFriendListVC.swift in Sources */,
 				2E634E252A16108E00DD51ED /* FilterVC.swift in Sources */,
 				2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */,
 				2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */,
@@ -1521,9 +1522,7 @@
 				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */,
-				2E87B8D32A0BC8FF00570386 /* BaseFriendListVC.swift in Sources */,
 				E593C8252A176B4500711C0F /* FriendManagementVC.swift in Sources */,
-				2E87B8D32A0BC8FF00570386 /* BaseFriendListVC.swift in Sources */,
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				2EE1537529E5AD560023FEA5 /* SearchRecentHeader.swift in Sources */,
@@ -1722,7 +1721,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1743,7 +1742,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor iOS Development";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor GitHubActions Deploy";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1759,7 +1758,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -1780,7 +1779,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor iOS Development";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor GitHubActions Deploy";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
