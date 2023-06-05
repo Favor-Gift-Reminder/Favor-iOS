@@ -200,10 +200,9 @@ private extension FriendPageViewReactor {
     }
     // onLocal
     self.friendFetcher.onLocal = {
-      return try await RealmManager.shared.read(Friend.self).filter(
-          "friendNo == %@",
-          self.friend.friendNo
-      )
+      return try await RealmManager.shared.read(Friend.self).where {
+        $0.friendNo.in([self.friend.friendNo])
+      }
     }
     // onLocalUpdate
     self.friendFetcher.onLocalUpdate = { _, remoteFriend in
