@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import Reusable
 import Then
+import SnapKit
 
 final class ProfileMemoCell: UICollectionViewCell, Reusable {
   
@@ -17,11 +18,22 @@ final class ProfileMemoCell: UICollectionViewCell, Reusable {
   
   private let memoLabel: UILabel = UILabel().then {
     $0.numberOfLines = 0
-    $0.textAlignment = .left
+    $0.textAlignment = .justified
+    $0.lineBreakMode = .byWordWrapping
     $0.font = .favorFont(.regular, size: 16.0)
   }
   
+  private let containerView: UIView = {
+    let view = UIView()
+    return view
+  }()
+  
   private let divider = FavorDivider()
+  
+  // MARK: - Properties
+  
+  private var labelHeight: Constraint?
+  private let defaultLabelHeight: CGFloat = 130.0
   
   // MARK: - Initializer
   
@@ -46,6 +58,12 @@ final class ProfileMemoCell: UICollectionViewCell, Reusable {
       self.memoLabel.text = memo
       self.memoLabel.textColor = .favorColor(.icon)
     }
+    if self.memoLabel.intrinsicContentSize.height > self.defaultLabelHeight {
+      print(self.memoLabel.intrinsicContentSize.height)
+      self.labelHeight?.update(offset: self.memoLabel.intrinsicContentSize.height)
+    } else {
+      self.labelHeight?.update(offset: self.defaultLabelHeight)
+    }
   }
 }
 
@@ -55,21 +73,29 @@ extension ProfileMemoCell: BaseView {
   func setupStyles() {}
   
   func setupLayouts() {
+    self.contentView.addSubview(self.containerView)
+    
     [
       self.memoLabel,
       self.divider
     ].forEach {
-      self.contentView.addSubview($0)
+      self.containerView.addSubview($0)
     }
   }
   
   func setupConstraints() {
+    self.containerView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+      self.labelHeight = make.height.equalTo(self.defaultLabelHeight).constraint
+    }
+    
     self.memoLabel.snp.makeConstraints { make in
       make.top.leading.trailing.equalToSuperview()
     }
     
     self.divider.snp.makeConstraints { make in
-      make.bottom.leading.trailing.equalToSuperview()
+      make.top.equalTo(self.containerView.snp.bottom).offset(16.0)
+      make.leading.trailing.equalToSuperview()
       make.height.equalTo(1.0)
     }
   }

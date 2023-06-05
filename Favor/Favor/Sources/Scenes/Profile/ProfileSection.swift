@@ -116,7 +116,7 @@ extension ProfileSection: Adaptive {
       )
     case .memo:
       return .listRow(
-        height: .absolute(130)
+        height: .estimated(130)
       )
     case .friends:
       return .grid(
@@ -154,7 +154,10 @@ extension ProfileSection: Adaptive {
     case .anniversaries:
       return .list(spacing: .fixed(10))
     case .memo:
-      return .list(
+      return .custom(
+        width: .fractionalWidth(1),
+        height: .estimated(130),
+        direction: .vertical,
         numberOfItems: 1
       )
     case .friends:
