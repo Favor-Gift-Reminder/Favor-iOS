@@ -15,8 +15,6 @@ import RxFlow
 import RxSwift
 import SnapKit
 
-// TODO: [] RxFlow 구현
-
 final class MemoBottomSheet: BaseBottomSheet, Stepper {
   
   private enum Metric {
@@ -76,7 +74,6 @@ final class MemoBottomSheet: BaseBottomSheet, Stepper {
     self.updateTitle("메모 수정")
     self.cancelButton.isHidden = true
     self.textView.text = self.memo
-    self.finishButton.isEnabled = self.memo == nil ? false : true
   }
   
   override func setupLayouts() {
@@ -124,12 +121,6 @@ final class MemoBottomSheet: BaseBottomSheet, Stepper {
     textViewChanged
       .scan("") { $1.count >= 150 ? $0 : $1 }
       .bind(to: self.textView.rx.text)
-      .disposed(by: self.disposeBag)
-    
-    // 완료 버튼 활성/비활성화
-    textViewChanged
-      .map { !$0.isEmpty }
-      .bind(to: self.finishButton.rx.isEnabled)
       .disposed(by: self.disposeBag)
     
     // 키보드 올라옴 감지
