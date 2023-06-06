@@ -32,7 +32,7 @@ final class ProfileAnniversarySetupHelperCell: UICollectionViewCell, Reusable {
     $0.textColor = .favorColor(.titleAndLine)
   }
   
-  private let shortCutButton = FavorSmallButton(with: .darkWithIcon("바로가기", image: nil))
+  private let shortCutButton = FavorSmallButton(with: .dark("바로가기", image: nil))
   
   // MARK: - Initializer
   

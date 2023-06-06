@@ -23,7 +23,7 @@ final class DashboardFlow: Flow {
     case .tabBarIsRequired:
       return self.navigateToDashBoard()
 
-    case .newGiftIsRequired:
+    case .giftManagementIsRequired:
       return self.navigateToNewGift()
 
     default:
@@ -78,7 +78,7 @@ private extension DashboardFlow {
 
     return .one(flowContributor: .contribute(
       withNextPresentable: newGiftFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.newGiftIsRequired)
+      withNextStepper: OneStepper(withSingleStep: AppStep.giftManagementIsRequired())
     ))
   }
 }

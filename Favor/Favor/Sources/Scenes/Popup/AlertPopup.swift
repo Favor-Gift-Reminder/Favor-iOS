@@ -8,9 +8,9 @@
 import UIKit
 
 import FavorKit
-import SnapKit
-import RxFlow
 import RxCocoa
+import RxFlow
+import SnapKit
 
 final class AlertPopup: BasePopup, Stepper {
   

@@ -8,8 +8,8 @@
 import UIKit
 
 import FavorKit
-import SnapKit
 import RxSwift
+import SnapKit
 import Then
 
 final class AnniversaryBottomSheetView: UIView {

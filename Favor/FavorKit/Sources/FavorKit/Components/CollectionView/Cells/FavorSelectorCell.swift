@@ -8,15 +8,24 @@
 import UIKit
 
 import Reusable
+import RxCocoa
+import RxSwift
 import SnapKit
 
+@objc
 public protocol FavorSelectorCellDelegate: AnyObject {
-  func selectorDidUpdate(from cell: FavorSelectorCell, _ data: String)
+  @objc
+  optional func selectorDidUpdate(from cell: FavorSelectorCell, _ data: String)
+
+  @objc
+  optional func selectorDidTap(from cell: FavorSelectorCell)
 }
 
 open class FavorSelectorCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Properties
+
+  public weak var delegate: FavorSelectorCellDelegate?
 
   // MARK: - UI Components
 
@@ -56,10 +65,22 @@ open class FavorSelectorCell: BaseCollectionViewCell, Reusable {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    self.bind()
   }
 
   public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: - Bind
+
+  private func bind() {
+    self.button.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.delegate?.selectorDidTap?(from: self)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions

@@ -36,6 +36,12 @@ final class HomeFlow: Flow {
     case .reminderIsRequired:
       return self.navigateToReminder()
 
+    case .filterBottomSheetIsRequired(let sortType):
+      return self.navigateToFilter(sortedBy: sortType)
+
+    case .giftDetailIsRequired(let gift):
+      return self.navigateToGift(with: gift)
+
     default: return .none
     }
   }
@@ -74,13 +80,22 @@ private extension HomeFlow {
     ))
   }
 
+  func navigateToGift(with gift: Gift) -> FlowContributors {
+    let giftFlow = GiftFlow(rootViewController: self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: giftFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.giftDetailIsRequired(gift))
+    ))
+  }
+
   func navigateToFilter(sortedBy sortType: SortType) -> FlowContributors {
     let filterBottomSheet = FilterBottomSheet()
     filterBottomSheet.currentSortType = sortType
     filterBottomSheet.modalPresentationStyle = .overFullScreen
     self.rootViewController.present(filterBottomSheet, animated: false)
     self.filterBottomSheet = filterBottomSheet
-    
+
     return .one(flowContributor: .contribute(
       withNextPresentable: filterBottomSheet,
       withNextStepper: filterBottomSheet
@@ -95,7 +110,8 @@ private extension HomeFlow {
       return .none
     }
     // TODO: Realm DB 구현하며 Sort, Filter 방식 변경
-    homeVC.reactor?.currentSortType.accept(sortType)
+//    homeVC.reactor?.currentSortType.accept(sortType)
+//    homeVC.filterDidEnded()
     return .none
   }
 }

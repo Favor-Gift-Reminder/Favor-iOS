@@ -9,8 +9,8 @@ import UIKit
 
 import FavorKit
 import Reusable
-import Then
 import SnapKit
+import Then
 
 final class ProfileMemoCell: UICollectionViewCell, Reusable {
   

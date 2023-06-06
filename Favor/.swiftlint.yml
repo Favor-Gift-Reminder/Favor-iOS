@@ -2,6 +2,7 @@ excluded: # 린트 과정에서 무시할 파일 경로. `included`보다 우선
   - Pods
   - Favor/Sources/Scenes/Application/AppDelegate.swift
   - Favor/Sources/Scenes/Application/SceneDelegate.swift
+  - ImageViewer/
 
 disabled_rules: # Default Rules에서 비활성화할 규칙
   - trailing_whitespace

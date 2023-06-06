@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "composer",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nomatterjun/Composer.git",
+      "state" : {
+        "revision" : "cc0922e0da66c7c118b4d3bc27548c2dd2ec72ca",
+        "version" : "1.0.1"
+      }
+    },
+    {
       "identity" : "kingfisher",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",

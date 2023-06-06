@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 public class BaseFriendListViewController: BaseViewController {
@@ -69,10 +70,10 @@ public class BaseFriendListViewController: BaseViewController {
     }
     return dataSource
   }()
-  public lazy var adapter: Adapter<FriendSection, FriendSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(scrollDirection: .vertical)
-    return adapter
+  public lazy var composer: Composer<FriendSection, FriendSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    composer.configuration = Composer.Configuration(scrollDirection: .vertical)
+    return composer
   }()
 
   // MARK: - UI Components

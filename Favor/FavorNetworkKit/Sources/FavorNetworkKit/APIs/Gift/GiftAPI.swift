@@ -25,7 +25,7 @@ public enum GiftAPI {
 
   /// 선물 수정
   /// ``` json
-  /// // giftRequestDTO
+  /// // GiftUpdateRequestDTO
   /// {
   ///   "giftName": "선물이름",
   ///   "giftDate": "1996-02-29",
@@ -33,14 +33,14 @@ public enum GiftAPI {
   ///   "category": "생일",
   ///   "emotion": "기뻐요",
   ///   "isPinned": false,
-  ///   "isGiven": false
+  ///   "isGiven": false,
+  ///   "friendNoList": [1]
   /// }
   /// ```
   /// - Parameters:
   ///   - dto: 수정하는 선물의 정보를 담은 리퀘스트 DTO - `Body`
-  ///   - friendNo: 수정하는 선물과 관련된 친구의 DB 넘버 - `Query`
   ///   - giftNo: 수정하는 선물의 DB 넘버 - `Path`
-  case patchGift(GiftRequestDTO, friendNo: Int, giftNo: Int)
+  case patchGift(GiftUpdateRequestDTO, giftNo: Int)
 
   /// 선물 생성
   /// ``` json
@@ -56,9 +56,8 @@ public enum GiftAPI {
   /// ```
   /// - Parameters:
   ///   - dto: 생성하는 선물의 정보를 담은 리퀘스트 DTO - `Body`
-  ///   - friendNo: 생성하는 선물과 관련된 친구의 DB 넘버 - `Path`
   ///   - userNo: 선물을 생성하는 유저의 DB 넘버 - `Path`
-  case postGift(GiftRequestDTO, friendNo: Int, userNo: Int)
+  case postGift(GiftRequestDTO, userNo: Int)
 }
 
 extension GiftAPI: BaseTargetType {

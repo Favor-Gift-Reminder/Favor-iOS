@@ -26,8 +26,8 @@ public final class RealmManager: RealmCRUDable {
   /// 로컬 DB의 버전
   ///
   /// [~ Version History ~](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  private static let version: UInt64 = 8
-  
+  private static let version: UInt64 = 10
+
   /// RealmManager에서 사용될 realm 인스턴스
   private var realm: Realm!
   /// Realm의 transaction은 해당 realm 인스턴스가 생성된 쓰레드에서 이루어져야 합니다.
@@ -71,6 +71,16 @@ public final class RealmManager: RealmCRUDable {
             migration.enumerateObjects(ofType: Friend.className()) { _, newObject in
               newObject!["anniversaryList"] = List<Anniversary>()
               newObject!["favorList"] = List<String>()
+            }
+          }
+          if oldVersion < 9 {
+            migration.enumerateObjects(ofType: Gift.className()) { _, newObject in
+              newObject!["privateCategory"] = "가벼운선물"
+            }
+          }
+          if oldVersion < 10 {
+            migration.enumerateObjects(ofType: Gift.className()) { _, newObject in
+              newObject!["privateCategory"] = "가벼운선물"
             }
           }
         }

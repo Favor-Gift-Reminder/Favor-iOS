@@ -38,7 +38,11 @@ public final class FavorLoadingFooterView: UICollectionReusableView, Reusable {
   // MARK: - Functions
 
   public func switchSpinning(to isAnimating: Bool) {
-    isAnimating ? self.spinner.startAnimating() : self.spinner.stopAnimating()
+    if isAnimating {
+      self.spinner.startAnimating()
+    } else {
+      self.spinner.stopAnimating()
+    }
   }
 }
 

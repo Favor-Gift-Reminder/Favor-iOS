@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 enum ProfileElementKind {
@@ -15,7 +16,9 @@ enum ProfileElementKind {
   static let sectionWhiteBackground = "Profile.SectionWhiteBackground"
 }
 
-enum ProfileSectionItem: SectionModelItem {
+// MARK: - Item
+
+enum ProfileSectionItem: ComposableItem {
   case profileSetupHelper(ProfileSetupHelperCellReactor)
   case anniversarySetupHelper
   case favors(ProfileFavorCellReactor)
@@ -24,7 +27,9 @@ enum ProfileSectionItem: SectionModelItem {
   case friends(ProfileFriendCellReactor)
 }
 
-enum ProfileSection: SectionModelType {
+// MARK: - Section
+
+enum ProfileSection: ComposableSection {
   case anniversarySetupHelper
   case profileSetupHelper
   case favors
@@ -32,6 +37,8 @@ enum ProfileSection: SectionModelType {
   case memo
   case friends
 }
+
+// MARK: - Hashable
 
 extension ProfileSectionItem {
   static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
@@ -69,6 +76,8 @@ extension ProfileSectionItem {
   }
 }
 
+// MARK: - Properties
+
 extension ProfileSection {
   var headerTitle: String? {
     switch self {
@@ -90,16 +99,13 @@ extension ProfileSection {
   }
 }
 
-// MARK: - Adapter
+// MARK: - Composer
 
-extension ProfileSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension ProfileSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .anniversarySetupHelper:
-      return .grid(
-        width: .fractionalWidth(1.0),
-        height: .absolute(250)
-      )
+      return .listRow(height: .absolute(250))
     case .profileSetupHelper:
       return .grid(
         width: .absolute(250),
@@ -126,7 +132,7 @@ extension ProfileSection: Adaptive {
     }
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .anniversarySetupHelper:
       return .list(
@@ -141,7 +147,7 @@ extension ProfileSection: Adaptive {
         spacing: .fixed(8)
       )
     case .favors:
-      let innerGroup: FavorCompositionalLayout.Group = .flow(
+      let innerGroup: UICollectionViewComposableLayout.Group = .flow(
         height: .absolute(32),
         numberOfItems: 3,
         spacing: .fixed(10)
@@ -154,12 +160,7 @@ extension ProfileSection: Adaptive {
     case .anniversaries:
       return .list(spacing: .fixed(10))
     case .memo:
-      return .custom(
-        width: .fractionalWidth(1),
-        height: .estimated(130),
-        direction: .vertical,
-        numberOfItems: 1
-      )
+      return .fullList(height: .estimated(130))
     case .friends:
       return .custom(
         width: .estimated(1),
@@ -170,10 +171,10 @@ extension ProfileSection: Adaptive {
       )
     }
   }
-  
-  public var section: FavorCompositionalLayout.Section {
-    let header = FavorCompositionalLayout.BoundaryItem.header(height: .estimated(32))
-    let whiteBackground = FavorCompositionalLayout.DecorationItem.background(
+
+  public var section: UICollectionViewComposableLayout.Section {
+    let header = UICollectionViewComposableLayout.BoundaryItem.header(height: .estimated(32))
+    let whiteBackground = UICollectionViewComposableLayout.DecorationItem.background(
       kind: ProfileElementKind.sectionWhiteBackground
     )
     let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20)
@@ -216,7 +217,7 @@ extension ProfileSection: Adaptive {
       return .base(
         contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 66, trailing: 20),
         orthogonalScrolling: .continuous,
-        boundaryItems: [FavorCompositionalLayout.BoundaryItem.header(height: .estimated(72))]
+        boundaryItems: [UICollectionViewComposableLayout.BoundaryItem.header(height: .estimated(72))]
       )
     }
   }

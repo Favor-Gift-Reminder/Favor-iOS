@@ -35,8 +35,6 @@ enum AppStep: Step {
   
   // MARK: - Home
   case homeIsRequired
-  case filterIsRequired(SortType)
-  case filterIsComplete(SortType)
   
   // MARK: - Search
   case searchIsRequired
@@ -77,17 +75,28 @@ enum AppStep: Step {
   
   // MARK: - Test
   case testIsRequired
-  
-  // MARK: - NewGift
-  case newGiftIsRequired
-  case newGiftIsComplete
+
+  // MARK: - Gift
+  case giftManagementIsRequired(Gift? = nil)
+  case giftManagementIsCompleteWithNoChanges
+  case newGiftIsComplete(GiftEditor)
+  case editGiftIsComplete(GiftEditor)
   case newGiftFriendIsRequired
+  case giftDetailIsRequired(Gift)
+  case giftDetailIsComplete(Gift)
+  case giftDetailPhotoIsRequired(Int, Int)
+  case giftShareIsRequired(Gift)
+
+  // MARK: - BottomSheet
+  case memoBottomSheetIsRequired(String?)
+  case memoBottomSheetIsComplete(String?)
+  case filterBottomSheetIsRequired(SortType)
+  case filterBottomSheetIsComplete(SortType)
+  case anniversaryBottomSheetIsRequired(AnniversaryCategory?)
+  case anniversaryBottomSheetIsComplete(AnniversaryCategory)
   
   // MARK: - Popup
   case alertPopupIsRequired(AlertPopup.PopupType)
   case alertPopupIsComplete(isConfirmed: Bool)
   
-  // MARK: - BottomSheet
-  case memoBottomSheetIsRequired(String?)
-  case memoBottomSheetIsComplete(String?)
 }

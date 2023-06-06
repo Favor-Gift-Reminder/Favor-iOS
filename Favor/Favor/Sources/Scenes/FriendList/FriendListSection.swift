@@ -7,18 +7,25 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
-public enum FriendSectionItem: SectionModelItem {
+// MARK: - Item
+
+public enum FriendSectionItem: ComposableItem {
   case empty
   case friend(Friend)
 }
 
-public enum FriendSection: SectionModelType {
+// MARK: - Section
+
+public enum FriendSection: ComposableSection {
   case empty
   case friend
   case editFriend
 }
+
+// MARK: - Hashable
 
 extension FriendSectionItem {
   public static func == (lhs: FriendSectionItem, rhs: FriendSectionItem) -> Bool {
@@ -42,10 +49,10 @@ extension FriendSectionItem {
   }
 }
 
-// MARK: - Adapter
+// MARK: - Composer
 
-extension FriendSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension FriendSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .empty:
       return .full()
@@ -57,7 +64,7 @@ extension FriendSection: Adaptive {
     }
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .empty:
       return .full()
@@ -66,7 +73,7 @@ extension FriendSection: Adaptive {
     }
   }
 
-  public var section: FavorCompositionalLayout.Section {
+  public var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .empty:
       return .base()

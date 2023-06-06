@@ -20,7 +20,7 @@ final class SearchViewController: BaseSearchViewController {
   
   // MARK: - Constants
   
-  let giftCategories: [String] = ["가벼운 선물", "생일", "집들이", "시험", "승진", "졸업", "기타"]
+  let giftCategories: [String] = ["가벼운선물", "생일", "집들이", "시험", "승진", "졸업", "기타"]
   let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
 
   private enum Constants {
@@ -57,7 +57,7 @@ final class SearchViewController: BaseSearchViewController {
     stackView.axis = .horizontal
     stackView.spacing = 10
     self.giftCategories.forEach {
-      stackView.addArrangedSubview(FavorSmallButton(with: .mainWithIcon($0, image: nil)))
+      stackView.addArrangedSubview(FavorSmallButton(with: .main($0, image: nil)))
     }
     stackView.distribution = .fillProportionally
     return stackView

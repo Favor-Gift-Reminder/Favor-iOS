@@ -20,7 +20,7 @@ class ProfileFavorCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - UI Components
   
-  private let button = FavorSmallButton(with: .darkWithHashTag("취향"))
+  private let button = FavorSmallButton(with: .hashtag("취향"))
   
   // MARK: - Initializer
   

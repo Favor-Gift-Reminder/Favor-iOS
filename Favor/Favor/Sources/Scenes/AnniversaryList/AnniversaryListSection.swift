@@ -7,11 +7,12 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 // MARK: - Item
 
-public enum AnniversaryListSectionItem: SectionModelItem {
+public enum AnniversaryListSectionItem: ComposableItem {
   case empty
   case anniversary(
     _ type: AnniversaryListCell.CellType,
@@ -31,7 +32,7 @@ public enum AnniversaryListSectionItem: SectionModelItem {
 
 // MARK: - Section
 
-public enum AnniversaryListSection: SectionModelType {
+public enum AnniversaryListSection: ComposableSection {
   case empty
   case pinned
   case all
@@ -78,8 +79,8 @@ extension AnniversaryListSectionItem {
 
 // MARK: - Adapter
 
-extension AnniversaryListSection: Adaptive {
-  public var item: FavorCompositionalLayout.Item {
+extension AnniversaryListSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .empty:
       return .full()
@@ -88,7 +89,7 @@ extension AnniversaryListSection: Adaptive {
     }
   }
 
-  public var group: FavorCompositionalLayout.Group {
+  public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .empty:
       return .full()
@@ -97,8 +98,8 @@ extension AnniversaryListSection: Adaptive {
     }
   }
 
-  public var section: FavorCompositionalLayout.Section {
-    let header = FavorCompositionalLayout.BoundaryItem.header(
+  public var section: UICollectionViewComposableLayout.Section {
+    let header = UICollectionViewComposableLayout.BoundaryItem.header(
       height: .absolute(37),
       contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 15, trailing: .zero)
     )

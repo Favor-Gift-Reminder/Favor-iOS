@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 
 public class BaseAnniversaryListViewController: BaseViewController, CellModelTransferDelegate {
@@ -59,13 +60,13 @@ public class BaseAnniversaryListViewController: BaseViewController, CellModelTra
 
   // MARK: - UI Components
 
-  public lazy var adapter: Adapter<AnniversaryListSection, AnniversaryListSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(
+  public lazy var composer: Composer<AnniversaryListSection, AnniversaryListSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    composer.configuration = Composer.Configuration(
       scrollDirection: .vertical,
       sectionSpacing: 40
     )
-    return adapter
+    return composer
   }()
 
   public lazy var collectionView: UICollectionView = {
@@ -94,7 +95,7 @@ public class BaseAnniversaryListViewController: BaseViewController, CellModelTra
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   // MARK: - Functions

@@ -111,7 +111,7 @@ final class HomeViewReactor: Reactor, Stepper {
       if case Section.upcoming = section {
         self.steps.accept(AppStep.reminderIsRequired)
       } else if case Section.timeline = section {
-        // Filter
+        self.steps.accept(AppStep.filterBottomSheetIsRequired(self.currentSortType.value))
       }
       return .empty()
 
@@ -127,7 +127,7 @@ final class HomeViewReactor: Reactor, Stepper {
         print(reminder)
       } else if case let Item.timeline(timeline) = item {
         guard case let Item.Timeline.gift(gift) = timeline else { return .empty() }
-        print(gift)
+        self.steps.accept(AppStep.giftDetailIsRequired(gift))
       }
       return .empty()
 

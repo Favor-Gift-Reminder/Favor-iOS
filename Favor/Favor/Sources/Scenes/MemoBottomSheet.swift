@@ -8,12 +8,12 @@
 import UIKit
 
 import FavorKit
-import Then
 import RSKPlaceholderTextView
 import RxCocoa
 import RxFlow
 import RxSwift
 import SnapKit
+import Then
 
 final class MemoBottomSheet: BaseBottomSheet, Stepper {
   
@@ -148,9 +148,9 @@ final class MemoBottomSheet: BaseBottomSheet, Stepper {
     
     // 완료 버튼 클릭
     self.finishButton.rx.tap
-      .asDriver()
+      .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self) { owner, _ in
-        let text = owner.textView.text
+        let text: String = owner.textView.text ?? ""
         owner.steps.accept(AppStep.memoBottomSheetIsComplete(text))
       }
       .disposed(by: self.disposeBag)

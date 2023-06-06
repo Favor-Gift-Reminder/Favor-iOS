@@ -8,6 +8,7 @@
 import UIKit
 
 import RxCocoa
+import RxGesture
 import RxSwift
 import SnapKit
 
@@ -17,13 +18,17 @@ public final class FavorDatePickerTextField: UIView {
 
   private let disposeBag = DisposeBag()
 
+  /// 실질적으로 사용되는 date 프로퍼티
+  /// 변경 가능한 지점
+  /// 1. updateDate
+  /// 2. 유저 선택
   fileprivate let date = BehaviorRelay<Date?>(value: nil)
+
+  private var isDateSet: Bool = false
 
   public var pickerMode: UIDatePicker.Mode = .date {
     didSet { self.datePicker.datePickerMode = self.pickerMode }
   }
-
-  private var isDateSet: Bool = false
 
   public var placeholder: String = "선택" {
     didSet {
@@ -121,17 +126,12 @@ public final class FavorDatePickerTextField: UIView {
   // MARK: - FUNCTIONS
 
   public func updateDate(_ date: Date?) {
-    self.isDateSet = date != nil
     self.date.accept(date)
   }
 
   public func updateIsUserInteractable(to isInteractable: Bool) {
     self.textField.isUserInteractionEnabled = isInteractable
     self.downButton.isHidden = !isInteractable
-  }
-
-  public func finishEditMode() {
-    self.textField.resignFirstResponder()
   }
 
   // MARK: - BINDING
@@ -143,6 +143,8 @@ public final class FavorDatePickerTextField: UIView {
         if let date {
           let dateString = owner.pickerMode == .time ? date.toTimeString() : date.toDateString()
           owner.textField.text = dateString
+        } else {
+          owner.textField.text = nil
         }
       })
       .disposed(by: self.disposeBag)
@@ -151,7 +153,7 @@ public final class FavorDatePickerTextField: UIView {
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
-        if owner.isDateSet {
+        if owner.textField.isFirstResponder {
           owner.date.accept(date)
         }
       })
@@ -164,12 +166,18 @@ public final class FavorDatePickerTextField: UIView {
       })
       .disposed(by: self.disposeBag)
 
+    // TextField가 선택되고 휠이 화면에 올라올 때
     self.downButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.textField.becomeFirstResponder()
-        owner.isDateSet = true
-        owner.datePicker.setDate(owner.date.value ?? .now, animated: false)
+        owner.popDatePicker()
+      })
+      .disposed(by: self.disposeBag)
+    self.textField.rx.tapGesture()
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, _ in
+        owner.popDatePicker()
       })
       .disposed(by: self.disposeBag)
   }
@@ -202,6 +210,15 @@ extension FavorDatePickerTextField: BaseView {
     self.downButton.snp.makeConstraints { make in
       make.width.height.equalTo(20)
     }
+  }
+}
+
+// MARK: - Privates
+
+private extension FavorDatePickerTextField {
+  func popDatePicker() {
+    self.textField.becomeFirstResponder()
+    self.datePicker.setDate(self.date.value ?? .now, animated: false)
   }
 }
 

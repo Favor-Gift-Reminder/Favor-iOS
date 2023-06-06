@@ -29,17 +29,20 @@ final class NewGiftFlow: Flow {
     case .imagePickerIsRequired(let manager):
       return self.presentPHPicker(manager: manager)
       
-    case .newGiftIsRequired:
+    case .giftManagementIsRequired:
       return self.navigateToNewGift()
-
-    case .newGiftIsComplete:
-      return self.popToTabBar()
       
     case .newGiftFriendIsRequired:
       return self.navigateToNewGiftFriend()
       
     case .friendManagementIsRequired:
       return self.navigateToFriendManagement()
+
+    case .giftManagementIsCompleteWithNoChanges:
+      return self.popToTabBar()
+
+    case .newGiftIsComplete(let gift):
+      return self.popToTabBar(with: gift)
       
     default:
       return .none
@@ -51,14 +54,17 @@ final class NewGiftFlow: Flow {
 
 private extension NewGiftFlow {
   func navigateToNewGift() -> FlowContributors {
-    let newGiftViewController = NewGiftViewController()
-    let newGiftReactor = NewGiftViewReactor(pickerManager: PHPickerManager())
-    newGiftViewController.reactor = newGiftReactor
-    self.rootViewController.pushViewController(newGiftViewController, animated: false)
+    let giftManagementVC = GiftManagementViewController()
+    let giftManagementReactor = GiftManagementViewReactor(.new, pickerManager: PHPickerManager())
+    giftManagementVC.reactor = giftManagementReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(giftManagementVC, animated: false)
+    }
     
     return .one(flowContributor: .contribute(
-      withNextPresentable: newGiftViewController,
-      withNextStepper: newGiftReactor
+      withNextPresentable: giftManagementVC,
+      withNextStepper: giftManagementReactor
     ))
   }
   
@@ -86,7 +92,7 @@ private extension NewGiftFlow {
     ))
   }
 
-  func popToTabBar() -> FlowContributors {
+  func popToTabBar(with gift: GiftEditor? = nil) -> FlowContributors {
     self.rootViewController.dismiss(animated: true)
 
     return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)

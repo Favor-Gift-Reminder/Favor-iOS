@@ -47,7 +47,7 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
     switch action {
     case .viewNeedsLoaded:
       return self.friendFetcher.fetch()
-        .flatMap { (status, friends) -> Observable<Mutation> in
+        .flatMap { (_, friends) -> Observable<Mutation> in
           let friendItems = friends.toArray().map { friend -> FriendSectionItem in
             return .friend(friend)
           }
@@ -61,7 +61,7 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
             let response: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
             print(response.responseMessage)
             return self.friendFetcher.fetch()
-              .flatMap { (status, friends) -> Observable<Mutation> in
+              .flatMap { (_, friends) -> Observable<Mutation> in
                 let friendItems = friends.toArray().map { friend -> FriendSectionItem in
                   return .friend(friend)
                 }

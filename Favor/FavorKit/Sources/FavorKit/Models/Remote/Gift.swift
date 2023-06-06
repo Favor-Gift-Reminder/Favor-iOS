@@ -27,7 +27,7 @@ public class Gift: Object {
   /// 선물 메모
   @Persisted public var memo: String?
   /// 선물 카테고리
-  @Persisted public var category: String?
+  @Persisted public var privateCategory: String
   /// 선물 감정 기록
   @Persisted public var emotion: String?
   /// 선물 핀 여부
@@ -37,11 +37,17 @@ public class Gift: Object {
   /// 받은 선물 / 준 선물 여부 (받은 선물 = `true`)
   @Persisted public var isGiven: Bool
 
+  public var category: FavorCategory {
+    get { FavorCategory(rawValue: self.privateCategory) ?? .lightGift }
+    set { self.privateCategory = newValue.rawValue }
+  }
+
   public override class func propertiesMapping() -> [String: String] {
     [
       "name": "giftName",
       "date": "giftDate",
-      "memo": "giftMemo"
+      "memo": "giftMemo",
+      "privateCategory": "category"
     ]
   }
 
@@ -62,7 +68,7 @@ public class Gift: Object {
     name: String,
     date: Date? = nil,
     memo: String? = nil,
-    category: String? = nil, // enum화?
+    category: FavorCategory,
     emotion: String? = nil, // enum화?
     isPinned: Bool = false,
     friendList: [Friend] = [],
@@ -73,7 +79,7 @@ public class Gift: Object {
     self.name = name
     self.date = date
     self.memo = memo
-    self.category = category
+    self.privateCategory = category.rawValue
     self.emotion = emotion
     self.isPinned = isPinned
     let newFriendList = List<Friend>()

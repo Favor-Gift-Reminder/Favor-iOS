@@ -1,6 +1,6 @@
 //
 //  FavorBarButtonItem.swift
-//  
+//  Favor
 //
 //  Created by 이창준 on 2023/03/12.
 //
@@ -13,9 +13,15 @@ import SnapKit
 
 public class FavorBarButtonItem: UIBarButtonItem {
 
+  // MARK: - Constants
+
+  private enum Metric {
+    static let size: CGFloat = 44.0
+  }
+
   // MARK: - UI Components
 
-  fileprivate lazy var button = UIButton()
+  fileprivate var button = UIButton()
 
   // MARK: - Initializer
 
@@ -24,7 +30,7 @@ public class FavorBarButtonItem: UIBarButtonItem {
   }
 
   /// - Parameters:
-  ///   - imageName: 아이콘 이미지 애셋의 이름
+  ///   - icon: 아이콘 이미지
   public convenience init(_ icon: UIImage.FavorIcon) {
     self.init()
     self.button = self.makeButton(with: icon)
@@ -34,25 +40,41 @@ public class FavorBarButtonItem: UIBarButtonItem {
     self.setupConstraints()
   }
 
+  public convenience init(_ title: String?) {
+    self.init()
+    self.button = self.makeButton(with: title)
+
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
+  }
+
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  public func update(_ icon: UIImage.FavorIcon) {
+    self.button = self.makeButton(with: icon)
+  }
+
+  public func update(_ title: String?) {
+    self.button = self.makeButton(with: title)
   }
 }
 
 // MARK: - UI Setup
 
 extension FavorBarButtonItem: BaseView {
-  public func setupStyles() {
-    //
-  }
+  public func setupStyles() { }
 
   public func setupLayouts() {
     self.customView = self.button
+    self.button.isUserInteractionEnabled = true
   }
 
   public func setupConstraints() {
     self.customView?.snp.makeConstraints { make in
-      make.width.height.equalTo(44)
+      make.width.height.equalTo(Metric.size)
     }
   }
 }
@@ -67,13 +89,24 @@ private extension FavorBarButtonItem {
     let button = UIButton(configuration: config)
     return button
   }
-}
 
-// MARK: - ReactorKit
+  func makeButton(with title: String?) -> UIButton {
+    var config = UIButton.Configuration.plain()
+    config.updateAttributedTitle(title, font: .favorFont(.bold, size: 18))
+    config.contentInsets = .zero
 
-public extension Reactive where Base: FavorBarButtonItem {
-  var tap: ControlEvent<()> {
-    let source = base.button.rx.tap
-    return ControlEvent(events: source)
+    let button = UIButton(configuration: config)
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .disabled:
+        config.baseForegroundColor = .favorColor(.line2)
+      case .normal:
+        config.baseForegroundColor = .favorColor(.icon)
+      default:
+        break
+      }
+    }
+    button.contentMode = .center
+    return button
   }
 }

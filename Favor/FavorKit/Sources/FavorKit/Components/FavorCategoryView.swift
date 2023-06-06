@@ -15,17 +15,16 @@ public final class FavorCategoryView: UIScrollView {
   
   // MARK: - UI COMPONENTS
   
-  private lazy var lightGiftButton = self.button("가벼운 선물", selectedImage: nil)
+  private lazy var lightGiftButton = self.button("가벼운선물", selectedImage: .favorIcon(.gift))
   private lazy var birthDayButton = self.button("생일", selectedImage: .favorIcon(.congrat))
   private lazy var houseWarmButton = self.button("집들이", selectedImage: .favorIcon(.housewarm))
-  private lazy var testButton = self.button("시험", selectedImage: nil)
+  private lazy var testButton = self.button("시험", selectedImage: .favorIcon(.pass))
   private lazy var promotionButton = self.button("승진", selectedImage: .favorIcon(.employed))
   private lazy var graduationButton = self.button("졸업", selectedImage: .favorIcon(.graduate))
-  private lazy var etcButton = self.button("기타", selectedImage: nil)
+  private lazy var etcButton = self.button("기타", selectedImage: .favorIcon(.etc))
   
   private lazy var buttons: [FavorSmallButton] = {
-    var buttons = [FavorSmallButton]()
-    
+    var buttons: [FavorSmallButton] = []
     [
       self.lightGiftButton,
       self.birthDayButton,
@@ -37,14 +36,12 @@ public final class FavorCategoryView: UIScrollView {
     ].forEach {
       buttons.append($0)
     }
-    
     return buttons
   }()
   
   private let contentsView: UIView = {
     let view = UIView()
     view.backgroundColor = .favorColor(.white)
-    
     return view
   }()
   
@@ -92,7 +89,7 @@ public final class FavorCategoryView: UIScrollView {
     for button in self.buttons {
       if button == sender {
         button.isSelected = true
-        self.currentCategory.accept(button.category!)
+        self.currentCategory.accept(button.category)
       } else {
         button.isSelected = false
       }
@@ -130,42 +127,42 @@ extension FavorCategoryView: BaseView {
     
     self.contentsView.snp.makeConstraints { make in
       make.leading.trailing.equalToSuperview()
-      make.bottom.top.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
     
     self.lightGiftButton.snp.makeConstraints { make in
       make.leading.equalToSuperview()
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
     
     self.birthDayButton.snp.makeConstraints { make in
       make.leading.equalTo(self.lightGiftButton.snp.trailing).offset(10)
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
     
     self.houseWarmButton.snp.makeConstraints { make in
       make.leading.equalTo(self.birthDayButton.snp.trailing).offset(10)
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
     
     self.testButton.snp.makeConstraints { make in
       make.leading.equalTo(self.houseWarmButton.snp.trailing).offset(10)
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
     
     self.promotionButton.snp.makeConstraints { make in
       make.leading.equalTo(self.testButton.snp.trailing).offset(10)
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
 
     self.graduationButton.snp.makeConstraints { make in
       make.leading.equalTo(self.promotionButton.snp.trailing).offset(10)
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
 
     self.etcButton.snp.makeConstraints { make in
       make.leading.equalTo(self.graduationButton.snp.trailing).offset(10)
-      make.top.bottom.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
       make.trailing.equalToSuperview()
     }
   }
@@ -181,10 +178,13 @@ private extension FavorCategoryView {
         $0.configuration = FavorSmallButtonType.gray(title).configuration
       case .selected:
         let image = selectedImage?.withTintColor(.favorColor(.white))
-        $0.configuration = FavorSmallButtonType.darkWithIcon(
+        $0.configuration = FavorSmallButtonType.dark(
           title,
           image: image
         ).configuration
+        $0.configuration?.image = image?
+          .withRenderingMode(.alwaysTemplate)
+          .resize(newWidth: 16)
       default:
         break
       }

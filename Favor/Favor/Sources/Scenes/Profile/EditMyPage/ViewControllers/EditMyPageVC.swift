@@ -7,6 +7,7 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
 import Reusable
@@ -75,12 +76,12 @@ final class EditMyPageViewController: BaseViewController, View {
     return dataSource
   }()
   
-  private lazy var adapter: Adapter<EditMyPageSection, EditMyPageSectionItem> = {
-    let adapter = Adapter(collectionView: self.collectionView, dataSource: self.dataSource)
-    adapter.configuration = Adapter.Configuration(
+  private lazy var composer: Composer<EditMyPageSection, EditMyPageSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    composer.configuration = Composer.Configuration(
       scrollDirection: .vertical,
       sectionSpacing: 40.0,
-      header: FavorCompositionalLayout.BoundaryItem.header(
+      header: UICollectionViewComposableLayout.BoundaryItem.header(
         height: .absolute(400),
         contentInsets: NSDirectionalEdgeInsets(
           top: .zero,
@@ -91,7 +92,7 @@ final class EditMyPageViewController: BaseViewController, View {
         kind: EditMyPageCollectionHeaderView.reuseIdentifier
       )
     )
-    return adapter
+    return composer
   }()
 
   // MARK: - UI Components
@@ -149,7 +150,7 @@ final class EditMyPageViewController: BaseViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.adapter.adapt()
+    self.composer.compose()
   }
 
   override func viewWillAppear(_ animated: Bool) {
