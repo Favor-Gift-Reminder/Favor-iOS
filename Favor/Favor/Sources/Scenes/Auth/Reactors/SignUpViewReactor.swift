@@ -197,7 +197,7 @@ private extension SignUpViewReactor {
       let task = Task {
         do {
           let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
-          self.workbench.write { transaction in
+          try await self.workbench.write { transaction in
             transaction.update(User(dto: responseDTO.data).realmObject(), update: .all)
           }
           single(.success(()))

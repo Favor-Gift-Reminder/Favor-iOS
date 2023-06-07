@@ -156,7 +156,7 @@ private extension ReminderViewReactor {
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
-      self.workbench.write { transaction in
+      try await self.workbench.write { transaction in
         transaction.update(remoteReminders.map { $0.realmObject() })
       }
     }

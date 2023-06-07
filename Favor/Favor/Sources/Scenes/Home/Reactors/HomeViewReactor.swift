@@ -235,7 +235,7 @@ private extension HomeViewReactor {
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
-      self.workbench.write { transaction in
+      try await self.workbench.write { transaction in
         transaction.update(remoteReminders.map { $0.realmObject() })
       }
     }
@@ -260,7 +260,7 @@ private extension HomeViewReactor {
     }
     // onLocalUpdate
     self.giftFetcher.onLocalUpdate = { _, remoteGifts in
-      self.workbench.write { transaction in
+      try await self.workbench.write { transaction in
         transaction.update(remoteGifts.map { $0.realmObject() })
       }
     }

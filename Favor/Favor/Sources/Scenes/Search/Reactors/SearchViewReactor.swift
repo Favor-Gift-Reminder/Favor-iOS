@@ -220,9 +220,11 @@ private extension SearchViewReactor {
   }
 
   func updateAndNavigateToSearchResult(_ searchString: String) {
-    self.workbench.write { transaction in
-      transaction.update(RecentSearchObject(query: searchString, date: .now))
+    Task {
+      try await self.workbench.write { transaction in
+        transaction.update(RecentSearchObject(query: searchString, date: .now))
+      }
+      self.steps.accept(AppStep.searchResultIsRequired(searchString))
     }
-    self.steps.accept(AppStep.searchResultIsRequired(searchString))
   }
 }

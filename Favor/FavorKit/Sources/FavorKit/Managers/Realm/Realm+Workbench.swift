@@ -54,15 +54,19 @@ public final class RealmWorkbench {
 
   public func write(
     _ block: @escaping (_ transaction: Transaction) throws -> Void
-  ) {
-    self.realmQueue.async {
-      do {
+  ) async throws {
+    typealias RealmContinuation = UnsafeContinuation<Void, Error>
+    return try await withUnsafeThrowingContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
         let transaction = Transaction(realm: self.realm)
-        try self.realm.write {
-          try block(transaction)
+        do {
+          try self.realm.write {
+            try block(transaction)
+          }
+          continuation.resume(returning: ())
+        } catch {
+          continuation.resume(throwing: error)
         }
-      } catch {
-        print(error)
       }
     }
   }

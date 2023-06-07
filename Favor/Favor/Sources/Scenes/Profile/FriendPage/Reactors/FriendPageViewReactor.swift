@@ -209,7 +209,7 @@ private extension FriendPageViewReactor {
       guard let friend = remoteFriend.first else {
         fatalError("해당 친구가 존재하지 않습니다.")
       }
-      self.workbench.write { transaction in
+      try await self.workbench.write { transaction in
         transaction.update(friend.realmObject())
       }
     }

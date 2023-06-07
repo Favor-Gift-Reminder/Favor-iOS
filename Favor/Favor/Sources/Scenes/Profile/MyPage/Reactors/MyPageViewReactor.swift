@@ -227,7 +227,7 @@ private extension MyPageViewReactor {
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { _, remoteUser in
       guard let remoteUser = remoteUser.first else { return }
-      self.workbench.write { transaction in
+      try await self.workbench.write { transaction in
         transaction.update(remoteUser.realmObject())
       }
     }

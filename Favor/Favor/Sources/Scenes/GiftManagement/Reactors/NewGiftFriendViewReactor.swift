@@ -181,7 +181,7 @@ private extension NewGiftFriendViewReactor {
     }
     // onLocalUpdate
     self.friendFetcher.onLocalUpdate = { _, remoteFriends in
-      self.workbench.write { transaction in
+      try await self.workbench.write { transaction in
         transaction.update(remoteFriends.map { $0.realmObject() })
       }
     }
