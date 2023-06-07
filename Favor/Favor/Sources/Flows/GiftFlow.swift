@@ -128,7 +128,7 @@ private extension GiftFlow {
     ))
   }
 
-  func popToGiftDetail(with gift: GiftEditor? = nil) -> FlowContributors {
+  func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
     // TODO: 메모리 해제
     DispatchQueue.main.async {
       self.rootViewController.popViewController(animated: true)

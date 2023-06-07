@@ -25,7 +25,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case editButtonDidTap
     case deleteButtonDidTap
     case shareButtonDidTap
-    case giftNeedsUpdated(GiftEditor)
+    case giftNeedsUpdated(Gift)
     case giftPhotoDidSelected(Int)
     case isPinnedButtonDidTap
     case emotionTagDidTap
@@ -36,11 +36,11 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   }
 
   enum Mutation {
-    case updateGift(GiftEditor)
+    case updateGift(Gift)
   }
 
   struct State {
-    var gift: GiftEditor
+    var gift: Gift
     var items: [[Item]] = []
     var imageItems: [Item] = []
   }
@@ -49,7 +49,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
   init(gift: Gift) {
     self.initialState = State(
-      gift: gift.toEditor()
+      gift: gift
     )
   }
 
@@ -58,7 +58,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .editButtonDidTap:
-      self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift.toModel()))
+      self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift))
       return .empty()
 
     case .deleteButtonDidTap:
@@ -70,14 +70,14 @@ final class GiftDetailViewReactor: Reactor, Stepper {
         }
 
     case .shareButtonDidTap:
-      self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift.toModel()))
+      self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift))
       return .empty()
 
     case .giftNeedsUpdated(let gift):
       return .just(.updateGift(gift))
 
     case .giftPhotoDidSelected(let item):
-      let total = self.currentState.gift.photoList.count
+      let total = self.currentState.gift.photos.count ?? 0
       self.steps.accept(AppStep.giftDetailPhotoIsRequired(item, total))
       return .empty()
 
@@ -87,7 +87,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return self.requestToggleIsPinned(updatedGift)
         .asObservable()
         .flatMap { gift -> Observable<Mutation> in
-          return .just(.updateGift(gift.toEditor()))
+          return .just(.updateGift(gift))
         }
         .catch { error in
           print(error)
@@ -130,7 +130,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
 
-      if state.gift.photoList.isEmpty {
+      if state.gift.photos.count ?? 0 == .zero {
         newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
       } else {
         newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
@@ -145,16 +145,16 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension GiftDetailViewReactor {
-  func requestDeleteGift(_ gift: GiftEditor) -> Single<Gift> {
+  func requestDeleteGift(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
-      let disposable = networking.request(.deleteGift(giftNo: gift.giftNo))
+      let disposable = networking.request(.deleteGift(giftNo: gift.identifier))
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.toDomain()))
+            single(.success(Gift(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -168,16 +168,16 @@ private extension GiftDetailViewReactor {
     }
   }
 
-  func requestToggleIsPinned(_ gift: GiftEditor) -> Single<Gift> {
+  func requestToggleIsPinned(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
-      let disposable = networking.request(.patchGift(gift.toUpdateRequestDTO(), giftNo: gift.giftNo))
+      let disposable = networking.request(.patchGift(gift.updateRequestDTO(), giftNo: gift.identifier))
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.toDomain()))
+            single(.success(Gift(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

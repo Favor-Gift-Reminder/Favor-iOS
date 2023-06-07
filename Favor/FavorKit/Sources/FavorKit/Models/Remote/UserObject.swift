@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  UserObject.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/19.
@@ -7,7 +7,7 @@
 
 import RealmSwift
 
-public class User: Object {
+public class UserObject: Object {
 
   // MARK: - Properties
 
@@ -22,13 +22,13 @@ public class User: Object {
   /// 회원 취향 태그
   @Persisted public var favorList: MutableSet<String>
   /// 선물 목록
-  @Persisted public var giftList: List<Gift>
+  @Persisted public var giftList: List<GiftObject>
   /// 리마인더 목록
-  @Persisted public var reminderList: List<Reminder>
+  @Persisted public var reminderList: List<ReminderObject>
   /// 기념일 목록
-  @Persisted public var anniversaryList: List<Anniversary>
+  @Persisted public var anniversaryList: List<AnniversaryObject>
   /// 회원 친구 목록
-  @Persisted public var friendList: List<Friend>
+  @Persisted public var friendList: List<FriendObject>
   /// 회원 사진
   @Persisted public var userPhoto: Photo?
   /// 회원 배경사진
@@ -55,9 +55,9 @@ public class User: Object {
     userID: String,
     name: String,
     favorList: [String] = [], // enum화?
-    giftList: [Gift] = [],
-    anniversaryList: [Anniversary] = [],
-    friendList: [Friend] = [],
+    giftList: [GiftObject] = [],
+    anniversaryList: [AnniversaryObject] = [],
+    friendList: [FriendObject] = [],
     userPhoto: Photo? = nil,
     backgroundPhoto: Photo? = nil
   ) {
@@ -67,13 +67,13 @@ public class User: Object {
     self.userID = userID
     self.name = name
     self.favorList.insert(objectsIn: favorList)
-    let newGiftList = List<Gift>()
+    let newGiftList = List<GiftObject>()
     newGiftList.append(objectsIn: giftList)
     self.giftList = newGiftList
-    let newAnniversaryList = List<Anniversary>()
+    let newAnniversaryList = List<AnniversaryObject>()
     newAnniversaryList.append(objectsIn: anniversaryList)
     self.anniversaryList = newAnniversaryList
-    let newFriendList = List<Friend>()
+    let newFriendList = List<FriendObject>()
     newFriendList.append(objectsIn: friendList)
     self.friendList = newFriendList
     self.userPhoto = userPhoto

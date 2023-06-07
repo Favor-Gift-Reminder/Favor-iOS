@@ -53,8 +53,8 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
     case .viewNeedsLoaded:
       return self.userFetcher.fetch()
         .flatMap { (_, user) -> Observable<Mutation> in
-          guard let user = user.toArray().first else { return .empty() }
-          return .just(.updateAnniversaries(user.anniversaryList.toArray()))
+          guard let user = user.first else { return .empty() }
+          return .just(.updateAnniversaries(user.anniversaryList))
         }
 
     case .newButtonDidTap:

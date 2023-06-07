@@ -9,7 +9,7 @@ import Foundation
 
 public extension DispatchQueue {
   static let realmThread = DispatchQueue(
-    label: "com.favor.Favor-iOS.realm",
-    qos: .userInitiated
+    label: "com.favor.Favor-iOS.realm-thread",
+    qos: .background
   )
 }

@@ -35,16 +35,3 @@ public struct AnniversaryResponseDTO: Decodable {
     self.userNo = try container.decode(Int.self, forKey: .userNo)
   }
 }
-
-// MARK: - Convert
-
-extension AnniversaryResponseDTO {
-  public func toDomain() -> Anniversary {
-    return Anniversary(
-      anniversaryNo: self.anniversaryNo,
-      title: self.anniversaryTitle,
-      date: self.anniversaryDate,
-      isPinned: self.isPinned ?? false
-    )
-  }
-}

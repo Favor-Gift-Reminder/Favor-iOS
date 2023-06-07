@@ -22,7 +22,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
 
   public weak var delegate: GiftDetailTagsCellDelegate?
 
-  public var gift: GiftEditor = GiftEditor() {
+  public var gift: Gift = Gift() {
     didSet { self.updateGift() }
   }
 
@@ -81,7 +81,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.relatedFriendsButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.tagDidSelected(.friends(self.gift.friendList))
+        owner.delegate?.tagDidSelected(.friends(self.gift.relatedFriends))
       })
       .disposed(by: self.disposeBag)
   }
@@ -98,7 +98,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       gift.isGiven ? "준 선물" : "받은 선물",
       font: .favorFont(.regular, size: 12)
     )
-    let friends = gift.friendList
+    let friends = gift.relatedFriends
     guard let firstFriend = friends.first else { return }
     let friendsTitle = friends.count == 1 ? firstFriend.name : "\(firstFriend.name) 외 \(friends.count)"
     self.relatedFriendsButton.configuration?.updateAttributedTitle(

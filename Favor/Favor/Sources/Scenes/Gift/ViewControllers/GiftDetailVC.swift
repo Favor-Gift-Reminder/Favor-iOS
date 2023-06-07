@@ -14,6 +14,7 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
+@MainActor
 final class GiftDetailViewController: BaseViewController, View {
   typealias GiftDetailDataSource = UICollectionViewDiffableDataSource<GiftDetailSection, GiftDetailSectionItem>
 
@@ -149,10 +150,10 @@ final class GiftDetailViewController: BaseViewController, View {
 
     reactor.state.map { $0.gift }
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, gift in
-        var totalGifts = gift.photoList.count
+      .drive(with: self, onNext: { (owner: GiftDetailViewController, gift: Gift) in
+        var totalGifts: Int = gift.photos.count
         #if DEBUG
-        totalGifts = gift.photoList.isEmpty ? 4 : gift.photoList.count
+        totalGifts = gift.photos.isEmpty ? 4 : gift.photos.count
         #endif
         owner.totalPages.accept(totalGifts)
       })
@@ -161,7 +162,7 @@ final class GiftDetailViewController: BaseViewController, View {
 
   // MARK: - Functions
 
-  public func update(gift: GiftEditor) {
+  public func update(gift: Gift) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.giftNeedsUpdated(gift))
     self.presentToast(.giftEdited(gift.name), duration: .short)
@@ -280,7 +281,7 @@ private extension GiftDetailViewController {
 // MARK: - GiftDetailTitleCell
 
 extension GiftDetailViewController: GiftDetailTitleCellDelegate {
-  func pinButtonDidTap() {
+  nonisolated func pinButtonDidTap() {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.isPinnedButtonDidTap)
   }
@@ -289,7 +290,7 @@ extension GiftDetailViewController: GiftDetailTitleCellDelegate {
 // MARK: - GiftDetailTagsCell
 
 extension GiftDetailViewController: GiftDetailTagsCellDelegate {
-  func tagDidSelected(_ tag: GiftTags) {
+  nonisolated func tagDidSelected(_ tag: GiftTags) {
     guard let reactor = self.reactor else { return }
     switch tag {
     case .emotion:
@@ -312,12 +313,12 @@ extension GiftDetailViewController: GalleryItemsDataSource {
     
   }
 
-  func itemCount() -> Int {
+  nonisolated func itemCount() -> Int {
     guard let reactor = self.reactor else { return 1 }
-    return reactor.currentState.gift.photoList.count
+    return reactor.currentState.gift.photos.count
   }
 
-  func provideGalleryItem(_ index: Int) -> ImageViewer.GalleryItem {
+  nonisolated func provideGalleryItem(_ index: Int) -> ImageViewer.GalleryItem {
     return GalleryItem.image { $0(UIImage(named: "MyPageHeaderPlaceholder")) }
   }
 

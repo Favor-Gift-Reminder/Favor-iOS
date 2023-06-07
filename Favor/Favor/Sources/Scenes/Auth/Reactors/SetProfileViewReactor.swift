@@ -21,7 +21,8 @@ final class SetProfileViewReactor: Reactor, Stepper {
   var initialState: State
   let pickerManager: PHPickerManager
   var steps = PublishRelay<Step>()
-  let networking = UserNetworking()
+  private let workbench = try! RealmWorkbench()
+  private let networking = UserNetworking()
 
   // Global States
   let isNameEmpty = BehaviorRelay<Bool>(value: true)
@@ -73,9 +74,9 @@ final class SetProfileViewReactor: Reactor, Stepper {
         .asObservable()
         .flatMap { user -> Observable<Mutation> in
           return .concat([
-            .just(.updateUserNo(user.userNo)),
+            .just(.updateUserNo(user.identifier)),
             .just(.updateUserName(user.name)),
-            .just(.updateUserId(user.userID))
+            .just(.updateUserId(user.searchID))
           ])
         }
 
@@ -181,12 +182,11 @@ private extension SetProfileViewReactor {
   func fetchStagedUserInfo() -> Single<User> {
     return Single<User>.create { single in
       let task = Task {
-        do {
-          let user = try await RealmManager.shared.read(User.self).toValue()
-          single(.success(user))
-        } catch {
-          single(.failure(error))
+        guard let user = await self.workbench.values(UserObject.self).first else {
+          single(.failure(FavorError.optionalBindingFailure("UserObject")))
+          return
         }
+        single(.success(User(realmObject: user)))
       }
 
       return Disposables.create {

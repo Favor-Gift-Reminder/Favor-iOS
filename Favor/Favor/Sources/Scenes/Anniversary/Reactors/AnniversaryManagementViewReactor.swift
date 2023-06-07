@@ -24,25 +24,21 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
 
   enum Action {
     case doneButtonDidTap
-    case titleDidUpdate(String?)
-    case categoryDidUpdate(String?)
+    case nameDidUpdate(String?)
+    case categoryDidUpdate(AnniversaryCategory)
     case dateDidUpdate(Date?)
     case deleteButtonDidTap
   }
 
   enum Mutation {
-    case updateAnniversaryTitle(String?)
-    case updateAnniversaryCategory(String)
+    case updateAnniversary(Anniversary)
     case updateAnniversaryDate(Date?)
   }
 
   struct State {
     var viewType: AnniversaryManagementViewController.ViewType
-    var anniversaryNo: Int?
-    var anniversaryTitle: String?
-    var anniversaryCategory: String?
+    var anniversary: Anniversary
     var anniversaryDate: Date?
-    var anniversaryIsPinned: Bool = false
     var sections: [Section] = [.name, .category, .date]
     var items: [Item]
     var isDoneButtonEnabled: Bool = false
@@ -54,12 +50,8 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
   init(with anniversary: Anniversary) {
     self.initialState = State(
       viewType: .edit,
-      anniversaryNo: anniversary.anniversaryNo,
-      anniversaryTitle: anniversary.title,
-      anniversaryCategory: "생일/축하",
-      anniversaryDate: anniversary.date,
-      anniversaryIsPinned: anniversary.isPinned,
-      items: [.name(anniversary.title), .category, .date(anniversary.date)]
+      anniversary: anniversary,
+      items: [.name(anniversary.name), .category, .date(anniversary.date)]
     )
   }
 
@@ -67,6 +59,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
   init() {
     self.initialState = State(
       viewType: .new,
+      anniversary: Anniversary(),
       items: [.name(nil), .category, .date(nil)]
     )
   }
@@ -74,14 +67,15 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
   // MARK: - Functions
 
   func mutate(action: Action) -> Observable<Mutation> {
+    var anniversary = self.currentState.anniversary
     switch action {
     case .doneButtonDidTap:
       switch self.currentState.viewType {
       case .new:
-        return self.requestNewAnniversary()
+        return self.requestNewAnniversary(with: self.currentState.anniversary)
           .asObservable()
           .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
-            let message: ToastMessage = .anniversaryAdded(anniversary.title)
+            let message: ToastMessage = .anniversaryAdded(anniversary.name)
             self.steps.accept(AppStep.anniversaryManagementIsComplete(message))
             return .empty()
           }
@@ -94,17 +88,10 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
             return .empty()
           }
       case .edit:
-        guard let anniversaryNo = self.currentState.anniversaryNo else { return .empty() }
-        let anniversary = Anniversary(
-          anniversaryNo: anniversaryNo,
-          title: self.currentState.anniversaryTitle ?? "",
-          date: self.currentState.anniversaryDate ?? .distantPast,
-          isPinned: self.currentState.anniversaryIsPinned
-        )
-        return self.requestPatchAnniversary(anniversary)
+        return self.requestPatchAnniversary(self.currentState.anniversary)
           .asObservable()
           .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
-            let message: ToastMessage = .anniversaryModifed(anniversary.title)
+            let message: ToastMessage = .anniversaryModifed(anniversary.name)
             self.steps.accept(AppStep.anniversaryManagementIsComplete(message))
             return .empty()
           }
@@ -114,21 +101,22 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
           }
       }
 
-    case .titleDidUpdate(let title):
-      return .just(.updateAnniversaryTitle(title))
+    case .nameDidUpdate(let name):
+      anniversary.name = name ?? ""
+      return .just(.updateAnniversary(anniversary))
 
     case .categoryDidUpdate(let category):
-      return .just(.updateAnniversaryCategory(category ?? ""))
+      anniversary.category = category
+      return .just(.updateAnniversary(anniversary))
 
     case .dateDidUpdate(let date):
       return .just(.updateAnniversaryDate(date))
 
     case .deleteButtonDidTap:
-      guard let anniversaryNo = self.currentState.anniversaryNo else { return .empty() }
-      return self.requestDeleteAnniversary(anniversaryNo)
+      return self.requestDeleteAnniversary(self.currentState.anniversary.identifier)
         .asObservable()
         .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
-          let message: ToastMessage = .anniversaryDeleted(anniversary.title)
+          let message: ToastMessage = .anniversaryDeleted(anniversary.name)
           self.steps.accept(AppStep.anniversaryManagementIsComplete(message))
           return .empty()
         }
@@ -139,14 +127,14 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
-    case .updateAnniversaryTitle(let title):
-      newState.anniversaryTitle = title
-
-    case .updateAnniversaryCategory(let category):
-      newState.anniversaryCategory = category
+    case .updateAnniversary(let anniversary):
+      newState.anniversary = anniversary
 
     case .updateAnniversaryDate(let date):
       newState.anniversaryDate = date
+      if let date {
+        newState.anniversary.date = date
+      }
     }
 
     return newState
@@ -156,9 +144,9 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
 
-      let isTitleEmpty = (state.anniversaryTitle ?? "").isEmpty
+      let isTitleEmpty = state.anniversary.name.isEmpty
       newState.isDoneButtonEnabled = !isTitleEmpty && state.anniversaryDate != nil
-      
+
       return newState
     }
   }
@@ -167,27 +155,17 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension AnniversaryManagementViewReactor {
-  func requestNewAnniversary() -> Single<Anniversary> {
+  func requestNewAnniversary(with anniversary: Anniversary) -> Single<Anniversary> {
     return Single<Anniversary>.create { single in
-      guard let title = self.currentState.anniversaryTitle else {
-        single(.failure(FavorError.optionalBindingFailure(self.currentState.anniversaryTitle)))
-        return Disposables.create()
-      }
-      guard let date = self.currentState.anniversaryDate else {
-        single(.failure(FavorError.optionalBindingFailure(self.currentState.anniversaryDate)))
-        return Disposables.create()
-      }
-
       let networking = AnniversaryNetworking()
-      let requestDTO = AnniversaryRequestDTO(anniversaryTitle: title, anniversaryDate: date.toDTODateString())
+      let requestDTO = anniversary.requestDTO()
 
       let disposable = networking.request(.postAnniversary(requestDTO, userNo: UserInfoStorage.userNo))
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            let anniversary = responseDTO.data.toDomain()
-            single(.success(anniversary))
+            single(.success(Anniversary(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -205,17 +183,16 @@ private extension AnniversaryManagementViewReactor {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()
       let requestDTO = AnniversaryUpdateRequestDTO(
-        anniversaryTitle: anniversary.title,
+        anniversaryTitle: anniversary.name,
         anniversaryDate: anniversary.date.toDTODateString(),
         isPinned: anniversary.isPinned
       )
-      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.anniversaryNo))
+      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            let anniversary = responseDTO.data.toDomain()
-            single(.success(anniversary))
+            single(.success(Anniversary(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -237,7 +214,7 @@ private extension AnniversaryManagementViewReactor {
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            let anniversary = responseDTO.data.toDomain()
+            let anniversary = Anniversary(dto: responseDTO.data)
             single(.success(anniversary))
           } catch {
             single(.failure(error))

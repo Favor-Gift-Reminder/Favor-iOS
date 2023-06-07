@@ -7,26 +7,14 @@
 
 import UIKit
 
-public enum AnniversaryCategory: CaseIterable {
-  case couple
-  case congrat
-  case gradu
-  case pass
-  case employ
-  case house
-  case birth
-  
-  public var text: String {
-    switch self {
-    case .birth: return "출산"
-    case .congrat: return "축하/생일"
-    case .couple: return "연인"
-    case .gradu: return "졸업"
-    case .employ: return "입사/승진"
-    case .pass: return "합격"
-    case .house: return "이사/집들이"
-    }
-  }
+public enum AnniversaryCategory: String, CaseIterable {
+  case couple = "연인"
+  case congrat = "축하/생일"
+  case gradu = "졸업"
+  case pass = "합격"
+  case employ = "입사/승진"
+  case house = "이사/집들이"
+  case birth = "출산"
   
   public var image: UIImage? {
     switch self {

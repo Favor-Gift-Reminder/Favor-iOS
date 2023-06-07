@@ -39,20 +39,3 @@ public struct GiftUpdateRequestDTO: Encodable {
     self.friendNoList = friendNoList
   }
 }
-
-// MARK: - Convert
-
-extension Gift {
-  public func toUpdateRequestDTO() -> GiftUpdateRequestDTO {
-    GiftUpdateRequestDTO(
-      giftName: self.name,
-      giftDate: self.date?.toDTODateString() ?? Date.now.toDTODateString(),
-      giftMemo: self.memo ?? "",
-      category: self.category.rawValue,
-      emotion: self.emotion ?? "기뻐요",
-      isPinned: self.isPinned,
-      isGiven: self.isGiven,
-      friendNoList: self.friendList.toArray().map { $0.friendNo }
-    )
-  }
-}

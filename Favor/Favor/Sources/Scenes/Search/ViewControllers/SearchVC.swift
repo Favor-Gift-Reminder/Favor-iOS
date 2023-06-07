@@ -82,7 +82,7 @@ final class SearchViewController: BaseSearchViewController {
     return stackView
   }()
 
-  // SearchRecent
+  // RecentSearchObject
   private lazy var recentSearchCollectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,

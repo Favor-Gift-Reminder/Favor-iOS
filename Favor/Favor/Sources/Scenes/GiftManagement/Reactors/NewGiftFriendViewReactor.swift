@@ -14,7 +14,17 @@ import RxCocoa
 import RxFlow
 
 final class NewGiftFriendViewReactor: Reactor, Stepper {
-  
+
+  // MARK: - Properties
+
+  var initialState: State = State()
+  var steps = PublishRelay<Step>()
+  private let workbench = try! RealmWorkbench()
+  private let friendFetcher = Fetcher<Friend>()
+
+  /// 최초로 불러온 친구 목록 입니다.
+  var allFriends: [Friend] = []
+
   enum Action {
     case viewDidLoad
     case cellDidTap(IndexPath, NewGiftFriendCell.RightButtonType)
@@ -41,15 +51,6 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     var isLoading: Bool = false
   }
   
-  // MARK: - Properties
-  
-  var initialState: State = State()
-  var steps = PublishRelay<Step>()
-  let friendFetcher = Fetcher<Friend>()
-  
-  /// 최초로 불러온 친구 목록 입니다.
-  var allFriends: [Friend] = []
-  
   // MARK: - Initializer
   
   init() {
@@ -63,9 +64,9 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
     case .viewDidLoad:
       return self.friendFetcher.fetch()
         .flatMap { (status, friends) -> Observable<Mutation> in
-          self.allFriends = friends.toArray()
+          self.allFriends = friends
           return .concat([
-            .just(.updateFriends(friends.toArray())),
+            .just(.updateFriends(friends)),
             .just(.updateLoading(status == .inProgress))
           ])
         }
@@ -134,7 +135,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       let friendItems = state.currentFriends
         .map { friend in
           var buttonType: NewGiftFriendCell.RightButtonType = .add
-          if state.selectedFriends.first(where: { $0.friendNo == friend.friendNo }) != nil {
+          if state.selectedFriends.first(where: { $0 == friend }) != nil {
             buttonType = .done
           }
           return NewGiftFriendItem.friend(
@@ -167,28 +168,22 @@ private extension NewGiftFriendViewReactor {
       let networking = UserNetworking()
       let friends = networking.request(.getAllFriendList(userNo: UserInfoStorage.userNo))
         .flatMap { response -> Observable<[Friend]> in
-          let responseData = response.data
-          let friends: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(responseData)
-          return .just(friends.data.map {
-            Friend(
-              friendNo: $0.friendNo,
-              name: $0.friendName,
-              memo: $0.friendMemo,
-              friendUserNo: $0.friendUserNo,
-              isUser: $0.isUser
-            )
-          })
+          let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Friend(dto: $0) })
         }
         .asSingle()
       return friends
     }
     // onLocal
     self.friendFetcher.onLocal = {
-      return try await RealmManager.shared.read(Friend.self)
+      return await self.workbench.values(FriendObject.self)
+        .map { Friend(realmObject: $0) }
     }
     // onLocalUpdate
     self.friendFetcher.onLocalUpdate = { _, remoteFriends in
-      try await RealmManager.shared.updateAll(remoteFriends)
+      self.workbench.write { transaction in
+        transaction.update(remoteFriends.map { $0.realmObject() })
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 //
-//  Friend.swift
+//  FriendObject.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/19.
@@ -7,14 +7,14 @@
 
 import RealmSwift
 
-public class Friend: Object {
+public class FriendObject: Object {
 
   // MARK: - Properties
 
   /// 친구 번호
   @Persisted(primaryKey: true) public var friendNo: Int
   /// 친구를 보유한 회원의 회원 번호
-  @Persisted(originProperty: "friendList") public var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "friendList") public var userNo: LinkingObjects<UserObject>
   /// 친구 이름
   @Persisted public var name: String
   /// 친구 사진
@@ -26,7 +26,7 @@ public class Friend: Object {
   /// 친구의 회원 여부 (회원 = `true`)
   @Persisted public var isUser: Bool
   /// 친구의 기념일 목록
-  @Persisted public var anniversaryList: List<Anniversary>
+  @Persisted public var anniversaryList: List<AnniversaryObject>
   /// 친구의 취향 태그
   @Persisted public var favorList: MutableSet<String>
 
@@ -50,7 +50,7 @@ public class Friend: Object {
   public convenience init(
     friendNo: Int,
     name: String,
-    anniversaryList: [Anniversary] = [],
+    anniversaryList: [AnniversaryObject] = [],
     favorList: [String] = [],
     profilePhoto: Photo? = nil,
     memo: String? = nil,
@@ -65,7 +65,7 @@ public class Friend: Object {
     self.friendUserNo = friendUserNo
     self.isUser = isUser
     self.favorList.insert(objectsIn: favorList)
-    let newAnniversaryList = List<Anniversary>()
+    let newAnniversaryList = List<AnniversaryObject>()
     newAnniversaryList.append(objectsIn: anniversaryList)
     self.anniversaryList = newAnniversaryList
   }

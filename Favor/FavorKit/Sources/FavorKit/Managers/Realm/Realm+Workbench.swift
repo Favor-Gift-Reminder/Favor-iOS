@@ -1,0 +1,81 @@
+//
+//  Realm+Workbench.swift
+//  Favor
+//
+//  Created by 이창준 on 6/6/23.
+//
+
+import Foundation
+import OSLog
+
+import RealmSwift
+
+public final class RealmWorkbench {
+
+  // MARK: - Properties
+
+  private var realm: Realm!
+  public let realmQueue: DispatchQueue
+
+  /// Realm DB의 Scheme 버전
+  ///
+  /// [**Version History**](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
+  public static let version: UInt64 = 11
+  private let migration = RealmMigration()
+
+  // MARK: - Initializer
+
+  public init(
+    reset: Bool = false,
+    queue: DispatchQueue = DispatchQueue.realmThread
+  ) {
+    self.realmQueue = queue
+
+    do {
+      let config = Realm.Configuration(
+        schemaVersion: RealmWorkbench.version,
+        migrationBlock: self.migration.migrationBlock
+      )
+
+      try self.realmQueue.sync {
+        self.realm = try Realm(configuration: config, queue: self.realmQueue)
+      }
+    } catch {
+      fatalError("Failed to create Realm instance: \(error.localizedDescription)")
+    }
+  }
+
+  // MARK: - Functions
+
+  /// RealmDB 파일의 위치를 출력합니다.
+  public func locateRealm() {
+    os_log(.debug, "💽 RealmDB is located at \(self.realm.configuration.fileURL!)")
+  }
+
+  public func write(
+    _ block: @escaping (_ transaction: Transaction) throws -> Void
+  ) {
+    self.realmQueue.async {
+      do {
+        let transaction = Transaction(realm: self.realm)
+        try self.realm.write {
+          try block(transaction)
+        }
+      } catch {
+        print(error)
+      }
+    }
+  }
+
+  public func values<T: Object>(
+    _ type: T.Type
+  ) async -> Results<T> {
+    typealias RealmContinuation = CheckedContinuation<Results<T>, Never>
+    return await withCheckedContinuation { (continuation: RealmContinuation) in
+      self.realmQueue.async {
+        let objects = self.realm.objects(type).freeze()
+        continuation.resume(returning: objects)
+      }
+    }
+  }
+}

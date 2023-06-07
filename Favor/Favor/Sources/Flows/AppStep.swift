@@ -79,8 +79,8 @@ enum AppStep: Step {
   // MARK: - Gift
   case giftManagementIsRequired(Gift? = nil)
   case giftManagementIsCompleteWithNoChanges
-  case newGiftIsComplete(GiftEditor)
-  case editGiftIsComplete(GiftEditor)
+  case newGiftIsComplete(Gift)
+  case editGiftIsComplete(Gift)
   case newGiftFriendIsRequired
   case giftDetailIsRequired(Gift)
   case giftDetailIsComplete(Gift)

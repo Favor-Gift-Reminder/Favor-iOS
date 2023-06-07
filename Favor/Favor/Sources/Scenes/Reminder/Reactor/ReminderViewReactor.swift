@@ -21,7 +21,8 @@ final class ReminderViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let reminderFetcher = Fetcher<Reminder>()
+  private let workbench = try! RealmWorkbench()
+  private let reminderFetcher = Fetcher<Reminder>()
 
   enum Action {
     case viewNeedsLoaded
@@ -69,7 +70,7 @@ final class ReminderViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.reminderFetcher.fetch()
         .flatMap { (status, reminders) -> Observable<Mutation> in
-          let filteredReminders = reminders.toArray().filter {
+          let filteredReminders = reminders.filter {
             let isYearMatch = $0.date.currentYear == self.currentState.selectedDate.year
             let isMonthMatch = $0.date.currentMonth == self.currentState.selectedDate.month
             return isYearMatch && isMonthMatch
@@ -139,16 +140,8 @@ private extension ReminderViewReactor {
         .flatMap { reminders -> Observable<[Reminder]> in
           let responseData = reminders.data
           do {
-            let remote: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(responseData)
-            return .just(remote.data.map {
-              Reminder(
-                reminderNo: $0.reminderNo,
-                title: $0.reminderTitle,
-                date: $0.reminderDate,
-                shouldNotify: $0.isAlarmSet,
-                friendNo: $0.friendNo
-              )
-            })
+            let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(responseData)
+            return .just(responseDTO.data.map { Reminder(dto: $0) })
           } catch {
             return .just([])
           }
@@ -158,12 +151,14 @@ private extension ReminderViewReactor {
     }
     // onLocal
     self.reminderFetcher.onLocal = {
-      return try await RealmManager.shared.read(Reminder.self)
+      return await self.workbench.values(ReminderObject.self)
+        .map { Reminder(realmObject: $0) }
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
-      os_log(.debug, "💽 ♻️ LocalDB REFRESH: \(remoteReminders)")
-      try await RealmManager.shared.updateAll(remoteReminders)
+      self.workbench.write { transaction in
+        transaction.update(remoteReminders.map { $0.realmObject() })
+      }
     }
   }
 }

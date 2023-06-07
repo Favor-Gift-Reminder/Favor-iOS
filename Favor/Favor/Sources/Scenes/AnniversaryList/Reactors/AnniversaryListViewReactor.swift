@@ -58,7 +58,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       return self.userFetcher.fetch()
         .flatMap { (_, user) -> Observable<Mutation> in
           guard let user = user.first else { return .empty() }
-          let anniversaries = user.anniversaryList.toArray()
+          let anniversaries = user.anniversaryList
           return .just(.updateAnniversaries(anniversaries))
         }
 
@@ -71,20 +71,17 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       let originalAnniversaries = self.currentState.anniversaries
       guard
         let originalTargetAnniversary = originalAnniversaries.first(where: { anniversary in
-          anniversary.anniversaryNo == tappedAnniversary.anniversaryNo
+          anniversary == tappedAnniversary
         }),
         originalTargetAnniversary.isPinned == tappedAnniversary.isPinned
       else { return .empty() }
       
       // 2. UI 우선 업데이트 - `anniversary`의 데이터를 변경하여 우선 업데이트
       let newAnniversaries = originalAnniversaries.map { (originalAnniversary: Anniversary) in
-        if originalAnniversary.anniversaryNo == tappedAnniversary.anniversaryNo {
-          return Anniversary(
-            anniversaryNo: originalAnniversary.anniversaryNo,
-            title: originalAnniversary.title,
-            date: originalAnniversary.date,
-            isPinned: !originalAnniversary.isPinned
-          )
+        if originalAnniversary == tappedAnniversary {
+          var anniversary = originalAnniversary
+          anniversary.isPinned.toggle()
+          return anniversary
         } else {
           return originalAnniversary
         }
@@ -181,19 +178,18 @@ private extension AnniversaryListViewReactor {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()
       let requestDTO = AnniversaryUpdateRequestDTO(
-        anniversaryTitle: anniversary.title,
+        anniversaryTitle: anniversary.name,
         anniversaryDate: anniversary.date.toDTODateString(),
         isPinned: !anniversary.isPinned
       )
 
-      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.anniversaryNo))
+      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            let anniversary = responseDTO.data.toDomain()
-            single(.success(anniversary))
+            single(.success(Anniversary(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nomatterjun/Composer.git",
       "state" : {
-        "revision" : "444c624ced1a3d176becec3a3cd053cf804b16b6",
-        "version" : "1.0.2"
+        "revision" : "23624920db88cf49c0f4633be5a86b8723034c54",
+        "version" : "1.0.3"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "revision" : "9ce8cf2c6cc1a7539e9feb1b5b85da6d20219ff5",
-        "version" : "10.40.0"
+        "revision" : "45ea4a0ec4bb3161c807be0a9a4921161dbe60a2",
+        "version" : "10.40.1"
       }
     },
     {
@@ -115,15 +115,6 @@
       "state" : {
         "revision" : "1b137c576b4aaaab949235752278956697c9e4a0",
         "version" : "4.0.4"
-      }
-    },
-    {
-      "identity" : "rxrealm",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/RxSwiftCommunity/RxRealm",
-      "state" : {
-        "revision" : "a7de576348d48286d8b100a501f757a1c531f1dd",
-        "version" : "5.0.5"
       }
     },
     {

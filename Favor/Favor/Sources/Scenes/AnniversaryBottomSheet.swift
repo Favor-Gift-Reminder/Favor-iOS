@@ -123,6 +123,6 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   private func updateView() {
     let anniversaryType = self.currentAnniversary
     self.iconViews.forEach { $0.isSelected = false }
-    self.iconViews.filter { $0.anniversaryType == anniversaryType }.first?.isSelected = true
+    self.iconViews.filter { $0.anniversaryCategory == anniversaryType }.first?.isSelected = true
   }
 }

@@ -46,19 +46,3 @@ public struct ReminderResponseDTO: Decodable {
     self.userNo = try container.decode(Int.self, forKey: .userNo)
   }
 }
-
-// MARK: - Convert
-
-extension ReminderResponseDTO {
-  public func toDomain() -> Reminder {
-    return Reminder(
-      reminderNo: self.reminderNo,
-      title: self.reminderTitle,
-      date: self.reminderDate,
-      memo: self.memo,
-      shouldNotify: self.isAlarmSet,
-      notifyTime: self.alarmTime,
-      friendNo: self.friendNo
-    )
-  }
-}

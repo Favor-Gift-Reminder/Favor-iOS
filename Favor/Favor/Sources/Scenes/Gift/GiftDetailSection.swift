@@ -97,3 +97,13 @@ extension GiftDetailSection: Composable {
     }
   }
 }
+
+// MARK: - Sendable
+
+extension GiftDetailSection: Sendable {
+
+}
+
+extension GiftDetailSectionItem: Sendable {
+  
+}

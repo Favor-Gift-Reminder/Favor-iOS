@@ -52,7 +52,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   struct State {
     var viewType: GiftManagementViewController.ViewType
     var giftType: GiftManagementViewController.GiftType = .received
-    var gift: GiftEditor
+    var gift: Gift
 
     var sections: [Section] = [.title, .category, .photos, .friends(isGiven: false), .date, .memo, .pin]
     var items: [[Item]] = []
@@ -63,7 +63,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   init(_ viewType: GiftManagementViewController.ViewType, pickerManager: PHPickerManager) {
     self.initialState = State(
       viewType: viewType,
-      gift: GiftEditor()
+      gift: Gift()
     )
     self.pickerManager = pickerManager
   }
@@ -71,7 +71,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   init(_ viewType: GiftManagementViewController.ViewType, with gift: Gift, pickerManager: PHPickerManager) {
     self.initialState = State(
       viewType: viewType,
-      gift: gift.toEditor()
+      gift: gift
     )
     self.pickerManager = pickerManager
   }
@@ -175,7 +175,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       newState.gift.category = category
 
     case .updatePhotos(let photos):
-      newState.gift.photoList = photos
+      newState.gift.photos = photos
 
     case .updateDate(let date):
       newState.gift.date = date
@@ -194,7 +194,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
 
-      var photoItems: [Item] = state.gift.photoList.map { .photo($0) }
+      var photoItems: [Item] = state.gift.photos.map { .photo($0) }
       photoItems.insert(.photo(nil), at: .zero)
       newState.items = [
         [.title], [.category], photoItems, [.friends], [.date], [.memo], [.pin]
@@ -208,18 +208,18 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension GiftManagementViewReactor {
-  func requestPostGift(_ gift: GiftEditor) -> Single<GiftEditor> {
-    return Single<GiftEditor>.create { single in
+  func requestPostGift(_ gift: Gift) -> Single<Gift> {
+    return Single<Gift>.create { single in
       let networking = GiftNetworking()
       let requestDTO = GiftRequestDTO(
         giftName: gift.name,
         giftDate: gift.date?.toDTODateString() ?? Date.distantPast.toDTODateString(),
         giftMemo: gift.memo ?? "",
         category: gift.category.rawValue,
-        emotion: gift.emotion ?? "기뻐요",
+        emotion: gift.emotion,
         isPinned: gift.isPinned,
         isGiven: gift.isGiven,
-        friendNoList: gift.friendList.map { $0.friendNo }
+        friendNoList: gift.relatedFriends.map { $0.identifier }
       )
 
       let disposable = networking.request(.postGift(requestDTO, userNo: UserInfoStorage.userNo))
@@ -227,7 +227,7 @@ private extension GiftManagementViewReactor {
         .subscribe(with: self, onSuccess: { _, response in
           do {
             let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.toDomain().toEditor()))
+            single(.success(Gift(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -239,26 +239,26 @@ private extension GiftManagementViewReactor {
     }
   }
 
-  func requestPatchGift(_ gift: GiftEditor) -> Single<GiftEditor> {
-    return Single<GiftEditor>.create { single in
+  func requestPatchGift(_ gift: Gift) -> Single<Gift> {
+    return Single<Gift>.create { single in
       let networking = GiftNetworking()
       let requestDTO = GiftUpdateRequestDTO(
         giftName: gift.name,
         giftDate: gift.date?.toDTODateString() ?? Date.distantPast.toDTODateString(),
         giftMemo: gift.memo ?? "",
         category: gift.category.rawValue,
-        emotion: gift.emotion ?? "기뻐요",
+        emotion: gift.emotion,
         isPinned: gift.isPinned,
         isGiven: gift.isGiven,
-        friendNoList: gift.friendList.map { $0.friendNo }
+        friendNoList: gift.relatedFriends.map { $0.identifier }
       )
 
-      let disposable = networking.request(.patchGift(requestDTO, giftNo: gift.giftNo))
+      let disposable = networking.request(.patchGift(requestDTO, giftNo: gift.identifier))
         .asSingle()
         .subscribe(with: self, onSuccess: { _, response in
           do {
             let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.toDomain().toEditor()))
+            single(.success(Gift(dto: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

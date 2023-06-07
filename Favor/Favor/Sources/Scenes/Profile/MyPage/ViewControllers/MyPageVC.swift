@@ -109,7 +109,7 @@ final class MyPageViewController: BaseProfileViewController, View {
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        var snapshot: NSDiffableDataSourceSnapshot<ProfileSection, ProfileSectionItem> = .init()
+        var snapshot = NSDiffableDataSourceSnapshot<ProfileSection, ProfileSectionItem>()
         snapshot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, items in
           snapshot.appendItems(items, toSection: sectionData.sections[idx])
@@ -135,7 +135,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       let reactor = self.reactor
     else { return }
     view.reactor = ProfileGiftStatsCollectionHeaderReactor(
-      gift: reactor.currentState.user.giftList.toArray()
+      gift: reactor.currentState.user.giftList
     )
   }
 

@@ -60,7 +60,7 @@ extension AnniversaryListSectionItem {
   public static func == (lhs: AnniversaryListSectionItem, rhs: AnniversaryListSectionItem) -> Bool {
     switch (lhs, rhs) {
     case let (.anniversary(_, lhsData, lhsIsPinned), .anniversary(_, rhsData, rhsIsPinned)):
-      return (lhsData.anniversaryNo == rhsData.anniversaryNo) && (lhsData.isPinned == rhsData.isPinned) && (lhsIsPinned == rhsIsPinned)
+      return (lhsData == rhsData) && (lhsData.isPinned == rhsData.isPinned) && (lhsIsPinned == rhsIsPinned)
     default:
       return false
     }
@@ -71,7 +71,7 @@ extension AnniversaryListSectionItem {
     case .empty:
       hasher.combine("Empty")
     case let .anniversary(_, anniversary, _):
-      hasher.combine(anniversary.anniversaryNo)
+      hasher.combine(anniversary.identifier)
       hasher.combine(anniversary.isPinned)
     }
   }

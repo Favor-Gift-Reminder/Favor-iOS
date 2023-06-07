@@ -33,7 +33,7 @@ extension FriendSectionItem {
     case (.empty, .empty):
       return true
     case let (.friend(lhsValue), .friend(rhsValue)):
-      return lhsValue.friendNo == rhsValue.friendNo
+      return lhsValue.identifier == rhsValue.identifier
     default:
       return false
     }
@@ -44,7 +44,7 @@ extension FriendSectionItem {
     case .empty:
       hasher.combine("Empty")
     case .friend(let friend):
-      hasher.combine(friend.friendNo)
+      hasher.combine(friend.identifier)
     }
   }
 }

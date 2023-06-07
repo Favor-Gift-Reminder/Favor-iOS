@@ -20,8 +20,9 @@ final class MyPageViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let userFetcher = Fetcher<User>()
-  
+  private let workbench = try! RealmWorkbench()
+  private let userFetcher = Fetcher<User>()
+
   enum Action {
     case viewNeedsLoaded
     case editButtonDidTap
@@ -73,14 +74,14 @@ final class MyPageViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.userFetcher.fetch()
         .flatMap { (status, user) -> Observable<Mutation> in
-          guard let user = user.toArray().first else { return .empty() }
+          guard let user = user.first else { return .empty() }
           return .concat([
             .just(.updateUser(user)),
             .just(.updateUserName(user.name)),
-            .just(.updateUserID(user.userID)),
-            .just(.updateFavorSection(user.favorList.map { Favor(rawValue: $0) ?? .cute })),
-            .just(.updateAnniversarySection(user.anniversaryList.toArray())),
-            .just(.updateFriendSection(user.friendList.toArray())),
+            .just(.updateUserID(user.searchID)),
+            .just(.updateFavorSection(user.favorList)),
+            .just(.updateAnniversarySection(user.anniversaryList)),
+            .just(.updateFriendSection(user.friendList)),
             .just(.updateLoading(status == .inProgress))
           ])
         }
@@ -207,21 +208,9 @@ private extension MyPageViewReactor {
       let networking = UserNetworking()
       let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
         .flatMap { user -> Observable<[User]> in
-          let userData = user.data
           do {
-            let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
-            let remoteUser = remote.data
-            let decodedUser = User(
-              userNo: remoteUser.userNo,
-              email: remoteUser.email,
-              userID: remoteUser.userID,
-              name: remoteUser.name,
-              favorList: remoteUser.favorList,
-              giftList: remoteUser.giftList.map { $0.toDomain() },
-              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
-              friendList: remoteUser.friendList.map { $0.toDomain() }
-            )
-            return .just([decodedUser])
+            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(user.data)
+            return .just([User(dto: responseDTO.data)])
           } catch {
             print(error)
             return .just([])
@@ -232,12 +221,15 @@ private extension MyPageViewReactor {
     }
     // onLocal
     self.userFetcher.onLocal = {
-      return try await RealmManager.shared.read(User.self)
+      return await self.workbench.values(UserObject.self)
+        .map { User(realmObject: $0) }
     }
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { _, remoteUser in
       guard let remoteUser = remoteUser.first else { return }
-      try await RealmManager.shared.update(remoteUser, update: .all)
+      self.workbench.write { transaction in
+        transaction.update(remoteUser.realmObject())
+      }
     }
   }
 }

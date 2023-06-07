@@ -1,5 +1,5 @@
 //
-//  Anniversary.swift
+//  AnniversaryObject.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/24.
@@ -9,7 +9,7 @@ import Foundation
 
 import RealmSwift
 
-public final class Anniversary: Object {
+public final class AnniversaryObject: Object {
 
   // MARK: - Properties
 
@@ -17,12 +17,19 @@ public final class Anniversary: Object {
   @Persisted(primaryKey: true) public var anniversaryNo: Int
   /// 기념일 이름
   @Persisted public var title: String
+  /// 기념일 카테고리
+  @Persisted private var privateCategory: String
   /// 기념일 날짜
   @Persisted public var date: Date
   /// 마이페이지 기념일 고정 여부
   @Persisted public var isPinned: Bool
   /// 기념일을 등록한 회원의 회원 번호
-  @Persisted(originProperty: "anniversaryList") public var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "anniversaryList") public var userNo: LinkingObjects<UserObject>
+
+  public var category: AnniversaryCategory {
+    get { AnniversaryCategory(rawValue: self.privateCategory) ?? .congrat }
+    set { self.privateCategory = newValue.rawValue }
+  }
 
   public override class func propertiesMapping() -> [String: String] {
     [
@@ -54,7 +61,7 @@ public final class Anniversary: Object {
 
 // MARK: - Array Extension
 
-extension Array where Element: Anniversary {
+extension Array where Element: AnniversaryObject {
 
   /// 기념일 배열을 아래 규칙에 따라 정렬합니다.
   /// ```
