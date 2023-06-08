@@ -12,7 +12,18 @@ import RxCocoa
 import RxFlow
 
 final class FriendPageViewReactor: Reactor, Stepper {
-  
+
+  // MARK: - Properties
+
+  var initialState: State = State()
+  var steps = PublishRelay<Step>()
+  private let friend: Friend
+  private let workbench = try! RealmWorkbench()
+  private let friendFetcher = Fetcher<Friend>()
+
+  /// 친구가 유저인지 판별해주는 계산 프로퍼티입니다.
+  private var isUser: Bool { self.friend.isUser }
+
   enum Action {
     case viewNeedsLoaded
     case doNothing
@@ -43,16 +54,6 @@ final class FriendPageViewReactor: Reactor, Stepper {
     var isLoading: Bool = false
   }
   
-  // MARK: - Properties
-  
-  var initialState: State = State()
-  var steps = PublishRelay<Step>()
-  private let friend: Friend
-  private let friendFetcher = Fetcher<Friend>()
-
-  /// 친구가 유저인지 판별해주는 계산 프로퍼티입니다.
-  private var isUser: Bool { self.friend.isUser }
-  
   // MARK: - Initializer
   
   init(_ friend: Friend) {
@@ -74,8 +75,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
       if self.friend.isUser {
         return .concat([
-          .just(.setFavorSection(self.friend.favorList.map { Favor(rawValue: $0) ?? .cute })),
-          .just(.setAnniversarySection(self.friend.anniversaryList.toArray())),
+          .just(.setFavorSection(self.friend.favorList)),
+          .just(.setAnniversarySection(self.friend.anniversaryList)),
           commonEvent
         ])
       } else {
@@ -94,8 +95,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
       return .concat([
         .just(.setLoading(true)),
         self.friendFetcher.fetch()
-          .flatMap { (status, friend) -> Observable<Mutation> in
-            guard let friend = friend.toArray().first else { return .empty() }
+          .flatMap { (status, _) -> Observable<Mutation> in
             return .concat([
               .just(.setLoading(status == .inProgress)),
               .just(.setMemoSection(memo)),
@@ -153,7 +153,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
       // 새 기념일 도움 섹션
       // 유저가 아닌 친구 & 기념일 목록이 비어 있는 조건을 모두 만족해야합니다.
-      if !self.isUser, self.friend.anniversaryList.toArray().isEmpty {
+      if !self.isUser, self.friend.anniversaryList.isEmpty {
         newSection.append(.anniversarySetupHelper)
         newItems.append([.anniversarySetupHelper])
       }
@@ -189,27 +189,29 @@ private extension FriendPageViewReactor {
       let friend = networking.request(.patchFriend(
         friendName: self.currentState.friendName,
         friendMemo: self.currentState.friendMemo ?? "",
-        friendNo: self.friend.friendNo
+        friendNo: self.friend.identifier
       ))
         .flatMap { response -> Observable<[Friend]> in
-          let friend: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
-          return .just([friend.data.toDomain()])
+          let responseDTO: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
+          return .just([Friend(dto: responseDTO.data)])
         }
         .asSingle()
       return friend
     }
     // onLocal
     self.friendFetcher.onLocal = {
-      return try await RealmManager.shared.read(Friend.self).where {
-        $0.friendNo.in([self.friend.friendNo])
-      }
+      return await self.workbench.values(FriendObject.self)
+        .where { $0.friendNo.in([self.friend.identifier]) }
+        .map { Friend(realmObject: $0) }
     }
     // onLocalUpdate
     self.friendFetcher.onLocalUpdate = { _, remoteFriend in
       guard let friend = remoteFriend.first else {
         fatalError("해당 친구가 존재하지 않습니다.")
       }
-      try await RealmManager.shared.update(friend)
+      try await self.workbench.write { transaction in
+        transaction.update(friend.realmObject())
+      }
     }
   }
 }

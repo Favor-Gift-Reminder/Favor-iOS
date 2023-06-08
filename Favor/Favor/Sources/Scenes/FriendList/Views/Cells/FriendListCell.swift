@@ -58,8 +58,8 @@ final class FriendListCell: BaseFriendCell, Pressable, Reusable {
 
   // MARK: - Functions
 
-  public override func bind(with friend: Friend) {
-    super.bind(with: friend)
+  override func bind(identifier: Int, name: String) {
+    super.bind(identifier: identifier, name: name)
 //    self.nameLabel.text = friend.name
   }
 

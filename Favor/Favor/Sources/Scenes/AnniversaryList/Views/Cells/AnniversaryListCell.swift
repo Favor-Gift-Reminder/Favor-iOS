@@ -109,7 +109,7 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
 private extension AnniversaryListCell {
   func updateCell() {
     guard let cellModel else { return }
-    self.title = cellModel.item.title
+    self.title = cellModel.item.name
     self.subtitle = cellModel.item.date.toShortenDateString()
 
     // type == .list이고 isPinned일때만 .icon

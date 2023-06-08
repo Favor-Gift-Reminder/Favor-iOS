@@ -18,7 +18,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // FavorKit Package의 Custom Font Register 메서드
     FavorKit.registerFonts()
 
-    RealmManager.shared.locateRealm()
+    try! RealmWorkbench().locateRealm()
 
     #if DEBUG
     FTUXStorage.isSignedIn = true

@@ -14,6 +14,7 @@ public class BaseFriendListViewReactor {
 
   // MARK: - Properties
 
+  public let workbench = try! RealmWorkbench()
   public let friendFetcher = Fetcher<Friend>()
 
   // MARK: - Initializer
@@ -30,21 +31,10 @@ public class BaseFriendListViewReactor {
       let networking = UserNetworking()
       let friends = networking.request(.getAllFriendList(userNo: UserInfoStorage.userNo))
         .flatMap { friends -> Observable<[Friend]> in
-          let friendsData = friends.data
           do {
-            let remote: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friendsData)
-            let remoteFriends = remote.data
-            let decodedFriends = remoteFriends.map { friend -> Friend in
-              return Friend(
-                friendNo: friend.friendNo,
-                name: friend.friendName,
-                profilePhoto: nil,
-                memo: friend.friendMemo,
-                friendUserNo: friend.friendUserNo,
-                isUser: friend.isUser
-              )
-            }
-            return .just(decodedFriends)
+            let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friends.data)
+            let friends = responseDTO.data.map { Friend(dto: $0) }
+            return .just(friends)
           } catch {
             print(error)
             return .just([])
@@ -55,12 +45,14 @@ public class BaseFriendListViewReactor {
     }
     // onLocal
     self.friendFetcher.onLocal = {
-      return try await RealmManager.shared.read(Friend.self)
+      return await self.workbench.values(FriendObject.self)
+        .map { Friend(realmObject: $0) }
     }
     // onLocalUpdate
     self.friendFetcher.onLocalUpdate = { _, remoteFriends in
-      try await RealmManager.shared.delete(remoteFriends)
-      try await RealmManager.shared.updateAll(remoteFriends, update: .modified)
+      try await self.workbench.write { transaction in
+        transaction.update(remoteFriends.map { $0.realmObject() })
+      }
     }
   }
 }

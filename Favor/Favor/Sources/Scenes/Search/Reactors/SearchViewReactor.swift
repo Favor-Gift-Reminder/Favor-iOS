@@ -29,8 +29,9 @@ final class SearchViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let mode: SearchViewMode
-  
+  private let workbench = try! RealmWorkbench()
+  private let mode: SearchViewMode
+
   enum Action {
     case viewNeedsLoaded
     case editingDidBegin
@@ -96,7 +97,6 @@ final class SearchViewReactor: Reactor, Stepper {
       switch self.mode {
       case .search:
         return self.createSearchRecents()
-          .asObservable()
           .flatMap { searchRecents -> Observable<Mutation> in
             let model = self.refineRecentSearch(searchRecents: searchRecents)
             return .concat([
@@ -192,11 +192,11 @@ final class SearchViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension SearchViewReactor {
-  func refineRecentSearch(searchRecents: [SearchRecent]) -> SearchRecentSection.SearchRecentModel {
-    let sortedRecentSearches = searchRecents.sorted(by: { $0.searchDate > $1.searchDate })
+  func refineRecentSearch(searchRecents: [RecentSearch]) -> SearchRecentSection.SearchRecentModel {
+    let sortedRecentSearches = searchRecents.sorted(by: { $0.date > $1.date })
     let recentSearchItems = sortedRecentSearches.map {
-      let searchText = $0.searchText
-      return SearchRecentSection.SearchRecentItem.recent(searchText)
+      let query = $0.query
+      return SearchRecentSection.SearchRecentItem.recent(query)
     }
     return SearchRecentSection.SearchRecentModel(
       model: .zero,
@@ -204,15 +204,13 @@ private extension SearchViewReactor {
     )
   }
 
-  func createSearchRecents() -> Single<[SearchRecent]> {
-    return Single<[SearchRecent]>.create { single in
+  func createSearchRecents() -> Observable<[RecentSearch]> {
+    return Observable<[RecentSearch]>.create { observer in
       let task = Task {
-        do {
-          let searches = try await RealmManager.shared.read(SearchRecent.self).toArray()
-          single(.success(searches))
-        } catch {
-          single(.failure(error))
-        }
+        let searches = await self.workbench.values(RecentSearchObject.self)
+          .map { RecentSearch(realmObject: $0) }
+        observer.onNext(Array(searches))
+        observer.onCompleted()
       }
 
       return Disposables.create {
@@ -222,9 +220,10 @@ private extension SearchViewReactor {
   }
 
   func updateAndNavigateToSearchResult(_ searchString: String) {
-    let searchRecent = SearchRecent(searchText: searchString, searchDate: .now)
-    _Concurrency.Task {
-      try await RealmManager.shared.update(searchRecent)
+    Task {
+      try await self.workbench.write { transaction in
+        transaction.update(RecentSearchObject(query: searchString, date: .now))
+      }
       self.steps.accept(AppStep.searchResultIsRequired(searchString))
     }
   }

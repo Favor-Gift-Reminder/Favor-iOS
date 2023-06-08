@@ -48,20 +48,3 @@ public struct FriendResponseDTO: Decodable {
     self.userNo = try container.decode(Int.self, forKey: .userNo)
   }
 }
-
-// MARK: - Convert
-
-extension FriendResponseDTO {
-  public func toDomain() -> Friend {
-    return Friend(
-      friendNo: self.friendNo,
-      name: self.friendName,
-      anniversaryList: self.anniversaryList.map { $0.toDomain() },
-      favorList: self.favorList,
-      profilePhoto: nil,
-      memo: self.friendMemo,
-      friendUserNo: self.friendUserNo,
-      isUser: self.isUser
-    )
-  }
-}

@@ -16,7 +16,7 @@ final class GiftDetailMemoCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
-  public var gift: GiftEditor = GiftEditor() {
+  public var gift: Gift = Gift() {
     didSet { self.updateGift() }
   }
 

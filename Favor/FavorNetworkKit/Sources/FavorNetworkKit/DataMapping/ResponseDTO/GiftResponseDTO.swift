@@ -50,20 +50,3 @@ public struct GiftResponseDTO: Decodable {
     self.userNo = try container.decode(Int.self, forKey: .userNo)
   }
 }
-
-// MARK: - Convert
-
-extension GiftResponseDTO {
-  public func toDomain() -> Gift {
-    return Gift(
-      giftNo: self.giftNo,
-      name: self.giftName,
-      date: self.giftDate,
-      memo: self.giftMemo,
-      category: self.category,
-      emotion: self.emotion,
-      isPinned: self.isPinned,
-      isGiven: self.isGiven
-    )
-  }
-}

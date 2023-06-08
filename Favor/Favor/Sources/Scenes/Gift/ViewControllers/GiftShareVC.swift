@@ -193,6 +193,7 @@ fileprivate extension ShareTarget {
 // MARK: - UIImageView
 
 fileprivate extension UIImage {
+  @MainActor
   func toBlurredBackgroundImage(_ frame: CGRect) -> UIImage {
     let imageView = UIImageView(frame: frame)
     imageView.contentMode = .scaleAspectFill

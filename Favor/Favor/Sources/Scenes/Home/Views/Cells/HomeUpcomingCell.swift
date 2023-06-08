@@ -41,7 +41,7 @@ final class HomeUpcomingCell: BaseCardCell {
 
   public func bind(with reminder: Reminder) {
     self.cardCellType = .reminder
-    self.title = reminder.title
+    self.title = reminder.name
     self.subtitle = reminder.date.toDday()
   }
 }

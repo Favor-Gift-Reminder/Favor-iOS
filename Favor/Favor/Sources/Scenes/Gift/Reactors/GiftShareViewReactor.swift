@@ -66,12 +66,15 @@ private extension GiftShareViewReactor {
   private func share(to target: ShareTarget) {
     switch target {
     case let .instagram(background, sticker):
-      self.shareToInstagram(background: background, sticker: sticker)
+      Task {
+        await self.shareToInstagram(background: background, sticker: sticker)
+      }
     case .photos:
       return
     }
   }
 
+  @MainActor
   private func shareToInstagram(background: UIImage?, sticker: UIImage?) {
     if
       let background, let sticker,
@@ -85,6 +88,7 @@ private extension GiftShareViewReactor {
     }
   }
 
+  @MainActor
   private func backgroundImage(backgroundImage: Data, stickerImage: Data, appID: String) {
     if let url = URL(string: appID) {
       if UIApplication.shared.canOpenURL(url) {

@@ -19,8 +19,8 @@ final class SignUpViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let networking = UserNetworking()
-  
+  private let workbench = try! RealmWorkbench()
+
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
   let passwordValidate = BehaviorRelay<ValidationResult>(value: .empty)
@@ -111,12 +111,13 @@ final class SignUpViewReactor: Reactor, Stepper {
       
     case .nextFlowRequested:
       if self.currentState.isNextButtonEnabled {
+        let networking = UserNetworking()
         let email = self.currentState.email
         let password = self.currentState.password
 
         return .concat([
           .just(.updateLoading(true)),
-          self.networking.request(.postSignUp(email: email, password: password))
+          networking.request(.postSignUp(email: email, password: password))
             .asObservable()
             .catch({ error in
               print(error)
@@ -195,16 +196,10 @@ private extension SignUpViewReactor {
     return Single<()>.create { single in
       let task = Task {
         do {
-          let decodedData: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
-          let decodedUserData = decodedData.data
-          let decodedUser = User(
-            userNo: decodedUserData.userNo,
-            email: decodedUserData.email,
-            userID: decodedUserData.userID,
-            name: decodedUserData.name,
-            favorList: decodedUserData.favorList
-          )
-          try await RealmManager.shared.recreate(decodedUser)
+          let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
+          try await self.workbench.write { transaction in
+            transaction.update(User(dto: responseDTO.data).realmObject(), update: .all)
+          }
           single(.success(()))
         } catch {
           single(.failure(error))

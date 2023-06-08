@@ -148,6 +148,7 @@ extension SearchUserResultCell: BaseView {
 // MARK: - Reactive
 
 extension Reactive where Base: SearchUserResultCell {
+  @MainActor
   var addFriendButtonDidTap: ControlEvent<()> {
     return ControlEvent(events: base.addFriendButton.rx.tap)
   }

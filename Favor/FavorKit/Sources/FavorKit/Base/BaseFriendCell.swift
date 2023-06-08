@@ -95,9 +95,9 @@ open class BaseFriendCell: BaseCollectionViewCell {
 
   // MARK: - Functions
   
-  open func bind(with friend: Friend) {
-    self.friendNo = friend.friendNo
-    self.friendName = friend.name
+  open func bind(identifier: Int, name: String) {
+    self.friendNo = identifier
+    self.friendName = name
 //    self.userImage = .friend(friend.profilePhoto)
   }
 

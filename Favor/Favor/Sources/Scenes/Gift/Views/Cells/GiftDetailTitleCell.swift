@@ -23,7 +23,7 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
 
   public weak var delegate: GiftDetailTitleCellDelegate?
 
-  public var gift: GiftEditor = GiftEditor() {
+  public var gift: Gift = Gift() {
     didSet { self.updateGift() }
   }
 

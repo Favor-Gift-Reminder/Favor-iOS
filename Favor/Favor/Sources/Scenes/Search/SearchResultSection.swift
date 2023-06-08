@@ -9,6 +9,7 @@ import UIKit
 
 import RxDataSources
 
+@MainActor
 enum SearchResultSectionType {
   case gift, user
 }

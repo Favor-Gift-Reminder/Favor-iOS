@@ -98,13 +98,13 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { $0.reminderEditor }
+    reactor.state.map { $0.reminder }
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, editor in
+      .drive(with: self, onNext: { owner, reminder in
         owner.dateSelectorTextField.isSelected = true
-        owner.dateSelectorTextField.updateDate(editor.date)
-        owner.notifyTimeSelectorTextField.isSelected = !(editor.notifyTime == nil)
-        owner.notifyTimeSelectorTextField.updateDate(editor.notifyTime)
+        owner.dateSelectorTextField.updateDate(reminder.date)
+        owner.notifyTimeSelectorTextField.isSelected = !(reminder.notifyDate == nil)
+        owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
       })
       .disposed(by: self.disposeBag)
   }

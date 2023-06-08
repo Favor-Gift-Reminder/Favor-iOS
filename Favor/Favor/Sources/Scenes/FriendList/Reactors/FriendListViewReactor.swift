@@ -49,8 +49,8 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     switch action {
     case .viewNeedsLoaded:
       return self.friendFetcher.fetch()
-        .flatMap { (_, friends) -> Observable<Mutation> in
-          let friendItems = friends.toArray().map { friend -> FriendSectionItem in
+        .flatMap { (_, friend) -> Observable<Mutation> in
+          let friendItems = friend.map { friend -> FriendSectionItem in
             return .friend(friend)
           }
           return .just(.updateFriendItems(friendItems))
@@ -106,14 +106,13 @@ private extension FriendListViewReactor {
     return Single<[Friend]>.create { single in
       let task = Task {
         do {
-          let friends = try await RealmManager.shared.read(Friend.self)
+          let friends = await self.workbench.values(FriendObject.self)
           if query.isEmpty {
-            single(.success(await friends.toArray()))
+            single(.success(friends.map { Friend(realmObject: $0) }))
           }
-          let filterFriends = await friends
+          let filterFriends = friends
             .where { $0.name.contains(query, options: .diacriticInsensitive) }
-            .toArray()
-          single(.success(filterFriends))
+          single(.success(filterFriends.map { Friend(realmObject: $0) }))
         } catch {
           single(.failure(error))
         }

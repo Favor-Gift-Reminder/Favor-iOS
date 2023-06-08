@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class ReminderFlow: Flow {
 
   // MARK: - Properties
@@ -57,9 +58,7 @@ private extension ReminderFlow {
     let reminderReactor = ReminderViewReactor()
     reminderVC.reactor = reminderReactor
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(reminderVC, animated: true)
-    }
+    self.rootViewController.pushViewController(reminderVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: reminderVC,
@@ -73,9 +72,7 @@ private extension ReminderFlow {
     newReminderVC.reactor = newReminderReactor
     newReminderVC.isEditable = true
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(newReminderVC, animated: true)
-    }
+    self.rootViewController.pushViewController(newReminderVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: newReminderVC,
@@ -89,9 +86,7 @@ private extension ReminderFlow {
     reminderDetailVC.reactor = reminderDetailReactor
     reminderDetailVC.isEditable = false
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(reminderDetailVC, animated: true)
-    }
+    self.rootViewController.pushViewController(reminderDetailVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: reminderDetailVC,
@@ -105,9 +100,7 @@ private extension ReminderFlow {
     reminderEditVC.reactor = reminderEditReactor
     reminderEditVC.isEditable = true
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(reminderEditVC, animated: true)
-    }
+    self.rootViewController.pushViewController(reminderEditVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: reminderEditVC,

@@ -53,9 +53,9 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     self.initialState = State(
       user: user,
       nameItems: [.textField(text: user.name, placeholder: "이름")],
-      idItems: [.textField(text: user.userID, placeholder: "ID")],
+      idItems: [.textField(text: user.searchID, placeholder: "ID")],
       favorItems: Favor.allCases.map { favor in
-        return .favor(isSelected: user.favorList.contains(favor.rawValue), favor: favor)
+        return .favor(isSelected: user.favorList.contains(favor), favor: favor)
       }
     )
   }
@@ -81,7 +81,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       }
       return self.userNetworking.request(.patchUser(
         name: name ?? currentState.user.name,
-        userId: id ?? currentState.user.userID,
+        userId: id ?? currentState.user.searchID,
         favorList: favors,
         userNo: UserInfoStorage.userNo
       ))

@@ -25,17 +25,17 @@ final class AnniversaryBottomSheetView: UIView {
     $0.textColor = .favorColor(.line3)
     $0.font = .favorFont(.regular, size: 16)
     $0.textAlignment = .center
-    $0.text = self.anniversaryType.text
+    $0.text = self.anniversaryCategory.rawValue
   }
   
   private lazy var iconImageView: UIImageView = UIImageView().then {
-    $0.image = self.anniversaryType.image?.withRenderingMode(.alwaysTemplate)
+    $0.image = self.anniversaryCategory.image?.withRenderingMode(.alwaysTemplate)
   }
   
   // MARK: - Properties
   
   /// 현재 뷰가 가지고 있는 AnniversaryType입니다.
-  let anniversaryType: AnniversaryCategory
+  let anniversaryCategory: AnniversaryCategory
   
   /// 선택이 되면 색깔이 바뀝니다.
   var isSelected: Bool = false {
@@ -53,12 +53,12 @@ final class AnniversaryBottomSheetView: UIView {
   lazy var tapObservable = self.rx.tapGesture()
     .skip(1)
     .withUnretained(self)
-    .flatMap { return Observable.just($0.0.anniversaryType) }
+    .flatMap { return Observable.just($0.0.anniversaryCategory) }
   
   // MARK: - Initializer
   
   init(_ anniversaryType: AnniversaryCategory) {
-    self.anniversaryType = anniversaryType
+    self.anniversaryCategory = anniversaryType
     super.init(frame: .zero)
     self.setupStyles()
     self.setupLayouts()
@@ -73,7 +73,7 @@ final class AnniversaryBottomSheetView: UIView {
 // MARK: - Setup
 
 extension AnniversaryBottomSheetView: BaseView {
-  func setupStyles() {}
+  nonisolated func setupStyles() {}
   
   func setupLayouts() {
     [

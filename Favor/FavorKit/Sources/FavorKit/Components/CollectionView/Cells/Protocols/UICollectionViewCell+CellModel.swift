@@ -8,7 +8,7 @@
 import RealmSwift
 
 public protocol CellModel {
-  associatedtype T: Object
+  associatedtype T: Storable
 
   var item: T { get set }
 }

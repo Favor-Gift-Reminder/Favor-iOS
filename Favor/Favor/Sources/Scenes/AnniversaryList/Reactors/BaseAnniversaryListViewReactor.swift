@@ -13,6 +13,7 @@ public class BaseAnniversaryListViewReactor {
 
   // MARK: - Properties
 
+  private let workbench = RealmWorkbench()
   let userFetcher = Fetcher<User>()
 
   // MARK: - Initializer
@@ -23,7 +24,7 @@ public class BaseAnniversaryListViewReactor {
 
   // MARK: - Functions
 
-  func setupUserFetcher() {
+  private func setupUserFetcher() {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
@@ -31,19 +32,9 @@ public class BaseAnniversaryListViewReactor {
         .flatMap { user -> Observable<[User]> in
           let userData = user.data
           do {
-            let remote: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
-            let remoteUser = remote.data
-            let decodedUser = User(
-              userNo: remoteUser.userNo,
-              email: remoteUser.email,
-              userID: remoteUser.userID,
-              name: remoteUser.name,
-              favorList: remoteUser.favorList,
-              giftList: remoteUser.giftList.map { $0.toDomain() },
-              anniversaryList: remoteUser.anniversaryList.map { $0.toDomain() },
-              friendList: remoteUser.friendList.map { $0.toDomain() }
-            )
-            return .just([decodedUser])
+            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
+            let user = User(dto: responseDTO.data)
+            return .just([user])
           } catch {
             print(error)
             return .just([])
@@ -54,12 +45,15 @@ public class BaseAnniversaryListViewReactor {
     }
     // onLocal
     self.userFetcher.onLocal = {
-      return try await RealmManager.shared.read(User.self)
+      return await self.workbench.values(UserObject.self)
+        .map { User(realmObject: $0) }
     }
     // onLocalUpdate
     self.userFetcher.onLocalUpdate = { _, remoteUser in
       guard let remoteUser = remoteUser.first else { return }
-      try await RealmManager.shared.update(remoteUser, update: .all)
+      try await self.workbench.write { transaction in
+        transaction.update(remoteUser.realmObject())
+      }
     }
   }
 }

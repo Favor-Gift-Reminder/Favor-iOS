@@ -43,7 +43,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 
   struct State {
     var type: EditType
-    var reminderEditor: ReminderEditor
+    var reminder: Reminder
     var cachedReminder: Reminder?
   }
 
@@ -53,7 +53,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
   init(_ type: EditType = .edit, reminder: Reminder) {
     self.initialState = State(
       type: type,
-      reminderEditor: reminder.toDomain(),
+      reminder: reminder,
       cachedReminder: reminder
     )
   }
@@ -62,7 +62,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
   init(_ type: EditType = .new) {
     self.initialState = State(
       type: type,
-      reminderEditor: ReminderEditor()
+      reminder: Reminder()
     )
   }
 
@@ -72,13 +72,13 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     switch action {
     case .viewDidLoad:
       return .merge(
-        .just(.updateReminderDate(self.currentState.reminderEditor.date)),
-        .just(.updateNotifyTime(self.currentState.reminderEditor.notifyTime))
+        .just(.updateReminderDate(self.currentState.reminder.date)),
+        .just(.updateNotifyTime(self.currentState.reminder.notifyDate))
       )
 
     case .doneButtonDidTap:
       os_log(.debug, "Done button did tap.")
-      print(self.currentState.reminderEditor)
+      print(self.currentState.reminder)
       return .empty()
 
     case .datePickerDidUpdate(let date):
@@ -97,13 +97,13 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 
     switch mutation {
     case .updateReminderDate(let date):
-      newState.reminderEditor.date = date ?? .distantPast
+      newState.reminder.date = date ?? .distantPast
 
     case .updateNotifyTime(let time):
-      newState.reminderEditor.notifyTime = time
+      newState.reminder.notifyDate = time
 
     case .updateShouldNotify(let shouldNotify):
-      newState.reminderEditor.shouldNotify = shouldNotify
+      newState.reminder.shouldNotify = shouldNotify
     }
 
     return newState

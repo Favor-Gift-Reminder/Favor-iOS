@@ -40,11 +40,11 @@ public class BaseFriendListViewController: BaseViewController {
           switch viewType {
           case .list:
             let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListCell
-            cell.bind(with: friend)
+            cell.bind(identifier: friend.identifier, name: friend.name)
             return cell
           case .edit:
             let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListModifyingCell
-            cell.bind(with: friend)
+            cell.bind(identifier: friend.identifier, name: friend.name)
             cell.deleteButton.rx.tap
               .subscribe(with: cell, onNext: { _, _ in
                 guard case let FriendSectionItem.friend(friend) = item else { return }

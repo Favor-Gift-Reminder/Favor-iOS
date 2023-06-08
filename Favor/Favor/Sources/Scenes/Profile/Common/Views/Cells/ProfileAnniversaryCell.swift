@@ -82,7 +82,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
     reactor.state.map { $0.anniversary }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, anniversary in
-        owner.titleLabel.text = anniversary.title
+        owner.titleLabel.text = anniversary.name
         owner.dateLabel.text = anniversary.date.toShortenDateString()
       })
       .disposed(by: self.disposeBag)

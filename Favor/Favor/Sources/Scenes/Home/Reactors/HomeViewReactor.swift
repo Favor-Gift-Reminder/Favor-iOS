@@ -23,8 +23,9 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let reminderFetcher = Fetcher<Reminder>()
-  let giftFetcher = Fetcher<Gift>()
+  private let workbench = try! RealmWorkbench()
+  private let reminderFetcher = Fetcher<Reminder>()
+  private let giftFetcher = Fetcher<Gift>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -90,7 +91,7 @@ final class HomeViewReactor: Reactor, Stepper {
         self.reminderFetcher.fetch(),
         self.giftFetcher.fetch(),
         resultSelector: { reminderResult, giftResult -> ([Reminder], [Gift]) in
-          return (reminderResult.results.toArray(), giftResult.results.toArray())
+          return (reminderResult.results, giftResult.results)
         })
       return fetchedDatas.flatMap { fetchedData -> Observable<Mutation> in
         let reminders = fetchedData.reminders
@@ -222,18 +223,21 @@ private extension HomeViewReactor {
       let reminders = networking.request(.getAllReminderList(userNo: UserInfoStorage.userNo))
         .flatMap { response -> Observable<[Reminder]> in
           let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { $0.toDomain() })
+          return .just(responseDTO.data.map { Reminder(dto: $0) })
         }
         .asSingle()
       return reminders
     }
     // onLocal
     self.reminderFetcher.onLocal = {
-      return try await RealmManager.shared.read(Reminder.self)
+      return await self.workbench.values(ReminderObject.self)
+        .map { Reminder(realmObject: $0) }
     }
     // onLocalUpdate
     self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
-      try await RealmManager.shared.updateAll(remoteReminders, update: .all)
+      try await self.workbench.write { transaction in
+        transaction.update(remoteReminders.map { $0.realmObject() })
+      }
     }
   }
 
@@ -244,18 +248,21 @@ private extension HomeViewReactor {
       let gifts = networking.request(.getAllGifts(userNo: UserInfoStorage.userNo))
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { $0.toDomain() })
+          return .just(responseDTO.data.map { Gift(dto: $0) })
         }
         .asSingle()
       return gifts
     }
     // onLocal
     self.giftFetcher.onLocal = {
-      return try await RealmManager.shared.read(Gift.self)
+      return await self.workbench.values(GiftObject.self)
+        .map { Gift(realmObject: $0) }
     }
     // onLocalUpdate
     self.giftFetcher.onLocalUpdate = { _, remoteGifts in
-      try await RealmManager.shared.updateAll(remoteGifts, update: .all)
+      try await self.workbench.write { transaction in
+        transaction.update(remoteGifts.map { $0.realmObject() })
+      }
     }
   }
 }

@@ -12,6 +12,7 @@ import FavorKit
 import ImageViewer
 import RxFlow
 
+@MainActor
 final class GiftFlow: Flow {
 
   // MARK: - Properties
@@ -72,9 +73,7 @@ private extension GiftFlow {
     let giftDetailReactor = GiftDetailViewReactor(gift: gift)
     giftDetailVC.reactor = giftDetailReactor
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(giftDetailVC, animated: true)
-    }
+    self.rootViewController.pushViewController(giftDetailVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: giftDetailVC,
@@ -100,19 +99,15 @@ private extension GiftFlow {
       headerView.currentIndex = index
     }
 
-    DispatchQueue.main.async {
-      giftDetailVC.presentImageGallery(galleryVC)
-    }
+    giftDetailVC.presentImageGallery(galleryVC)
 
     return .none
   }
 
   func popToHome(with gift: Gift) -> FlowContributors {
-    DispatchQueue.main.async {
-      self.rootViewController.popViewController(animated: true)
-      guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return }
-      homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
-    }
+    self.rootViewController.popViewController(animated: true)
+    guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return .none }
+    homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
 
     return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
   }
@@ -125,9 +120,7 @@ private extension GiftFlow {
     )
     giftManagementVC.reactor = giftManagementReactor
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(giftManagementVC, animated: true)
-    }
+    self.rootViewController.pushViewController(giftManagementVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: giftManagementVC,
@@ -135,7 +128,7 @@ private extension GiftFlow {
     ))
   }
 
-  func popToGiftDetail(with gift: GiftEditor? = nil) -> FlowContributors {
+  func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
     // TODO: 메모리 해제
     DispatchQueue.main.async {
       self.rootViewController.popViewController(animated: true)
@@ -155,9 +148,7 @@ private extension GiftFlow {
     giftShareVC.reactor = giftShareReactor
     giftShareVC.title = "선물 한 컷"
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(giftShareVC, animated: true)
-    }
+    self.rootViewController.pushViewController(giftShareVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: giftShareVC,

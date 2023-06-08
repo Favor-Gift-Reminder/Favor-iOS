@@ -103,15 +103,15 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, reminder in
         // 헤더
-        owner.eventTitleLabel.text = reminder.title
+        owner.eventTitleLabel.text = reminder.name
         owner.eventSubtitleLabel.text = reminder.date.toDday()
         // 날짜
         owner.dateSelectorTextField.updateDate(reminder.date)
         // 알림
-        let isNotifyTimeSet: Bool = reminder.notifyTime != nil
+        let isNotifyTimeSet: Bool = reminder.notifyDate != nil
         owner.notifySelectorStack.arrangedSubviews[1].isHidden = !isNotifyTimeSet
         owner.notifyEmptyLabel.isHidden = isNotifyTimeSet
-        owner.notifyTimeSelectorTextField.updateDate(reminder.notifyTime)
+        owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
         // 메모
         owner.memoTextView.text = reminder.memo
       })

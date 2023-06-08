@@ -36,7 +36,7 @@ final class ReminderCell: BaseCardCell, Reusable, View {
     reactor.state.map { $0.reminderData }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, reminder in
-        owner.title = reminder.title
+        owner.title = reminder.name
         owner.subtitle = reminder.date.toDday()
         owner.toggleSwitch.rx.isOn.onNext(reminder.shouldNotify)
       })

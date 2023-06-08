@@ -23,7 +23,7 @@ final class SearchUserResultCellReactor: Reactor {
   }
 
   struct State {
-    var userData: User = User(userNo: 1, email: "sdfkj", userID: "favor", name: "테스터", favorList: [])
+    var userData: UserObject = UserObject(userNo: 1, email: "sdfkj", userID: "favor", name: "테스터", favorList: [])
   }
 
   // MARK: - Initializer

@@ -1,5 +1,5 @@
 //
-//  Reminder.swift
+//  ReminderObject.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/19.
@@ -9,7 +9,7 @@ import Foundation
 
 import RealmSwift
 
-public class Reminder: Object {
+public class ReminderObject: Object {
 
   // MARK: - Properties
 
@@ -17,7 +17,7 @@ public class Reminder: Object {
   @Persisted(primaryKey: true) public var reminderNo: Int
   /// 리마인더 보유 회원 번호
   /// - Description: `User`의 `reminderList` 프로퍼티에 등록된 `Reminder` 테이블의 Primary Key.
-  @Persisted(originProperty: "reminderList") public var userNo: LinkingObjects<User>
+  @Persisted(originProperty: "reminderList") public var userNo: LinkingObjects<UserObject>
   /// 리마인더 제목
   @Persisted public var title: String
   /// 리마인더로 등록한 이벤트의 날짜
@@ -67,23 +67,5 @@ public class Reminder: Object {
     self.shouldNotify = shouldNotify
     self.notifyTime = notifyTime
     self.friendNo = friendNo
-  }
-}
-
-// MARK: - Array Extension
-
-extension Array where Element: Reminder {
-  public func sort() -> (future: Self, past: Self) {
-    let today = Calendar.current.startOfDay(for: .now)
-    let (future, past) = self.reduce(into: (future: Self(), past: Self())) { result, reminder in
-      let reminderDate = Calendar.current.startOfDay(for: reminder.date)
-      if reminderDate >= today {
-        result.future.append(reminder)
-      } else {
-        result.past.append(reminder)
-      }
-    }
-
-    return (future: future, past: past)
   }
 }

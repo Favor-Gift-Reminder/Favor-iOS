@@ -239,7 +239,7 @@ private extension AnniversaryManagementViewController {
 extension AnniversaryManagementViewController: FavorTextFieldCellDelegate {
   func textFieldDidUpdate(from cell: FavorTextFieldCell, _ text: String?) {
     guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.titleDidUpdate(text))
+    reactor.action.onNext(.nameDidUpdate(text))
   }
 }
 

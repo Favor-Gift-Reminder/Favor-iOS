@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class AuthFlow: Flow {
   
   var root: Presentable {

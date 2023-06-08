@@ -10,6 +10,7 @@ import UIKit
 import FavorKit
 import RxFlow
 
+@MainActor
 final class FriendListFlow: Flow {
 
   // MARK: - Properties
@@ -54,9 +55,7 @@ private extension FriendListFlow {
     friendListVC.title = "내 친구"
     friendListVC.viewType = .list
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(friendListVC, animated: true)
-    }
+    self.rootViewController.pushViewController(friendListVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: friendListVC,
@@ -71,9 +70,7 @@ private extension FriendListFlow {
     editFriendVC.title = "삭제하기"
     editFriendVC.viewType = .edit
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(editFriendVC, animated: true)
-    }
+    self.rootViewController.pushViewController(editFriendVC, animated: true)
 
     return .one(flowContributor: .contribute(
       withNextPresentable: editFriendVC,
@@ -82,9 +79,7 @@ private extension FriendListFlow {
   }
 
   func navigateToMyPage() -> FlowContributors {
-    DispatchQueue.main.async {
-      self.rootViewController.popViewController(animated: true)
-    }
+    self.rootViewController.popViewController(animated: true)
     return .end(forwardToParentFlowWithStep: AppStep.friendListIsComplete)
   }
 }
