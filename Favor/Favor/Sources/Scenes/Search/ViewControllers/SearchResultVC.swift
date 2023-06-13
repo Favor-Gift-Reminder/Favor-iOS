@@ -7,40 +7,26 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
-import Reusable
-import RxDataSources
 import RxGesture
-import RxSwift
 import SnapKit
 
 final class SearchResultViewController: BaseSearchViewController {
-  typealias SearchGiftResultDataSource = RxCollectionViewSectionedReloadDataSource<SearchResultSection.SearchGiftResultModel>
-  
+  typealias SearchResultDataSource = UICollectionViewDiffableDataSource<SearchResultSection, SearchResultSectionItem>
+
   // MARK: - Constants
   
   // MARK: - Properties
 
-  private let dataSource = SearchGiftResultDataSource(
-    configureCell: { _, collectionView, indexPath, item in
-      switch item {
-      case let .empty(image, text):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorEmptyCell
-        cell.bindEmptyData(image: image, text: text)
-        return cell
-      case .gift(let reactor):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchGiftResultCell
-        cell.reactor = reactor
-        return cell
-      case .user(let reactor):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchUserResultCell
-        cell.reactor = reactor
-        return cell
-      }
-    }
-  )
-  
+  private var dataSource: SearchResultDataSource?
+
+  private lazy var composer: Composer<SearchResultSection, SearchResultSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    return composer
+  }()
+
   // MARK: - UI Components
 
   // Search Selected
@@ -57,47 +43,29 @@ final class SearchResultViewController: BaseSearchViewController {
   private let selectedIndicatorBarView = SelectedIndicatorBar()
 
   // Contents
-  private lazy var giftCollectionView: UICollectionView = {
+  private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
-      collectionViewLayout: self.makeCompositionalLayout()
+      collectionViewLayout: UICollectionViewLayout()
     )
 
-    // register
-    collectionView.register(cellType: FavorEmptyCell.self)
-    collectionView.register(cellType: SearchGiftResultCell.self)
-    collectionView.register(cellType: SearchUserResultCell.self)
-
-    // Configure
     collectionView.showsVerticalScrollIndicator = false
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.alwaysBounceVertical = false
     return collectionView
   }()
-  
+
   // MARK: - Life Cycle
-  
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    self.setupDataSource()
+    self.composer.compose()
+  }
+
   // MARK: - Binding
 
-  override func bind() {
-    guard let reactor = self.reactor else { return }
-
-    // Action
-
-    // State
-    reactor.state
-      .map { state in
-        switch state.selectedSearchType {
-        case .gift:
-          return [state.giftResults]
-        case .user:
-          return [state.userResult]
-        }
-      }
-      .bind(to: self.giftCollectionView.rx.items(dataSource: self.dataSource))
-      .disposed(by: self.disposeBag)
-  }
-  
   override func bind(reactor: SearchViewReactor) {
     super.bind(reactor: reactor)
     
@@ -118,7 +86,7 @@ final class SearchResultViewController: BaseSearchViewController {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.giftCollectionView.rx.didScroll
+    self.collectionView.rx.didScroll
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.view.endEditing(true)
@@ -139,9 +107,40 @@ final class SearchResultViewController: BaseSearchViewController {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, selected in
         owner.updateSelectedSearchButton(to: selected)
-        owner.giftCollectionView.isScrollEnabled = selected == .gift
+        owner.collectionView.isScrollEnabled = selected == .gift
       })
       .disposed(by: self.disposeBag)
+
+    reactor.state.map { state -> [SearchResultSectionItem] in
+      switch state.selectedSearchType {
+      case .gift:
+        return state.giftSearchResultItems
+      case .user:
+        return state.userSearchResultItems
+      }
+    }
+    .debug()
+    .asDriver(onErrorRecover: { _ in return .empty()})
+    .drive(with: self, onNext: { owner, items in
+      guard let firstItem = items.first else { return }
+      var snapshot = NSDiffableDataSourceSnapshot<SearchResultSection, SearchResultSectionItem>()
+      switch firstItem {
+      case .empty:
+        snapshot.appendSections([.result(.empty)])
+        snapshot.appendItems(items, toSection: .result(.empty))
+      case .gift:
+        snapshot.appendSections([.result(.gift)])
+        snapshot.appendItems(items, toSection: .result(.gift))
+      case .user:
+        snapshot.appendSections([.result(.user)])
+        snapshot.appendItems(items, toSection: .result(.user))
+      }
+
+      DispatchQueue.main.async {
+        owner.dataSource?.apply(snapshot)
+      }
+    })
+    .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
@@ -156,7 +155,7 @@ final class SearchResultViewController: BaseSearchViewController {
     [
       self.searchTextField,
       self.buttonStack,
-      self.giftCollectionView
+      self.collectionView
     ].forEach {
       self.view.addSubview($0)
     }
@@ -189,7 +188,7 @@ final class SearchResultViewController: BaseSearchViewController {
       make.height.equalTo(2.5)
     }
 
-    self.giftCollectionView.snp.makeConstraints { make in
+    self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.buttonStack.snp.bottom)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide)
@@ -233,55 +232,51 @@ private extension SearchResultViewController {
       self.buttonStack.layoutSubviews()
     }.startAnimation()
   }
-}
 
-// MARK: - CollectionView
+  func setupDataSource() {
+    let emptyCellRegistration = UICollectionView.CellRegistration
+    <FavorEmptyCell, SearchResultSectionItem> { [weak self] cell, _, item in
+      guard
+        self != nil,
+        case let SearchResultSectionItem.empty(image, text) = item
+      else { return }
+      cell.bindEmptyData(image: image, text: text)
+    }
 
-private extension SearchResultViewController {
-  func makeCompositionalLayout() -> UICollectionViewCompositionalLayout {
-    return UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
-      let sectionType = self.dataSource[sectionIndex].model
-      let sectionFirstItem = self.dataSource[sectionIndex].items.first
+    let giftResultCellRegistration = UICollectionView.CellRegistration
+    <SearchGiftResultCell, SearchResultSectionItem> { [weak self] cell, _, item in
+      guard
+        self != nil,
+        case let SearchResultSectionItem.gift(gift) = item
+      else { return }
+      cell.bind(with: gift)
+    }
 
-      var isSectionEmpty: Bool = false
-      if let sectionFirstItem {
-        if case SearchResultSection.SearchResultItem.empty(_, _) = sectionFirstItem {
-          isSectionEmpty = true
+    let userResultCellRegistration = UICollectionView.CellRegistration
+    <SearchUserResultCell, SearchResultSectionItem> { [weak self] cell, _, item in
+      guard
+        self != nil,
+        case let SearchResultSectionItem.user(user) = item
+      else { return }
+      cell.bind(with: user)
+    }
+
+    self.dataSource = SearchResultDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { [weak self] collectionView, indexPath, item in
+        guard self != nil else { return UICollectionViewCell() }
+        switch item {
+        case .empty:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: emptyCellRegistration, for: indexPath, item: item)
+        case .gift:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: giftResultCellRegistration, for: indexPath, item: item)
+        case .user:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: userResultCellRegistration, for: indexPath, item: item)
         }
       }
-      return self.makeCompositionalSection(sectionType: sectionType, isEmpty: isSectionEmpty)
-    })
-  }
-
-  func makeCompositionalSection(
-    sectionType: SearchResultSectionType,
-    isEmpty: Bool
-  ) -> NSCollectionLayoutSection {
-    let emptyItem = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0))
     )
-
-    let item = NSCollectionLayoutItem(
-      layoutSize: sectionType.cellSize
-    )
-
-    let group = UICollectionViewCompositionalLayout.group(
-      direction: .horizontal,
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: isEmpty ? .fractionalHeight(1.0) : sectionType.cellSize.heightDimension
-      ),
-      subItem: isEmpty ? emptyItem : item,
-      count: isEmpty ? 1 : sectionType.columns
-    )
-    group.interItemSpacing = .fixed(sectionType.spacing)
-
-    let section = NSCollectionLayoutSection(group: group)
-    section.contentInsets = isEmpty ? .zero : sectionType.sectionInset
-    section.interGroupSpacing = sectionType.spacing
-
-    return section
   }
 }

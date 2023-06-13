@@ -62,7 +62,6 @@ class BaseSearchViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-//    Observable.combineLatest(self.rx.viewWillDisappear, self.searchTextField.rx.backButtonDidTap)
     self.searchTextField.rx.backButtonDidTap
       .throttle(.nanoseconds(500), scheduler: MainScheduler.asyncInstance)
       .map { _ in Reactor.Action.viewWillDisappear }
@@ -82,7 +81,6 @@ class BaseSearchViewController: BaseViewController, View {
     // State
     reactor.state.map { $0.isEditing }
       .distinctUntilChanged()
-      .debug("isEditing")
       .delay(.nanoseconds(100), scheduler: MainScheduler.instance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isEditing in

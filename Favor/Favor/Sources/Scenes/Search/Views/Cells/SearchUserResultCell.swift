@@ -8,12 +8,13 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
-import Reusable
-import RxCocoa
 import SnapKit
 
-final class SearchUserResultCell: UICollectionViewCell, View, Reusable {
+public protocol SearchUserResultCellDelegate: AnyObject {
+  func addFriendButtonDidTap()
+}
+
+final class SearchUserResultCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 
@@ -24,7 +25,7 @@ final class SearchUserResultCell: UICollectionViewCell, View, Reusable {
 
   // MARK: - Properties
 
-  public var disposeBag = DisposeBag()
+  public weak var delegate: SearchUserResultCellDelegate?
 
   // MARK: - UI Components
 
@@ -83,18 +84,9 @@ final class SearchUserResultCell: UICollectionViewCell, View, Reusable {
 
   // MARK: - Binding
 
-  func bind(reactor: SearchUserResultCellReactor) {
-    // Action
-
-    // State
-    reactor.state.map { $0.userData }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, user in
-        // image
-        owner.nameLabel.text = user.name
-        owner.idLabel.text = "@" + user.userID
-      })
-      .disposed(by: self.disposeBag)
+  public func bind(with user: User) {
+    self.nameLabel.text = user.name
+    self.idLabel.text = "@" + user.searchID
   }
 
   // MARK: - Functions
@@ -142,14 +134,5 @@ extension SearchUserResultCell: BaseView {
       make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(Metric.buttonHeight)
     }
-  }
-}
-
-// MARK: - Reactive
-
-extension Reactive where Base: SearchUserResultCell {
-  @MainActor
-  var addFriendButtonDidTap: ControlEvent<()> {
-    return ControlEvent(events: base.addFriendButton.rx.tap)
   }
 }
