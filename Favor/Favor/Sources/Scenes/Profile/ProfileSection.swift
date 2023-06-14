@@ -160,7 +160,7 @@ extension ProfileSection: Composable {
     case .anniversaries:
       return .list(spacing: .fixed(10))
     case .memo:
-      return .fullList(height: .estimated(130))
+      return .singleFullList(height: .estimated(130))
     case .friends:
       return .custom(
         width: .estimated(1),

@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nomatterjun/Composer.git",
       "state" : {
-        "revision" : "23624920db88cf49c0f4633be5a86b8723034c54",
-        "version" : "1.0.3"
+        "revision" : "6274e133ae67532cfbd48f16435bdc9765b5e8b2",
+        "version" : "1.0.4"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
-        "revision" : "36b2df44453ba5e830369c76ab0683799a287605",
-        "version" : "13.13.0"
+        "revision" : "3c950f43bafc4fe39ce605e913cc7f30426e1747",
+        "version" : "13.8.0"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "revision" : "45ea4a0ec4bb3161c807be0a9a4921161dbe60a2",
-        "version" : "10.40.1"
+        "revision" : "80368adfbf58360104042522d9f4623a3de7863b",
+        "version" : "10.37.2"
       }
     },
     {
