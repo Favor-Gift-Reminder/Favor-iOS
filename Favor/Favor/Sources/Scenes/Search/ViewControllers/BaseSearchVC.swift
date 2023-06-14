@@ -69,7 +69,7 @@ class BaseSearchViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.view.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-      guard let `self` = self else { return }
+      guard let self = self else { return }
       recognizer.delegate = self
       delegate.simultaneousRecognitionPolicy = .never
     })

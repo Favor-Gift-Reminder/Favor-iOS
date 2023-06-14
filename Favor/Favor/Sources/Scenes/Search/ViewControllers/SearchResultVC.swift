@@ -137,14 +137,19 @@ final class SearchResultViewController: BaseSearchViewController {
       }
 
       DispatchQueue.main.async {
-        owner.dataSource?.apply(snapshot)
+        owner.dataSource?.apply(snapshot, animatingDifferences: true)
       }
     })
     .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
-  
+
+  public func requestSearchQuery(with searchQuery: String) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.searchRequestedWith(searchQuery))
+  }
+
   // MARK: - UI Setups
   
   override func setupStyles() {
