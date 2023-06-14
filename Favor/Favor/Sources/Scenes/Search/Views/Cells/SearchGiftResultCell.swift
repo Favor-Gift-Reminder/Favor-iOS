@@ -8,11 +8,9 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
-import Reusable
 import SnapKit
 
-final class SearchGiftResultCell: BaseCollectionViewCell, View, Reusable {
+final class SearchGiftResultCell: BaseCollectionViewCell {
 
   // MARK: - Properties
 
@@ -59,18 +57,9 @@ final class SearchGiftResultCell: BaseCollectionViewCell, View, Reusable {
 
   // MARK: - Binding
 
-  func bind(reactor: SearchGiftResultCellReactor) {
-    // Action
-
-    // State
-    reactor.state.map { $0.gift }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, gift in
-        // image
-        owner.titleLabel.text = gift.name
-        owner.dateLabel.text = gift.date?.toShortenDateString()
-      })
-      .disposed(by: self.disposeBag)
+  public func bind(with gift: Gift) {
+    self.titleLabel.text = gift.name
+    self.dateLabel.text = gift.date?.toShortenDateString()
   }
 }
 
@@ -83,17 +72,17 @@ extension SearchGiftResultCell: BaseView {
 
   func setupLayouts() {
     [
-      self.thumbnailImageView,
-      self.labelStack
-    ].forEach {
-      self.addSubview($0)
-    }
-
-    [
       self.titleLabel,
       self.dateLabel
     ].forEach {
       self.labelStack.addArrangedSubview($0)
+    }
+
+    [
+      self.thumbnailImageView,
+      self.labelStack
+    ].forEach {
+      self.addSubview($0)
     }
   }
 
@@ -104,7 +93,7 @@ extension SearchGiftResultCell: BaseView {
 
     self.labelStack.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(16)
-      make.trailing.equalToSuperview().inset(30)
+      make.trailing.lessThanOrEqualToSuperview().inset(32)
       make.bottom.equalToSuperview().inset(16)
     }
   }

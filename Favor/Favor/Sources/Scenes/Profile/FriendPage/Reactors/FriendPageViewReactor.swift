@@ -18,7 +18,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
   var initialState: State = State()
   var steps = PublishRelay<Step>()
   private let friend: Friend
-  private let workbench = try! RealmWorkbench()
+  private let workbench = RealmWorkbench()
   private let friendFetcher = Fetcher<Friend>()
 
   /// 친구가 유저인지 판별해주는 계산 프로퍼티입니다.

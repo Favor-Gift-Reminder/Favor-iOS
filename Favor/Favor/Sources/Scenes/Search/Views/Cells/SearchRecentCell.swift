@@ -8,10 +8,9 @@
 import UIKit
 
 import FavorKit
-import Reusable
 import SnapKit
 
-final class SearchRecentCell: UICollectionViewCell, Reusable {
+final class SearchRecentCell: BaseCollectionViewCell {
 
   // MARK: - UI Components
 
@@ -53,7 +52,7 @@ final class SearchRecentCell: UICollectionViewCell, Reusable {
 
   // MARK: - Functions
 
-  public func updateText(_ text: String) {
+  public func bind(with text: String) {
     self.textLabel.text = text
   }
 }

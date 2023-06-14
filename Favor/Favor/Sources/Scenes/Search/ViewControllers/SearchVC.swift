@@ -7,20 +7,17 @@
 
 import UIKit
 
+import Composer
 import FavorKit
 import ReactorKit
-import Reusable
 import RxCocoa
-import RxDataSources
-import RxGesture
 import SnapKit
 
 final class SearchViewController: BaseSearchViewController {
-  typealias RecentSearchDataSource = RxCollectionViewSectionedReloadDataSource<SearchRecentSection.SearchRecentModel>
-  
+  typealias SearchDataSource = UICollectionViewDiffableDataSource<SearchSection, SearchSectionItem>
+
   // MARK: - Constants
-  
-  let giftCategories: [String] = ["가벼운선물", "생일", "집들이", "시험", "승진", "졸업", "기타"]
+
   let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
 
   private enum Constants {
@@ -30,34 +27,24 @@ final class SearchViewController: BaseSearchViewController {
   
   // MARK: - Properties
 
-  private var dataSource = RecentSearchDataSource(
-    configureCell: { _, collectionView, indexPath, item in
-      switch item {
-      case .recent(let recentSearch):
-        let cell = collectionView.dequeueReusableCell(for: indexPath) as SearchRecentCell
-        cell.updateText(recentSearch)
-        return cell
-      }
-    }, configureSupplementaryView: { _, collectionView, kind, indexPath in
-      let header = collectionView.dequeueReusableSupplementaryView(
-        ofKind: kind,
-        for: indexPath
-      ) as SearchRecentHeader
-      return header
-    }
-  )
-  
+  private var dataSource: SearchDataSource?
+
+  private lazy var composer: Composer<SearchSection, SearchSectionItem> = {
+    let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
+    return composer
+  }()
+
   // MARK: - UI Components
   
   // Gift Category
   private lazy var giftCategoryTitleLabel = self.makeTitleLabel(title: "선물 카테고리")
-  
+
   private lazy var giftCategoryButtonStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.spacing = 10
-    self.giftCategories.forEach {
-      stackView.addArrangedSubview(FavorSmallButton(with: .main($0, image: nil)))
+    FavorCategory.allCases.forEach {
+      stackView.addArrangedSubview(FavorSmallButton(with: .gray($0.rawValue)))
     }
     stackView.distribution = .fillProportionally
     return stackView
@@ -68,6 +55,7 @@ final class SearchViewController: BaseSearchViewController {
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.showsVerticalScrollIndicator = false
     scrollView.contentInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+    scrollView.canCancelContentTouches = true
     return scrollView
   }()
   
@@ -83,44 +71,26 @@ final class SearchViewController: BaseSearchViewController {
   }()
 
   // RecentSearchObject
-  private lazy var recentSearchCollectionView: UICollectionView = {
+  private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
-      collectionViewLayout: self.makeSearchRecentCompositionalLayout()
+      collectionViewLayout: UICollectionViewLayout()
     )
-
-    // Register
-    collectionView.register(cellType: SearchRecentCell.self)
-    collectionView.register(
-      supplementaryViewType: SearchRecentHeader.self,
-      ofKind: SearchRecentCell.reuseIdentifier
-    )
-
-    // Setup
     collectionView.showsHorizontalScrollIndicator = false
-    collectionView.showsVerticalScrollIndicator = false
-    collectionView.isHidden = true
+    collectionView.contentInset = UIEdgeInsets(top: 40, left: .zero, bottom: .zero, right: .zero)
     return collectionView
   }()
-  
+
   // MARK: - Life Cycle
-  
-  // MARK: - Binding
 
-  override func bind() {
-    guard let reactor = self.reactor else { return }
+  override func viewDidLoad() {
+    super.viewDidLoad()
 
-    // Action
-    self.recentSearchCollectionView.rx.modelSelected(SearchRecentSection.SearchRecentItem.self)
-      .map { item in Reactor.Action.searchRecentDidSelected(item) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    // State
-    reactor.state.map { [$0.searchRecents] }
-      .bind(to: self.recentSearchCollectionView.rx.items(dataSource: self.dataSource))
-      .disposed(by: self.disposeBag)
+    self.setupDataSource()
+    self.composer.compose()
   }
+
+  // MARK: - Binding
 
   override func bind(reactor: SearchViewReactor) {
     super.bind(reactor: reactor)
@@ -130,6 +100,40 @@ final class SearchViewController: BaseSearchViewController {
       .throttle(.nanoseconds(500), scheduler: MainScheduler.instance)
       .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.giftCategoryButtonStack.arrangedSubviews.forEach { arrangedView in
+      guard let button = arrangedView as? FavorSmallButton else { return }
+      button.rx.tap
+        .map { Reactor.Action.categoryButtonDidTap(button.category) }
+        .bind(to: reactor.action)
+        .disposed(by: self.disposeBag)
+    }
+
+    self.collectionView.rx.itemSelected
+      .map { indexPath -> Reactor.Action in
+        guard let item = self.dataSource?.itemIdentifier(for: indexPath) else { return .doNothing }
+        switch item {
+        case .recent(let searchString):
+          return .searchRecentDidSelected(searchString.queryString)
+        }
+      }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    // State
+    reactor.state.map { $0.recentSearchItems }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, searches in
+        guard let dataSource = owner.dataSource else { return }
+        var snapshot = NSDiffableDataSourceSnapshot<SearchSection, SearchSectionItem>()
+        snapshot.appendSections([.recent])
+        snapshot.appendItems(searches, toSection: .recent)
+
+        DispatchQueue.main.async {
+          dataSource.apply(snapshot)
+        }
+      })
       .disposed(by: self.disposeBag)
   }
   
@@ -148,9 +152,6 @@ final class SearchViewController: BaseSearchViewController {
   }
   
   override func setupLayouts() {
-    self.giftCategories.forEach {
-      self.giftCategoryButtonStack.addArrangedSubview(FavorSmallButton(with: .gray($0)))
-    }
     self.giftCategoryButtonScrollView.addSubview(self.giftCategoryButtonStack)
 
     self.emotions.forEach {
@@ -163,7 +164,7 @@ final class SearchViewController: BaseSearchViewController {
       self.giftCategoryButtonScrollView,
       self.emotionTitleLabel,
       self.emotionButtonStack,
-      self.recentSearchCollectionView
+      self.collectionView
     ].forEach {
       self.view.addSubview($0)
     }
@@ -176,7 +177,7 @@ final class SearchViewController: BaseSearchViewController {
     }
     
     self.giftCategoryTitleLabel.snp.makeConstraints { make in
-      make.top.equalTo(self.searchTextField.snp.bottom).offset(56)
+      make.top.equalTo(self.searchTextField.snp.bottom).offset(40)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
     self.giftCategoryButtonScrollView.snp.makeConstraints { make in
@@ -199,8 +200,8 @@ final class SearchViewController: BaseSearchViewController {
       make.height.equalTo(40)
     }
 
-    self.recentSearchCollectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.searchTextField.snp.bottom).offset(40)
+    self.collectionView.snp.makeConstraints { make in
+      make.top.equalTo(self.searchTextField.snp.bottom)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide)
     }
@@ -227,56 +228,49 @@ private extension SearchViewController {
 
   func toggleRecentSearch(to isHidden: Bool) {
     let duration = isHidden ? Constants.fadeInDuration : Constants.fadeOutDuration
-    self.recentSearchCollectionView.isHidden = false
+    self.collectionView.isHidden = false
     let animator = UIViewPropertyAnimator(duration: duration, curve: .easeInOut) {
-      self.recentSearchCollectionView.layer.opacity = isHidden ? 0.0 : 1.0
+      self.collectionView.layer.opacity = isHidden ? 0.0 : 1.0
     }
     animator.addCompletion { _ in
-      self.recentSearchCollectionView.isHidden = isHidden
+      self.collectionView.isHidden = isHidden
     }
     animator.startAnimation()
   }
-}
 
-// MARK: - CollectionView
+  func setupDataSource() {
+    let searchCellRegistration = UICollectionView.CellRegistration<SearchRecentCell, SearchSectionItem> { [weak self] cell, _, item in
+      guard
+        self != nil,
+        case let SearchSectionItem.recent(searchString) = item
+      else { return }
+      cell.bind(with: searchString.queryString)
+    }
 
-private extension BaseSearchViewController {
-  func makeSearchRecentCompositionalLayout() -> UICollectionViewCompositionalLayout {
-    let item = NSCollectionLayoutItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0)
-      )
-    )
-    let group = UICollectionViewCompositionalLayout.group(
-      direction: .vertical,
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(44)
-      ),
-      subItem: item,
-      count: 1
-    )
-    let section = NSCollectionLayoutSection(group: group)
-
-    let header = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .estimated(21)
-      ),
-      elementKind: SearchRecentCell.reuseIdentifier,
-      alignment: .topLeading
-    )
-    section.boundarySupplementaryItems = [header]
-
-    section.contentInsets = NSDirectionalEdgeInsets(
-      top: 16,
-      leading: 20,
-      bottom: 16,
-      trailing: 20
+    self.dataSource = SearchDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { collectionView, indexPath, item in
+        switch item {
+        case .recent:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: searchCellRegistration, for: indexPath, item: item)
+        }
+      }
     )
 
-    let layout = UICollectionViewCompositionalLayout(section: section)
-    return layout
+    let headerRegistration = UICollectionView.SupplementaryRegistration<FavorSectionHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { [weak self] _, _, _ in
+      guard self != nil else { return }
+    }
+
+    self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+      guard self != nil else { return UICollectionReusableView() }
+      switch kind {
+      case UICollectionView.elementKindSectionHeader:
+        return collectionView.dequeueConfiguredReusableSupplementary(
+          using: headerRegistration, for: indexPath)
+      default:
+        return UICollectionReusableView()
+      }
+    }
   }
 }
