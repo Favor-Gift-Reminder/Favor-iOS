@@ -1,5 +1,5 @@
 //
-//  SearchCategoryViewReactor.swift
+//  SearchTagViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 6/15/23.
@@ -11,7 +11,7 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-public final class SearchCategoryViewReactor: Reactor, Stepper {
+public final class SearchTagViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
 
@@ -23,18 +23,21 @@ public final class SearchCategoryViewReactor: Reactor, Stepper {
   public enum Action {
     case viewNeedsLoaded
     case categoryDidSelected(FavorCategory)
+    case emotionDidSelected(FavorEmotion)
   }
 
   public enum Mutation {
     case updateSelectedCategory(FavorCategory)
+    case updateSelectedEmotion(FavorEmotion)
     case updateGifts([Gift])
   }
 
   public struct State {
     var category: FavorCategory?
-    var sections: [SearchCategorySection] = []
+    var emotion: FavorEmotion?
+    var sections: [SearchTagSection] = []
     var gifts: [Gift] = []
-    var giftItems: [SearchCategorySectionItem] = []
+    var giftItems: [SearchTagSectionItem] = []
   }
 
   // MARK: - Initializer
@@ -60,6 +63,17 @@ public final class SearchCategoryViewReactor: Reactor, Stepper {
             return .just(.updateGifts(gifts.results))
           }
       )
+
+    case .emotionDidSelected(let emotion):
+      self.setupFetcher(with: emotion)
+      return .concat(
+        .just(.updateSelectedEmotion(emotion)),
+        self.giftFetcher.fetch()
+          .asObservable()
+          .flatMap { gifts -> Observable<Mutation> in
+            return .just(.updateGifts(gifts.results))
+          }
+      )
     }
   }
 
@@ -69,6 +83,9 @@ public final class SearchCategoryViewReactor: Reactor, Stepper {
     switch mutation {
     case .updateSelectedCategory(let category):
       newState.category = category
+
+    case .updateSelectedEmotion(let emotion):
+      newState.emotion = emotion
 
     case .updateGifts(let gifts):
       newState.gifts = gifts
@@ -96,7 +113,7 @@ public final class SearchCategoryViewReactor: Reactor, Stepper {
 
 // MARK: - Fetcher
 
-private extension SearchCategoryViewReactor {
+private extension SearchTagViewReactor {
   func setupFetcher(with category: FavorCategory) {
     // onRemote
     self.giftFetcher.onRemote = {
@@ -113,6 +130,32 @@ private extension SearchCategoryViewReactor {
     self.giftFetcher.onLocal = {
       return await self.workbench.values(GiftObject.self)
         .filter { $0.category == category }
+        .map { Gift(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
+      try await self.workbench.write { transaction in
+        transaction.update(remoteGifts.map { $00.realmObject() })
+      }
+    }
+  }
+
+  func setupFetcher(with emotion: FavorEmotion) {
+    // onRemote
+    self.giftFetcher.onRemote = {
+      let networking = UserNetworking()
+      let gifts = networking.request(.getGiftByEmotion(emotion: emotion.rawValue, userNo: UserInfoStorage.userNo))
+        .flatMap { response -> Observable<[Gift]> in
+          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Gift(dto: $0) })
+        }
+        .asSingle()
+      return gifts
+    }
+    // onLocal
+    self.giftFetcher.onLocal = {
+      return await self.workbench.values(GiftObject.self)
+        .filter { $0.emotion == emotion }
         .map { Gift(realmObject: $0) }
     }
     // onLocalUpdate

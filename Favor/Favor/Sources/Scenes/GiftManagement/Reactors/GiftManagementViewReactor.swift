@@ -211,16 +211,7 @@ private extension GiftManagementViewReactor {
   func requestPostGift(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
-      let requestDTO = GiftRequestDTO(
-        giftName: gift.name,
-        giftDate: gift.date?.toDTODateString() ?? Date.distantPast.toDTODateString(),
-        giftMemo: gift.memo ?? "",
-        category: gift.category.rawValue,
-        emotion: gift.emotion,
-        isPinned: gift.isPinned,
-        isGiven: gift.isGiven,
-        friendNoList: gift.relatedFriends.map { $0.identifier }
-      )
+      let requestDTO = gift.requestDTO()
 
       let disposable = networking.request(.postGift(requestDTO, userNo: UserInfoStorage.userNo))
         .asSingle()
@@ -242,16 +233,7 @@ private extension GiftManagementViewReactor {
   func requestPatchGift(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
-      let requestDTO = GiftUpdateRequestDTO(
-        giftName: gift.name,
-        giftDate: gift.date?.toDTODateString() ?? Date.distantPast.toDTODateString(),
-        giftMemo: gift.memo ?? "",
-        category: gift.category.rawValue,
-        emotion: gift.emotion,
-        isPinned: gift.isPinned,
-        isGiven: gift.isGiven,
-        friendNoList: gift.relatedFriends.map { $0.identifier }
-      )
+      let requestDTO = gift.updateRequestDTO()
 
       let disposable = networking.request(.patchGift(requestDTO, giftNo: gift.identifier))
         .asSingle()

@@ -11,22 +11,22 @@ import Composer
 
 // MARK: - Item
 
-public enum SearchCategorySectionItem: ComposableItem {
+public enum SearchTagSectionItem: ComposableItem {
   case empty(UIImage?, String)
   case gift(Gift)
 }
 
 // MARK: - Section
 
-public enum SearchCategorySection: ComposableSection {
+public enum SearchTagSection: ComposableSection {
   case empty
   case gift
 }
 
 // MARK: - Hashable
 
-extension SearchCategorySectionItem: Hashable {
-  public static func == (lhs: SearchCategorySectionItem, rhs: SearchCategorySectionItem) -> Bool {
+extension SearchTagSectionItem: Hashable {
+  public static func == (lhs: SearchTagSectionItem, rhs: SearchTagSectionItem) -> Bool {
     switch (lhs, rhs) {
     case (.empty, .empty):
       return false
@@ -49,7 +49,7 @@ extension SearchCategorySectionItem: Hashable {
 
 // MARK: - Composer
 
-extension SearchCategorySection: Composable {
+extension SearchTagSection: Composable {
   public var item: UICollectionViewComposableLayout.Item {
     switch self {
     case .empty:

@@ -40,6 +40,7 @@ final class SearchViewReactor: Reactor, Stepper {
     case textDidChanged(String?)
     case editingDidEnd
     case categoryButtonDidTap(FavorCategory)
+    case emotionButtonDidTap(FavorEmotion)
     case returnKeyDidTap
     case searchRecentDidSelected(String)
     case searchRequestedWith(String)
@@ -123,6 +124,10 @@ final class SearchViewReactor: Reactor, Stepper {
 
     case .categoryButtonDidTap(let category):
       self.steps.accept(AppStep.searchCategoryResultIsRequired(category))
+      return .empty()
+
+    case .emotionButtonDidTap(let emotion):
+      self.steps.accept(AppStep.searchEmotionResultIsRequired(emotion))
       return .empty()
 
     case .returnKeyDidTap:

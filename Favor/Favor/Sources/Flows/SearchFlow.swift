@@ -47,6 +47,9 @@ final class SearchFlow: Flow {
     case .searchCategoryResultIsRequired(let category):
       return self.navigateToSearchCategoryResult(with: category)
 
+    case .searchEmotionResultIsRequired(let emotion):
+      return self.navigateToSearchEmotionResult(with: emotion)
+
     default:
       return .none
     }
@@ -90,16 +93,37 @@ private extension SearchFlow {
 
   func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
     let searchCategoryVC = SearchCategoryViewController()
-    let searchCategoryReactor = SearchCategoryViewReactor()
+    let searchCategoryReactor = SearchTagViewReactor()
     searchCategoryVC.reactor = searchCategoryReactor
+    searchCategoryVC.title = "선물 카테고리"
 
     DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
+      self.rootViewController.setNavigationBarHidden(false, animated: false)
       self.rootViewController.pushViewController(searchCategoryVC, animated: true)
       searchCategoryVC.requestCategory(category)
     }
 
     return .one(flowContributor: .contribute(
       withNextPresentable: searchCategoryVC, withNextStepper: searchCategoryReactor
+    ))
+  }
+
+  func navigateToSearchEmotionResult(with emotion: FavorEmotion) -> FlowContributors {
+    let searchEmotionVC = SearchEmotionViewController()
+    let searchEmotionReactor = SearchTagViewReactor()
+    searchEmotionVC.reactor = searchEmotionReactor
+    searchEmotionVC.title = "선물 감정"
+
+    DispatchQueue.main.async {
+      self.rootViewController.setupNavigationAppearance()
+      self.rootViewController.setNavigationBarHidden(false, animated: false)
+      self.rootViewController.pushViewController(searchEmotionVC, animated: true)
+      searchEmotionVC.requestEmotion(emotion)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchEmotionVC, withNextStepper: searchEmotionReactor
     ))
   }
 

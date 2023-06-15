@@ -21,7 +21,7 @@ public struct Gift: Storable, Receivable {
   public var photos: [UIImage]
   public var memo: String?
   public var category: FavorCategory
-  public var emotion: String
+  public var emotion: FavorEmotion?
   public var isPinned: Bool
   public var relatedFriends: [Friend]
   public var isGiven: Bool
@@ -39,7 +39,7 @@ public struct Gift: Storable, Receivable {
     self.photos = []
     self.memo = realmObject.memo
     self.category = realmObject.category
-    self.emotion = realmObject.emotion ?? "기뻐요"
+    self.emotion = realmObject.emotion
     self.isPinned = realmObject.isPinned
     self.relatedFriends = realmObject.friendList.compactMap(Friend.init(realmObject:))
     self.isGiven = realmObject.isGiven
@@ -74,13 +74,26 @@ public struct Gift: Storable, Receivable {
     self.isGiven = dto.isGiven
   }
 
+  public func requestDTO() -> GiftRequestDTO {
+    GiftRequestDTO(
+      giftName: self.name,
+      giftDate: (self.date ?? .distantPast).toDTODateString(),
+      giftMemo: self.memo ?? "",
+      category: self.category,
+      emotion: self.emotion ?? .good,
+      isPinned: self.isPinned,
+      isGiven: self.isGiven,
+      friendNoList: self.relatedFriends.map { $0.identifier }
+    )
+  }
+
   public func updateRequestDTO() -> GiftUpdateRequestDTO {
     GiftUpdateRequestDTO(
       giftName: self.name,
       giftDate: (self.date ?? .distantPast).toDTODateString(),
       giftMemo: self.memo ?? "",
-      category: self.category.rawValue,
-      emotion: self.emotion,
+      category: self.category,
+      emotion: self.emotion ?? .good,
       isPinned: self.isPinned,
       isGiven: self.isGiven,
       friendNoList: self.relatedFriends.map { $0.identifier }
@@ -98,7 +111,7 @@ public struct Gift: Storable, Receivable {
     self.name = ""
     self.photos = []
     self.category = .etc
-    self.emotion = ""
+    self.emotion = .xoxo
     self.isPinned = false
     self.relatedFriends = []
     self.isGiven = false

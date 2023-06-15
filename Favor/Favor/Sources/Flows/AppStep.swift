@@ -42,6 +42,7 @@ enum AppStep: Step {
   case searchResultIsRequired(String)
   case searchResultIsComplete
   case searchCategoryResultIsRequired(FavorCategory)
+  case searchEmotionResultIsRequired(FavorEmotion)
 
   // MARK: - Reminder
   case reminderIsRequired
