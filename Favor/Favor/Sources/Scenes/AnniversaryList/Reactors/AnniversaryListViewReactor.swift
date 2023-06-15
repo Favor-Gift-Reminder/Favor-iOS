@@ -16,33 +16,30 @@ import RxFlow
 final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor, Stepper {
   typealias Section = AnniversaryListSection
   typealias Item = AnniversaryListSectionItem
-
+  
   // MARK: - Properties
-
+  
   var initialState: State
   var steps = PublishRelay<Step>()
   let networking = AnniversaryNetworking()
-
+  
   enum Action {
     case viewNeedsLoaded
     case editButtonDidTap
     case pinButtonDidTap(Anniversary)
   }
-
+  
   enum Mutation {
     case updateAnniversaries([Anniversary])
-    case updatePinnedSection([Item])
     case updateAllSection([Item])
   }
-
+  
   struct State {
     var anniversaries: [Anniversary] = []
     var sections: [Section] = []
-    var items: [[Item]] = []
-    var pinnedItems: [Item] = []
-    var allItems: [Item] = []
+    var items: [Item] = []
   }
-
+  
   // MARK: - Initializer
 
   override init() {
@@ -51,7 +48,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   }
 
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
@@ -65,7 +62,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     case .editButtonDidTap:
       self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
       return .empty()
-
+      
     case .pinButtonDidTap(let tappedAnniversary):
       // 1. 현재 상태의 값을 백업
       let originalAnniversaries = self.currentState.anniversaries
@@ -102,31 +99,25 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       )
     }
   }
-
+  
   func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     return mutation.flatMap { originalMutation -> Observable<Mutation> in
       switch originalMutation {
       case .updateAnniversaries(let anniversaries):
-        let (pinnedItems: pinnedItems, allItems: allItems) = anniversaries.sort()
-          .reduce(into: (pinnedItems: [Item](), allItems: [Item]())) { result, anniversary in
-            // 고정됨 부분과 전체 부분의 값이 같더라도 cell의 reactor는 달라야하기 때문에
-            // 각각 생성해줍니다.
-            result.allItems.append(anniversary.toItem(forSection: .all))
-            if anniversary.isPinned {
-              result.pinnedItems.append(anniversary.toItem(forSection: .pinned))
-            }
-          }
-        return .concat(
+        let sortedAnniversaries = anniversaries.sort()
+          .map { $0.toItem(forSection: .all) }
+        
+        return .concat([
           .just(originalMutation),
-          .just(.updatePinnedSection(pinnedItems)),
-          .just(.updateAllSection(allItems))
-        )
+          .just(.updateAllSection(sortedAnniversaries))
+        ])
+        
       default:
         return .just(originalMutation)
       }
     }
   }
-
+  
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -134,11 +125,8 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     case .updateAnniversaries(let anniversaries):
       newState.anniversaries = anniversaries
 
-    case .updatePinnedSection(let pinnedItems):
-      newState.pinnedItems = pinnedItems
-
     case .updateAllSection(let allItems):
-      newState.allItems = allItems
+      newState.items = allItems
     }
 
     return newState
@@ -149,23 +137,18 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       var newState = state
 
       // 비어있을 때
-      if state.allItems.isEmpty {
+      if state.items.isEmpty {
         newState.sections = [.empty]
-        newState.items = [[.empty]]
+        newState.items = [.empty]
         return newState
       }
-
-      // 고정됨
-      if !state.pinnedItems.isEmpty {
-        newState.sections = [.pinned]
-        newState.items = [state.pinnedItems]
-      }
+      
       // 전체
-      if !state.allItems.isEmpty {
+      if !state.items.isEmpty {
         newState.sections.append(.all)
-        newState.items.append(state.allItems)
+        newState.items = state.items
       }
-
+      
       return newState
     }
   }

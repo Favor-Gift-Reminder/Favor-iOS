@@ -34,7 +34,6 @@ public enum AnniversaryListSectionItem: ComposableItem {
 
 public enum AnniversaryListSection: ComposableSection {
   case empty
-  case pinned
   case all
   case edit
 }
@@ -44,8 +43,6 @@ public enum AnniversaryListSection: ComposableSection {
 extension AnniversaryListSection {
   public var header: String {
     switch self {
-    case .pinned:
-      return "고정됨"
     case .all:
       return "전체"
     default:
@@ -65,7 +62,7 @@ extension AnniversaryListSectionItem {
       return false
     }
   }
-
+  
   public func hash(into hasher: inout Hasher) {
     switch self {
     case .empty:
@@ -84,7 +81,7 @@ extension AnniversaryListSection: Composable {
     switch self {
     case .empty:
       return .full()
-    case .pinned, .all, .edit:
+    case .all, .edit:
       return .listRow(height: .absolute(95))
     }
   }
@@ -93,7 +90,7 @@ extension AnniversaryListSection: Composable {
     switch self {
     case .empty:
       return .full()
-    case .pinned, .all, .edit:
+    case .all, .edit:
       return .list()
     }
   }
@@ -107,7 +104,7 @@ extension AnniversaryListSection: Composable {
     switch self {
     case .empty:
       return .base()
-    case .pinned, .all:
+    case .all:
       return .base(
         spacing: 10,
         boundaryItems: [header]
