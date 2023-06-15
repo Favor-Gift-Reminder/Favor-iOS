@@ -51,30 +51,20 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        // initial Snapshot과 final Snapshot 생성
-        let initialSnapshot = owner.dataSource.snapshot()
-        var finalSnapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
-        finalSnapshot.appendSections(sectionData.sections)
-        finalSnapshot.reloadSections(sectionData.sections)
-        sectionData.items.enumerated().forEach { idx, item in
-          finalSnapshot.appendItems(item, toSection: sectionData.sections[idx])
-        }
-
-        // 고정된 Section이 보일때만 animate
-        let visibleSections: [AnniversaryListSection] = owner.collectionView.indexPathsForVisibleItems
-          .compactMap { owner.dataSource.sectionIdentifier(for: $0.section) }
-        let isPinnedSectionVisibleBefore = !initialSnapshot.sectionIdentifiers.contains(.pinned)
+        var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
+        snapshot.appendSections(sectionData.sections)
+        snapshot.appendItems(sectionData.items)
+        snapshot.reloadSections(sectionData.sections)
         DispatchQueue.main.async {
           owner.dataSource.apply(
-            finalSnapshot,
-            animatingDifferences: visibleSections.contains(.pinned) || isPinnedSectionVisibleBefore
+            snapshot,
+            animatingDifferences: true
           )
-          owner.collectionView.collectionViewLayout.invalidateLayout()
         }
       })
       .disposed(by: self.disposeBag)
