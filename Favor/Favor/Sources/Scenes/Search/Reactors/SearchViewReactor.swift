@@ -122,7 +122,7 @@ final class SearchViewReactor: Reactor, Stepper {
       return .just(.toggleIsEditingTo(false))
 
     case .categoryButtonDidTap(let category):
-      print(category.rawValue)
+      self.steps.accept(AppStep.searchCategoryResultIsRequired(category))
       return .empty()
 
     case .returnKeyDidTap:

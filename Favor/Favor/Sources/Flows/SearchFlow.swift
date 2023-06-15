@@ -36,13 +36,16 @@ final class SearchFlow: Flow {
       return self.navigateToSearch()
 
     case .searchIsComplete:
-      return self.navigateToHome()
+      return self.popSearch()
 
     case .searchResultIsRequired(let queryString):
       return self.navigateToSearchResult(with: queryString)
 
     case .searchResultIsComplete:
       return self.popSearchResult()
+
+    case .searchCategoryResultIsRequired(let category):
+      return self.navigateToSearchCategoryResult(with: category)
 
     default:
       return .none
@@ -85,12 +88,27 @@ private extension SearchFlow {
     ))
   }
 
+  func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
+    let searchCategoryVC = SearchCategoryViewController()
+    let searchCategoryReactor = SearchCategoryViewReactor()
+    searchCategoryVC.reactor = searchCategoryReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchCategoryVC, animated: true)
+      searchCategoryVC.requestCategory(category)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchCategoryVC, withNextStepper: searchCategoryReactor
+    ))
+  }
+
   func popSearchResult() -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
     return .none
   }
 
-  func navigateToHome() -> FlowContributors {
+  func popSearch() -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
     self.rootViewController.setNavigationBarHidden(false, animated: false)
     return .end(forwardToParentFlowWithStep: AppStep.searchIsComplete)
