@@ -15,7 +15,7 @@ public struct RecentSearch: Storable {
   // MARK: - Properties
 
   public let identifier: Int
-  public let query: String
+  public let queryString: String
   public var date: Date
 
   // MARK: - Storable
@@ -25,13 +25,13 @@ public struct RecentSearch: Storable {
     guard let realmObject = rlmObjectRef else { fatalError() }
 
     self.identifier = Int(Date().timeIntervalSince1970) % Int.max
-    self.query = realmObject.query
+    self.queryString = realmObject.query
     self.date = realmObject.date
   }
 
   public func realmObject() -> RecentSearchObject {
     RecentSearchObject(
-      query: self.query,
+      query: self.queryString,
       date: self.date
     )
   }
@@ -41,11 +41,11 @@ public struct RecentSearch: Storable {
 
 extension RecentSearch: Hashable {
   public static func == (lhs: RecentSearch, rhs: RecentSearch) -> Bool {
-    return lhs.query == rhs.query
+    return lhs.queryString == rhs.queryString
   }
 
   public func hash(into hasher: inout Hasher) {
-    hasher.combine(self.query)
+    hasher.combine(self.queryString)
   }
 }
 

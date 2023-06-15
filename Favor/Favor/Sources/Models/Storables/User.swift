@@ -139,3 +139,15 @@ extension User {
     }
   }
 }
+
+// MARK: - Hashable
+
+extension User: Hashable {
+  public static func == (lhs: User, rhs: User) -> Bool {
+    return lhs.identifier == rhs.identifier
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(self.identifier)
+  }
+}

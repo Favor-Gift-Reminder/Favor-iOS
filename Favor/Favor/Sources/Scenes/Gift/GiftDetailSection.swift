@@ -69,13 +69,13 @@ extension GiftDetailSection: Composable {
   public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .image:
-      return .fullList(height: .absolute(330))
+      return .singleFullList(height: .absolute(330))
     case .title:
-      return .fullList(height: .absolute(60))
+      return .singleFullList(height: .absolute(60))
     case .tags:
-      return .fullList(height: .absolute(32))
+      return .singleFullList(height: .absolute(32))
     case .memo:
-      return .fullList(height: .estimated(60))
+      return .singleFullList(height: .estimated(60))
     }
   }
 

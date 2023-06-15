@@ -14,7 +14,7 @@ public class BaseFriendListViewReactor {
 
   // MARK: - Properties
 
-  public let workbench = try! RealmWorkbench()
+  public let workbench = RealmWorkbench()
   public let friendFetcher = Fetcher<Friend>()
 
   // MARK: - Initializer

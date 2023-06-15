@@ -76,6 +76,7 @@ private extension SearchFlow {
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(searchResultVC, animated: true)
+      searchResultVC.requestSearchQuery(with: searchQuery)
     }
 
     return .one(flowContributor: .contribute(
