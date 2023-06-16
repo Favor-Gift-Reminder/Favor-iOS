@@ -28,7 +28,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case giftNeedsUpdated(Gift)
     case giftPhotoDidSelected(Int)
     case isPinnedButtonDidTap
-    case emotionTagDidTap
+    case emotionTagDidTap(FavorEmotion)
     case categoryTagDidTap(FavorCategory)
     case isGivenTagDidTap(Bool)
     case friendsTagDidTap([Friend])
@@ -94,12 +94,12 @@ final class GiftDetailViewReactor: Reactor, Stepper {
           return .empty()
         }
 
-    case .emotionTagDidTap:
-      os_log(.debug, "Emotion tag did tap.")
+    case .emotionTagDidTap(let emotion):
+      self.steps.accept(AppStep.searchEmotionResultIsRequired(emotion))
       return .empty()
 
     case .categoryTagDidTap(let category):
-      os_log(.debug, "Category tag did tap: \(String(describing: category)).")
+      self.steps.accept(AppStep.searchCategoryResultIsRequired(category))
       return .empty()
 
     case .isGivenTagDidTap(let isGiven):

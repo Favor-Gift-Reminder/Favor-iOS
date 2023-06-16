@@ -198,8 +198,11 @@ final class GiftDetailViewController: BaseViewController, View {
 private extension GiftDetailViewController {
   func setupDataSource() {
     let imageCellRegistration = UICollectionView.CellRegistration
-    <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] _, _, itemIdentifier in
-      guard self != nil, case let GiftDetailSectionItem.image(image) = itemIdentifier else { return }
+    <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] _, _, item in
+      guard
+        self != nil,
+        case GiftDetailSectionItem.image = item
+      else { return }
       // Image
     }
 
@@ -293,8 +296,8 @@ extension GiftDetailViewController: GiftDetailTagsCellDelegate {
   nonisolated func tagDidSelected(_ tag: GiftTags) {
     guard let reactor = self.reactor else { return }
     switch tag {
-    case .emotion:
-      reactor.action.onNext(.emotionTagDidTap)
+    case .emotion(let emotion):
+      reactor.action.onNext(.emotionTagDidTap(emotion))
     case .category(let category):
       reactor.action.onNext(.categoryTagDidTap(category))
     case .isGiven(let isGiven):

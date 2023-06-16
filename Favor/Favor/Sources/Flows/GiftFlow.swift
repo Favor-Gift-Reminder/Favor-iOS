@@ -47,10 +47,16 @@ final class GiftFlow: Flow {
     case .giftManagementIsRequired(let gift):
       return self.navigateToGiftManagement(with: gift)
 
+    case .searchEmotionResultIsRequired(let emotion):
+      return self.navigateToSearchEmotionResult(with: emotion)
+
+    case .searchCategoryResultIsRequired(let category):
+      return self.navigateToSearchCategoryResult(with: category)
+
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToGiftDetail()
 
-    case .newGiftIsComplete(let gift):
+    case .newGiftIsComplete:
       return self.popToGiftDetail()
 
     case .editGiftIsComplete(let gift):
@@ -125,6 +131,36 @@ private extension GiftFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: giftManagementVC,
       withNextStepper: giftManagementReactor
+    ))
+  }
+
+  func navigateToSearchEmotionResult(with emotion: FavorEmotion) -> FlowContributors {
+    let searchEmotionVC = SearchEmotionViewController()
+    let searchEmotionReactor = SearchTagViewReactor()
+    searchEmotionVC.reactor = searchEmotionReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchEmotionVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchEmotionVC,
+      withNextStepper: searchEmotionReactor
+    ))
+  }
+
+  func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
+    let searchCategoryVC = SearchCategoryViewController()
+    let searchCategoryReactor = SearchTagViewReactor()
+    searchCategoryVC.reactor = searchCategoryReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchCategoryVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchCategoryVC,
+      withNextStepper: searchCategoryReactor
     ))
   }
 

@@ -60,7 +60,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.emotionButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.tagDidSelected(.emotion)
+        owner.delegate?.tagDidSelected(.emotion(.boring))
       })
       .disposed(by: self.disposeBag)
 
