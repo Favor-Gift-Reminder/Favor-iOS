@@ -30,8 +30,8 @@ final class AnniversaryFlow: Flow {
     guard let step = step as? AppStep else { return .none }
 
     switch step {
-    case .anniversaryListIsRequired:
-      return self.navigateToAnniversaryList()
+    case .anniversaryListIsRequired(let anniversaryListType):
+      return self.navigateToAnniversaryList(anniversaryListType: anniversaryListType)
 
     case .editAnniversaryListIsRequired(let anniversaries):
       return self.navigateToEditAnniversaryList(with: anniversaries)
@@ -47,7 +47,7 @@ final class AnniversaryFlow: Flow {
 
     case .anniversaryListIsComplete:
       return self.popFromAnniversaryList()
-
+      
     default:
       return .none
     }
@@ -57,8 +57,8 @@ final class AnniversaryFlow: Flow {
 // MARK: - Navigates
 
 private extension AnniversaryFlow {
-  func navigateToAnniversaryList() -> FlowContributors {
-    let anniversaryListVC = AnniversaryListViewController()
+  func navigateToAnniversaryList(anniversaryListType: AnniversaryListType) -> FlowContributors {
+    let anniversaryListVC = AnniversaryListViewController(anniversaryListType: anniversaryListType)
     let anniversaryListReactor = AnniversaryListViewReactor()
     anniversaryListVC.reactor = anniversaryListReactor
     anniversaryListVC.title = "내 기념일"

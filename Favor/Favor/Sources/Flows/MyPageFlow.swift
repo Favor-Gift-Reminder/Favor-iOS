@@ -94,7 +94,7 @@ extension MyPageFlow {
     
     return .one(flowContributor: .contribute(
       withNextPresentable: anniversaryListFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired)
+      withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired(.mine))
     ))
   }
 
