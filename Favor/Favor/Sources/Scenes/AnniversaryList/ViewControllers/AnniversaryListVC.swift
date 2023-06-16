@@ -17,19 +17,41 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   // MARK: - Constants
 
   // MARK: - Properties
+  
+  private let anniversaryListType: AnniversaryListType
 
   // MARK: - UI Components
-
+  
   private let editButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.icon)
     config.updateAttributedTitle("편집", font: .favorFont(.bold, size: 18))
-
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
+  public lazy var floatyButton: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.background.cornerRadius = 28
+    config.baseBackgroundColor = .favorColor(.main)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = .favorIcon(.add)?.resize(newWidth: 20).withTintColor(.favorColor(.white))
+    let button = UIButton(configuration: config)
+    return button
+  }()
+  
+  // MARK: - Initializer
+  
+  init(anniversaryListType: AnniversaryListType) {
+    self.anniversaryListType = anniversaryListType
+    super.init(nibName: nil, bundle: nil)
+  }
+  
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+  
   // MARK: - Life Cycle
 
   override func viewWillAppear(_ animated: Bool) {
@@ -39,7 +61,7 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   }
 
   // MARK: - Binding
-
+  
   func bind(reactor: AnniversaryListViewReactor) {
     // Action
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
@@ -79,9 +101,34 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
     else { return }
     reactor.action.onNext(.pinButtonDidTap(model.item))
   }
-
+  
   // MARK: - UI Setups
-
+  
+  override func setupStyles() {
+    super.setupStyles()
+    
+    /// 선택된 친구가 유저일 경우 UI를 변경합니다.
+    if case AnniversaryListType.friend(_, true) = self.anniversaryListType {
+      self.floatyButton.isHidden = true
+      self.editButton.isHidden = true
+    }
+  }
+  
+  override func setupLayouts() {
+    super.setupLayouts()
+    
+    self.view.addSubview(self.floatyButton)
+  }
+  
+  override func setupConstraints() {
+    super.setupConstraints()
+    
+    self.floatyButton.snp.makeConstraints { make in
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(22)
+      make.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.width.height.equalTo(56)
+    }
+  }
 }
 
 // MARK: - Privates
