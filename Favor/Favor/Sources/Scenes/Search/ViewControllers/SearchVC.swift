@@ -241,9 +241,10 @@ private extension SearchViewController {
     <SearchRecentCell, SearchSectionItem> { [weak self] cell, _, item in
       guard
         self != nil,
-        case let SearchSectionItem.recent(searchString) = item
+        case let SearchSectionItem.recent(recentSearch) = item
       else { return }
-      cell.bind(with: searchString.queryString)
+      cell.delegate = self
+      cell.bind(with: recentSearch)
     }
 
     self.dataSource = SearchDataSource(
@@ -259,8 +260,9 @@ private extension SearchViewController {
 
     let headerRegistration = UICollectionView.SupplementaryRegistration
     <FavorSectionHeaderView>(elementKind: UICollectionView.elementKindSectionHeader
-    ) { [weak self] _, _, _ in
+    ) { [weak self] header, _, _ in
       guard self != nil else { return }
+      header.bind(title: "최근 검색어")
     }
 
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
@@ -273,5 +275,14 @@ private extension SearchViewController {
         return UICollectionReusableView()
       }
     }
+  }
+}
+
+// MARK: - SearchRecentCell
+
+extension SearchViewController: SearchRecentCellDelegate {
+  func deleteButtonDidTap(_ recentSearch: RecentSearch) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.searchRecentDeleteButtonDidTap(recentSearch))
   }
 }
