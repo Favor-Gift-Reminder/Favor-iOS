@@ -16,7 +16,7 @@ public final class FavorSmallButton: UIButton {
   private let smallFavorButtonType: FavorSmallButtonType
 
   /// 현재 선물 카테고리의 case를 알 수 있습니다.
-  var category: FavorCategory {
+  public var category: FavorCategory {
     guard let title = self.configuration?.title else { return .lightGift }
     return FavorCategory(rawValue: title) ?? .lightGift
   }

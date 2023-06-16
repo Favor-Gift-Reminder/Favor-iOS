@@ -23,7 +23,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  private let workbench = try! RealmWorkbench()
+  private let workbench = RealmWorkbench()
   private let reminderFetcher = Fetcher<Reminder>()
   private let giftFetcher = Fetcher<Gift>()
 

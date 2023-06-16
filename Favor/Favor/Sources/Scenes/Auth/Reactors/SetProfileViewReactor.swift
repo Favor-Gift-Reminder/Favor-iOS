@@ -21,7 +21,7 @@ final class SetProfileViewReactor: Reactor, Stepper {
   var initialState: State
   let pickerManager: PHPickerManager
   var steps = PublishRelay<Step>()
-  private let workbench = try! RealmWorkbench()
+  private let workbench = RealmWorkbench()
   private let networking = UserNetworking()
 
   // Global States

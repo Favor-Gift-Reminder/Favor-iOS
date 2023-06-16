@@ -77,7 +77,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .just(.updateGift(gift))
 
     case .giftPhotoDidSelected(let item):
-      let total = self.currentState.gift.photos.count ?? 0
+      let total = self.currentState.gift.photos.count 
       self.steps.accept(AppStep.giftDetailPhotoIsRequired(item, total))
       return .empty()
 
@@ -130,7 +130,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
 
-      if state.gift.photos.count ?? 0 == .zero {
+      if state.gift.photos.count == .zero {
         newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
       } else {
         newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]

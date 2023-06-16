@@ -7,69 +7,85 @@
 
 import UIKit
 
-import RxDataSources
+import Composer
+import FavorKit
 
-@MainActor
-enum SearchResultSectionType {
-  case gift, user
+// MARK: - Item
+
+public enum SearchResultSectionItem: ComposableItem {
+  case empty(UIImage?, String)
+  case gift(Gift)
+  case user(User)
 }
 
-struct SearchResultSection {
-  typealias SearchGiftResultModel = SectionModel<SearchResultSectionType, SearchResultItem>
+// MARK: - Section
 
-  enum SearchResultItem {
-    case empty(UIImage?, String)
-    case gift(SearchGiftResultCellReactor)
-    case user(SearchUserResultCellReactor)
+public enum SearchResultSection: ComposableSection {
+  case result(SectionType)
+
+  public enum SectionType {
+    case empty, gift, user
   }
 }
 
-extension SearchResultSectionType {
-  var cellSize: NSCollectionLayoutSize {
+// MARK: - Hashable
+
+extension SearchResultSectionItem: Hashable {
+  public func hash(into hasher: inout Hasher) {
     switch self {
+    case .empty:
+      hasher.combine("Empty")
+    case .gift(let gift):
+      hasher.combine(gift)
+    case .user(let user):
+      hasher.combine(user)
+    }
+  }
+}
+
+// MARK: - Composer
+
+extension SearchResultSection: Composable {
+  public var item: UICollectionViewComposableLayout.Item {
+    guard case let SearchResultSection.result(item) = self else { return .full() }
+
+    switch item {
+    case .empty:
+      return .full()
     case .gift:
-      return NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(0.5),
-        heightDimension: .fractionalWidth(0.5)
+      return .grid(
+        width: .fractionalWidth(0.5),
+        height: .fractionalWidth(0.5))
+    case .user:
+      return .full()
+    }
+  }
+
+  public var group: UICollectionViewComposableLayout.Group {
+    guard case let SearchResultSection.result(item) = self else { return .full() }
+
+    switch item {
+    case .empty:
+      return .full()
+    case .gift:
+      return .grid(height: .fractionalWidth(0.5), numberOfItems: 2, spacing: .fixed(5))
+    case .user:
+      return .full()
+    }
+  }
+
+  public var section: UICollectionViewComposableLayout.Section {
+    guard case let SearchResultSection.result(item) = self else { return .base() }
+
+    switch item {
+    case .empty:
+      return .base()
+    case .gift:
+      return .base(
+        contentInsets: NSDirectionalEdgeInsets(top: 32, leading: 20, bottom: 32, trailing: 20)
       )
     case .user:
-      return NSCollectionLayoutSize(
-        widthDimension: .fractionalWidth(1.0),
-        heightDimension: .fractionalHeight(1.0)
-      )
-    }
-  }
-
-  var columns: Int {
-    switch self {
-    case .gift: return 2
-    case .user: return 1
-    }
-  }
-
-  var spacing: CGFloat {
-    switch self {
-    case .gift: return 5.0
-    case .user: return 0.0
-    }
-  }
-
-  var sectionInset: NSDirectionalEdgeInsets {
-    switch self {
-    case .gift:
-      return NSDirectionalEdgeInsets(
-        top: 32,
-        leading: 20,
-        bottom: 32,
-        trailing: 20
-      )
-    case .user:
-      return NSDirectionalEdgeInsets(
-        top: .zero,
-        leading: 20,
-        bottom: .zero,
-        trailing: 20
-      )
+      return .base()
     }
   }
 }
