@@ -17,13 +17,14 @@ final class FriendPageViewReactor: Reactor, Stepper {
 
   var initialState: State = State()
   var steps = PublishRelay<Step>()
-  private let friend: Friend
-  private let workbench = try! RealmWorkbench()
-  private let friendFetcher = Fetcher<Friend>()
+  private var friend: Friend
+  private let workbench = RealmWorkbench()
+  private let friendPatchFetcher = Fetcher<Friend>()
+  private let friendGetFetcher = Fetcher<Friend>()
 
   /// 친구가 유저인지 판별해주는 계산 프로퍼티입니다.
   private var isUser: Bool { self.friend.isUser }
-
+  
   enum Action {
     case viewNeedsLoaded
     case doNothing
@@ -40,6 +41,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
     case setMemo(String?)
     case setFriendName(String)
     case setLoading(Bool)
+    case setFriend(Friend)
   }
   
   struct State {
@@ -58,7 +60,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
   
   init(_ friend: Friend) {
     self.friend = friend
-    self.setupFriendFetcher()
+    self.setupFriendPatchFetcher()
+    self.setupFriendGetFetcher()
   }
   
   // MARK: - Functions
@@ -66,23 +69,22 @@ final class FriendPageViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      let commonEvent = Observable<Mutation>.concat(
-        .just(.setMemo(self.friend.memo)),
-        .just(.setMemoSection(self.friend.memo)),
-        .just(.setFriendName(self.friend.name))
-        // TODO: 친구가 유저일 때, 아이디 String 값 필요
-      )
-      
-      if self.friend.isUser {
-        return .concat([
-          .just(.setFavorSection(self.friend.favorList)),
-          .just(.setAnniversarySection(self.friend.anniversaryList)),
-          commonEvent
-        ])
-      } else {
-        return commonEvent
-      }
-      
+      return self.friendGetFetcher.fetch()
+        .flatMap { (status, friend) -> Observable<Mutation> in
+          guard let friend = friend.first else {
+            fatalError("해당 친구가 존재하지 않습니다.")
+          }
+          return .concat([
+            .just(.setLoading(status == .inProgress)),
+            .just(.setMemo(friend.memo)),
+            .just(.setMemoSection(friend.memo)),
+            .just(.setFriendName(friend.name)),
+            .just(.setFavorSection(friend.favorList)),
+            .just(.setAnniversarySection(friend.anniversaryList)),
+            .just(.setFriend(friend))
+          ])
+        }
+
     case .memoCellDidTap(let memo):
       self.steps.accept(AppStep.memoBottomSheetIsRequired(memo))
       return .empty()
@@ -94,7 +96,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
     case .memoDidChange(let memo):
       return .concat([
         .just(.setLoading(true)),
-        self.friendFetcher.fetch()
+        self.friendPatchFetcher.fetch()
+          .debug()
           .flatMap { (status, _) -> Observable<Mutation> in
             return .concat([
               .just(.setLoading(status == .inProgress)),
@@ -105,7 +108,10 @@ final class FriendPageViewReactor: Reactor, Stepper {
       ])
       
     case .moreAnniversaryDidTap:
-      self.steps.accept(AppStep.anniversaryListIsRequired)
+      self.steps.accept(AppStep.anniversaryListIsRequired(AnniversaryListType.friend(
+        friendUserNo: self.friend.identifier,
+        isUser: self.friend.isUser
+      )))
       return .empty()
       
     case .doNothing:
@@ -140,6 +146,9 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
     case .setLoading(let isLoading):
       newState.isLoading = isLoading
+      
+    case .setFriend(let friend):
+      self.friend = friend
     }
     
     return newState
@@ -167,7 +176,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
       // 기념일
       if !state.anniversaryItems.isEmpty {
         newSection.append(.anniversaries)
-        newItems.append(state.anniversaryItems)
+        // TODO: 고정된 기념일이 없으면 최근 3개 or 고정된 기념일 보여주기
+        newItems.append(state.anniversaryItems.prefix(3).wrap())
       }
       
       // 메모
@@ -176,15 +186,44 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
       newState.sections = newSection
       newState.items = newItems
+      
       return newState
     }
   }
 }
 
 private extension FriendPageViewReactor {
-  func setupFriendFetcher() {
+  func setupFriendGetFetcher() {
     // onRemote
-    self.friendFetcher.onRemote = {
+    self.friendGetFetcher.onRemote = {
+      let networking = FriendNetworking()
+      return networking.request(.getFriend(friendNo: self.friend.identifier))
+        .flatMap { response -> Observable<[Friend]> in
+          let responseDTO: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
+          return .just([Friend(dto: responseDTO.data)])
+        }
+        .asSingle()
+    }
+    // onLocal
+    self.friendGetFetcher.onLocal = {
+      return await self.workbench.values(FriendObject.self)
+        .where { $0.friendNo.in([self.friend.identifier]) }
+        .map { Friend(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.friendGetFetcher.onLocalUpdate = { _, remoteFriend in
+      guard let friend = remoteFriend.first else {
+        fatalError("해당 친구가 존재하지 않습니다.")
+      }
+      try await self.workbench.write { transaction in
+        transaction.update(friend.realmObject())
+      }
+    }
+  }
+  
+  func setupFriendPatchFetcher() {
+    // onRemote
+    self.friendPatchFetcher.onRemote = {
       let networking = FriendNetworking()
       let friend = networking.request(.patchFriend(
         friendName: self.currentState.friendName,
@@ -199,13 +238,13 @@ private extension FriendPageViewReactor {
       return friend
     }
     // onLocal
-    self.friendFetcher.onLocal = {
+    self.friendPatchFetcher.onLocal = {
       return await self.workbench.values(FriendObject.self)
         .where { $0.friendNo.in([self.friend.identifier]) }
         .map { Friend(realmObject: $0) }
     }
     // onLocalUpdate
-    self.friendFetcher.onLocalUpdate = { _, remoteFriend in
+    self.friendPatchFetcher.onLocalUpdate = { _, remoteFriend in
       guard let friend = remoteFriend.first else {
         fatalError("해당 친구가 존재하지 않습니다.")
       }
