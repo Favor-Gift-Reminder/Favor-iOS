@@ -91,9 +91,9 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
-
+  
   override func transfer(_ model: (any CellModel)?, from cell: UICollectionViewCell) {
     guard
       let model = model as? AnniversaryListCellModel,
@@ -107,10 +107,15 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   override func setupStyles() {
     super.setupStyles()
     
-    /// 선택된 친구가 유저일 경우 UI를 변경합니다.
-    if case AnniversaryListType.friend(_, true) = self.anniversaryListType {
-      self.floatyButton.isHidden = true
-      self.editButton.isHidden = true
+    switch self.anniversaryListType {
+    case .mine:
+      self.navigationItem.title = "내 기념일"
+    case .friend(let friend):
+      self.navigationItem.title = "\(friend.name)의 기념일"
+      if friend.isUser {
+        self.floatyButton.isHidden = true
+        self.editButton.isHidden = true
+      }
     }
   }
   

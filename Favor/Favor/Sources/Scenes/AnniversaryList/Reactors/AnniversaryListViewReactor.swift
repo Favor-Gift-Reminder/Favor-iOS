@@ -21,7 +21,8 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  let networking = AnniversaryNetworking()
+  let workbench = RealmWorkbench()
+  let anniversaryListType: AnniversaryListType
   
   enum Action {
     case viewNeedsLoaded
@@ -41,24 +42,38 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   }
   
   // MARK: - Initializer
-
-  override init() {
+  
+  init(anniversaryListType: AnniversaryListType) {
+    self.anniversaryListType = anniversaryListType
     self.initialState = State()
     super.init()
+    
+    if case AnniversaryListType.friend(let friend) = anniversaryListType {
+      self.setupFriendFetcher(with: friend)
+    }
   }
-
+  
   // MARK: - Functions
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.userFetcher.fetch()
-        .flatMap { (_, user) -> Observable<Mutation> in
-          guard let user = user.first else { return .empty() }
-          let anniversaries = user.anniversaryList
-          return .just(.updateAnniversaries(anniversaries))
-        }
-
+      switch self.anniversaryListType {
+      case .mine:
+        return self.userFetcher.fetch()
+          .flatMap { (_, user) -> Observable<Mutation> in
+            guard let user = user.first else { return .empty() }
+            let anniversaries = user.anniversaryList
+            return .just(.updateAnniversaries(anniversaries))
+          }
+      case .friend:
+        return self.friendFetcher.fetch()
+          .flatMap { (status, friend) -> Observable<Mutation> in
+            guard let friend = friend.first else { return .empty() }
+            return .just(.updateAnniversaries(friend.anniversaryList.sort()))
+          }
+      }
+      
     case .editButtonDidTap:
       self.steps.accept(AppStep.editAnniversaryListIsRequired(self.currentState.anniversaries))
       return .empty()
@@ -83,7 +98,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
           return originalAnniversary
         }
       }
-
+      
       // 3. 서버 통신 - 완료되면 `anniversary`의 데이터를 변경하여 업데이트
       return .concat(
         .just(.updateAnniversaries(newAnniversaries)),

@@ -14,7 +14,7 @@ import RxFlow
 final class FriendPageViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
-
+  
   var initialState: State = State()
   var steps = PublishRelay<Step>()
   private var friend: Friend
@@ -108,10 +108,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
       ])
       
     case .moreAnniversaryDidTap:
-      self.steps.accept(AppStep.anniversaryListIsRequired(AnniversaryListType.friend(
-        friendUserNo: self.friend.identifier,
-        isUser: self.friend.isUser
-      )))
+      self.steps.accept(AppStep.anniversaryListIsRequired(AnniversaryListType.friend(friend: self.friend)))
       return .empty()
       
     case .doNothing:
