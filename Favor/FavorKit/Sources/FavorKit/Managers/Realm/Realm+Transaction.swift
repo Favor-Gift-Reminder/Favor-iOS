@@ -64,6 +64,7 @@ public final class Transaction {
   public func delete<T>(
     _ value: T
   ) where T: Object {
-    self.realm.delete(value)
+    let objects = self.realm.objects(T.self).filter { $0 == value }
+    self.realm.delete(objects)
   }
 }
