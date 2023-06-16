@@ -24,3 +24,9 @@ public class RecentSearchObject: Object {
     self.date = date
   }
 }
+
+extension RecentSearchObject {
+  public static func == (lhs: RecentSearchObject, rhs: RecentSearchObject) -> Bool {
+    return lhs.query == rhs.query
+  }
+}
