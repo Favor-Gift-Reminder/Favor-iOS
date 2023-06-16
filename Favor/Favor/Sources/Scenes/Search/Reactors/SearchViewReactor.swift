@@ -63,6 +63,7 @@ final class SearchViewReactor: Reactor, Stepper {
   
   struct State {
     var isEditing: Bool = false
+    var isRecentSearchVisible: Bool = false
     var searchQuery: String?
     var recentSearches: [RecentSearch] = []
     var recentSearchItems: [SearchSectionItem] = []
@@ -136,9 +137,11 @@ final class SearchViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.searchEmotionResultIsRequired(emotion))
       return .empty()
 
+    // transform에서 처리
     case .returnKeyDidTap:
       return .empty()
 
+    // transform에서 처리
     case .searchRecentDidSelected:
       return .empty()
 
@@ -254,6 +257,10 @@ final class SearchViewReactor: Reactor, Stepper {
       }
 
       newState.recentSearchItems = state.recentSearches.map { SearchSectionItem.recent($0) }
+
+      if !state.recentSearches.isEmpty && state.isEditing {
+        newState.isRecentSearchVisible = true
+      }
 
       return newState
     }

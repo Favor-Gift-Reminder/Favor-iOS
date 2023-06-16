@@ -127,6 +127,13 @@ final class SearchViewController: BaseSearchViewController {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.isRecentSearchVisible }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, isVisible in
+        owner.toggleRecentSearch(to: !isVisible)
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.recentSearchItems }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, searches in
@@ -143,12 +150,6 @@ final class SearchViewController: BaseSearchViewController {
   }
   
   // MARK: - Functions
-
-  override func toggleIsEditing(to isEditing: Bool) {
-    super.toggleIsEditing(to: isEditing)
-    
-    self.toggleRecentSearch(to: !isEditing)
-  }
   
   // MARK: - UI Setups
   
