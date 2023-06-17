@@ -58,7 +58,7 @@ final class AnniversaryFlow: Flow {
 
 private extension AnniversaryFlow {
   func navigateToAnniversaryList(_ type: AnniversaryListType) -> FlowContributors {
-    let anniversaryListVC = AnniversaryListViewController(type)
+    let anniversaryListVC = AnniversaryListViewController()
     let anniversaryListReactor = AnniversaryListViewReactor(type)
     anniversaryListVC.reactor = anniversaryListReactor
 

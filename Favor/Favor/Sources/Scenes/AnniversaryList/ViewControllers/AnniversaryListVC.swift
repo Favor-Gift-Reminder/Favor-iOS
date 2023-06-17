@@ -17,8 +17,6 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   // MARK: - Constants
 
   // MARK: - Properties
-  
-  private let anniversaryListType: AnniversaryListType
 
   // MARK: - UI Components
   
@@ -40,18 +38,7 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
     let button = UIButton(configuration: config)
     return button
   }()
-  
-  // MARK: - Initializer
-  
-  init(_ type: AnniversaryListType) {
-    self.anniversaryListType = type
-    super.init(nibName: nil, bundle: nil)
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-  
+    
   // MARK: - Life Cycle
 
   override func viewWillAppear(_ animated: Bool) {
@@ -107,7 +94,8 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   override func setupStyles() {
     super.setupStyles()
     
-    switch self.anniversaryListType {
+    guard let reactor = self.reactor else { return }
+    switch reactor.currentState.anniversaryListType {
     case .mine:
       self.navigationItem.title = "내 기념일"
     case .friend(let friend):

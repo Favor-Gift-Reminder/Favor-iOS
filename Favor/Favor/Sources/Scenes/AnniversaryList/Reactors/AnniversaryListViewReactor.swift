@@ -39,13 +39,14 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     var anniversaries: [Anniversary] = []
     var sections: [Section] = []
     var items: [Item] = []
+    var anniversaryListType: AnniversaryListType
   }
   
   // MARK: - Initializer
   
   init(_ type: AnniversaryListType) {
+    self.initialState = State(anniversaryListType: type)
     self.anniversaryListType = type
-    self.initialState = State()
     super.init()
     
     if case AnniversaryListType.friend(let friend) = type {
