@@ -22,7 +22,6 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   var initialState: State
   var steps = PublishRelay<Step>()
   let workbench = RealmWorkbench()
-  let anniversaryListType: AnniversaryListType
   
   enum Action {
     case viewNeedsLoaded
@@ -46,7 +45,6 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   
   init(_ type: AnniversaryListType) {
     self.initialState = State(anniversaryListType: type)
-    self.anniversaryListType = type
     super.init()
     
     if case AnniversaryListType.friend(let friend) = type {
@@ -59,7 +57,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      switch self.anniversaryListType {
+      switch self.currentState.anniversaryListType {
       case .mine:
         return self.userFetcher.fetch()
           .flatMap { (_, user) -> Observable<Mutation> in
