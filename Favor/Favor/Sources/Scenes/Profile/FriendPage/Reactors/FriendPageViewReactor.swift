@@ -12,18 +12,14 @@ import RxCocoa
 import RxFlow
 
 final class FriendPageViewReactor: Reactor, Stepper {
-
+  
   // MARK: - Properties
   
-  var initialState: State = State()
   var steps = PublishRelay<Step>()
-  private var friend: Friend
+  var initialState: State
   private let workbench = RealmWorkbench()
   private let friendPatchFetcher = Fetcher<Friend>()
   private let friendGetFetcher = Fetcher<Friend>()
-
-  /// 친구가 유저인지 판별해주는 계산 프로퍼티입니다.
-  private var isUser: Bool { self.friend.isUser }
   
   enum Action {
     case viewNeedsLoaded
@@ -35,31 +31,23 @@ final class FriendPageViewReactor: Reactor, Stepper {
   }
   
   enum Mutation {
-    case setFavorSection([Favor])
-    case setMemoSection(String?)
-    case setAnniversarySection([Anniversary])
-    case setMemo(String?)
-    case setFriendName(String)
     case setLoading(Bool)
     case setFriend(Friend)
+    case setMemo(String?)
   }
   
   struct State {
-    var friendName: String = ""
-    var friendMemo: String?
+    var friend: Friend
+    var memo: String?
     var sections: [ProfileSection] = []
     var items: [[ProfileSectionItem]] = []
-    var anniversarySetupHelperItems: [ProfileSectionItem] = []
-    var favorItems: [ProfileSectionItem] = []
-    var anniversaryItems: [ProfileSectionItem] = []
-    var memoItems: [ProfileSectionItem] = []
     var isLoading: Bool = false
   }
   
   // MARK: - Initializer
   
   init(_ friend: Friend) {
-    self.friend = friend
+    self.initialState = State(friend: friend)
     self.setupFriendPatchFetcher()
     self.setupFriendGetFetcher()
   }
@@ -71,16 +59,9 @@ final class FriendPageViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.friendGetFetcher.fetch()
         .flatMap { (status, friend) -> Observable<Mutation> in
-          guard let friend = friend.first else {
-            fatalError("해당 친구가 존재하지 않습니다.")
-          }
+          guard let friend = friend.first else { return .empty() }
           return .concat([
             .just(.setLoading(status == .inProgress)),
-            .just(.setMemo(friend.memo)),
-            .just(.setMemoSection(friend.memo)),
-            .just(.setFriendName(friend.name)),
-            .just(.setFavorSection(friend.favorList)),
-            .just(.setAnniversarySection(friend.anniversaryList)),
             .just(.setFriend(friend))
           ])
         }
@@ -95,20 +76,19 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
     case .memoDidChange(let memo):
       return .concat([
-        .just(.setLoading(true)),
+        .just(.setMemo(memo)),
         self.friendPatchFetcher.fetch()
-          .debug()
-          .flatMap { (status, _) -> Observable<Mutation> in
+          .flatMap { (status, friend) -> Observable<Mutation> in
+            guard let friend = friend.first else { return .empty() }
             return .concat([
               .just(.setLoading(status == .inProgress)),
-              .just(.setMemoSection(memo)),
-              .just(.setMemo(memo))
+              .just(.setFriend(friend))
             ])
           }
       ])
       
     case .moreAnniversaryDidTap:
-      self.steps.accept(AppStep.anniversaryListIsRequired(AnniversaryListType.friend(friend: self.friend)))
+      self.steps.accept(AppStep.anniversaryListIsRequired(.friend(friend: self.currentState.friend)))
       return .empty()
       
     case .doNothing:
@@ -120,32 +100,14 @@ final class FriendPageViewReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-    case .setMemoSection(let memo):
-      newState.memoItems = [.memo(memo)]
-      
-    case .setFavorSection(let favors):
-      let favorSection = favors.map {
-        ProfileSectionItem.favors(ProfileFavorCellReactor(favor: $0))
-      }
-      newState.favorItems = favorSection
-      
-    case .setAnniversarySection(let anniversaries):
-      let anniversarySection = anniversaries.map {
-        ProfileSectionItem.anniversaries(ProfileAnniversaryCellReactor(anniversary: $0))
-      }
-      newState.anniversaryItems = anniversarySection
-      
     case .setMemo(let memo):
-      newState.friendMemo = memo
-      
-    case .setFriendName(let name):
-      newState.friendName = name
+      newState.memo = memo
       
     case .setLoading(let isLoading):
       newState.isLoading = isLoading
       
     case .setFriend(let friend):
-      self.friend = friend
+      newState.friend = friend
     }
     
     return newState
@@ -159,27 +121,31 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
       // 새 기념일 도움 섹션
       // 유저가 아닌 친구 & 기념일 목록이 비어 있는 조건을 모두 만족해야합니다.
-      if !self.isUser, self.friend.anniversaryList.isEmpty {
+      if !state.friend.isUser, state.friend.anniversaryList.isEmpty {
         newSection.append(.anniversarySetupHelper)
         newItems.append([.anniversarySetupHelper])
       }
       
       // 취향
-      if !state.favorItems.isEmpty {
+      if !state.friend.favorList.isEmpty {
         newSection.append(.favors)
-        newItems.append(state.favorItems)
+        newItems.append(state.friend.favorList.map { ProfileSectionItem.favors(.init(favor: $0)) })
       }
       
       // 기념일
-      if !state.anniversaryItems.isEmpty {
+      if !state.friend.anniversaryList.isEmpty {
         newSection.append(.anniversaries)
         // TODO: 고정된 기념일이 없으면 최근 3개 or 고정된 기념일 보여주기
-        newItems.append(state.anniversaryItems.prefix(3).wrap())
+        newItems.append(state.friend.anniversaryList
+          .map { ProfileSectionItem.anniversaries(.init(anniversary: $0)) }
+          .prefix(3)
+          .wrap()
+        )
       }
       
       // 메모
       newSection.append(.memo)
-      newItems.append(state.memoItems)
+      newItems.append([ProfileSectionItem.memo(self.currentState.memo)])
       
       newState.sections = newSection
       newState.items = newItems
@@ -194,7 +160,7 @@ private extension FriendPageViewReactor {
     // onRemote
     self.friendGetFetcher.onRemote = {
       let networking = FriendNetworking()
-      return networking.request(.getFriend(friendNo: self.friend.identifier))
+      return networking.request(.getFriend(friendNo: self.currentState.friend.identifier))
         .flatMap { response -> Observable<[Friend]> in
           let responseDTO: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
           return .just([Friend(dto: responseDTO.data)])
@@ -204,7 +170,7 @@ private extension FriendPageViewReactor {
     // onLocal
     self.friendGetFetcher.onLocal = {
       return await self.workbench.values(FriendObject.self)
-        .where { $0.friendNo.in([self.friend.identifier]) }
+        .where { $0.friendNo.in([self.currentState.friend.identifier]) }
         .map { Friend(realmObject: $0) }
     }
     // onLocalUpdate
@@ -221,11 +187,12 @@ private extension FriendPageViewReactor {
   func setupFriendPatchFetcher() {
     // onRemote
     self.friendPatchFetcher.onRemote = {
+      
       let networking = FriendNetworking()
       let friend = networking.request(.patchFriend(
-        friendName: self.currentState.friendName,
-        friendMemo: self.currentState.friendMemo ?? "",
-        friendNo: self.friend.identifier
+        friendName: self.currentState.friend.name,
+        friendMemo: self.currentState.memo ?? "",
+        friendNo: self.currentState.friend.identifier
       ))
         .flatMap { response -> Observable<[Friend]> in
           let responseDTO: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
@@ -237,7 +204,7 @@ private extension FriendPageViewReactor {
     // onLocal
     self.friendPatchFetcher.onLocal = {
       return await self.workbench.values(FriendObject.self)
-        .where { $0.friendNo.in([self.friend.identifier]) }
+        .where { $0.friendNo.in([self.currentState.friend.identifier]) }
         .map { Friend(realmObject: $0) }
     }
     // onLocalUpdate
