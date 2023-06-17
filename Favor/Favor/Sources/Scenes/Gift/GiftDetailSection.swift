@@ -75,7 +75,7 @@ extension GiftDetailSection: Composable {
     case .tags:
       return .singleFullList(height: .absolute(32))
     case .memo:
-      return .singleFullList(height: .absolute(60))
+      return .singleFullList(height: .estimated(60))
     }
   }
   

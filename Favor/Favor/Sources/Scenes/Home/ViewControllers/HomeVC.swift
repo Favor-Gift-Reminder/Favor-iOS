@@ -25,7 +25,13 @@ final class HomeViewController: BaseViewController, View {
   
   // MARK: - UI Components
 
-  private let searchButton = FavorBarButtonItem(.search)
+  private let searchButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.search)
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
 
   private lazy var composer: Composer<HomeSection, HomeSectionItem> = {
     let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
@@ -164,7 +170,7 @@ final class HomeViewController: BaseViewController, View {
 
 private extension HomeViewController {
   func setupNavigationBar() {
-    self.navigationItem.setRightBarButton(self.searchButton, animated: false)
+    self.navigationItem.setRightBarButton(self.searchButton.toBarButtonItem(), animated: false)
     self.navigationController?.setNavigationBarHidden(false, animated: false)
   }
 

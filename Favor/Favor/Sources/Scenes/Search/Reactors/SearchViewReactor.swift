@@ -8,6 +8,7 @@
 import OSLog
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RealmSwift
 import RxCocoa
@@ -29,7 +30,8 @@ final class SearchViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  private let workbench = try! RealmWorkbench()
+  private let workbench = RealmWorkbench()
+  private let giftFetcher = Fetcher<Gift>()
   private let mode: SearchViewMode
 
   enum Action {
@@ -37,47 +39,37 @@ final class SearchViewReactor: Reactor, Stepper {
     case editingDidBegin
     case textDidChanged(String?)
     case editingDidEnd
+    case categoryButtonDidTap(FavorCategory)
     case returnKeyDidTap
-    case searchRecentDidSelected(SearchRecentSection.SearchRecentItem)
+    case searchRecentDidSelected(String)
+    case searchRequestedWith(String)
     case searchTypeDidSelected(SearchType)
     case viewWillDisappear
+    case doNothing
   }
   
   enum Mutation {
     case toggleIsEditingTo(Bool)
     case updateText(String?)
-    case updateRecentSearches(SearchRecentSection.SearchRecentModel)
+    case updateRecentSearches([RecentSearch])
     case updateSearchType(SearchType)
+    case updateSearchTypeBySearchResult
+    case updateGiftResult([Gift])
+    case updateUserResult([User])
   }
   
   struct State {
     var isEditing: Bool = false
     var searchQuery: String?
-    var searchRecents = SearchRecentSection.SearchRecentModel(
-      model: .zero,
-      items: []
-    )
+    var recentSearches: [RecentSearch] = []
+    var recentSearchItems: [SearchSectionItem] = []
+    // Search Results
+    var didUserSelectedSearchType: Bool = false
     var selectedSearchType: SearchType = .gift
-    var giftResults = SearchResultSection.SearchGiftResultModel(
-      model: .gift,
-      items: [
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor()),
-        .gift(SearchGiftResultCellReactor())
-      ]
-    )
-    var userResult = SearchResultSection.SearchGiftResultModel(
-      model: .user,
-      items: [
-//        .user(SearchUserResultCellReactor())
-      ]
-    )
+    var giftSearchResults: [Gift] = []
+    var giftSearchResultItems: [SearchResultSectionItem] = []
+    var userSearchResults: [User] = []
+    var userSearchResultItems: [SearchResultSectionItem] = []
   }
   
   // MARK: - Initializer
@@ -87,6 +79,9 @@ final class SearchViewReactor: Reactor, Stepper {
       searchQuery: searchQuery
     )
     self.mode = mode
+    if let searchQuery {
+      self.setupGiftFetcher(with: searchQuery)
+    }
   }
 
   // MARK: - Functions
@@ -96,18 +91,17 @@ final class SearchViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       switch self.mode {
       case .search:
-        return self.createSearchRecents()
-          .flatMap { searchRecents -> Observable<Mutation> in
-            let model = self.refineRecentSearch(searchRecents: searchRecents)
+        return self.fetchRecentSearches()
+          .flatMap { recentSearches -> Observable<Mutation> in
+            let searches = recentSearches.sorted(by: { $0.date > $1.date })
             return .concat([
-              .just(.updateRecentSearches(model)),
+              .just(.updateRecentSearches(searches)),
               .just(.toggleIsEditingTo(true))
             ])
           }
       case .result:
         return .just(.updateSearchType(.gift))
       }
-
 
     case .viewWillDisappear:
       switch self.mode {
@@ -126,30 +120,63 @@ final class SearchViewReactor: Reactor, Stepper {
       
     case .editingDidEnd:
       return .just(.toggleIsEditingTo(false))
-      
-    case .returnKeyDidTap:
-      if let searchString = self.currentState.searchQuery {
-        switch self.mode {
-        case .search:
-          self.updateAndNavigateToSearchResult(searchString)
-        case .result:
-          return .concat([
-            .just(.toggleIsEditingTo(false)),
-            .empty() // TODO: Update Result
-          ])
-        }
-      }
-      return .just(.toggleIsEditingTo(false))
 
-    case .searchRecentDidSelected(let item):
-      switch item {
-      case .recent(let recentSearchString):
-        self.updateAndNavigateToSearchResult(recentSearchString)
-      }
+    case .categoryButtonDidTap(let category):
+      print(category.rawValue)
       return .empty()
+
+    case .returnKeyDidTap:
+      return .empty()
+
+    case .searchRecentDidSelected:
+      return .empty()
+
+    case .searchRequestedWith(let searchQuery):
+      switch self.mode {
+      case .search:
+        self.updateAndNavigateToSearchResult(searchQuery)
+        return .just(.toggleIsEditingTo(false))
+      case .result:
+        self.setupGiftFetcher(with: searchQuery)
+        return .concat(
+          self.giftFetcher.fetch()
+            .flatMap { fetchResult -> Observable<Mutation> in
+              let (_, gifts) = fetchResult
+              return .just(.updateGiftResult(gifts))
+            },
+          self.fetchRemoteUser(with: searchQuery)
+            .asObservable()
+            .flatMap { (user: User?) -> Observable<Mutation> in
+              if let user {
+                return .just(.updateUserResult([user]))
+              } else {
+                return .just(.updateUserResult([]))
+              }
+            },
+          .just(.toggleIsEditingTo(false)),
+          .just(.updateSearchTypeBySearchResult)
+        )
+      }
 
     case .searchTypeDidSelected(let searchType):
       return .just(.updateSearchType(searchType))
+
+    case .doNothing:
+      return .empty()
+    }
+  }
+
+  func transform(action: Observable<Action>) -> Observable<Action> {
+    return action.map { action in
+      switch action {
+      case .returnKeyDidTap:
+        guard let searchQuery = self.currentState.searchQuery else { return .doNothing }
+        return .searchRequestedWith(searchQuery)
+      case .searchRecentDidSelected(let searchQuery):
+        return .searchRequestedWith(searchQuery)
+      default:
+        return action
+      }
     }
   }
 
@@ -164,26 +191,50 @@ final class SearchViewReactor: Reactor, Stepper {
       newState.searchQuery = text
 
     case .updateRecentSearches(let recentSearches):
-      newState.searchRecents = recentSearches
+      newState.recentSearches = recentSearches
 
     case .updateSearchType(let searchType):
+      newState.didUserSelectedSearchType = true
       newState.selectedSearchType = searchType
+
+    case .updateSearchTypeBySearchResult:
+      if !self.currentState.didUserSelectedSearchType {
+        if self.currentState.giftSearchResults.isEmpty && !self.currentState.userSearchResults.isEmpty {
+          newState.selectedSearchType = .user
+        } else if !self.currentState.giftSearchResults.isEmpty && self.currentState.userSearchResults.isEmpty {
+          newState.selectedSearchType = .gift
+        }
+      }
+
+    case .updateGiftResult(let gifts):
+      newState.giftSearchResults = gifts
+
+    case .updateUserResult(let users):
+      newState.userSearchResults = users
     }
-    
+
     return newState
   }
 
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-      // Upcoming이 비어있을 경우 .empty 데이터 추가
-      if state.giftResults.items.isEmpty {
-        newState.giftResults.items.append(.empty(nil, "검색 결과가 없습니다."))
+
+      // 선물 검색 결과가 비어있을 경우 .empty 데이터 추가
+      if state.giftSearchResults.isEmpty {
+        newState.giftSearchResultItems = [.empty(nil, "검색 결과가 없습니다.")]
+      } else {
+        newState.giftSearchResultItems = state.giftSearchResults.map { .gift($0) }
       }
-      // Timeline이 비어있을 경우 .empty 데이터 추가
-      if state.userResult.items.isEmpty {
-        newState.userResult.items.append(.empty(nil, "검색 결과가 없습니다."))
+      // 친구 검색 결과가 비어있을 경우 .empty 데이터 추가
+      if state.userSearchResults.isEmpty {
+        newState.userSearchResultItems = [.empty(nil, "검색 결과가 없습니다.")]
+      } else {
+        newState.userSearchResultItems = state.userSearchResults.map { .user($0) }
       }
+
+      newState.recentSearchItems = state.recentSearches.map { SearchSectionItem.recent($0) }
+
       return newState
     }
   }
@@ -192,19 +243,20 @@ final class SearchViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension SearchViewReactor {
-  func refineRecentSearch(searchRecents: [RecentSearch]) -> SearchRecentSection.SearchRecentModel {
-    let sortedRecentSearches = searchRecents.sorted(by: { $0.date > $1.date })
-    let recentSearchItems = sortedRecentSearches.map {
-      let query = $0.query
-      return SearchRecentSection.SearchRecentItem.recent(query)
+  func updateAndNavigateToSearchResult(_ searchString: String) {
+    Task {
+      try await self.workbench.write { transaction in
+        transaction.update(RecentSearchObject(query: searchString, date: .now))
+      }
+      self.steps.accept(AppStep.searchResultIsRequired(searchString))
     }
-    return SearchRecentSection.SearchRecentModel(
-      model: .zero,
-      items: recentSearchItems
-    )
   }
+}
 
-  func createSearchRecents() -> Observable<[RecentSearch]> {
+// MARK: - Fetcher
+
+private extension SearchViewReactor {
+  func fetchRecentSearches() -> Observable<[RecentSearch]> {
     return Observable<[RecentSearch]>.create { observer in
       let task = Task {
         let searches = await self.workbench.values(RecentSearchObject.self)
@@ -219,12 +271,53 @@ private extension SearchViewReactor {
     }
   }
 
-  func updateAndNavigateToSearchResult(_ searchString: String) {
-    Task {
+  func setupGiftFetcher(with queryString: String) {
+    // onRemote
+    self.giftFetcher.onRemote = {
+      let networking = UserNetworking()
+      let gifts = networking.request(.getGiftByName(giftName: queryString, userNo: UserInfoStorage.userNo))
+        .flatMap { response -> Observable<[Gift]> in
+          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Gift(dto: $0) })
+        }
+        .asSingle()
+      return gifts
+    }
+    // onLocal
+    self.giftFetcher.onLocal = {
+      return await self.workbench.values(GiftObject.self)
+        .where { $0.name.contains(queryString) }
+        .map { Gift(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
       try await self.workbench.write { transaction in
-        transaction.update(RecentSearchObject(query: searchString, date: .now))
+        transaction.update(remoteGifts.map { $0.realmObject() })
       }
-      self.steps.accept(AppStep.searchResultIsRequired(searchString))
+    }
+  }
+
+  func fetchRemoteUser(with queryString: String) -> Single<User?> {
+    return Single<User?>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.getUserId(userId: queryString))
+        .take(1)
+        .asSingle()
+      // FIXME: DecodeError 처리 필요..! ResponseMessage가 "USER_NOT_FOUND"일 때
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
+            single(.success(User(dto: responseDTO.data)))
+          } catch {
+            print(error)
+          }
+        }, onFailure: {_ in 
+          single(.success(nil))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
     }
   }
 }
