@@ -14,7 +14,7 @@ import RxFlow
 final class AnniversaryFlow: Flow {
 
   // MARK: - Properties
-
+  
   var root: Presentable { self.rootViewController }
   let rootViewController: BaseNavigationController
 
@@ -25,13 +25,13 @@ final class AnniversaryFlow: Flow {
   }
 
   // MARK: - Navigate
-
+  
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
-
+    
     switch step {
     case .anniversaryListIsRequired(let anniversaryListType):
-      return self.navigateToAnniversaryList(anniversaryListType: anniversaryListType)
+      return self.navigateToAnniversaryList(anniversaryListType)
 
     case .editAnniversaryListIsRequired(let anniversaries):
       return self.navigateToEditAnniversaryList(with: anniversaries)
@@ -57,11 +57,10 @@ final class AnniversaryFlow: Flow {
 // MARK: - Navigates
 
 private extension AnniversaryFlow {
-  func navigateToAnniversaryList(anniversaryListType: AnniversaryListType) -> FlowContributors {
-    let anniversaryListVC = AnniversaryListViewController(anniversaryListType: anniversaryListType)
-    let anniversaryListReactor = AnniversaryListViewReactor(anniversaryListType: anniversaryListType)
+  func navigateToAnniversaryList(_ type: AnniversaryListType) -> FlowContributors {
+    let anniversaryListVC = AnniversaryListViewController(type)
+    let anniversaryListReactor = AnniversaryListViewReactor(type)
     anniversaryListVC.reactor = anniversaryListReactor
-    anniversaryListVC.title = "내 기념일"
 
     DispatchQueue.main.async {
       self.rootViewController.setupNavigationAppearance()

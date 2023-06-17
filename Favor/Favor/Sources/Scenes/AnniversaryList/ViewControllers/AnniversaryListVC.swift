@@ -43,8 +43,8 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   
   // MARK: - Initializer
   
-  init(anniversaryListType: AnniversaryListType) {
-    self.anniversaryListType = anniversaryListType
+  init(_ type: AnniversaryListType) {
+    self.anniversaryListType = type
     super.init(nibName: nil, bundle: nil)
   }
   

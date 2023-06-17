@@ -43,12 +43,12 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   
   // MARK: - Initializer
   
-  init(anniversaryListType: AnniversaryListType) {
-    self.anniversaryListType = anniversaryListType
+  init(_ type: AnniversaryListType) {
+    self.anniversaryListType = type
     self.initialState = State()
     super.init()
     
-    if case AnniversaryListType.friend(let friend) = anniversaryListType {
+    if case AnniversaryListType.friend(let friend) = type {
       self.setupFriendFetcher(with: friend)
     }
   }
@@ -68,9 +68,9 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
           }
       case .friend:
         return self.friendFetcher.fetch()
-          .flatMap { (status, friend) -> Observable<Mutation> in
+          .flatMap { (_, friend) -> Observable<Mutation> in
             guard let friend = friend.first else { return .empty() }
-            return .just(.updateAnniversaries(friend.anniversaryList.sort()))
+            return .just(.updateAnniversaries(friend.anniversaryList))
           }
       }
       

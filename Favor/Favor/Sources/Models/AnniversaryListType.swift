@@ -8,7 +8,7 @@
 import FavorKit
 
 /// 기념일 리스트를 분기처리위한 열거형입니다.
-public enum AnniversaryListType {
+public enum AnniversaryListType: Equatable {
   /// 나의 기념일들을 조회합니다.
   case mine
   /// 친구의 기념일들을 조회합니다.

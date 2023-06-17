@@ -96,7 +96,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
     
     // MARK: - State
     
-    reactor.state.map { $0.friendName }
+    reactor.state.map { $0.friend.name }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, name in
         owner.profileView.rx.name.onNext(name)
