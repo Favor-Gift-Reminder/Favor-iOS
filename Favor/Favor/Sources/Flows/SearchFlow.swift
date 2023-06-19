@@ -98,9 +98,8 @@ private extension SearchFlow {
     searchCategoryVC.title = "선물 카테고리"
 
     DispatchQueue.main.async {
-      self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.setNavigationBarHidden(false, animated: false)
       self.rootViewController.pushViewController(searchCategoryVC, animated: true)
+      self.rootViewController.setNavigationBarHidden(false, animated: false)
       searchCategoryVC.requestCategory(category)
     }
 
@@ -116,9 +115,8 @@ private extension SearchFlow {
     searchEmotionVC.title = "선물 감정"
 
     DispatchQueue.main.async {
-      self.rootViewController.setupNavigationAppearance()
-      self.rootViewController.setNavigationBarHidden(false, animated: false)
       self.rootViewController.pushViewController(searchEmotionVC, animated: true)
+      self.rootViewController.setNavigationBarHidden(false, animated: false)
       searchEmotionVC.requestEmotion(emotion)
     }
 
