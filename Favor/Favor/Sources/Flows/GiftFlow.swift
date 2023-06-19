@@ -138,9 +138,11 @@ private extension GiftFlow {
     let searchEmotionVC = SearchEmotionViewController()
     let searchEmotionReactor = SearchTagViewReactor()
     searchEmotionVC.reactor = searchEmotionReactor
+    searchEmotionVC.title = "선물 감정"
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(searchEmotionVC, animated: true)
+      searchEmotionVC.requestEmotion(emotion)
     }
 
     return .one(flowContributor: .contribute(
@@ -153,9 +155,11 @@ private extension GiftFlow {
     let searchCategoryVC = SearchCategoryViewController()
     let searchCategoryReactor = SearchTagViewReactor()
     searchCategoryVC.reactor = searchCategoryReactor
+    searchCategoryVC.title = "선물 카테고리"
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(searchCategoryVC, animated: true)
+      searchCategoryVC.requestCategory(category)
     }
 
     return .one(flowContributor: .contribute(
