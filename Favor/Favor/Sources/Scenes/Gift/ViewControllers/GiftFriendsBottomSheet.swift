@@ -54,7 +54,16 @@ public final class GiftFriendsBottomSheet: BaseBottomSheet, Stepper {
   // MARK: - Bind
 
   public override func bind() {
-
+    self.collectionView.rx.itemSelected
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, indexPath in
+        guard
+          let dataSource = owner.dataSource,
+          let item = dataSource.itemIdentifier(for: indexPath)
+        else { return }
+        self.steps.accept(AppStep.friendPageIsRequired(item.friend))
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - UI Setups

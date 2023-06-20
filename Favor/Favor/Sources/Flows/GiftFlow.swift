@@ -57,6 +57,9 @@ final class GiftFlow: Flow {
     case .giftDetailFriendsBottomSheetIsRequired(let friends):
       return self.navigateToFriends(with: friends)
 
+    case .friendPageIsRequired(let friend):
+      return self.navigateToFriendPage(with: friend)
+
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToGiftDetail()
 
@@ -185,6 +188,21 @@ private extension GiftFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: friendsBottomSheet,
       withNextStepper: friendsBottomSheet
+    ))
+  }
+
+  func navigateToFriendPage(with friend: Friend) -> FlowContributors {
+    let friendPageVC = FriendPageViewController(with: friend)
+    let friendPageReactor = FriendPageViewReactor(friend)
+    friendPageVC.reactor = friendPageReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(friendPageVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendPageVC,
+      withNextStepper: friendPageReactor
     ))
   }
 
