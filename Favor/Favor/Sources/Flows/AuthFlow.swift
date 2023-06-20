@@ -99,8 +99,8 @@ private extension AuthFlow {
   }
   
   func navigateToSignIn() -> FlowContributors {
-    let viewController = SignInViewController()
-    let reactor = SignInViewReactor()
+    let viewController = AuthSignInViewController()
+    let reactor = AuthSignInViewReactor()
     viewController.title = "로그인"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
