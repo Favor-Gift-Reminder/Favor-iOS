@@ -104,6 +104,7 @@ public class FavorProfilePhotoView: UIView {
       let isUserIndicatorSize = self.isUserIndicatorSize
     else { print("Size constraints missing."); return }
     profileImageViewSize.update(offset: self.type.size)
+    profileImageViewSize.update(priority: .high)
     self.profileImageView.layer.cornerRadius = self.type.size / 2
     isUserIndicatorSize.update(offset: self.type.indicatorSize)
     self.isUserIndicator.layer.cornerRadius = self.type.indicatorSize / 2

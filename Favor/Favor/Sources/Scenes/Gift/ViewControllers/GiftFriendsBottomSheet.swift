@@ -87,7 +87,7 @@ public final class GiftFriendsBottomSheet: BaseBottomSheet, Stepper {
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.titleLabel.snp.bottom).offset(60).priority(.low)
       make.directionalHorizontalEdges.equalToSuperview()
-      make.bottom.lessThanOrEqualToSuperview().inset(95)
+      make.height.equalTo(87).priority(.high)
     }
   }
 }
