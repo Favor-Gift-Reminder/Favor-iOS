@@ -197,6 +197,7 @@ private extension GiftFlow {
     friendPageVC.reactor = friendPageReactor
 
     DispatchQueue.main.async {
+      self.friendsBottomSheet?.dismissBottomSheet()
       self.rootViewController.pushViewController(friendPageVC, animated: true)
     }
 
