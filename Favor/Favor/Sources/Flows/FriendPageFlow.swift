@@ -55,7 +55,7 @@ final class FriendPageFlow: Flow {
 
 extension FriendPageFlow {
   private func navigateToFriendPage(_ friend: Friend) -> FlowContributors {
-    let friendPageVC = FriendPageViewController(with: friend)
+    let friendPageVC = FriendPageViewController()
     let reactor = FriendPageViewReactor(friend)
     friendPageVC.reactor = reactor
     

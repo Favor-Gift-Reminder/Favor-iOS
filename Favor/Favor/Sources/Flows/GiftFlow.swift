@@ -192,7 +192,7 @@ private extension GiftFlow {
   }
 
   func navigateToFriendPage(with friend: Friend) -> FlowContributors {
-    let friendPageVC = FriendPageViewController(with: friend)
+    let friendPageVC = FriendPageViewController()
     let friendPageReactor = FriendPageViewReactor(friend)
     friendPageVC.reactor = friendPageReactor
 

@@ -33,12 +33,10 @@ final class FriendPageViewReactor: Reactor, Stepper {
   enum Mutation {
     case setLoading(Bool)
     case setFriend(Friend)
-    case setMemo(String?)
   }
   
   struct State {
     var friend: Friend
-    var memo: String?
     var sections: [ProfileSection] = []
     var items: [[ProfileSectionItem]] = []
     var isLoading: Bool = false
@@ -75,8 +73,10 @@ final class FriendPageViewReactor: Reactor, Stepper {
       return .empty()
       
     case .memoDidChange(let memo):
+      var friend = self.currentState.friend
+      friend.memo = memo
       return .concat([
-        .just(.setMemo(memo)),
+        .just(.setFriend(friend)),
         self.friendPatchFetcher.fetch()
           .flatMap { (status, friend) -> Observable<Mutation> in
             guard let friend = friend.first else { return .empty() }
@@ -100,9 +100,6 @@ final class FriendPageViewReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
-    case .setMemo(let memo):
-      newState.memo = memo
-      
     case .setLoading(let isLoading):
       newState.isLoading = isLoading
       
@@ -145,8 +142,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
       
       // 메모
       newSection.append(.memo)
-      newItems.append([ProfileSectionItem.memo(self.currentState.memo)])
-      
+      newItems.append([ProfileSectionItem.memo(state.friend.memo)])
+
       newState.sections = newSection
       newState.items = newItems
       
@@ -191,7 +188,7 @@ private extension FriendPageViewReactor {
       let networking = FriendNetworking()
       let friend = networking.request(.patchFriend(
         friendName: self.currentState.friend.name,
-        friendMemo: self.currentState.memo ?? "",
+        friendMemo: self.currentState.friend.memo ?? "",
         friendNo: self.currentState.friend.identifier
       ))
         .flatMap { response -> Observable<[Friend]> in
