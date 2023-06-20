@@ -22,6 +22,7 @@ final class GiftFlow: Flow {
   }
 
   private let rootViewController: BaseNavigationController
+  private var friendsBottomSheet: GiftFriendsBottomSheet?
 
   // MARK: - Initializer
 
@@ -52,6 +53,9 @@ final class GiftFlow: Flow {
 
     case .searchCategoryResultIsRequired(let category):
       return self.navigateToSearchCategoryResult(with: category)
+
+    case .giftDetailFriendsBottomSheetIsRequired(let friends):
+      return self.navigateToFriends(with: friends)
 
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToGiftDetail()
@@ -165,6 +169,22 @@ private extension GiftFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: searchCategoryVC,
       withNextStepper: searchCategoryReactor
+    ))
+  }
+
+  func navigateToFriends(with friends: [Friend]) -> FlowContributors {
+    let friendsBottomSheet = GiftFriendsBottomSheet()
+    friendsBottomSheet.modalPresentationStyle = .overFullScreen
+
+    DispatchQueue.main.async {
+      self.rootViewController.present(friendsBottomSheet, animated: false)
+      friendsBottomSheet.friends = friends
+      self.friendsBottomSheet = friendsBottomSheet
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendsBottomSheet,
+      withNextStepper: friendsBottomSheet
     ))
   }
 

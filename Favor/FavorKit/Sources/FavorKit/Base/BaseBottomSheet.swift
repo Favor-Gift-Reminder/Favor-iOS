@@ -35,6 +35,14 @@ open class BaseBottomSheet: BaseViewController {
     return view
   }()
 
+  private let grabber: UIView = {
+    let view = UIView()
+    view.backgroundColor = .systemGray
+    view.alpha = 0.5
+    view.layer.cornerRadius = 2.5
+    return view
+  }()
+
   public let titleLabel: UILabel = {
     let lb = UILabel()
     lb.textColor = .favorColor(.icon)
@@ -81,6 +89,7 @@ open class BaseBottomSheet: BaseViewController {
     return tg
   }()
 
+  // TODO: 컨테이너 뷰에서만 동작하도록 변경
   private lazy var panGesture: UIPanGestureRecognizer = {
     let pg = UIPanGestureRecognizer(
       target: self,
@@ -121,6 +130,7 @@ open class BaseBottomSheet: BaseViewController {
     }
 
     [
+      self.grabber,
       self.titleLabel,
       self.cancelButton,
       self.finishButton
@@ -140,6 +150,13 @@ open class BaseBottomSheet: BaseViewController {
         .inset(-Metric.bottomSheetHeight)
         .constraint
       self.containerViewHeight = make.height.equalTo(Metric.bottomSheetHeight).constraint
+    }
+
+    self.grabber.snp.makeConstraints { make in
+      make.top.equalToSuperview().inset(6)
+      make.height.equalTo(5)
+      make.width.equalTo(36)
+      make.centerX.equalToSuperview()
     }
 
     self.titleLabel.snp.makeConstraints { make in
@@ -229,5 +246,10 @@ open class BaseBottomSheet: BaseViewController {
 
   public func updateTitle(_ title: String) {
     self.titleLabel.text = title
+  }
+
+  public func setUpperButtons(isHidden: Bool) {
+    self.cancelButton.isHidden = isHidden
+    self.finishButton.isHidden = isHidden
   }
 }

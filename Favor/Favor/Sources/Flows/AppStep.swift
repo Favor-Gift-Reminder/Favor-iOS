@@ -85,6 +85,7 @@ enum AppStep: Step {
   case editGiftIsComplete(Gift)
   case newGiftFriendIsRequired
   case giftDetailIsRequired(Gift)
+  case giftDetailFriendsBottomSheetIsRequired([Friend])
   case giftDetailIsComplete(Gift)
   case giftDetailPhotoIsRequired(Int, Int)
   case giftShareIsRequired(Gift)

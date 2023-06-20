@@ -107,7 +107,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .friendsTagDidTap(let friends):
-      os_log(.debug, "Friends tag did tap: \(String(describing: friends)).")
+      self.steps.accept(AppStep.giftDetailFriendsBottomSheetIsRequired(friends))
       return .empty()
 
     case .doNothing:

@@ -25,7 +25,7 @@ final class FriendManagementViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  private let profileImageView: FavorProfileImageView = FavorProfileImageView().then {
+  private let profileImageView: FavorProfileImageRegisterButton = FavorProfileImageRegisterButton().then {
     $0.isHiddenPlusView = false
   }
   
