@@ -54,6 +54,10 @@ extension UIImage {
     case graduate
     case housewarm
     case pass
+
+    case kakao
+    case naver
+    case apple
   }
 
   public static func favorIcon(_ icon: FavorIcon) -> UIImage? {

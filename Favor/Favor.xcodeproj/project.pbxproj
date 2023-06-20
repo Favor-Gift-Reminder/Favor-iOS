@@ -131,8 +131,8 @@
 		2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */; };
 		2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE6B3982983DF3900CDBC81 /* AppFlow.swift */; };
 		2ED17A6A2A40A4AD00806A9F /* GiftFriendsBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17A692A40A4AD00806A9F /* GiftFriendsBottomSheet.swift */; };
-		2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* SignInVC.swift */; };
-		2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */; };
+		2ED22DAF296FF4A900ED6221 /* AuthSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* AuthSignInVC.swift */; };
+		2ED22DB1296FF4D100ED6221 /* AuthSignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DB0296FF4D100ED6221 /* AuthSignInViewReactor.swift */; };
 		2ED326AD29B0DB9D001963D0 /* TermSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326AC29B0DB9D001963D0 /* TermSection.swift */; };
 		2ED326AF29B0EE16001963D0 /* TermTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326AE29B0EE16001963D0 /* TermTableView.swift */; };
 		2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B429B0F6EB001963D0 /* Terms.swift */; };
@@ -340,8 +340,8 @@
 		2EC939F6299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAnniversaryCellReactor.swift; sourceTree = "<group>"; };
 		2EC939F8299E160A00C8C47F /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		2ED17A692A40A4AD00806A9F /* GiftFriendsBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftFriendsBottomSheet.swift; sourceTree = "<group>"; };
-		2ED22DAE296FF4A900ED6221 /* SignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInVC.swift; sourceTree = "<group>"; };
-		2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewReactor.swift; sourceTree = "<group>"; };
+		2ED22DAE296FF4A900ED6221 /* AuthSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSignInVC.swift; sourceTree = "<group>"; };
+		2ED22DB0296FF4D100ED6221 /* AuthSignInViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSignInViewReactor.swift; sourceTree = "<group>"; };
 		2ED326AC29B0DB9D001963D0 /* TermSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermSection.swift; sourceTree = "<group>"; };
 		2ED326AE29B0EE16001963D0 /* TermTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermTableView.swift; sourceTree = "<group>"; };
 		2ED326B429B0F6EB001963D0 /* Terms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terms.swift; sourceTree = "<group>"; };
@@ -473,7 +473,7 @@
 		2E1C5659296C24AE0067FC78 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				2EC52CAF2A41F7D40072998E /* Login */,
+				2EC52CAF2A41F7D40072998E /* SignIn */,
 				2EC52CB02A41F7DE0072998E /* Password */,
 				2EC52CB12A41F7ED0072998E /* Join */,
 				2EC52CB22A41F7F30072998E /* Profile */,
@@ -1014,14 +1014,14 @@
 			path = Reactors;
 			sourceTree = "<group>";
 		};
-		2EC52CAF2A41F7D40072998E /* Login */ = {
+		2EC52CAF2A41F7D40072998E /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
 				2EC52CB52A41F80E0072998E /* Reactors */,
 				2EC52CB42A41F8080072998E /* Views */,
 				2EC52CB32A41F8020072998E /* ViewControllers */,
 			);
-			path = Login;
+			path = SignIn;
 			sourceTree = "<group>";
 		};
 		2EC52CB02A41F7DE0072998E /* Password */ = {
@@ -1058,6 +1058,7 @@
 			isa = PBXGroup;
 			children = (
 				2EE07EE6296EDE5100048A3C /* AuthEntryVC.swift */,
+				2ED22DAE296FF4A900ED6221 /* AuthSignInVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1073,6 +1074,7 @@
 			isa = PBXGroup;
 			children = (
 				2EE07EE8296EDE9700048A3C /* AuthEntryViewReactor.swift */,
+				2ED22DB0296FF4D100ED6221 /* AuthSignInViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -1324,7 +1326,6 @@
 			isa = PBXGroup;
 			children = (
 				2E6E86F029B3891200C7AF69 /* Password */,
-				2ED22DAE296FF4A900ED6221 /* SignInVC.swift */,
 				2EE0D58029751EBD0064E932 /* SignUpVC.swift */,
 				2EE0D584297524660064E932 /* SetProfileVC.swift */,
 				2EE0D58E29786C1C0064E932 /* TermVC.swift */,
@@ -1336,7 +1337,6 @@
 			isa = PBXGroup;
 			children = (
 				2E6E86F129B3894500C7AF69 /* Password */,
-				2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */,
 				2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */,
 				2EE0D586297524880064E932 /* SetProfileViewReactor.swift */,
 				2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */,
@@ -1693,7 +1693,7 @@
 				2EE1537B29E7E8790023FEA5 /* SelectedIndicatorBar.swift in Sources */,
 				2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */,
 				E5B1827A2973FDC600229C50 /* OnboardingSlide.swift in Sources */,
-				2ED22DB1296FF4D100ED6221 /* SignInViewReactor.swift in Sources */,
+				2ED22DB1296FF4D100ED6221 /* AuthSignInViewReactor.swift in Sources */,
 				2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */,
 				2E946FE32A2599CA00D0EED8 /* GiftShareViewReactor.swift in Sources */,
 				2E1C81B42A1F008100D4128E /* GiftDetailPageFooterView.swift in Sources */,
@@ -1720,7 +1720,7 @@
 				2EC371FA2995262D00D1007B /* SearchResultVC.swift in Sources */,
 				2EE1537929E7DC9F0023FEA5 /* SearchGiftResultCell.swift in Sources */,
 				2EC6E11D29BC65BF006FBC11 /* HomeFlow.swift in Sources */,
-				2ED22DAF296FF4A900ED6221 /* SignInVC.swift in Sources */,
+				2ED22DAF296FF4A900ED6221 /* AuthSignInVC.swift in Sources */,
 				E59AB09C2A178ADE00F0AC7D /* FriendManagementViewReactor.swift in Sources */,
 				E52F565B29D5698A004E85A6 /* NewGiftFlow.swift in Sources */,
 				2EA3849C298D7C680081499C /* HomeUpcomingCell.swift in Sources */,
