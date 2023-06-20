@@ -10,21 +10,48 @@ import FavorNetworkKit
 import RxSwift
 
 public class BaseAnniversaryListViewReactor {
-
+  
   // MARK: - Properties
 
   private let workbench = RealmWorkbench()
   let userFetcher = Fetcher<User>()
-
-  // MARK: - Initializer
-
-  public init() {
+  let friendFetcher = Fetcher<Friend>()
+  
+  init() {
     self.setupUserFetcher()
   }
 
   // MARK: - Functions
-
-  private func setupUserFetcher() {
+  
+  func setupFriendFetcher(with friend: Friend) {
+    // onRemote
+    self.friendFetcher.onRemote = {
+      let networking = FriendNetworking()
+      return networking.request(.getFriend(friendNo: friend.identifier))
+        .flatMap { response -> Observable<[Friend]> in
+          let responseDTO: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
+          return .just([Friend(dto: responseDTO.data)])
+        }
+        .asSingle()
+    }
+    // onLocal
+    self.friendFetcher.onLocal = {
+      await self.workbench.values(FriendObject.self)
+        .where { $0.friendNo.in([friend.identifier]) }
+        .map { Friend(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.friendFetcher.onLocalUpdate = { _, remoteFriend in
+      guard let friend = remoteFriend.first else {
+        fatalError("해당 친구가 존재하지 않습니다.")
+      }
+      try await self.workbench.write { transaction in
+        transaction.update(friend.realmObject())
+      }
+    }
+  }
+  
+  func setupUserFetcher() {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
