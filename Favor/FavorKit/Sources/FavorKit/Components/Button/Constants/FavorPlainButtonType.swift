@@ -8,7 +8,7 @@
 import UIKit
 
 public enum FavorPlainButtonType {
-  case logIn(String)
+  case navigate(String)
   case more(String)
   case main(String, isRight: Bool)
   
@@ -21,9 +21,12 @@ public enum FavorPlainButtonType {
     config.baseForegroundColor = .favorColor(.subtext)
     
     switch self {
-    case .logIn(let title):
+    case .navigate(let title):
       titleString = title
-      config.image = .favorIcon(.right)
+      config.image = .favorIcon(.right)?
+        .withRenderingMode(.alwaysTemplate)
+        .resize(newWidth: 12)
+        .withTintColor(.favorColor(.subtext))
       titleContainer.font = .favorFont(.regular, size: 14)
     case .more(let title):
       titleString = title
