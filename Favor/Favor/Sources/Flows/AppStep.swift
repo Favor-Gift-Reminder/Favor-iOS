@@ -68,7 +68,7 @@ enum AppStep: Step {
   case friendPageIsRequired(Friend)
   
   // MARK: - AnniversaryList
-  case anniversaryListIsRequired
+  case anniversaryListIsRequired(AnniversaryListType)
   case anniversaryListIsComplete
   case editAnniversaryListIsRequired([Anniversary])
   case newAnniversaryIsRequired

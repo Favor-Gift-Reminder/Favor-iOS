@@ -33,7 +33,7 @@ public struct GiftResponseDTO: Decodable {
     case isPinned
     case userNo
   }
-
+  
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.category = try container.decode(FavorCategory.self, forKey: .category)

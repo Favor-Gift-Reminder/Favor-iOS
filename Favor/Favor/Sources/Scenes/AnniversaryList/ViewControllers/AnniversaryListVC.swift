@@ -19,17 +19,26 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   // MARK: - Properties
 
   // MARK: - UI Components
-
+  
   private let editButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.icon)
     config.updateAttributedTitle("편집", font: .favorFont(.bold, size: 18))
-
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
+  public lazy var floatyButton: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.background.cornerRadius = 28
+    config.baseBackgroundColor = .favorColor(.main)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = .favorIcon(.add)?.resize(newWidth: 20).withTintColor(.favorColor(.white))
+    let button = UIButton(configuration: config)
+    return button
+  }()
+    
   // MARK: - Life Cycle
 
   override func viewWillAppear(_ animated: Bool) {
@@ -39,7 +48,7 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
   }
 
   // MARK: - Binding
-
+  
   func bind(reactor: AnniversaryListViewReactor) {
     // Action
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
@@ -51,37 +60,27 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        // initial Snapshot과 final Snapshot 생성
-        let initialSnapshot = owner.dataSource.snapshot()
-        var finalSnapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
-        finalSnapshot.appendSections(sectionData.sections)
-        finalSnapshot.reloadSections(sectionData.sections)
-        sectionData.items.enumerated().forEach { idx, item in
-          finalSnapshot.appendItems(item, toSection: sectionData.sections[idx])
-        }
-
-        // 고정된 Section이 보일때만 animate
-        let visibleSections: [AnniversaryListSection] = owner.collectionView.indexPathsForVisibleItems
-          .compactMap { owner.dataSource.sectionIdentifier(for: $0.section) }
-        let isPinnedSectionVisibleBefore = !initialSnapshot.sectionIdentifiers.contains(.pinned)
+        var snapshot = NSDiffableDataSourceSnapshot<AnniversaryListSection, AnniversaryListSectionItem>()
+        snapshot.appendSections(sectionData.sections)
+        snapshot.appendItems(sectionData.items)
+        snapshot.reloadSections(sectionData.sections)
         DispatchQueue.main.async {
           owner.dataSource.apply(
-            finalSnapshot,
-            animatingDifferences: visibleSections.contains(.pinned) || isPinnedSectionVisibleBefore
+            snapshot,
+            animatingDifferences: true
           )
-          owner.collectionView.collectionViewLayout.invalidateLayout()
         }
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
-
+  
   override func transfer(_ model: (any CellModel)?, from cell: UICollectionViewCell) {
     guard
       let model = model as? AnniversaryListCellModel,
@@ -89,9 +88,40 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
     else { return }
     reactor.action.onNext(.pinButtonDidTap(model.item))
   }
-
+  
   // MARK: - UI Setups
-
+  
+  override func setupStyles() {
+    super.setupStyles()
+    
+    guard let reactor = self.reactor else { return }
+    switch reactor.currentState.anniversaryListType {
+    case .mine:
+      self.navigationItem.title = "내 기념일"
+    case .friend(let friend):
+      self.navigationItem.title = "\(friend.name)의 기념일"
+      if friend.isUser {
+        self.floatyButton.isHidden = true
+        self.editButton.isHidden = true
+      }
+    }
+  }
+  
+  override func setupLayouts() {
+    super.setupLayouts()
+    
+    self.view.addSubview(self.floatyButton)
+  }
+  
+  override func setupConstraints() {
+    super.setupConstraints()
+    
+    self.floatyButton.snp.makeConstraints { make in
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(22)
+      make.trailing.equalTo(self.view.layoutMarginsGuide)
+      make.width.height.equalTo(56)
+    }
+  }
 }
 
 // MARK: - Privates
