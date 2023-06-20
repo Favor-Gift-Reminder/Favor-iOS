@@ -21,7 +21,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
     return stackView
   }()
 
-  private let profileImageView = FavorProfileImageView(.big)
+  private let profileImageView = FavorProfilePhotoView(.big)
 
   private let nameLabel: UILabel = {
     let label = UILabel()

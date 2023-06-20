@@ -9,7 +9,7 @@ import UIKit
 
 import SnapKit
 
-public class FavorProfileImageView: UIView {
+public class FavorProfilePhotoView: UIView {
 
   // MARK: - Constants
 
@@ -117,7 +117,7 @@ public class FavorProfileImageView: UIView {
 
 // MARK: - UI Setups
 
-extension FavorProfileImageView: BaseView {
+extension FavorProfilePhotoView: BaseView {
   public func setupStyles() {
     //
   }
