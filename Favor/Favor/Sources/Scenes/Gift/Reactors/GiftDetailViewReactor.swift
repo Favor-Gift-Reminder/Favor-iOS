@@ -103,6 +103,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .isGivenTagDidTap(let isGiven):
+      // TODO: 타임라인 단독 화면 만든 후 연결
       os_log(.debug, "IsGiven tag did tap: \(isGiven).")
       return .empty()
 
