@@ -150,8 +150,8 @@
 		2EE07ECB296E8D8400048A3C /* MyPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECA296E8D8400048A3C /* MyPageVC.swift */; };
 		2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECC296E8D9A00048A3C /* SettingVC.swift */; };
 		2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07ECE296E8DB500048A3C /* ReminderVC.swift */; };
-		2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */; };
-		2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */; };
+		2EE07EE7296EDE5100048A3C /* AuthEntryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE6296EDE5100048A3C /* AuthEntryVC.swift */; };
+		2EE07EE9296EDE9700048A3C /* AuthEntryViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE07EE8296EDE9700048A3C /* AuthEntryViewReactor.swift */; };
 		2EE0D58329751EEF0064E932 /* SignUpViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */; };
 		2EE0D585297524660064E932 /* SetProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D584297524660064E932 /* SetProfileVC.swift */; };
 		2EE0D587297524880064E932 /* SetProfileViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EE0D586297524880064E932 /* SetProfileViewReactor.swift */; };
@@ -360,8 +360,8 @@
 		2EE07ECA296E8D8400048A3C /* MyPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageVC.swift; sourceTree = "<group>"; };
 		2EE07ECC296E8D9A00048A3C /* SettingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingVC.swift; sourceTree = "<group>"; };
 		2EE07ECE296E8DB500048A3C /* ReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderVC.swift; sourceTree = "<group>"; };
-		2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInVC.swift; sourceTree = "<group>"; };
-		2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectSignInViewReactor.swift; sourceTree = "<group>"; };
+		2EE07EE6296EDE5100048A3C /* AuthEntryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEntryVC.swift; sourceTree = "<group>"; };
+		2EE07EE8296EDE9700048A3C /* AuthEntryViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthEntryViewReactor.swift; sourceTree = "<group>"; };
 		2EE0D58029751EBD0064E932 /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 		2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewReactor.swift; sourceTree = "<group>"; };
 		2EE0D584297524660064E932 /* SetProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetProfileVC.swift; sourceTree = "<group>"; };
@@ -473,6 +473,10 @@
 		2E1C5659296C24AE0067FC78 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
+				2EC52CAF2A41F7D40072998E /* Login */,
+				2EC52CB02A41F7DE0072998E /* Password */,
+				2EC52CB12A41F7ED0072998E /* Join */,
+				2EC52CB22A41F7F30072998E /* Profile */,
 				2ED326AC29B0DB9D001963D0 /* TermSection.swift */,
 				2EE07EE4296EDCA900048A3C /* Reactors */,
 				2ED8CB4529B0C2E400E7B547 /* Views */,
@@ -1010,6 +1014,132 @@
 			path = Reactors;
 			sourceTree = "<group>";
 		};
+		2EC52CAF2A41F7D40072998E /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				2EC52CB52A41F80E0072998E /* Reactors */,
+				2EC52CB42A41F8080072998E /* Views */,
+				2EC52CB32A41F8020072998E /* ViewControllers */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		2EC52CB02A41F7DE0072998E /* Password */ = {
+			isa = PBXGroup;
+			children = (
+				2EC52CB82A41F81E0072998E /* Reactors */,
+				2EC52CB72A41F81A0072998E /* Views */,
+				2EC52CB62A41F8150072998E /* ViewControllers */,
+			);
+			path = Password;
+			sourceTree = "<group>";
+		};
+		2EC52CB12A41F7ED0072998E /* Join */ = {
+			isa = PBXGroup;
+			children = (
+				2EC52CBB2A41F82D0072998E /* Reactors */,
+				2EC52CBA2A41F82A0072998E /* Views */,
+				2EC52CB92A41F8250072998E /* ViewControllers */,
+			);
+			path = Join;
+			sourceTree = "<group>";
+		};
+		2EC52CB22A41F7F30072998E /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				2EC52CBE2A41F8380072998E /* Reactors */,
+				2EC52CBD2A41F8350072998E /* Views */,
+				2EC52CBC2A41F8310072998E /* ViewControllers */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		2EC52CB32A41F8020072998E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2EE07EE6296EDE5100048A3C /* AuthEntryVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EC52CB42A41F8080072998E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EC52CB52A41F80E0072998E /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2EE07EE8296EDE9700048A3C /* AuthEntryViewReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2EC52CB62A41F8150072998E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EC52CB72A41F81A0072998E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EC52CB82A41F81E0072998E /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2EC52CB92A41F8250072998E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EC52CBA2A41F82A0072998E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EC52CBB2A41F82D0072998E /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2EC52CBC2A41F8310072998E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EC52CBD2A41F8350072998E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EC52CBE2A41F8380072998E /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
 		2EC6E11B29BC6030006FBC11 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1194,7 +1324,6 @@
 			isa = PBXGroup;
 			children = (
 				2E6E86F029B3891200C7AF69 /* Password */,
-				2EE07EE6296EDE5100048A3C /* SelectSignInVC.swift */,
 				2ED22DAE296FF4A900ED6221 /* SignInVC.swift */,
 				2EE0D58029751EBD0064E932 /* SignUpVC.swift */,
 				2EE0D584297524660064E932 /* SetProfileVC.swift */,
@@ -1208,7 +1337,6 @@
 			children = (
 				2E6E86F129B3894500C7AF69 /* Password */,
 				2ED22DB0296FF4D100ED6221 /* SignInViewReactor.swift */,
-				2EE07EE8296EDE9700048A3C /* SelectSignInViewReactor.swift */,
 				2EE0D58229751EEF0064E932 /* SignUpViewReactor.swift */,
 				2EE0D586297524880064E932 /* SetProfileViewReactor.swift */,
 				2ED8CB4329B0BD3F00E7B547 /* TermViewReactor.swift */,
@@ -1603,7 +1731,7 @@
 				2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */,
 				2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */,
 				2ED326AD29B0DB9D001963D0 /* TermSection.swift in Sources */,
-				2EE07EE9296EDE9700048A3C /* SelectSignInViewReactor.swift in Sources */,
+				2EE07EE9296EDE9700048A3C /* AuthEntryViewReactor.swift in Sources */,
 				2ED17A6A2A40A4AD00806A9F /* GiftFriendsBottomSheet.swift in Sources */,
 				2E7065482A15FA6F007B1C94 /* AnniversaryManagementVC.swift in Sources */,
 				2E7065502A160AF2007B1C94 /* AnniversaryManagementSection.swift in Sources */,
@@ -1641,7 +1769,7 @@
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */,
 				E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */,
-				2EE07EE7296EDE5100048A3C /* SelectSignInVC.swift in Sources */,
+				2EE07EE7296EDE5100048A3C /* AuthEntryVC.swift in Sources */,
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
 				E583C5912A1E627800DC219A /* FilterBottomSheet.swift in Sources */,

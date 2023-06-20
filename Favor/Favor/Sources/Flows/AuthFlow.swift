@@ -71,8 +71,8 @@ final class AuthFlow: Flow {
 
 private extension AuthFlow {
   func navigateToAuth() -> FlowContributors {
-    let viewController = SelectSignInViewController()
-    let reactor = SelectSignInViewReactor()
+    let viewController = AuthEntryViewController()
+    let reactor = AuthEntryViewReactor()
     viewController.reactor = reactor
     self.rootViewController.setViewControllers([viewController], animated: true)
     

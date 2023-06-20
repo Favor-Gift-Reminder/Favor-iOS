@@ -1,5 +1,5 @@
 //
-//  SelectSignInViewReactor.swift
+//  AuthEntryViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/11.
@@ -12,46 +12,42 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class SelectSignInViewReactor: Reactor, Stepper {
-  
+public final class AuthEntryViewReactor: Reactor, Stepper {
+
   // MARK: - Properties
   
-  var initialState: State
-  var steps = PublishRelay<Step>()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
   
-  enum Action {
-    case loadView
-    case emailLoginButtonTap
-    case signUpButtonTap
+  public enum Action {
+    case viewNeedsLoaded
+    case signInButtonDidTap
+    case signUpButtonDidTap
   }
   
-  enum Mutation {
-    
-  }
-  
-  struct State {
-    
-  }
-  
+  public enum Mutation { }
+
+  public struct State { }
+
   // MARK: - Initializer
   
   init() {
     self.initialState = State()
   }
   
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .loadView:
+    case .viewNeedsLoaded:
       if FTUXStorage.isFirstLaunch {
         self.steps.accept(AppStep.onboardingIsRequired)
       }
       return .empty()
 
-    case .emailLoginButtonTap:
+    case .signInButtonDidTap:
       self.steps.accept(AppStep.signInIsRequired)
       return .empty()
       
-    case .signUpButtonTap:
+    case .signUpButtonDidTap:
       self.steps.accept(AppStep.signUpIsRequired)
       return .empty()
     }

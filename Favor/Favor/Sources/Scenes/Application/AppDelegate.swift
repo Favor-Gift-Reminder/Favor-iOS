@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     RealmWorkbench().locateRealm()
 
     #if DEBUG
-    FTUXStorage.isSignedIn = true
+    FTUXStorage.isSignedIn = false
     UserInfoStorage.userNo = 26
     #endif
     print("Current User: \(UserInfoStorage.userNo)")

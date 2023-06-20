@@ -50,7 +50,7 @@ final class SignInViewController: BaseViewController, View {
   
   private lazy var signInButton = FavorLargeButton(with: .main("로그인"))
   
-  private lazy var findPasswordButton = FavorPlainButton(with: .logIn("비밀번호 찾기"))
+  private lazy var findPasswordButton = FavorPlainButton(with: .navigate("비밀번호 찾기"))
 
   private lazy var buttonStack: UIStackView = {
     let stackView = UIStackView()
