@@ -42,6 +42,7 @@ extension UIImage {
     case share
     case show
     case uncheck
+    case largeNewGift
 
     case down
     case left
