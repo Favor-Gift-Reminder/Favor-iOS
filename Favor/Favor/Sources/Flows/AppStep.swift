@@ -41,6 +41,8 @@ enum AppStep: Step {
   case searchIsComplete
   case searchResultIsRequired(String)
   case searchResultIsComplete
+  case searchCategoryResultIsRequired(FavorCategory)
+  case searchEmotionResultIsRequired(FavorEmotion)
 
   // MARK: - Reminder
   case reminderIsRequired
@@ -83,6 +85,7 @@ enum AppStep: Step {
   case editGiftIsComplete(Gift)
   case newGiftFriendIsRequired
   case giftDetailIsRequired(Gift)
+  case giftDetailFriendsBottomSheetIsRequired([Friend])
   case giftDetailIsComplete(Gift)
   case giftDetailPhotoIsRequired(Int, Int)
   case giftShareIsRequired(Gift)

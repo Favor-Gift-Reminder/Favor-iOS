@@ -10,7 +10,25 @@ import UIKit
 import FavorKit
 import SnapKit
 
-final class SearchRecentCell: BaseCollectionViewCell {
+public protocol SearchRecentCellDelegate: AnyObject {
+  func deleteButtonDidTap(_ recentSearch: RecentSearch)
+}
+
+public final class SearchRecentCell: BaseCollectionViewCell {
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let deleteButtonSize: CGFloat = 12.0
+  }
+
+  // MARK: - Properties
+
+  public weak var delegate: SearchRecentCellDelegate?
+
+  private var recentSearch: RecentSearch? {
+    didSet { self.textLabel.text = self.recentSearch?.queryString }
+  }
 
   // MARK: - UI Components
 
@@ -27,13 +45,14 @@ final class SearchRecentCell: BaseCollectionViewCell {
     return label
   }()
 
-  private let deleteButton: UIButton = {
+  private lazy var deleteButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.line2)
     config.image = .favorIcon(.close)?.resize(newWidth: 12)
 
     let button = UIButton(configuration: config)
+    button.addTarget(self, action: #selector(self.deleteButtonDidTap(_:)), for: .touchUpInside)
     return button
   }()
 
@@ -52,19 +71,23 @@ final class SearchRecentCell: BaseCollectionViewCell {
 
   // MARK: - Functions
 
-  public func bind(with text: String) {
-    self.textLabel.text = text
+  public func bind(with recentSearch: RecentSearch) {
+    self.recentSearch = recentSearch
+  }
+
+  @objc
+  func deleteButtonDidTap(_ sender: UIButton) {
+    guard let recentSearch = self.recentSearch else { return }
+    self.delegate?.deleteButtonDidTap(recentSearch)
   }
 }
 
 // MARK: - UI Setups
 
 extension SearchRecentCell: BaseView {
-  func setupStyles() {
-    self.backgroundColor = .clear
-  }
+  public func setupStyles() { }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     [
       self.iconImageView,
       self.textLabel,
@@ -74,9 +97,10 @@ extension SearchRecentCell: BaseView {
     }
   }
 
-  func setupConstraints() {
+  public func setupConstraints() {
     self.iconImageView.snp.makeConstraints { make in
-      make.leading.directionalVerticalEdges.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
+      make.leading.equalToSuperview()
     }
 
     self.textLabel.snp.makeConstraints { make in
@@ -87,7 +111,7 @@ extension SearchRecentCell: BaseView {
     self.deleteButton.snp.makeConstraints { make in
       make.trailing.equalToSuperview()
       make.centerY.equalToSuperview()
-      make.width.height.equalTo(12)
+      make.width.height.equalTo(Metric.deleteButtonSize)
     }
   }
 }

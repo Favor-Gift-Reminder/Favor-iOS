@@ -11,8 +11,8 @@ import FavorKit
 
 public struct GiftResponseDTO: Decodable {
   public let category: FavorCategory
-  public let emotion: String // Enum
-  public let friendList: [FriendResponseDTO]?
+  public let emotion: FavorEmotion
+  public let friendList: [FriendResponseDTO]
   public let giftDate: Date
   public let giftMemo: String
   public let giftName: String
@@ -37,8 +37,8 @@ public struct GiftResponseDTO: Decodable {
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.category = try container.decode(FavorCategory.self, forKey: .category)
-    self.emotion = try container.decode(String.self, forKey: .emotion)
-    self.friendList = try container.decode([FriendResponseDTO]?.self, forKey: .friendList)
+    self.emotion = try container.decode(FavorEmotion.self, forKey: .emotion)
+    self.friendList = try container.decode([FriendResponseDTO].self, forKey: .friendList)
     let giftDateString = try container.decode(String.self, forKey: .giftDate)
     let giftDate = giftDateString.toDate("yyyy-MM-dd")
     self.giftDate = giftDate ?? .distantPast
