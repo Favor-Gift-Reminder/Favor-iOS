@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/01/12.
 //
 
+import AuthenticationServices
 import UIKit
 
 import FavorKit
@@ -66,8 +67,10 @@ public final class AuthSignInViewController: BaseViewController, View {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.spacing = 20
-    SocialAuthType.allCases.forEach {
-      stackView.addArrangedSubview(SocialAuthButton($0))
+    AuthMethod.allCases.forEach {
+      if $0.isValid {
+        stackView.addArrangedSubview(SocialAuthButton($0))
+      }
     }
     return stackView
   }()
@@ -128,7 +131,7 @@ public final class AuthSignInViewController: BaseViewController, View {
     self.socialSignInButtonStackView.arrangedSubviews.forEach { arrangedSubview in
       guard let button = arrangedSubview as? SocialAuthButton else { return }
       button.rx.tap
-        .map { Reactor.Action.socialSignInButtonDidTap(button.socialType) }
+        .map { Reactor.Action.socialSignInButtonDidTap(button.authMethod) }
         .bind(to: reactor.action)
         .disposed(by: self.disposeBag)
     }
@@ -140,7 +143,7 @@ public final class AuthSignInViewController: BaseViewController, View {
 
     self.view.rx.tapGesture()
       .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: {  owner, _ in
         owner.view.endEditing(true)
       })
@@ -148,9 +151,20 @@ public final class AuthSignInViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.isSignInButtonEnabled }
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .never()})
       .drive(with: self, onNext: { owner, isEnabled in
         owner.signInButton.isEnabled = isEnabled
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.requestedSocialAuth }
+      .asDriver(onErrorRecover: { _ in return .never()})
+      .drive(with: self, onNext: { owner, socialAuth in
+        switch socialAuth {
+        case .apple:
+          owner.handleSignInWithApple()
+        default: break
+        }
       })
       .disposed(by: self.disposeBag)
   }
@@ -205,4 +219,45 @@ public final class AuthSignInViewController: BaseViewController, View {
     }
   }
   
+}
+
+// MARK: - Sign in With
+
+extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+  func handleSignInWithApple() {
+    let provider = ASAuthorizationAppleIDProvider()
+    let request = provider.createRequest()
+    request.requestedScopes = [.fullName, .email]
+
+    let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+    authorizationController.delegate = self
+    authorizationController.presentationContextProvider = self
+    authorizationController.performRequests()
+  }
+
+  public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+    return self.view.window!
+  }
+
+  public func authorizationController(
+    controller: ASAuthorizationController,
+    didCompleteWithAuthorization authorization: ASAuthorization
+  ) {
+    guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
+
+    // Create an account in your system.
+    let userIdentifier = appleIDCredential.user
+    let fullName = appleIDCredential.fullName
+    let email = appleIDCredential.email
+
+    // Handle Sign Up Task
+
+  }
+
+  public func authorizationController(
+    controller: ASAuthorizationController,
+    didCompleteWithError error: Error
+  ) {
+    print(error)
+  }
 }

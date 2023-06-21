@@ -59,12 +59,8 @@ final class AppFlow: Flow {
 
 private extension AppFlow {
   func navigateToRoot() -> FlowContributors {
-//    #if DEBUG
-//    FTUXStorage.isSignedIn = true
-//    #endif
     if FTUXStorage.isSignedIn {
-      os_log(.debug, "🏁 Signed In: Navigating to tab bar flow.")
-      return self.navigateToDashboard()
+      return self.handleSignedInNavigate()
     } else {
       os_log(.debug, "🏁 Not Signed In: Navigating to auth flow.")
       return self.navigateToAuth()
@@ -121,5 +117,21 @@ private extension AppFlow {
       withNextPresentable: testFlow,
       withNextStepper: OneStepper(withSingleStep: AppStep.rootIsRequired) // Change to Test Step here.
     ))
+  }
+}
+
+// MARK: - Privates
+
+private extension AppFlow {
+  func handleSignedInNavigate() -> FlowContributors {
+    switch FTUXStorage.socialAuthType {
+    case .email: // Email 로그인
+      return self.navigateToDashboard()
+    case .apple: // Apple 로그인
+      os_log(.debug, "🏁 Signed in via 🍎 Apple: Navigating to tab bar flow.")
+      return self.navigateToDashboard()
+    default:
+      return .none
+    }
   }
 }

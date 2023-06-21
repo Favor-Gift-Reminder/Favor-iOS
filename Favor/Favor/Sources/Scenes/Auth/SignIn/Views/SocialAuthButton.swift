@@ -20,7 +20,7 @@ public final class SocialAuthButton: UIButton {
 
   // MARK: - Properties
 
-  public var socialType: SocialAuthType!
+  public var authMethod: AuthMethod!
 
   // MARK: - Initializer
 
@@ -28,10 +28,10 @@ public final class SocialAuthButton: UIButton {
     super.init(frame: frame)
   }
 
-  public convenience init(_ socialType: SocialAuthType) {
+  public convenience init(_ authMethod: AuthMethod) {
     self.init(frame: .zero)
-    self.socialType = socialType
-    self.setupSocialAuthType(socialType)
+    self.authMethod = authMethod
+    self.setupSocialAuthType(authMethod)
   }
 
   required init?(coder: NSCoder) {
@@ -40,14 +40,14 @@ public final class SocialAuthButton: UIButton {
 
   // MARK: - Functions
 
-  private func setupSocialAuthType(_ socialType: SocialAuthType) {
+  private func setupSocialAuthType(_ authMethod: AuthMethod) {
     var config = UIButton.Configuration.filled()
-    config.baseBackgroundColor = socialType.backgroundColor
-    config.baseForegroundColor = socialType.foregroundColor
-    config.image = socialType.icon?
+    config.baseBackgroundColor = authMethod.backgroundColor
+    config.baseForegroundColor = authMethod.foregroundColor
+    config.image = authMethod.icon?
       .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: socialType.iconSize(.large))
-      .withTintColor(socialType.foregroundColor)
+      .resize(newWidth: authMethod.iconSize(.large))
+      .withTintColor(authMethod.foregroundColor)
     self.configuration = config
     
     self.snp.makeConstraints { make in

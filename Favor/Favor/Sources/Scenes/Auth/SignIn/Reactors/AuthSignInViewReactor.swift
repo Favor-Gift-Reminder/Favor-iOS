@@ -31,7 +31,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case emailDidUpdate(String)
     case passwordDidUpdate(String)
     case signInButtonDidTap
-    case socialSignInButtonDidTap(SocialAuthType)
+    case socialSignInButtonDidTap(AuthMethod)
     case findPasswordButtonDidTap
   }
   
@@ -41,6 +41,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
+    case pulseSocialAuth(AuthMethod)
   }
   
   public struct State {
@@ -49,6 +50,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
+    @Pulse var requestedSocialAuth: AuthMethod = .undefined
   }
   
   // MARK: - Initializer
@@ -87,9 +89,9 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       // Login
       return .empty()
 
-    case .socialSignInButtonDidTap(let socialType):
-      os_log(.debug, "Sign-In with social did tap: \(String(describing: socialType))")
-      return .empty()
+    case .socialSignInButtonDidTap(let socialAuth):
+      os_log(.debug, "Sign-In with social did tap: \(String(describing: socialAuth))")
+      return .just(.pulseSocialAuth(socialAuth))
 
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
@@ -129,14 +131,11 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 
     case .validateSignInButton(let isNextButtonEnabled):
       newState.isSignInButtonEnabled = isNextButtonEnabled
+
+    case .pulseSocialAuth(let socialAuth):
+      newState.requestedSocialAuth = socialAuth
     }
 
     return newState
   }
-}
-
-// MARK: - Privates
-
-private extension AuthSignInViewReactor {
-  
 }
