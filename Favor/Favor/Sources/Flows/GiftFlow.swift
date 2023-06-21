@@ -22,6 +22,7 @@ final class GiftFlow: Flow {
   }
 
   private let rootViewController: BaseNavigationController
+  private var friendsBottomSheet: GiftFriendsBottomSheet?
 
   // MARK: - Initializer
 
@@ -47,10 +48,22 @@ final class GiftFlow: Flow {
     case .giftManagementIsRequired(let gift):
       return self.navigateToGiftManagement(with: gift)
 
+    case .searchEmotionResultIsRequired(let emotion):
+      return self.navigateToSearchEmotionResult(with: emotion)
+
+    case .searchCategoryResultIsRequired(let category):
+      return self.navigateToSearchCategoryResult(with: category)
+
+    case .giftDetailFriendsBottomSheetIsRequired(let friends):
+      return self.navigateToFriends(with: friends)
+
+    case .friendPageIsRequired(let friend):
+      return self.navigateToFriendPage(with: friend)
+
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToGiftDetail()
 
-    case .newGiftIsComplete(let gift):
+    case .newGiftIsComplete:
       return self.popToGiftDetail()
 
     case .editGiftIsComplete(let gift):
@@ -125,6 +138,72 @@ private extension GiftFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: giftManagementVC,
       withNextStepper: giftManagementReactor
+    ))
+  }
+
+  func navigateToSearchEmotionResult(with emotion: FavorEmotion) -> FlowContributors {
+    let searchEmotionVC = SearchEmotionViewController()
+    let searchEmotionReactor = SearchTagViewReactor()
+    searchEmotionVC.reactor = searchEmotionReactor
+    searchEmotionVC.title = "선물 감정"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchEmotionVC, animated: true)
+      searchEmotionVC.requestEmotion(emotion)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchEmotionVC,
+      withNextStepper: searchEmotionReactor
+    ))
+  }
+
+  func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
+    let searchCategoryVC = SearchCategoryViewController()
+    let searchCategoryReactor = SearchTagViewReactor()
+    searchCategoryVC.reactor = searchCategoryReactor
+    searchCategoryVC.title = "선물 카테고리"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(searchCategoryVC, animated: true)
+      searchCategoryVC.requestCategory(category)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: searchCategoryVC,
+      withNextStepper: searchCategoryReactor
+    ))
+  }
+
+  func navigateToFriends(with friends: [Friend]) -> FlowContributors {
+    let friendsBottomSheet = GiftFriendsBottomSheet()
+    friendsBottomSheet.modalPresentationStyle = .overFullScreen
+
+    DispatchQueue.main.async {
+      self.rootViewController.present(friendsBottomSheet, animated: false)
+      friendsBottomSheet.friends = friends
+      self.friendsBottomSheet = friendsBottomSheet
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendsBottomSheet,
+      withNextStepper: friendsBottomSheet
+    ))
+  }
+
+  func navigateToFriendPage(with friend: Friend) -> FlowContributors {
+    let friendPageVC = FriendPageViewController()
+    let friendPageReactor = FriendPageViewReactor(friend)
+    friendPageVC.reactor = friendPageReactor
+
+    DispatchQueue.main.async {
+      self.friendsBottomSheet?.dismissBottomSheet()
+      self.rootViewController.pushViewController(friendPageVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendPageVC,
+      withNextStepper: friendPageReactor
     ))
   }
 

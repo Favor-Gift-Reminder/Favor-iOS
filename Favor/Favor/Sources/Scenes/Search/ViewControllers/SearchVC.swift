@@ -18,8 +18,6 @@ final class SearchViewController: BaseSearchViewController {
 
   // MARK: - Constants
 
-  let emotions: [String] = ["🥹", "🥰", "🙂", "😐", "😰"]
-
   private enum Constants {
     static let fadeInDuration = 0.15
     static let fadeOutDuration = 0.2
@@ -65,8 +63,7 @@ final class SearchViewController: BaseSearchViewController {
   private lazy var emotionButtonStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
-    stackView.distribution = .equalSpacing
-    stackView.spacing = 34
+    stackView.distribution = .equalCentering
     return stackView
   }()
 
@@ -110,6 +107,14 @@ final class SearchViewController: BaseSearchViewController {
         .disposed(by: self.disposeBag)
     }
 
+    self.emotionButtonStack.arrangedSubviews.forEach { arrangedView in
+      guard let button = arrangedView as? FavorEmotionButton else { return }
+      button.rx.tap
+        .map { Reactor.Action.emotionButtonDidTap(button.emotion) }
+        .bind(to: reactor.action)
+        .disposed(by: self.disposeBag)
+    }
+
     self.collectionView.rx.itemSelected
       .map { indexPath -> Reactor.Action in
         guard let item = self.dataSource?.itemIdentifier(for: indexPath) else { return .doNothing }
@@ -122,6 +127,13 @@ final class SearchViewController: BaseSearchViewController {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.isRecentSearchVisible }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, isVisible in
+        owner.toggleRecentSearch(to: !isVisible)
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.recentSearchItems }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, searches in
@@ -138,12 +150,6 @@ final class SearchViewController: BaseSearchViewController {
   }
   
   // MARK: - Functions
-
-  override func toggleIsEditing(to isEditing: Bool) {
-    super.toggleIsEditing(to: isEditing)
-    
-    self.toggleRecentSearch(to: !isEditing)
-  }
   
   // MARK: - UI Setups
   
@@ -154,8 +160,8 @@ final class SearchViewController: BaseSearchViewController {
   override func setupLayouts() {
     self.giftCategoryButtonScrollView.addSubview(self.giftCategoryButtonStack)
 
-    self.emotions.forEach {
-      self.emotionButtonStack.addArrangedSubview(self.makeEmojiButton(emoji: $0))
+    FavorEmotion.allCases.forEach {
+      self.emotionButtonStack.addArrangedSubview(FavorEmotionButton($0))
     }
 
     [
@@ -218,13 +224,6 @@ private extension SearchViewController {
     label.text = title
     return label
   }
-  
-  func makeEmojiButton(emoji: String) -> UIButton {
-    let button = UIButton()
-    button.contentMode = .center
-    button.setImage(emoji.emojiToImage(size: .init(width: 40, height: 40)), for: .normal)
-    return button
-  }
 
   func toggleRecentSearch(to isHidden: Bool) {
     let duration = isHidden ? Constants.fadeInDuration : Constants.fadeOutDuration
@@ -239,12 +238,14 @@ private extension SearchViewController {
   }
 
   func setupDataSource() {
-    let searchCellRegistration = UICollectionView.CellRegistration<SearchRecentCell, SearchSectionItem> { [weak self] cell, _, item in
+    let searchCellRegistration = UICollectionView.CellRegistration
+    <SearchRecentCell, SearchSectionItem> { [weak self] cell, _, item in
       guard
         self != nil,
-        case let SearchSectionItem.recent(searchString) = item
+        case let SearchSectionItem.recent(recentSearch) = item
       else { return }
-      cell.bind(with: searchString.queryString)
+      cell.delegate = self
+      cell.bind(with: recentSearch)
     }
 
     self.dataSource = SearchDataSource(
@@ -258,8 +259,11 @@ private extension SearchViewController {
       }
     )
 
-    let headerRegistration = UICollectionView.SupplementaryRegistration<FavorSectionHeaderView>(elementKind: UICollectionView.elementKindSectionHeader) { [weak self] _, _, _ in
+    let headerRegistration = UICollectionView.SupplementaryRegistration
+    <FavorSectionHeaderView>(elementKind: UICollectionView.elementKindSectionHeader
+    ) { [weak self] header, _, _ in
       guard self != nil else { return }
+      header.bind(title: "최근 검색어")
     }
 
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
@@ -272,5 +276,14 @@ private extension SearchViewController {
         return UICollectionReusableView()
       }
     }
+  }
+}
+
+// MARK: - SearchRecentCell
+
+extension SearchViewController: SearchRecentCellDelegate {
+  func deleteButtonDidTap(_ recentSearch: RecentSearch) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.searchRecentDeleteButtonDidTap(recentSearch))
   }
 }

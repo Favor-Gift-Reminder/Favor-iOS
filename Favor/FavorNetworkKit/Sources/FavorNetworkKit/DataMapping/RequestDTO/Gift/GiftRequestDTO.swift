@@ -5,7 +5,7 @@
 //  Created by 김응철 on 2023/03/08.
 //
 
-import Foundation
+import FavorKit
 
 public struct GiftRequestDTO: Encodable {
   let giftName: String
@@ -21,8 +21,8 @@ public struct GiftRequestDTO: Encodable {
     giftName: String,
     giftDate: String,
     giftMemo: String,
-    category: String,
-    emotion: String,
+    category: FavorCategory,
+    emotion: FavorEmotion,
     isPinned: Bool = false,
     isGiven: Bool = false,
     friendNoList: [Int]
@@ -30,8 +30,8 @@ public struct GiftRequestDTO: Encodable {
     self.giftName = giftName
     self.giftDate = giftDate
     self.giftMemo = giftMemo
-    self.category = category
-    self.emotion = emotion
+    self.category = category.rawValue
+    self.emotion = emotion.rawValue
     self.isPinned = isPinned
     self.isGiven = isGiven
     self.friendNoList = friendNoList

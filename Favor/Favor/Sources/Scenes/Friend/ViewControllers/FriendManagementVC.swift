@@ -25,10 +25,12 @@ final class FriendManagementViewController: BaseViewController, View {
   
   // MARK: - UI Components
   
-  private let profileImageView: FavorProfileImageView = FavorProfileImageView().then {
-    $0.isHiddenPlusView = false
-  }
-  
+  private let profileImageRegisterButton: FavorProfileImageRegisterButton = {
+    let button = FavorProfileImageRegisterButton()
+    button.isHiddenPlusView = false
+    return button
+  }()
+
   private lazy var nameTextField: FavorTextField = FavorTextField().then {
     $0.titleLabelText = "이름"
     switch self.viewControllerType {
@@ -91,7 +93,7 @@ final class FriendManagementViewController: BaseViewController, View {
   
   override func setupLayouts() {
     [
-      self.profileImageView,
+      self.profileImageRegisterButton,
       self.nameTextField
     ].forEach {
       self.view.addSubview($0)
@@ -99,13 +101,13 @@ final class FriendManagementViewController: BaseViewController, View {
   }
   
   override func setupConstraints() {
-    self.profileImageView.snp.makeConstraints { make in
+    self.profileImageRegisterButton.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
     }
     
     self.nameTextField.snp.makeConstraints { make in
-      make.top.equalTo(self.profileImageView.snp.bottom).offset(Metric.nameTextFieldTopSpacing)
+      make.top.equalTo(self.profileImageRegisterButton.snp.bottom).offset(Metric.nameTextFieldTopSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }
