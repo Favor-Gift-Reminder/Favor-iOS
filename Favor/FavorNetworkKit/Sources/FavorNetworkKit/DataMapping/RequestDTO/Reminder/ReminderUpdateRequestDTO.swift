@@ -1,5 +1,5 @@
 //
-//  ReminderUpdateResposneDTO.swift
+//  ReminderUpdateRequestDTO.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/04/19.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ReminderUpdateResposneDTO: Encodable {
+public struct ReminderUpdateRequestDTO: Encodable {
   let title: String
   let reminderDate: Date
   let isAlarmSet: Bool
