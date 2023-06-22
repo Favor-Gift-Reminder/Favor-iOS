@@ -44,8 +44,8 @@ final class FriendPageFlow: Flow {
     case .newAnniversaryIsRequired:
       return self.navigateToAnniversaryManagement()
       
-    case .anniversaryListIsRequired:
-      return self.navigateToAnniversaryList()
+    case .anniversaryListIsRequired(let anniversaryListType):
+      return self.navigateToAnniversaryList(anniversaryListType)
       
     default:
       return .none
@@ -55,7 +55,7 @@ final class FriendPageFlow: Flow {
 
 extension FriendPageFlow {
   private func navigateToFriendPage(_ friend: Friend) -> FlowContributors {
-    let friendPageVC = FriendPageViewController(with: friend)
+    let friendPageVC = FriendPageViewController()
     let reactor = FriendPageViewReactor(friend)
     friendPageVC.reactor = reactor
     
@@ -92,12 +92,12 @@ extension FriendPageFlow {
     ))
   }
   
-  private func navigateToAnniversaryList() -> FlowContributors {
+  private func navigateToAnniversaryList(_ anniversaryListType: AnniversaryListType) -> FlowContributors {
     let flow = AnniversaryFlow(rootViewController: self.rootViewController)
     
     return .one(flowContributor: .contribute(
       withNextPresentable: flow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired)
+      withNextStepper: OneStepper(withSingleStep: AppStep.anniversaryListIsRequired(anniversaryListType))
     ))
   }
 }

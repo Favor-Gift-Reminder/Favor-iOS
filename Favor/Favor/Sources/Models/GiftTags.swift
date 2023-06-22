@@ -8,7 +8,7 @@
 import FavorKit
 
 public enum GiftTags {
-  case emotion
+  case emotion(FavorEmotion)
   case category(FavorCategory)
   case isGiven(Bool)
   case friends([Friend])

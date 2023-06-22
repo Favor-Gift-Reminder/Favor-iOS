@@ -33,6 +33,7 @@ final class SearchViewReactor: Reactor, Stepper {
   private let workbench = RealmWorkbench()
   private let giftFetcher = Fetcher<Gift>()
   private let mode: SearchViewMode
+  private var tasks: Set<Task<Void, Error>> = []
 
   enum Action {
     case viewNeedsLoaded
@@ -40,8 +41,10 @@ final class SearchViewReactor: Reactor, Stepper {
     case textDidChanged(String?)
     case editingDidEnd
     case categoryButtonDidTap(FavorCategory)
+    case emotionButtonDidTap(FavorEmotion)
     case returnKeyDidTap
     case searchRecentDidSelected(String)
+    case searchRecentDeleteButtonDidTap(RecentSearch)
     case searchRequestedWith(String)
     case searchTypeDidSelected(SearchType)
     case viewWillDisappear
@@ -60,6 +63,7 @@ final class SearchViewReactor: Reactor, Stepper {
   
   struct State {
     var isEditing: Bool = false
+    var isRecentSearchVisible: Bool = false
     var searchQuery: String?
     var recentSearches: [RecentSearch] = []
     var recentSearchItems: [SearchSectionItem] = []
@@ -82,6 +86,10 @@ final class SearchViewReactor: Reactor, Stepper {
     if let searchQuery {
       self.setupGiftFetcher(with: searchQuery)
     }
+  }
+
+  deinit {
+    self.tasks.forEach { $0.cancel() }
   }
 
   // MARK: - Functions
@@ -122,14 +130,29 @@ final class SearchViewReactor: Reactor, Stepper {
       return .just(.toggleIsEditingTo(false))
 
     case .categoryButtonDidTap(let category):
-      print(category.rawValue)
+      self.steps.accept(AppStep.searchCategoryResultIsRequired(category))
       return .empty()
 
+    case .emotionButtonDidTap(let emotion):
+      self.steps.accept(AppStep.searchEmotionResultIsRequired(emotion))
+      return .empty()
+
+    // transform에서 처리
     case .returnKeyDidTap:
       return .empty()
 
+    // transform에서 처리
     case .searchRecentDidSelected:
       return .empty()
+
+    case .searchRecentDeleteButtonDidTap(let recentSearch):
+      return self.deleteRecentSearch(recentSearch)
+        .asObservable()
+        .flatMap { recentSearch -> Observable<Mutation> in
+          var newRecentSearches = self.currentState.recentSearches
+          newRecentSearches.removeAll { $0 == recentSearch }
+          return .just(.updateRecentSearches(newRecentSearches))
+        }
 
     case .searchRequestedWith(let searchQuery):
       switch self.mode {
@@ -235,6 +258,10 @@ final class SearchViewReactor: Reactor, Stepper {
 
       newState.recentSearchItems = state.recentSearches.map { SearchSectionItem.recent($0) }
 
+      if !state.recentSearches.isEmpty && state.isEditing {
+        newState.isRecentSearchVisible = true
+      }
+
       return newState
     }
   }
@@ -244,11 +271,31 @@ final class SearchViewReactor: Reactor, Stepper {
 
 private extension SearchViewReactor {
   func updateAndNavigateToSearchResult(_ searchString: String) {
-    Task {
+    let task = Task {
       try await self.workbench.write { transaction in
         transaction.update(RecentSearchObject(query: searchString, date: .now))
       }
       self.steps.accept(AppStep.searchResultIsRequired(searchString))
+    }
+    self.tasks.insert(task)
+  }
+
+  func deleteRecentSearch(_ recentSearch: RecentSearch) -> Single<RecentSearch> {
+    return Single<RecentSearch>.create { single in
+      let task = Task {
+        do {
+          try await self.workbench.write { transaction in
+            transaction.delete(recentSearch.realmObject())
+            single(.success(recentSearch))
+          }
+        } catch {
+          single(.failure(error))
+        }
+      }
+
+      return Disposables.create {
+        task.cancel()
+      }
     }
   }
 }
