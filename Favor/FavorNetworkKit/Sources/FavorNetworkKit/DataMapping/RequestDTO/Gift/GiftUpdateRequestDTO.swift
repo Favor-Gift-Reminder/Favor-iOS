@@ -13,8 +13,8 @@ public struct GiftUpdateRequestDTO: Encodable {
   let giftName: String
   let giftDate: String
   let giftMemo: String
-  let category: String // Enum
-  let emotion: String // Enum
+  let category: String
+  let emotion: String
   let isPinned: Bool
   let isGiven: Bool
   let friendNoList: [Int]
@@ -23,8 +23,8 @@ public struct GiftUpdateRequestDTO: Encodable {
     giftName: String,
     giftDate: String,
     giftMemo: String,
-    category: String,
-    emotion: String,
+    category: FavorCategory,
+    emotion: FavorEmotion,
     isPinned: Bool,
     isGiven: Bool,
     friendNoList: [Int]
@@ -32,8 +32,8 @@ public struct GiftUpdateRequestDTO: Encodable {
     self.giftName = giftName
     self.giftDate = giftDate
     self.giftMemo = giftMemo
-    self.category = category
-    self.emotion = emotion
+    self.category = category.rawValue
+    self.emotion = emotion.rawValue
     self.isPinned = isPinned
     self.isGiven = isGiven
     self.friendNoList = friendNoList

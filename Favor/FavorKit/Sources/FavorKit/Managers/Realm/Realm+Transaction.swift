@@ -64,6 +64,9 @@ public final class Transaction {
   public func delete<T>(
     _ value: T
   ) where T: Object {
-    self.realm.delete(value)
+    let pk = value.objectSchema.primaryKeyProperty!.name
+    let object = self.realm.objects(T.self)
+      .filter("\(pk) == %@", value.value(forKey: pk)!)
+    self.realm.delete(object)
   }
 }

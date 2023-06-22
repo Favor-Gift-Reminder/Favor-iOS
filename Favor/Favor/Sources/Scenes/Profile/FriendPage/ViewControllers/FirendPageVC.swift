@@ -25,20 +25,10 @@ final class FriendPageViewController: BaseProfileViewController, View {
   
   // MARK: - Properties
   
-  private let friend: Friend
-  
   /// 유저가 유저인지 판별해주는 계산 프로퍼티입니다.
-  private var isUser: Bool { self.friend.isUser  }
-  
-  // MARK: - Initializer
-  
-  init(with friend: Friend) {
-    self.friend = friend
-    super.init(nibName: nil, bundle: nil)
-  }
-  
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+  private var isUser: Bool {
+    guard let reactor = self.reactor else { return false }
+    return reactor.currentState.friend.isUser
   }
   
   // MARK: - Setup
@@ -96,7 +86,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
     
     // MARK: - State
     
-    reactor.state.map { $0.friendName }
+    reactor.state.map { $0.friend.name }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, name in
         owner.profileView.rx.name.onNext(name)

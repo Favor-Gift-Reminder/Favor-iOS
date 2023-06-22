@@ -78,7 +78,7 @@ extension GiftDetailSection: Composable {
       return .singleFullList(height: .estimated(60))
     }
   }
-
+  
   public var section: UICollectionViewComposableLayout.Section {
     switch self {
     case .image:

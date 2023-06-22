@@ -35,7 +35,7 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
   }
 
   // MARK: - Initializer
-
+  
   override init() {
     self.initialState = State()
     super.init()
@@ -53,13 +53,12 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
           }
           return .just(.updateFriendItems(friendItems))
         }
-
+      
     case .deleteButtonDidTap(let friend):
       return self.friendNetworking.request(.deleteFriend(friendNo: friend.identifier))
         .flatMap { response -> Observable<Mutation> in
           do {
             let response: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
-            print(response.responseMessage)
             return self.friendFetcher.fetch()
               .flatMap { (_, friends) -> Observable<Mutation> in
                 let friendItems = friends.map { friend -> FriendSectionItem in
