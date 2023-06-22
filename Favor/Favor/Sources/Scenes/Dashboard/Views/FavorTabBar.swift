@@ -71,11 +71,12 @@ final class FavorTabBar: UITabBar {
   private func setupShapeLayer() {
     let shapeLayer = CAShapeLayer()
     shapeLayer.path = self.drawPath()
-    shapeLayer.fillColor = UIColor.favorColor(.white).cgColor
+    shapeLayer.fillColor = UIColor.favorColor(.black).cgColor
     // Shadow
     shapeLayer.shadowColor = UIColor.favorColor(.black).cgColor
     shapeLayer.shadowOffset = CGSize(width: 0, height: -1)
     shapeLayer.shadowOpacity = 0.03
+    shapeLayer.shadowPath = UIBezierPath(rect: shapeLayer.bounds).cgPath
     self.layer.insertSublayer(shapeLayer, at: 0)
   }
   
@@ -174,13 +175,8 @@ final class FavorTabBar: UITabBar {
   
   /// 인덱스가 바뀔 때 마다 UI를 업데이트합니다.
   private func updateUI() {
-    self.homeButton.isSelected = false
-    self.friendButton.isSelected = false
-    if self.selectedIndex == 0 {
-      self.homeButton.isSelected = true
-    } else {
-      self.friendButton.isSelected = true
-    }
+    self.homeButton.isSelected = self.selectedIndex == 0
+    self.friendButton.isSelected = self.selectedIndex == 1
   }
   
   /// 터치 영역을 조절하는 메서드입니다.
@@ -193,7 +189,7 @@ final class FavorTabBar: UITabBar {
     
     // 피타고라스 법칙을 이용하여 중앙 버튼의 터치를 감지합니다.
     return sqrt((from.x - to.x) * (from.x - to.x) + (from.y - to.y) * (from.y - to.y))
-    <= 20 ? self.middleButton :super.hitTest(point, with: event)
+    <= 20 ? self.middleButton : super.hitTest(point, with: event)
   }
   
   /// 중앙 버튼이 터치될 때 불려지는 메서드입니다.
@@ -222,12 +218,12 @@ extension FavorTabBar: BaseView {
   func setupConstraints() {
     self.homeButton.snp.makeConstraints { make in
       make.top.equalToSuperview().inset(12.0)
-      make.leading.equalToSuperview().inset(70.0)
+      make.centerX.equalToSuperview().multipliedBy(0.5)
     }
     
     self.friendButton.snp.makeConstraints { make in
       make.top.equalToSuperview().inset(12.0)
-      make.trailing.equalToSuperview().inset(70.0)
+      make.centerX.equalToSuperview().multipliedBy(1.5)
     }
   }
 }

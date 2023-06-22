@@ -55,6 +55,7 @@ final class SearchFlow: Flow {
 private extension SearchFlow {
   func navigateToSearch() -> FlowContributors {
     let searchVC = SearchViewController()
+    searchVC.hidesBottomBarWhenPushed = true
     let searchReactor = SearchViewReactor(mode: .search)
     searchVC.reactor = searchReactor
 
