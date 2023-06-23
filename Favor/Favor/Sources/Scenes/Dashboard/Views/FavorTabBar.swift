@@ -19,8 +19,11 @@ final class FavorTabBar: UITabBar {
   private lazy var friendButton = self.makeButton(.favorIcon(.friend))
   
   private lazy var middleButton: UIButton = {
-    let button = UIButton()
-    button.setImage(.favorIcon(.largeNewGift), for: .normal)
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .favorColor(.main)
+    config.image = .favorIcon(.tabbar)
+    config.background.cornerRadius = 20.0
+    let button = UIButton(configuration: config)
     button.addTarget(self, action: #selector(self.didTapMiddleButton), for: .touchUpInside)
     return button
   }()
@@ -71,7 +74,7 @@ final class FavorTabBar: UITabBar {
   private func setupShapeLayer() {
     let shapeLayer = CAShapeLayer()
     shapeLayer.path = self.drawPath()
-    shapeLayer.fillColor = UIColor.favorColor(.black).cgColor
+    shapeLayer.fillColor = UIColor.favorColor(.white).cgColor
     // Shadow
     shapeLayer.shadowColor = UIColor.favorColor(.black).cgColor
     shapeLayer.shadowOffset = CGSize(width: 0, height: -1)
