@@ -36,6 +36,7 @@ extension UIColor {
     case subtext = "#616161"
     case titleAndLine = "#424242"
     case icon = "#222222"
+    case nav = "#FFE4E5"
   }
   
   /// 색상을 적용하는 전역 메서드 입니다.

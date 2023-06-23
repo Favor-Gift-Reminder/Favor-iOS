@@ -43,14 +43,7 @@ private extension DashboardFlow {
       myPageFlow,
       when: .ready
     ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
-      let pages = TabBarPage.allCases
-      let emptyNC = BaseNavigationController()
-      emptyNC.isValid = false
-      let navigationControllers: [BaseNavigationController] = [homeNC, emptyNC, myPageNC]
-      navigationControllers.enumerated().forEach { idx, nc in
-        nc.tabBarItem = pages[idx].tabBarItem
-      }
-
+      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
       self.rootViewController.setViewControllers(navigationControllers, animated: false)
     }
     
@@ -66,7 +59,7 @@ private extension DashboardFlow {
       )
     ])
   }
-
+  
   func navigateToNewGift() -> FlowContributors {
     let newGiftFlow = NewGiftFlow()
 
