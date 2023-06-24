@@ -9,83 +9,45 @@ import Foundation
 
 public final class KeychainManager {
 
-  /// **kSecClass**
-  /// `kSecClassGenericPassword`
-  /// - 일반적인 비밀번호 (주어진 데이터만)
-  /// `kSecClassInternetPassword`
-  /// - 인터넷 비밀번호
-  /// - URL, username 등을 함께 저장
-  /// `kSecClassCertificate`
-  /// - 인증서 (Certificate 파일)
-  /// `kSecClassKey`
-  /// - 암호화 키 (en/decrypt를 위한 Key)
-  /// `kSecClassIdentity`
-  /// - ID (Certificate + PrivateKey)
-  /// ➡️ 대부분의 경우 GenericPassword를 사용하면 됨!
-
-  /// Keychain으로부터 데이터를 불러옵니다.
+  /// Keychain에 데이터를 추가합니다.
+  ///
+  /// 만약 값이 이미 존재한다면 업데이트하고, 존재하지 않는다면 새로 추가합니다.
+  ///
   /// - Parameters:
-  ///   - account: 가져올 키체인의 Key (`String`)
-  public func fetch(account: String) throws -> Data? {
-    var result: AnyObject?
-
-    let status = SecItemCopyMatching([
-      kSecClass: kSecClassGenericPassword,
-      kSecAttrAccount: account,
-      kSecAttrService: Constants.service
-    ] as NSDictionary, &result)
-
-    switch status {
-    case errSecSuccess:
-      return result as? Data
-    case errSecItemNotFound:
-      return nil
-    default:
-      throw KeychainError.fetchError
+  ///   - value: Keychain에 저장할 데이터 (`Data`)
+  ///   - account: Keychain에 저장할 데이터에 대응되는 Key (`String`)
+  public func set(value: Data, account: String) throws {
+    if try self.exists(account: account) {
+      try self.update(value: value, account: account)
+    } else {
+      try self.add(value: value, account: account)
     }
   }
 
-  /// Keychain에 데이터를 저장합니다.
+  /// Keychain에서 account Key에 해당되는 데이터를 불러옵니다.
+  ///
+  /// Keychain에 값이 존재한다면 Optional로 불러오고, 존재하지 않는다면 에러를 방출합니다.
+  ///
   /// - Parameters:
-  ///   - value: 저장할 값 (`Data`)
-  ///   - account: 저장할 값에 대응되는 Key (`String`)
-  public func add(value: Data, account: String) throws {
-    let status = SecItemAdd([
-      kSecClass: kSecClassGenericPassword, // 데이터 종류
-      kSecAttrAccount: account, // 데이터 키
-      kSecValueData: value, // 데이터 밸류
-      kSecAttrService: Constants.service
-    ] as NSDictionary, nil)
-
-    guard status == errSecSuccess else { throw KeychainError.creationError }
+  ///   - account: Keychain에서 조회할 데이터에 대응되는 Key (`String`)
+  /// - Returns: Keychain에 저장된 데이터
+  public func get(account: String) throws -> Data? {
+    if try self.exists(account: account) {
+      return try self.fetch(account: account)
+    } else {
+      throw KeychainError.transactionError
+    }
   }
 
-  /// Keychain에 있는 데이터를 업데이트합니다.
+  /// Keychain에 저장되어 있는 account Key에 대응되는 데이터를 삭제합니다.
+  ///
   /// - Parameters:
-  ///   - value: 업데이트할 값 (`Data`)
-  ///   - account: 업데이트할 값에 대응되는 Key (`String`)
-  public func update(value: Data, account: String) throws {
-    let status = SecItemUpdate([
-      kSecClass: kSecClassGenericPassword,
-      kSecAttrAccount: account,
-      kSecAttrService: Constants.service
-    ] as NSDictionary, [
-      kSecValueData: value
-    ] as NSDictionary)
-
-    guard status == errSecSuccess else { throw KeychainError.transactionError}
-  }
-
-  /// Keychain에 있는 데이터를 삭제합니다.
-  /// - Parameters:
-  ///   - account: 삭제할 값에 대응되는 Key (`String`)
+  ///   - account: Keychain에서 삭제할 값에 대응되는 Key (`String`)
   public func delete(account: String) throws {
-    let status = SecItemDelete([
-      kSecClass: kSecClassGenericPassword,
-      kSecAttrAccount: account,
-      kSecAttrService: Constants.service
-    ] as NSDictionary)
-
-    guard status == errSecSuccess else { throw KeychainError.transactionError }
+    if try self.exists(account: account) {
+      return try self.remove(account: account)
+    } else {
+      throw KeychainError.transactionError
+    }
   }
 }
