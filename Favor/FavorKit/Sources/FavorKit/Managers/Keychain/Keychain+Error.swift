@@ -8,10 +8,9 @@
 import Foundation
 
 extension KeychainManager {
-
   enum KeychainError: Error {
+    case fetchError
     case creationError
     case transactionError
   }
-
 }

@@ -7,7 +7,7 @@
 
 extension KeychainManager {
 
-  private enum Constants {
+  enum Constants {
     static let service: String = "com.favor.Favor.iOS.keychainManager"
   }
 
