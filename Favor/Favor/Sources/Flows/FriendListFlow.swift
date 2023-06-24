@@ -51,6 +51,7 @@ private extension FriendListFlow {
   func navigateToFriendList() -> FlowContributors {
     let friendListVC = FriendListViewController()
     let friendListReactor = FriendListViewReactor()
+    friendListVC.hidesBottomBarWhenPushed = true
     friendListVC.reactor = friendListReactor
     friendListVC.title = "내 친구"
     friendListVC.viewType = .list
