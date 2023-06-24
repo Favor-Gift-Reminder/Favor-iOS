@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/01/27.
 //
 
+import AuthenticationServices
 import OSLog
 import UIKit
 
@@ -20,6 +21,7 @@ final class AppFlow: Flow {
 
   var window: UIWindow // Comment this line.
   var root: Presentable { self.window } // Change to rootViewController
+  private let keychain = KeychainManager()
 
   /// Used only for testFlow.
   private lazy var rootViewController: BaseNavigationController = {
@@ -131,7 +133,26 @@ private extension AppFlow {
       os_log(.debug, "🏁 Signed in via 🍎 Apple: Navigating to tab bar flow.")
       return self.navigateToDashboard()
     default:
+      print(FTUXStorage.socialAuthType)
       return .none
+    }
+  }
+
+  func fetchAppleCredentialState() {
+    let appleIDProvider = ASAuthorizationAppleIDProvider()
+    guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) else { return }
+    let decodedUserID = String(decoding: userID, as: UTF8.self)
+    appleIDProvider.getCredentialState(forUserID: decodedUserID) { state, _ in
+      switch state {
+      case .authorized:
+        print("Authorized")
+      case .notFound, .revoked:
+        print("Need re-auth")
+      case .transferred:
+        break
+      @unknown default:
+        fatalError()
+      }
     }
   }
 }

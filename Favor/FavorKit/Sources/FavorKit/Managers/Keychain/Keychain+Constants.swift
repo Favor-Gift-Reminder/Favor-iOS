@@ -11,4 +11,7 @@ extension KeychainManager {
     static let service: String = "com.favor.Favor.iOS.keychainManager"
   }
 
+  public enum Accounts: String {
+    case userID = "com.favor.Favor.iOS.keychainManager.userID"
+  }
 }

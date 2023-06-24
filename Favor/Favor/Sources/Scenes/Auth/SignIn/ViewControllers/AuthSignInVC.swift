@@ -27,7 +27,9 @@ public final class AuthSignInViewController: BaseViewController, View {
   }
 
   // MARK: - Properties
-  
+
+  private let keychain = KeychainManager()
+
   // MARK: - UI Components
   
   private let emailTextField: FavorTextField = {
@@ -249,9 +251,23 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
     let userIdentifier = appleIDCredential.user
     let fullName = appleIDCredential.fullName
     let email = appleIDCredential.email
-
+    print(email, fullName)
     // Handle Sign Up Task
-
+    guard
+      let encodedUserID = userIdentifier.data(using: .utf8),
+      let reactor = self.reactor,
+      let email = email,
+      let familyName = fullName?.familyName,
+      let givenName = fullName?.givenName
+    else { return }
+    do {
+      try self.keychain.set(value: encodedUserID, account: KeychainManager.Accounts.userID.rawValue)
+      print("Hey")
+      FTUXStorage.socialAuthType = .apple
+      reactor.action.onNext(.signedInWithApple(email, familyName + givenName))
+    } catch {
+      print(error)
+    }
   }
 
   public func authorizationController(

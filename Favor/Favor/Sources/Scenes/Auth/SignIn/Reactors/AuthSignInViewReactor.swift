@@ -33,6 +33,8 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case signInButtonDidTap
     case socialSignInButtonDidTap(AuthMethod)
     case findPasswordButtonDidTap
+    // Social Login
+    case signedInWithApple(String, String)
   }
   
   public enum Mutation {
@@ -95,6 +97,10 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
+      return .empty()
+
+    case let .signedInWithApple(email, name):
+      print(email, name)
       return .empty()
     }
   }
