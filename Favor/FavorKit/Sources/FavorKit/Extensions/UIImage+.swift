@@ -22,6 +22,7 @@ extension UIImage {
     case done
     case edit
     case etc
+    case error
     case favor
     case filter
     case friend
