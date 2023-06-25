@@ -128,14 +128,11 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                   self.steps.accept(AppStep.setProfileIsRequired(user))
                   return .just(.updateLoading(false))
                 }
-                .catch { error in
-                  print(error)
+                .catch { _ in
                   return .just(.updateLoading(false))
                 }
             }
-            .catch { error in
-              let error = error as! APIError
-              print(error.description)
+            .catch { _ in
               return .just(.updateLoading(false))
             }
         ])
@@ -213,6 +210,14 @@ private extension AuthSignUpViewReactor {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
             single(.success(User(dto: responseDTO.data)))
           } catch {
+            do {
+              let errorResponseDTO: ErrorResponseDTO = try APIManager.decode(response.data)
+              let errorCode = errorResponseDTO.responseCode
+              let errorMessage = errorResponseDTO.responseMessage
+              os_log(.error, "💩 \(errorCode): \(errorMessage)")
+            } catch {
+              single(.failure(error))
+            }
             single(.failure(error))
           }
         }, onFailure: { error in

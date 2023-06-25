@@ -31,12 +31,10 @@ public final class Networking<TargetType: BaseTargetType> {
   
   // MARK: - Functions
   
-  public func request(
-    _ target: TargetType
-  ) -> Observable<Response> {
+  public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
-      .filterSuccessfulStatusCodes()
+//      .filterSuccessfulStatusCodes()
       .catch(self.handleInternetConnection)
       .catch(self.handleTimeOut)
       .catch(self.handleREST)
