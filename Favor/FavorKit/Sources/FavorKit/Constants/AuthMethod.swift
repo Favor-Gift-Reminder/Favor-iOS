@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum AuthMethod: CaseIterable {
+public enum AuthMethod: CaseIterable, Codable {
   case email
   case kakao
   case naver
