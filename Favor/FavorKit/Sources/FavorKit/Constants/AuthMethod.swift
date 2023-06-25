@@ -14,7 +14,7 @@ public enum AuthMethod: CaseIterable {
   case apple
   case undefined
 
-  public var isValid: Bool {
+  public var isSocialAuth: Bool {
     switch self {
     case .kakao, .naver, .apple: return true
     case .email, .undefined: return false

@@ -70,7 +70,7 @@ public final class AuthSignInViewController: BaseViewController, View {
     stackView.axis = .horizontal
     stackView.spacing = 20
     AuthMethod.allCases.forEach {
-      if $0.isValid {
+      if $0.isSocialAuth {
         stackView.addArrangedSubview(SocialAuthButton($0))
       }
     }
