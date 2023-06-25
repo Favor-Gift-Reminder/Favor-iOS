@@ -31,7 +31,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 private extension SceneDelegate {
-  
   func enableNavigateLog() {
     self.coordinator.rx.didNavigate.subscribe(onNext: { flow, step in
       let message = "➡️ Navigate to flow = \(flow) and step = \(step)"

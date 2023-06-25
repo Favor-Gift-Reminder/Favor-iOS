@@ -7,6 +7,7 @@
 
 import OSLog
 
+import FavorKit
 import Moya
 import RxMoya
 import RxSwift
@@ -21,12 +22,25 @@ public final class Networking<TargetType: BaseTargetType> {
 
   // MARK: - Properties
 
-  let provider: MoyaProvider<TargetType>
+  private let provider: MoyaProvider<TargetType>
+  private let keychain: KeychainManager
 
   // MARK: - Initializer
 
   public init() {
-    self.provider = MoyaProvider<TargetType>()
+    let keychain = KeychainManager()
+    self.keychain = keychain
+    let authPlugin = AccessTokenPlugin { _ in
+      guard
+        let data = try? keychain.get(account: KeychainManager.Accounts.accessToken.rawValue),
+        let decodedString = String(data: data, encoding: .utf8)
+      else {
+        os_log(.info, "Failed to fetch access token from keychain.")
+        return ""
+      }
+      return decodedString
+    }
+    self.provider = MoyaProvider<TargetType>(plugins: [authPlugin])
   }
   
   // MARK: - Functions
@@ -34,7 +48,7 @@ public final class Networking<TargetType: BaseTargetType> {
   public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
-//      .filterSuccessfulStatusCodes()
+      .filterSuccessfulStatusCodes()
       .catch(self.handleInternetConnection)
       .catch(self.handleTimeOut)
       .catch(self.handleREST)

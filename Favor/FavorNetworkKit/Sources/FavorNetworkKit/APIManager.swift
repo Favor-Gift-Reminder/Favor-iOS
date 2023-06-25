@@ -16,7 +16,6 @@ public class APIManager {
   private typealias JSON = [String: Any]
   
   public enum HeaderType {
-    case jsonToken
     case json
     case multiPart
   }
@@ -81,10 +80,6 @@ extension APIManager {
 
   public static func header(for header: HeaderType) -> [String: String] {
     switch header {
-    case .jsonToken: return [
-      "Content-Type": "application/json",
-      "X-AUTH-TOKEN": "" // TODO: JWT 토큰 추가
-    ]
     case .json: return ["Content-Type": "application/json"]
     case .multiPart: return ["Content-Type": "multipart/form-data"]
     }

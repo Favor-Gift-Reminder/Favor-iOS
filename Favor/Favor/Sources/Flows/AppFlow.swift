@@ -128,9 +128,11 @@ private extension AppFlow {
   func handleSignedInNavigate() -> FlowContributors {
     switch FTUXStorage.socialAuthType {
     case .email: // Email 로그인
+      // TODO: 자동 로그인
       return self.navigateToDashboard()
     case .apple: // Apple 로그인
       os_log(.debug, "🏁 Signed in via 🍎 Apple: Navigating to tab bar flow.")
+      // TODO: `fetchAppleCredentialState` 사용해 애플 로그인 상태 확인 후 자동 로그인
       return self.navigateToDashboard()
     default:
       print(FTUXStorage.socialAuthType)

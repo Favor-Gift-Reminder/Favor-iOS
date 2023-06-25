@@ -13,5 +13,6 @@ extension KeychainManager {
 
   public enum Accounts: String {
     case userID = "com.favor.Favor.iOS.keychainManager.userID"
+    case accessToken = "com.favor.Favor.iOS.kehchainManager.accessToken"
   }
 }

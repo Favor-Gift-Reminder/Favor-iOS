@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     #if DEBUG
 //    FTUXStorage.isSignedIn = true
-    UserInfoStorage.userNo = 26
+//    UserInfoStorage.userNo = 26
     #endif
     print("Current User: \(UserInfoStorage.userNo)")
     

@@ -47,7 +47,10 @@ extension UserAPI {
 
     case .getAllReminderList(let userNo):
       return "/users/reminder-list/\(userNo)"
-      
+
+    case .postSignIn:
+      return "/users/sign-in"
+
     case .postSignUp:
       return "/users/sign-up"
     }

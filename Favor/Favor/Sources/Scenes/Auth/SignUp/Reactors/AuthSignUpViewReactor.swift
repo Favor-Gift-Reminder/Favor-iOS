@@ -21,6 +21,7 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
   public var initialState: State
   public var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
+  private let keychain = KeychainManager()
 
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
@@ -122,15 +123,33 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
           self.requestSignUp(email: email, password: password)
             .asObservable()
             .flatMap { user -> Observable<Mutation> in
-              return self.updateUser(with: user)
-                .asObservable()
-                .flatMap { user -> Observable<Mutation> in
-                  self.steps.accept(AppStep.setProfileIsRequired(user))
-                  return .just(.updateLoading(false))
-                }
-                .catch { _ in
-                  return .just(.updateLoading(false))
-                }
+              return .concat([
+                self.updateUser(with: user)
+                  .asObservable()
+                  .flatMap { user -> Observable<Mutation> in
+                    self.steps.accept(AppStep.setProfileIsRequired(user))
+                    return .empty()
+                  }
+                  .catch { _ in
+                    return .just(.updateLoading(false))
+                  },
+                self.requestSignIn(email: email, password: password)
+                  .asObservable()
+                  .flatMap { token -> Observable<Mutation> in
+                    do {
+                      FTUXStorage.socialAuthType = .email
+                      guard let tokenData = token.data(using: .utf8) else { return .empty() }
+                      try self.keychain.set(
+                        value: tokenData,
+                        account: KeychainManager.Accounts.accessToken.rawValue
+                      )
+                    } catch {
+                      os_log(.error, "\(error)")
+                      return .just(.updateLoading(false))
+                    }
+                    return .just(.updateLoading(false))
+                  }
+                ])
             }
             .catch { _ in
               return .just(.updateLoading(false))
@@ -245,6 +264,29 @@ private extension AuthSignUpViewReactor {
 
       return Disposables.create {
         task.cancel()
+      }
+    }
+  }
+
+  func requestSignIn(email: String, password: String) -> Single<String> {
+    return Single<String>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.postSignIn(email: email, password: password))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<SignInResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.token))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
       }
     }
   }
