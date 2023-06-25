@@ -43,9 +43,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
     }
   }
   
-  override func setupNavigationBar() {
-    super.setupNavigationBar()
-    
+  private func setupNavigationBar() {
     self.navigationItem.rightBarButtonItem = self.moreButton.toBarButtonItem()
   }
   

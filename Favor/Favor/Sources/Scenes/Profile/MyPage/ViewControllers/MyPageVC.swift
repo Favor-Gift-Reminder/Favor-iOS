@@ -43,6 +43,12 @@ final class MyPageViewController: BaseProfileViewController, View {
   
   // MARK: - Life Cycle
   
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    self.setupNavigationBar()
+  }
+  
   // MARK: - Binding
   
   func bind(reactor: MyPageViewReactor) {
@@ -121,14 +127,13 @@ final class MyPageViewController: BaseProfileViewController, View {
   }
   
   // MARK: - Functions
-
-  override func setupNavigationBar() {
-    super.setupNavigationBar()
-
+  
+  private func setupNavigationBar() {
+    self.navigationController?.setNavigationBarHidden(false, animated: true)
     let rightBarItems = [self.settingButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
     self.navigationItem.setRightBarButtonItems(rightBarItems, animated: false)
   }
-
+  
   override func injectReactor(to view: UICollectionReusableView) {
     guard
       let view = view as? ProfileGiftStatsCollectionHeader,
@@ -144,5 +149,4 @@ final class MyPageViewController: BaseProfileViewController, View {
 
     reactor.action.onNext(.headerRightButtonDidTap(section))
   }
-
 }

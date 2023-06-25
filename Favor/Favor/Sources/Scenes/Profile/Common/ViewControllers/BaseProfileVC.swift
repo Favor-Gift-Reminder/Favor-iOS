@@ -155,25 +155,8 @@ public class BaseProfileViewController: BaseViewController {
 
     self.composer.compose()
   }
-
-  public override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-
-    self.setupNavigationBar()
-  }
-
+  
   // MARK: - Functions
-
-  public func setupNavigationBar() {
-    guard let navigationController = self.navigationController as? BaseNavigationController else { return }
-    
-    navigationController.setNavigationBarHidden(false, animated: false)
-
-    let appearance = UINavigationBarAppearance()
-    appearance.configureWithTransparentBackground()
-    navigationController.navigationBar.standardAppearance = appearance
-    navigationController.navigationBar.scrollEdgeAppearance = appearance
-  }
   
   /// CollectionView의 contentOffset에 따라 ProfileView의 크기와 흐림도를 업데이트합니다.
   /// - Parameters:
