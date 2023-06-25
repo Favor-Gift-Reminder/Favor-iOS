@@ -58,6 +58,7 @@ extension FriendPageFlow {
     let friendPageVC = FriendPageViewController()
     let reactor = FriendPageViewReactor(friend)
     friendPageVC.reactor = reactor
+    friendPageVC.hidesBottomBarWhenPushed = true
     
     self.rootViewController.setupNavigationAppearance()
     self.rootViewController.pushViewController(friendPageVC, animated: true)

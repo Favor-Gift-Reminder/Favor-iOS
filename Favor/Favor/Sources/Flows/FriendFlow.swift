@@ -39,6 +39,8 @@ private extension FriendFlow {
     let viewController = FriendManagementViewController(viewControllerType)
     let reactor = FriendManagementViewReactor()
     viewController.reactor = reactor
+    viewController.hidesBottomBarWhenPushed = true
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: viewController,
       withNextStepper: reactor

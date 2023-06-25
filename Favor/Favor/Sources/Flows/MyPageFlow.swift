@@ -78,7 +78,7 @@ extension MyPageFlow {
       self.rootViewController.setupNavigationAppearance()
       self.rootViewController.pushViewController(editMyPageVC, animated: true)
     }
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: editMyPageVC,
       withNextStepper: editMyPageReactor
@@ -88,7 +88,7 @@ extension MyPageFlow {
   private func navigateToSetting() -> FlowContributors {
     return .none
   }
-
+  
   private func navigateToAnniversaryList() -> FlowContributors {
     let anniversaryListFlow = AnniversaryFlow(rootViewController: self.rootViewController)
     
