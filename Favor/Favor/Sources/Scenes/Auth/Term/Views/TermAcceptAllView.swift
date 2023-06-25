@@ -12,38 +12,58 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-final class TermAcceptAllView: UIView {
+public protocol TermAcceptAllViewDelegate: AnyObject {
+  func acceptAllDidSelected()
+}
+
+public final class TermAcceptAllView: UIView {
 
   // MARK: - Constants
 
+  private enum Typo {
+    static let agreeAllTitle: String = "약관 전체동의"
+  }
+
   // MARK: - Properties
+
+  public weak var delegate: TermAcceptAllViewDelegate?
 
   // MARK: - UI Components
 
-  private lazy var checkButton: UIButton = {
+  private let checkButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.image = UIImage(systemName: "checkmark.square")
-    config.contentInsets = NSDirectionalEdgeInsets(
-      top: 6.5,
-      leading: 6.5,
-      bottom: 6.5,
-      trailing: 6.5
-    )
-    config.baseForegroundColor = .favorColor(.icon)
+    config.background.backgroundColor = .clear
 
     let button = UIButton(configuration: config)
-    button.isUserInteractionEnabled = false
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.image = .favorIcon(.uncheck)?
+          .withRenderingMode(.alwaysTemplate)
+        button.configuration?.baseForegroundColor = .favorColor(.line2)
+      case .selected:
+        button.configuration?.image = .favorIcon(.checkFilled)?
+          .withRenderingMode(.alwaysTemplate)
+        button.configuration?.baseForegroundColor = .favorColor(.main)
+      default:
+        break
+      }
+    }
     return button
   }()
 
-  private lazy var titleLabel: UILabel = {
+  private let titleLabel: UILabel = {
     let label = UILabel()
-    label.font = .favorFont(.regular, size: 14)
-    label.text = "약관 전체동의"
+    label.font = .favorFont(.regular, size: 16)
+    label.text = Typo.agreeAllTitle
     return label
   }()
 
-  fileprivate lazy var button = UIButton()
+  private lazy var button: UIButton = {
+    let button = UIButton()
+    button.addTarget(self, action: #selector(self.buttonDidTap), for: .touchUpInside)
+    return button
+  }()
 
   // MARK: - Initializer
 
@@ -61,21 +81,21 @@ final class TermAcceptAllView: UIView {
   // MARK: - Functions
 
   public func updateCheckButton(isAllAccepted: Bool) {
-    let image = isAllAccepted ? "checkmark.square.fill" : "checkmark.square"
-    self.checkButton.configuration?.image = UIImage(systemName: image)
+    self.checkButton.isSelected = isAllAccepted
+  }
+
+  @objc
+  func buttonDidTap() {
+    self.delegate?.acceptAllDidSelected()
   }
 }
 
 // MARK: - UI Setup
 
 extension TermAcceptAllView: BaseView {
-  func setupStyles() {
-    self.frame = self.frame.inset(
-      by: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-    )
-  }
+  public func setupStyles() { }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     [
       self.checkButton,
       self.titleLabel,
@@ -85,7 +105,7 @@ extension TermAcceptAllView: BaseView {
     }
   }
 
-  func setupConstraints() {
+  public func setupConstraints() {
     self.checkButton.snp.makeConstraints { make in
       make.leading.directionalVerticalEdges.equalToSuperview()
       make.width.equalTo(self.checkButton.snp.height)
@@ -100,13 +120,5 @@ extension TermAcceptAllView: BaseView {
     self.button.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
-  }
-}
-
-extension Reactive where Base: TermAcceptAllView {
-  @MainActor
-  var tap: ControlEvent<()> {
-    let source = base.button.rx.tap
-    return ControlEvent(events: source)
   }
 }

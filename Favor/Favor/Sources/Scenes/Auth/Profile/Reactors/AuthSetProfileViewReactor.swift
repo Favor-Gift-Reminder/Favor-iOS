@@ -1,5 +1,5 @@
 //
-//  SetProfileViewReactor.swift
+//  AuthSetProfileViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/16.
@@ -14,44 +14,38 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class SetProfileViewReactor: Reactor, Stepper {
-  
+public final class AuthSetProfileViewReactor: Reactor, Stepper {
+
   // MARK: - Properties
   
-  var initialState: State
-  let pickerManager: PHPickerManager
-  var steps = PublishRelay<Step>()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
+  private let pickerManager = PHPickerManager()
   private let workbench = RealmWorkbench()
-  private let networking = UserNetworking()
 
   // Global States
   let isNameEmpty = BehaviorRelay<Bool>(value: true)
   let idValidate = BehaviorRelay<ValidationResult>(value: .empty)
   
-  enum Action {
-    case viewNeedsLoaded
+  public enum Action {
     case profileImageButtonDidTap
     case nameTextFieldDidUpdate(String)
     case idTextFieldDidUpdate(String)
-    case nextFlowRequested
+    case nextButtonDidTap
   }
   
-  enum Mutation {
+  public enum Mutation {
     case updateProfileImage(UIImage?)
-    case updateUserNo(Int)
-    case updateUserName(String)
-    case updateUserId(String)
+    case updateUser(User)
     case updateNameValidationResult(Bool)
     case updateIDValidationResult(ValidationResult)
     case validateNextButton(Bool)
     case updateLoading(Bool)
   }
   
-  struct State {
+  public struct State {
     var profileImage: UIImage?
-    var userNo: Int = .min
-    var userName: String = ""
-    var userId: String = ""
+    var user: User
     var nameValidationResult: Bool = true
     var idValidationResult: ValidationResult = .empty
     var isNextButtonEnabled: Bool = false
@@ -60,26 +54,14 @@ final class SetProfileViewReactor: Reactor, Stepper {
   
   // MARK: - Initializer
   
-  init(pickerManager: PHPickerManager) {
-    self.pickerManager = pickerManager
-    self.initialState = State()
+  init(_ user: User) {
+    self.initialState = State(user: user)
   }
   
   // MARK: - Functions
   
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewNeedsLoaded:
-      return self.fetchStagedUserInfo()
-        .asObservable()
-        .flatMap { user -> Observable<Mutation> in
-          return .concat([
-            .just(.updateUserNo(user.identifier)),
-            .just(.updateUserName(user.name)),
-            .just(.updateUserId(user.searchID))
-          ])
-        }
-
     case .profileImageButtonDidTap:
       self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
       return Observable<Mutation>.empty()
@@ -87,44 +69,41 @@ final class SetProfileViewReactor: Reactor, Stepper {
     case .nameTextFieldDidUpdate(let name):
       os_log(.debug, "Name TextField did update: \(name).")
       self.isNameEmpty.accept(name.isEmpty)
+      var newUser = self.currentState.user
+      newUser.name = name
       return .concat([
         .just(.updateNameValidationResult(name.isEmpty)),
-        .just(.updateUserName(name))
+        .just(.updateUser(newUser))
       ])
 
     case .idTextFieldDidUpdate(let id):
       os_log(.debug, "ID TextField did update: \(id).")
       let idValidationResult = AuthValidationManager(type: .id).validate(id)
       self.idValidate.accept(idValidationResult)
+      var newUser = self.currentState.user
+      newUser.searchID = id
       return .concat([
-        .just(.updateUserId(id)),
+        .just(.updateUser(newUser)),
         .just(.updateIDValidationResult(idValidationResult))
       ])
       
-    case .nextFlowRequested:
+    case .nextButtonDidTap:
       if self.currentState.isNextButtonEnabled {
-        let userNo = self.currentState.userNo
-        let userId = self.currentState.userId
-        let userName = self.currentState.userName
-        
         return .concat([
           .just(.updateLoading(true)),
-          self.networking.request(.patchProfile(
-            userId: userId,
-            name: userName,
-            userNo: userNo
-          ))
-          .flatMap { _ -> Observable<Mutation> in
-            self.steps.accept(AppStep.termIsRequired(userName))
-            return .just(.updateLoading(false))
-          }
+          self.requestPatchProfile(self.currentState.user)
+            .asObservable()
+            .flatMap { user -> Observable<Mutation> in
+              self.steps.accept(AppStep.termIsRequired(user))
+              return .just(.updateLoading(false))
+            }
         ])
       }
       return .empty()
     }
   }
   
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+  public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     let pickerMutation = self.pickerManager.pickedContents
       .flatMap({ (picker) -> Observable<Mutation> in
         return .just(.updateProfileImage(picker.first))
@@ -142,27 +121,21 @@ final class SetProfileViewReactor: Reactor, Stepper {
     return Observable.merge(mutation, pickerMutation, combineValidationsMutation)
   }
   
-  func reduce(state: State, mutation: Mutation) -> State {
+  public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
     
     switch mutation {
     case .updateProfileImage(let image):
       newState.profileImage = image
 
-    case .updateUserNo(let userNo):
-      newState.userNo = userNo
-
-    case .updateUserName(let userName):
-      newState.userName = userName
+    case .updateUser(let user):
+      newState.user = user
 
     case .updateNameValidationResult(let isNameValid):
       newState.nameValidationResult = isNameValid
 
     case .updateIDValidationResult(let isIDValid):
       newState.idValidationResult = isIDValid
-      
-    case .updateUserId(let id):
-      newState.userId = id
 
     case .validateNextButton(let isNextButtonEnabled):
       newState.isNextButtonEnabled = isNextButtonEnabled
@@ -178,19 +151,27 @@ final class SetProfileViewReactor: Reactor, Stepper {
 
 // MARK: - Privates
 
-private extension SetProfileViewReactor {
-  func fetchStagedUserInfo() -> Single<User> {
+private extension AuthSetProfileViewReactor {
+  func requestPatchProfile(_ user: User) -> Single<User> {
     return Single<User>.create { single in
-      let task = Task {
-        guard let user = await self.workbench.values(UserObject.self).first else {
-          single(.failure(FavorError.optionalBindingFailure("UserObject")))
-          return
-        }
-        single(.success(User(realmObject: user)))
-      }
+      let networking = UserNetworking()
+      let disposable = networking.request(
+        .patchProfile(userId: user.searchID, name: user.name, userNo: user.identifier))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
+            single(.success(User(dto: responseDTO.data)))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
 
       return Disposables.create {
-        task.cancel()
+        disposable.dispose()
       }
     }
   }

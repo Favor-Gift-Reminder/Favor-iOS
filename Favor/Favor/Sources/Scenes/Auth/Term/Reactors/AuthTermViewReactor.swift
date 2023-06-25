@@ -1,64 +1,63 @@
 //
-//  TermViewReactor.swift
+//  AuthTermViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/02.
 //
 
-import Foundation
+import UIKit
 import OSLog
 
 import FavorKit
 import ReactorKit
-import Reusable
 import RxCocoa
 import RxDataSources
 import RxFlow
 
-final class TermViewReactor: Reactor, Stepper {
+public final class AuthTermViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
 
-  var initialState: State
-  var steps = PublishRelay<Step>()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
 
-  enum Action {
-    case viewDidLoad
+  public enum Action {
+    case viewNeedsLoaded
     case acceptAllDidTap
     case itemSelected(IndexPath)
-    case nextFlowRequested
+    case nextButtonDidTap
   }
 
-  enum Mutation {
-    case setupTermSection
-    case checkIfAllAccepted
+  public enum Mutation {
+    case updateTerms([Terms])
     case toggleAllTerms
-    case updateTermSection(IndexPath)
     case validateNextButton
   }
 
-  struct State {
+  public struct State {
+    var userProfile: UIImage?
     var userName: String
-    var termSections: [TermSection] = []
+    var terms: [Terms] = []
+    var termItems: [AuthTermSectionItem] = []
     var isAllAccepted: Bool = false
     var isNextButtonEnabled: Bool = false
   }
 
   // MARK: - Initializer
 
-  init(with userName: String) {
+  init(with user: User) {
     self.initialState = State(
-      userName: userName
+      userProfile: user.profilePhoto,
+      userName: user.name
     )
   }
 
-
   // MARK: - Functions
 
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .viewDidLoad:
-      return .just(.setupTermSection)
+    case .viewNeedsLoaded:
+      return .just(.updateTerms(self.fetchTerms()))
 
     case .acceptAllDidTap:
       return .concat([
@@ -67,13 +66,15 @@ final class TermViewReactor: Reactor, Stepper {
       ])
 
     case .itemSelected(let indexPath):
+      var terms = self.currentState.terms
+      terms[indexPath.item].isAccepted.toggle()
+      print(terms)
       return .concat([
-        .just(.updateTermSection(indexPath)),
-        .just(.checkIfAllAccepted),
+        .just(.updateTerms(terms)),
         .just(.validateNextButton)
       ])
       
-    case .nextFlowRequested:
+    case .nextButtonDidTap:
       os_log(.debug, "Next button did tap.")
       if self.currentState.isNextButtonEnabled {
         FTUXStorage.isSignedIn = true
@@ -83,49 +84,48 @@ final class TermViewReactor: Reactor, Stepper {
     }
   }
 
-  func reduce(state: State, mutation: Mutation) -> State {
+  public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
     switch mutation {
-    case .setupTermSection:
-      newState.termSections = self.setupTermSection()
-
-    case .checkIfAllAccepted:
-      newState.isAllAccepted = true
-      for section in newState.termSections {
-        for term in section.items where !term.isAccepted {
-          newState.isAllAccepted = false
-        }
-      }
+    case .updateTerms(let terms):
+      newState.terms = terms
 
     case .toggleAllTerms:
       newState.isAllAccepted.toggle()
-      for section in 0 ..< newState.termSections.count {
-        for row in 0 ..< newState.termSections[section].items.count {
-          newState.termSections[section].items[row].isAccepted = newState.isAllAccepted
-        }
+      newState.terms = state.terms.map { term in
+        var newTerm = term
+        newTerm.isAccepted = newState.isAllAccepted
+        return newTerm
       }
 
-    case .updateTermSection(let indexPath):
-      newState.termSections[indexPath.section].items[indexPath.row].isAccepted.toggle()
-
     case .validateNextButton:
-      newState.isNextButtonEnabled = true
-      for section in newState.termSections {
-        for term in section.items where term.isRequired && !term.isAccepted {
-          newState.isNextButtonEnabled = false
-        }
+      if state.terms.first(where: { $0.isRequired && !$0.isAccepted }) != nil {
+        newState.isNextButtonEnabled = false
+      } else {
+        newState.isNextButtonEnabled = true
       }
     }
 
     return newState
   }
+
+  public func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+
+      newState.termItems = state.terms.map { AuthTermSectionItem(terms: $0) }
+      newState.isAllAccepted = state.terms.filter { !$0.isAccepted }.isEmpty
+
+      return newState
+    }
+  }
 }
 
 // MARK: - Privates
 
-private extension TermViewReactor {
-  func setupTermSection() -> [TermSection] {
+private extension AuthTermViewReactor {
+  func fetchTerms() -> [Terms] {
     typealias JSON = [String: Any]
 
     guard let filePath = Bundle.main.path(forResource: "Term-Info", ofType: "plist") else {
@@ -159,7 +159,6 @@ private extension TermViewReactor {
       decodedTerms.append(term)
     }
 
-    let termSection = TermSection(items: decodedTerms.sorted(by: { $0.index < $1.index }))
-    return [termSection]
+    return decodedTerms.sorted(by: { $0.index < $1.index })
   }
 }

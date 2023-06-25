@@ -1,5 +1,5 @@
 //
-//  SignUpViewReactor.swift
+//  AuthSignUpViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/16.
@@ -13,27 +13,27 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class SignUpViewReactor: Reactor, Stepper {
-  
+public final class AuthSignUpViewReactor: Reactor, Stepper {
+
   // MARK: - Properties
   
-  var initialState: State
-  var steps = PublishRelay<Step>()
-  private let workbench = try! RealmWorkbench()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
+  private let workbench = RealmWorkbench()
 
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
   let passwordValidate = BehaviorRelay<ValidationResult>(value: .empty)
   let confirmPasswordValidate = BehaviorRelay<ValidationResult>(value: .empty)
   
-  enum Action {
+  public enum Action {
     case emailTextFieldDidUpdate(String)
     case passwordTextFieldDidUpdate(String)
     case confirmPasswordTextFieldDidUpdate(String)
-    case nextFlowRequested
+    case nextButtonDidTap
   }
   
-  enum Mutation {
+  public enum Mutation {
     // Email
     case updateEmail(String)
     case updateEmailValidationResult(ValidationResult)
@@ -48,7 +48,7 @@ final class SignUpViewReactor: Reactor, Stepper {
     case updateLoading(Bool)
   }
   
-  struct State {
+  public struct State {
     // Email
     var email: String = ""
     var emailValidationResult: ValidationResult = .empty
@@ -71,7 +71,7 @@ final class SignUpViewReactor: Reactor, Stepper {
   
   // MARK: - Functions
   
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailTextFieldDidUpdate(let email):
       os_log(.debug, "Email TextField did update: \(email)")
@@ -109,25 +109,20 @@ final class SignUpViewReactor: Reactor, Stepper {
         .just(.updateConfirmPasswordValidationResult(confirmPasswordValidationResult))
       ])
       
-    case .nextFlowRequested:
+    case .nextButtonDidTap:
       if self.currentState.isNextButtonEnabled {
-        let networking = UserNetworking()
         let email = self.currentState.email
         let password = self.currentState.password
 
         return .concat([
           .just(.updateLoading(true)),
-          networking.request(.postSignUp(email: email, password: password))
+          self.requestSignUp(email: email, password: password)
             .asObservable()
-            .catch({ error in
-              print(error)
-              return .empty()
-            })
-            .flatMap { response -> Observable<Mutation> in
-              return self.refineAndUpdateUser(with: response.data)
+            .flatMap { user -> Observable<Mutation> in
+              return self.updateUser(with: user)
                 .asObservable()
-                .flatMap { _ -> Observable<Mutation> in
-                  self.steps.accept(AppStep.setProfileIsRequired)
+                .flatMap { user -> Observable<Mutation> in
+                  self.steps.accept(AppStep.setProfileIsRequired(user))
                   return .just(.updateLoading(false))
                 }
             }
@@ -137,7 +132,7 @@ final class SignUpViewReactor: Reactor, Stepper {
     }
   }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+  public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     let combineValidationsMutation: Observable<Mutation> = .combineLatest(
       self.emailValidate,
       self.passwordValidate,
@@ -156,7 +151,7 @@ final class SignUpViewReactor: Reactor, Stepper {
     return Observable.of(mutation, combineValidationsMutation).merge()
   }
   
-  func reduce(state: State, mutation: Mutation) -> State {
+  public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
     
     switch mutation {
@@ -191,16 +186,38 @@ final class SignUpViewReactor: Reactor, Stepper {
 
 // MARK: - Privates
 
-private extension SignUpViewReactor {
-  func refineAndUpdateUser(with userData: Data) -> Single<()> {
-    return Single<()>.create { single in
+private extension AuthSignUpViewReactor {
+  func requestSignUp(email: String, password: String) -> Single<User> {
+    return Single<User>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.postSignUp(email: email, password: password))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
+            single(.success(User(dto: responseDTO.data)))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+
+  func updateUser(with user: User) -> Single<User> {
+    return Single<User>.create { single in
       let task = Task {
         do {
-          let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
           try await self.workbench.write { transaction in
-            transaction.update(User(dto: responseDTO.data).realmObject(), update: .all)
+            transaction.update(user.realmObject(), update: .all)
           }
-          single(.success(()))
+          single(.success(user))
         } catch {
           single(.failure(error))
         }

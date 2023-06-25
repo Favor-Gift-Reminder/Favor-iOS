@@ -1,5 +1,5 @@
 //
-//  SignUpVC.swift
+//  AuthSignUpVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/16.
@@ -13,7 +13,7 @@ import RxCocoa
 import RxGesture
 import SnapKit
 
-final class SignUpViewController: BaseViewController, View {
+public final class AuthSignUpViewController: BaseViewController, View {
   
   // MARK: - Constants
 
@@ -22,21 +22,28 @@ final class SignUpViewController: BaseViewController, View {
     static let textFieldSpacing = 32.0
     static let bottomSpacing = 32.0
   }
-  
+
+  private enum Typo {
+    static let emailPlaceholder: String = "이메일"
+    static let passwordPlaceholder: String = "비밀번호"
+    static let passwordValidatePlaceholder: String = "비밀번호 확인"
+    static let nextButtonTitle: String = "다음"
+  }
+
   // MARK: - Properties
   
   // MARK: - UI Components
 
-  private lazy var scrollView: UIScrollView = {
+  private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsVerticalScrollIndicator = false
     scrollView.showsHorizontalScrollIndicator = false
     return scrollView
   }()
   
-  private lazy var emailTextField: FavorTextField = {
+  private let emailTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "이메일"
+    textField.placeholder = Typo.emailPlaceholder
     textField.updateMessageLabel(
       AuthValidationManager(type: .email).description(for: .empty),
       state: .normal,
@@ -50,40 +57,38 @@ final class SignUpViewController: BaseViewController, View {
   
   private lazy var pwTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "비밀번호"
+    textField.placeholder = Typo.passwordPlaceholder
     textField.updateMessageLabel(
       AuthValidationManager(type: .password).description(for: .empty),
       state: .normal,
       animated: false
     )
     textField.isSecureField = true
-//    textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .next
     return textField
   }()
   
-  private lazy var pwValidateTextField: FavorTextField = {
+  private let pwValidateTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "비밀번호 확인"
+    textField.placeholder = Typo.passwordValidatePlaceholder
     textField.updateMessageLabel(
       AuthValidationManager(type: .confirmPassword).description(for: .empty),
       state: .normal,
       animated: false
     )
     textField.isSecureField = true
-//    textField.textField.textContentType = .newPassword
     textField.textField.returnKeyType = .done
     return textField
   }()
   
-  private lazy var nextButton: FavorLargeButton = {
-    let button = FavorLargeButton(with: .main("다음"))
+  private let nextButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main(Typo.nextButtonTitle))
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
-        button.configuration = FavorLargeButtonType.main("다음").configuration
+        button.configuration = FavorLargeButtonType.main(Typo.nextButtonTitle).configuration
       case .disabled:
-        button.configuration = FavorLargeButtonType.gray("다음").configuration
+        button.configuration = FavorLargeButtonType.gray(Typo.nextButtonTitle).configuration
       default:
         break
       }
@@ -92,7 +97,7 @@ final class SignUpViewController: BaseViewController, View {
     return button
   }()
   
-  private lazy var textFieldStack: UIStackView = {
+  private let textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = Metric.textFieldSpacing
@@ -101,16 +106,16 @@ final class SignUpViewController: BaseViewController, View {
   
   // MARK: - Life Cycle
 
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.emailTextField.becomeFirstResponder()
   }
   
   // MARK: - Binding
 
-  func bind(reactor: SignUpViewReactor) {
+  public func bind(reactor: AuthSignUpViewReactor) {
     // Action
-    Observable.just(())
+    self.rx.viewDidLoad
       .bind(with: self, onNext: { owner, _ in
         owner.emailTextField.becomeFirstResponder()
       })
@@ -176,19 +181,19 @@ final class SignUpViewController: BaseViewController, View {
         self?.scrollView.scroll(to: .zero)
       })
       .delay(.milliseconds(500), scheduler: MainScheduler.instance)
-      .map { Reactor.Action.nextFlowRequested }
+      .map { Reactor.Action.nextButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tap
-      .map { Reactor.Action.nextFlowRequested }
+      .map { Reactor.Action.nextButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.scrollView.rx.tapGesture()
       .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: {  owner, _ in
+      .asDriver(onErrorRecover: { _ in return .never() })
+      .drive(with: self, onNext: { owner, _ in
         owner.view.endEditing(true)
         owner.scrollView.scroll(to: .zero)
       })
@@ -196,7 +201,7 @@ final class SignUpViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.emailValidationResult }
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .never() })
       .distinctUntilChanged()
       .skip(1)
       .drive(with: self, onNext: { owner, validationResult in
@@ -216,7 +221,7 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.passwordValidationResult }
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .never() })
       .distinctUntilChanged()
       .skip(1)
       .drive(with: self, onNext: { owner, validationResult in
@@ -236,7 +241,7 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.confirmPasswordValidationResult }
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .never() })
       .distinctUntilChanged()
       .skip(1)
       .drive(with: self, onNext: { owner, validationResult in
@@ -256,7 +261,7 @@ final class SignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.isNextButtonEnabled }
-      .asDriver(onErrorRecover: { _ in return .empty()})
+      .asDriver(onErrorRecover: { _ in return .never()})
       .distinctUntilChanged()
       .drive(with: self, onNext: { owner, isButtonEnabled in
         owner.nextButton.configurationUpdateHandler = { button in
@@ -273,12 +278,8 @@ final class SignUpViewController: BaseViewController, View {
   // MARK: - Functions
   
   // MARK: - UI Setups
-
-  override func setupStyles() {
-    super.setupStyles()
-  }
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     [
       self.scrollView,
       self.nextButton
@@ -297,9 +298,9 @@ final class SignUpViewController: BaseViewController, View {
     self.scrollView.addSubview(self.textFieldStack)
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     self.scrollView.snp.makeConstraints { make in
-      make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
 

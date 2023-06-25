@@ -1,5 +1,5 @@
 //
-//  FindPasswordVC.swift
+//  AuthFindPasswordVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/04.
@@ -13,7 +13,7 @@ import RxCocoa
 import RxGesture
 import SnapKit
 
-final class FindPasswordViewController: BaseViewController, View {
+public final class AuthFindPasswordViewController: BaseViewController, View {
 
   // MARK: - Constants
 
@@ -25,7 +25,7 @@ final class FindPasswordViewController: BaseViewController, View {
 
   // MARK: - UI Components
 
-  private lazy var textField: FavorTextField = {
+  private let textField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "이메일"
     textField.updateMessageLabel("가입 시 사용했던 이메일을 입력해주세요.")
@@ -35,21 +35,18 @@ final class FindPasswordViewController: BaseViewController, View {
     return textField
   }()
 
-  private lazy var nextButton: FavorLargeButton = {
-    let button = FavorLargeButton(with: .main("다음"))
-    return button
-  }()
+  private let nextButton = FavorLargeButton(with: .main("다음"))
 
   // MARK: - Life Cycle
 
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.textField.becomeFirstResponder()
   }
 
   // MARK: - Binding
 
-  func bind(reactor: FindPasswordViewReactor) {
+  public func bind(reactor: AuthFindPasswordViewReactor) {
     // Action
     self.textField.rx.text
       .orEmpty
@@ -96,11 +93,11 @@ final class FindPasswordViewController: BaseViewController, View {
 
   // MARK: - UI Setups
 
-  override func setupStyles() {
+  public override func setupStyles() {
     super.setupStyles()
   }
 
-  override func setupLayouts() {
+  public override func setupLayouts() {
     [
       self.textField,
       self.nextButton
@@ -109,7 +106,7 @@ final class FindPasswordViewController: BaseViewController, View {
     }
   }
 
-  override func setupConstraints() {
+  public override func setupConstraints() {
     self.textField.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)

@@ -1,5 +1,5 @@
 //
-//  SetProfileVC.swift
+//  AuthSetProfileVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/16.
@@ -13,7 +13,7 @@ import RxCocoa
 import RxGesture
 import SnapKit
 
-final class SetProfileViewController: BaseViewController, View {
+public final class AuthSetProfileViewController: BaseViewController, View {
   
   // MARK: - Constants
 
@@ -24,19 +24,25 @@ final class SetProfileViewController: BaseViewController, View {
     static let textFieldSpacing = 32.0
     static let bottomSpacing = 32.0
   }
-  
+
+  private enum Typo {
+    static let namePlaceholder: String = "이름"
+    static let idPlaceholder: String = "유저 아이디"
+    static let nextButtonTitle: String = "다음"
+  }
+
   // MARK: - Properties
   
   // MARK: - UI Components
 
-  private lazy var scrollView: UIScrollView = {
+  private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsHorizontalScrollIndicator = false
     scrollView.showsVerticalScrollIndicator = false
     return scrollView
   }()
   
-  private lazy var profileImageButton: UIButton = {
+  private let profileImageButton: UIButton = {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line3)
     config.baseForegroundColor = .favorColor(.white)
@@ -49,7 +55,7 @@ final class SetProfileViewController: BaseViewController, View {
     return button
   }()
   
-  private lazy var plusImageView: UIButton = {
+  private let plusImageView: UIButton = {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
     config.baseForegroundColor = .favorColor(.white)
@@ -61,18 +67,18 @@ final class SetProfileViewController: BaseViewController, View {
     return button
   }()
   
-  private lazy var nameTextField: FavorTextField = {
+  private let nameTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "이름"
+    textField.placeholder = Typo.namePlaceholder
     textField.hasMessage = false
     textField.textField.textContentType = .nickname
     textField.textField.returnKeyType = .next
     return textField
   }()
   
-  private lazy var idTextField: FavorTextField = {
+  private let idTextField: FavorTextField = {
     let textField = FavorTextField()
-    textField.placeholder = "유저 아이디"
+    textField.placeholder = Typo.idPlaceholder
     textField.textField.keyboardType = .asciiCapable
     textField.textField.textContentType = .nickname
     textField.textField.returnKeyType = .done
@@ -91,40 +97,35 @@ final class SetProfileViewController: BaseViewController, View {
     return textField
   }()
   
-  private lazy var textFieldStack: UIStackView = {
+  private let textFieldStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = Metric.textFieldSpacing
     return stackView
   }()
   
-  private lazy var nextButton: FavorLargeButton = {
-    let button = FavorLargeButton(with: .main("다음"))
+  private let nextButton: FavorLargeButton = {
+    let button = FavorLargeButton(with: .main(Typo.nextButtonTitle))
     button.isEnabled = false
     return button
   }()
   
   // MARK: - Life Cycle
 
-  override func viewDidLoad() {
+  public override func viewDidLoad() {
     super.viewDidLoad()
     self.view.layoutIfNeeded()
   }
 
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.nameTextField.becomeFirstResponder()
   }
   
   // MARK: - Binding
   
-  func bind(reactor: SetProfileViewReactor) {
+  public func bind(reactor: AuthSetProfileViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
     self.profileImageButton.rx.tapWithHaptic
       .map { Reactor.Action.profileImageButtonDidTap }
       .bind(to: reactor.action)
@@ -162,13 +163,13 @@ final class SetProfileViewController: BaseViewController, View {
         self?.scrollView.scroll(to: .zero)
       })
       .delay(.milliseconds(500), scheduler: MainScheduler.instance)
-      .map { Reactor.Action.nextFlowRequested }
+      .map { Reactor.Action.nextButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
     self.nextButton.rx.tapWithHaptic
       .delay(.milliseconds(500), scheduler: MainScheduler.instance)
-      .map { Reactor.Action.nextFlowRequested }
+      .map { Reactor.Action.nextButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -190,9 +191,8 @@ final class SetProfileViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { $0.userName }
+    reactor.state.map { $0.user.name }
       .take(until: { !$0.isEmpty })
-      .concat(reactor.state.map { $0.userName }.take(1))
       .observe(on: MainScheduler.asyncInstance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, name in
@@ -200,9 +200,8 @@ final class SetProfileViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
 
-    reactor.state.map { $0.userId }
+    reactor.state.map { $0.user.searchID }
       .take(until: { !$0.isEmpty })
-      .concat(reactor.state.map { $0.userId }.take(1))
       .observe(on: MainScheduler.asyncInstance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, id in
@@ -246,7 +245,7 @@ final class SetProfileViewController: BaseViewController, View {
   
   // MARK: - UI Setups
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     [
       self.scrollView,
       self.nextButton
@@ -270,7 +269,7 @@ final class SetProfileViewController: BaseViewController, View {
     }
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     self.scrollView.snp.makeConstraints { make in
       make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)

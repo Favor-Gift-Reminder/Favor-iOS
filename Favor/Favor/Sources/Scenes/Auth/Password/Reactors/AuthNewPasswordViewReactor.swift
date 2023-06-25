@@ -1,5 +1,5 @@
 //
-//  NewPasswordViewReactor.swift
+//  AuthNewPasswordViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/04.
@@ -12,24 +12,24 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class NewPasswordViewReactor: Reactor, Stepper {
+public final class AuthNewPasswordViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
 
-  var initialState: State
-  var steps = PublishRelay<Step>()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
 
   // Global States
   let passwordValidate = BehaviorRelay<ValidationResult>(value: .empty)
   let confirmPasswordValidate = BehaviorRelay<ValidationResult>(value: .empty)
 
-  enum Action {
+  public enum Action {
     case passwordTextFieldDidUpdate(String)
     case confirmPasswordTextFieldDidUpdate(String)
     case nextFlowRequested
   }
 
-  enum Mutation {
+  public enum Mutation {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case updateConfirmPassword(String)
@@ -37,7 +37,7 @@ final class NewPasswordViewReactor: Reactor, Stepper {
     case validateDoneButton(Bool)
   }
 
-  struct State {
+  public struct State {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var confirmPassword: String = ""
@@ -54,7 +54,7 @@ final class NewPasswordViewReactor: Reactor, Stepper {
 
   // MARK: - Functions
 
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .nextFlowRequested:
       os_log(.debug, "Done button or keyboard done button did tap.")
@@ -90,7 +90,7 @@ final class NewPasswordViewReactor: Reactor, Stepper {
     }
   }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+  public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
       self.passwordValidate,
       self.confirmPasswordValidate,
@@ -104,7 +104,7 @@ final class NewPasswordViewReactor: Reactor, Stepper {
     return Observable.of(mutation, combineValidationsMutation).merge()
   }
 
-  func reduce(state: State, mutation: Mutation) -> State {
+  public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
     switch mutation {

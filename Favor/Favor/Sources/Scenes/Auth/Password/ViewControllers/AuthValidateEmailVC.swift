@@ -1,5 +1,5 @@
 //
-//  ValidateEmailCodeVC.swift
+//  AuthValidateEmailVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/04.
@@ -12,7 +12,7 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
-final class ValidateEmailCodeViewController: BaseViewController, View {
+public final class AuthValidateEmailViewController: BaseViewController, View {
 
   // MARK: - Constants
 
@@ -24,7 +24,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
   // MARK: - UI Components
 
-  private lazy var emailCodeTextField: FavorTextField = {
+  private let emailCodeTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "인증 코드"
     textField.updateMessageLabel("example@naver.com으로 전송된 6자리 코드를 입력하세요.")
@@ -33,7 +33,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
     return textField
   }()
 
-  private lazy var nextButton: FavorLargeButton = {
+  private let nextButton: FavorLargeButton = {
     let button = FavorLargeButton(with: .main("다음"))
     button.isEnabled = false
     return button
@@ -41,14 +41,14 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.emailCodeTextField.becomeFirstResponder()
   }
 
   // MARK: - Binding
 
-  func bind(reactor: ValidateEmailCodeViewReactor) {
+  public func bind(reactor: AuthValidateEmailViewReactor) {
     // Action
     self.emailCodeTextField.rx.text
       .orEmpty
@@ -89,11 +89,11 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
 
   // MARK: - UI Setups
 
-  override func setupStyles() {
+  public override func setupStyles() {
     super.setupStyles()
   }
 
-  override func setupLayouts() {
+  public override func setupLayouts() {
     [
       self.emailCodeTextField,
       self.nextButton
@@ -102,7 +102,7 @@ final class ValidateEmailCodeViewController: BaseViewController, View {
     }
   }
 
-  override func setupConstraints() {
+  public override func setupConstraints() {
     self.emailCodeTextField.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)

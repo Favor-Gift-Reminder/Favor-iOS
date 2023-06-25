@@ -1,5 +1,5 @@
 //
-//  TermCell.swift
+//  AuthTermCell.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/02.
@@ -8,63 +8,72 @@
 import UIKit
 
 import FavorKit
-import Reusable
 import RxCocoa
 import RxSwift
 import SnapKit
 
-final class TermCell: UITableViewCell, Reusable {
+public final class AuthTermCell: BaseCollectionViewCell {
 
   // MARK: - Constants
 
+  private enum Typo {
+    static let detailButtonTitle: String = "보기"
+  }
+
   // MARK: - Properties
 
-  var disposeBag = DisposeBag()
-  var url: String?
+  public var url: String?
 
   // MARK: - UI Components
 
-  private lazy var checkButton: UIButton = {
+  private let checkButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.image = UIImage(systemName: "checkmark.square")
-    config.contentInsets = NSDirectionalEdgeInsets(top: 6.5, leading: 6.5, bottom: 6.5, trailing: 6.5)
-    config.baseForegroundColor = .favorColor(.icon)
+    config.background.backgroundColor = .clear
 
     let button = UIButton(configuration: config)
+
+    button.configurationUpdateHandler = { button in
+      switch button.state {
+      case .normal:
+        button.configuration?.image = .favorIcon(.uncheck)?
+          .withRenderingMode(.alwaysTemplate)
+        button.configuration?.baseForegroundColor = .favorColor(.line2)
+      case .selected:
+        button.configuration?.image = .favorIcon(.checkFilled)?
+          .withRenderingMode(.alwaysTemplate)
+        button.configuration?.baseForegroundColor = .favorColor(.main)
+      default:
+        break
+      }
+    }
+
     button.isUserInteractionEnabled = false
     return button
   }()
 
-  private lazy var titleLabel: UILabel = {
+  private let titleLabel: UILabel = {
     let label = UILabel()
-    label.font = .favorFont(.regular, size: 14)
+    label.font = .favorFont(.regular, size: 16)
     return label
   }()
 
-  fileprivate lazy var openDetailButton: FavorPlainButton = {
-    let button = FavorPlainButton(with: .more("보기"))
+  private let openDetailButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.updateAttributedTitle(Typo.detailButtonTitle, font: .favorFont(.regular, size: 16))
+    config.baseForegroundColor = .favorColor(.main)
+
+    let button = UIButton(configuration: config)
     return button
   }()
 
   // MARK: - Initializer
 
-  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-    super.init(style: style, reuseIdentifier: reuseIdentifier)
+  override init(frame: CGRect) {
+    super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
-
-    self.openDetailButton.rx.tap
-      .asDriver(onErrorRecover: {_ in return .empty()})
-      .drive(with: self, onNext: { owner, _ in
-        guard
-          let urlString = owner.url,
-          let url = URL(string: urlString)
-        else { return }
-
-        UIApplication.shared.open(url)
-      })
-      .disposed(by: self.disposeBag)
+    self.bind()
   }
 
   required init?(coder: NSCoder) {
@@ -73,10 +82,22 @@ final class TermCell: UITableViewCell, Reusable {
 
   // MARK: - Binding
 
+  private func bind() {
+    self.openDetailButton.rx.tap
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        guard
+          let urlString = owner.url,
+          let url = URL(string: urlString)
+        else { return }
+        UIApplication.shared.open(url)
+      })
+      .disposed(by: self.disposeBag)
+  }
+
   public func bind(terms: Terms) {
     self.titleLabel.text = terms.title
-    let image = terms.isAccepted ? "checkmark.square.fill" : "checkmark.square"
-    self.checkButton.configuration?.image = UIImage(systemName: image)
+    self.checkButton.isSelected = terms.isAccepted
     self.url = terms.url
   }
 
@@ -86,15 +107,10 @@ final class TermCell: UITableViewCell, Reusable {
 
 // MARK: - UI Setup
 
-extension TermCell: BaseView {
-  func setupStyles() {
-    self.contentView.frame = self.contentView.frame.inset(
-      by: UIEdgeInsets(top: 8, left: 0, bottom: 8, right: 0)
-    )
-    self.selectionStyle = .none
-  }
+extension AuthTermCell: BaseView {
+  public func setupStyles() { }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     [
       self.checkButton,
       self.titleLabel,
@@ -104,7 +120,7 @@ extension TermCell: BaseView {
     }
   }
 
-  func setupConstraints() {
+  public func setupConstraints() {
     self.checkButton.snp.makeConstraints { make in
       make.leading.directionalVerticalEdges.equalToSuperview()
       make.width.equalTo(self.checkButton.snp.height)

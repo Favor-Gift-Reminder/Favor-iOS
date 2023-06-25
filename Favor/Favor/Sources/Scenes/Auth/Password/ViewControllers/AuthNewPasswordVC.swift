@@ -1,5 +1,5 @@
 //
-//  NewPasswordVC.swift
+//  AuthNewPasswordVC.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/04.
@@ -13,7 +13,7 @@ import RxCocoa
 import RxGesture
 import SnapKit
 
-final class NewPasswordViewController: BaseViewController, View {
+public final class AuthNewPasswordViewController: BaseViewController, View {
 
   // MARK: - Constants
 
@@ -26,14 +26,14 @@ final class NewPasswordViewController: BaseViewController, View {
 
   // MARK: - UI Components
 
-  private lazy var scrollView: UIScrollView = {
+  private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsVerticalScrollIndicator = false
     scrollView.showsHorizontalScrollIndicator = false
     return scrollView
   }()
 
-  private lazy var newPasswordTextField: FavorTextField = {
+  private let newPasswordTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "새 비밀번호"
     textField.updateMessageLabel("영문, 숫자 혼용 6자 이상")
@@ -44,7 +44,7 @@ final class NewPasswordViewController: BaseViewController, View {
     return textField
   }()
 
-  private lazy var pwValidateTextField: FavorTextField = {
+  private let pwValidateTextField: FavorTextField = {
     let textField = FavorTextField()
     textField.placeholder = "새 비밀번호 확인"
     textField.isSecureField = true
@@ -54,14 +54,14 @@ final class NewPasswordViewController: BaseViewController, View {
     return textField
   }()
 
-  private lazy var textFieldStackView: UIStackView = {
+  private let textFieldStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 32
     return stackView
   }()
 
-  private lazy var doneButton: FavorLargeButton = {
+  private let doneButton: FavorLargeButton = {
     let button = FavorLargeButton(with: .main("변경하기"))
     button.configurationUpdateHandler = { button in
       switch button.state {
@@ -79,14 +79,14 @@ final class NewPasswordViewController: BaseViewController, View {
 
   // MARK: - Life Cycle
 
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     self.newPasswordTextField.becomeFirstResponder()
   }
 
   // MARK: - Binding
 
-  func bind(reactor: NewPasswordViewReactor) {
+  public func bind(reactor: AuthNewPasswordViewReactor) {
     // Action
     self.newPasswordTextField.rx.text
       .orEmpty
@@ -177,11 +177,11 @@ final class NewPasswordViewController: BaseViewController, View {
 
   // MARK: - UI Setups
 
-  override func setupStyles() {
+  public override func setupStyles() {
     super.setupStyles()
   }
 
-  override func setupLayouts() {
+  public override func setupLayouts() {
     [
       self.scrollView,
       self.doneButton
@@ -199,7 +199,7 @@ final class NewPasswordViewController: BaseViewController, View {
     self.scrollView.addSubview(self.textFieldStackView)
   }
 
-  override func setupConstraints() {
+  public override func setupConstraints() {
     self.scrollView.snp.makeConstraints { make in
       make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)

@@ -1,5 +1,5 @@
 //
-//  FindPasswordViewReactor.swift
+//  AuthFindPasswordViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/04.
@@ -12,28 +12,28 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class FindPasswordViewReactor: Reactor, Stepper {
+public final class AuthFindPasswordViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
 
-  var initialState: State
-  var steps = PublishRelay<Step>()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
 
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
 
-  enum Action {
+  public enum Action {
     case viewWillAppear
     case emailTextFieldDidUpdate(String)
     case nextFlowRequested
   }
 
-  enum Mutation {
+  public enum Mutation {
     case updateEmail(String)
     case updateEmailValidation(ValidationResult)
   }
 
-  struct State {
+  public struct State {
     var email: String = ""
     var isNextButtonEnabled: Bool = false
   }
@@ -44,10 +44,9 @@ final class FindPasswordViewReactor: Reactor, Stepper {
     self.initialState = State()
   }
 
-
   // MARK: - Functions
 
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewWillAppear:
       os_log(.debug, "View will appear.")
@@ -70,7 +69,7 @@ final class FindPasswordViewReactor: Reactor, Stepper {
     }
   }
 
-  func reduce(state: State, mutation: Mutation) -> State {
+  public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
     switch mutation {

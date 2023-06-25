@@ -1,5 +1,5 @@
 //
-//  ValidateEmailCodeViewReactor.swift
+//  AuthValidateEmailViewReactor.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/03/04.
@@ -9,23 +9,23 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class ValidateEmailCodeViewReactor: Reactor, Stepper {
+public final class AuthValidateEmailViewReactor: Reactor, Stepper {
 
   // MARK: - Properties
 
-  var initialState: State
-  var steps = PublishRelay<Step>()
+  public var initialState: State
+  public var steps = PublishRelay<Step>()
 
-  enum Action {
+  public enum Action {
     case emailCodeTextFieldDidUpdate(String)
     case nextFlowRequested
   }
 
-  enum Mutation {
+  public enum Mutation {
     case updateEmailCode(String)
   }
 
-  struct State {
+  public struct State {
     let email: String
     var emailCode: String = ""
   }
@@ -41,7 +41,7 @@ final class ValidateEmailCodeViewReactor: Reactor, Stepper {
 
   // MARK: - Functions
 
-  func mutate(action: Action) -> Observable<Mutation> {
+  public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailCodeTextFieldDidUpdate(let code):
       return .just(.updateEmailCode(code))
@@ -52,7 +52,7 @@ final class ValidateEmailCodeViewReactor: Reactor, Stepper {
     }
   }
 
-  func reduce(state: State, mutation: Mutation) -> State {
+  public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
     switch mutation {

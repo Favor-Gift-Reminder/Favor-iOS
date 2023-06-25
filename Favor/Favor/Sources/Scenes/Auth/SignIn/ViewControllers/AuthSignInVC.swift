@@ -251,7 +251,7 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
     let userIdentifier = appleIDCredential.user
     let fullName = appleIDCredential.fullName
     let email = appleIDCredential.email
-    print(email, fullName)
+
     // Handle Sign Up Task
     guard
       let encodedUserID = userIdentifier.data(using: .utf8),
@@ -262,7 +262,6 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
     else { return }
     do {
       try self.keychain.set(value: encodedUserID, account: KeychainManager.Accounts.userID.rawValue)
-      print("Hey")
       FTUXStorage.socialAuthType = .apple
       reactor.action.onNext(.signedInWithApple(email, familyName + givenName))
     } catch {
