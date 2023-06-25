@@ -10,7 +10,6 @@ import UIKit
 import FavorKit
 import ReactorKit
 import Reusable
-import RxDataSources
 
 final class NewGiftFriendViewController: BaseViewController, View {
   typealias DataSource = UICollectionViewDiffableDataSource<NewGiftFriendSection, NewGiftFriendItem>

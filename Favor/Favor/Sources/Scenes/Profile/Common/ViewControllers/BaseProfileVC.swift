@@ -11,7 +11,6 @@ import Composer
 import FavorKit
 import ReactorKit
 import Reusable
-import RxDataSources
 import SnapKit
 
 public class BaseProfileViewController: BaseViewController {

@@ -5,13 +5,12 @@
 //  Created by 이창준 on 2023/03/02.
 //
 
-import UIKit
 import OSLog
+import UIKit
 
 import FavorKit
 import ReactorKit
 import RxCocoa
-import RxDataSources
 import RxFlow
 
 public final class AuthTermViewReactor: Reactor, Stepper {
