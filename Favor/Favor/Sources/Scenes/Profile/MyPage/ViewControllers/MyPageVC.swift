@@ -41,6 +41,17 @@ final class MyPageViewController: BaseProfileViewController, View {
     return button
   }()
   
+  private let favorLabelButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    var container = AttributeContainer()
+    container.font = UIFont.favorFont(.bold, size: 22.0)
+    config.attributedTitle = AttributedString("Favor", attributes: container)
+    config.baseForegroundColor = .favorColor(.white)
+    let button = UIButton(configuration: config)
+    button.isUserInteractionEnabled = false
+    return button
+  }()
+  
   // MARK: - Life Cycle
   
   override func viewWillAppear(_ animated: Bool) {
@@ -81,7 +92,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // Cell 선택
-
+    
     self.collectionView.rx.itemSelected
       .map { indexPath -> Reactor.Action in
         guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return .doNothing }
@@ -131,7 +142,9 @@ final class MyPageViewController: BaseProfileViewController, View {
   private func setupNavigationBar() {
     self.navigationController?.setNavigationBarHidden(false, animated: true)
     let rightBarItems = [self.settingButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
+    let leftBarItem = self.favorLabelButton.toBarButtonItem()
     self.navigationItem.setRightBarButtonItems(rightBarItems, animated: false)
+    self.navigationItem.setLeftBarButton(leftBarItem, animated: false)
   }
   
   override func injectReactor(to view: UICollectionReusableView) {
