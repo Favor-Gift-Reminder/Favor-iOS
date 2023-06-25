@@ -17,10 +17,6 @@ public final class RealmWorkbench {
   private var realm: Realm!
   public let realmQueue: DispatchQueue
 
-  /// Realm DB의 Scheme 버전
-  ///
-  /// [**Version History**](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  public static let version: UInt64 = 11
   private let migration = RealmMigration()
 
   // MARK: - Initializer
@@ -33,7 +29,7 @@ public final class RealmWorkbench {
 
     do {
       let config = Realm.Configuration(
-        schemaVersion: RealmWorkbench.version,
+        schemaVersion: RealmMigration.version,
         migrationBlock: self.migration.migrationBlock
       )
 

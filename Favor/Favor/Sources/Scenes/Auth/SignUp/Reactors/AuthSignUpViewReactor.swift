@@ -9,6 +9,7 @@ import OSLog
 
 import FavorKit
 import FavorNetworkKit
+import Moya
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -34,6 +35,7 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
   }
   
   public enum Mutation {
+    case presentNewToast(ToastMessage)
     // Email
     case updateEmail(String)
     case updateEmailValidationResult(ValidationResult)
@@ -49,6 +51,7 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
   }
   
   public struct State {
+    @Pulse var toastMessage: ToastMessage?
     // Email
     var email: String = ""
     var emailValidationResult: ValidationResult = .empty
@@ -125,6 +128,15 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                   self.steps.accept(AppStep.setProfileIsRequired(user))
                   return .just(.updateLoading(false))
                 }
+                .catch { error in
+                  print(error)
+                  return .just(.updateLoading(false))
+                }
+            }
+            .catch { error in
+              let error = error as! APIError
+              print(error.description)
+              return .just(.updateLoading(false))
             }
         ])
       }
@@ -155,6 +167,9 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
     var newState = state
     
     switch mutation {
+    case .presentNewToast(let message):
+      newState.toastMessage = message
+
     case .updateEmail(let email):
       newState.email = email
       
@@ -212,7 +227,7 @@ private extension AuthSignUpViewReactor {
 
   func updateUser(with user: User) -> Single<User> {
     return Single<User>.create { single in
-      let task = Task {
+      let task = _Concurrency.Task {
         do {
           try await self.workbench.write { transaction in
             transaction.update(user.realmObject(), update: .all)

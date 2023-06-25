@@ -42,6 +42,10 @@ public final class Networking<TargetType: BaseTargetType> {
       .catch(self.handleREST)
       .asObservable()
       .do(
+        onNext: { _ in
+          let message = "🌐 ✅ SUCCESS: \(requestURL)"
+          os_log(.debug, "\(message)")
+        },
         onError: { error in
           switch error {
           case APIError.internetConnection:
@@ -63,7 +67,7 @@ public final class Networking<TargetType: BaseTargetType> {
           }
         },
         onSubscribed: {
-          let message = "🌐 🟢 SUBSCRIBED: \(requestURL)"
+          let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
           os_log(.debug, "\(message)")
         }
       )

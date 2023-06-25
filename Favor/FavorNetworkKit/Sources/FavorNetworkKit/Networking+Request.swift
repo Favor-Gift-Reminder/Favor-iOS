@@ -26,6 +26,7 @@ extension Networking {
   }
 
   public func handleREST<T: Any>(_ error: Error) throws -> Single<T> {
+    print(error.localizedDescription)
     guard error is APIError else {
       throw APIError.restError(
         error,

@@ -200,6 +200,13 @@ public final class AuthSignUpViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
+    reactor.state.map { $0.toastMessage }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, message in
+        owner.presentToast(message, duration: .short)
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.emailValidationResult }
       .asDriver(onErrorRecover: { _ in return .never() })
       .distinctUntilChanged()

@@ -20,12 +20,14 @@ public struct User: Storable, Receivable {
   public var searchID: String
   public var name: String
   public var favorList: [Favor]
-  public var giftList: [Gift]
   public var reminderList: [Reminder]
   public var anniversaryList: [Anniversary]
   public var friendList: [Friend]
   public var profilePhoto: UIImage?
   public var profileBackgroundPhoto: UIImage?
+  public var givenGifts: Int
+  public var receivedGifts: Int
+  public var totalgifts: Int
 
   // MARK: - Storable
 
@@ -38,10 +40,12 @@ public struct User: Storable, Receivable {
     self.searchID = realmObject.userID
     self.name = realmObject.name
     self.favorList = realmObject.favorList.toArray().compactMap { Favor(rawValue: $0) }
-    self.giftList = realmObject.giftList.compactMap(Gift.init(realmObject:))
     self.reminderList = realmObject.reminderList.compactMap(Reminder.init(realmObject:))
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.friendList = realmObject.friendList.compactMap(Friend.init(realmObject:))
+    self.givenGifts = realmObject.givenGifts
+    self.receivedGifts = realmObject.receivedGifts
+    self.totalgifts = realmObject.totalGifts
     // TODO: 이미지 구현 후 적용
 //    self.profilePhoto = realmObject.userPhoto
 //    self.profileBackgroundPhoto = realmObject.backgroundPhoto
@@ -54,9 +58,11 @@ public struct User: Storable, Receivable {
       userID: self.searchID,
       name: self.name,
       favorList: self.favorList.map { $0.rawValue },
-      giftList: self.giftList.compactMap { $0.realmObject() },
       anniversaryList: self.anniversaryList.compactMap { $0.realmObject() },
-      friendList: self.friendList.compactMap { $0.realmObject() }
+      friendList: self.friendList.compactMap { $0.realmObject() },
+      givenGifts: self.givenGifts,
+      receivedGifts: self.receivedGifts,
+      totalGifts: self.totalgifts
 //      userPhoto: self.profilePhoto,
 //      backgroundPhoto: self.profileBackgroundPhoto
     )
@@ -70,10 +76,12 @@ public struct User: Storable, Receivable {
     self.searchID = dto.userID
     self.name = dto.name
     self.favorList = dto.favorList.compactMap(Favor.init(rawValue:))
-    self.giftList = dto.giftList.compactMap(Gift.init(dto:))
     self.reminderList = dto.reminderList.compactMap(Reminder.init(dto:))
     self.anniversaryList = dto.anniversaryList.compactMap(Anniversary.init(dto:))
     self.friendList = dto.friendList.compactMap(Friend.init(dto:))
+    self.givenGifts = dto.givenGift
+    self.receivedGifts = dto.receivedGift
+    self.totalgifts = dto.totalGift
   }
 
   // MARK: - Mock
@@ -88,10 +96,12 @@ public struct User: Storable, Receivable {
     self.searchID = ""
     self.name = ""
     self.favorList = []
-    self.giftList = []
     self.reminderList = []
     self.anniversaryList = []
     self.friendList = []
+    self.givenGifts = 0
+    self.receivedGifts = 0
+    self.totalgifts = 0
   }
 }
 
@@ -104,12 +114,14 @@ extension User {
     case searchID(String)
     case name(String)
     case favorList([Favor])
-    case giftList([Gift])
     case reminderList([Reminder])
     case anniversaryList([Anniversary])
     case friendList([Friend])
     case profilePhoto(UIImage?)
     case profileBackgroundPhoto(UIImage?)
+    case givenGifts(Int)
+    case receivedGifts(Int)
+    case totalGifts(Int)
 
     public var propertyValuePair: PropertyValuePair {
       switch self {
@@ -123,8 +135,6 @@ extension User {
         return ("name", name)
       case .favorList(let favorList):
         return ("favorList", favorList)
-      case .giftList(let giftList):
-        return ("giftList", giftList)
       case .reminderList(let reminderList):
         return ("reminderList", reminderList)
       case .anniversaryList(let anniversaryList):
@@ -135,6 +145,12 @@ extension User {
         return ("profilePhoto", profilePhoto)
       case .profileBackgroundPhoto(let profileBackgroundPhoto):
         return ("profileBackgroundPhoto", profileBackgroundPhoto)
+      case .givenGifts(let givenGifts):
+        return ("givenGifts", givenGifts)
+      case .receivedGifts(let receivedGifts):
+        return ("receivedGifts", receivedGifts)
+      case .totalGifts(let totalGifts):
+        return ("totalGifts", totalGifts)
       }
     }
   }
