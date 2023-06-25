@@ -114,4 +114,13 @@ extension UserAPI: BaseTargetType {
   public var path: String { self.getPath() }
   public var method: Moya.Method { self.getMethod() }
   public var task: Moya.Task { self.getTask() }
+
+  public var headers: [String: String]? {
+    switch self {
+    case .postSignUp:
+      return APIManager.header(for: .json)
+    default:
+      return APIManager.header(for: .json) // TODO: JWT 토큰 적용 후 변경
+    }
+  }
 }
