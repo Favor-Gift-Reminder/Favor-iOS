@@ -36,6 +36,7 @@ extension UIColor {
     case subtext = "#616161"
     case titleAndLine = "#424242"
     case icon = "#222222"
+    case nav = "#FFE4E5"
 
     case kakao = "#FEE500"
     case naver = "#03C75A"
