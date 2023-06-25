@@ -62,6 +62,14 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .disposed(by: self.disposeBag)
     
     // State
+    reactor.state.map { $0.shouldShowToast }
+      .filter { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        owner.presentToast(.anniversaryPinLimited, duration: .short)
+      }
+      .disposed(by: self.disposeBag)
+    
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in

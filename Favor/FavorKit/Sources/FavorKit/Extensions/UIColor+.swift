@@ -37,6 +37,8 @@ extension UIColor {
     case titleAndLine = "#424242"
     case icon = "#222222"
     case nav = "#FFE4E5"
+    case toast1 = "#FC606E"
+    case toast2 = "#3C3C3C"
   }
   
   /// 색상을 적용하는 전역 메서드 입니다.
