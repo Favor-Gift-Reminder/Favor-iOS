@@ -134,9 +134,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       let view = view as? ProfileGiftStatsCollectionHeader,
       let reactor = self.reactor
     else { return }
-    view.reactor = ProfileGiftStatsCollectionHeaderReactor(
-      gift: reactor.currentState.user.giftList
-    )
+    view.reactor = ProfileGiftStatsCollectionHeaderReactor(user: reactor.currentState.user)
   }
 
   override func headerRightButtonDidTap(at section: ProfileSection) {

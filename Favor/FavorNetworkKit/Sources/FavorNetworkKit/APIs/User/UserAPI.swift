@@ -96,9 +96,22 @@ public enum UserAPI {
   ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
   case getAllReminderList(userNo: Int)
 
+  /// 로그인
+  /// ``` json
+  /// // signDTO
+  /// {
+  ///   "email": "favor@gmail.com",
+  ///   "password": "********",
+  /// }
+  /// ```
+  /// - Parameters:
+  ///   - email: 로그인하는 회원의 이메일 주소 - `Body`
+  ///   - password: 로그인하는 회원의 비밀번호 - `Body`
+  case postSignIn(email: String, password: String)
+
   /// 회원가입
   /// ``` json
-  /// // signUpDTO
+  /// // signDTO
   /// {
   ///   "email": "favor@gmail.com",
   ///   "password": "********",
@@ -114,4 +127,13 @@ extension UserAPI: BaseTargetType {
   public var path: String { self.getPath() }
   public var method: Moya.Method { self.getMethod() }
   public var task: Moya.Task { self.getTask() }
+
+  public var authorizationType: AuthorizationType? {
+    switch self {
+    case .postSignUp:
+      return .none
+    default:
+      return .basic
+    }
+  }
 }

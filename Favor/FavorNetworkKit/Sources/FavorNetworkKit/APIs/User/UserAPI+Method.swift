@@ -48,6 +48,9 @@ extension UserAPI {
     case .getAllReminderList:
       return .get
 
+    case .postSignIn:
+      return .post
+
     case .postSignUp:
       return .post
     }

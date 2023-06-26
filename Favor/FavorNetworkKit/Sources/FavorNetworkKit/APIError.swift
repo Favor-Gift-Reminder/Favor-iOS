@@ -17,6 +17,8 @@ public enum APIError: Error {
     switch self {
     case .decodeError(let error):
       return "💩 Decoding에 실패하였습니다.: \(error)"
+    case let .restError(error, statusCode, _):
+      return "💩 API 콜에 실패하였습니다.: \(statusCode!) \(error)"
     default:
       return ""
     }

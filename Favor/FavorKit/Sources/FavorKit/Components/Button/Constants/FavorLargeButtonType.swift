@@ -9,7 +9,6 @@ import UIKit
 
 public enum FavorLargeButtonType {
   case main(String)
-  /// Stroke 설정 필요
   case main2(String)
   case dark1(String)
   case dark2(String)
