@@ -22,7 +22,6 @@ public class BaseProfileViewController: BaseViewController {
   private enum Metric {
     /// 헤더와 컬렉션뷰가 겹치는 높이
     static let profileViewOverliedHeight = 24.0
-    static let collectionViewTopInset: CGFloat = 218.0 - 24.0
   }
 
   // MARK: - Properties
@@ -105,7 +104,7 @@ public class BaseProfileViewController: BaseViewController {
     )
     return composer
   }()
-
+  
   // MARK: - UI Components
 
   let profileView = ProfileView()
@@ -140,7 +139,7 @@ public class BaseProfileViewController: BaseViewController {
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInset = UIEdgeInsets(
-      top: Metric.collectionViewTopInset,
+      top: .zero,
       left: .zero,
       bottom: .zero,
       right: .zero
@@ -157,25 +156,37 @@ public class BaseProfileViewController: BaseViewController {
     self.composer.compose()
   }
   
+  public override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
+    
+    let collectionViewContentInset: CGFloat =
+    ProfileView.height - (Metric.profileViewOverliedHeight + self.view.safeAreaInsets.top)
+    self.collectionView.contentInset.top = collectionViewContentInset
+  }
+  
   // MARK: - Functions
   
   /// CollectionView의 contentOffset에 따라 ProfileView의 크기와 흐림도를 업데이트합니다.
   /// - Parameters:
   ///   - offset: CollectionView의 `contentOffset`
   public func updateProfileViewLayout(by offset: CGPoint, name: String) {
+    /// CollectionView와 SafeArea간의 간격입니다.
+    let collectionViewContentInset: CGFloat =
+    ProfileView.height - (Metric.profileViewOverliedHeight + self.view.safeAreaInsets.top)
+    /// 스크롤이 되면서 ProfileView의 높이도 비율에 맞춰서 감소해야합니다.
     /// ProfileView의 높이 값이 `330`을 맞춰주는 보조 값입니다.
-    let assistanceValue: CGFloat = 136.0
+    let assistanceValue: CGFloat = ProfileView.height - collectionViewContentInset
     /// 둥근 모서리를 제외한 컨텐츠의 최상단과 화면 상단 사이의 거리 (초기값 = ProfileView height)
     let spaceBetweenTopAndContent = abs(offset.y)
     /// 컨텐츠의 최상단(`GiftStatsHeader`)이 화면 상단보다 아래에 있는 지 여부
     let isContentBelowTopOfScreen = offset.y < 0
-    
+        
     // 컨텐츠가 `ProfileView`의 최대 높이 범위(330) 안에 있는 경우
     // ProfileView의 높이 변화
     if isContentBelowTopOfScreen {
       self.navigationItem.title = nil
       self.profileViewHeightConstraint?.update(offset: assistanceValue + spaceBetweenTopAndContent)
-      self.profileView.updateBackgroundAlpha(to: (spaceBetweenTopAndContent) / Metric.collectionViewTopInset)
+      self.profileView.updateBackgroundAlpha(to: (spaceBetweenTopAndContent) / collectionViewContentInset)
     }
     // 컨텐츠의 최상단(`GiftStatsHeader`)이 화면의 상단보다 위에 있는 경우
     // contentInset은 `.zero`로 고정하고 ProfileView는 숨겨짐
