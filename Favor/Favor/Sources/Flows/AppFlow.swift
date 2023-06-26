@@ -15,43 +15,35 @@ import RxFlow
 import RxSwift
 
 @MainActor
-final class AppFlow: Flow {
-  
+public final class AppFlow: Flow {
+
   // MARK: - Properties
 
-  var window: UIWindow // Comment this line.
-  var root: Presentable { self.window } // Change to rootViewController
+  public var root: Presentable { self.rootViewController }
   private let keychain = KeychainManager()
 
   /// Used only for testFlow.
-  private lazy var rootViewController: BaseNavigationController = {
-    let viewController = BaseNavigationController()
-    viewController.setNavigationBarHidden(true, animated: false)
-    return viewController
-  }()
+  private let rootViewController: UINavigationController
 
   // Comment this Initializer.
-  init(window: UIWindow) {
-    self.window = window
+  public init(_ rootViewController: UINavigationController) {
+    self.rootViewController = rootViewController
   }
 
   // MARK: - Navigate
   
-  func navigate(to step: Step) -> FlowContributors {
+  public func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
-    case .rootIsRequired:
-      return self.navigateToRoot()
+    case .splashIsRequired:
+      return self.navigateToSplash()
 
     case .authIsRequired:
       return self.navigateToAuth()
 
     case .tabBarIsRequired:
       return self.navigateToDashboard()
-
-    case .testIsRequired:
-      return self.navigateToTest()
       
     default:
       return .none
@@ -60,23 +52,19 @@ final class AppFlow: Flow {
 }
 
 private extension AppFlow {
-  func navigateToRoot() -> FlowContributors {
-    if FTUXStorage.isSignedIn {
-      return self.handleSignedInNavigate()
-    } else {
-      os_log(.debug, "🏁 Not Signed In: Navigating to auth flow.")
-      return self.navigateToAuth()
+  func navigateToSplash() -> FlowContributors {
+    let splashVC = SplashViewController()
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(splashVC, animated: true)
     }
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: splashVC, withNextStepper: splashVC))
   }
 
   func navigateToDashboard() -> FlowContributors {
     let dashboardFlow = DashboardFlow()
-
-    Flows.use(dashboardFlow, when: .created) { [unowned self] root in
-      DispatchQueue.main.async {
-        self.window.rootViewController = root
-      }
-    }
 
     return .one(flowContributor: .contribute(
       withNextPresentable: dashboardFlow,
@@ -89,12 +77,6 @@ private extension AppFlow {
   func navigateToAuth() -> FlowContributors {
     let authFlow = AuthFlow()
     
-    Flows.use(authFlow, when: .created) { [unowned self] root in
-      DispatchQueue.main.async {
-        self.window.rootViewController = root
-      }
-    }
-    
     return .one(flowContributor: .contribute(
       withNextPresentable: authFlow,
       withNextStepper: OneStepper(
@@ -102,44 +84,11 @@ private extension AppFlow {
       )
     ))
   }
-  
-  /// UI Test를 위한 navigate 메서드
-  func navigateToTest() -> FlowContributors {
-    let testFlow = AppFlow(window: self.window) // Change to Test Flow here.
-    
-    Flows.use(testFlow, when: .created) { [unowned self] root in
-      DispatchQueue.main.async {
-        self.window.rootViewController = root // Change to commented lines.
-//        root.modalPresentationStyle = .overFullScreen
-//        self.rootViewController.present(root, animated: false)
-      }
-    }
-    
-    return .one(flowContributor: .contribute(
-      withNextPresentable: testFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.rootIsRequired) // Change to Test Step here.
-    ))
-  }
 }
 
 // MARK: - Privates
 
 private extension AppFlow {
-  func handleSignedInNavigate() -> FlowContributors {
-    switch FTUXStorage.socialAuthType {
-    case .email: // Email 로그인
-      // TODO: 자동 로그인
-      return self.navigateToDashboard()
-    case .apple: // Apple 로그인
-      os_log(.debug, "🏁 Signed in via 🍎 Apple: Navigating to tab bar flow.")
-      // TODO: `fetchAppleCredentialState` 사용해 애플 로그인 상태 확인 후 자동 로그인
-      return self.navigateToDashboard()
-    default:
-      print(FTUXStorage.socialAuthType)
-      return .none
-    }
-  }
-
   func fetchAppleCredentialState() {
     let appleIDProvider = ASAuthorizationAppleIDProvider()
     guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) else { return }

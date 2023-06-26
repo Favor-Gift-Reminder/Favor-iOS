@@ -24,9 +24,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window = window
 
     self.enableNavigateLog()
-    let appFlow = AppFlow(window: window)
+    let navigationController = UINavigationController()
+
+    let appFlow = AppFlow(navigationController)
     self.coordinator.coordinate(flow: appFlow, with: AppStepper())
-    window.makeKeyAndVisible()
+
+    Flows.use(appFlow, when: .created) { root in
+      self.window?.rootViewController = root
+      self.window?.makeKeyAndVisible()
+    }
 	}
 }
 

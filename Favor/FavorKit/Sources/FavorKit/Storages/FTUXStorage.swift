@@ -10,10 +10,7 @@ import Foundation
 public final class FTUXStorage {
   @UserDefault(key: .isFirstLaunch, defaultValue: true)
   public static var isFirstLaunch: Bool
-  
-  @UserDefault(key: .isSignedIn, defaultValue: false)
-  public static var isSignedIn: Bool
 
-  @UserDefault(key: .socialAuthType, defaultValue: .undefined)
-  public static var socialAuthType: AuthMethod
+  @UserDefault(key: .authState, defaultValue: .undefined)
+  public static var authState: AuthState
 }
