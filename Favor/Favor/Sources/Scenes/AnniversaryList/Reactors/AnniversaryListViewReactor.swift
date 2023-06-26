@@ -32,7 +32,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   enum Mutation {
     case updateAnniversaries([Anniversary])
     case updateAllSection([Item])
-    case updateToast(Bool)
+    case updateToast(ToastMessage)
   }
   
   struct State {
@@ -40,7 +40,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     var sections: [Section] = []
     var items: [Item] = []
     var anniversaryListType: AnniversaryListType
-    var shouldShowToast: Bool = false
+    @Pulse var shouldShowToast: ToastMessage?
   }
   
   // MARK: - Initializer
@@ -86,10 +86,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       
       guard originalPinnedAnniversaries.count + isPinnedTargetAnniversary < 4 else {
         // 고정된 기념일이 3개 초과되었을 경우입니다.
-        return .concat([
-          .just(.updateToast(true)),
-          .just(.updateToast(false))
-        ])
+        return .just(.updateToast(.anniversaryPinLimited))
       }
       
       // 1. 현재 상태의 값을 백업
