@@ -75,8 +75,7 @@ public final class AuthTermViewReactor: Reactor, Stepper {
       
     case .nextButtonDidTap:
       os_log(.debug, "Next button did tap.")
-      if self.currentState.isNextButtonEnabled {
-        FTUXStorage.isSignedIn = true
+      if self.currentState.isNextButtonEnabled {  
         self.steps.accept(AppStep.tabBarIsRequired)
       }
       return .empty()

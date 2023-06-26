@@ -69,7 +69,7 @@ public final class AuthSignInViewController: BaseViewController, View {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.spacing = 20
-    AuthMethod.allCases.forEach {
+    AuthState.allCases.forEach {
       if $0.isSocialAuth {
         stackView.addArrangedSubview(SocialAuthButton($0))
       }
@@ -262,7 +262,7 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
     else { return }
     do {
       try self.keychain.set(value: encodedUserID, account: KeychainManager.Accounts.userID.rawValue)
-      FTUXStorage.socialAuthType = .apple
+      FTUXStorage.authState = .apple
       reactor.action.onNext(.signedInWithApple(email, familyName + givenName))
     } catch {
       print(error)

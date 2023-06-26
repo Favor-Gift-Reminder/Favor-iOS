@@ -137,7 +137,7 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                   .asObservable()
                   .flatMap { token -> Observable<Mutation> in
                     do {
-                      FTUXStorage.socialAuthType = .email
+                      FTUXStorage.authState = .email
                       guard let tokenData = token.data(using: .utf8) else { return .empty() }
                       try self.keychain.set(
                         value: tokenData,

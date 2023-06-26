@@ -1,5 +1,5 @@
 //
-//  AuthMethod.swift
+//  AuthState.swift
 //  Favor
 //
 //  Created by 이창준 on 6/21/23.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum AuthMethod: CaseIterable, Codable {
+public enum AuthState: CaseIterable, Codable {
   case email
   case kakao
   case naver

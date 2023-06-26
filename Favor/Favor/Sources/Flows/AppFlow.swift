@@ -61,11 +61,23 @@ final class AppFlow: Flow {
 
 private extension AppFlow {
   func navigateToRoot() -> FlowContributors {
-    if FTUXStorage.isSignedIn {
-      return self.handleSignedInNavigate()
-    } else {
-      os_log(.debug, "🏁 Not Signed In: Navigating to auth flow.")
-      return self.navigateToAuth()
+    switch FTUXStorage.authState {
+    case .email: // Email 로그인
+                 // TODO: 자동 로그인
+      return self.navigateToDashboard()
+    case .apple: // Apple 로그인
+      os_log(.debug, "🔐 Signed in via 🍎 Apple: Navigating to tab bar flow.")
+      // TODO: `fetchAppleCredentialState` 사용해 애플 로그인 상태 확인 후 자동 로그인
+      return self.navigateToDashboard()
+    case .kakao: // 카카오 로그인
+      os_log(.debug, "🔐 Signed in via 🥥 Kakao: Navigating to tab bar flow.")
+      return .none
+    case .naver: // 네이버 로그인
+      os_log(.debug, "🔐 Signed in via 🌲 Naver: Navigating to tab bar flow.")
+      return .none
+    case .undefined:
+      os_log(.debug, "🔒 Not signed in to any services: Navigating to auth flow.")
+      return .none
     }
   }
 
@@ -125,21 +137,6 @@ private extension AppFlow {
 // MARK: - Privates
 
 private extension AppFlow {
-  func handleSignedInNavigate() -> FlowContributors {
-    switch FTUXStorage.socialAuthType {
-    case .email: // Email 로그인
-      // TODO: 자동 로그인
-      return self.navigateToDashboard()
-    case .apple: // Apple 로그인
-      os_log(.debug, "🏁 Signed in via 🍎 Apple: Navigating to tab bar flow.")
-      // TODO: `fetchAppleCredentialState` 사용해 애플 로그인 상태 확인 후 자동 로그인
-      return self.navigateToDashboard()
-    default:
-      print(FTUXStorage.socialAuthType)
-      return .none
-    }
-  }
-
   func fetchAppleCredentialState() {
     let appleIDProvider = ASAuthorizationAppleIDProvider()
     guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) else { return }

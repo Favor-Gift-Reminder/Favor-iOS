@@ -31,7 +31,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case emailDidUpdate(String)
     case passwordDidUpdate(String)
     case signInButtonDidTap
-    case socialSignInButtonDidTap(AuthMethod)
+    case socialSignInButtonDidTap(AuthState)
     case findPasswordButtonDidTap
     // Social Login
     case signedInWithApple(String, String)
@@ -43,7 +43,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
-    case pulseSocialAuth(AuthMethod)
+    case pulseSocialAuth(AuthState)
   }
   
   public struct State {
@@ -52,7 +52,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
-    @Pulse var requestedSocialAuth: AuthMethod = .undefined
+    @Pulse var requestedSocialAuth: AuthState = .undefined
   }
   
   // MARK: - Initializer
