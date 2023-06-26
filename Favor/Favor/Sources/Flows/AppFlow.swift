@@ -28,7 +28,7 @@ public final class AppFlow: Flow {
   // Comment this Initializer.
   public init() {
     self.rootViewController = BaseNavigationController()
-    self.rootViewController.navigationBar.isHidden = true
+    self.rootViewController.setNavigationBarHidden(true, animated: false)
   }
 
   // MARK: - Navigate
@@ -41,7 +41,6 @@ public final class AppFlow: Flow {
       return self.navigateToSplash()
 
     case .authIsRequired:
-      print("Auth is required")
       return self.navigateToAuth()
 
     case .dashboardIsRequired:

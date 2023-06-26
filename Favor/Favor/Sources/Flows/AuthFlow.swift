@@ -78,6 +78,7 @@ private extension AuthFlow {
 
     DispatchQueue.main.async {
       self.rootViewController.viewControllers.insert(authEntryVC, at: .zero)
+      self.rootViewController.setNavigationBarHidden(false, animated: false)
       self.rootViewController.popViewController(animated: false)
     }
 
