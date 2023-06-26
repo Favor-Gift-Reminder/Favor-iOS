@@ -7,6 +7,7 @@
 
 import OSLog
 
+import FavorKit
 import Moya
 import RxMoya
 import RxSwift
@@ -21,19 +22,30 @@ public final class Networking<TargetType: BaseTargetType> {
 
   // MARK: - Properties
 
-  let provider: MoyaProvider<TargetType>
+  private let provider: MoyaProvider<TargetType>
+  private let keychain: KeychainManager
 
   // MARK: - Initializer
 
   public init() {
-    self.provider = MoyaProvider<TargetType>()
+    let keychain = KeychainManager()
+    self.keychain = keychain
+    let authPlugin = AccessTokenPlugin { _ in
+      guard
+        let data = try? keychain.get(account: KeychainManager.Accounts.accessToken.rawValue),
+        let decodedString = String(data: data, encoding: .utf8)
+      else {
+        os_log(.info, "Failed to fetch access token from keychain.")
+        return ""
+      }
+      return decodedString
+    }
+    self.provider = MoyaProvider<TargetType>(plugins: [authPlugin])
   }
   
   // MARK: - Functions
   
-  public func request(
-    _ target: TargetType
-  ) -> Observable<Response> {
+  public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
       .filterSuccessfulStatusCodes()
@@ -42,6 +54,10 @@ public final class Networking<TargetType: BaseTargetType> {
       .catch(self.handleREST)
       .asObservable()
       .do(
+        onNext: { _ in
+          let message = "🌐 ✅ SUCCESS: \(requestURL)"
+          os_log(.debug, "\(message)")
+        },
         onError: { error in
           switch error {
           case APIError.internetConnection:
@@ -63,7 +79,7 @@ public final class Networking<TargetType: BaseTargetType> {
           }
         },
         onSubscribed: {
-          let message = "🌐 🟢 SUBSCRIBED: \(requestURL)"
+          let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
           os_log(.debug, "\(message)")
         }
       )

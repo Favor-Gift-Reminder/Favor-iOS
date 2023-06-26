@@ -23,31 +23,18 @@ public final class ProfileGiftStatsCollectionHeaderReactor: Reactor {
   }
   
   public struct State {
-    var gifts: [Gift]
-    var totalGifts: Int = -1
-    var receivedGifts: Int = -1
-    var givenGifts: Int = -1
+    var givenGifts: Int
+    var receivedGifts: Int
+    var totalGifts: Int
   }
   
   // MARK: - Initializer
   
-  public init(gift: [Gift]) {
+  public init(user: User) {
     self.initialState = State(
-      gifts: gift
+      givenGifts: user.givenGifts,
+      receivedGifts: user.receivedGifts,
+      totalGifts: user.totalgifts
     )
-  }
-  
-  // MARK: - Functions
-
-  public func transform(state: Observable<State>) -> Observable<State> {
-    return state.map { state in
-      var newState = state
-
-      newState.totalGifts = state.gifts.count
-      newState.receivedGifts = state.gifts.filter { $0.isGiven == false }.count
-      newState.givenGifts = state.gifts.filter { $0.isGiven == true }.count
-
-      return newState
-    }
   }
 }

@@ -13,4 +13,7 @@ public final class FTUXStorage {
   
   @UserDefault(key: .isSignedIn, defaultValue: false)
   public static var isSignedIn: Bool
+
+  @UserDefault(key: .socialAuthType, defaultValue: .undefined)
+  public static var socialAuthType: AuthMethod
 }

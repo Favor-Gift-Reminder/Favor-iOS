@@ -39,6 +39,10 @@ extension UIColor {
     case nav = "#FFE4E5"
     case toast1 = "#FC606E"
     case toast2 = "#3C3C3C"
+
+    case kakao = "#FEE500"
+    case naver = "#03C75A"
+    case apple = "#000001"
   }
   
   /// 색상을 적용하는 전역 메서드 입니다.
