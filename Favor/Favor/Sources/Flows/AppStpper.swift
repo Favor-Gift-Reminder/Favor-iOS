@@ -17,6 +17,6 @@ final class AppStepper: Stepper {
   private let disposeBag = DisposeBag()
   
   var initialStep: Step {
-    return AppStep.rootIsRequired
+    return AppStep.splashIsRequired
   }
 }

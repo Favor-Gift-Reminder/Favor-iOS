@@ -61,7 +61,7 @@ final class AuthFlow: Flow {
       return self.presentPHPicker(manager: manager)
 
     case .tabBarIsRequired:
-      return .end(forwardToParentFlowWithStep: AppStep.rootIsRequired)
+      return .end(forwardToParentFlowWithStep: AppStep.splashIsRequired)
       
     default:
       return .none

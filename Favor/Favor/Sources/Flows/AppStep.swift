@@ -14,7 +14,7 @@ enum AppStep: Step {
   case imagePickerIsRequired(PHPickerManager)
 
   // MARK: - Root
-  case rootIsRequired
+  case splashIsRequired
 
   // MARK: - Auth
   case authIsRequired
@@ -74,9 +74,6 @@ enum AppStep: Step {
   case newAnniversaryIsRequired
   case anniversaryManagementIsRequired(Anniversary)
   case anniversaryManagementIsComplete(ToastMessage)
-  
-  // MARK: - Test
-  case testIsRequired
 
   // MARK: - Gift
   case giftManagementIsRequired(Gift? = nil)
