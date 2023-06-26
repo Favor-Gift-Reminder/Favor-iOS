@@ -138,11 +138,20 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                   .flatMap { token -> Observable<Mutation> in
                     do {
                       FTUXStorage.authState = .email
-                      guard let tokenData = token.data(using: .utf8) else { return .empty() }
+                      guard
+                        let emailData = email.data(using: .utf8),
+                        let passwordData = password.data(using: .utf8),
+                        let tokenData = token.data(using: .utf8)
+                      else { return .empty() }
+                      try self.keychain.set(
+                        value: emailData,
+                        account: KeychainManager.Accounts.userEmail.rawValue)
+                      try self.keychain.set(
+                        value: passwordData,
+                        account: KeychainManager.Accounts.userPassword.rawValue)
                       try self.keychain.set(
                         value: tokenData,
-                        account: KeychainManager.Accounts.accessToken.rawValue
-                      )
+                        account: KeychainManager.Accounts.accessToken.rawValue)
                     } catch {
                       os_log(.error, "\(error)")
                       return .just(.updateLoading(false))

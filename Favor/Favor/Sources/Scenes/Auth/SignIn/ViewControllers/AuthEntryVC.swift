@@ -88,7 +88,7 @@ final class AuthEntryViewController: BaseViewController, View {
   // MARK: - Functions
   
   // MARK: - UI Setups
-  
+
   override func setupLayouts() {
     [
       self.signInButton,

@@ -23,11 +23,12 @@ public final class AppFlow: Flow {
   private let keychain = KeychainManager()
 
   /// Used only for testFlow.
-  private let rootViewController: UINavigationController
+  private let rootViewController: BaseNavigationController
 
   // Comment this Initializer.
-  public init(_ rootViewController: UINavigationController) {
-    self.rootViewController = rootViewController
+  public init() {
+    self.rootViewController = BaseNavigationController()
+    self.rootViewController.navigationBar.isHidden = true
   }
 
   // MARK: - Navigate
@@ -40,9 +41,10 @@ public final class AppFlow: Flow {
       return self.navigateToSplash()
 
     case .authIsRequired:
+      print("Auth is required")
       return self.navigateToAuth()
 
-    case .tabBarIsRequired:
+    case .dashboardIsRequired:
       return self.navigateToDashboard()
       
     default:
@@ -54,13 +56,24 @@ public final class AppFlow: Flow {
 private extension AppFlow {
   func navigateToSplash() -> FlowContributors {
     let splashVC = SplashViewController()
+    let splashReactor = SplashViewReactor()
+    splashVC.reactor = splashReactor
 
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(splashVC, animated: true)
-    }
+    self.rootViewController.setViewControllers([splashVC], animated: true)
     
     return .one(flowContributor: .contribute(
-      withNextPresentable: splashVC, withNextStepper: splashVC))
+      withNextPresentable: splashVC, withNextStepper: splashReactor, allowStepWhenNotPresented: true))
+  }
+
+  func navigateToAuth() -> FlowContributors {
+    let authFlow = AuthFlow(self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: authFlow,
+      withNextStepper: OneStepper(
+        withSingleStep: AppStep.authIsRequired
+      )
+    ))
   }
 
   func navigateToDashboard() -> FlowContributors {
@@ -69,18 +82,7 @@ private extension AppFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: dashboardFlow,
       withNextStepper: OneStepper(
-        withSingleStep: AppStep.tabBarIsRequired
-      )
-    ))
-  }
-  
-  func navigateToAuth() -> FlowContributors {
-    let authFlow = AuthFlow()
-    
-    return .one(flowContributor: .contribute(
-      withNextPresentable: authFlow,
-      withNextStepper: OneStepper(
-        withSingleStep: AppStep.authIsRequired
+        withSingleStep: AppStep.dashboardIsRequired
       )
     ))
   }
@@ -88,6 +90,7 @@ private extension AppFlow {
 
 // MARK: - Privates
 
+// TODO: Move to splash
 private extension AppFlow {
   func fetchAppleCredentialState() {
     let appleIDProvider = ASAuthorizationAppleIDProvider()

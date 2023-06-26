@@ -31,7 +31,7 @@ enum AppStep: Step {
   case onboardingIsComplete
   
   // MARK: - Main
-  case tabBarIsRequired
+  case dashboardIsRequired
   
   // MARK: - Home
   case homeIsRequired

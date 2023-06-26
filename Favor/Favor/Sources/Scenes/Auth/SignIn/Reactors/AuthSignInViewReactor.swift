@@ -20,7 +20,8 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
   
   public var initialState: State
   public var steps = PublishRelay<Step>()
-  let networking = UserNetworking()
+  private let networking = UserNetworking()
+  private let keychain = KeychainManager()
 
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
@@ -44,6 +45,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
     case pulseSocialAuth(AuthState)
+    case updateLoading(Bool)
   }
   
   public struct State {
@@ -53,6 +55,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
     @Pulse var requestedSocialAuth: AuthState = .undefined
+    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -88,8 +91,22 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       ])
 
     case .signInButtonDidTap:
-      // Login
-      return .empty()
+      let email = self.currentState.email
+      let password = self.currentState.password
+      return .concat([
+        .just(.updateLoading(true)),
+        self.requestSignIn(email: email, password: password)
+          .asObservable()
+          .flatMap { token -> Observable<Mutation> in
+            do {
+              try self.handleSignInSuccess(email: email, password: password, token: token)
+            } catch {
+              os_log(.error, "\(error)")
+              return .just(.updateLoading(false))
+            }
+            return .just(.updateLoading(false))
+          }
+      ])
 
     case .socialSignInButtonDidTap(let socialAuth):
       os_log(.debug, "Sign-In with social did tap: \(String(describing: socialAuth))")
@@ -140,8 +157,57 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 
     case .pulseSocialAuth(let socialAuth):
       newState.requestedSocialAuth = socialAuth
+
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
     }
 
     return newState
+  }
+}
+
+// MARK: - Privates
+
+private extension AuthSignInViewReactor {
+  func requestSignIn(email: String, password: String) -> Single<String> {
+    return Single<String>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.postSignIn(email: email, password: password))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<SignInResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.token))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+
+  func handleSignInSuccess(email: String, password: String, token: String) throws {
+    guard
+      let emailData = email.data(using: .utf8),
+      let passwordData = password.data(using: .utf8),
+      let tokenData = token.data(using: .utf8)
+    else { throw FavorError.optionalBindingFailure([email, password, token]) }
+
+    FTUXStorage.authState = .email
+    try self.keychain.set(
+      value: emailData,
+      account: KeychainManager.Accounts.userEmail.rawValue)
+    try self.keychain.set(
+      value: passwordData,
+      account: KeychainManager.Accounts.userPassword.rawValue)
+    try self.keychain.set(
+      value: tokenData,
+      account: KeychainManager.Accounts.accessToken.rawValue)
   }
 }

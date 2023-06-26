@@ -21,7 +21,7 @@ final class DashboardFlow: Flow {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
-    case .tabBarIsRequired:
+    case .dashboardIsRequired:
       return self.navigateToDashBoard()
 
     case .giftManagementIsRequired:

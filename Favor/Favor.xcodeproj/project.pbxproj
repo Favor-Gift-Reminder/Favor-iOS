@@ -105,6 +105,9 @@
 		2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EA46B2929BA35570030904E /* Term-Info.plist */; };
 		2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */; };
 		2EA73C4929DE703F005097C0 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */; };
+		2EAC60A32A49DC5A0047A572 /* SplashViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC60A22A49DC5A0047A572 /* SplashViewReactor.swift */; };
+		2EAC60A52A49F68B0047A572 /* AppStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC60A42A49F68B0047A572 /* AppStepper.swift */; };
+		2EAC60A82A4A018F0047A572 /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = 2EAC60A72A4A018F0047A572 /* Hero */; };
 		2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */; };
 		2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71229D4500D008D10A0 /* ReminderSection.swift */; };
 		2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71429D48B97008D10A0 /* ReminderCell.swift */; };
@@ -191,7 +194,6 @@
 		E52F565B29D5698A004E85A6 /* NewGiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */; };
-		E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C3298B5CDF002940D1 /* AppStpper.swift */; };
 		E55CF7C6298B8EBB002940D1 /* DashboardFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7C5298B8EBB002940D1 /* DashboardFlow.swift */; };
 		E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */ = {isa = PBXBuildFile; productRef = E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */; };
 		E57F313D2970004D00E3D449 /* OnboardingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57F313C2970004D00E3D449 /* OnboardingCell.swift */; };
@@ -315,6 +317,8 @@
 		2EA46B2929BA35570030904E /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailVC.swift; sourceTree = "<group>"; };
 		2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewReactor.swift; sourceTree = "<group>"; };
+		2EAC60A22A49DC5A0047A572 /* SplashViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewReactor.swift; sourceTree = "<group>"; };
+		2EAC60A42A49F68B0047A572 /* AppStepper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppStepper.swift; sourceTree = "<group>"; };
 		2EB167842A428E6100EEB47A /* Favor.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Favor.entitlements; sourceTree = "<group>"; };
 		2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderViewReactor.swift; sourceTree = "<group>"; };
 		2EB3E71229D4500D008D10A0 /* ReminderSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderSection.swift; sourceTree = "<group>"; };
@@ -403,7 +407,6 @@
 		E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFlow.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
 		E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlow.swift; sourceTree = "<group>"; };
-		E55CF7C3298B5CDF002940D1 /* AppStpper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStpper.swift; sourceTree = "<group>"; };
 		E55CF7C5298B8EBB002940D1 /* DashboardFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardFlow.swift; sourceTree = "<group>"; };
 		E57F313C2970004D00E3D449 /* OnboardingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCell.swift; sourceTree = "<group>"; };
 		E583C58E2A1E619F00DC219A /* AnniversaryBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryBottomSheetView.swift; sourceTree = "<group>"; };
@@ -433,6 +436,7 @@
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
+				2EAC60A82A4A018F0047A572 /* Hero in Frameworks */,
 				2E946FDF2A2585BA00D0EED8 /* ImageViewer in Frameworks */,
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
@@ -725,7 +729,8 @@
 		2E76F58629601EC3002FF001 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
-				2E76F58429601CD6002FF001 /* SplashVC.swift */,
+				2EAC60A12A49DC500047A572 /* Reactors */,
+				2EAC60A02A49DC470047A572 /* ViewControllers */,
 			);
 			path = Splash;
 			sourceTree = "<group>";
@@ -846,6 +851,22 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		2EAC60A02A49DC470047A572 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2E76F58429601CD6002FF001 /* SplashVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EAC60A12A49DC500047A572 /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2EAC60A22A49DC5A0047A572 /* SplashViewReactor.swift */,
+			);
+			path = Reactors;
 			sourceTree = "<group>";
 		};
 		2EBB014A295E8C600072D158 /* Sources */ = {
@@ -1414,7 +1435,7 @@
 			isa = PBXGroup;
 			children = (
 				E5CFF72A298404F700E11D9A /* AppStep.swift */,
-				E55CF7C3298B5CDF002940D1 /* AppStpper.swift */,
+				2EAC60A42A49F68B0047A572 /* AppStepper.swift */,
 				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
 				E55CF7B9298A743B002940D1 /* AuthFlow.swift */,
 				E55CF7C5298B8EBB002940D1 /* DashboardFlow.swift */,
@@ -1521,6 +1542,7 @@
 				E59AB0972A17778700F0AC7D /* Then */,
 				2E946FDE2A2585BA00D0EED8 /* ImageViewer */,
 				2E55501E2A27A5AE00E6AB26 /* Composer */,
+				2EAC60A72A4A018F0047A572 /* Hero */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1586,6 +1608,7 @@
 				2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */,
 				E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */,
 				2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */,
+				2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1784,7 +1807,6 @@
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
 				E5FB769C2A21C13900BF3197 /* BasePopup.swift in Sources */,
-				E55CF7C4298B5CDF002940D1 /* AppStpper.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2E9B4CC22A12841C00C7E31E /* AnniversaryListVC.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* AuthNewPasswordVC.swift in Sources */,
@@ -1812,8 +1834,10 @@
 				2EC939F1299CF67E00C8C47F /* ProfileGiftStatsCollectionHeaderReactor.swift in Sources */,
 				2EE07ECF296E8DB500048A3C /* ReminderVC.swift in Sources */,
 				2E95E4B129E8EFB400A46C38 /* SearchResultSection.swift in Sources */,
+				2EAC60A52A49F68B0047A572 /* AppStepper.swift in Sources */,
 				2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */,
 				2EA3849A298D7C680081499C /* HomeSection.swift in Sources */,
+				2EAC60A32A49DC5A0047A572 /* SplashViewReactor.swift in Sources */,
 				2E9B4CC42A12844700C7E31E /* AnniversaryListViewReactor.swift in Sources */,
 				2ED8CB4429B0BD3F00E7B547 /* AuthTermViewReactor.swift in Sources */,
 				2EC939F7299CF6E800C8C47F /* ProfileAnniversaryCellReactor.swift in Sources */,
@@ -2187,6 +2211,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/HeroTransitions/Hero.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.2;
+			};
+		};
 		2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
@@ -2285,6 +2317,11 @@
 		2E946FDE2A2585BA00D0EED8 /* ImageViewer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageViewer;
+		};
+		2EAC60A72A4A018F0047A572 /* Hero */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */;
+			productName = Hero;
 		};
 		2EC371F7299521AD00D1007B /* RxGesture */ = {
 			isa = XCSwiftPackageProductDependency;

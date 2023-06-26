@@ -18,7 +18,6 @@ extension UIColor {
     let r = round((Double((rgb >> 16) & 0xFF) / 255) * 100) / 100
     let g = round((Double((rgb >>  8) & 0xFF) / 255) * 100) / 100
     let b = round((Double((rgb >>  0) & 0xFF) / 255) * 100) / 100
-    print(r, g, b)
     self.init(red: r, green: g, blue: b, alpha: 1.0)
   }
   

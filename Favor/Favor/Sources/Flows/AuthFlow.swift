@@ -11,18 +11,19 @@ import FavorKit
 import RxFlow
 
 @MainActor
-final class AuthFlow: Flow {
-  
-  var root: Presentable {
+public final class AuthFlow: Flow {
+
+  public var root: Presentable {
     return self.rootViewController
   }
   
-  private lazy var rootViewController: BaseNavigationController = {
-    let viewController = BaseNavigationController()
-    return viewController
-  }()
-  
-  func navigate(to step: Step) -> FlowContributors {
+  private let rootViewController: BaseNavigationController
+
+  init(_ rootViewController: BaseNavigationController) {
+    self.rootViewController = rootViewController
+  }
+
+  public func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
@@ -60,7 +61,7 @@ final class AuthFlow: Flow {
     case .imagePickerIsRequired(let manager):
       return self.presentPHPicker(manager: manager)
 
-    case .tabBarIsRequired:
+    case .dashboardIsRequired:
       return .end(forwardToParentFlowWithStep: AppStep.splashIsRequired)
       
     default:
@@ -71,14 +72,18 @@ final class AuthFlow: Flow {
 
 private extension AuthFlow {
   func navigateToAuth() -> FlowContributors {
-    let viewController = AuthEntryViewController()
-    let reactor = AuthEntryViewReactor()
-    viewController.reactor = reactor
-    self.rootViewController.setViewControllers([viewController], animated: true)
-    
+    let authEntryVC = AuthEntryViewController()
+    let authEntryReactor = AuthEntryViewReactor()
+    authEntryVC.reactor = authEntryReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.viewControllers.insert(authEntryVC, at: .zero)
+      self.rootViewController.popViewController(animated: false)
+    }
+
     return .one(flowContributor: .contribute(
-      withNextPresentable: viewController,
-      withNextStepper: reactor
+      withNextPresentable: authEntryVC,
+      withNextStepper: authEntryReactor
     ))
   }
   

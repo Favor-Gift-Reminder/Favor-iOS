@@ -99,7 +99,7 @@ private extension NewGiftFlow {
   func popToTabBar(with gift: Gift? = nil) -> FlowContributors {
     self.rootViewController.dismiss(animated: true)
 
-    return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
+    return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
   }
   
   func presentPHPicker(manager: PHPickerManager) -> FlowContributors {
