@@ -22,6 +22,7 @@ public class BaseProfileViewController: BaseViewController {
   private enum Metric {
     /// 헤더와 컬렉션뷰가 겹치는 높이
     static let profileViewOverliedHeight = 24.0
+    static let collectionViewTopInset: CGFloat = 218.0 - 24.0
   }
 
   // MARK: - Properties
@@ -139,7 +140,7 @@ public class BaseProfileViewController: BaseViewController {
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInset = UIEdgeInsets(
-      top: ProfileView.height - Metric.profileViewOverliedHeight,
+      top: Metric.collectionViewTopInset,
       left: .zero,
       bottom: .zero,
       right: .zero
@@ -152,7 +153,7 @@ public class BaseProfileViewController: BaseViewController {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
-
+    
     self.composer.compose()
   }
   
@@ -161,23 +162,26 @@ public class BaseProfileViewController: BaseViewController {
   /// CollectionView의 contentOffset에 따라 ProfileView의 크기와 흐림도를 업데이트합니다.
   /// - Parameters:
   ///   - offset: CollectionView의 `contentOffset`
-  public func updateProfileViewLayout(by offset: CGPoint) {
+  public func updateProfileViewLayout(by offset: CGPoint, name: String) {
+    /// ProfileView의 높이 값이 `330`을 맞춰주는 보조 값입니다.
+    let assistanceValue: CGFloat = 136.0
     /// 둥근 모서리를 제외한 컨텐츠의 최상단과 화면 상단 사이의 거리 (초기값 = ProfileView height)
-    let spaceBetweenTopAndContent = abs(offset.y) + Metric.profileViewOverliedHeight
+    let spaceBetweenTopAndContent = abs(offset.y)
     /// 컨텐츠의 최상단(`GiftStatsHeader`)이 화면 상단보다 아래에 있는 지 여부
     let isContentBelowTopOfScreen = offset.y < 0
-    /// ProfileView의 height보다 아래로 더 스크롤 됐는 지 여부
-    let isScrollViewInMiddleOfBounds = (offset.y - Metric.profileViewOverliedHeight) > -ProfileView.height
     
     // 컨텐츠가 `ProfileView`의 최대 높이 범위(330) 안에 있는 경우
     // ProfileView의 높이 변화
-    if isContentBelowTopOfScreen, isScrollViewInMiddleOfBounds {
-      self.profileViewHeightConstraint?.update(offset: spaceBetweenTopAndContent)
-      self.profileView.updateBackgroundAlpha(to: spaceBetweenTopAndContent / ProfileView.height)
+    if isContentBelowTopOfScreen {
+      self.navigationItem.title = nil
+      self.profileViewHeightConstraint?.update(offset: assistanceValue + spaceBetweenTopAndContent)
+      self.profileView.updateBackgroundAlpha(to: (spaceBetweenTopAndContent) / Metric.collectionViewTopInset)
     }
     // 컨텐츠의 최상단(`GiftStatsHeader`)이 화면의 상단보다 위에 있는 경우
     // contentInset은 `.zero`로 고정하고 ProfileView는 숨겨짐
     else if !isContentBelowTopOfScreen {
+      self.navigationItem.title = name
+      self.navigationItem.title = "김응철" // TODO: 코드 삭제 요청
       self.profileViewHeightConstraint?.update(offset: 0)
       self.profileView.updateBackgroundAlpha(to: 0)
     }
@@ -188,7 +192,7 @@ public class BaseProfileViewController: BaseViewController {
       self.profileView.updateBackgroundAlpha(to: 1)
     }
   }
-
+  
   public func injectReactor(to view: UICollectionReusableView) { }
   func headerRightButtonDidTap(at section: ProfileSection) { }
 
@@ -206,7 +210,7 @@ public class BaseProfileViewController: BaseViewController {
       self.view.addSubview($0)
     }
   }
-
+  
   public override func setupConstraints() {
     self.profileView.snp.makeConstraints { make in
       make.top.equalToSuperview()
@@ -215,8 +219,7 @@ public class BaseProfileViewController: BaseViewController {
     }
 
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalToSuperview()
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalToSuperview()
     }
   }

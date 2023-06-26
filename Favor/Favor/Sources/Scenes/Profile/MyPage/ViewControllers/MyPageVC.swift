@@ -82,12 +82,12 @@ final class MyPageViewController: BaseProfileViewController, View {
       .map { Reactor.Action.settingButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // 스크롤
     self.collectionView.rx.contentOffset
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, offset in
-        owner.updateProfileViewLayout(by: offset)
+        owner.updateProfileViewLayout(by: offset, name: reactor.currentState.userName)
       })
       .disposed(by: self.disposeBag)
 

@@ -63,7 +63,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
     self.collectionView.rx.contentOffset
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, offset in
-        owner.updateProfileViewLayout(by: offset)
+        owner.updateProfileViewLayout(by: offset, name: reactor.currentState.friend.name)
       })
       .disposed(by: self.disposeBag)
     
