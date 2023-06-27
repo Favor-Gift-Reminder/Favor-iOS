@@ -13,15 +13,21 @@ import RxFlow
 @MainActor
 public final class AuthFlow: Flow {
 
+  // MARK: - Properties
+
   public var root: Presentable {
     return self.rootViewController
   }
   
   private let rootViewController: BaseNavigationController
 
-  init(_ rootViewController: BaseNavigationController) {
-    self.rootViewController = rootViewController
+  // MARK: - Initializer
+
+  init() {
+    self.rootViewController = BaseNavigationController()
   }
+
+  // MARK: - Navigate
 
   public func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
@@ -70,6 +76,8 @@ public final class AuthFlow: Flow {
   }
 }
 
+// MARK: - Navigates
+
 private extension AuthFlow {
   func navigateToAuth() -> FlowContributors {
     let authEntryVC = AuthEntryViewController()
@@ -77,9 +85,7 @@ private extension AuthFlow {
     authEntryVC.reactor = authEntryReactor
 
     DispatchQueue.main.async {
-      self.rootViewController.viewControllers.insert(authEntryVC, at: .zero)
-      self.rootViewController.setNavigationBarHidden(false, animated: false)
-      self.rootViewController.popViewController(animated: false)
+      self.rootViewController.pushViewController(authEntryVC, animated: false)
     }
 
     return .one(flowContributor: .contribute(

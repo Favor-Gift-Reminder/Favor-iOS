@@ -23,12 +23,11 @@ public final class AppFlow: Flow {
   private let keychain = KeychainManager()
 
   /// Used only for testFlow.
-  private let rootViewController: BaseNavigationController
+  private let rootViewController: FavorTabBarController
 
   // Comment this Initializer.
   public init() {
-    self.rootViewController = BaseNavigationController()
-    self.rootViewController.setNavigationBarHidden(true, animated: false)
+    self.rootViewController = FavorTabBarController()
   }
 
   // MARK: - Navigate
@@ -44,28 +43,66 @@ public final class AppFlow: Flow {
       return self.navigateToAuth()
 
     case .dashboardIsRequired:
-      return self.navigateToDashboard()
-      
+      return .none
+
     default:
       return .none
     }
   }
 }
 
+// MARK: - Navigates
+
 private extension AppFlow {
   func navigateToSplash() -> FlowContributors {
+    let homeFlow = HomeFlow()
+    let myPageFlow = MyPageFlow()
+
     let splashVC = SplashViewController()
     let splashReactor = SplashViewReactor()
     splashVC.reactor = splashReactor
 
-    self.rootViewController.setViewControllers([splashVC], animated: true)
-    
-    return .one(flowContributor: .contribute(
-      withNextPresentable: splashVC, withNextStepper: splashReactor, allowStepWhenNotPresented: true))
+    DispatchQueue.main.async {
+      splashVC.modalPresentationStyle = .overFullScreen
+      self.rootViewController.present(splashVC, animated: false)
+    }
+
+    Flows.use(
+      homeFlow,
+      myPageFlow,
+      when: .created
+    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
+      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
+      self.rootViewController.setViewControllers(navigationControllers, animated: false)
+    }
+
+    return .multiple(flowContributors: [
+      .contribute(
+        withNextPresentable: splashVC,
+        withNextStepper: splashReactor,
+        allowStepWhenNotPresented: true
+      ),
+      .contribute(
+        withNextPresentable: homeFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
+      ),
+      .contribute(withNext: self.rootViewController),
+      .contribute(
+        withNextPresentable: myPageFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
+      )
+    ])
   }
 
   func navigateToAuth() -> FlowContributors {
-    let authFlow = AuthFlow(self.rootViewController)
+    let authFlow = AuthFlow()
+
+    Flows.use(authFlow, when: .created) { root in
+      self.rootViewController.dismiss(animated: false) {
+        root.modalPresentationStyle = .overFullScreen
+        self.rootViewController.present(root, animated: false)
+      }
+    }
 
     return .one(flowContributor: .contribute(
       withNextPresentable: authFlow,
@@ -73,39 +110,5 @@ private extension AppFlow {
         withSingleStep: AppStep.authIsRequired
       )
     ))
-  }
-
-  func navigateToDashboard() -> FlowContributors {
-    let dashboardFlow = DashboardFlow()
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: dashboardFlow,
-      withNextStepper: OneStepper(
-        withSingleStep: AppStep.dashboardIsRequired
-      )
-    ))
-  }
-}
-
-// MARK: - Privates
-
-// TODO: Move to splash
-private extension AppFlow {
-  func fetchAppleCredentialState() {
-    let appleIDProvider = ASAuthorizationAppleIDProvider()
-    guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) else { return }
-    let decodedUserID = String(decoding: userID, as: UTF8.self)
-    appleIDProvider.getCredentialState(forUserID: decodedUserID) { state, _ in
-      switch state {
-      case .authorized:
-        print("Authorized")
-      case .notFound, .revoked:
-        print("Need re-auth")
-      case .transferred:
-        break
-      @unknown default:
-        fatalError()
-      }
-    }
   }
 }

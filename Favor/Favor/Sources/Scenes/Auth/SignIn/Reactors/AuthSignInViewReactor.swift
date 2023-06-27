@@ -44,7 +44,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
-    case pulseSocialAuth(AuthState)
+    case socialAuthSelected(AuthState)
     case updateLoading(Bool)
   }
   
@@ -54,7 +54,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
-    @Pulse var requestedSocialAuth: AuthState = .undefined
+    var requestedSocialAuth: AuthState = .undefined
     var isLoading: Bool = false
   }
   
@@ -77,7 +77,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       let emailVaildate = AuthValidationManager(type: .email).validate(email)
       self.emailValidate.accept(emailVaildate)
       return .concat([
-        .just(.updatePassword(email)),
+        .just(.updateEmail(email)),
         .just(.updateEmailValidationResult(emailVaildate))
       ])
 
@@ -100,6 +100,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
           .flatMap { token -> Observable<Mutation> in
             do {
               try self.handleSignInSuccess(email: email, password: password, token: token)
+              self.steps.accept(AppStep.dashboardIsRequired)
             } catch {
               os_log(.error, "\(error)")
               return .just(.updateLoading(false))
@@ -110,7 +111,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 
     case .socialSignInButtonDidTap(let socialAuth):
       os_log(.debug, "Sign-In with social did tap: \(String(describing: socialAuth))")
-      return .just(.pulseSocialAuth(socialAuth))
+      return .just(.socialAuthSelected(socialAuth))
 
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
@@ -155,7 +156,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case .validateSignInButton(let isNextButtonEnabled):
       newState.isSignInButtonEnabled = isNextButtonEnabled
 
-    case .pulseSocialAuth(let socialAuth):
+    case .socialAuthSelected(let socialAuth):
       newState.requestedSocialAuth = socialAuth
 
     case .updateLoading(let isLoading):

@@ -35,7 +35,7 @@ public final class Networking<TargetType: BaseTargetType> {
         let data = try? keychain.get(account: KeychainManager.Accounts.accessToken.rawValue),
         let decodedString = String(data: data, encoding: .utf8)
       else {
-        os_log(.info, "Failed to fetch access token from keychain.")
+        os_log(.info, "No access token found in keychain. Please attempt sign in to retrieve one.")
         return ""
       }
       return decodedString

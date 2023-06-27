@@ -11,55 +11,37 @@ import FavorKit
 import RxFlow
 
 @MainActor
-final class DashboardFlow: Flow {
-  
-  var root: Presentable { self.rootViewController }
-  
-  let rootViewController = FavorTabBarController()
+public final class DashboardFlow: Flow {
 
-  func navigate(to step: Step) -> FlowContributors {
+  // MARK: - Properties
+
+  public var root: Presentable { self.rootViewController }
+  
+  let rootViewController: BaseNavigationController
+
+  // MARK: - Initializer
+
+  init(_ rootViewController: BaseNavigationController) {
+    self.rootViewController = rootViewController
+  }
+
+  // MARK: - Navigate
+
+  public func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
-    case .dashboardIsRequired:
-      return self.navigateToDashBoard()
-
     case .giftManagementIsRequired:
       return self.navigateToNewGift()
-
     default:
       return .none
     }
   }
 }
 
-private extension DashboardFlow {
-  func navigateToDashBoard() -> FlowContributors {
-    let homeFlow = HomeFlow()
-    let myPageFlow = MyPageFlow()
+// MARK: - Navigates
 
-    Flows.use(
-      homeFlow,
-      myPageFlow,
-      when: .ready
-    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
-      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
-      self.rootViewController.setViewControllers(navigationControllers, animated: false)
-    }
-    
-    return .multiple(flowContributors: [
-      .contribute(
-        withNextPresentable: homeFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
-      ),
-      .contribute(withNext: self.rootViewController),
-      .contribute(
-        withNextPresentable: myPageFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
-      )
-    ])
-  }
-  
+private extension DashboardFlow {
   func navigateToNewGift() -> FlowContributors {
     let newGiftFlow = NewGiftFlow()
 
