@@ -48,40 +48,34 @@ public final class Networking<TargetType: BaseTargetType> {
   public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
-      .filterSuccessfulStatusCodes()
       .catch(self.handleInternetConnection)
       .catch(self.handleTimeOut)
-      .catch(self.handleREST)
-      .asObservable()
-      .do(
-        onNext: { _ in
-          let message = "🌐 ✅ SUCCESS: \(requestURL)"
-          os_log(.debug, "\(message)")
-        },
-        onError: { error in
-          switch error {
-          case APIError.internetConnection:
-            // 인터넷이 끊겼을 때,
-            break
-          case APIError.timeOut:
-            // 요청 시간이 초과됐을 때,
-            break
-          case APIError.restError(_, _, _):
-            // statusCode가 200..<300 이외의 Response
-            break
-          default:
-            // 다른 에러
-            break
-          }
-          if let response = (error as? MoyaError)?.response {
-            let message = "🌐 ❌ FAILURE: \(requestURL) [\(response.statusCode)]"
-            os_log(.error, "\(message)")
-          }
-        },
-        onSubscribed: {
-          let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
-          os_log(.debug, "\(message)")
+      .do(onSuccess: { _ in
+        let message = "🌐 ✅ SUCCESS: \(requestURL)"
+        os_log(.debug, "\(message)")
+      }, onError: { error in
+        if let response = (error as? MoyaError)?.response {
+          let message = "🌐 ❌ FAILURE: \(requestURL) [\(response.statusCode)]"
+          os_log(.error, "\(message)")
         }
-      )
+      }, onSubscribed: {
+        let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
+        os_log(.debug, "\(message)")
+      })
+      .asObservable()
+      .flatMap { response -> Observable<Response> in
+        do {
+          if let filteredResponse = try? response.filterSuccessfulStatusCodes() { // 200..<300
+            return .just(filteredResponse)
+          } else { // REST error
+            let errorDTO: ErrorResponseDTO = try APIManager.decode(response.data)
+            return .error(APIError.restError(
+              responseCode: errorDTO.responseCode, responseMessage: errorDTO.responseMessage
+            ))
+          }
+        } catch {
+          return .error(error)
+        }
+      }
   }
 }
