@@ -69,11 +69,9 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      os_log(.debug, "View did load.")
       return .empty()
 
     case .emailDidUpdate(let email):
-      os_log(.debug, "Email TextField did update: \(email)")
       let emailVaildate = AuthValidationManager(type: .email).validate(email)
       self.emailValidate.accept(emailVaildate)
       return .concat([
@@ -82,7 +80,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       ])
 
     case .passwordDidUpdate(let password):
-      os_log(.debug, "Password TextField did update: \(password)")
       let passwordValidate = AuthValidationManager(type: .password).validate(password)
       self.passwordValidate.accept(passwordValidate)
       return .concat([
@@ -103,7 +100,17 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
               self.steps.accept(AppStep.dashboardIsRequired)
             } catch {
               os_log(.error, "\(error)")
-              return .just(.updateLoading(false))
+            }
+            return .just(.updateLoading(false))
+          }
+          .catch { error in
+            if let error = error as? APIError {
+              switch error {
+              case .restError:
+                print(error.description)
+              default:
+                break
+              }
             }
             return .just(.updateLoading(false))
           }

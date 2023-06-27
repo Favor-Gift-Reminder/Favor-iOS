@@ -18,7 +18,7 @@ public enum APIError: Error {
     case .decodeError(let error):
       return "💩 Decoding에 실패하였습니다.: \(error)"
     case let .restError(responseCode, responseMessage):
-      return "\(responseCode) - \(responseMessage)"
+      return "\(responseCode): \(responseMessage)"
     default:
       return ""
     }
