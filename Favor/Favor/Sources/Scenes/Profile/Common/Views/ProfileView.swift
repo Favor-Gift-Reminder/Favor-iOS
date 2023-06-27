@@ -85,7 +85,13 @@ public final class ProfileView: UIView {
   // MARK: - Functions
   
   func updateBackgroundAlpha(to alpha: CGFloat) {
-    self.backgroundImageView.alpha = alpha
+    [
+      self.backgroundImageView,
+      self.profileStackView,
+      self.profileImageButton
+    ].forEach {
+      $0.alpha = alpha
+    }
   }
 }
 

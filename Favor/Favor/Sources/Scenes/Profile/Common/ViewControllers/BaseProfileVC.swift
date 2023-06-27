@@ -103,7 +103,7 @@ public class BaseProfileViewController: BaseViewController {
     )
     return composer
   }()
-
+  
   // MARK: - UI Components
 
   let profileView = ProfileView()
@@ -138,7 +138,7 @@ public class BaseProfileViewController: BaseViewController {
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInset = UIEdgeInsets(
-      top: ProfileView.height - Metric.profileViewOverliedHeight,
+      top: .zero,
       left: .zero,
       bottom: .zero,
       right: .zero
@@ -151,49 +151,47 @@ public class BaseProfileViewController: BaseViewController {
 
   public override func viewDidLoad() {
     super.viewDidLoad()
-
+    
     self.composer.compose()
   }
-
-  public override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-
-    self.setupNavigationBar()
-  }
-
-  // MARK: - Functions
-
-  public func setupNavigationBar() {
-    guard let navigationController = self.navigationController as? BaseNavigationController else { return }
+  
+  public override func viewSafeAreaInsetsDidChange() {
+    super.viewSafeAreaInsetsDidChange()
     
-    navigationController.setNavigationBarHidden(false, animated: false)
-
-    let appearance = UINavigationBarAppearance()
-    appearance.configureWithTransparentBackground()
-    navigationController.navigationBar.standardAppearance = appearance
-    navigationController.navigationBar.scrollEdgeAppearance = appearance
+    let collectionViewContentInset: CGFloat =
+    ProfileView.height - (Metric.profileViewOverliedHeight + self.view.safeAreaInsets.top)
+    self.collectionView.contentInset.top = collectionViewContentInset
   }
+  
+  // MARK: - Functions
   
   /// CollectionView의 contentOffset에 따라 ProfileView의 크기와 흐림도를 업데이트합니다.
   /// - Parameters:
   ///   - offset: CollectionView의 `contentOffset`
-  public func updateProfileViewLayout(by offset: CGPoint) {
+  public func updateProfileViewLayout(by offset: CGPoint, name: String) {
+    /// CollectionView와 SafeArea간의 간격입니다.
+    let collectionViewContentInset: CGFloat =
+    ProfileView.height - (Metric.profileViewOverliedHeight + self.view.safeAreaInsets.top)
+    /// 스크롤이 되면서 ProfileView의 높이도 비율에 맞춰서 감소해야합니다.
+    /// ProfileView의 높이 값이 `330`을 맞춰주는 보조 값입니다.
+    let assistanceValue: CGFloat = ProfileView.height - collectionViewContentInset
     /// 둥근 모서리를 제외한 컨텐츠의 최상단과 화면 상단 사이의 거리 (초기값 = ProfileView height)
-    let spaceBetweenTopAndContent = abs(offset.y) + Metric.profileViewOverliedHeight
+    let spaceBetweenTopAndContent = abs(offset.y)
     /// 컨텐츠의 최상단(`GiftStatsHeader`)이 화면 상단보다 아래에 있는 지 여부
     let isContentBelowTopOfScreen = offset.y < 0
-    /// ProfileView의 height보다 아래로 더 스크롤 됐는 지 여부
-    let isScrollViewInMiddleOfBounds = (offset.y - Metric.profileViewOverliedHeight) > -ProfileView.height
-    
+        
     // 컨텐츠가 `ProfileView`의 최대 높이 범위(330) 안에 있는 경우
     // ProfileView의 높이 변화
-    if isContentBelowTopOfScreen, isScrollViewInMiddleOfBounds {
-      self.profileViewHeightConstraint?.update(offset: spaceBetweenTopAndContent)
-      self.profileView.updateBackgroundAlpha(to: spaceBetweenTopAndContent / ProfileView.height)
+    if isContentBelowTopOfScreen {
+      self.navigationItem.title = nil
+      self.profileViewHeightConstraint?.update(offset: assistanceValue + spaceBetweenTopAndContent)
+      self.profileView.updateBackgroundAlpha(to: (spaceBetweenTopAndContent) / collectionViewContentInset)
     }
     // 컨텐츠의 최상단(`GiftStatsHeader`)이 화면의 상단보다 위에 있는 경우
     // contentInset은 `.zero`로 고정하고 ProfileView는 숨겨짐
     else if !isContentBelowTopOfScreen {
+      self.navigationItem.title = name
+      self.navigationItem.title = "김응철" // TODO: 코드 삭제 요청
       self.profileViewHeightConstraint?.update(offset: 0)
       self.profileView.updateBackgroundAlpha(to: 0)
     }
@@ -204,7 +202,7 @@ public class BaseProfileViewController: BaseViewController {
       self.profileView.updateBackgroundAlpha(to: 1)
     }
   }
-
+  
   public func injectReactor(to view: UICollectionReusableView) { }
   func headerRightButtonDidTap(at section: ProfileSection) { }
 
@@ -222,7 +220,7 @@ public class BaseProfileViewController: BaseViewController {
       self.view.addSubview($0)
     }
   }
-
+  
   public override func setupConstraints() {
     self.profileView.snp.makeConstraints { make in
       make.top.equalToSuperview()
@@ -231,8 +229,7 @@ public class BaseProfileViewController: BaseViewController {
     }
 
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalToSuperview()
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalToSuperview()
     }
   }

@@ -32,6 +32,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   enum Mutation {
     case updateAnniversaries([Anniversary])
     case updateAllSection([Item])
+    case updateToast(ToastMessage)
   }
   
   struct State {
@@ -39,6 +40,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     var sections: [Section] = []
     var items: [Item] = []
     var anniversaryListType: AnniversaryListType
+    @Pulse var shouldShowToast: ToastMessage?
   }
   
   // MARK: - Initializer
@@ -78,6 +80,15 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       return .empty()
       
     case .pinButtonDidTap(let tappedAnniversary):
+      // 0. 고정되어 있는 기념일이 3개가 초과된 경우를 판별합니다.
+      let originalPinnedAnniversaries = self.currentState.anniversaries.filter({ $0.isPinned })
+      let isPinnedTargetAnniversary: Int = !tappedAnniversary.isPinned ? 1 : 0
+      
+      guard originalPinnedAnniversaries.count + isPinnedTargetAnniversary < 4 else {
+        // 고정된 기념일이 3개 초과되었을 경우입니다.
+        return .just(.updateToast(.anniversaryPinLimited))
+      }
+      
       // 1. 현재 상태의 값을 백업
       let originalAnniversaries = self.currentState.anniversaries
       guard
@@ -141,6 +152,9 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
 
     case .updateAllSection(let allItems):
       newState.items = allItems
+      
+    case .updateToast(let shouldShowToast):
+      newState.shouldShowToast = shouldShowToast
     }
 
     return newState

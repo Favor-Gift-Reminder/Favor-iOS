@@ -73,8 +73,8 @@ final class AnniversaryListModifyingViewController: BaseAnniversaryListViewContr
   override func viewNeedsLoaded(with toast: ToastMessage? = nil) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.viewNeedsLoaded)
-
-    self.presentToast(toast, duration: .short)
+    
+//    self.presentToast(toast, duration: .short)
   }
 
   override func transfer(_ model: (any CellModel)?, from cell: UICollectionViewCell) {

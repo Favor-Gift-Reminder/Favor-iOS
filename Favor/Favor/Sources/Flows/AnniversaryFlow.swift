@@ -61,6 +61,7 @@ private extension AnniversaryFlow {
     let anniversaryListVC = AnniversaryListViewController()
     let anniversaryListReactor = AnniversaryListViewReactor(type)
     anniversaryListVC.reactor = anniversaryListReactor
+    anniversaryListVC.hidesBottomBarWhenPushed = true
 
     DispatchQueue.main.async {
       self.rootViewController.setupNavigationAppearance()

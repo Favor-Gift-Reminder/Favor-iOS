@@ -17,7 +17,7 @@ open class BaseNavigationController: UINavigationController {
 
   open override func viewDidLoad() {
     super.viewDidLoad()
-
+    
     self.setupNavigationAppearance()
   }
 
@@ -31,7 +31,7 @@ open class BaseNavigationController: UINavigationController {
   }
 
   // MARK: - Functions
-
+  
   public func setupNavigationAppearance() {
     // Button Appearance
     let backButtonAppearance = UIBarButtonItemAppearance()
@@ -48,8 +48,6 @@ open class BaseNavigationController: UINavigationController {
     // Bar Appearance
     let appearance = UINavigationBarAppearance()
     appearance.configureWithTransparentBackground()
-    appearance.backgroundColor = .favorColor(.white)
-    appearance.shadowColor = .favorColor(.white)
     appearance.backButtonAppearance = backButtonAppearance
     appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
 

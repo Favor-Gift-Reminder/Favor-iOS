@@ -18,7 +18,7 @@ final class ReminderViewController: BaseViewController, View {
   typealias ReminderDataSource = RxCollectionViewSectionedReloadDataSource<ReminderSection.ReminderSectionModel>
 
   // MARK: - Constants
-
+  
   // MARK: - Properties
 
   private lazy var dataSource: ReminderDataSource = ReminderDataSource(
@@ -43,7 +43,7 @@ final class ReminderViewController: BaseViewController, View {
 
   // MARK: - UI Components
   private lazy var newReminderButton = FavorBarButtonItem(.addNoti)
-
+  
   private lazy var emptyImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = .favorIcon(.deselect)?

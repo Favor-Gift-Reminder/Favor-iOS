@@ -52,9 +52,8 @@ final class FavorTabBarController: UITabBarController, Stepper {
     self.setValue(self.favorTabBar, forKey: "tabBar")
     self.favorTabBar.selectedIndex = 0
     
-    // GiftManagement페이지로 이동합니다.
     self.favorTabBar.middleButtonObserver = {
-      print("BOOM!")
+      // TODO: GiftManagement페이지로 이동합니다.
     }
   }
   

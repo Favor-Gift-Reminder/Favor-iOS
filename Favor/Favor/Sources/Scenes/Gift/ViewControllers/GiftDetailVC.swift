@@ -89,7 +89,7 @@ final class GiftDetailViewController: BaseViewController, View {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
+    
     self.setupNavigationBar()
   }
 
@@ -167,9 +167,9 @@ final class GiftDetailViewController: BaseViewController, View {
     reactor.action.onNext(.giftNeedsUpdated(gift))
     self.presentToast(.giftEdited(gift.name), duration: .short)
   }
-
+  
   // MARK: - UI Setups
-
+  
   private func setupNavigationBar() {
     self.navigationItem.setRightBarButtonItems(
       [
