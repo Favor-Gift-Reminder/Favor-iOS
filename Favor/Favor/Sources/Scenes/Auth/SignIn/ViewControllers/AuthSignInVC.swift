@@ -6,6 +6,8 @@
 //
 
 import AuthenticationServices
+import CryptoKit
+import OSLog
 import UIKit
 
 import FavorKit
@@ -29,6 +31,7 @@ public final class AuthSignInViewController: BaseViewController, View {
   // MARK: - Properties
 
   private let keychain = KeychainManager()
+  private var currentNonce: String?
 
   // MARK: - UI Components
   
@@ -133,8 +136,10 @@ public final class AuthSignInViewController: BaseViewController, View {
     self.socialSignInButtonStackView.arrangedSubviews.forEach { arrangedSubview in
       guard let button = arrangedSubview as? SocialAuthButton else { return }
       button.rx.tap
-        .map { Reactor.Action.socialSignInButtonDidTap(button.authMethod) }
-        .bind(to: reactor.action)
+        .asDriver(onErrorRecover: { _ in return .empty() })
+        .drive(with: self, onNext: { owner, _ in
+          owner.handleSocialAuth(button.authMethod)
+        })
         .disposed(by: self.disposeBag)
     }
 
@@ -145,7 +150,7 @@ public final class AuthSignInViewController: BaseViewController, View {
 
     self.view.rx.tapGesture()
       .when(.recognized)
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .never() })
       .drive(with: self, onNext: {  owner, _ in
         owner.view.endEditing(true)
       })
@@ -153,20 +158,9 @@ public final class AuthSignInViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.isSignInButtonEnabled }
-      .asDriver(onErrorRecover: { _ in return .never()})
+      .asDriver(onErrorRecover: { _ in return .never() })
       .drive(with: self, onNext: { owner, isEnabled in
         owner.signInButton.isEnabled = isEnabled
-      })
-      .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.requestedSocialAuth }
-      .asDriver(onErrorRecover: { _ in return .never()})
-      .drive(with: self, onNext: { owner, socialAuth in
-        switch socialAuth {
-        case .apple:
-          owner.handleSignInWithApple()
-        default: break
-        }
       })
       .disposed(by: self.disposeBag)
 
@@ -227,18 +221,57 @@ public final class AuthSignInViewController: BaseViewController, View {
   
 }
 
-// MARK: - Sign in With
+// MARK: - Social SignIn
+
+extension AuthSignInViewController {
+  private func handleSocialAuth(_ authMethod: AuthState) {
+    switch authMethod {
+    case .apple:
+      self.handleSignInWithApple()
+    default:
+      break
+    }
+  }
+}
+
+// MARK: - Apple
 
 extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
-  func handleSignInWithApple() {
+  private func handleSignInWithApple() {
+    let nonce = self.randomNonceString()
+    self.currentNonce = nonce
     let provider = ASAuthorizationAppleIDProvider()
-    let request = provider.createRequest()
-    request.requestedScopes = [.fullName, .email]
+    let request = ASAuthorizationAppleIDProvider().createRequest()
 
-    let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-    authorizationController.delegate = self
-    authorizationController.presentationContextProvider = self
-    authorizationController.performRequests()
+    // Keychain에 UserID가 저장되어 있을 때.
+    if let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) {
+      let decodedUserID = String(decoding: userID, as: UTF8.self)
+      provider.getCredentialState(forUserID: decodedUserID) { state, error in
+        switch state {
+        case .authorized:
+          os_log(.debug, "Authorized")
+          let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+          authorizationController.delegate = self
+          authorizationController.presentationContextProvider = self
+          authorizationController.performRequests()
+        case .revoked:
+          os_log(.debug, "Need re-auth")
+        case .notFound:
+          os_log(.debug, "Need Sign in")
+        case .transferred:
+          os_log(.debug, "Transferred")
+        @unknown default:
+          fatalError()
+        }
+      }
+    } else { // Keychain에 UserID가 없을 때
+      os_log(.debug, "No userID found on keychain.")
+      request.requestedScopes = [.fullName, .email]
+      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+      authorizationController.delegate = self
+      authorizationController.presentationContextProvider = self
+      authorizationController.performRequests()
+    }
   }
 
   public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
@@ -249,34 +282,74 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
     controller: ASAuthorizationController,
     didCompleteWithAuthorization authorization: ASAuthorization
   ) {
-    guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
-
-    // Create an account in your system.
-    let userIdentifier = appleIDCredential.user
-    let fullName = appleIDCredential.fullName
-    let email = appleIDCredential.email
-
-    // Handle Sign Up Task
+    guard let credential = authorization.credential as? ASAuthorizationAppleIDCredential else { return }
     guard
-      let encodedUserID = userIdentifier.data(using: .utf8),
-      let reactor = self.reactor,
-      let email = email,
-      let familyName = fullName?.familyName,
-      let givenName = fullName?.givenName
+      let nonce = self.currentNonce,
+      let appleIDToken = credential.identityToken,
+      let idTokenString = String(data: appleIDToken, encoding: .utf8)
     else { return }
-    do {
-      try self.keychain.set(value: encodedUserID, account: KeychainManager.Accounts.userID.rawValue)
-      FTUXStorage.authState = .apple
-      reactor.action.onNext(.signedInWithApple(email, familyName + givenName))
-    } catch {
-      print(error)
-    }
+
+//    do {
+//      try self.keychain.set(value: encodedUserID, account: KeychainManager.Accounts.userID.rawValue)
+//      FTUXStorage.authState = .apple
+//      reactor.action.onNext(.signedInWithApple(email, familyName + givenName))
+//    } catch {
+//      os_log(.error, "\(error)")
+//    }
   }
 
   public func authorizationController(
     controller: ASAuthorizationController,
     didCompleteWithError error: Error
   ) {
-    print(error)
+    os_log(.error, "\(error)")
+  }
+}
+
+// MARK: - Kakao
+
+extension AuthSignInViewController {
+
+}
+
+// MARK: - Privates
+
+private extension AuthSignInViewController {
+  func randomNonceString(length: Int = 32) -> String {
+    precondition(length > 0)
+    let charset: [Character] = Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+    var result = ""
+    var remainingLength = length
+
+    while remainingLength > 0 {
+      let randoms: [UInt8] = (0 ..< 16).map { _ in
+        var random: UInt8 = 0
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, 1, &random)
+        if errorCode != errSecSuccess {
+          fatalError("Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)")
+        }
+        return random
+      }
+
+      randoms.forEach { random in
+        if remainingLength == 0 { return }
+
+        if random < charset.count {
+          result.append(charset[Int(random)])
+          remainingLength -= 1
+        }
+      }
+    }
+    return result
+  }
+
+  func sha256(_ input: String) -> String {
+    let inputData = Data(input.utf8)
+    let hashedData = SHA256.hash(data: inputData)
+    let hashString = hashedData.compactMap {
+      return String(format: "%02x", $0)
+    }.joined()
+
+    return hashString
   }
 }

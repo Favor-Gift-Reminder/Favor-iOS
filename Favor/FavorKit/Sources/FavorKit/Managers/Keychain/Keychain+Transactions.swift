@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 extension KeychainManager {
   
@@ -103,6 +104,7 @@ extension KeychainManager {
 
     switch status {
     case errSecSuccess:
+      os_log(.debug, "🔑 Found Keychain value for account: \(account)")
       return true
     case errSecItemNotFound:
       return false

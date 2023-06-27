@@ -32,7 +32,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case emailDidUpdate(String)
     case passwordDidUpdate(String)
     case signInButtonDidTap
-    case socialSignInButtonDidTap(AuthState)
     case findPasswordButtonDidTap
     // Social Login
     case signedInWithApple(String, String)
@@ -44,7 +43,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
-    case socialAuthSelected(AuthState)
     case updateLoading(Bool)
   }
   
@@ -54,7 +52,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
-    var requestedSocialAuth: AuthState = .undefined
     var isLoading: Bool = false
   }
   
@@ -105,20 +102,11 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
           }
           .catch { error in
             if let error = error as? APIError {
-              switch error {
-              case .restError:
-                print(error.description)
-              default:
-                break
-              }
+              os_log(.error, "\(error.description)")
             }
             return .just(.updateLoading(false))
           }
       ])
-
-    case .socialSignInButtonDidTap(let socialAuth):
-      os_log(.debug, "Sign-In with social did tap: \(String(describing: socialAuth))")
-      return .just(.socialAuthSelected(socialAuth))
 
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
@@ -162,9 +150,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 
     case .validateSignInButton(let isNextButtonEnabled):
       newState.isSignInButtonEnabled = isNextButtonEnabled
-
-    case .socialAuthSelected(let socialAuth):
-      newState.requestedSocialAuth = socialAuth
 
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
