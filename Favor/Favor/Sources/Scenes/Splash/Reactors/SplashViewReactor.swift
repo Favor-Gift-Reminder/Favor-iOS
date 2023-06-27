@@ -61,8 +61,13 @@ private extension SplashViewReactor {
         .asObservable()
         .flatMap { token -> Observable<Mutation> in
           os_log(.debug, "🔐 Signed in via 📨 Email: Navigating to dashboardflow.")
-          print(token)
           // Token 저장
+          if let tokenData = token.data(using: .utf8) {
+            try self.keychain.set(
+              value: tokenData,
+              account: KeychainManager.Accounts.accessToken.rawValue
+            )
+          }
           self.steps.accept(AppStep.dashboardIsRequired)
           return .empty()
         }

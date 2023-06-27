@@ -78,7 +78,6 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .emailTextFieldDidUpdate(let email):
-      os_log(.debug, "Email TextField did update: \(email)")
       let emailValidationResult = AuthValidationManager(type: .email).validate(email)
       self.emailValidate.accept(emailValidationResult)
       return .concat([
@@ -87,7 +86,6 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
       ])
       
     case .passwordTextFieldDidUpdate(let password):
-      os_log(.debug, "Password TextField did update: \( password)")
       let passwordValidationResult = AuthValidationManager(type: .password).validate(password)
       self.passwordValidate.accept(passwordValidationResult)
       let confirmPasswordValidationResult = AuthValidationManager(type: .confirmPassword).confirm(
@@ -102,7 +100,6 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
       ])
       
     case .confirmPasswordTextFieldDidUpdate(let confirmPassword):
-      os_log(.debug, "Confirm Password TextField did update: \(confirmPassword)")
       let confirmPasswordValidationResult = AuthValidationManager(type: .confirmPassword).confirm(
         confirmPassword,
         with: self.currentState.password
@@ -124,6 +121,7 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
             .asObservable()
             .flatMap { user -> Observable<Mutation> in
               return .concat([
+                // Local User update
                 self.updateUser(with: user)
                   .asObservable()
                   .flatMap { user -> Observable<Mutation> in
@@ -133,11 +131,11 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                   .catch { _ in
                     return .just(.updateLoading(false))
                   },
+                // Request sign-in to retrieve access token
                 self.requestSignIn(email: email, password: password)
                   .asObservable()
                   .flatMap { token -> Observable<Mutation> in
                     do {
-                      FTUXStorage.authState = .email
                       guard
                         let emailData = email.data(using: .utf8),
                         let passwordData = password.data(using: .utf8),
@@ -152,6 +150,7 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                       try self.keychain.set(
                         value: tokenData,
                         account: KeychainManager.Accounts.accessToken.rawValue)
+                      FTUXStorage.authState = .email
                     } catch {
                       os_log(.error, "\(error)")
                       return .just(.updateLoading(false))
@@ -160,7 +159,10 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
                   }
                 ])
             }
-            .catch { _ in
+            .catch { error in
+              if let error = error as? APIError {
+                os_log(.error, "\(error.description)")
+              }
               return .just(.updateLoading(false))
             }
         ])
@@ -238,17 +240,12 @@ private extension AuthSignUpViewReactor {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
             single(.success(User(dto: responseDTO.data)))
           } catch {
-            do {
-              let errorResponseDTO: ErrorResponseDTO = try APIManager.decode(response.data)
-              let errorCode = errorResponseDTO.responseCode
-              let errorMessage = errorResponseDTO.responseMessage
-              os_log(.error, "💩 \(errorCode): \(errorMessage)")
-            } catch {
-              single(.failure(error))
-            }
             single(.failure(error))
           }
         }, onFailure: { error in
+          if let error = error as? APIError {
+            os_log(.error, "\(error.description)")
+          }
           single(.failure(error))
         })
 

@@ -192,7 +192,6 @@ private extension AuthSignInViewReactor {
       let tokenData = token.data(using: .utf8)
     else { throw FavorError.optionalBindingFailure([email, password, token]) }
 
-    FTUXStorage.authState = .email
     try self.keychain.set(
       value: emailData,
       account: KeychainManager.Accounts.userEmail.rawValue)
@@ -202,5 +201,6 @@ private extension AuthSignInViewReactor {
     try self.keychain.set(
       value: tokenData,
       account: KeychainManager.Accounts.accessToken.rawValue)
+    FTUXStorage.authState = .email
   }
 }
