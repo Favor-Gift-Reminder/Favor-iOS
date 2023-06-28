@@ -28,7 +28,6 @@
 		2E2B366B2A38515F0080171D /* SearchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2B366A2A38515F0080171D /* SearchSection.swift */; };
 		2E2DB8CD2A2DB36400E6F5C6 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
 		2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */; };
-		2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = 2E3FA74229F37D8F003342CA /* OrderedCollections */; };
 		2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */; };
 		2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */; };
 		2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75629F7C52D003342CA /* FriendListVC.swift */; };
@@ -178,6 +177,8 @@
 		2EF1585F29E3CDC100D199DF /* FavorTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */; };
 		2EFDA0F42A3AA83B009A11D7 /* SearchCategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F32A3AA83B009A11D7 /* SearchCategoryVC.swift */; };
 		2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */; };
+		2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */; };
+		2EFDE6792A4BF8BC007A808F /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */; };
 		E51F55842A4036650002EADB /* FavorTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51F55832A4036650002EADB /* FavorTabBar.swift */; };
 		E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */; };
 		E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */; };
@@ -435,6 +436,7 @@
 				E59AB0982A17778700F0AC7D /* Then in Frameworks */,
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
+				2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2EAC60A82A4A018F0047A572 /* Hero in Frameworks */,
 				2E946FDF2A2585BA00D0EED8 /* ImageViewer in Frameworks */,
@@ -442,7 +444,7 @@
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E55501F2A27A5AE00E6AB26 /* Composer in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
-				2E3FA74329F37D8F003342CA /* OrderedCollections in Frameworks */,
+				2EFDE6792A4BF8BC007A808F /* RxKakaoSDKUser in Frameworks */,
 				2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
 				2E635391295D906A00B23A14 /* Differentiator in Frameworks */,
@@ -1538,11 +1540,12 @@
 				2EE3BA8329AB60A4004FDCC9 /* RealmSwift */,
 				2E730C6929BA31F4003668D9 /* FavorNetworkKit */,
 				2EEFD5B629BB7B4300BA46BA /* FavorKit */,
-				2E3FA74229F37D8F003342CA /* OrderedCollections */,
 				E59AB0972A17778700F0AC7D /* Then */,
 				2E946FDE2A2585BA00D0EED8 /* ImageViewer */,
 				2E55501E2A27A5AE00E6AB26 /* Composer */,
 				2EAC60A72A4A018F0047A572 /* Hero */,
+				2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */,
+				2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1605,10 +1608,10 @@
 				E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */,
 				2EE3BA6E29A9D7D3004FDCC9 /* XCRemoteSwiftPackageReference "Reusable" */,
 				2EE3BA8029AB60A4004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
-				2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */,
 				E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */,
 				2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */,
 				2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */,
+				2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -2155,14 +2158,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/apple/swift-collections.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.0;
-			};
-		};
 		2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/nomatterjun/Composer.git";
@@ -2251,6 +2246,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk-rx";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		E56260FA2991E4EA00D14020 /* XCRemoteSwiftPackageReference "RSKPlaceholderTextView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ruslanskorb/RSKPlaceholderTextView.git";
@@ -2270,11 +2273,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		2E3FA74229F37D8F003342CA /* OrderedCollections */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2E3FA74129F37D8F003342CA /* XCRemoteSwiftPackageReference "swift-collections" */;
-			productName = OrderedCollections;
-		};
 		2E55501E2A27A5AE00E6AB26 /* Composer */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */;
@@ -2351,6 +2349,16 @@
 		2EEFD5B629BB7B4300BA46BA /* FavorKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FavorKit;
+		};
+		2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
+			productName = RxKakaoSDKAuth;
+		};
+		2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */;
+			productName = RxKakaoSDKUser;
 		};
 		E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */ = {
 			isa = XCSwiftPackageProductDependency;
