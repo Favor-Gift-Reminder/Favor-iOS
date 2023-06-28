@@ -28,7 +28,11 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Initializer
 
   public init() {
+    #if DEBUG
     var plugins: [PluginType] = [NetworkLoggerPlugin()]
+    #else
+    var plugins: [PluginType] = []
+    #endif
     if let accessToken = try? self.keychain.get(account: KeychainManager.Accounts.accessToken.rawValue) {
       let accessTokenString = String(decoding: accessToken, as: UTF8.self)
       plugins.append(FavorJWTPlugin { _ in accessTokenString })
