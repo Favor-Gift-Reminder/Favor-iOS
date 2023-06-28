@@ -21,7 +21,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
     return stackView
   }()
 
-  private let profileImageView = FavorProfilePhotoView(.big)
+  private let profileImageView = FavorProfilePhotoView(.big, isUser: false)
 
   private let nameLabel: UILabel = {
     let label = UILabel()
@@ -32,7 +32,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   }()
 
   // MARK: - Initializer
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
@@ -47,7 +47,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   // MARK: - Functions
 
   public func bind(_ friend: Friend) {
-    self.profileImageView.updateProfileImage(friend.profilePhoto)
+    self.profileImageView.profileImage = friend.profilePhoto
     self.nameLabel.text = friend.name
   }
 }

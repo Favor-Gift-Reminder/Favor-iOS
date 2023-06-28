@@ -22,12 +22,12 @@ public final class FavorToastMessageView: UIView {
   public var height: CGFloat = 44.0 {
     didSet { self.updateHeight() }
   }
-
-  public var message: String? {
+  
+  public var message: ToastMessage? {
     didSet { self.updateMessage() }
   }
-
-  public var duration: ToastManager.duration?
+  
+  public var duration: ToastManager.Duration?
 
   // MARK: - UI Components
 
@@ -40,22 +40,36 @@ public final class FavorToastMessageView: UIView {
     label.lineBreakMode = .byTruncatingTail
     return label
   }()
-
+  
+  private let warningImageView: UIImageView = {
+    let iv = UIImageView()
+    iv.image = .favorIcon(.error)?.withTintColor(.favorColor(.white))
+    return iv
+  }()
+  
+  private lazy var stackView: UIStackView = {
+    let sv = UIStackView()
+    [
+      self.warningImageView,
+      self.titleLabel
+    ].forEach {
+      sv.addArrangedSubview($0)
+    }
+    sv.spacing = 10.0
+    sv.axis = .horizontal
+    return sv
+  }()
+  
   // MARK: - Initializer
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-
+  
+  init(_ message: ToastMessage) {
+    super.init(frame: .zero)
+    
+    self.message = message
+    self.updateMessage()
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
-  }
-
-  public convenience init(_ message: String) {
-    self.init(frame: .zero)
-
-    self.message = message
-    self.updateMessage()
   }
 
   required init?(coder: NSCoder) {
@@ -77,20 +91,30 @@ extension FavorToastMessageView: BaseView {
       .flexibleBottomMargin
     ]
     self.layer.cornerRadius = self.height / 2
-    self.backgroundColor = .favorColor(.sub)
+    
+    switch self.message?.viewType {
+    case .basic:
+      self.backgroundColor = .favorColor(.toast2)
+      self.warningImageView.isHidden = true
+    case .warning:
+      self.backgroundColor = .favorColor(.toast1)
+      self.warningImageView.isHidden = false
+    default:
+      break
+    }
   }
-
+  
   public func setupLayouts() {
-    self.addSubview(self.titleLabel)
+    self.addSubview(self.stackView)
   }
-
+  
   public func setupConstraints() {
     self.snp.makeConstraints { make in
       make.width.equalTo(self.width)
       make.height.equalTo(self.height)
     }
-
-    self.titleLabel.snp.makeConstraints { make in
+    
+    self.stackView.snp.makeConstraints { make in
       make.center.equalToSuperview()
     }
   }
@@ -112,6 +136,6 @@ private extension FavorToastMessageView {
   }
 
   func updateMessage() {
-    self.titleLabel.text = self.message
+    self.titleLabel.text = self.message?.description
   }
 }

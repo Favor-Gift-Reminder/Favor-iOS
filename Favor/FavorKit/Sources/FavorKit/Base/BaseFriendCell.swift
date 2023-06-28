@@ -13,64 +13,13 @@ open class BaseFriendCell: BaseCollectionViewCell {
 
   // MARK: - Constants
   
-  public enum ProfileImageType {
-    case undefined
-    case friend(UIImage?)
-  }
-  
   private enum Metric {
     static let profileImageViewSize: CGFloat = 48.0
   }
   
-  // MARK: - Properties
-
-  public var friendNo: Int?
-  
-  public var friendName: String = "" {
-    didSet {
-      self.nameLabel.text = friendName
-    }
-  }
-  
-  public var friendProfileImage: ProfileImageType = .undefined {
-    didSet {
-      switch self.friendProfileImage {
-      case .undefined:
-        self.profileImageView.isHidden = true
-        self.friendIconImageView.isHidden = false
-      case .friend:
-//        self.profileImageView.image = profileImage
-        self.profileImageView.isHidden = false
-        self.friendIconImageView.isHidden = true
-      }
-    }
-  }
-  
   // MARK: - UI Components
-
-  public var containerView = UIView()
-
-  private let friendIconImageView: UIImageView = {
-    let imageView = UIImageView()
-    imageView.image = .favorIcon(.friend)?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: Metric.profileImageViewSize / 2)
-      .withTintColor(.favorColor(.white))
-    imageView.contentMode = .center
-    imageView.backgroundColor = .favorColor(.line3)
-    imageView.layer.cornerRadius = Metric.profileImageViewSize / 2
-    imageView.clipsToBounds = true
-    return imageView
-  }()
   
-  private let profileImageView: UIImageView = {
-    let imageView = UIImageView()
-    imageView.contentMode = .scaleAspectFill
-    imageView.backgroundColor = .clear
-    imageView.layer.cornerRadius = Metric.profileImageViewSize / 2
-    imageView.clipsToBounds = true
-    return imageView
-  }()
+  public var containerView = UIView()
   
   private let nameLabel: UILabel = {
     let label = UILabel()
@@ -79,26 +28,38 @@ open class BaseFriendCell: BaseCollectionViewCell {
     label.text = "친구"
     return label
   }()
-
+  
+  private let favorProfilePhotoView = FavorProfilePhotoView(.small, isUser: false)
+  
+  // MARK: - Properties
+  
+  public var friendName: String = "" {
+    willSet { self.nameLabel.text = newValue }
+  }
+  
   // MARK: - Initializer
-
+  
   public override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
   }
-
+  
   required public init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Functions
   
-  open func bind(identifier: Int, name: String) {
-    self.friendNo = identifier
+  open func configure(
+    isUser: Bool,
+    name: String,
+    image: UIImage? = nil
+  ) {
+    self.favorProfilePhotoView.profileImage = image
+    self.favorProfilePhotoView.isUser = isUser
     self.friendName = name
-//    self.userImage = .friend(friend.profilePhoto)
   }
 
   // MARK: - Setup
@@ -110,10 +71,9 @@ open class BaseFriendCell: BaseCollectionViewCell {
 
   open func setupLayouts() {
     self.contentView.addSubview(self.containerView)
-
+    
     [
-      self.friendIconImageView,
-      self.profileImageView,
+      self.favorProfilePhotoView,
       self.nameLabel
     ].forEach {
       self.containerView.addSubview($0)
@@ -125,19 +85,14 @@ open class BaseFriendCell: BaseCollectionViewCell {
       make.edges.equalToSuperview()
     }
     
-    self.profileImageView.snp.makeConstraints { make in
+    self.favorProfilePhotoView.snp.makeConstraints { make in
       make.leading.equalToSuperview()
       make.centerY.equalToSuperview()
       make.width.height.equalTo(Metric.profileImageViewSize)
     }
     
-    self.friendIconImageView.snp.makeConstraints { make in
-      make.center.equalTo(self.profileImageView)
-      make.width.height.equalTo(Metric.profileImageViewSize)
-    }
-
     self.nameLabel.snp.makeConstraints { make in
-      make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
+      make.leading.equalTo(self.favorProfilePhotoView.snp.trailing).offset(16)
       make.centerY.equalToSuperview()
     }
   }

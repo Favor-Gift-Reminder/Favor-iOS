@@ -57,6 +57,7 @@ private extension ReminderFlow {
     let reminderVC = ReminderViewController()
     let reminderReactor = ReminderViewReactor()
     reminderVC.reactor = reminderReactor
+    reminderVC.hidesBottomBarWhenPushed = true
 
     self.rootViewController.pushViewController(reminderVC, animated: true)
 

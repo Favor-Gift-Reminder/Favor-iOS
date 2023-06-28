@@ -60,6 +60,7 @@ private extension NewGiftFlow {
     let giftManagementVC = GiftManagementViewController()
     let giftManagementReactor = GiftManagementViewReactor(.new, pickerManager: PHPickerManager())
     giftManagementVC.reactor = giftManagementReactor
+    giftManagementVC.hidesBottomBarWhenPushed = true
 
     self.rootViewController.pushViewController(giftManagementVC, animated: false)
     

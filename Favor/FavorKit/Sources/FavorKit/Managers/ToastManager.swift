@@ -12,8 +12,8 @@ import SnapKit
 public final class ToastManager {
 
   // MARK: - Constants
-
-  public enum duration {
+  
+  public enum Duration {
     case short, long, forever
 
     var timeInterval: TimeInterval {
@@ -39,47 +39,18 @@ public final class ToastManager {
   private init() { }
 
   // MARK: - Functions
-
+  
   /// `FavorToastMessageView` 객체를 생성합니다.
-  public func prepareToast(_ message: String) -> FavorToastMessageView {
+  public func prepareToast(_ message: ToastMessage) -> FavorToastMessageView {
     let toast = FavorToastMessageView(message)
     return toast
   }
-
-  private func showToast(
-    _ toast: FavorToastMessageView,
-    at viewController: Toastable,
-    completion: (() -> Void)? = nil
-  ) {
-    toast.alpha = 0.0
-    viewController.view.addSubview(toast)
-
-    toast.snp.makeConstraints { make in
-      make.centerX.equalToSuperview()
-      make.bottom.equalTo(viewController.view.safeAreaLayoutGuide)
-      make.directionalHorizontalEdges.equalTo(viewController.view.layoutMarginsGuide).inset(20)
-    }
-    viewController.view.layoutIfNeeded()
-
-    let animator = UIViewPropertyAnimator(duration: self.popInDuration, curve: .easeInOut) {
-      toast.alpha = 1.0
-      toast.snp.updateConstraints { make in
-        make.bottom.equalTo(viewController.view.safeAreaLayoutGuide).inset(20)
-      }
-      viewController.view.layoutIfNeeded()
-    }
-    animator.addCompletion { _ in
-      self.hideToast(toast, from: viewController, duration: toast.duration)
-      if let completion { completion() }
-    }
-    animator.startAnimation()
-  }
-
+  
   /// ToastView를 최상단 VC 위에 띄웁니다.
   public func showNewToast(
     _ toast: FavorToastMessageView,
     at viewController: Toastable,
-    duration: ToastManager.duration = .short,
+    duration: ToastManager.Duration = .short,
     completion: (() -> Void)? = nil
   ) {
     toast.duration = duration
@@ -99,7 +70,7 @@ public final class ToastManager {
   public func hideToast(
     _ toast: FavorToastMessageView,
     from viewController: Toastable,
-    duration: ToastManager.duration? = nil
+    duration: ToastManager.Duration? = nil
   ) {
     let animator = UIViewPropertyAnimator(duration: self.popOutDuration, curve: .easeInOut) {
       toast.alpha = 0.0
@@ -111,7 +82,7 @@ public final class ToastManager {
     animator.addCompletion { _ in
       DispatchQueue.main.asyncAfter(deadline: .now() + self.popOutDuration) {
         toast.removeFromSuperview()
-
+        
         self.queue.dequeue()
         if let nextToast = self.queue.peek() {
           self.showToast(nextToast, at: viewController)
@@ -127,5 +98,36 @@ public final class ToastManager {
 
   public func resetToast() {
     self.queue = Queue<FavorToastMessageView>()
+  }
+  
+  // MARK: - Privates
+  
+  private func showToast(
+    _ toast: FavorToastMessageView,
+    at viewController: Toastable,
+    completion: (() -> Void)? = nil
+  ) {
+    toast.alpha = 0.0
+    viewController.view.addSubview(toast)
+    
+    toast.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.bottom.equalTo(viewController.view.safeAreaLayoutGuide)
+      make.directionalHorizontalEdges.equalTo(viewController.view.layoutMarginsGuide).inset(20)
+    }
+    viewController.view.layoutIfNeeded()
+    
+    let animator = UIViewPropertyAnimator(duration: self.popInDuration, curve: .easeInOut) {
+      toast.alpha = 1.0
+      toast.snp.updateConstraints { make in
+        make.bottom.equalTo(viewController.view.safeAreaLayoutGuide).inset(toast.message?.bottomInset ?? 0.0)
+      }
+      viewController.view.layoutIfNeeded()
+    }
+    animator.addCompletion { _ in
+      self.hideToast(toast, from: viewController, duration: toast.duration)
+      if let completion { completion() }
+    }
+    animator.startAnimation()
   }
 }

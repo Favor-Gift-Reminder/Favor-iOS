@@ -85,7 +85,7 @@ final class MyPageViewReactor: Reactor, Stepper {
             .just(.updateLoading(status == .inProgress))
           ])
         }
-
+      
     case .editButtonDidTap:
       self.steps.accept(AppStep.editMyPageIsRequired(self.currentState.user))
       return .empty()

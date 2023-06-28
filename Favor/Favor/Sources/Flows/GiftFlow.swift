@@ -85,6 +85,7 @@ private extension GiftFlow {
     let giftDetailVC = GiftDetailViewController()
     let giftDetailReactor = GiftDetailViewReactor(gift: gift)
     giftDetailVC.reactor = giftDetailReactor
+    giftDetailVC.hidesBottomBarWhenPushed = true
 
     self.rootViewController.pushViewController(giftDetailVC, animated: true)
 
@@ -120,7 +121,7 @@ private extension GiftFlow {
   func popToHome(with gift: Gift) -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
     guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return .none }
-    homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
+//    homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
 
     return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
   }

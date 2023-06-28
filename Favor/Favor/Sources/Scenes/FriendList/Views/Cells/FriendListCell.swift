@@ -13,20 +13,20 @@ import Reusable
 final class FriendListCell: BaseFriendCell, Pressable, Reusable {
 
   // MARK: - Constants
-
+  
   private enum Metric {
     static let profileImageViewSize = 48.0
     static let rightImageViewSize = 28.0
   }
-
+  
   // MARK: - Properties
-
-  var pressedScale: Double = 0.96
+  
+  var pressedScale: Double = 1.0
   var idleBackgroundColor: UIColor = .favorColor(.white)
   var pressedBackgroundColor: UIColor = .favorColor(.background)
-
+  
   // MARK: - UI Components
-
+  
   private let rightImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = .favorIcon(.right)?
@@ -43,7 +43,7 @@ final class FriendListCell: BaseFriendCell, Pressable, Reusable {
     stackView.spacing = 10
     return stackView
   }()
-
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -55,21 +55,23 @@ final class FriendListCell: BaseFriendCell, Pressable, Reusable {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Functions
-
-  override func bind(identifier: Int, name: String) {
-    super.bind(identifier: identifier, name: name)
-//    self.nameLabel.text = friend.name
+  
+  func configure(_ friend: Friend) {
+    super.configure(
+      isUser: friend.isUser,
+      name: friend.name,
+      image: friend.profilePhoto
+    )
   }
-
+  
   // MARK: - UI Setups
 
   override func setupLayouts() {
     super.setupLayouts()
 
     self.rightIconStack.addArrangedSubview(self.rightImageView)
-
     self.containerView.addSubview(self.rightIconStack)
   }
 

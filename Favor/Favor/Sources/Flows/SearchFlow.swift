@@ -63,6 +63,7 @@ private extension SearchFlow {
     let searchVC = SearchViewController()
     let searchReactor = SearchViewReactor(mode: .search)
     searchVC.reactor = searchReactor
+    searchVC.hidesBottomBarWhenPushed = true
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(searchVC, animated: true)
