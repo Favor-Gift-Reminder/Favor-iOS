@@ -23,11 +23,17 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Properties
 
   private let provider: MoyaProvider<TargetType>
+  private let keychain = KeychainManager()
 
   // MARK: - Initializer
 
   public init() {
-    self.provider = MoyaProvider<TargetType>()
+    var plugins: [PluginType] = [NetworkLoggerPlugin()]
+    if let accessToken = try? self.keychain.get(account: KeychainManager.Accounts.accessToken.rawValue) {
+      let accessTokenString = String(decoding: accessToken, as: UTF8.self)
+      plugins.append(FavorJWTPlugin { _ in accessTokenString })
+    }
+    self.provider = MoyaProvider<TargetType>(plugins: plugins)
   }
   
   // MARK: - Functions

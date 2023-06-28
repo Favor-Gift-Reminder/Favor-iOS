@@ -127,13 +127,4 @@ extension UserAPI: BaseTargetType {
   public var path: String { self.getPath() }
   public var method: Moya.Method { self.getMethod() }
   public var task: Moya.Task { self.getTask() }
-
-  public var headers: [String : String]? {
-    switch self {
-    case .postSignIn, .postSignUp:
-      return APIManager.header(for: .json)
-    default:
-      return APIManager.header(for: .jwt)
-    }
-  }
 }
