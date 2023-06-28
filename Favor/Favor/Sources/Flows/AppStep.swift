@@ -16,6 +16,10 @@ enum AppStep: Step {
   // MARK: - Root
   case splashIsRequired
 
+  // MARK: - Onboarding
+  case onboardingIsRequired
+  case onboardingIsComplete
+
   // MARK: - Auth
   case authIsRequired
   case findPasswordIsRequired
@@ -25,11 +29,8 @@ enum AppStep: Step {
   case signInIsRequired
   case setProfileIsRequired(User)
   case termIsRequired(User)
-  
-  // MARK: - Onboarding
-  case onboardingIsRequired
-  case onboardingIsComplete
-  
+  case authIsComplete
+
   // MARK: - Main
   case dashboardIsRequired
   

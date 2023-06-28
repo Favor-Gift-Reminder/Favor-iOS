@@ -39,11 +39,11 @@ public final class AppFlow: Flow {
     case .splashIsRequired:
       return self.navigateToSplash()
 
+    case .dashboardIsRequired:
+      return self.popToDashboard()
+
     case .authIsRequired:
       return self.navigateToAuth()
-
-    case .dashboardIsRequired:
-      return .none
 
     default:
       return .none
@@ -92,6 +92,12 @@ private extension AppFlow {
         withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
       )
     ])
+  }
+
+  func popToDashboard() -> FlowContributors {
+    self.rootViewController.dismiss(animated: true)
+
+    return .none
   }
 
   func navigateToAuth() -> FlowContributors {

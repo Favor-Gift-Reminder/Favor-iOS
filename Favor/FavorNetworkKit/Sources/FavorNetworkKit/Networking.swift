@@ -23,24 +23,11 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Properties
 
   private let provider: MoyaProvider<TargetType>
-  private let keychain: KeychainManager
 
   // MARK: - Initializer
 
   public init() {
-    let keychain = KeychainManager()
-    self.keychain = keychain
-    let authPlugin = AccessTokenPlugin { _ in
-      guard
-        let data = try? keychain.get(account: KeychainManager.Accounts.accessToken.rawValue),
-        let decodedString = String(data: data, encoding: .utf8)
-      else {
-        os_log(.info, "No access token found in keychain. Please attempt sign in to retrieve one.")
-        return ""
-      }
-      return decodedString
-    }
-    self.provider = MoyaProvider<TargetType>(plugins: [authPlugin])
+    self.provider = MoyaProvider<TargetType>()
   }
   
   // MARK: - Functions

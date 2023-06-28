@@ -123,7 +123,7 @@ private extension SplashViewReactor {
 
   func fetchAppleCredentialState() {
     let appleIDProvider = ASAuthorizationAppleIDProvider()
-    guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) else { return }
+    guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userAppleID.rawValue) else { return }
     let decodedUserID = String(decoding: userID, as: UTF8.self)
     appleIDProvider.getCredentialState(forUserID: decodedUserID) { state, _ in
       switch state {

@@ -248,7 +248,7 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
     let request = ASAuthorizationAppleIDProvider().createRequest()
 
     // Keychain에 UserID가 저장되어 있을 때.
-    if let userID = try? self.keychain.get(account: KeychainManager.Accounts.userID.rawValue) {
+    if let userID = try? self.keychain.get(account: KeychainManager.Accounts.userAppleID.rawValue) {
       let decodedUserID = String(decoding: userID, as: UTF8.self)
       provider.getCredentialState(forUserID: decodedUserID) { state, error in
         switch state {

@@ -27,8 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     RxKakaoSDK.initSDK(appKey: "${NATIVE_APP_KEY}")
 
     #if DEBUG
-//    FTUXStorage.isSignedIn = true
-//    UserInfoStorage.userNo = 26
+    UserInfoStorage.userNo = 1
     #endif
     print("Current User: \(UserInfoStorage.userNo)")
     

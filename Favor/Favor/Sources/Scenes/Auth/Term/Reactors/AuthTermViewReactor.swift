@@ -76,7 +76,7 @@ public final class AuthTermViewReactor: Reactor, Stepper {
     case .nextButtonDidTap:
       os_log(.debug, "Next button did tap.")
       if self.currentState.isNextButtonEnabled {  
-        self.steps.accept(AppStep.dashboardIsRequired)
+        self.steps.accept(AppStep.authIsComplete)
       }
       return .empty()
     }

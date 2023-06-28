@@ -128,12 +128,12 @@ extension UserAPI: BaseTargetType {
   public var method: Moya.Method { self.getMethod() }
   public var task: Moya.Task { self.getTask() }
 
-  public var authorizationType: AuthorizationType? {
+  public var headers: [String : String]? {
     switch self {
-    case .postSignUp:
-      return .none
+    case .postSignIn, .postSignUp:
+      return APIManager.header(for: .json)
     default:
-      return .basic
+      return APIManager.header(for: .jwt)
     }
   }
 }

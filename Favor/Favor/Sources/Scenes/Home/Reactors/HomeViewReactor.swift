@@ -231,6 +231,12 @@ private extension HomeViewReactor {
           let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Reminder(dto: $0) })
         }
+        .catch { error in
+          if let error = error as? APIError {
+            os_log(.error, "\(error.description)")
+          }
+          return .error(error)
+        }
         .asSingle()
       return reminders
     }
@@ -255,6 +261,12 @@ private extension HomeViewReactor {
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Gift(dto: $0) })
+        }
+        .catch { error in
+          if let error = error as? APIError {
+            os_log(.error, "\(error.description)")
+          }
+          return .error(error)
         }
         .asSingle()
       return gifts
