@@ -175,6 +175,12 @@
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		2EF1585F29E3CDC100D199DF /* FavorTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */; };
+		2EF8C4942A4C72F3003E67A8 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */; };
+		2EF8C4962A4C734E003E67A8 /* SettingsViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4952A4C734E003E67A8 /* SettingsViewReactor.swift */; };
+		2EF8C4982A4C7900003E67A8 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4972A4C7900003E67A8 /* SettingsSection.swift */; };
+		2EF8C49A2A4C79BF003E67A8 /* SettingsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4992A4C79BF003E67A8 /* SettingsFlow.swift */; };
+		2EF8C49E2A4C9D5B003E67A8 /* SettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C49D2A4C9D5B003E67A8 /* SettingsCell.swift */; };
+		2EF8C4A02A4C9E96003E67A8 /* SettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C49F2A4C9E96003E67A8 /* SettingsHeaderView.swift */; };
 		2EFDA0F42A3AA83B009A11D7 /* SearchCategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F32A3AA83B009A11D7 /* SearchCategoryVC.swift */; };
 		2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */; };
 		2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */; };
@@ -390,6 +396,12 @@
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavorTabBarController.swift; sourceTree = "<group>"; };
+		2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		2EF8C4952A4C734E003E67A8 /* SettingsViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewReactor.swift; sourceTree = "<group>"; };
+		2EF8C4972A4C7900003E67A8 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
+		2EF8C4992A4C79BF003E67A8 /* SettingsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFlow.swift; sourceTree = "<group>"; };
+		2EF8C49D2A4C9D5B003E67A8 /* SettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsCell.swift; sourceTree = "<group>"; };
+		2EF8C49F2A4C9E96003E67A8 /* SettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeaderView.swift; sourceTree = "<group>"; };
 		2EFDA0F32A3AA83B009A11D7 /* SearchCategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCategoryVC.swift; sourceTree = "<group>"; };
 		2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTagViewReactor.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
@@ -902,6 +914,7 @@
 				2EE07EBD296E8D2300048A3C /* Profile */,
 				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				2EE07EAA296E7BC100048A3C /* Reminder */,
+				2EF8C48F2A4C72BE003E67A8 /* Settings */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1371,6 +1384,42 @@
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
+		2EF8C48F2A4C72BE003E67A8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C4972A4C7900003E67A8 /* SettingsSection.swift */,
+				2EF8C4922A4C72E7003E67A8 /* Reactors */,
+				2EF8C4912A4C72E2003E67A8 /* Views */,
+				2EF8C4902A4C72DB003E67A8 /* ViewControllers */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		2EF8C4902A4C72DB003E67A8 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EF8C4912A4C72E2003E67A8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C49D2A4C9D5B003E67A8 /* SettingsCell.swift */,
+				2EF8C49F2A4C9E96003E67A8 /* SettingsHeaderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EF8C4922A4C72E7003E67A8 /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C4952A4C734E003E67A8 /* SettingsViewReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
 		E517803729A8E88A0011C220 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1452,6 +1501,7 @@
 				E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */,
 				2E1DBE462A1E6E4100C9BC30 /* GiftFlow.swift */,
 				2E9B4CBF2A12831A00C7E31E /* AnniversaryFlow.swift */,
+				2EF8C4992A4C79BF003E67A8 /* SettingsFlow.swift */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -1726,8 +1776,10 @@
 				2ED326C729B32C32001963D0 /* AuthNewPasswordViewReactor.swift in Sources */,
 				2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */,
 				E5B61F3529B37F260031046C /* (null) in Sources */,
+				2EF8C49E2A4C9D5B003E67A8 /* SettingsCell.swift in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */,
+				2EF8C4962A4C734E003E67A8 /* SettingsViewReactor.swift in Sources */,
 				2E87B8DA2A0BCE3200570386 /* FriendListModifyingViewReactor.swift in Sources */,
 				2E9B4CC62A12855800C7E31E /* AnniversaryListCell.swift in Sources */,
 				E59AB09A2A17858C00F0AC7D /* FriendFlow.swift in Sources */,
@@ -1746,6 +1798,7 @@
 				2E217C082A2F790700C91A46 /* RecentSearch.swift in Sources */,
 				2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */,
 				2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */,
+				2EF8C4A02A4C9E96003E67A8 /* SettingsHeaderView.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* AuthEntryViewReactor.swift in Sources */,
 				2ED17A6A2A40A4AD00806A9F /* GiftFriendsBottomSheet.swift in Sources */,
 				2E7065482A15FA6F007B1C94 /* AnniversaryManagementVC.swift in Sources */,
@@ -1785,6 +1838,7 @@
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */,
 				E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */,
+				2EF8C4942A4C72F3003E67A8 /* SettingsVC.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* AuthEntryVC.swift in Sources */,
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
@@ -1803,6 +1857,7 @@
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */,
+				2EF8C4982A4C7900003E67A8 /* SettingsSection.swift in Sources */,
 				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */,
@@ -1827,6 +1882,7 @@
 				E5FB769E2A21C22700BF3197 /* AlertPopup.swift in Sources */,
 				E5FB76A02A21C76200BF3197 /* ReminderDatePopup.swift in Sources */,
 				E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */,
+				2EF8C49A2A4C79BF003E67A8 /* SettingsFlow.swift in Sources */,
 				2EE0D585297524660064E932 /* AuthSetProfileVC.swift in Sources */,
 				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
 				2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */,

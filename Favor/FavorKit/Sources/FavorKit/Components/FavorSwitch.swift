@@ -25,16 +25,16 @@ public final class FavorSwitch: UIButton {
   fileprivate var isOn = BehaviorRelay<Bool>(value: false)
 
   /// Switch가 켜졌을 때의 색상
-  public var onTintColor: SwitchColor = (.favorColor(.sub), .favorColor(.white))
+  public var onTintColor: SwitchColor = (.favorColor(.main), .favorColor(.white))
 
   /// Switch가 꺼졌을 때의 색상
   public var offTintColor: SwitchColor = (.favorColor(.line3), .favorColor(.white))
 
   /// Thumb와 Bar의 top, bottom 간격
-  public var thumbVerticalPadding: CGFloat = 1
+  public var thumbVerticalPadding: CGFloat = 2.0
 
   /// Thumb와 Bar의 leading, trailing 간격
-  public var thumbHorizontalPadding: CGFloat = 1
+  public var thumbHorizontalPadding: CGFloat = 2.0
 
   public var duration: TimeInterval = 0.2
 

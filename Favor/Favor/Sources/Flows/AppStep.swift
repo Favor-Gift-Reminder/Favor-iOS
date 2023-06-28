@@ -10,7 +10,7 @@ import Foundation
 import FavorKit
 import RxFlow
 
-enum AppStep: Step {
+public enum AppStep: Step {
   case imagePickerIsRequired(PHPickerManager)
 
   // MARK: - Root
@@ -57,7 +57,6 @@ enum AppStep: Step {
   case myPageIsRequired
   case editMyPageIsRequired(User)
   case editMyPageIsComplete
-  case settingIsRequired
 
   // MARK: - FriendList
   case friendListIsRequired
@@ -88,6 +87,18 @@ enum AppStep: Step {
   case giftDetailPhotoIsRequired(Int, Int)
   case giftShareIsRequired(Gift)
 
+  // MARK: - Settings
+
+  case settingsIsRequired
+  case authInfoIsRequired
+  case changePasswordIsRequired
+  case appLockIsRequired
+  case devTeamInfoIsRequired
+  case devTeamSupportIsRequired
+  case serviceUsageTermIsRequired
+  case privateInfoManagementTermIsRequired
+  case openSourceUsageIsRequired
+
   // MARK: - BottomSheet
   case memoBottomSheetIsRequired(String?)
   case memoBottomSheetIsComplete(String?)
@@ -99,5 +110,7 @@ enum AppStep: Step {
   // MARK: - Popup
   case alertPopupIsRequired(AlertPopup.PopupType)
   case alertPopupIsComplete(isConfirmed: Bool)
-  
+
+  // MARK: - Placeholder
+  case doNothing
 }

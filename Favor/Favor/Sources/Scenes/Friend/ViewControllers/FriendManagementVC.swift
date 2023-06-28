@@ -11,9 +11,9 @@ import FavorKit
 import ReactorKit
 import Then
 
-final class FriendManagementViewController: BaseViewController, View {
+public final class FriendManagementViewController: BaseViewController, View {
   
-  enum ViewControllerType {
+  public enum ViewControllerType {
     case new
     case edit(Friend)
   }
@@ -79,7 +79,7 @@ final class FriendManagementViewController: BaseViewController, View {
   
   // MARK: - Setup
   
-  override func setupStyles() {
+  public override func setupStyles() {
     let title: String
     switch self.viewControllerType {
     case .new: title = "새 친구"
@@ -91,7 +91,7 @@ final class FriendManagementViewController: BaseViewController, View {
     self.finishButton.isEnabled = false
   }
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     [
       self.profileImageRegisterButton,
       self.nameTextField
@@ -100,7 +100,7 @@ final class FriendManagementViewController: BaseViewController, View {
     }
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     self.profileImageRegisterButton.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
@@ -114,7 +114,7 @@ final class FriendManagementViewController: BaseViewController, View {
   
   // MARK: - Bind
   
-  func bind(reactor: FriendManagementViewReactor) {
+  public func bind(reactor: FriendManagementViewReactor) {
     
   }
 }

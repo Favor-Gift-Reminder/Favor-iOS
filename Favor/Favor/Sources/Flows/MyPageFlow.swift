@@ -35,8 +35,8 @@ final class MyPageFlow: Flow {
       self.rootViewController.popViewController(animated: true)
       return .none
       
-    case .settingIsRequired:
-      return self.navigateToSetting()
+    case .settingsIsRequired:
+      return self.navigateToSettings()
 
     case .anniversaryListIsRequired:
       return self.navigateToAnniversaryList()
@@ -85,8 +85,13 @@ extension MyPageFlow {
     ))
   }
 
-  private func navigateToSetting() -> FlowContributors {
-    return .none
+  private func navigateToSettings() -> FlowContributors {
+    let settingsFlow = SettingsFlow(rootViewController: self.rootViewController)
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: settingsFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.settingsIsRequired)
+    ))
   }
   
   private func navigateToAnniversaryList() -> FlowContributors {

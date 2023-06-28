@@ -12,9 +12,9 @@ import RxCocoa
 import RxFlow
 import SnapKit
 
-final class AlertPopup: BasePopup, Stepper {
-  
-  enum PopupType {
+public final class AlertPopup: BasePopup, Stepper {
+
+  public enum PopupType {
     case register
     case remove
     
@@ -66,7 +66,7 @@ final class AlertPopup: BasePopup, Stepper {
   // MARK: - Properties
   
   private let popupType: PopupType
-  var steps = PublishRelay<Step>()
+  public var steps = PublishRelay<Step>()
   
   // MARK: - Initializer
   
@@ -81,7 +81,7 @@ final class AlertPopup: BasePopup, Stepper {
   
   // MARK: - Setup
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     super.setupLayouts()
     
     [
@@ -92,7 +92,7 @@ final class AlertPopup: BasePopup, Stepper {
     }
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     super.setupConstraints()
     
     self.contentsLabel.snp.makeConstraints { make in
@@ -109,7 +109,7 @@ final class AlertPopup: BasePopup, Stepper {
   
   // MARK: - Bind
   
-  override func bind() {
+  public override func bind() {
     super.bind()
     
     self.confirmButton.rx.tap

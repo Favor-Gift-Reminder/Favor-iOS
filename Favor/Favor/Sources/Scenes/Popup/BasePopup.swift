@@ -11,7 +11,7 @@ import FavorKit
 import SnapKit
 import Then
 
-class BasePopup: BaseViewController {
+public class BasePopup: BaseViewController {
   
   private enum Metric {
     static let containerViewWidth: CGFloat = 335.0
@@ -48,7 +48,7 @@ class BasePopup: BaseViewController {
   
   // MARK: - LifeCycle
   
-  override func viewDidAppear(_ animated: Bool) {
+  public override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
     
     self.animateDimmedView()
@@ -57,13 +57,13 @@ class BasePopup: BaseViewController {
   
   // MARK: - Setup
   
-  override func setupStyles() {
+  public override func setupStyles() {
     super.setupStyles()
     
     self.view.backgroundColor = .clear
   }
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     super.setupLayouts()
     
     [
@@ -74,7 +74,7 @@ class BasePopup: BaseViewController {
     }
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     super.setupConstraints()
     
     self.dimmedView.snp.makeConstraints { make in
@@ -91,7 +91,7 @@ class BasePopup: BaseViewController {
   
   // MARK: - Bind
   
-  override func bind() {
+  public override func bind() {
     super.bind()
     
     self.dimmedView.rx.tapGesture()

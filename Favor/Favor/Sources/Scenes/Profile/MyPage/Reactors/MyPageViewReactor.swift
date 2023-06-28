@@ -91,7 +91,7 @@ final class MyPageViewReactor: Reactor, Stepper {
       return .empty()
 
     case .settingButtonDidTap:
-      self.steps.accept(AppStep.settingIsRequired)
+      self.steps.accept(AppStep.settingsIsRequired)
       return .empty()
       
     case .headerRightButtonDidTap(let section):
