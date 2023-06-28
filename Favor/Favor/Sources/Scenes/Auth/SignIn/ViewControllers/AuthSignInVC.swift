@@ -11,9 +11,11 @@ import OSLog
 import UIKit
 
 import FavorKit
+import KakaoSDKUser
 import ReactorKit
 import RxCocoa
 import RxGesture
+import RxKakaoSDKUser
 import SnapKit
 
 public final class AuthSignInViewController: BaseViewController, View {
@@ -228,6 +230,8 @@ extension AuthSignInViewController {
     switch authMethod {
     case .apple:
       self.handleSignInWithApple()
+    case .kakao:
+      self.handleSignInWithKakao()
     default:
       break
     }
@@ -309,7 +313,19 @@ extension AuthSignInViewController: ASAuthorizationControllerDelegate, ASAuthori
 // MARK: - Kakao
 
 extension AuthSignInViewController {
-
+  private func handleSignInWithKakao() {
+    if UserApi.isKakaoTalkLoginAvailable() {
+      UserApi.shared.rx.loginWithKakaoTalk()
+        .subscribe(with: self, onNext: { owner, oauthToken in
+          os_log(.debug, "loginWithKakaoTalk() success.")
+        }, onError: { owner, error in
+          os_log(.error, "\(error)")
+        })
+        .disposed(by: self.disposeBag)
+    } else {
+      os_log(.debug, "Kakao login not available.")
+    }
+  }
 }
 
 // MARK: - Privates

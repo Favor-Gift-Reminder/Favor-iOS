@@ -8,6 +8,9 @@
 import UIKit
 
 import FavorKit
+import KakaoSDKAuth
+import RxKakaoSDKAuth
+import RxKakaoSDKCommon
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -18,7 +21,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // FavorKit Package의 Custom Font Register 메서드
     FavorKit.registerFonts()
 
+    // RealmDB의 파일 위치 출력
     RealmWorkbench().locateRealm()
+    // KakaoSDK 초기화
+    RxKakaoSDK.initSDK(appKey: "${NATIVE_APP_KEY}")
 
     #if DEBUG
 //    FTUXStorage.isSignedIn = true
@@ -43,4 +49,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			// Use this method to release any resources that were specific to the discarded scenes, as they will not return.
 	}
 
+  func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+    // 카카오톡 인증을 마치고 앱으로 돌아왔을 때의 처리 설정
+    if AuthApi.isKakaoTalkLoginUrl(url) {
+      return AuthController.rx.handleOpenUrl(url: url)
+    }
+
+    return false
+  }
 }
