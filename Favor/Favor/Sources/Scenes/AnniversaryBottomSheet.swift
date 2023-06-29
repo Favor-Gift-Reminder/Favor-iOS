@@ -41,6 +41,9 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
     didSet { self.updateView() }
   }
   
+  /// 완료 버튼 Handler
+  var finishButtonHandler: ((AnniversaryCategory) -> Void)?
+  
   var steps = PublishRelay<Step>()
   
   // MARK: - Initializer
@@ -54,6 +57,14 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  // MARK: - LifeCycle
+  
+  override func viewDidLayoutSubviews() {
+    super.viewDidLayoutSubviews()
+    
+    self.setScrollOffset()
   }
   
   // MARK: - Setup
@@ -90,7 +101,7 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
     }
     
     self.iconViewStackView.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(53.0)
+      make.leading.trailing.equalToSuperview().inset(self.view.center.x - 24)
       make.top.bottom.equalToSuperview()
     }
   }
@@ -100,20 +111,20 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   override func bind() {
     super.bind()
     
-    for view in iconViews {
-      view.tapObservable
-        .asDriver(onErrorRecover: { _ in return .empty() })
-        .drive(with: self) { owner, anniversaryType in
-          owner.currentAnniversary = anniversaryType
-          owner.updateView()
-        }
-        .disposed(by: self.disposeBag)
-    }
-    
+    // 완료 버튼 클릭 이벤트
     self.finishButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self) { _, _ in
-//        owner.steps.accept(AppStep.anniversaryBottomSheetIsComplete(owner.currentAnniversary))
+      .drive(with: self) { owner, _ in
+        owner.finishButtonHandler?(owner.currentAnniversary)
+        owner.dismissBottomSheet()
+      }
+      .disposed(by: self.disposeBag)
+    
+    // 스크롤 이벤트
+    self.scrollView.rx.contentOffset
+      .asDriver()
+      .drive(with: self) { owner, offset in
+        owner.setAutoSelection(offset)
       }
       .disposed(by: self.disposeBag)
   }
@@ -123,6 +134,33 @@ final class AnniversaryBottomSheet: BaseBottomSheet, Stepper {
   private func updateView() {
     let anniversaryType = self.currentAnniversary
     self.iconViews.forEach { $0.isSelected = false }
-    self.iconViews.filter { $0.anniversaryCategory == anniversaryType }.first?.isSelected = true
+    self.iconViews.filter {
+      $0.anniversaryCategory == anniversaryType
+    }.first?.isSelected = true
+  }
+  
+  private func setScrollOffset() {
+    for button in self.iconViewStackView.arrangedSubviews {
+      let category = (button as? AnniversaryBottomSheetView)?.anniversaryCategory ?? .couple
+      
+      if category == self.currentAnniversary {
+        let buttonFrame = button.convert(button.bounds, to: self.scrollView)
+        self.scrollView.setContentOffset(CGPoint(
+          x: buttonFrame.origin.x - ((self.view.frame.width / 2) - (buttonFrame.width / 2)), y: 0
+        ), animated: false)
+      }
+    }
+  }
+  
+  private func setAutoSelection(_ offset: CGPoint) {
+    let centerX = offset.x + self.view.center.x
+    
+    for button in self.iconViewStackView.arrangedSubviews {
+      let buttonFrame = button.convert(button.bounds, to: self.scrollView)
+      if buttonFrame.contains(CGPoint(x: centerX, y: self.scrollView.bounds.midY)) {
+        self.currentAnniversary = (button as? AnniversaryBottomSheetView)?.anniversaryCategory ?? .couple
+        self.updateView()
+      }
+    }
   }
 }

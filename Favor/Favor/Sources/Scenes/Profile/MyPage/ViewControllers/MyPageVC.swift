@@ -156,10 +156,18 @@ final class MyPageViewController: BaseProfileViewController, View {
       gift: reactor.currentState.user.giftList
     )
   }
-
+  
+  /// 더보기 버튼을 클릭할 때의 이벤트 메서드입니다.
   override func headerRightButtonDidTap(at section: ProfileSection) {
     guard let reactor = self.reactor else { return }
-
     reactor.action.onNext(.headerRightButtonDidTap(section))
+  }
+  
+  /// `ProfileSetup`의 바로가기 버튼을 클릭할 때의 이벤트 메서드입니다.
+  override func profileSetupGoButtonDidTap(
+    at type: ProfileSetupHelperCellReactor.ProfileHelperType
+  ) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.profileSetupCellDidTap(type))
   }
 }

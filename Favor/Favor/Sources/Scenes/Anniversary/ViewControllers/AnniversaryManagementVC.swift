@@ -15,7 +15,7 @@ import SnapKit
 
 final class AnniversaryManagementViewController: BaseViewController, View {
   typealias AnniversaryManagementDataSource = UICollectionViewDiffableDataSource<AnniversaryManagementSection, AnniversaryManagementSectionItem>
-
+  
   // MARK: - Constants
 
   public enum ViewType {
@@ -28,9 +28,9 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       }
     }
   }
-
+  
   // MARK: - Properties
-
+  
   private lazy var dataSource: AnniversaryManagementDataSource = {
     let dataSource = AnniversaryManagementDataSource(
       collectionView: self.collectionView,
@@ -46,9 +46,14 @@ final class AnniversaryManagementViewController: BaseViewController, View {
           cell.bind(placeholder: "내 기념일 이름 (최대 10자)")
           cell.bind(text: title)
           return cell
-        case .category:
+        case .category(let anniversaryCategory):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorSelectorCell
-          cell.bind(unselectedTitle: "종류 선택")
+          cell.delegate = self
+          if let anniversaryCategory {
+            cell.bind(selectedTitle: anniversaryCategory.rawValue)
+          } else {
+            cell.bind(unselectedTitle: "종류 선택")
+          }
           return cell
         case .date(let date):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorDateSelectorCell
@@ -80,9 +85,9 @@ final class AnniversaryManagementViewController: BaseViewController, View {
     }
     return dataSource
   }()
-
+  
   // MARK: - UI Components
-
+  
   private let doneButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
@@ -107,7 +112,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-
+    
     // Register
     collectionView.register(cellType: FavorTextFieldCell.self)
     collectionView.register(cellType: FavorSelectorCell.self)
@@ -136,7 +141,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
 
     self.composer.compose()
   }
-
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
 
@@ -171,7 +176,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
         owner.deleteButton.isHidden = viewType == .new
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
@@ -249,5 +254,24 @@ extension AnniversaryManagementViewController: FavorDateSelectorCellDelegate {
   func dateSelectorDidUpdate(from cell: FavorDateSelectorCell, _ date: Date?) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.dateDidUpdate(date))
+  }
+}
+
+// MARK: - FavorSelectorCell
+
+extension AnniversaryManagementViewController: FavorSelectorCellDelegate {
+  func selectorDidTap(from cell: FavorSelectorCell) {
+    guard let reactor = self.reactor else { return }
+    
+    // 기념일 바텀시트를 전환합니다.
+    let currentAnniversaryCateogry = reactor.currentState.anniversary.category
+    let bottomSheet = AnniversaryBottomSheet(currentAnniversaryCateogry)
+    bottomSheet.modalPresentationStyle = .overFullScreen
+    self.present(bottomSheet, animated: false)
+    
+    // 완료 버튼의 Handler입니다.
+    bottomSheet.finishButtonHandler = {
+      reactor.action.onNext(.categoryDidUpdate($0))
+    }
   }
 }
