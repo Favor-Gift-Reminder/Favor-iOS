@@ -20,7 +20,7 @@ public final class SocialAuthButton: UIButton {
 
   // MARK: - Properties
 
-  public var authMethod: AuthMethod!
+  public var authMethod: AuthState!
 
   // MARK: - Initializer
 
@@ -28,7 +28,7 @@ public final class SocialAuthButton: UIButton {
     super.init(frame: frame)
   }
 
-  public convenience init(_ authMethod: AuthMethod) {
+  public convenience init(_ authMethod: AuthState) {
     self.init(frame: .zero)
     self.authMethod = authMethod
     self.setupSocialAuthType(authMethod)
@@ -40,7 +40,7 @@ public final class SocialAuthButton: UIButton {
 
   // MARK: - Functions
 
-  private func setupSocialAuthType(_ authMethod: AuthMethod) {
+  private func setupSocialAuthType(_ authMethod: AuthState) {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = authMethod.backgroundColor
     config.baseForegroundColor = authMethod.foregroundColor

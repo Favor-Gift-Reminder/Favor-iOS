@@ -15,5 +15,5 @@ enum UserDefaultsKey: String {
   // MARK: - User Info
 
   case userNo
-  case socialAuthType
+  case authState
 }

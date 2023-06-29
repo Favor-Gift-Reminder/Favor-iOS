@@ -8,6 +8,8 @@
 import Foundation
 import OSLog
 
+import FavorKit
+
 /// > Usage:
 ///   ``` swift
 ///   APIManager.mock.baseURL
@@ -17,6 +19,7 @@ public class APIManager {
   
   public enum HeaderType {
     case json
+    case jwt
     case multiPart
   }
   
@@ -30,7 +33,7 @@ public class APIManager {
   public static let mock = APIManager(.mock)
   public static let v1 = APIManager(.v1)
   private var type: ServerType
-  
+
   /// plist 파일에 포함된 API의 BaseURL입니다.
   /// URL 끝에 '/'가 없습니다. Path를 작성할 때 `/user`와 같이 작성해주세요.
   public var baseURL: String {
@@ -81,7 +84,20 @@ extension APIManager {
   public static func header(for header: HeaderType) -> [String: String] {
     switch header {
     case .json: return ["Content-Type": "application/json"]
+    case .jwt: return [
+      "Content-Type": "application/json",
+      "X-AUTH-TOKEN": APIManager.accessToken()
+    ]
     case .multiPart: return ["Content-Type": "multipart/form-data"]
     }
+  }
+
+  private static func accessToken() -> String {
+    let keychain = KeychainManager()
+    if let accessToken = try? keychain.get(account: KeychainManager.Accounts.accessToken.rawValue) {
+      let accessTokenString = String(decoding: accessToken, as: UTF8.self)
+      return accessTokenString
+    }
+    return ""
   }
 }

@@ -14,7 +14,11 @@ enum AppStep: Step {
   case imagePickerIsRequired(PHPickerManager)
 
   // MARK: - Root
-  case rootIsRequired
+  case splashIsRequired
+
+  // MARK: - Onboarding
+  case onboardingIsRequired
+  case onboardingIsComplete
 
   // MARK: - Auth
   case authIsRequired
@@ -25,13 +29,10 @@ enum AppStep: Step {
   case signInIsRequired
   case setProfileIsRequired(User)
   case termIsRequired(User)
-  
-  // MARK: - Onboarding
-  case onboardingIsRequired
-  case onboardingIsComplete
-  
+  case authIsComplete
+
   // MARK: - Main
-  case tabBarIsRequired
+  case dashboardIsRequired
   
   // MARK: - Home
   case homeIsRequired
@@ -74,9 +75,6 @@ enum AppStep: Step {
   case newAnniversaryIsRequired
   case anniversaryManagementIsRequired(Anniversary)
   case anniversaryManagementIsComplete(ToastMessage)
-  
-  // MARK: - Test
-  case testIsRequired
 
   // MARK: - Gift
   case giftManagementIsRequired(Gift? = nil)

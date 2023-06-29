@@ -20,7 +20,8 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
   
   public var initialState: State
   public var steps = PublishRelay<Step>()
-  let networking = UserNetworking()
+  private let networking = UserNetworking()
+  private let keychain = KeychainManager()
 
   // Global States
   let emailValidate = BehaviorRelay<ValidationResult>(value: .empty)
@@ -31,7 +32,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case emailDidUpdate(String)
     case passwordDidUpdate(String)
     case signInButtonDidTap
-    case socialSignInButtonDidTap(AuthMethod)
     case findPasswordButtonDidTap
     // Social Login
     case signedInWithApple(String, String)
@@ -43,7 +43,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
-    case pulseSocialAuth(AuthMethod)
+    case updateLoading(Bool)
   }
   
   public struct State {
@@ -52,7 +52,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
-    @Pulse var requestedSocialAuth: AuthMethod = .undefined
+    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -66,20 +66,17 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      os_log(.debug, "View did load.")
       return .empty()
 
     case .emailDidUpdate(let email):
-      os_log(.debug, "Email TextField did update: \(email)")
       let emailVaildate = AuthValidationManager(type: .email).validate(email)
       self.emailValidate.accept(emailVaildate)
       return .concat([
-        .just(.updatePassword(email)),
+        .just(.updateEmail(email)),
         .just(.updateEmailValidationResult(emailVaildate))
       ])
 
     case .passwordDidUpdate(let password):
-      os_log(.debug, "Password TextField did update: \(password)")
       let passwordValidate = AuthValidationManager(type: .password).validate(password)
       self.passwordValidate.accept(passwordValidate)
       return .concat([
@@ -88,12 +85,28 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       ])
 
     case .signInButtonDidTap:
-      // Login
-      return .empty()
-
-    case .socialSignInButtonDidTap(let socialAuth):
-      os_log(.debug, "Sign-In with social did tap: \(String(describing: socialAuth))")
-      return .just(.pulseSocialAuth(socialAuth))
+      let email = self.currentState.email
+      let password = self.currentState.password
+      return .concat([
+        .just(.updateLoading(true)),
+        self.requestSignIn(email: email, password: password)
+          .asObservable()
+          .flatMap { token -> Observable<Mutation> in
+            do {
+              try self.handleSignInSuccess(email: email, password: password, token: token)
+              self.steps.accept(AppStep.dashboardIsRequired)
+            } catch {
+              os_log(.error, "\(error)")
+            }
+            return .just(.updateLoading(false))
+          }
+          .catch { error in
+            if let error = error as? APIError {
+              os_log(.error, "\(error.description)")
+            }
+            return .just(.updateLoading(false))
+          }
+      ])
 
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
@@ -138,10 +151,56 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case .validateSignInButton(let isNextButtonEnabled):
       newState.isSignInButtonEnabled = isNextButtonEnabled
 
-    case .pulseSocialAuth(let socialAuth):
-      newState.requestedSocialAuth = socialAuth
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
     }
 
     return newState
+  }
+}
+
+// MARK: - Privates
+
+private extension AuthSignInViewReactor {
+  func requestSignIn(email: String, password: String) -> Single<String> {
+    return Single<String>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.postSignIn(email: email, password: password))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<SignInResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.token))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+
+  func handleSignInSuccess(email: String, password: String, token: String) throws {
+    guard
+      let emailData = email.data(using: .utf8),
+      let passwordData = password.data(using: .utf8),
+      let tokenData = token.data(using: .utf8)
+    else { throw FavorError.optionalBindingFailure([email, password, token]) }
+
+    try self.keychain.set(
+      value: emailData,
+      account: KeychainManager.Accounts.userEmail.rawValue)
+    try self.keychain.set(
+      value: passwordData,
+      account: KeychainManager.Accounts.userPassword.rawValue)
+    try self.keychain.set(
+      value: tokenData,
+      account: KeychainManager.Accounts.accessToken.rawValue)
+    FTUXStorage.authState = .email
   }
 }

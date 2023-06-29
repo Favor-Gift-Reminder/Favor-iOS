@@ -127,13 +127,12 @@ extension UserAPI: BaseTargetType {
   public var path: String { self.getPath() }
   public var method: Moya.Method { self.getMethod() }
   public var task: Moya.Task { self.getTask() }
-
-  public var authorizationType: AuthorizationType? {
+  public var authorizationType: JWTAuthorizationType? {
     switch self {
-    case .postSignUp:
+    case .postSignIn, .postSignUp:
       return .none
     default:
-      return .basic
+      return .accessToken
     }
   }
 }

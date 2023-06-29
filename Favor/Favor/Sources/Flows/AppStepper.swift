@@ -1,22 +1,22 @@
 //
-//  AppStepper.swift
+//  AppStpper.swift
 //  Favor
 //
-//  Created by 이창준 on 2023/01/27.
+//  Created by 김응철 on 2023/02/02.
 //
+
+import Foundation
 
 import RxCocoa
 import RxFlow
 import RxSwift
 
-final class AppStepper: Stepper {
-  
-  // MARK: - Properties
-  
-  let steps = PublishRelay<Step>()
+public final class AppStepper: Stepper {
+
+  public let steps = PublishRelay<Step>()
   private let disposeBag = DisposeBag()
   
-  var initialStep: Step {
-    return AppStep.onboardingIsRequired
+  public var initialStep: Step {
+    return AppStep.splashIsRequired
   }
 }

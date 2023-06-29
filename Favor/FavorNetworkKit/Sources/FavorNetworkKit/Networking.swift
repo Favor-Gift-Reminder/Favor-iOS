@@ -23,24 +23,21 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Properties
 
   private let provider: MoyaProvider<TargetType>
-  private let keychain: KeychainManager
+  private let keychain = KeychainManager()
 
   // MARK: - Initializer
 
   public init() {
-    let keychain = KeychainManager()
-    self.keychain = keychain
-    let authPlugin = AccessTokenPlugin { _ in
-      guard
-        let data = try? keychain.get(account: KeychainManager.Accounts.accessToken.rawValue),
-        let decodedString = String(data: data, encoding: .utf8)
-      else {
-        os_log(.info, "Failed to fetch access token from keychain.")
-        return ""
-      }
-      return decodedString
+    #if DEBUG
+    var plugins: [PluginType] = [NetworkLoggerPlugin()]
+    #else
+    var plugins: [PluginType] = []
+    #endif
+    if let accessToken = try? self.keychain.get(account: KeychainManager.Accounts.accessToken.rawValue) {
+      let accessTokenString = String(decoding: accessToken, as: UTF8.self)
+      plugins.append(FavorJWTPlugin { _ in accessTokenString })
     }
-    self.provider = MoyaProvider<TargetType>(plugins: [authPlugin])
+    self.provider = MoyaProvider<TargetType>(plugins: plugins)
   }
   
   // MARK: - Functions
@@ -48,40 +45,34 @@ public final class Networking<TargetType: BaseTargetType> {
   public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
-      .filterSuccessfulStatusCodes()
       .catch(self.handleInternetConnection)
       .catch(self.handleTimeOut)
-      .catch(self.handleREST)
-      .asObservable()
-      .do(
-        onNext: { _ in
-          let message = "🌐 ✅ SUCCESS: \(requestURL)"
-          os_log(.debug, "\(message)")
-        },
-        onError: { error in
-          switch error {
-          case APIError.internetConnection:
-            // 인터넷이 끊겼을 때,
-            break
-          case APIError.timeOut:
-            // 요청 시간이 초과됐을 때,
-            break
-          case APIError.restError(_, _, _):
-            // statusCode가 200..<300 이외의 Response
-            break
-          default:
-            // 다른 에러
-            break
-          }
-          if let response = (error as? MoyaError)?.response {
-            let message = "🌐 ❌ FAILURE: \(requestURL) [\(response.statusCode)]"
-            os_log(.error, "\(message)")
-          }
-        },
-        onSubscribed: {
-          let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
-          os_log(.debug, "\(message)")
+      .do(onSuccess: { _ in
+        let message = "🌐 ✅ SUCCESS: \(requestURL)"
+        os_log(.debug, "\(message)")
+      }, onError: { error in
+        if let response = (error as? MoyaError)?.response {
+          let message = "🌐 ❌ FAILURE: \(requestURL) [\(response.statusCode)]"
+          os_log(.error, "\(message)")
         }
-      )
+      }, onSubscribed: {
+        let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
+        os_log(.debug, "\(message)")
+      })
+      .asObservable()
+      .flatMap { response -> Observable<Response> in
+        do {
+          if let filteredResponse = try? response.filterSuccessfulStatusCodes() { // 200..<300
+            return .just(filteredResponse)
+          } else { // REST error
+            let errorDTO: ErrorResponseDTO = try APIManager.decode(response.data)
+            return .error(APIError.restError(
+              responseCode: errorDTO.responseCode, responseMessage: errorDTO.responseMessage
+            ))
+          }
+        } catch {
+          return .error(error)
+        }
+      }
   }
 }

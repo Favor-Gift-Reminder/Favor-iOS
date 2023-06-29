@@ -87,20 +87,26 @@ final class HomeViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      let fetchedDatas: Observable<(reminders: [Reminder], gifts: [Gift])> = .zip(
-        self.reminderFetcher.fetch(),
-        self.giftFetcher.fetch(),
-        resultSelector: { reminderResult, giftResult -> ([Reminder], [Gift]) in
-          return (reminderResult.results, giftResult.results)
-        })
-      return fetchedDatas.flatMap { fetchedData -> Observable<Mutation> in
-        let reminders = fetchedData.reminders
-        let gifts = fetchedData.gifts
-        return .concat([
-          .just(.updateReminders(reminders)),
-          .just(.updateGifts(gifts)),
-          .just(.updateTimelineLoading(false))
-        ])
+      switch FTUXStorage.authState {
+      case .undefined:
+        os_log(.info, "ℹ️ Skipping home view configuration since AuthState is not defined.")
+        return .empty()
+      default:
+        let fetchedDatas: Observable<(reminders: [Reminder], gifts: [Gift])> = .zip(
+          self.reminderFetcher.fetch(),
+          self.giftFetcher.fetch(),
+          resultSelector: { reminderResult, giftResult -> ([Reminder], [Gift]) in
+            return (reminderResult.results, giftResult.results)
+          })
+        return fetchedDatas.flatMap { fetchedData -> Observable<Mutation> in
+          let reminders = fetchedData.reminders
+          let gifts = fetchedData.gifts
+          return .concat([
+            .just(.updateReminders(reminders)),
+            .just(.updateGifts(gifts)),
+            .just(.updateTimelineLoading(false))
+          ])
+        }
       }
 
     case .searchButtonDidTap:
@@ -225,6 +231,12 @@ private extension HomeViewReactor {
           let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Reminder(dto: $0) })
         }
+        .catch { error in
+          if let error = error as? APIError {
+            os_log(.error, "\(error.description)")
+          }
+          return .error(error)
+        }
         .asSingle()
       return reminders
     }
@@ -249,6 +261,12 @@ private extension HomeViewReactor {
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Gift(dto: $0) })
+        }
+        .catch { error in
+          if let error = error as? APIError {
+            os_log(.error, "\(error.description)")
+          }
+          return .error(error)
         }
         .asSingle()
       return gifts

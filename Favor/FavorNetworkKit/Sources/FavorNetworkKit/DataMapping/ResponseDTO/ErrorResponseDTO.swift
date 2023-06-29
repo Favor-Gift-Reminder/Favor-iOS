@@ -12,8 +12,8 @@ public struct ErrorResponseDTO: Decodable {
   public let responseMessage: String
 
   enum CodingKeys: String, CodingKey {
-    case responseCode = "ResponseCode"
-    case responseMessage = "ResponseMessage"
+    case responseCode
+    case responseMessage
   }
 
   public init(from decoder: Decoder) throws {

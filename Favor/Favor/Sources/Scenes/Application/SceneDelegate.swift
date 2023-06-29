@@ -8,6 +8,7 @@
 import OSLog
 import UIKit
 
+import FavorKit
 import RxFlow
 import RxSwift
 
@@ -24,9 +25,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window = window
 
     self.enableNavigateLog()
-    let appFlow = AppFlow(window: window)
+
+    let appFlow = AppFlow()
     self.coordinator.coordinate(flow: appFlow, with: AppStepper())
-    window.makeKeyAndVisible()
+
+    Flows.use(appFlow, when: .created) { root in
+      window.rootViewController = root
+      window.makeKeyAndVisible()
+    }
 	}
 }
 
