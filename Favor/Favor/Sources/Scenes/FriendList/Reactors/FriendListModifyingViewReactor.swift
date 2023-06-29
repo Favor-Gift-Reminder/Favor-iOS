@@ -18,31 +18,32 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
   var initialState: State
   var steps = PublishRelay<Step>()
   let friendNetworking = FriendNetworking()
-
+  
   enum Action {
     case viewNeedsLoaded
     case deleteButtonDidTap(Friend)
   }
-
+  
   enum Mutation {
     case updateFriendItems([FriendSectionItem])
   }
-
+  
   struct State {
     var sections: [FriendSection] = [.editFriend]
     var items: [[FriendSectionItem]] = []
     var friendItems: [FriendSectionItem] = []
+    @Pulse var shouldShowPopup: Int?
   }
-
+  
   // MARK: - Initializer
   
   override init() {
     self.initialState = State()
     super.init()
   }
-
+  
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
@@ -55,6 +56,7 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
         }
       
     case .deleteButtonDidTap(let friend):
+      
       return self.friendNetworking.request(.deleteFriend(friendNo: friend.identifier))
         .flatMap { response -> Observable<Mutation> in
           do {

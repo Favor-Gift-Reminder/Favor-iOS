@@ -28,14 +28,14 @@ final class FriendListModifyingViewController: BaseFriendListViewController, Vie
   }
   
   // MARK: - Binding
-
+  
   func bind(reactor: FriendListModifyingViewReactor) {
     // Action
     self.rx.viewDidLoad
       .map { Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -52,15 +52,25 @@ final class FriendListModifyingViewController: BaseFriendListViewController, Vie
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
-
+  
+  /// 삭제 버튼 클릭 이벤트 메서드입니다.
   override func cellButtonDidTap<T>(with data: T) {
     guard
       let reactor = self.reactor,
       let data = data as? Friend
     else { return }
-    reactor.action.onNext(.deleteButtonDidTap(data))
+    
+    // 친구 삭제 확인 팝업을 띄웁니다.
+    let popup = AlertPopup(.remove)
+    popup.modalPresentationStyle = .overFullScreen
+    self.present(popup, animated: false)
+    
+    // 삭제 버튼을 눌렸을 때 실행되는 클로저입니다.
+    popup.confirmButtonHandler = {
+      reactor.action.onNext(.deleteButtonDidTap(data))
+    }
   }
 
   // MARK: - UI Setups
