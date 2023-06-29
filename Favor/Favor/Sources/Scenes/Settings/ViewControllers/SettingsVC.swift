@@ -71,7 +71,6 @@ public final class SettingsViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.items }
-      .debug()
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, items in
         var snapshot = NSDiffableDataSourceSnapshot<SettingsSection, SettingsSectionItem>()

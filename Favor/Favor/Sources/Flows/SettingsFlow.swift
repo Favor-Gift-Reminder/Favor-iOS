@@ -46,8 +46,8 @@ public final class SettingsFlow: Flow {
       }
       return .none
 
-    case .appLockIsRequired:
-      return self.navigateToAppLock()
+    case .localAuthIsRequired:
+      return self.navigateToLocalAuth()
 
     case .devTeamInfoIsRequired:
       return self.navigateToDevTeamInfo()
@@ -126,8 +126,19 @@ private extension SettingsFlow {
     ))
   }
 
-  func navigateToAppLock() -> FlowContributors {
-    return .none
+  func navigateToLocalAuth() -> FlowContributors {
+    let localAuthVC = LocalAuthViewController()
+    let localAuthReactor = LocalAuthViewReactor()
+    localAuthVC.reactor = localAuthReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(localAuthVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: localAuthVC,
+      withNextStepper: localAuthReactor
+    ))
   }
 
   func navigateToDevTeamInfo() -> FlowContributors {

@@ -10,10 +10,11 @@ enum UserDefaultsKey: String {
   // MARK: - FTUX
 
   case isFirstLaunch
-  case isSignedIn
+  case authState
 
   // MARK: - User Info
 
   case userNo
-  case authState
+  case isLocalAuthEnabled
+  case isBiometricAuthEnabled
 }

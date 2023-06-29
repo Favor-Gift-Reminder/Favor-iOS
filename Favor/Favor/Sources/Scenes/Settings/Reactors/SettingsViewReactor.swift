@@ -94,7 +94,7 @@ private extension SettingsViewReactor {
       .selectable(
         .userInfo, .newPasswordIsRequired, title: "비밀번호 변경"),
       .selectable(
-        .userInfo, .appLockIsRequired, title: "앱 잠금"),
+        .userInfo, .localAuthIsRequired, title: "앱 잠금"),
       .switchable(
         .notification, .doNothing, title: "리마인더 알림"),
       .switchable(

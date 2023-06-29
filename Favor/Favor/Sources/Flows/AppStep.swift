@@ -92,7 +92,7 @@ public enum AppStep: Step {
 
   case settingsIsRequired
   case authInfoIsRequired
-  case appLockIsRequired
+  case localAuthIsRequired
   case devTeamInfoIsRequired
   case devTeamSupportIsRequired
   case serviceUsageTermIsRequired
