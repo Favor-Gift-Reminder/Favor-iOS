@@ -15,16 +15,14 @@ import SnapKit
 public final class FavorDatePickerTextField: UIView {
 
   // MARK: - PROPERTIES
-
+  
   private let disposeBag = DisposeBag()
-
+  
   /// 실질적으로 사용되는 date 프로퍼티
   /// 변경 가능한 지점
   /// 1. updateDate
   /// 2. 유저 선택
   fileprivate let date = BehaviorRelay<Date?>(value: nil)
-
-  private var isDateSet: Bool = false
 
   public var pickerMode: UIDatePicker.Mode = .date {
     didSet { self.datePicker.datePickerMode = self.pickerMode }
@@ -42,9 +40,9 @@ public final class FavorDatePickerTextField: UIView {
       self.textField.attributedPlaceholder = placeholder
     }
   }
-
+  
   public var isSelected: Bool = false {
-    didSet { self.downButton.isSelected = self.isSelected }
+    willSet { self.downButton.isSelected = newValue }
   }
 
   // MARK: - UI Components
@@ -64,18 +62,21 @@ public final class FavorDatePickerTextField: UIView {
     config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
     config.baseForegroundColor = .favorColor(.explain)
     config.baseBackgroundColor = .clear
-
+    
     let btn = UIButton(configuration: config)
     btn.configurationUpdateHandler = { button in
+      let image: UIImage? = .favorIcon(.down)?.resize(newWidth: 12.0)
       switch button.state {
-      case .normal: button.configuration?.baseForegroundColor = .favorColor(.explain)
-      case .selected: button.configuration?.baseForegroundColor = .favorColor(.icon)
+      case .normal:
+        button.configuration?.image = image?.withTintColor(.favorColor(.explain))
+      case .selected:
+        button.configuration?.image = image?.withTintColor(.favorColor(.icon))
       default: break
       }
     }
     return btn
   }()
-
+  
   fileprivate lazy var datePicker: UIDatePicker = {
     let dp = UIDatePicker()
     dp.datePickerMode = .date
@@ -135,11 +136,12 @@ public final class FavorDatePickerTextField: UIView {
   }
 
   // MARK: - BINDING
-
+  
   private func bind() {
     self.date
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
+        owner.isSelected = true
         if let date {
           let dateString = owner.pickerMode == .time ? date.toTimeString() : date.toDateString()
           owner.textField.text = dateString
@@ -150,7 +152,6 @@ public final class FavorDatePickerTextField: UIView {
       .disposed(by: self.disposeBag)
 
     self.datePicker.rx.date
-      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
         if owner.textField.isFirstResponder {
@@ -218,7 +219,7 @@ extension FavorDatePickerTextField: BaseView {
 private extension FavorDatePickerTextField {
   func popDatePicker() {
     self.textField.becomeFirstResponder()
-    self.datePicker.setDate(self.date.value ?? .now, animated: false)
+    self.datePicker.setDate(self.date.value ?? .now, animated: true)
   }
 }
 
