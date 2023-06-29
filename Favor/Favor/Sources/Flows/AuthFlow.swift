@@ -151,7 +151,7 @@ private extension AuthFlow {
 
   func navigateToNewPassword() -> FlowContributors {
     let viewController = AuthNewPasswordViewController()
-    let reactor = AuthNewPasswordViewReactor()
+    let reactor = AuthNewPasswordViewReactor(.auth)
     viewController.title = "비밀번호 변경"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)

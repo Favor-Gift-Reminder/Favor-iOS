@@ -5,6 +5,8 @@
 //  Created by 이창준 on 6/28/23.
 //
 
+import Foundation
+
 import FavorKit
 import ReactorKit
 import RxCocoa
@@ -75,11 +77,22 @@ public final class SettingsViewReactor: Reactor, Stepper {
 
 private extension SettingsViewReactor {
   func setupCells() -> [SettingsSectionItem] {
+    guard
+      let info: [String: Any] = Bundle.main.infoDictionary,
+      let appVersion = info["CFBundleShortVersionString"] as? String,
+      let buildVersion = info["CFBundleVersion"] as? String
+    else { return [] }
+    let version: String
+    if buildVersion == "beta" {
+      version = [appVersion, buildVersion].joined(separator: " ")
+    } else {
+      version = appVersion
+    }
     return [
       .selectable(
         .userInfo, .authInfoIsRequired, title: "로그인 정보", info: FTUXStorage.authState.rawValue),
       .selectable(
-        .userInfo, .findPasswordIsRequired, title: "비밀번호 변경"),
+        .userInfo, .newPasswordIsRequired, title: "비밀번호 변경"),
       .selectable(
         .userInfo, .appLockIsRequired, title: "앱 잠금"),
       .switchable(
@@ -87,7 +100,7 @@ private extension SettingsViewReactor {
       .switchable(
         .notification, .doNothing, title: "마케팅 정보 알림"),
       .info(
-        .appInfo, .doNothing, title: "버전", info: "1.1.1"),
+        .appInfo, .doNothing, title: "버전", info: version),
       .selectable(
         .appInfo, .devTeamInfoIsRequired, title: "팀"),
       .selectable(

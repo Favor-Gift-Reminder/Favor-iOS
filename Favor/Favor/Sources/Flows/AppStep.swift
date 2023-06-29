@@ -25,6 +25,7 @@ public enum AppStep: Step {
   case findPasswordIsRequired
   case validateEmailCodeIsRequired(String)
   case newPasswordIsRequired
+  case newPasswordIsComplete
   case signUpIsRequired
   case signInIsRequired
   case setProfileIsRequired(User)
@@ -91,7 +92,6 @@ public enum AppStep: Step {
 
   case settingsIsRequired
   case authInfoIsRequired
-  case changePasswordIsRequired
   case appLockIsRequired
   case devTeamInfoIsRequired
   case devTeamSupportIsRequired

@@ -37,8 +37,14 @@ public final class SettingsFlow: Flow {
     case .authInfoIsRequired:
       return self.navigateToAuthInfo()
 
-    case .changePasswordIsRequired:
-      return self.navigateToChangePassword()
+    case .newPasswordIsRequired:
+      return self.navigateToNewPassword()
+
+    case .newPasswordIsComplete:
+      if self.rootViewController.topViewController is SettingsNewPasswordViewController {
+        self.rootViewController.popViewController(animated: true)
+      }
+      return .none
 
     case .appLockIsRequired:
       return self.navigateToAppLock()
@@ -104,8 +110,20 @@ private extension SettingsFlow {
     ))
   }
 
-  func navigateToChangePassword() -> FlowContributors {
-    return .none
+  func navigateToNewPassword() -> FlowContributors {
+    let newPasswordVC = SettingsNewPasswordViewController()
+    let newPasswordReactor = AuthNewPasswordViewReactor(.settings)
+    newPasswordVC.reactor = newPasswordReactor
+    newPasswordVC.title = "비밀번호 변경"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(newPasswordVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: newPasswordVC,
+      withNextStepper: newPasswordReactor
+    ))
   }
 
   func navigateToAppLock() -> FlowContributors {

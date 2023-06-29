@@ -156,7 +156,7 @@ extension SettingsCell: BaseView {
     }
 
     self.infoLabel.snp.makeConstraints { make in
-      make.trailing.equalToSuperview().inset(Metric.trailingInset)
+      make.trailing.equalToSuperview().inset(Metric.trailingInset + 9.0)
       make.centerY.equalToSuperview()
     }
   }

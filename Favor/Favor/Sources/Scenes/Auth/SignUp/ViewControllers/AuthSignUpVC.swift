@@ -272,7 +272,7 @@ public final class AuthSignUpViewController: BaseViewController, View {
       .distinctUntilChanged()
       .drive(with: self, onNext: { owner, isButtonEnabled in
         owner.nextButton.configurationUpdateHandler = { button in
-          button.isEnabled = (isButtonEnabled == true)
+          button.isEnabled = isButtonEnabled
         }
       })
       .disposed(by: self.disposeBag)

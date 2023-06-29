@@ -44,10 +44,6 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
 
     self.setupDataSource()
     self.composer.compose()
-
-    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
-      self.reactor?.steps.accept(AppStep.wayBackToRootIsRequired)
-    }
   }
 
   // MARK: - Binding
