@@ -8,8 +8,8 @@
 import UIKit
 
 import FavorKit
-import RxSwift
 import RxCocoa
+import RxSwift
 import RxFlow
 import SnapKit
 

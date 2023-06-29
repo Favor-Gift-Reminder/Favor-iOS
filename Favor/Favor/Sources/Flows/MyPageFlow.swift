@@ -47,6 +47,9 @@ final class MyPageFlow: Flow {
     case .friendPageIsRequired(let friend):
       return self.navigateToFriendPage(friend)
 
+    case .wayBackToRootIsRequired:
+      return .one(flowContributor: .forwardToParentFlow(withStep: AppStep.wayBackToRootIsRequired))
+
     default:
       return .none
     }

@@ -45,6 +45,9 @@ public final class AppFlow: Flow {
     case .authIsRequired:
       return self.navigateToAuth()
 
+    case .wayBackToRootIsRequired:
+      return self.navigateWayBackToRoot()
+
     default:
       return .none
     }
@@ -55,9 +58,6 @@ public final class AppFlow: Flow {
 
 private extension AppFlow {
   func navigateToSplash() -> FlowContributors {
-    let homeFlow = HomeFlow()
-    let myPageFlow = MyPageFlow()
-
     let splashVC = SplashViewController()
     let splashReactor = SplashViewReactor()
     splashVC.reactor = splashReactor
@@ -67,31 +67,15 @@ private extension AppFlow {
       self.rootViewController.present(splashVC, animated: false)
     }
 
-    Flows.use(
-      homeFlow,
-      myPageFlow,
-      when: .created
-    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
-      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
-      self.rootViewController.setViewControllers(navigationControllers, animated: false)
-    }
-
-    return .multiple(flowContributors: [
+    let splashContributor: [FlowContributor] = [
       .contribute(
         withNextPresentable: splashVC,
         withNextStepper: splashReactor,
         allowStepWhenNotPresented: true
-      ),
-      .contribute(
-        withNextPresentable: homeFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
-      ),
-      .contribute(withNext: self.rootViewController),
-      .contribute(
-        withNextPresentable: myPageFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
       )
-    ])
+    ]
+
+    return .multiple(flowContributors: splashContributor + self.dashboardContributors())
   }
 
   func popToDashboard() -> FlowContributors {
@@ -116,5 +100,38 @@ private extension AppFlow {
         withSingleStep: AppStep.authIsRequired
       )
     ))
+  }
+
+  func navigateWayBackToRoot() -> FlowContributors {
+    return .one(flowContributor: .forwardToCurrentFlow(withStep: AppStep.authIsRequired))
+  }
+}
+
+// MARK: - Contributors
+
+private extension AppFlow {
+  func dashboardContributors() -> [FlowContributor] {
+    let homeFlow = HomeFlow()
+    let myPageFlow = MyPageFlow()
+
+    Flows.use(
+      homeFlow,
+      myPageFlow,
+      when: .created
+    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
+      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
+      self.rootViewController.setViewControllers(navigationControllers, animated: false)
+    }
+
+    return [
+      .contribute(
+        withNextPresentable: homeFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
+      ),
+      .contribute(
+        withNextPresentable: myPageFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
+      )
+    ]
   }
 }

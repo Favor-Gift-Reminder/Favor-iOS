@@ -7,12 +7,12 @@
 
 import UIKit
 
-public enum AuthState: CaseIterable, Codable {
-  case email
-  case kakao
-  case naver
-  case apple
-  case undefined
+public enum AuthState: String, CaseIterable, Codable {
+  case email = "이메일"
+  case kakao = "카카오"
+  case naver = "네이버"
+  case apple = "애플"
+  case undefined = "로그인"
 
   public var isSocialAuth: Bool {
     switch self {

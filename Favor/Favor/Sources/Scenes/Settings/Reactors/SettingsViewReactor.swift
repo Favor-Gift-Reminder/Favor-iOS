@@ -5,6 +5,7 @@
 //  Created by 이창준 on 6/28/23.
 //
 
+import FavorKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -75,17 +76,29 @@ public final class SettingsViewReactor: Reactor, Stepper {
 private extension SettingsViewReactor {
   func setupCells() -> [SettingsSectionItem] {
     return [
-      .selectable(.userInfo, .authInfoIsRequired, title: "로그인 정보", info: "이메일"),
-      .selectable(.userInfo, .findPasswordIsRequired, title: "비밀번호 변경"),
-      .selectable(.userInfo, .appLockIsRequired, title: "앱 잠금"),
-      .switchable(.notification, .doNothing, title: "리마인더 알림"),
-      .switchable(.notification, .doNothing, title: "마케팅 정보 알림"),
-      .info(.appInfo, .doNothing, title: "버전", info: "1.1.1"),
-      .selectable(.appInfo, .devTeamInfoIsRequired, title: "팀"),
-      .selectable(.appInfo, .devTeamSupportIsRequired, title: "개발자 응원하기"),
-      .selectable(.appInfo, .serviceUsageTermIsRequired, title: "서비스 이용약관"),
-      .selectable(.appInfo, .privateInfoManagementTermIsRequired, title: "개인정보 처리방침"),
-      .selectable(.appInfo, .openSourceUsageIsRequired, title: "오픈 소스 라이선스")
+      .selectable(
+        .userInfo, .authInfoIsRequired, title: "로그인 정보", info: FTUXStorage.authState.rawValue),
+      .selectable(
+        .userInfo, .findPasswordIsRequired, title: "비밀번호 변경"),
+      .selectable(
+        .userInfo, .appLockIsRequired, title: "앱 잠금"),
+      .switchable(
+        .notification, .doNothing, title: "리마인더 알림"),
+      .switchable(
+        .notification, .doNothing, title: "마케팅 정보 알림"),
+      .info(
+        .appInfo, .doNothing, title: "버전", info: "1.1.1"),
+      .selectable(
+        .appInfo, .devTeamInfoIsRequired, title: "팀"),
+      .selectable(
+        .appInfo, .devTeamSupportIsRequired, title: "개발자 응원하기"),
+      .selectable(
+        .appInfo, .serviceUsageTermIsRequired, title: "서비스 이용약관"),
+      .selectable(
+        .appInfo, .privateInfoManagementTermIsRequired, title: "개인정보 처리방침"),
+      .selectable(
+        .appInfo, .openSourceUsageIsRequired, title: "오픈 소스 라이선스")
     ]
   }
+  
 }

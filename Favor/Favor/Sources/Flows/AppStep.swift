@@ -98,6 +98,7 @@ public enum AppStep: Step {
   case serviceUsageTermIsRequired
   case privateInfoManagementTermIsRequired
   case openSourceUsageIsRequired
+  case wayBackToRootIsRequired
 
   // MARK: - BottomSheet
   case memoBottomSheetIsRequired(String?)

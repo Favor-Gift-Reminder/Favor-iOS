@@ -58,6 +58,10 @@ public final class SettingsFlow: Flow {
     case .openSourceUsageIsRequired:
       return self.navigateToOpenSourceUsage()
 
+    case .wayBackToRootIsRequired:
+      self.rootViewController.popToRootViewController(animated: false)
+      return .end(forwardToParentFlowWithStep: AppStep.wayBackToRootIsRequired)
+
     default:
       return .none
     }
@@ -85,7 +89,19 @@ private extension SettingsFlow {
   }
 
   func navigateToAuthInfo() -> FlowContributors {
-    return .none
+    let settingsAuthInfoVC = SettingsAuthInfoViewController()
+    let settingsAuthInfoReactor = SettingsAuthInfoViewReactor()
+    settingsAuthInfoVC.reactor = settingsAuthInfoReactor
+    settingsAuthInfoVC.title = "로그인 정보"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(settingsAuthInfoVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: settingsAuthInfoVC,
+      withNextStepper: settingsAuthInfoReactor
+    ))
   }
 
   func navigateToChangePassword() -> FlowContributors {
