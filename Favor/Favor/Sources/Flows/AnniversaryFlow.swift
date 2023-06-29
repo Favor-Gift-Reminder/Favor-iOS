@@ -90,12 +90,13 @@ private extension AnniversaryFlow {
       withNextStepper: anniversaryListModifyingReactor
     ))
   }
-
+  
   func navigateToAnniversaryManagement(
     _ viewType: AnniversaryManagementViewController.ViewType,
     with anniversary: Anniversary? = nil
   ) -> FlowContributors {
     let anniversaryManagementVC = AnniversaryManagementViewController()
+    anniversaryManagementVC.hidesBottomBarWhenPushed = true
     var anniversaryManagementReactor: AnniversaryManagementViewReactor
     switch viewType {
     case .edit:
@@ -110,7 +111,7 @@ private extension AnniversaryFlow {
       self.rootViewController.setupNavigationAppearance()
       self.rootViewController.pushViewController(anniversaryManagementVC, animated: true)
     }
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: anniversaryManagementVC,
       withNextStepper: anniversaryManagementReactor
