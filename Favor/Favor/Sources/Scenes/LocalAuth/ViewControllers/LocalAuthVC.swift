@@ -5,8 +5,11 @@
 //  Created by 이창준 on 6/29/23.
 //
 
+import LocalAuthentication
+import OSLog
 import UIKit
 
+import DeviceKit
 import FavorKit
 import ReactorKit
 import SnapKit
@@ -22,6 +25,33 @@ public final class LocalAuthViewController: BaseViewController, View {
     static let keypadHorizontalInset: CGFloat = 48.0
   }
 
+  private enum Typo {
+    static var biometricFailTitle: String {
+      let device = Device.current
+      if device.isFaceIDCapable {
+        return "Face ID를 사용할 수 없습니다"
+      } else if device.isTouchIDCapable {
+        return "Touch ID를 사용할 수 없습니다"
+      } else {
+        return "생체 인식을 사용할 수 없습니다"
+      }
+    }
+    static var biometricFailDescription: String {
+      let device = Device.current
+      let biometric: String
+      if device.isFaceIDCapable {
+        biometric = "Face ID"
+      } else if device.isTouchIDCapable {
+        biometric = "Touch ID"
+      } else {
+        biometric = "생체 인식"
+      }
+      return "설정 > 페이버 에서 " + biometric + " 권한을 허용해주세요."
+    }
+    static let biometricFailCancel: String = "취소"
+    static let biometricFailSetting: String = "설정"
+  }
+
   // MARK: - Properties
 
   public var titleString: String = "암호 확인" {
@@ -31,6 +61,8 @@ public final class LocalAuthViewController: BaseViewController, View {
   public var subtitleString: String = "암호를 입력해주세요." {
     didSet { self.subtitleLabel.text = self.subtitleString }
   }
+
+  private let authContext = LAContext()
 
   // MARK: - UI Components
 
@@ -60,6 +92,7 @@ public final class LocalAuthViewController: BaseViewController, View {
     config.updateAttributedTitle("test", font: .favorFont(.regular, size: 14))
 
     let button = UIButton(configuration: config)
+    button.isHidden = !Device.current.hasBiometricSensor
     return button
   }()
 
@@ -78,7 +111,7 @@ public final class LocalAuthViewController: BaseViewController, View {
     self.biometricAuthButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
-        print("Tapped")
+        owner.handleLocalAuth()
       })
       .disposed(by: self.disposeBag)
 
@@ -145,6 +178,36 @@ private extension LocalAuthViewController {
     let numpadSize = (keypadWidth - keypadSpacings) / 3
     let height = (numpadSize * 4) + (self.numberKeypad.verticalSpacing * 3)
     return height
+  }
+
+  func handleLocalAuth() {
+    var error: NSError?
+    if self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+      let reason = "얼굴 대라"
+      authContext.evaluatePolicy(
+        .deviceOwnerAuthenticationWithBiometrics,
+        localizedReason: reason
+      ) { [weak self] isSucceed, error in
+        DispatchQueue.main.async {
+          if isSucceed {
+            os_log(.info, "Succeed")
+          }
+        }
+      }
+    } else {
+      let ac = UIAlertController(
+        title: Typo.biometricFailTitle,
+        message: Typo.biometricFailDescription,
+        preferredStyle: .alert)
+      ac.addAction(UIAlertAction(title: Typo.biometricFailCancel, style: .destructive))
+      ac.addAction(UIAlertAction(title: Typo.biometricFailSetting, style: .default, handler: { _ in
+        UIApplication.shared.open(
+          URL(string: UIApplication.openSettingsURLString)!,
+          completionHandler: nil
+        )
+      }))
+      self.present(ac, animated: true)
+    }
   }
 }
 

@@ -68,6 +68,7 @@
 		2E7975462A4DC82E0083773B /* KeypadInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7975452A4DC82E0083773B /* KeypadInputs.swift */; };
 		2E7975482A4DC8560083773B /* FavorKeypadTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7975472A4DC8560083773B /* FavorKeypadTextField.swift */; };
 		2E79754A2A4DCBDC0083773B /* FavorKeypadText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7975492A4DCBDC0083773B /* FavorKeypadText.swift */; };
+		2E79754D2A4E756D0083773B /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E79754C2A4E756D0083773B /* DeviceKit */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
 		2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A4295D7C4500BAC43D /* Assets.xcassets */; };
@@ -476,6 +477,7 @@
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E55501F2A27A5AE00E6AB26 /* Composer in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
+				2E79754D2A4E756D0083773B /* DeviceKit in Frameworks */,
 				2EFDE6792A4BF8BC007A808F /* RxKakaoSDKUser in Frameworks */,
 				2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
@@ -1658,6 +1660,7 @@
 				2EAC60A72A4A018F0047A572 /* Hero */,
 				2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */,
 				2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */,
+				2E79754C2A4E756D0083773B /* DeviceKit */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1724,6 +1727,7 @@
 				2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */,
 				2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */,
 				2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
+				2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -2322,6 +2326,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devicekit/DeviceKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 		2E7C30AF295D8DA400BAC43D /* XCRemoteSwiftPackageReference "ReactorKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ReactorKit/ReactorKit";
@@ -2433,6 +2445,11 @@
 		2E730C6929BA31F4003668D9 /* FavorNetworkKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FavorNetworkKit;
+		};
+		2E79754C2A4E756D0083773B /* DeviceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */;
+			productName = DeviceKit;
 		};
 		2E7C30B0295D8DA400BAC43D /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;
