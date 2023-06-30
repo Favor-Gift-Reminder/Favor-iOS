@@ -9,8 +9,8 @@ import UIKit
 
 import FavorKit
 import RxCocoa
-import RxSwift
 import RxFlow
+import RxSwift
 import SnapKit
 
 final class FavorTabBarController: UITabBarController, Stepper {

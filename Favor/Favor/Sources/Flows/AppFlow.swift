@@ -20,7 +20,6 @@ public final class AppFlow: Flow {
   // MARK: - Properties
 
   public var root: Presentable { self.rootViewController }
-  private let keychain = KeychainManager()
 
   /// Used only for testFlow.
   private let rootViewController: FavorTabBarController
@@ -38,6 +37,9 @@ public final class AppFlow: Flow {
     switch step {
     case .splashIsRequired:
       return self.navigateToSplash()
+
+    case .splashIsComplete:
+      return self.popFromSplash()
 
     case .dashboardIsRequired:
       return self.popToDashboard()
@@ -82,6 +84,34 @@ private extension AppFlow {
     ]
 
     return .multiple(flowContributors: splashContributor + self.dashboardContributors())
+  }
+
+  func popFromSplash() -> FlowContributors {
+    typealias DescriptionMessage = LocalAuthViewReactor.DescriptionMessage
+
+    let localAuthVC = LocalAuthViewController()
+    localAuthVC.modalPresentationStyle = .overFullScreen
+    localAuthVC.titleString = "암호"
+    let description = DescriptionMessage(description: "암호를 입력해주세요.")
+    let localAuthReactor = LocalAuthViewReactor(.launch, description: description)
+    localAuthVC.reactor = localAuthReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.dismiss(animated: false) {
+        if UserInfoStorage.isLocalAuthEnabled {
+          self.rootViewController.present(localAuthVC, animated: false)
+        }
+      }
+    }
+
+    if UserInfoStorage.isLocalAuthEnabled {
+      return .one(flowContributor: .contribute(
+        withNextPresentable: localAuthVC,
+        withNextStepper: localAuthReactor
+      ))
+    } else {
+      return .none
+    }
   }
 
   func navigateToAuth() -> FlowContributors {

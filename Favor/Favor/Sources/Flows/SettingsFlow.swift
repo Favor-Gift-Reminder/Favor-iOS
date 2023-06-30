@@ -133,10 +133,12 @@ private extension SettingsFlow {
     typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
     let localAuthVC = LocalAuthViewController()
     let description: DescriptionMessage
+    let animated: Bool
     switch location {
     case .settingsCheckOld:
       localAuthVC.titleString = "암호 변경"
       description = DescriptionMessage(description: "기존 암호를 입력해주세요.")
+      animated = true
     case .settingsNew:
       if UserInfoStorage.isLocalAuthEnabled {
         localAuthVC.titleString = "암호 변경"
@@ -145,17 +147,20 @@ private extension SettingsFlow {
         localAuthVC.titleString = "암호 등록"
         description = DescriptionMessage(description: "새로운 암호를 입력해주세요.")
       }
+      animated = true
     case .settingsConfirmNew:
       localAuthVC.titleString = "암호 확인"
       description = DescriptionMessage(description: "새로운 암호를 입력해주세요.")
+      animated = false
     default:
       description = DescriptionMessage()
+      animated = true
     }
     let localAuthReactor = LocalAuthViewReactor(location, description: description)
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {
-      self.rootViewController.pushViewController(localAuthVC, animated: true)
+      self.rootViewController.pushViewController(localAuthVC, animated: animated)
     }
 
     return .one(flowContributor: .contribute(
