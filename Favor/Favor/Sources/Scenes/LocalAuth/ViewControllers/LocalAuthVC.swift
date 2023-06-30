@@ -79,14 +79,24 @@ public final class LocalAuthViewController: BaseViewController, View {
     static let biometricFailSetting: String = "설정"
   }
 
+  public struct DescriptionMessage: Equatable {
+    var description: String?
+    var isError: Bool = false
+  }
+
   // MARK: - Properties
 
   public var titleString: String? {
     didSet { self.titleLabel.text = self.titleString }
   }
 
-  public var subtitleString: String? {
-    didSet { self.subtitleLabel.text = self.subtitleString }
+  public var subtitleString: DescriptionMessage? {
+    didSet {
+      self.subtitleLabel.text = self.subtitleString?.description
+      self.subtitleLabel.textColor = {
+        self.subtitleString!.isError ? .favorColor(.main) : .favorColor(.explain)
+      }()
+    }
   }
 
   private let authContext = LAContext()
@@ -107,7 +117,7 @@ public final class LocalAuthViewController: BaseViewController, View {
     label.font = .favorFont(.regular, size: 16)
     label.textColor = .favorColor(.explain)
     label.textAlignment = .center
-    label.text = self.subtitleString
+    label.text = self.subtitleString?.description
     return label
   }()
 
@@ -160,6 +170,14 @@ public final class LocalAuthViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, inputs in
         owner.keypadTextField.updateKeypadInputs(inputs)
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.description }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, description in
+        owner.subtitleString = description
       })
       .disposed(by: self.disposeBag)
   }

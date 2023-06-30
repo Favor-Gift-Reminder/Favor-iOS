@@ -91,10 +91,8 @@ private extension SettingsViewReactor {
     }
     let localAuthLocation: LocalAuthLocation
     if UserInfoStorage.isLocalAuthEnabled {
-      os_log(.debug, "Local auth is enabled. Navigate to change.")
       localAuthLocation = .settingsCheckOld
     } else {
-      os_log(.debug, "Local auth is disabled. Navigate to new.")
       localAuthLocation = .settingsNew
     }
     return [

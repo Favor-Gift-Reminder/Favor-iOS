@@ -13,6 +13,7 @@ import RxCocoa
 import RxFlow
 
 public final class LocalAuthViewReactor: Reactor, Stepper {
+  typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
 
   // MARK: - Properties
 
@@ -34,17 +35,21 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
     case appendInput(Int)
     case removeLastInput
     case resetInput
+    case announceWrongPassword
   }
 
   public struct State {
     @Pulse var pulseLocalAuthPrompt: Bool = false
     var inputs: [KeypadInput] = Array(repeating: KeypadInput(data: nil, isLastInput: false), count: 4)
+    var description: DescriptionMessage
   }
 
   // MARK: - Initializer
 
-  init(_ location: LocalAuthLocation) {
-    self.initialState = State()
+  init(_ location: LocalAuthLocation, description: DescriptionMessage) {
+    self.initialState = State(
+      description: description
+    )
     self.location = location
     if case let LocalAuthLocation.settingsConfirmNew(password) = location {
       self.targetPassword = password
@@ -125,6 +130,12 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
         KeypadInput(isLastInput: false),
         KeypadInput(isLastInput: false)
       ]
+
+    case .announceWrongPassword:
+      newState.description = DescriptionMessage(
+        description: "암호가 일치하지 않습니다.",
+        isError: true
+      )
     }
 
     return newState
@@ -148,11 +159,16 @@ private extension LocalAuthViewReactor {
   /// 암호 변경이 필요한 경우 이전 암호 입력이 완료됐을 때
   func handleCheckOldInput(with key: String) -> Observable<Mutation> {
     if self.validateOldInput(key) {
+      os_log(.debug, "🔐 Password match!")
       self.steps.accept(AppStep.localAuthIsRequired(.settingsNew))
-      return .empty()
-    } else {
-      HapticManager.haptic(style: .heavy)
       return .just(.resetInput)
+    } else {
+      os_log(.debug, "🔒 Password miss!")
+      HapticManager.haptic(style: .heavy)
+      return .concat([
+        .just(.announceWrongPassword),
+        .just(.resetInput)
+      ])
     }
   }
 
@@ -180,7 +196,10 @@ private extension LocalAuthViewReactor {
       }
     } else {
       HapticManager.haptic(style: .heavy)
-      return .just(.resetInput)
+      return .concat([
+        .just(.resetInput),
+        .just(.announceWrongPassword)
+      ])
     }
   }
 

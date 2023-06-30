@@ -103,16 +103,18 @@ private extension AppFlow {
   }
 
   func navigateToLocalAuth(location: LocalAuthLocation) -> FlowContributors {
+    typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
     let localAuthVC = LocalAuthViewController()
-    let localAuthReactor = LocalAuthViewReactor(location)
-    localAuthVC.reactor = localAuthReactor
+    let description: DescriptionMessage
     switch location {
     case .launch:
       localAuthVC.titleString = "암호"
-      localAuthVC.subtitleString = "암호를 입력해주세요."
+      description = DescriptionMessage(description: "암호를 입력해주세요.")
     default:
-      break
+      description = DescriptionMessage()
     }
+    let localAuthReactor = LocalAuthViewReactor(location, description: description)
+    localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {
       self.rootViewController.present(localAuthVC, animated: false)

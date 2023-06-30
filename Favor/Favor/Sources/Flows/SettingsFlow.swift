@@ -130,26 +130,28 @@ private extension SettingsFlow {
   }
 
   func navigateToLocalAuth(location: LocalAuthLocation) -> FlowContributors {
+    typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
     let localAuthVC = LocalAuthViewController()
-    let localAuthReactor = LocalAuthViewReactor(location)
+    let description: DescriptionMessage
     switch location {
     case .settingsCheckOld:
       localAuthVC.titleString = "암호 변경"
-      localAuthVC.subtitleString = "기존 암호를 입력해주세요."
+      description = DescriptionMessage(description: "기존 암호를 입력해주세요.")
     case .settingsNew:
       if UserInfoStorage.isLocalAuthEnabled {
         localAuthVC.titleString = "암호 변경"
-        localAuthVC.subtitleString = "변경할 암호를 입력해주세요."
+        description = DescriptionMessage(description: "변경할 암호를 입력해주세요.")
       } else {
         localAuthVC.titleString = "암호 등록"
-        localAuthVC.subtitleString = "새로운 암호를 입력해주세요."
+        description = DescriptionMessage(description: "새로운 암호를 입력해주세요.")
       }
     case .settingsConfirmNew:
       localAuthVC.titleString = "암호 확인"
-      localAuthVC.subtitleString = "다시 한번 입력해주세요."
+      description = DescriptionMessage(description: "새로운 암호를 입력해주세요.")
     default:
-      break
+      description = DescriptionMessage()
     }
+    let localAuthReactor = LocalAuthViewReactor(location, description: description)
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {
