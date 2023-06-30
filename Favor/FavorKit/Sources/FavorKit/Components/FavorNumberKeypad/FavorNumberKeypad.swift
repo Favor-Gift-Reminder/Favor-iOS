@@ -53,7 +53,8 @@ public final class FavorNumberKeypadCell: UICollectionViewCell {
         self.button.configuration?.updateAttributedTitle(keyString, font: .favorFont(.bold, size: 24))
       case .keyImage(let keyImage):
         self.button.configuration?.title = nil
-        self.button.configuration?.image = keyImage.withRenderingMode(.alwaysTemplate)
+        self.button.configuration?.image = keyImage
+          .withRenderingMode(.alwaysTemplate)
       }
     }
   }
@@ -132,8 +133,7 @@ public final class FavorNumberKeypad: UIView {
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
-      collectionViewLayout: self.setupLayout()
-    )
+      collectionViewLayout: self.setupLayout())
 
     collectionView.isScrollEnabled = false
     collectionView.showsVerticalScrollIndicator = false

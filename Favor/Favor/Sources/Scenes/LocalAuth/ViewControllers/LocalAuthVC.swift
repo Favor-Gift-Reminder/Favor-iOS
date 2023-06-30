@@ -99,6 +99,17 @@ public final class LocalAuthViewController: BaseViewController, View {
     }
   }
 
+  private var biometricImage: UIImage? {
+    let device = Device.current
+    if device.isFaceIDCapable {
+      return UIImage(systemName: "faceid")
+    } else if device.isTouchIDCapable {
+      return UIImage(systemName: "touchid")
+    } else {
+      return nil
+    }
+  }
+
   private let authContext = LAContext()
 
   // MARK: - UI Components
@@ -123,19 +134,22 @@ public final class LocalAuthViewController: BaseViewController, View {
 
   private let keypadTextField = FavorKeypadTextField()
 
-  private let biometricAuthButton: UIButton = {
-    var config = UIButton.Configuration.filled()
-    config.baseBackgroundColor = .favorColor(.main)
-    config.updateAttributedTitle("test", font: .favorFont(.regular, size: 14))
-
-    let button = UIButton(configuration: config)
-    button.isHidden = !Device.current.hasBiometricSensor
-    return button
-  }()
-
   private lazy var numberKeypad: FavorNumberKeypad = {
+    // Numbers
     let numbers: [FavorNumberKeypadCellModel] = (1...9).map { .keyString(String($0)) }
-    let bottoms: [FavorNumberKeypadCellModel] = [.keyString(""), .keyString("0"), .keyImage(.favorIcon(.erase)!)]
+    // Biometric
+    let biometricImage: UIImage = self.biometricImage ?? UIImage()
+    guard let reactor = self.reactor else { return FavorNumberKeypad([]) }
+    let biometricPad: FavorNumberKeypadCellModel
+    switch reactor.location {
+    case .launch, .settingsCheckOld:
+      biometricPad = .keyImage(biometricImage)
+    default:
+      biometricPad = .keyString("")
+    }
+    let bottoms: [FavorNumberKeypadCellModel] = [
+      biometricPad, .keyString("0"), .keyImage(.favorIcon(.erase)!)
+    ]
     let keypad = FavorNumberKeypad(numbers + bottoms)
     keypad.delegate = self
     return keypad
@@ -146,23 +160,25 @@ public final class LocalAuthViewController: BaseViewController, View {
   public func bind(reactor: LocalAuthViewReactor) {
     // Action
     self.rx.viewDidAppear
-      .map { _ in Reactor.Action.biometricAuthNeedsChecked }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.biometricAuthButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
-        owner.handleLocalAuth()
+        switch reactor.location {
+        case .launch, .settingsCheckOld:
+          if let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled {
+            if isBiometricAuthEnabled { owner.handleBiometricAuth() }
+          }
+        default:
+          break
+        }
       })
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.state.map { $0.pulseLocalAuthPrompt }
-      .distinctUntilChanged()
+    reactor.pulse { $0.$pulseLocalAuthPrompt }
       .asDriver(onErrorRecover: { _ in return .empty() })
+      .filter { $0 }
       .drive(with: self, onNext: { owner, _ in
-        owner.handleLocalAuthPrompt()
+        owner.handleBiometricAuth()
       })
       .disposed(by: self.disposeBag)
 
@@ -191,7 +207,6 @@ public final class LocalAuthViewController: BaseViewController, View {
       self.titleLabel,
       self.subtitleLabel,
       self.keypadTextField,
-      self.biometricAuthButton,
       self.numberKeypad
     ].forEach {
       self.view.addSubview($0)
@@ -211,11 +226,6 @@ public final class LocalAuthViewController: BaseViewController, View {
 
     self.keypadTextField.snp.makeConstraints { make in
       make.top.equalTo(self.subtitleLabel.snp.bottom).offset(48.0)
-      make.centerX.equalToSuperview()
-    }
-
-    self.biometricAuthButton.snp.makeConstraints { make in
-      make.bottom.equalTo(self.numberKeypad.snp.top).offset(-48.0)
       make.centerX.equalToSuperview()
     }
 
@@ -239,36 +249,47 @@ private extension LocalAuthViewController {
   }
 
   func handleLocalAuthPrompt() {
-    let ac = UIAlertController(
-      title: Typo.biometricPromptTitle,
-      message: Typo.biometricPromptDescription,
-      preferredStyle: .alert)
-    ac.addAction(UIAlertAction(title: Typo.biometricPromptCancel, style: .destructive, handler: { _ in
-      // 생체 인증 사용 X
-      UserInfoStorage.isBiometricAuthEnabled = false
-      // 그대로 진행
-    }))
-    ac.addAction(UIAlertAction(title: Typo.biometricPromptAccept, style: .default, handler: { _ in
-      // 생체 인증 확인
-      UserInfoStorage.isBiometricAuthEnabled = true
-      self.dismiss(animated: true) {
-        self.handleLocalAuth()
+    if let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled {
+      // 설정된 적 있음
+      if isBiometricAuthEnabled {
+        // 생체 인증 시작
+        self.handleBiometricAuth()
       }
-    }))
-    self.present(ac, animated: true)
+    } else {
+      // 설정된 적 없음
+      // 팝업창 present
+      let ac = UIAlertController(
+        title: Typo.biometricPromptTitle,
+        message: Typo.biometricPromptDescription,
+        preferredStyle: .alert)
+      ac.addAction(UIAlertAction(title: Typo.biometricPromptAccept, style: .default, handler: { _ in
+        // 생체 인증 확인
+        UserInfoStorage.isBiometricAuthEnabled = true
+        self.dismiss(animated: true) {
+          self.handleBiometricAuth()
+        }
+      }))
+      ac.addAction(UIAlertAction(title: Typo.biometricPromptCancel, style: .destructive, handler: { _ in
+        // 생체 인증 사용 X
+        UserInfoStorage.isBiometricAuthEnabled = false
+        // 그대로 진행
+      }))
+      self.present(ac, animated: true)
+    }
   }
 
-  func handleLocalAuth() {
+  func handleBiometricAuth() {
     var error: NSError?
     if self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
       let reason = "얼굴 대라"
       authContext.evaluatePolicy(
         .deviceOwnerAuthenticationWithBiometrics,
         localizedReason: reason
-      ) { [weak self] isSucceed, error in
+      ) { [weak self] isSucceed, _ in
         DispatchQueue.main.async {
           if isSucceed {
-            os_log(.info, "Succeed")
+            guard let reactor = self?.reactor else { return }
+            reactor.action.onNext(.biometricAuthDidSucceed)
           }
         }
       }

@@ -6,7 +6,9 @@
 //
 
 import OSLog
+import UIKit
 
+import DeviceKit
 import FavorKit
 import ReactorKit
 import RxCocoa
@@ -19,15 +21,14 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
   public var initialState: State
   public let steps = PublishRelay<Step>()
-  private let location: LocalAuthLocation
+  public let location: LocalAuthLocation
   private let keychain = KeychainManager()
 
   private let targetPassword: String?
 
   public enum Action {
-    case biometricAuthNeedsChecked
     case keypadDidSelected(FavorNumberKeypadCellModel)
-    case localAuthSecceed
+    case biometricAuthDidSucceed
   }
 
   public enum Mutation {
@@ -62,22 +63,19 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .biometricAuthNeedsChecked:
-      return .empty()
-
     case .keypadDidSelected(let keypad):
       switch keypad {
-      // 숫자가 입력됐을 때
+        // 숫자가 입력됐을 때
       case .keyString(let keyString):
         guard let keyNumber = Int(keyString) else { return .empty() }
         let currentInputs = self.currentState.inputs
-
+        
         // 마지막 입력일 때
         if currentInputs.filter({ $0.data != nil }).count == currentInputs.count - 1 {
           var finalInput = currentInputs.dropLast()
           finalInput.append(KeypadInput(data: keyNumber, isLastInput: true))
           let key = Array(finalInput).combinedValue
-
+          
           switch self.location {
           case .launch:
             return self.handleLaunchInput(with: key)
@@ -90,15 +88,30 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
           }
         }
         return .just(.appendInput(keyNumber))
-
-      // 특수기호가 입력됐을 때
+        
+        // 특수기호가 입력됐을 때
       case .keyImage(let keyImage):
-        guard keyImage == .favorIcon(.erase) else { return .empty() }
-        return .just(.removeLastInput)
+        switch keyImage {
+        case .favorIcon(.erase)!:
+          return .just(.removeLastInput)
+        case UIImage(systemName: "faceid")!, UIImage(systemName: "touchid")!:
+          return .just(.pulseLocalAuthPrompt(true))
+          return .empty()
+        default:
+          return .empty()
+        }
       }
 
-    case .localAuthSecceed:
+    case .biometricAuthDidSucceed:
       os_log(.debug, "Local Auth Succeed!")
+      switch self.location {
+      case .launch:
+        self.steps.accept(AppStep.localAuthIsComplete)
+      case .settingsCheckOld:
+        self.steps.accept(AppStep.localAuthIsRequired(.settingsNew))
+      default:
+        break
+      }
       return .empty()
     }
   }
@@ -206,7 +219,6 @@ private extension LocalAuthViewReactor {
   /// 입력된 암호와 설정된 암호를 대조합니다.
   /// - Returns: 입력된 암호와 설정된 암호의 동일 여부 `Bool`
   func validateOldInput(_ key: String) -> Bool {
-    // 암호를 저장된 암호와 대조하고
     guard let localAuth = try? self.keychain.get(account: KeychainManager.Accounts.localAuth.rawValue) else {
       fatalError("There is no keypass set for local auth.")
     }
