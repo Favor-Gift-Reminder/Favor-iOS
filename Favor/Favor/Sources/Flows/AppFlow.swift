@@ -45,6 +45,12 @@ public final class AppFlow: Flow {
     case .authIsRequired:
       return self.navigateToAuth()
 
+    case .localAuthIsRequired(let location):
+      return self.navigateToLocalAuth(location: location)
+
+    case .localAuthIsComplete:
+      return self.popToDashboard()
+
     case .wayBackToRootIsRequired:
       return self.navigateWayBackToRoot()
 
@@ -78,12 +84,6 @@ private extension AppFlow {
     return .multiple(flowContributors: splashContributor + self.dashboardContributors())
   }
 
-  func popToDashboard() -> FlowContributors {
-    self.rootViewController.dismiss(animated: true)
-
-    return .none
-  }
-
   func navigateToAuth() -> FlowContributors {
     let authFlow = AuthFlow()
 
@@ -100,6 +100,34 @@ private extension AppFlow {
         withSingleStep: AppStep.authIsRequired
       )
     ))
+  }
+
+  func navigateToLocalAuth(location: LocalAuthLocation) -> FlowContributors {
+    let localAuthVC = LocalAuthViewController()
+    let localAuthReactor = LocalAuthViewReactor(location)
+    localAuthVC.reactor = localAuthReactor
+    switch location {
+    case .launch:
+      localAuthVC.titleString = "암호"
+      localAuthVC.subtitleString = "암호를 입력해주세요."
+    default:
+      break
+    }
+
+    DispatchQueue.main.async {
+      self.rootViewController.present(localAuthVC, animated: false)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: localAuthVC,
+      withNextStepper: localAuthReactor
+    ))
+  }
+
+  func popToDashboard() -> FlowContributors {
+    self.rootViewController.dismiss(animated: true)
+
+    return .none
   }
 
   func navigateWayBackToRoot() -> FlowContributors {

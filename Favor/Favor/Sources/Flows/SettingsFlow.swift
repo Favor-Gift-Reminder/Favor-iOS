@@ -46,8 +46,11 @@ public final class SettingsFlow: Flow {
       }
       return .none
 
-    case .localAuthIsRequired:
-      return self.navigateToLocalAuth()
+    case .localAuthIsRequired(let location):
+      return self.navigateToLocalAuth(location: location)
+
+    case .localAuthIsComplete:
+      return self.popToSettings()
 
     case .devTeamInfoIsRequired:
       return self.navigateToDevTeamInfo()
@@ -126,9 +129,27 @@ private extension SettingsFlow {
     ))
   }
 
-  func navigateToLocalAuth() -> FlowContributors {
+  func navigateToLocalAuth(location: LocalAuthLocation) -> FlowContributors {
     let localAuthVC = LocalAuthViewController()
-    let localAuthReactor = LocalAuthViewReactor()
+    let localAuthReactor = LocalAuthViewReactor(location)
+    switch location {
+    case .settingsCheckOld:
+      localAuthVC.titleString = "암호 변경"
+      localAuthVC.subtitleString = "기존 암호를 입력해주세요."
+    case .settingsNew:
+      if UserInfoStorage.isLocalAuthEnabled {
+        localAuthVC.titleString = "암호 변경"
+        localAuthVC.subtitleString = "변경할 암호를 입력해주세요."
+      } else {
+        localAuthVC.titleString = "암호 등록"
+        localAuthVC.subtitleString = "새로운 암호를 입력해주세요."
+      }
+    case .settingsConfirmNew:
+      localAuthVC.titleString = "암호 확인"
+      localAuthVC.subtitleString = "다시 한번 입력해주세요."
+    default:
+      break
+    }
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {
@@ -139,6 +160,17 @@ private extension SettingsFlow {
       withNextPresentable: localAuthVC,
       withNextStepper: localAuthReactor
     ))
+  }
+
+  func popToSettings() -> FlowContributors {
+    DispatchQueue.main.async {
+      let viewControllers = self.rootViewController.viewControllers
+      if let settingsVC = viewControllers.first(where: { $0 is SettingsViewController }) {
+        self.rootViewController.popToViewController(settingsVC, animated: true)
+      }
+    }
+
+    return .none
   }
 
   func navigateToDevTeamInfo() -> FlowContributors {

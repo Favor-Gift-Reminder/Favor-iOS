@@ -17,4 +17,5 @@ enum UserDefaultsKey: String {
   case userNo
   case isLocalAuthEnabled
   case isBiometricAuthEnabled
+  case useBiometricAuth
 }

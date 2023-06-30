@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 import FavorKit
 import ReactorKit
@@ -88,13 +89,21 @@ private extension SettingsViewReactor {
     } else {
       version = appVersion
     }
+    let localAuthLocation: LocalAuthLocation
+    if UserInfoStorage.isLocalAuthEnabled {
+      os_log(.debug, "Local auth is enabled. Navigate to change.")
+      localAuthLocation = .settingsCheckOld
+    } else {
+      os_log(.debug, "Local auth is disabled. Navigate to new.")
+      localAuthLocation = .settingsNew
+    }
     return [
       .selectable(
         .userInfo, .authInfoIsRequired, title: "로그인 정보", info: FTUXStorage.authState.rawValue),
       .selectable(
         .userInfo, .newPasswordIsRequired, title: "비밀번호 변경"),
       .selectable(
-        .userInfo, .localAuthIsRequired, title: "앱 잠금"),
+        .userInfo, .localAuthIsRequired(localAuthLocation), title: "앱 잠금"),
       .switchable(
         .notification, .doNothing, title: "리마인더 알림"),
       .switchable(

@@ -26,25 +26,52 @@ public final class LocalAuthViewController: BaseViewController, View {
   }
 
   private enum Typo {
+    static let device = Device.current
+    static var biometricPromptTitle: String {
+      if device.isFaceIDCapable {
+        return "Face ID"
+      } else if device.isTouchIDCapable {
+        return "Touch ID"
+      } else {
+        return "생체 인증"
+      }
+    }
+    static var biometricPromptDescription: String {
+      if device.isFaceIDCapable {
+        return "빠른 이용을 위해 Face ID를 사용하세요."
+      } else if device.isTouchIDCapable {
+        return "빠른 이용을 위해 Touch ID를 사용하세요."
+      } else {
+        return "빠른 이용을 위해 생체 인증을 사용하세요."
+      }
+    }
+    static let biometricPromptCancel: String = "암호 입력하기"
+    static var biometricPromptAccept: String {
+      if device.isFaceIDCapable {
+        return "Face ID 사용하기"
+      } else if device.isTouchIDCapable {
+        return "Touch ID 사용하기"
+      } else {
+        return "생체 인증 사용하기"
+      }
+    }
     static var biometricFailTitle: String {
-      let device = Device.current
       if device.isFaceIDCapable {
         return "Face ID를 사용할 수 없습니다"
       } else if device.isTouchIDCapable {
         return "Touch ID를 사용할 수 없습니다"
       } else {
-        return "생체 인식을 사용할 수 없습니다"
+        return "생체 인증을 사용할 수 없습니다"
       }
     }
     static var biometricFailDescription: String {
-      let device = Device.current
       let biometric: String
       if device.isFaceIDCapable {
         biometric = "Face ID"
       } else if device.isTouchIDCapable {
         biometric = "Touch ID"
       } else {
-        biometric = "생체 인식"
+        biometric = "생체 인증"
       }
       return "설정 > 페이버 에서 " + biometric + " 권한을 허용해주세요."
     }
@@ -54,11 +81,11 @@ public final class LocalAuthViewController: BaseViewController, View {
 
   // MARK: - Properties
 
-  public var titleString: String = "암호 확인" {
+  public var titleString: String? {
     didSet { self.titleLabel.text = self.titleString }
   }
 
-  public var subtitleString: String = "암호를 입력해주세요." {
+  public var subtitleString: String? {
     didSet { self.subtitleLabel.text = self.subtitleString }
   }
 
@@ -108,6 +135,11 @@ public final class LocalAuthViewController: BaseViewController, View {
 
   public func bind(reactor: LocalAuthViewReactor) {
     // Action
+    self.rx.viewDidAppear
+      .map { _ in Reactor.Action.biometricAuthNeedsChecked }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
     self.biometricAuthButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
@@ -116,6 +148,14 @@ public final class LocalAuthViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.state.map { $0.pulseLocalAuthPrompt }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        owner.handleLocalAuthPrompt()
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.inputs }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, inputs in
@@ -178,6 +218,26 @@ private extension LocalAuthViewController {
     let numpadSize = (keypadWidth - keypadSpacings) / 3
     let height = (numpadSize * 4) + (self.numberKeypad.verticalSpacing * 3)
     return height
+  }
+
+  func handleLocalAuthPrompt() {
+    let ac = UIAlertController(
+      title: Typo.biometricPromptTitle,
+      message: Typo.biometricPromptDescription,
+      preferredStyle: .alert)
+    ac.addAction(UIAlertAction(title: Typo.biometricPromptCancel, style: .destructive, handler: { _ in
+      // 생체 인증 사용 X
+      UserInfoStorage.isBiometricAuthEnabled = false
+      // 그대로 진행
+    }))
+    ac.addAction(UIAlertAction(title: Typo.biometricPromptAccept, style: .default, handler: { _ in
+      // 생체 인증 확인
+      UserInfoStorage.isBiometricAuthEnabled = true
+      self.dismiss(animated: true) {
+        self.handleLocalAuth()
+      }
+    }))
+    self.present(ac, animated: true)
   }
 
   func handleLocalAuth() {

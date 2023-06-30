@@ -7,7 +7,6 @@
 
 import UIKit
 
-import FavorKit
 import RxCocoa
 import RxSwift
 import SnapKit
@@ -159,7 +158,7 @@ public final class FavorNumberKeypad: UIView {
       .disposed(by: self.disposeBag)
   }
 
-  convenience init(_ data: [FavorNumberKeypadCellModel]) {
+  public convenience init(_ data: [FavorNumberKeypadCellModel]) {
     self.init(frame: .zero)
     self.data = data
     self.setupData()

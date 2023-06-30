@@ -7,7 +7,6 @@
 
 import UIKit
 
-import FavorKit
 import SnapKit
 
 public final class FavorKeypadTextField: UIView {

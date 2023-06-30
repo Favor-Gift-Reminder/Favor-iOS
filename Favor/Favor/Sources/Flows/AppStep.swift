@@ -32,6 +32,10 @@ public enum AppStep: Step {
   case termIsRequired(User)
   case authIsComplete
 
+  // MARK: - Local Auth
+  case localAuthIsRequired(LocalAuthLocation)
+  case localAuthIsComplete
+
   // MARK: - Main
   case dashboardIsRequired
   
@@ -92,7 +96,6 @@ public enum AppStep: Step {
 
   case settingsIsRequired
   case authInfoIsRequired
-  case localAuthIsRequired
   case devTeamInfoIsRequired
   case devTeamSupportIsRequired
   case serviceUsageTermIsRequired
