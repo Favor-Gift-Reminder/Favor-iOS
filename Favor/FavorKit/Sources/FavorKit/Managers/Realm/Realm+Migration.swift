@@ -13,8 +13,13 @@ public class RealmMigration {
 
   // MARK: - Properties
 
+  /// Realm DB의 Scheme 버전
+  ///
+  /// [**Version History**](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
+  public static let version: UInt64 = 12
+
   public var migrationBlock: MigrationBlock = { migration, oldVersion in
-    guard oldVersion < RealmWorkbench.version else {
+    guard oldVersion < RealmMigration.version else {
       fatalError("RealmDB versioning error.")
     }
 
@@ -59,6 +64,13 @@ public class RealmMigration {
     if oldVersion < 10 {
       migration.enumerateObjects(ofType: GiftObject.className()) { _, newObject in
         newObject!["privateCategory"] = "가벼운선물"
+      }
+    }
+    if oldVersion < 12 {
+      migration.enumerateObjects(ofType: UserObject.className()) { oldObject, newObject in
+        newObject!["givenGifts"] = 0
+        newObject!["receivedGifts"] = 0
+        newObject!["totalGifts"] = 0
       }
     }
   }

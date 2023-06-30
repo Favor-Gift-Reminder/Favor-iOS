@@ -15,9 +15,6 @@ public class GiftObject: Object {
 
   /// 선물 번호 - **PK**
   @Persisted(primaryKey: true) public var giftNo: Int
-  /// 선물을 등록한 회원의 회원 번호
-  /// - Description: `User`의 `giftList` 프로퍼티에 등록된 `Gift` 테이블의 Primary Key.
-  @Persisted(originProperty: "giftList") public var userNo: LinkingObjects<UserObject>
   /// 선물 제목
   @Persisted public var name: String
   /// 선물 날짜

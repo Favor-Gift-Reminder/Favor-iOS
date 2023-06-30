@@ -11,18 +11,25 @@ import FavorKit
 import RxFlow
 
 @MainActor
-final class AuthFlow: Flow {
-  
-  var root: Presentable {
+public final class AuthFlow: Flow {
+
+  // MARK: - Properties
+
+  public var root: Presentable {
     return self.rootViewController
   }
   
-  private lazy var rootViewController: BaseNavigationController = {
-    let viewController = BaseNavigationController()
-    return viewController
-  }()
-  
-  func navigate(to step: Step) -> FlowContributors {
+  private let rootViewController: BaseNavigationController
+
+  // MARK: - Initializer
+
+  init() {
+    self.rootViewController = BaseNavigationController()
+  }
+
+  // MARK: - Navigate
+
+  public func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
@@ -51,17 +58,17 @@ final class AuthFlow: Flow {
     case .signUpIsRequired:
       return self.navigateToSignUp()
       
-    case .setProfileIsRequired:
-      return self.navigateToSetProfile()
-      
-    case .termIsRequired(let userName):
-      return self.navigateToTerm(with: userName)
+    case .setProfileIsRequired(let user):
+      return self.navigateToSetProfile(with: user)
+
+    case .termIsRequired(let user):
+      return self.navigateToTerm(with: user)
 
     case .imagePickerIsRequired(let manager):
       return self.presentPHPicker(manager: manager)
 
-    case .tabBarIsRequired:
-      return .end(forwardToParentFlowWithStep: AppStep.rootIsRequired)
+    case .authIsComplete:
+      return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
       
     default:
       return .none
@@ -69,16 +76,21 @@ final class AuthFlow: Flow {
   }
 }
 
+// MARK: - Navigates
+
 private extension AuthFlow {
   func navigateToAuth() -> FlowContributors {
-    let viewController = SelectSignInViewController()
-    let reactor = SelectSignInViewReactor()
-    viewController.reactor = reactor
-    self.rootViewController.setViewControllers([viewController], animated: true)
-    
+    let authEntryVC = AuthEntryViewController()
+    let authEntryReactor = AuthEntryViewReactor()
+    authEntryVC.reactor = authEntryReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(authEntryVC, animated: false)
+    }
+
     return .one(flowContributor: .contribute(
-      withNextPresentable: viewController,
-      withNextStepper: reactor
+      withNextPresentable: authEntryVC,
+      withNextStepper: authEntryReactor
     ))
   }
   
@@ -99,8 +111,8 @@ private extension AuthFlow {
   }
   
   func navigateToSignIn() -> FlowContributors {
-    let viewController = SignInViewController()
-    let reactor = SignInViewReactor()
+    let viewController = AuthSignInViewController()
+    let reactor = AuthSignInViewReactor()
     viewController.title = "로그인"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -112,8 +124,8 @@ private extension AuthFlow {
   }
 
   func navigateToFindPassword() -> FlowContributors {
-    let viewController = FindPasswordViewController()
-    let reactor = FindPasswordViewReactor()
+    let viewController = AuthFindPasswordViewController()
+    let reactor = AuthFindPasswordViewReactor()
     viewController.title = "비밀번호 찾기"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -125,8 +137,8 @@ private extension AuthFlow {
   }
 
   func navigateToValidateEmailCode(with email: String) -> FlowContributors {
-    let viewController = ValidateEmailCodeViewController()
-    let reactor = ValidateEmailCodeViewReactor(with: email)
+    let viewController = AuthValidateEmailViewController()
+    let reactor = AuthValidateEmailViewReactor(with: email)
     viewController.title = "비밀번호 찾기"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -138,8 +150,8 @@ private extension AuthFlow {
   }
 
   func navigateToNewPassword() -> FlowContributors {
-    let viewController = NewPasswordViewController()
-    let reactor = NewPasswordViewReactor()
+    let viewController = AuthNewPasswordViewController()
+    let reactor = AuthNewPasswordViewReactor()
     viewController.title = "비밀번호 변경"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -151,8 +163,8 @@ private extension AuthFlow {
   }
   
   func navigateToSignUp() -> FlowContributors {
-    let viewController = SignUpViewController()
-    let reactor = SignUpViewReactor()
+    let viewController = AuthSignUpViewController()
+    let reactor = AuthSignUpViewReactor()
     viewController.title = "회원가입"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -163,9 +175,9 @@ private extension AuthFlow {
     )
   }
   
-  func navigateToSetProfile() -> FlowContributors {
-    let viewController = SetProfileViewController()
-    let reactor = SetProfileViewReactor(pickerManager: PHPickerManager())
+  func navigateToSetProfile(with user: User) -> FlowContributors {
+    let viewController = AuthSetProfileViewController()
+    let reactor = AuthSetProfileViewReactor(user)
     viewController.title = "프로필 작성"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -176,9 +188,9 @@ private extension AuthFlow {
     )
   }
   
-  func navigateToTerm(with userName: String) -> FlowContributors {
-    let viewController = TermViewController()
-    let reactor = TermViewReactor(with: userName)
+  func navigateToTerm(with user: User) -> FlowContributors {
+    let viewController = AuthTermViewController()
+    let reactor = AuthTermViewReactor(with: user)
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     

@@ -64,7 +64,16 @@ extension UserAPI {
     case .getAllReminderList:
       return .requestPlain
 
-    case .postSignUp(let email, let password):
+    case let .postSignIn(email, password):
+      return .requestParameters(
+        parameters: [
+          "email": email,
+          "password": password
+        ],
+        encoding: JSONEncoding.default
+      )
+
+    case let .postSignUp(email, password):
       return .requestParameters(
         parameters: [
           "email": email,

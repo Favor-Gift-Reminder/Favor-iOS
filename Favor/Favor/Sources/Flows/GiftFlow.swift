@@ -123,7 +123,7 @@ private extension GiftFlow {
     guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return .none }
 //    homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
 
-    return .end(forwardToParentFlowWithStep: AppStep.tabBarIsRequired)
+    return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
   }
 
   func navigateToGiftManagement(with gift: Gift?) -> FlowContributors {

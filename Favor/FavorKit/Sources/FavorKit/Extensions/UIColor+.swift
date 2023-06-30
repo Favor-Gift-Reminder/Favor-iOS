@@ -15,9 +15,9 @@ extension UIColor {
     var rgb: UInt64 = 0
     scanner.scanHexInt64(&rgb)
     
-    let r = Double((rgb >> 16) & 0xFF) / 255
-    let g = Double((rgb >>  8) & 0xFF) / 255
-    let b = Double((rgb >>  0) & 0xFF) / 255
+    let r = round((Double((rgb >> 16) & 0xFF) / 255) * 100) / 100
+    let g = round((Double((rgb >>  8) & 0xFF) / 255) * 100) / 100
+    let b = round((Double((rgb >>  0) & 0xFF) / 255) * 100) / 100
     self.init(red: r, green: g, blue: b, alpha: 1.0)
   }
   
@@ -39,6 +39,10 @@ extension UIColor {
     case nav = "#FFE4E5"
     case toast1 = "#FC606E"
     case toast2 = "#3C3C3C"
+
+    case kakao = "#FEE500"
+    case naver = "#03C75A"
+    case apple = "#000001"
   }
   
   /// 색상을 적용하는 전역 메서드 입니다.

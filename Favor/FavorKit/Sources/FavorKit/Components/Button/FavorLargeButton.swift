@@ -10,13 +10,19 @@ import UIKit
 import SnapKit
 
 public final class FavorLargeButton: UIButton {
-  
-  // MARK: - PROPERTIES
-  
+
+  // MARK: - Constants
+
+  private enum Metric {
+    static let buttonHeight: CGFloat = 56.0
+  }
+
+  // MARK: - Properties
+
   private let largeFavorButtonType: FavorLargeButtonType
   
-  // MARK: - INITIALIZER
-  
+  // MARK: - Initializer
+
   public init(with largeFavorButtonType: FavorLargeButtonType) {
     self.largeFavorButtonType = largeFavorButtonType
     super.init(frame: .zero)
@@ -30,16 +36,26 @@ public final class FavorLargeButton: UIButton {
   }
 }
 
+// MARK: - UI Setups
+
 extension FavorLargeButton {
   func setupStyles() {
     self.configuration = self.largeFavorButtonType.configuration
+
+    if case FavorLargeButtonType.main2 = self.largeFavorButtonType {
+      self.layer.borderColor = UIColor.favorColor(.divider).cgColor
+      self.layer.borderWidth = 1.0
+    }
+
+    self.layer.cornerRadius = Metric.buttonHeight / 2
+    self.clipsToBounds = true
   }
   
-  func setupLayouts() {}
-  
+  func setupLayouts() { }
+
   func setupConstraints() {
     self.snp.makeConstraints { make in
-      make.height.equalTo(56)
+      make.height.equalTo(Metric.buttonHeight)
     }
   }
 }

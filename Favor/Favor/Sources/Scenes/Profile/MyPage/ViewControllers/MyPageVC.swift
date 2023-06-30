@@ -152,9 +152,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       let view = view as? ProfileGiftStatsCollectionHeader,
       let reactor = self.reactor
     else { return }
-    view.reactor = ProfileGiftStatsCollectionHeaderReactor(
-      gift: reactor.currentState.user.giftList
-    )
+    view.reactor = ProfileGiftStatsCollectionHeaderReactor(user: reactor.currentState.user)
   }
   
   /// 더보기 버튼을 클릭할 때의 이벤트 메서드입니다.
