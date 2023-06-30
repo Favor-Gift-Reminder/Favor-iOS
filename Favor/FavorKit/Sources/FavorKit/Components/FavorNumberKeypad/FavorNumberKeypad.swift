@@ -61,16 +61,17 @@ public final class FavorNumberKeypadCell: UICollectionViewCell {
   // MARK: - UI Components
 
   public let button: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.baseBackgroundColor = .favorColor(.white)
+    var config = UIButton.Configuration.filled()
+    config.cornerStyle = .capsule
+    config.baseForegroundColor = .favorColor(.icon)
 
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
-        button.configuration?.baseForegroundColor = .favorColor(.icon)
+        button.configuration?.baseBackgroundColor = .favorColor(.white)
       case .selected:
-        button.configuration?.baseForegroundColor = .favorColor(.main)
+        button.configuration?.baseBackgroundColor = .favorColor(.card)
       default:
         break
       }
@@ -85,7 +86,8 @@ public final class FavorNumberKeypadCell: UICollectionViewCell {
     super.init(frame: frame)
     self.addSubview(self.button)
     self.button.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.center.equalToSuperview()
+      make.width.height.greaterThanOrEqualTo(72.0).priority(.required)
     }
   }
 

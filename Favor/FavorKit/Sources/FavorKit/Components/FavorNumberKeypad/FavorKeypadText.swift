@@ -34,7 +34,7 @@ public final class FavorKeypadText: UIView {
       case .normal:
         button.configuration?.baseForegroundColor = .favorColor(.divider)
       case .selected:
-        button.configuration?.baseForegroundColor = .favorColor(.main)
+        button.configuration?.baseForegroundColor = .favorColor(.icon)
       default:
         break
       }
@@ -47,7 +47,7 @@ public final class FavorKeypadText: UIView {
   private let numberLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 24)
-    label.textColor = .favorColor(.main)
+    label.textColor = .favorColor(.icon)
     label.textAlignment = .center
     return label
   }()
