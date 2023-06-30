@@ -42,7 +42,17 @@ final class ReminderViewController: BaseViewController, View {
   )
 
   // MARK: - UI Components
+  
   private lazy var newReminderButton = FavorBarButtonItem(.addNoti)
+  
+  private let monthSelectorButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.pick)
+    config.imagePlacement = .trailing
+    config.imagePadding = 14.0
+    let button = UIButton(configuration: config)
+    return button
+  }()
   
   private lazy var emptyImageView: UIImageView = {
     let imageView = UIImageView()
@@ -51,7 +61,7 @@ final class ReminderViewController: BaseViewController, View {
       .withAlignmentRectInsets(UIEdgeInsets(top: -35, left: -35, bottom: -35, right: -35))
     return imageView
   }()
-
+  
   private lazy var emptyLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 16)
@@ -60,13 +70,13 @@ final class ReminderViewController: BaseViewController, View {
     label.text = "이벤트가 없습니다."
     return label
   }()
-
+  
   private lazy var emptyContainerStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
     return stackView
   }()
-
+  
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: self.view.bounds,
@@ -96,7 +106,7 @@ final class ReminderViewController: BaseViewController, View {
   }
 
   // MARK: - Binding
-
+  
   override func bind() {
     guard let reactor = self.reactor else { return }
 
@@ -115,7 +125,7 @@ final class ReminderViewController: BaseViewController, View {
       }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.isReminderEmpty }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -142,12 +152,25 @@ final class ReminderViewController: BaseViewController, View {
       .map { Reactor.Action.newReminderButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.monthSelectorButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in
+        // 월 선택 팝업 창으로 전환합니다.
+        let datePickerPopup = ReminderDatePopup(reactor.currentState.selectedDate)
+        datePickerPopup.modalPresentationStyle = .overFullScreen
+        owner.present(datePickerPopup, animated: false)
+      }
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { $0.selectedDate }
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { _, _ in
-
+      .drive(with: self, onNext: { owner, date in
+        owner.monthSelectorButton.configuration?.updateAttributedTitle(
+          "\(date.year ?? 0)년 \(date.month ?? 0)월",
+          font: .favorFont(.bold, size: 18.0)
+        )
       })
       .disposed(by: self.disposeBag)
 
@@ -200,6 +223,7 @@ final class ReminderViewController: BaseViewController, View {
 
 private extension ReminderViewController {
   func setupNavigationBar() {
+    self.navigationItem.titleView = self.monthSelectorButton
     self.navigationItem.setRightBarButton(self.newReminderButton, animated: false)
   }
 

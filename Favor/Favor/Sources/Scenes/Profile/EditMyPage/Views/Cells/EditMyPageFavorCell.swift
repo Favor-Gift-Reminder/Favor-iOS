@@ -16,20 +16,24 @@ final class EditMyPageFavorCell: BaseCollectionViewCell, Reusable {
   // MARK: - Constants
 
   // MARK: - Properties
-
+  
   public var isButtonSelected: Bool = false {
     didSet { self.favorButton.isSelected = self.isButtonSelected }
   }
-
+  
   public var favor: Favor? {
     didSet { self.updateTitle() }
   }
-
-  // MARK: - UI Components
-
+  
+  private var favorButtonWidth: Constraint?
+  
+  // MARK: - UI Component
+  
   private let favorButton: UIButton = {
     var config = UIButton.Configuration.filled()
-
+    config.background.cornerRadius = 16.0
+    config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+    
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
       switch button.state {
@@ -42,14 +46,12 @@ final class EditMyPageFavorCell: BaseCollectionViewCell, Reusable {
       default: break
       }
     }
-    button.titleLabel?.numberOfLines = 1
     button.isUserInteractionEnabled = false
-    button.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     return button
   }()
 
   // MARK: - Initializer
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
@@ -62,20 +64,17 @@ final class EditMyPageFavorCell: BaseCollectionViewCell, Reusable {
   }
 
   // MARK: - Functions
-
 }
 
 // MARK: - UI Setups
 
 extension EditMyPageFavorCell: BaseView {
-  func setupStyles() {
-    self.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-  }
-
+  func setupStyles() {}
+  
   func setupLayouts() {
-    self.addSubview(self.favorButton)
+    self.contentView.addSubview(self.favorButton)
   }
-
+  
   func setupConstraints() {
     self.favorButton.snp.makeConstraints { make in
       make.edges.equalToSuperview()

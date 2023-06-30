@@ -52,10 +52,10 @@ extension EditMyPageSection: Composable {
     case .name, .id:
       return .listRow(height: .absolute(19))
     case .favor:
-      return .grid(width: .estimated(63), height: .absolute(32))
+      return .grid(width: .estimated(100.0), height: .absolute(32))
     }
   }
-
+  
   var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .name, .id:

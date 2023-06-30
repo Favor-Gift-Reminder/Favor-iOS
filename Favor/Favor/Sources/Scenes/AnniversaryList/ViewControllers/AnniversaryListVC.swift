@@ -13,11 +13,11 @@ import ReactorKit
 import SnapKit
 
 final class AnniversaryListViewController: BaseAnniversaryListViewController, View {
-
+  
   // MARK: - Constants
 
   // MARK: - Properties
-
+  
   // MARK: - UI Components
   
   private let editButton: UIButton = {

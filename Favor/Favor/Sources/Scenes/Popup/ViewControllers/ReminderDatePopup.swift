@@ -11,6 +11,10 @@ import FavorKit
 import SnapKit
 import Then
 
+protocol ReminderDatePopupDelegate: AnyObject {
+  func reminderDatePopupDidClose(_ dateComponents: DateComponents)
+}
+
 final class ReminderDatePopup: BasePopup {
   
   private enum Metric {
@@ -30,15 +34,20 @@ final class ReminderDatePopup: BasePopup {
   
   private lazy var leftButton = self.makeArrowButton(image: .favorIcon(.left))
   private lazy var rightButton = self.makeArrowButton(image: .favorIcon(.right))
+  
+  /// 월 버튼을 모아놓은 배열입니다.
   private lazy var monthButtons = (1...12).map { self.makeMonthButton(month: $0) }
+  
+  // 버튼들을 스택뷰로 모아둔 객체입니다.
   private lazy var buttonHorizontalStack1 = self.makeHorizontalStack(Array(self.monthButtons[0...3]))
   private lazy var buttonHorizontalStack2 = self.makeHorizontalStack(Array(self.monthButtons[4...7]))
   private lazy var buttonHorizontalStack3 = self.makeHorizontalStack(Array(self.monthButtons[8...11]))
   
+  /// 팝업 상단의 년도를 나타내주는 레이블입니다.
   private lazy var yearLabel: UILabel = UILabel().then {
     $0.font = .favorFont(.bold, size: 18.0)
     $0.textColor = .favorColor(.icon)
-    $0.text = "2023년"
+    $0.text = "\(self.currentDate.year!)년"
   }
   
   private lazy var buttonVerticalStack: UIStackView = UIStackView().then { stack in
@@ -54,9 +63,12 @@ final class ReminderDatePopup: BasePopup {
   
   // MARK: - Initializer
   
-  init() {
-    // TODO: 처음 진입할 때, 년도와 달 값 받기
+  /// 초기에 진입할 때, 날짜 값의 정보가 필요합니다.
+  init(_ date: DateComponents) {
+    self.currentDate = date
+    self.initialYear = date.year!
     super.init(Metric.containerViewHeight)
+    self.yearDidChange()
   }
   
   required init?(coder: NSCoder) {
@@ -65,9 +77,19 @@ final class ReminderDatePopup: BasePopup {
   
   // MARK: - Properties
   
-  private var currentYear: Int = Date().currentYear {
-    didSet { self.yearLabel.text = "\(self.currentYear)년" }
+  /// 현재 저장되어 있는 날짜 값 입니다.
+  private var currentDate: DateComponents {
+    didSet {
+      self.yearLabel.text = "\(self.currentDate.year!)년"
+      self.yearDidChange()
+    }
   }
+  
+  /// 처음 화면에 진입할 때 저장할 년도 입니다.
+  private let initialYear: Int
+  
+  /// 이벤트 처리를 위한 `Delegate` 컴포넌트 입니다.
+  weak var delegate: ReminderDatePopupDelegate?
   
   // MARK: - Setup
   
@@ -109,31 +131,7 @@ final class ReminderDatePopup: BasePopup {
     }
   }
   
-  // MARK: - Bind
-  
-  override func bind() {
-    super.bind()
-    
-    self.monthButtons.forEach { button in
-      button.rx.tap
-        .compactMap { button.configuration?.title }
-        .asDriver(onErrorJustReturn: "")
-        .drive(with: self) { owner, title in owner.tapMonthButton(title) }
-        .disposed(by: self.disposeBag)
-    }
-    
-    self.leftButton.rx.tap
-      .asDriver()
-      .drive(with: self) { owner, _ in owner.currentYear -= 1 }
-      .disposed(by: self.disposeBag)
-    
-    self.rightButton.rx.tap
-      .asDriver()
-      .drive(with: self) { owner, _ in owner.currentYear += 1 }
-      .disposed(by: self.disposeBag)
-  }
-  
-  // MARK: - Functions
+  // MARK: - Make
   
   private func makeArrowButton(image: UIImage?) -> UIButton {
     let button = UIButton()
@@ -173,9 +171,59 @@ final class ReminderDatePopup: BasePopup {
     return stackView
   }
   
-  private func tapMonthButton(_ month: String) {
+  // MARK: - Bind
+  
+  override func bind() {
+    super.bind()
+    
+    // 월 버튼
+    self.monthButtons.forEach { button in
+      button.rx.tap
+        .compactMap { button.configuration?.title }
+        .asDriver(onErrorJustReturn: "")
+        .drive(with: self) { owner, title in owner.monthButtonDidTap(title) }
+        .disposed(by: self.disposeBag)
+    }
+    
+    // 왼쪽 버튼
+    self.leftButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in owner.currentDate.year! -= 1 }
+      .disposed(by: self.disposeBag)
+    
+    // 오른쪽 버튼
+    self.rightButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in owner.currentDate.year! += 1 }
+      .disposed(by: self.disposeBag)
+  }
+  
+  // MARK: - Functions
+  
+  /// 년도 값을 달라지면 호출되는 메서드입니다.
+  private func yearDidChange() {
     self.monthButtons.forEach { $0.isSelected = false }
-    self.monthButtons.first(where: { $0.configuration?.title == month })?.isSelected = true
-    // TODO: 현재 팝업 종료
+    if self.initialYear == self.currentDate.year {
+      // 화면에 처음 진입했을 때의 년도 값과 현재 선택된 년도 값이 일치했을 경우,
+      let month = self.currentDate.month ?? 0
+      self.monthButtons[month - 1].isSelected = true
+    }
+  }
+  
+  /// 월 버튼을 클릭하면 호출되는 메서드입니다.
+  /// - Parameters:
+  ///  - month: 버튼에 들어가 있는 월 String 입니다.
+  private func monthButtonDidTap(_ month: String) {
+    // 문자열에서 숫자만 추출
+    let extractedMonth = month.components(
+      separatedBy: CharacterSet.decimalDigits.inverted)
+      .joined()
+    
+    // 현재 저장되는 날짜에 월 값을 저장합니다.
+    self.currentDate.month = Int(extractedMonth)
+    // VC에 이벤트를 전달합니다.
+    self.delegate?.reminderDatePopupDidClose(self.currentDate)
+    // 팝업 창을 닫습니다.
+    self.dismissPopup()
   }
 }

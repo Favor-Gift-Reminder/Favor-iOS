@@ -9,10 +9,9 @@ import UIKit
 
 import FavorKit
 import RxCocoa
-import RxFlow
 import SnapKit
 
-final class AlertPopup: BasePopup, Stepper {
+final class AlertPopup: BasePopup {
   
   enum PopupType {
     case register
@@ -39,12 +38,14 @@ final class AlertPopup: BasePopup, Stepper {
   
   // MARK: - UI Components
   
+  /// 확인 버튼 입니다.
   private lazy var confirmButton = self.makeButton(
     backgroundColor: .favorColor(.main),
     foregroundColor: .favorColor(.white),
     title: "확인"
   )
   
+  /// 취소 버튼 입니다.
   private lazy var cancelButton = self.makeButton(
     backgroundColor: .favorColor(.button),
     foregroundColor: .favorColor(.subtext),
@@ -66,7 +67,9 @@ final class AlertPopup: BasePopup, Stepper {
   // MARK: - Properties
   
   private let popupType: PopupType
-  var steps = PublishRelay<Step>()
+  
+  /// 확인 버튼을 누르고 난 후 구현해야할 클로저입니다.
+  var confirmButtonHandler: (() -> Void)?
   
   // MARK: - Initializer
   
@@ -111,18 +114,20 @@ final class AlertPopup: BasePopup, Stepper {
   
   override func bind() {
     super.bind()
-    
+
+    /// 확인 버튼이 클릭 될 때
     self.confirmButton.rx.tap
       .asDriver()
       .drive(with: self) { owner, _ in
-        owner.steps.accept(AppStep.alertPopupIsComplete(isConfirmed: true))
+        owner.confirmButtonHandler?()
+        owner.dismissPopup()
       }
       .disposed(by: self.disposeBag)
     
     self.cancelButton.rx.tap
       .asDriver()
       .drive(with: self) { owner, _ in
-        owner.steps.accept(AppStep.alertPopupIsComplete(isConfirmed: false))
+        owner.dismissPopup()
       }
       .disposed(by: self.disposeBag)
   }
