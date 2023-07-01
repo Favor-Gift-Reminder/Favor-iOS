@@ -26,6 +26,9 @@ extension AnniversaryAPI {
 
     case .postAnniversary:
       return .post
+      
+    case .patchAnniversaryPin:
+      return .patch
     }
   }
 }

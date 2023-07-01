@@ -26,6 +26,9 @@ extension GiftAPI {
       
     case .postGift:
       return "/gifts"
+      
+    case .patchPinGift(let giftNo):
+      return "/gifts/pin/\(giftNo)"
     }
   }
 }

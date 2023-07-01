@@ -57,6 +57,11 @@ public enum GiftAPI {
   /// - Parameters:
   ///   - dto: 생성하는 선물의 정보를 담은 리퀘스트 DTO - `Body`
   case postGift(GiftRequestDTO)
+  
+  /// 선물 핀 여부 수정
+  /// - Parameters:
+  ///  - giftNo: 핀 여부를 수정하는 선물의 DB 넘버 - `Path`
+  case patchPinGift(giftNo: Int)
 }
 
 extension GiftAPI: BaseTargetType {

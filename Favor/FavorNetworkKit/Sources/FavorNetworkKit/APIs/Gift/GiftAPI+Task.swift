@@ -27,6 +27,9 @@ extension GiftAPI {
       
     case .postGift(let giftRequestDTO):
       return .requestJSONEncodable(giftRequestDTO)
+      
+    case .patchPinGift:
+      return .requestPlain
     }
   }
 }

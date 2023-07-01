@@ -26,6 +26,9 @@ extension AnniversaryAPI {
 
     case .postAnniversary:
       return "/anniversaries"
+      
+    case .patchAnniversaryPin(let anniversaryNo):
+      return "/anniversaries/pin/\(anniversaryNo)"
     }
   }
 }

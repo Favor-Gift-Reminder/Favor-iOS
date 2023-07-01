@@ -186,9 +186,8 @@ private extension FriendPageViewReactor {
     self.friendPatchFetcher.onRemote = {
       
       let networking = FriendNetworking()
-      let friend = networking.request(.patchFriend(
-        friendName: self.currentState.friend.name,
-        friendMemo: self.currentState.friend.memo ?? "",
+      let friend = networking.request(.patchFriendMemo(
+        memo: self.currentState.friend.memo ?? "",
         friendNo: self.currentState.friend.identifier
       ))
         .flatMap { response -> Observable<[Friend]> in

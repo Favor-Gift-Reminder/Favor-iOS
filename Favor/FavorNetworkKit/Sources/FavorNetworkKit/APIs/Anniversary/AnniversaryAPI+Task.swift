@@ -32,6 +32,9 @@ extension AnniversaryAPI {
       
     case let .postAnniversary(anniversaryRequestDTO):
       return .requestJSONEncodable(anniversaryRequestDTO)
+      
+    case .patchAnniversaryPin:
+      return .requestPlain
     }
   }
 }

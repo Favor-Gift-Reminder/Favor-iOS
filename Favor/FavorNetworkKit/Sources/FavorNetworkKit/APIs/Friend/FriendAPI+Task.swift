@@ -21,11 +21,10 @@ extension FriendAPI {
     case .deleteFriend:
       return .requestPlain
 
-    case .patchFriend(let friendName, let friendMemo, _):
+    case .patchFriendMemo(let memo, _):
       return .requestParameters(
         parameters: [
-          "friendName": friendName,
-          "friendMemo": friendMemo
+          "memo": memo
         ],
         encoding: JSONEncoding.default
       )
@@ -46,6 +45,15 @@ extension FriendAPI {
         ],
         encoding: JSONEncoding.default
       )
+      
+    case .getFriendGivenGifts:
+      return .requestPlain
+      
+    case .getFriendReceivedGifts:
+      return .requestPlain
+      
+    case .getFriendTotalGifts:
+      return .requestPlain
     }
   }
 }
