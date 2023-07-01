@@ -16,6 +16,7 @@ import SnapKit
 public enum FavorNumberKeypadCellModel: Hashable {
   case keyString(String)
   case keyImage(UIImage)
+  case emptyKey
 
   public static func == (lhs: FavorNumberKeypadCellModel, rhs: FavorNumberKeypadCellModel) -> Bool {
     switch (lhs, rhs) {
@@ -34,6 +35,8 @@ public enum FavorNumberKeypadCellModel: Hashable {
       hasher.combine(keyString)
     case .keyImage(let keyImage):
       hasher.combine(keyImage)
+    case .emptyKey:
+      hasher.combine("empty")
     }
   }
 }
@@ -55,6 +58,9 @@ public final class FavorNumberKeypadCell: UICollectionViewCell {
         self.button.configuration?.title = nil
         self.button.configuration?.image = keyImage
           .withRenderingMode(.alwaysTemplate)
+      case .emptyKey:
+        self.button.configuration?.image = nil
+        self.button.configuration?.title = nil
       }
     }
   }
@@ -63,7 +69,6 @@ public final class FavorNumberKeypadCell: UICollectionViewCell {
 
   public let button: UIButton = {
     var config = UIButton.Configuration.filled()
-    config.cornerStyle = .capsule
     config.baseForegroundColor = .favorColor(.icon)
 
     let button = UIButton(configuration: config)
@@ -72,11 +77,13 @@ public final class FavorNumberKeypadCell: UICollectionViewCell {
       case .normal:
         button.configuration?.baseBackgroundColor = .favorColor(.white)
       case .selected:
-        button.configuration?.baseBackgroundColor = .favorColor(.card)
+        button.configuration?.baseBackgroundColor = .favorColor(.background)
       default:
         break
       }
     }
+    button.layer.cornerRadius = 24.0
+    button.clipsToBounds = true
     button.isUserInteractionEnabled = false
     return button
   }()

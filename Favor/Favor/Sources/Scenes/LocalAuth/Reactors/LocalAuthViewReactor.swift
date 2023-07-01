@@ -21,7 +21,7 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
   public var initialState: State
   public let steps = PublishRelay<Step>()
-  public let location: LocalAuthLocation
+  public let localAuthRequest: LocalAuthRequest
   private let keychain = KeychainManager()
 
   private let targetPassword: String?
@@ -29,12 +29,12 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
   public enum Action {
     case keypadDidSelected(FavorNumberKeypadCellModel)
     case biometricAuthDidSucceed
+    case biometricPopupDidFinish(Bool)
   }
 
   public enum Mutation {
     case pulseLocalAuthPrompt(Bool)
     case appendInput(Int)
-    case removeLastInput
     case resetInput
     case announceWrongPassword
   }
@@ -47,12 +47,12 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init(_ location: LocalAuthLocation, description: DescriptionMessage) {
+  init(_ request: LocalAuthRequest, description: DescriptionMessage) {
     self.initialState = State(
       description: description
     )
-    self.location = location
-    if case let LocalAuthLocation.settingsConfirmNew(password) = location {
+    self.localAuthRequest = request
+    if case let LocalAuthRequest.confirmNew(password, _) = request {
       self.targetPassword = password
     } else {
       self.targetPassword = nil
@@ -76,15 +76,15 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
           finalInput.append(KeypadInput(data: keyNumber, isLastInput: true))
           let key = Array(finalInput).combinedValue
           
-          switch self.location {
-          case .launch:
-            return self.handleLaunchInput(with: key)
-          case .settingsCheckOld:
-            return self.handleCheckOldInput(with: key)
-          case .settingsNew:
-            return self.handleCheckNewInput(with: key)
-          case .settingsConfirmNew:
-            return self.handleCheckConfirmNewInput(with: key)
+          switch self.localAuthRequest {
+          case .authenticate:
+            return self.handleAuthenticateInput(with: key)
+          case .askCurrent:
+            return self.handleAskCurrentInput(with: key)
+          case .askNew:
+            return self.handleAskNewInput(with: key)
+          case .confirmNew:
+            return self.handleConfirmNewInput(with: key)
           }
         }
         return .just(.appendInput(keyNumber))
@@ -92,27 +92,37 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
         // 특수기호가 입력됐을 때
       case .keyImage(let keyImage):
         switch keyImage {
-        case .favorIcon(.erase)!:
-          return .just(.removeLastInput)
         case UIImage(systemName: "faceid")!, UIImage(systemName: "touchid")!:
           return .just(.pulseLocalAuthPrompt(true))
-          return .empty()
         default:
           return .empty()
         }
+
+      case .emptyKey:
+        return .empty()
       }
 
     case .biometricAuthDidSucceed:
       os_log(.debug, "Local Auth Succeed!")
-      switch self.location {
-      case .launch:
+      switch self.localAuthRequest {
+      case .authenticate:
         self.steps.accept(AppStep.localAuthIsComplete)
-      case .settingsCheckOld:
-        self.steps.accept(AppStep.localAuthIsRequired(.settingsNew))
+      case .askCurrent:
+        self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
       default:
         break
       }
       return .empty()
+
+    case .biometricPopupDidFinish(let isConfirmed):
+      UserInfoStorage.isBiometricAuthEnabled = isConfirmed
+      if isConfirmed { // 생체 인증 사용
+        self.steps.accept(AppStep.localAuthIsComplete)
+        return .just(.pulseLocalAuthPrompt(true))
+      } else { // 생체 인증 사용 X
+        self.steps.accept(AppStep.localAuthIsComplete)
+        return .empty()
+      }
     }
   }
 
@@ -130,11 +140,6 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
       if emptyIdx - 1 >= 0 {
         newState.inputs[emptyIdx - 1].isLastInput = false
       }
-
-    case .removeLastInput:
-      guard let lastIdx = state.inputs.lastIndex(where: { $0.data != nil }) else { return state }
-      newState.inputs[lastIdx].isLastInput = false
-      newState.inputs[lastIdx].data = nil
 
     case .resetInput:
       newState.inputs = [
@@ -159,8 +164,18 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
 private extension LocalAuthViewReactor {
   /// 앱 실행 시 암호 입력이 완료됐을 때
-  func handleLaunchInput(with key: String) -> Observable<Mutation> {
-    if self.validateOldInput(key) { // 맞다면 dismiss
+  func handleAuthenticateInput(with key: String) -> Observable<Mutation> {
+    if self.validateCurrentInput(key) { // 맞다면 dismiss
+      if
+        case let LocalAuthRequest.authenticate(resultHandler) = self.localAuthRequest,
+        let resultHandler = resultHandler
+      {
+        do {
+          try resultHandler(nil)
+        } catch {
+          os_log(.error, "\(error)")
+        }
+      }
       self.steps.accept(AppStep.localAuthIsComplete)
       return .empty()
     } else {  // 틀리다면 다시
@@ -170,10 +185,10 @@ private extension LocalAuthViewReactor {
   }
 
   /// 암호 변경이 필요한 경우 이전 암호 입력이 완료됐을 때
-  func handleCheckOldInput(with key: String) -> Observable<Mutation> {
-    if self.validateOldInput(key) {
+  func handleAskCurrentInput(with key: String) -> Observable<Mutation> {
+    if self.validateCurrentInput(key) {
       os_log(.debug, "🔐 Password match!")
-      self.steps.accept(AppStep.localAuthIsRequired(.settingsNew))
+      self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
       return .just(.resetInput)
     } else {
       os_log(.debug, "🔒 Password miss!")
@@ -186,27 +201,44 @@ private extension LocalAuthViewReactor {
   }
 
   /// 새 암호가 필요한 경우 암호 입력이 완료됐을 때
-  func handleCheckNewInput(with key: String) -> Observable<Mutation> {
-    self.steps.accept(AppStep.localAuthIsRequired(.settingsConfirmNew(key)))
+  func handleAskNewInput(with key: String) -> Observable<Mutation> {
+    if
+      case let LocalAuthRequest.askNew(resultHandler) = self.localAuthRequest,
+      let resultHandler = resultHandler
+    {
+      self.steps.accept(AppStep.localAuthIsRequired(.confirmNew(key, resultHandler)))
+    } else {
+      self.steps.accept(AppStep.localAuthIsRequired(.confirmNew(key)))
+    }
     return .just(.resetInput)
   }
 
   /// 새 암호가 필요한 경우 암호 확인 입력이 완료됐을 때
-  func handleCheckConfirmNewInput(with key: String) -> Observable<Mutation> {
+  func handleConfirmNewInput(with key: String) -> Observable<Mutation> {
     guard
       let keyData = key.data(using: .utf8),
       let targetPassword = self.targetPassword
     else { return .empty() }
 
     if key == targetPassword {
-      do {
-        try self.keychain.set(value: keyData, account: KeychainManager.Accounts.localAuth.rawValue)
-        UserInfoStorage.isLocalAuthEnabled = true
-        self.steps.accept(AppStep.localAuthIsComplete)
-        return .just(.resetInput)
-      } catch {
-        return .error(error)
+      if
+        case let LocalAuthRequest.confirmNew(_, resultHandler) = self.localAuthRequest,
+        let resultHandler = resultHandler
+      {
+        do {
+          try resultHandler(keyData)
+        } catch {
+          os_log(.error, "\(error)")
+        }
       }
+
+      // 생체 인증 Prompt
+      if UserInfoStorage.isBiometricAuthEnabled != nil {
+        self.steps.accept(AppStep.localAuthIsComplete)
+      } else {
+        self.steps.accept(AppStep.biometricAuthPopupIsRequired)
+      }
+      return .just(.resetInput)
     } else {
       HapticManager.haptic(style: .heavy)
       return .concat([
@@ -218,7 +250,7 @@ private extension LocalAuthViewReactor {
 
   /// 입력된 암호와 설정된 암호를 대조합니다.
   /// - Returns: 입력된 암호와 설정된 암호의 동일 여부 `Bool`
-  func validateOldInput(_ key: String) -> Bool {
+  func validateCurrentInput(_ key: String) -> Bool {
     guard let localAuth = try? self.keychain.get(account: KeychainManager.Accounts.localAuth.rawValue) else {
       fatalError("There is no keypass set for local auth.")
     }

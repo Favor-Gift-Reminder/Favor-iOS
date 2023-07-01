@@ -5,7 +5,7 @@
 //  Created by 이창준 on 2023/03/08.
 //
 
-enum UserDefaultsKey: String {
+public enum UserDefaultsKey: String {
 
   // MARK: - FTUX
 
@@ -17,5 +17,6 @@ enum UserDefaultsKey: String {
   case userNo
   case isLocalAuthEnabled
   case isBiometricAuthEnabled
-  case useBiometricAuth
+  case isReminderNotificationEnabled
+  case isMarketingNotificationEnabled
 }

@@ -82,7 +82,7 @@ final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable, View {
 
 extension ProfileSetupHelperCell: BaseView {
   func setupStyles() {
-    self.backgroundColor = .favorColor(.divider)
+    self.backgroundColor = .favorColor(.card)
     self.layer.cornerRadius = 8
     self.clipsToBounds = true
   }

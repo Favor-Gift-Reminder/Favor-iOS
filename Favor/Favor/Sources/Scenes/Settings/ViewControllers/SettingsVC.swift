@@ -56,7 +56,12 @@ public final class SettingsViewController: BaseViewController, View {
 
   public func bind(reactor: SettingsViewReactor) {
     // Action
-    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+    self.rx.viewDidLoad
+      .map { Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.rx.viewWillAppear
       .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -74,15 +79,14 @@ public final class SettingsViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, items in
         var snapshot = NSDiffableDataSourceSnapshot<SettingsSection, SettingsSectionItem>()
-        snapshot.appendSections([.userInfo, .notification, .appInfo])
+        var sectionItems: [SettingsSection: [SettingsSectionItem]] = [:]
+
         items.forEach { item in
-          switch item {
-          case
-            let .selectable(section, _, _, _),
-            let .switchable(section, _, _),
-            let .info(section, _, _, _):
-            snapshot.appendItems([item], toSection: section)
-          }
+          sectionItems[item.section, default: []].append(item)
+        }
+        snapshot.appendSections(sectionItems.keys.sorted(by: <))
+        sectionItems.forEach { section, items in
+          snapshot.appendItems(items, toSection: section)
         }
 
         DispatchQueue.main.async {
@@ -112,18 +116,40 @@ public final class SettingsViewController: BaseViewController, View {
 
 private extension SettingsViewController {
   func setupDataSource() {
-    let cellRegistration = UICollectionView.CellRegistration
-    <SettingsCell, SettingsSectionItem> { [weak self] cell, _, item in
-      guard self != nil else { return }
-      cell.bind(with: item)
+    let tappableCellRegistration = UICollectionView.CellRegistration
+    <SettingsTappableCell, SettingsSectionItem> { [weak self] cell, _, item in
+      guard let self = self else { return }
+      cell.bind(item)
+    }
+
+    let navigatableCellRegistration = UICollectionView.CellRegistration
+    <SettingsNaviagatableCell, SettingsSectionItem> { [weak self] cell, _, item in
+      guard let self = self else { return }
+      cell.bind(item)
+    }
+
+    let switchableCellRegistration = UICollectionView.CellRegistration
+    <SettingsSwitchableCell, SettingsSectionItem> { [weak self] cell, _, item in
+      guard let self = self else { return }
+      cell.bind(item)
+      cell.delegate = self
     }
 
     self.dataSource = SettingsDataSource(
       collectionView: self.collectionView,
       cellProvider: { [weak self] collectionView, indexPath, item in
         guard self != nil else { return UICollectionViewCell() }
-        return collectionView.dequeueConfiguredReusableCell(
-          using: cellRegistration, for: indexPath, item: item)
+        switch item.type {
+        case .tappable:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: tappableCellRegistration, for: indexPath, item: item)
+        case .navigatable:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: navigatableCellRegistration, for: indexPath, item: item)
+        case .switchable:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: switchableCellRegistration, for: indexPath, item: item)
+        }
       }
     )
 
@@ -135,14 +161,26 @@ private extension SettingsViewController {
         let self = self,
         let sections = self.dataSource?.snapshot().sectionIdentifiers
       else { return }
-      header.bind(with: sections[indexPath.section].header)
+
+      if let sectionHeader = sections[indexPath.section].header {
+        header.bind(with: sectionHeader)
+      } else {
+        header.isHidden = true
+      }
     }
 
     let footerRegistration: UICollectionView.SupplementaryRegistration<FavorSectionFooterView> =
     UICollectionView.SupplementaryRegistration(
       elementKind: UICollectionView.elementKindSectionFooter
-    ) { [weak self] _, _, _ in
-      guard self != nil else { return }
+    ) { [weak self] footer, _, indexPath in
+      guard let self = self else { return }
+      guard let numberOfSections = self.dataSource?.numberOfSections(in: self.collectionView) else {
+        return
+      }
+
+      if indexPath.section == numberOfSections - 1 {
+        footer.isHidden = true
+      }
     }
 
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
@@ -158,5 +196,18 @@ private extension SettingsViewController {
         return UICollectionReusableView()
       }
     }
+  }
+}
+
+// MARK: - Settings Switchable Cell
+
+extension SettingsViewController: SettingsSwitchableCellDelegate {
+  public func switchDidToggle(_ item: SettingsSectionItem, to isOn: Bool) {
+    guard
+      let reactor = self.reactor,
+      case let SettingsSectionItem.CellType.switchable(_, key) = item.type
+    else { return }
+
+    reactor.action.onNext(.switchDidToggled(key, to: isOn))
   }
 }

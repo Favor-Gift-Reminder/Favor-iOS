@@ -18,4 +18,12 @@ public final class UserInfoStorage {
   /// 앱 잠금에 생체 인식 사용 여부 Boolean
   @UserDefault(key: .isBiometricAuthEnabled, defaultValue: nil)
   public static var isBiometricAuthEnabled: Bool?
+
+  /// 리마인더 알림 여부 Boolean
+  @UserDefault(key: .isReminderNotificationEnabled, defaultValue: false)
+  public static var isReminderNotificationEnabled: Bool
+
+  /// 마케팅 정보 알림
+  @UserDefault(key: .isMarketingNotificationEnabled, defaultValue: false)
+  public static var isMarketingNotificationEnabled: Bool
 }

@@ -34,7 +34,9 @@ public enum AppStep: Step {
   case authIsComplete
 
   // MARK: - Local Auth
-  case localAuthIsRequired(LocalAuthLocation)
+  case localAuthIsRequired(LocalAuthRequest)
+  case biometricAuthPopupIsRequired
+  case biometricAuthPopupIsComplete(isConfirmed: Bool)
   case localAuthIsComplete
 
   // MARK: - Main
@@ -94,14 +96,15 @@ public enum AppStep: Step {
   case giftShareIsRequired(Gift)
 
   // MARK: - Settings
-
   case settingsIsRequired
-  case authInfoIsRequired
-  case devTeamInfoIsRequired
-  case devTeamSupportIsRequired
-  case serviceUsageTermIsRequired
-  case privateInfoManagementTermIsRequired
-  case openSourceUsageIsRequired
+  case authInfoIsRequired // 로그인 정보
+  // 비밀번호 변경 (newPasswordIsRequired)
+  case appPrivacyIsRequired // 앱 잠금
+  case devTeamInfoIsRequired // 팀
+  case devTeamSupportIsRequired // 개발자 응원하기
+  case serviceUsageTermIsRequired // 서비스 이용약관
+  case privateInfoManagementTermIsRequired // 개인정보 처리방침
+  case openSourceUsageIsRequired // 오픈소스 라이선스
   case wayBackToRootIsRequired
 
   // MARK: - BottomSheet

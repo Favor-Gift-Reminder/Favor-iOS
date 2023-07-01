@@ -1,6 +1,6 @@
 //
 //  BasePopup.swift
-//  
+//  Favor
 //
 //  Created by 김응철 on 2023/05/27.
 //
@@ -12,7 +12,9 @@ import SnapKit
 import Then
 
 public class BasePopup: BaseViewController {
-  
+
+  // MARK: - Constants
+
   private enum Metric {
     static let containerViewWidth: CGFloat = 335.0
   }
@@ -24,7 +26,7 @@ public class BasePopup: BaseViewController {
     $0.alpha = 0.0
   }
   
-  let containerView: UIView = UIView().then {
+  public let containerView: UIView = UIView().then {
     $0.layer.cornerRadius = 24.0
     $0.backgroundColor = .favorColor(.white)
   }
@@ -46,17 +48,17 @@ public class BasePopup: BaseViewController {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - LifeCycle
-  
-  public override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    
+  // MARK: - Life Cycle
+
+  public override func viewIsAppearing(_ animated: Bool) {
+    super.viewIsAppearing(animated)
+
     self.animateDimmedView()
     self.animateContainerView()
   }
   
-  // MARK: - Setup
-  
+  // MARK: - UI Setups
+
   public override func setupStyles() {
     super.setupStyles()
     
@@ -83,8 +85,8 @@ public class BasePopup: BaseViewController {
     
     self.containerView.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.width.equalTo(Metric.containerViewWidth)
       self.containerViewBottomInset = make.bottom.equalToSuperview().inset(100.0).constraint
+      make.width.equalTo(Metric.containerViewWidth)
       make.height.equalTo(self.containerViewHeight)
     }
   }
@@ -104,7 +106,7 @@ public class BasePopup: BaseViewController {
   // MARK: - Functions
   
   /// dismiss(animated:) 대신 이 메서드를 불러서 종료시켜야 합니다.
-  func dismissPopup() {
+  public func dismissPopup(_ completion: (() -> Void)? = nil) {
     // TODO: Coordinator 삭제
     UIView.animate(
       withDuration: 0.2,
@@ -115,7 +117,10 @@ public class BasePopup: BaseViewController {
         self.containerView.alpha = 0
         self.view.layoutIfNeeded()
       },
-      completion: { _ in self.dismiss(animated: false) }
+      completion: { _ in
+        self.dismiss(animated: false)
+        if let completion { completion() }
+      }
     )
   }
   

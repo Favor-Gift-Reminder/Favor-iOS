@@ -116,7 +116,7 @@ public final class LocalAuthViewController: BaseViewController, View {
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
-    label.font = .favorFont(.bold, size: 18)
+    label.font = .favorFont(.bold, size: 20)
     label.textColor = .favorColor(.icon)
     label.textAlignment = .center
     label.text = self.titleString
@@ -137,19 +137,28 @@ public final class LocalAuthViewController: BaseViewController, View {
   private lazy var numberKeypad: FavorNumberKeypad = {
     // Numbers
     let numbers: [FavorNumberKeypadCellModel] = (1...9).map { .keyString(String($0)) }
+
     // Biometric
+    let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled ?? false
     let biometricImage: UIImage = self.biometricImage ?? UIImage()
-    guard let reactor = self.reactor else { return FavorNumberKeypad([]) }
+    guard let location = reactor?.localAuthRequest else { return FavorNumberKeypad([]) }
     let biometricPad: FavorNumberKeypadCellModel
-    switch reactor.location {
-    case .launch, .settingsCheckOld:
-      biometricPad = .keyImage(biometricImage)
-    default:
-      biometricPad = .keyString("")
+    switch location {
+    case .authenticate, .askCurrent:
+      biometricPad = {
+        isBiometricAuthEnabled ? .keyImage(biometricImage) : .emptyKey
+      }()
+    case .askNew, .confirmNew:
+      biometricPad = .emptyKey
     }
+
+    // Bottoms
     let bottoms: [FavorNumberKeypadCellModel] = [
-      biometricPad, .keyString("0"), .keyImage(.favorIcon(.erase)!)
+      biometricPad,
+      .keyString("0"),
+      .emptyKey
     ]
+
     let keypad = FavorNumberKeypad(numbers + bottoms)
     keypad.delegate = self
     return keypad
@@ -162,8 +171,8 @@ public final class LocalAuthViewController: BaseViewController, View {
     self.rx.viewDidAppear
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
-        switch reactor.location {
-        case .launch, .settingsCheckOld:
+        switch reactor.localAuthRequest {
+        case .authenticate, .askCurrent:
           if let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled {
             if isBiometricAuthEnabled { owner.handleBiometricAuth() }
           }
@@ -199,6 +208,11 @@ public final class LocalAuthViewController: BaseViewController, View {
   }
 
   // MARK: - Functions
+
+  public func handleBiometricPopupResult(_ isConfirmed: Bool) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.biometricPopupDidFinish(isConfirmed))
+  }
 
   // MARK: - UI Setups
 
@@ -248,41 +262,29 @@ private extension LocalAuthViewController {
     return height
   }
 
-  func handleLocalAuthPrompt() {
-    if let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled {
-      // 설정된 적 있음
-      if isBiometricAuthEnabled {
-        // 생체 인증 시작
-        self.handleBiometricAuth()
-      }
-    } else {
-      // 설정된 적 없음
-      // 팝업창 present
-      let ac = UIAlertController(
-        title: Typo.biometricPromptTitle,
-        message: Typo.biometricPromptDescription,
-        preferredStyle: .alert)
-      ac.addAction(UIAlertAction(title: Typo.biometricPromptAccept, style: .default, handler: { _ in
-        // 생체 인증 확인
-        UserInfoStorage.isBiometricAuthEnabled = true
-        self.dismiss(animated: true) {
-          self.handleBiometricAuth()
-        }
-      }))
-      ac.addAction(UIAlertAction(title: Typo.biometricPromptCancel, style: .destructive, handler: { _ in
-        // 생체 인증 사용 X
-        UserInfoStorage.isBiometricAuthEnabled = false
-        // 그대로 진행
-      }))
-      self.present(ac, animated: true)
-    }
-  }
-
+  /// 생체 인증을 시도합니다.
+  ///
+  /// 생체 인증을 사용하도록 설정하였다면 생체 인증을 시도하고, 사용하도록 설정한 적이 없다면 생체 인증 프롬프트를 띄웁니다.
   func handleBiometricAuth() {
     var error: NSError?
-    if self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+
+    // 사용자가 생체 인증을 사용하도록 설정한 적이 있는 지 확인합니다.
+    guard let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled else {
+      // 설정한 적이 없다면, 페이버 프롬프트를 띄웁니다.
+      self.presentBiometricPrompt()
+      return
+    }
+
+    // 사용 여부를 설정한 적이 있다면 on/off 여부를 확인합니다.
+    // 생체 인증을 사용하고 있습니다. (생체 인증을 시도합니다.)
+    // 앱에 생체 인증 권한이 부여되었는지를 확인합니다. (첫 권한 확인이라면 권한을 요청합니다.)
+    if
+      isBiometricAuthEnabled,
+      self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+    {
+      // 권한이 있다면 생체 인증 설정 여부를 확인합니다.
       let reason = "얼굴 대라"
-      authContext.evaluatePolicy(
+      self.authContext.evaluatePolicy(
         .deviceOwnerAuthenticationWithBiometrics,
         localizedReason: reason
       ) { [weak self] isSucceed, _ in
@@ -294,19 +296,38 @@ private extension LocalAuthViewController {
         }
       }
     } else {
+      // 권한이 없다면 권한 요청 알림 창을 띄웁니다.
       let ac = UIAlertController(
         title: Typo.biometricFailTitle,
         message: Typo.biometricFailDescription,
         preferredStyle: .alert)
       ac.addAction(UIAlertAction(title: Typo.biometricFailCancel, style: .destructive))
-      ac.addAction(UIAlertAction(title: Typo.biometricFailSetting, style: .default, handler: { _ in
-        UIApplication.shared.open(
-          URL(string: UIApplication.openSettingsURLString)!,
-          completionHandler: nil
-        )
-      }))
+      ac.addAction(UIAlertAction(title: Typo.biometricFailSetting, style: .default) { _ in
+        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+      })
       self.present(ac, animated: true)
     }
+  }
+
+  /// 생체 인증 프롬프트를 띄웁니다.
+  func presentBiometricPrompt() {
+    let ac = UIAlertController(
+      title: Typo.biometricPromptTitle,
+      message: Typo.biometricPromptDescription,
+      preferredStyle: .alert)
+    ac.addAction(UIAlertAction(title: Typo.biometricPromptAccept, style: .default, handler: { _ in
+      // 생체 인증 확인
+      UserInfoStorage.isBiometricAuthEnabled = true
+      self.dismiss(animated: true) {
+        self.handleBiometricAuth()
+      }
+    }))
+    ac.addAction(UIAlertAction(title: Typo.biometricPromptCancel, style: .destructive, handler: { _ in
+      // 생체 인증 사용 X
+      UserInfoStorage.isBiometricAuthEnabled = false
+      // 그대로 진행
+    }))
+    self.present(ac, animated: true)
   }
 }
 

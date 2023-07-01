@@ -48,7 +48,7 @@ public final class AppFlow: Flow {
       return self.navigateToAuth()
 
     case .localAuthIsRequired(let location):
-      return self.navigateToLocalAuth(location: location)
+      return self.navigateToLocalAuth(request: location)
 
     case .localAuthIsComplete:
       return self.popToDashboard()
@@ -93,7 +93,7 @@ private extension AppFlow {
     localAuthVC.modalPresentationStyle = .overFullScreen
     localAuthVC.titleString = "암호"
     let description = DescriptionMessage(description: "암호를 입력해주세요.")
-    let localAuthReactor = LocalAuthViewReactor(.launch, description: description)
+    let localAuthReactor = LocalAuthViewReactor(.authenticate(), description: description)
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {
@@ -132,18 +132,18 @@ private extension AppFlow {
     ))
   }
 
-  func navigateToLocalAuth(location: LocalAuthLocation) -> FlowContributors {
+  func navigateToLocalAuth(request: LocalAuthRequest) -> FlowContributors {
     typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
     let localAuthVC = LocalAuthViewController()
     let description: DescriptionMessage
-    switch location {
-    case .launch:
+    switch request {
+    case .authenticate:
       localAuthVC.titleString = "암호"
       description = DescriptionMessage(description: "암호를 입력해주세요.")
     default:
       description = DescriptionMessage()
     }
-    let localAuthReactor = LocalAuthViewReactor(location, description: description)
+    let localAuthReactor = LocalAuthViewReactor(request, description: description)
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {

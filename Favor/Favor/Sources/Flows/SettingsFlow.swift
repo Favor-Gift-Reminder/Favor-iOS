@@ -46,8 +46,17 @@ public final class SettingsFlow: Flow {
       }
       return .none
 
-    case .localAuthIsRequired(let location):
-      return self.navigateToLocalAuth(location: location)
+    case .appPrivacyIsRequired:
+      return self.navigateToAppPrivacy()
+
+    case .localAuthIsRequired(let localAuthRequest):
+      return self.navigateToLocalAuth(request: localAuthRequest)
+
+    case .biometricAuthPopupIsRequired:
+      return self.navigateToBiometricAuthPopup()
+
+    case .biometricAuthPopupIsComplete(let isConfirmed):
+      return self.dismissBiometricAuthPopup(isConfirmed)
 
     case .localAuthIsComplete:
       return self.popToSettings()
@@ -82,7 +91,7 @@ public final class SettingsFlow: Flow {
 private extension SettingsFlow {
   func navigateToSettings() -> FlowContributors {
     let settingsVC = SettingsViewController()
-    let settingsReactor = SettingsViewReactor()
+    let settingsReactor = SettingsViewReactor(.settings)
     settingsVC.reactor = settingsReactor
     settingsVC.title = "설정"
     settingsVC.hidesBottomBarWhenPushed = true
@@ -129,17 +138,37 @@ private extension SettingsFlow {
     ))
   }
 
-  func navigateToLocalAuth(location: LocalAuthLocation) -> FlowContributors {
+  func navigateToAppPrivacy() -> FlowContributors {
+    let appPrivacyVC = SettingsViewController()
+    let appPrivacyReactor = SettingsViewReactor(.appPrivacy)
+    appPrivacyVC.reactor = appPrivacyReactor
+    appPrivacyVC.title = "앱 잠금"
+
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(appPrivacyVC, animated: true)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: appPrivacyVC,
+      withNextStepper: appPrivacyReactor
+    ))
+  }
+
+  func navigateToLocalAuth(request: LocalAuthRequest) -> FlowContributors {
     typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
     let localAuthVC = LocalAuthViewController()
     let description: DescriptionMessage
     let animated: Bool
-    switch location {
-    case .settingsCheckOld:
+    switch request {
+    case .authenticate:
+      localAuthVC.titleString = "암호"
+      description = DescriptionMessage(description: "암호를 입력해주세요.")
+      animated = true
+    case .askCurrent:
       localAuthVC.titleString = "암호 변경"
       description = DescriptionMessage(description: "기존 암호를 입력해주세요.")
       animated = true
-    case .settingsNew:
+    case .askNew:
       if UserInfoStorage.isLocalAuthEnabled {
         localAuthVC.titleString = "암호 변경"
         description = DescriptionMessage(description: "변경할 암호를 입력해주세요.")
@@ -148,15 +177,12 @@ private extension SettingsFlow {
         description = DescriptionMessage(description: "새로운 암호를 입력해주세요.")
       }
       animated = true
-    case .settingsConfirmNew:
+    case .confirmNew:
       localAuthVC.titleString = "암호 확인"
       description = DescriptionMessage(description: "새로운 암호를 입력해주세요.")
       animated = false
-    default:
-      description = DescriptionMessage()
-      animated = true
     }
-    let localAuthReactor = LocalAuthViewReactor(location, description: description)
+    let localAuthReactor = LocalAuthViewReactor(request, description: description)
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {
@@ -169,10 +195,41 @@ private extension SettingsFlow {
     ))
   }
 
+  func navigateToBiometricAuthPopup() -> FlowContributors {
+    let popup = BiometricAuthPopup(335.0)
+    popup.modalPresentationStyle = .overFullScreen
+
+    DispatchQueue.main.async {
+      self.rootViewController.present(popup, animated: false)
+    }
+
+    return .one(flowContributor: .contribute(withNext: popup))
+  }
+
+  func dismissBiometricAuthPopup(_ isConfirmed: Bool) -> FlowContributors {
+    guard
+      let topVC = self.rootViewController.topViewController as? LocalAuthViewController,
+      let popup = self.rootViewController.presentedViewController as? BiometricAuthPopup
+    else {
+      return .none
+    }
+
+    DispatchQueue.main.async {
+      popup.dismissPopup {
+        topVC.handleBiometricPopupResult(isConfirmed)
+      }
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: topVC,
+      withNextStepper: topVC.reactor!
+    ))
+  }
+
   func popToSettings() -> FlowContributors {
     DispatchQueue.main.async {
       let viewControllers = self.rootViewController.viewControllers
-      if let settingsVC = viewControllers.first(where: { $0 is SettingsViewController }) {
+      if let settingsVC = viewControllers.last(where: { $0 is SettingsViewController }) {
         self.rootViewController.popToViewController(settingsVC, animated: true)
       }
     }
