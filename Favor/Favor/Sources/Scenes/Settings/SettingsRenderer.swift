@@ -98,7 +98,17 @@ private extension SettingsRenderer {
       ))
 
       // 암호 변경
-      items.append(Item(type: .navigatable, section: .appPrivacy, title: "암호 변경", step: .localAuthIsRequired(.askCurrent)))
+      let resultHandler: ((Data?) throws -> Void) = { data in
+        guard let data = data else { return }
+        let keychain = KeychainManager()
+        try keychain.set(value: data, account: KeychainManager.Accounts.localAuth.rawValue)
+      }
+      items.append(Item(
+        type: .navigatable,
+        section: .appPrivacy,
+        title: "암호 변경",
+        step: .localAuthIsRequired(.askCurrent(resultHandler))
+      ))
 
       // 암호 삭제
       items.append(Item(type: .navigatable, section: .appPrivacy, title: "암호 삭제"))

@@ -11,7 +11,7 @@ public enum LocalAuthRequest {
   public typealias ResultHandler = ((Data?) throws -> Void)
 
   case authenticate(ResultHandler? = nil)
-  case askCurrent
+  case askCurrent(ResultHandler? = nil)
   case askNew(ResultHandler? = nil)
   case confirmNew(String, ResultHandler? = nil)
 }

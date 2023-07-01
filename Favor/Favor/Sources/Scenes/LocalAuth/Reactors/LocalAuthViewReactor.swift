@@ -188,7 +188,14 @@ private extension LocalAuthViewReactor {
   func handleAskCurrentInput(with key: String) -> Observable<Mutation> {
     if self.validateCurrentInput(key) {
       os_log(.debug, "🔐 Password match!")
-      self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
+      if
+        case let LocalAuthRequest.askCurrent(resultHandler) = self.localAuthRequest,
+        let resultHandler = resultHandler
+      {
+        self.steps.accept(AppStep.localAuthIsRequired(.askNew(resultHandler)))
+      } else {
+        self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
+      }
       return .just(.resetInput)
     } else {
       os_log(.debug, "🔒 Password miss!")
