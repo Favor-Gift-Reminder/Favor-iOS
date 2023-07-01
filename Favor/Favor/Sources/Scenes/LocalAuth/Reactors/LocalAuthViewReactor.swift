@@ -188,13 +188,8 @@ private extension LocalAuthViewReactor {
   func handleAskCurrentInput(with key: String) -> Observable<Mutation> {
     if self.validateCurrentInput(key) {
       os_log(.debug, "🔐 Password match!")
-      if
-        case let LocalAuthRequest.askCurrent(resultHandler) = self.localAuthRequest,
-        let resultHandler = resultHandler
-      {
+      if case let LocalAuthRequest.askCurrent(resultHandler) = self.localAuthRequest {
         self.steps.accept(AppStep.localAuthIsRequired(.askNew(resultHandler)))
-      } else {
-        self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
       }
       return .just(.resetInput)
     } else {
@@ -209,13 +204,8 @@ private extension LocalAuthViewReactor {
 
   /// 새 암호가 필요한 경우 암호 입력이 완료됐을 때
   func handleAskNewInput(with key: String) -> Observable<Mutation> {
-    if
-      case let LocalAuthRequest.askNew(resultHandler) = self.localAuthRequest,
-      let resultHandler = resultHandler
-    {
+    if case let LocalAuthRequest.askNew(resultHandler) = self.localAuthRequest {
       self.steps.accept(AppStep.localAuthIsRequired(.confirmNew(key, resultHandler)))
-    } else {
-      self.steps.accept(AppStep.localAuthIsRequired(.confirmNew(key)))
     }
     return .just(.resetInput)
   }
