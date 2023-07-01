@@ -13,40 +13,52 @@ extension UserAPI {
   public func getPath() -> String {
     switch self {
     case .getAllUsers:
+      return "/users/admin"
+
+    case .getUser:
+      return "/users"
+      
+    case .deleteUser:
       return "/users"
 
-    case .getUser(let userNo):
-      return "/users/\(userNo)"
+    case .patchUser:
+      return "/users"
+      
+    case .getAllAnnivesaryList:
+      return "/users/anniversaries"
 
-    case .deleteUser(let userNo):
-      return "/users/\(userNo)"
+    case .getAllFriendList:
+      return "/users/friends"
 
-    case .patchUser(_, _, _, let userNo):
-      return "/users/\(userNo)"
+    case .getGiftByCategory(let category):
+      return "/users/gifts-by-category/\(category)"
 
-    case .getAllFriendList(let userNo):
-      return "/users/friend-list/\(userNo)"
+    case .getGiftByEmotion(let emotion):
+      return "/users/gifts-by-emotion/\(emotion)"
 
-    case .getGiftByCategory(let category, let userNo):
-      return "/users/gift-by-category/\(userNo)/\(category)"
+    case .getGiftByName(let giftName):
+      return "/users/gifts-by-name/\(giftName)"
+      
+    case .getGiftsGivenByUser(let userNo):
+      return "/users/gifts-given\(userNo)"
+      
+    case .getGiftsReceivedByUser(let userNo):
+      return "/users/gifts-received/\(userNo)"
 
-    case .getGiftByEmotion(let emotion, let userNo):
-      return "/users/gift-by-emotion/\(userNo)/\(emotion)"
-
-    case .getGiftByName(let giftName, let userNo):
-      return "/users/gift-by-name/\(userNo)/\(giftName)"
-
-    case .getAllGifts(let userNo):
-      return "/users/gift-list/\(userNo)"
+    case .getAllGifts:
+      return "/users/gifts"
 
     case .getUserId(let userId):
-      return "/users/id/\(userId)"
+      return "/users/\(userId)"
 
-    case let .patchProfile(_, _, userNo):
-      return "/users/profile/\(userNo)"
+    case .patchProfile:
+      return "/users/profile"
 
-    case .getAllReminderList(let userNo):
-      return "/users/reminder-list/\(userNo)"
+    case .getAllReminderList:
+      return "/users/reminders"
+      
+    case let .getAllFilterReminderList(year, month):
+      return "/users/reminders/\(year)/\(month)"
 
     case .postSignIn:
       return "/users/sign-in"

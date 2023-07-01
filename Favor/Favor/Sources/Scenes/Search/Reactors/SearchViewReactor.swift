@@ -322,7 +322,7 @@ private extension SearchViewReactor {
     // onRemote
     self.giftFetcher.onRemote = {
       let networking = UserNetworking()
-      let gifts = networking.request(.getGiftByName(giftName: queryString, userNo: UserInfoStorage.userNo))
+      let gifts = networking.request(.getGiftByName(giftName: queryString))
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Gift(dto: $0) })

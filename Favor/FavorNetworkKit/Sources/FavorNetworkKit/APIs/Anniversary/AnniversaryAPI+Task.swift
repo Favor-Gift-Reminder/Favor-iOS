@@ -29,15 +29,9 @@ extension AnniversaryAPI {
           "anniversaryNo": anniversaryNo
         ]
       )
-
-    case let .postAnniversary(anniversaryRequestDTO, userNo):
-      return .requestCompositeParameters(
-        bodyParameters: anniversaryRequestDTO.toDictionary(),
-        bodyEncoding: JSONEncoding.default,
-        urlParameters: [
-          "userNo": userNo
-        ]
-      )
+      
+    case let .postAnniversary(anniversaryRequestDTO):
+      return .requestJSONEncodable(anniversaryRequestDTO)
     }
   }
 }

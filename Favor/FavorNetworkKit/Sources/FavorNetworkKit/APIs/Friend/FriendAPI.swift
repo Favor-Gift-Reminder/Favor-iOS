@@ -49,21 +49,24 @@ public enum FriendAPI {
   ///   - friendName: 추가하는 친구의 이름 - `Body`
   ///   - friendMemo: 추가하는 친구의 메모 - `Body`
   ///   - friendNo: 추가하는 친구의 DB 넘버 - `Path`
+  @available(
+    *,
+     deprecated,
+     renamed: "postUserFriend",
+     message: "비회원 친구추가 API는 삭제되었습니다. 대신 `postUserFriend`을 이용하세요."
+  )
   case postFriend(friendName: String, friendMemo: String, userNo: Int)
-
+  
   /// 회원친구 추가
   /// ``` json
   /// // friendRequestDTO
   /// {
   ///   "userFriendNo": 1,
-  ///   "userFriendMemo": "메모",
   /// }
   /// ```
   /// - Parameters:
   ///   - userFriendNo: 추가하는 유저 친구의 친구 목록 넘버 - `Body`
-  ///   - userFriendMemo: 추가하는 유저 친구의 메모 - `Body`
-  ///   - userNo: 추가하는 친구의 회원 DB 넘버 - `Path`
-  case postUserFriend(userFriendNo: Int, userFriendMemo: String, userNo: Int)
+  case postUserFriend(userFriendNo: Int)
 }
 
 extension FriendAPI: BaseTargetType {

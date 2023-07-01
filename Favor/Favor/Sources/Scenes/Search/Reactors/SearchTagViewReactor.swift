@@ -118,7 +118,7 @@ private extension SearchTagViewReactor {
     // onRemote
     self.giftFetcher.onRemote = {
       let networking = UserNetworking()
-      let gifts = networking.request(.getGiftByCategory(category: category.rawValue, userNo: UserInfoStorage.userNo))
+      let gifts = networking.request(.getGiftByCategory(category: category.rawValue))
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Gift(dto: $0) })
@@ -144,7 +144,7 @@ private extension SearchTagViewReactor {
     // onRemote
     self.giftFetcher.onRemote = {
       let networking = UserNetworking()
-      let gifts = networking.request(.getGiftByEmotion(emotion: emotion.rawValue, userNo: UserInfoStorage.userNo))
+      let gifts = networking.request(.getGiftByEmotion(emotion: emotion.rawValue))
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Gift(dto: $0) })

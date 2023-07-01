@@ -23,6 +23,9 @@ extension UserAPI {
 
     case .patchUser:
       return .patch
+      
+    case .getAllAnnivesaryList:
+      return .get
 
     case .getAllFriendList:
       return .get
@@ -35,6 +38,12 @@ extension UserAPI {
 
     case .getGiftByName:
       return .get
+      
+    case .getGiftsGivenByUser:
+      return .get
+      
+    case .getGiftsReceivedByUser:
+      return .get
 
     case .getAllGifts:
       return .get
@@ -46,6 +55,9 @@ extension UserAPI {
       return .patch
 
     case .getAllReminderList:
+      return .get
+      
+    case .getAllFilterReminderList:
       return .get
 
     case .postSignIn:

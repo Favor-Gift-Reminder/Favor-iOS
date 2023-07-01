@@ -30,7 +30,10 @@ extension ReminderAPI {
         ]
       )
       
-    case .postReminder(let reminderRequestDTO, _, _):
+    case .postFriendReminder:
+      return .requestPlain
+      
+    case .postReminder(let reminderRequestDTO, _):
       return .requestJSONEncodable(reminderRequestDTO)
     }
   }

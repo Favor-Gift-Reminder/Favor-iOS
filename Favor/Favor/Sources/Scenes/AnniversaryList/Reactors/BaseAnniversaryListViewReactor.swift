@@ -55,7 +55,7 @@ public class BaseAnniversaryListViewReactor {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
-      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
+      let user = networking.request(.getUser)
         .flatMap { user -> Observable<[User]> in
           let userData = user.data
           do {

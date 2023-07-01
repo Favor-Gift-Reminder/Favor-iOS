@@ -94,7 +94,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
           .flatMap { token -> Observable<Mutation> in
             do {
               try self.handleSignInSuccess(email: email, password: password, token: token)
-              self.steps.accept(AppStep.dashboardIsRequired)
+              self.steps.accept(AppStep.authIsComplete)
             } catch {
               os_log(.error, "\(error)")
             }
@@ -107,7 +107,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
             return .just(.updateLoading(false))
           }
       ])
-
+      
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
       return .empty()

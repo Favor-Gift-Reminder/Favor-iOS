@@ -46,8 +46,7 @@ public enum AnniversaryAPI {
   /// ```
   /// - Parameters:
   ///   - dto: 생성하는 기념일에 대한 정보를 담은 `AnniversaryRequestDTO` - `Body`
-  ///   - userNo: 기념일을 생성하는 회원의 DB 넘버 - `Path`
-  case postAnniversary(AnniversaryRequestDTO, userNo: Int)
+  case postAnniversary(AnniversaryRequestDTO)
 }
 
 extension AnniversaryAPI: BaseTargetType {

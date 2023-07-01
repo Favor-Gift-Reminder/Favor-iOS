@@ -22,7 +22,7 @@ public enum GiftAPI {
   /// - Parameters:
   ///   - giftNo: 삭제하는 선물의 DB 넘버 - `Path`
   case deleteGift(giftNo: Int)
-
+  
   /// 선물 수정
   /// ``` json
   /// // GiftUpdateRequestDTO
@@ -56,8 +56,7 @@ public enum GiftAPI {
   /// ```
   /// - Parameters:
   ///   - dto: 생성하는 선물의 정보를 담은 리퀘스트 DTO - `Body`
-  ///   - userNo: 선물을 생성하는 유저의 DB 넘버 - `Path`
-  case postGift(GiftRequestDTO, userNo: Int)
+  case postGift(GiftRequestDTO)
 }
 
 extension GiftAPI: BaseTargetType {

@@ -13,7 +13,7 @@ extension FriendAPI {
   public func getPath() -> String {
     switch self {
     case .getAllFriends:
-      return "/friends"
+      return "/friends/admin"
 
     case .getFriend(let friendNo):
       return "/friends/\(friendNo)"
@@ -26,9 +26,9 @@ extension FriendAPI {
 
     case .postFriend(_, _, let userNo):
       return "/friends/\(userNo)"
-
-    case .postUserFriend(_, _, let userNo):
-      return "/friends/add/\(userNo)"
+      
+    case .postUserFriend:
+      return "/friends"
     }
   }
 }

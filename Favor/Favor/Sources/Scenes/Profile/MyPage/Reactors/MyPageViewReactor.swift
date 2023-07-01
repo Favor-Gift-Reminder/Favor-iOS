@@ -216,7 +216,7 @@ private extension MyPageViewReactor {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
-      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
+      let user = networking.request(.getUser)
         .flatMap { user -> Observable<[User]> in
           do {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(user.data)

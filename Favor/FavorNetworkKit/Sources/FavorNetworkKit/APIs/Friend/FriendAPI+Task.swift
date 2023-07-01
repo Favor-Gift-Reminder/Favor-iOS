@@ -39,11 +39,10 @@ extension FriendAPI {
         encoding: JSONEncoding.default
       )
       
-    case .postUserFriend(let userFriendNo, let userFriendMemo, _):
+    case .postUserFriend(let userFriendNo):
       return .requestParameters(
         parameters: [
-          "userFriendNo": userFriendNo,
-          "userFriendMemo": userFriendMemo
+          "userFriendNo": userFriendNo
         ],
         encoding: JSONEncoding.default
       )

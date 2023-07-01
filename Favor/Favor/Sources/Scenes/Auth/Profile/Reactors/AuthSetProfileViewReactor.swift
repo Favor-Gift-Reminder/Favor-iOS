@@ -156,7 +156,7 @@ private extension AuthSetProfileViewReactor {
     return Single<User>.create { single in
       let networking = UserNetworking()
       let disposable = networking.request(
-        .patchProfile(userId: user.searchID, name: user.name, userNo: user.identifier))
+        .patchProfile(userId: user.searchID, name: user.name))
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
