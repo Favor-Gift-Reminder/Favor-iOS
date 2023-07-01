@@ -180,7 +180,10 @@ private extension LocalAuthViewReactor {
       return .empty()
     } else {  // 틀리다면 다시
       HapticManager.haptic(style: .heavy)
-      return .just(.resetInput)
+      return .concat([
+        .just(.announceWrongPassword),
+        .just(.resetInput)
+      ])
     }
   }
 
