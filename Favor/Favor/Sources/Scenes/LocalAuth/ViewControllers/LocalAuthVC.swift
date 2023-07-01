@@ -23,6 +23,7 @@ public final class LocalAuthViewController: BaseViewController, View {
     static let bottomInset: CGFloat = 20.0
     static let labelSpacing: CGFloat = 16.0
     static let keypadHorizontalInset: CGFloat = 48.0
+    static let biometricPopupHight: CGFloat = 335.0
   }
 
   private enum Typo {
@@ -173,8 +174,8 @@ public final class LocalAuthViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, _ in
         switch reactor.localAuthRequest {
         case .authenticate, .askCurrent:
-          if let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled {
-            if isBiometricAuthEnabled { owner.handleBiometricAuth() }
+          if UserInfoStorage.isBiometricAuthEnabled {
+            owner.handleBiometricAuth()
           }
         default:
           break
@@ -183,7 +184,15 @@ public final class LocalAuthViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
-    reactor.pulse { $0.$pulseLocalAuthPrompt }
+    reactor.pulse { $0.$biometricAuthPromptPulse }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .filter { $0 }
+      .drive(with: self, onNext: { owner, _ in
+        owner.presentBiometricPopup()
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.pulse { $0.$biometricAuthPulse }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .filter { $0 }
       .drive(with: self, onNext: { owner, _ in
@@ -262,26 +271,19 @@ private extension LocalAuthViewController {
     return height
   }
 
+  /// 생체 인증 프롬프트를 띄웁니다.
+  func presentBiometricPopup() {
+    let biometricPopup = BiometricAuthPopup(Metric.biometricPopupHight)
+    biometricPopup.delegate = self
+    biometricPopup.modalPresentationStyle = .overFullScreen
+    self.present(biometricPopup, animated: false)
+  }
+
   /// 생체 인증을 시도합니다.
-  ///
-  /// 생체 인증을 사용하도록 설정하였다면 생체 인증을 시도하고, 사용하도록 설정한 적이 없다면 생체 인증 프롬프트를 띄웁니다.
   func handleBiometricAuth() {
     var error: NSError?
 
-    // 사용자가 생체 인증을 사용하도록 설정한 적이 있는 지 확인합니다.
-    guard let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled else {
-      // 설정한 적이 없다면, 페이버 프롬프트를 띄웁니다.
-      self.presentBiometricPrompt()
-      return
-    }
-
-    // 사용 여부를 설정한 적이 있다면 on/off 여부를 확인합니다.
-    // 생체 인증을 사용하고 있습니다. (생체 인증을 시도합니다.)
-    // 앱에 생체 인증 권한이 부여되었는지를 확인합니다. (첫 권한 확인이라면 권한을 요청합니다.)
-    if
-      isBiometricAuthEnabled,
-      self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-    {
+    if self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
       // 권한이 있다면 생체 인증 설정 여부를 확인합니다.
       let reason = "얼굴 대라"
       self.authContext.evaluatePolicy(
@@ -308,27 +310,6 @@ private extension LocalAuthViewController {
       self.present(ac, animated: true)
     }
   }
-
-  /// 생체 인증 프롬프트를 띄웁니다.
-  func presentBiometricPrompt() {
-    let ac = UIAlertController(
-      title: Typo.biometricPromptTitle,
-      message: Typo.biometricPromptDescription,
-      preferredStyle: .alert)
-    ac.addAction(UIAlertAction(title: Typo.biometricPromptAccept, style: .default, handler: { _ in
-      // 생체 인증 확인
-      UserInfoStorage.isBiometricAuthEnabled = true
-      self.dismiss(animated: true) {
-        self.handleBiometricAuth()
-      }
-    }))
-    ac.addAction(UIAlertAction(title: Typo.biometricPromptCancel, style: .destructive, handler: { _ in
-      // 생체 인증 사용 X
-      UserInfoStorage.isBiometricAuthEnabled = false
-      // 그대로 진행
-    }))
-    self.present(ac, animated: true)
-  }
 }
 
 // MARK: - NumberKeypad
@@ -337,5 +318,18 @@ extension LocalAuthViewController: FavorNumberKeypadDelegate {
   public func padSelected(_ selected: FavorNumberKeypadCellModel) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.keypadDidSelected(selected))
+  }
+}
+
+// MARK: - BiometricAuth Popup
+
+extension LocalAuthViewController: BiometricAuthPopupDelegate {
+  public func biometricAuthUsageSelected(_ isConfirmed: Bool) {
+    guard let biometricPopup = self.presentedViewController as? BiometricAuthPopup else {
+      return
+    }
+    biometricPopup.dismissPopup {
+      self.handleBiometricPopupResult(isConfirmed)
+    }
   }
 }

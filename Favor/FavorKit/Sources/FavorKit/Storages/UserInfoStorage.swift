@@ -16,8 +16,8 @@ public final class UserInfoStorage {
   public static var isLocalAuthEnabled: Bool
 
   /// 앱 잠금에 생체 인식 사용 여부 Boolean
-  @UserDefault(key: .isBiometricAuthEnabled, defaultValue: nil)
-  public static var isBiometricAuthEnabled: Bool?
+  @UserDefault(key: .isBiometricAuthEnabled, defaultValue: false)
+  public static var isBiometricAuthEnabled: Bool
 
   /// 리마인더 알림 여부 Boolean
   @UserDefault(key: .isReminderNotificationEnabled, defaultValue: false)

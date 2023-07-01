@@ -52,12 +52,6 @@ public final class SettingsFlow: Flow {
     case .localAuthIsRequired(let localAuthRequest):
       return self.navigateToLocalAuth(request: localAuthRequest)
 
-    case .biometricAuthPopupIsRequired:
-      return self.navigateToBiometricAuthPopup()
-
-    case .biometricAuthPopupIsComplete(let isConfirmed):
-      return self.dismissBiometricAuthPopup(isConfirmed)
-
     case .localAuthIsComplete:
       return self.popToSettings()
 
@@ -192,37 +186,6 @@ private extension SettingsFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: localAuthVC,
       withNextStepper: localAuthReactor
-    ))
-  }
-
-  func navigateToBiometricAuthPopup() -> FlowContributors {
-    let popup = BiometricAuthPopup(335.0)
-    popup.modalPresentationStyle = .overFullScreen
-
-    DispatchQueue.main.async {
-      self.rootViewController.present(popup, animated: false)
-    }
-
-    return .one(flowContributor: .contribute(withNext: popup))
-  }
-
-  func dismissBiometricAuthPopup(_ isConfirmed: Bool) -> FlowContributors {
-    guard
-      let topVC = self.rootViewController.topViewController as? LocalAuthViewController,
-      let popup = self.rootViewController.presentedViewController as? BiometricAuthPopup
-    else {
-      return .none
-    }
-
-    DispatchQueue.main.async {
-      popup.dismissPopup {
-        topVC.handleBiometricPopupResult(isConfirmed)
-      }
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: topVC,
-      withNextStepper: topVC.reactor!
     ))
   }
 

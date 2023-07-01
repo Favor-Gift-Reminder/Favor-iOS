@@ -9,11 +9,13 @@ import UIKit
 
 import DeviceKit
 import FavorKit
-import RxCocoa
-import RxFlow
 import SnapKit
 
-public final class BiometricAuthPopup: BasePopup, Stepper {
+public protocol BiometricAuthPopupDelegate: AnyObject {
+  func biometricAuthUsageSelected(_ isConfirmed: Bool)
+}
+
+public final class BiometricAuthPopup: BasePopup {
 
   // MARK: - Constants
 
@@ -51,7 +53,7 @@ public final class BiometricAuthPopup: BasePopup, Stepper {
 
   // MARK: - Properties
 
-  public let steps = PublishRelay<Step>()
+  public weak var delegate: BiometricAuthPopupDelegate?
 
   private var biometricIconImage: UIImage? {
     let device = Device.current
@@ -172,11 +174,11 @@ public final class BiometricAuthPopup: BasePopup, Stepper {
 
   @objc
   private func rejectButtonDidTap(_ sender: UIButton) {
-    self.steps.accept(AppStep.biometricAuthPopupIsComplete(isConfirmed: false))
+    self.delegate?.biometricAuthUsageSelected(false)
   }
 
   @objc
   private func confirmButtonDidTap(_ sender: UIButton) {
-    self.steps.accept(AppStep.biometricAuthPopupIsComplete(isConfirmed: true))
+    self.delegate?.biometricAuthUsageSelected(true)
   }
 }

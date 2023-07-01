@@ -35,8 +35,6 @@ public enum AppStep: Step {
 
   // MARK: - Local Auth
   case localAuthIsRequired(LocalAuthRequest)
-  case biometricAuthPopupIsRequired
-  case biometricAuthPopupIsComplete(isConfirmed: Bool)
   case localAuthIsComplete
 
   // MARK: - Main

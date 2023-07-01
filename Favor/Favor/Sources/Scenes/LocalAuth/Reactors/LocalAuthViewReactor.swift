@@ -33,14 +33,18 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
   }
 
   public enum Mutation {
-    case pulseLocalAuthPrompt(Bool)
+    case pulseBiometricAuthPrompt(Bool)
+    case pulseBiometricAuth(Bool)
     case appendInput(Int)
     case resetInput
     case announceWrongPassword
   }
 
   public struct State {
-    @Pulse var pulseLocalAuthPrompt: Bool = false
+    /// 생체 인증 프롬프트
+    @Pulse var biometricAuthPromptPulse: Bool = false
+    /// 생체 인증
+    @Pulse var biometricAuthPulse: Bool = false
     var inputs: [KeypadInput] = Array(repeating: KeypadInput(data: nil, isLastInput: false), count: 4)
     var description: DescriptionMessage
   }
@@ -93,7 +97,7 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
       case .keyImage(let keyImage):
         switch keyImage {
         case UIImage(systemName: "faceid")!, UIImage(systemName: "touchid")!:
-          return .just(.pulseLocalAuthPrompt(true))
+          return .just(.pulseBiometricAuth(true))
         default:
           return .empty()
         }
@@ -116,13 +120,8 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
     case .biometricPopupDidFinish(let isConfirmed):
       UserInfoStorage.isBiometricAuthEnabled = isConfirmed
-      if isConfirmed { // 생체 인증 사용
-        self.steps.accept(AppStep.localAuthIsComplete)
-        return .just(.pulseLocalAuthPrompt(true))
-      } else { // 생체 인증 사용 X
-        self.steps.accept(AppStep.localAuthIsComplete)
-        return .empty()
-      }
+      self.steps.accept(AppStep.localAuthIsComplete)
+      return isConfirmed ? .just(.pulseBiometricAuth(true)) : .empty()
     }
   }
 
@@ -130,8 +129,11 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
-    case .pulseLocalAuthPrompt(let isPromptNeeded):
-      newState.pulseLocalAuthPrompt = isPromptNeeded
+    case .pulseBiometricAuthPrompt(let isPromptNeeded):
+      newState.biometricAuthPromptPulse = isPromptNeeded
+
+    case .pulseBiometricAuth(let isAuthNeeded):
+      newState.biometricAuthPulse = isAuthNeeded
 
     case .appendInput(let inputNumber):
       guard let emptyIdx = newState.inputs.firstIndex(where: { $0.data == nil }) else { return state }
@@ -233,12 +235,10 @@ private extension LocalAuthViewReactor {
       }
 
       // 생체 인증 Prompt
-      if UserInfoStorage.isBiometricAuthEnabled != nil {
-        self.steps.accept(AppStep.localAuthIsComplete)
-      } else {
-        self.steps.accept(AppStep.biometricAuthPopupIsRequired)
-      }
-      return .just(.resetInput)
+      return .concat([
+        .just(.resetInput),
+        .just(.pulseBiometricAuthPrompt(true))
+      ])
     } else {
       HapticManager.haptic(style: .heavy)
       return .concat([
