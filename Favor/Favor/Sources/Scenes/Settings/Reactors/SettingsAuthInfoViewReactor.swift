@@ -19,10 +19,10 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
 
   public var initialState: State
   public let steps = PublishRelay<Step>()
-  private let keychain = KeychainManager()
+  private var keychain: KeychainManager
 
   public enum Action {
-    case signOutDidTap
+    case signOutButtonDidTap
     case deleteAccountDidTap
   }
 
@@ -36,7 +36,8 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init() {
+  init(keychain: KeychainManager) {
+    self.keychain = keychain
     self.initialState = State()
   }
 
@@ -44,7 +45,7 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
 
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .signOutDidTap:
+    case .signOutButtonDidTap:
       self.handleSignOut()
       return .empty()
 

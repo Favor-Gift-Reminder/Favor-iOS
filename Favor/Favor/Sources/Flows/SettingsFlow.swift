@@ -101,8 +101,9 @@ private extension SettingsFlow {
   }
 
   func navigateToAuthInfo() -> FlowContributors {
-    let settingsAuthInfoVC = SettingsAuthInfoViewController()
-    let settingsAuthInfoReactor = SettingsAuthInfoViewReactor()
+    let keychain = KeychainManager()
+    let settingsAuthInfoVC = SettingsAuthInfoViewController(keychain: keychain)
+    let settingsAuthInfoReactor = SettingsAuthInfoViewReactor(keychain: keychain)
     settingsAuthInfoVC.reactor = settingsAuthInfoReactor
     settingsAuthInfoVC.title = "로그인 정보"
 
