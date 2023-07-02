@@ -182,6 +182,7 @@
 		2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */; };
 		2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */; };
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
+		2EEEF7112A5172B800D48038 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2EEEF7102A5172B800D48038 /* Settings.bundle */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		2EF1585F29E3CDC100D199DF /* FavorTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */; };
 		2EF8C4942A4C72F3003E67A8 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */; };
@@ -414,6 +415,7 @@
 		2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditVC.swift; sourceTree = "<group>"; };
 		2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditViewReactor.swift; sourceTree = "<group>"; };
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
+		2EEEF7102A5172B800D48038 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavorTabBarController.swift; sourceTree = "<group>"; };
 		2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -776,6 +778,7 @@
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
+				2EEEF7102A5172B800D48038 /* Settings.bundle */,
 				2E6E28EC2A25855D00E25DB6 /* ImageViewer */,
 				2EEFD5B529BB7B3900BA46BA /* FavorKit */,
 				2E730C6829BA311C003668D9 /* FavorNetworkKit */,
@@ -1751,6 +1754,7 @@
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E68C70D2A394C9800B7ACD0 /* .gitkeep in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
+				2EEEF7112A5172B800D48038 /* Settings.bundle in Resources */,
 				2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
