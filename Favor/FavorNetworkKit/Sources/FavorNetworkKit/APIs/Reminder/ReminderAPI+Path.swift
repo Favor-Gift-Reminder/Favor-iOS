@@ -13,7 +13,7 @@ extension ReminderAPI {
   public func getPath() -> String {
     switch self {
     case .getAllReminders:
-      return "/reminders"
+      return "/reminders/admin"
 
     case .getReminder(let reminderNo):
       return "/reminders/\(reminderNo)"
@@ -24,8 +24,11 @@ extension ReminderAPI {
     case .patchReminder(_, _, let reminderNo):
       return "/reminders/\(reminderNo)"
       
-    case .postReminder(_, let friendNo, let userNo):
-      return "/reminders/\(userNo)/\(friendNo)"
+    case .postFriendReminder(let anniversaryNo):
+      return "/reminders/\(anniversaryNo)"
+      
+    case .postReminder(_, let friendNo):
+      return "/reminders/\(friendNo)"
     }
   }
 }

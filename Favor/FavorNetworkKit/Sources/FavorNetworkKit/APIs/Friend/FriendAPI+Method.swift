@@ -21,7 +21,7 @@ extension FriendAPI {
     case .deleteFriend:
       return .delete
 
-    case .patchFriend:
+    case .patchFriendMemo:
       return .patch
 
     case .postFriend:
@@ -29,6 +29,15 @@ extension FriendAPI {
 
     case .postUserFriend:
       return .post
+      
+    case .getFriendGivenGifts:
+      return .get
+      
+    case .getFriendReceivedGifts:
+      return .get
+      
+    case .getFriendTotalGifts:
+      return .get
     }
   }
 }

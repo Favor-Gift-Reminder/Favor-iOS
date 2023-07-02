@@ -21,7 +21,7 @@ extension UserAPI {
     case .deleteUser:
       return .requestPlain
 
-    case .patchUser(let name, let userId, let favorList, _):
+    case .patchUser(let name, let userId, let favorList):
       return .requestParameters(
         parameters: [
           "name": name,
@@ -30,6 +30,9 @@ extension UserAPI {
         ],
         encoding: JSONEncoding.default
       )
+  
+    case .getAllAnnivesaryList:
+      return .requestPlain
 
     case .getAllFriendList:
       return .requestPlain
@@ -42,6 +45,12 @@ extension UserAPI {
 
     case .getGiftByName:
       return .requestPlain
+      
+    case .getGiftsGivenByUser:
+      return .requestPlain
+      
+    case .getGiftsReceivedByUser:
+      return .requestPlain
 
     case .getAllGifts:
       return .requestPlain
@@ -49,19 +58,19 @@ extension UserAPI {
     case .getUserId:
       return .requestPlain
 
-    case let .patchProfile(userId, name, userNo):
-      return .requestCompositeParameters(
-        bodyParameters: [
+    case let .patchProfile(userId, name):
+      return .requestParameters(
+        parameters: [
           "userId": userId,
           "name": name
         ],
-        bodyEncoding: JSONEncoding.default,
-        urlParameters: [
-          "userNo": userNo
-        ]
+        encoding: JSONEncoding.default
       )
 
     case .getAllReminderList:
+      return .requestPlain
+      
+    case .getAllFilterReminderList:
       return .requestPlain
 
     case let .postSignIn(email, password):

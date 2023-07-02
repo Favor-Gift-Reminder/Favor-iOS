@@ -13,7 +13,7 @@ extension GiftAPI {
   public func getPath() -> String {
     switch self {
     case .getAllGifts:
-      return "/gifts"
+      return "/gifts/admin"
 
     case .getGift(let giftNo):
       return "/gifts/\(giftNo)"
@@ -24,8 +24,11 @@ extension GiftAPI {
     case .patchGift(_, let giftNo):
       return "/gifts/\(giftNo)"
       
-    case .postGift(_, let userNo):
-      return "/gifts/\(userNo)"
+    case .postGift:
+      return "/gifts"
+      
+    case .patchPinGift(let giftNo):
+      return "/gifts/pin/\(giftNo)"
     }
   }
 }

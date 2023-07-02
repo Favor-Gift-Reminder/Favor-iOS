@@ -23,20 +23,18 @@ public enum FriendAPI {
   ///   - friendNo: 삭제하는 친구의 DB 넘버 - `Path`
   case deleteFriend(friendNo: Int)
 
-  /// 친구 수정
+  /// 친구 메모 수정
   /// ``` json
   /// // friendRequestDTO
   /// {
-  ///   "friendName": "이름",
-  ///   "friendMemo": "메모",
+  ///   "memo": "메모수정완료",
   /// }
   /// ```
   /// - Parameters:
-  ///   - friendName: 수정하는 친구의 이름 - `Body`
-  ///   - friendMemo: 수정하는 친구의 메모 - `Body`
+  ///   - memo: 수정하는 친구의 메모 - `Body`
   ///   - friendNo: 수정하는 친구의 DB 넘버 - `Path`
-  case patchFriend(friendName: String, friendMemo: String, friendNo: Int)
-
+  case patchFriendMemo(memo: String, friendNo: Int)
+  
   /// 친구 생성
   /// ``` json
   /// // friendRequestDTO
@@ -49,21 +47,40 @@ public enum FriendAPI {
   ///   - friendName: 추가하는 친구의 이름 - `Body`
   ///   - friendMemo: 추가하는 친구의 메모 - `Body`
   ///   - friendNo: 추가하는 친구의 DB 넘버 - `Path`
+  @available(
+    *,
+     deprecated,
+     renamed: "postUserFriend",
+     message: "비회원 친구추가 API는 삭제되었습니다. 대신 `postUserFriend`을 이용하세요."
+  )
   case postFriend(friendName: String, friendMemo: String, userNo: Int)
-
+  
   /// 회원친구 추가
   /// ``` json
   /// // friendRequestDTO
   /// {
   ///   "userFriendNo": 1,
-  ///   "userFriendMemo": "메모",
   /// }
   /// ```
   /// - Parameters:
   ///   - userFriendNo: 추가하는 유저 친구의 친구 목록 넘버 - `Body`
-  ///   - userFriendMemo: 추가하는 유저 친구의 메모 - `Body`
-  ///   - userNo: 추가하는 친구의 회원 DB 넘버 - `Path`
-  case postUserFriend(userFriendNo: Int, userFriendMemo: String, userNo: Int)
+  case postUserFriend(userFriendNo: Int)
+  
+  /// 친구가 준 선물 전체 조회
+  /// - Parameters:
+  ///  - friendNo: 조회하는 친구의 DB 넘버 - `Path`
+  case getFriendGivenGifts(friendNo: Int)
+  
+  /// 친구가 받은 선물 전체 조회
+  /// - Parameters:
+  ///  - friendNo: 조회하는 친구의 DB 넘버 - `Path`
+  case getFriendReceivedGifts(friendNo: Int)
+
+  /// 친구의 선물 전체 조회
+  /// - Parameters:
+  ///  - friendNo: 조회하는 친구의 DB 넘버 - `Path`
+  case getFriendTotalGifts(friendNo: Int)
+
 }
 
 extension FriendAPI: BaseTargetType {

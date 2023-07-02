@@ -226,7 +226,7 @@ private extension HomeViewReactor {
     // onRemote
     self.reminderFetcher.onRemote = {
       let networking = UserNetworking()
-      let reminders = networking.request(.getAllReminderList(userNo: UserInfoStorage.userNo))
+      let reminders = networking.request(.getAllReminderList)
         .flatMap { response -> Observable<[Reminder]> in
           let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Reminder(dto: $0) })
@@ -257,7 +257,7 @@ private extension HomeViewReactor {
     // onRemote
     self.giftFetcher.onRemote = {
       let networking = UserNetworking()
-      let gifts = networking.request(.getAllGifts(userNo: UserInfoStorage.userNo))
+      let gifts = networking.request(.getAllGifts)
         .flatMap { response -> Observable<[Gift]> in
           let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Gift(dto: $0) })

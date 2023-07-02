@@ -164,8 +164,8 @@ private extension AnniversaryManagementViewReactor {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()
       let requestDTO = anniversary.requestDTO()
-
-      let disposable = networking.request(.postAnniversary(requestDTO, userNo: UserInfoStorage.userNo))
+      
+      let disposable = networking.request(.postAnniversary(requestDTO))
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
