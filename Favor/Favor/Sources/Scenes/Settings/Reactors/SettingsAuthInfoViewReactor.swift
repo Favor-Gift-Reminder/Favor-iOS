@@ -22,16 +22,20 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
   private var keychain: KeychainManager
 
   public enum Action {
-    case signOutButtonDidTap
+    case signoutButtonDidTap
     case deleteAccountDidTap
+    case signoutDidRequested
+    case deleteAccountDidRequested
   }
 
   public enum Mutation {
-
+    case pulseSignout
+    case pulseDeleteAccount
   }
 
   public struct State {
-
+    @Pulse var signoutPulse: Bool = false
+    @Pulse var deleteAccountPulse: Bool = false
   }
 
   // MARK: - Initializer
@@ -45,11 +49,17 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
 
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
-    case .signOutButtonDidTap:
+    case .signoutButtonDidTap:
+      return .just(.pulseSignout)
+
+    case .deleteAccountDidTap:
+      return .just(.pulseDeleteAccount)
+
+    case .signoutDidRequested:
       self.handleSignOut()
       return .empty()
 
-    case .deleteAccountDidTap:
+    case .deleteAccountDidRequested:
       return self.handleDeleteAccount()
         .asObservable()
         .flatMap { _ -> Observable<Mutation> in
@@ -57,14 +67,23 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
           return .empty()
         }
         .catch { error in
-          if let error = error as? APIError {
-            os_log(.error, "\(error.description)")
-          } else if let error = error as? KeychainManager.KeychainError {
-            os_log(.error, "\(error)")
-          }
           return .error(error)
         }
     }
+  }
+
+  public func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+
+    switch mutation {
+    case .pulseSignout:
+      newState.signoutPulse = true
+
+    case .pulseDeleteAccount:
+      newState.deleteAccountPulse = true
+    }
+
+    return newState
   }
 }
 

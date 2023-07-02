@@ -183,6 +183,7 @@
 		2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */; };
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
 		2EEEF7112A5172B800D48038 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2EEEF7102A5172B800D48038 /* Settings.bundle */; };
+		2EEEF7152A51785100D48038 /* NewAlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEEF7142A51785100D48038 /* NewAlertPopup.swift */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		2EF1585F29E3CDC100D199DF /* FavorTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */; };
 		2EF8C4942A4C72F3003E67A8 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */; };
@@ -416,6 +417,7 @@
 		2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditViewReactor.swift; sourceTree = "<group>"; };
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
 		2EEEF7102A5172B800D48038 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		2EEEF7142A51785100D48038 /* NewAlertPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewAlertPopup.swift; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavorTabBarController.swift; sourceTree = "<group>"; };
 		2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
@@ -1622,6 +1624,7 @@
 			children = (
 				E5FB769B2A21C13900BF3197 /* BasePopup.swift */,
 				E5FB769D2A21C22700BF3197 /* AlertPopup.swift */,
+				2EEEF7142A51785100D48038 /* NewAlertPopup.swift */,
 				2E79754E2A4F42270083773B /* BiometricAuthPopup.swift */,
 				E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */,
 			);
@@ -1823,6 +1826,7 @@
 				2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */,
 				2E72EAA22A3ACDB40088587A /* SearchEmotionVC.swift in Sources */,
 				2EFF672E2A5058E50097A664 /* BaseSettingsCell.swift in Sources */,
+				2EEEF7152A51785100D48038 /* NewAlertPopup.swift in Sources */,
 				2E1C81BA2A20AA0D00D4128E /* GiftDetailMemoCell.swift in Sources */,
 				2E1C81B62A1F12B600D4128E /* GiftDetailTagsCell.swift in Sources */,
 				2ED8CB4729B0C30400E7B547 /* AuthTermCell.swift in Sources */,

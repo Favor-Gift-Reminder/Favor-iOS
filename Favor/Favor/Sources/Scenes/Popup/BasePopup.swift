@@ -135,7 +135,7 @@ public class BasePopup: BaseViewController {
   
   /// 팝업 창을 아래에서 올라오는 애니메이션 메서드입니다.
   private func animateContainerView() {
-    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut) {
+    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
       self.containerViewBottomInset?.update(
         inset: (self.view.frame.height / 2) - self.containerViewHeight / 2
       )

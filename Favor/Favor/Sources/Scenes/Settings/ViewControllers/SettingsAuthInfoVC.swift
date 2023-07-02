@@ -5,6 +5,7 @@
 //  Created by 이창준 on 6/29/23.
 //
 
+import OSLog
 import UIKit
 
 import FavorKit
@@ -15,6 +16,35 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
 
   // MARK: - Constants
 
+  private enum Metric {
+    static let verticalInset: CGFloat = 32.0
+    static let horizontalInset: CGFloat = 12.0
+    static let authInfoViewHeight: CGFloat = 100.0
+    static let buttonHeight: CGFloat = 56.0
+    static let buttonCornerRadius: CGFloat = 8.0
+    static let deleteAccountDescriptionNumberOfLines: Int = 3
+  }
+
+  private enum Typo {
+    static let signoutButtonTitle: String = "로그아웃"
+    static let deleteAccountButtonTitle: String = "회원탈퇴"
+    static let cancelButtonTitle: String = "취소"
+    static let signoutAcceptButtonTitle: String = "로그아웃"
+    static let deleteAccountAcceptButtonTitle: String = "탈퇴"
+    static let signoutPopupTitle: String = "로그아웃 하시겠습니까?"
+    static let deleteAccountPopupTitle: String = "회원 탈퇴하기"
+    static let deleteAccountDescription: String = """
+      회원님의 모든 기록이 삭제됩니다.
+      삭제된 정보는 복구할 수 없습니다.
+      지금 탈퇴하시겠습니까?
+      """
+  }
+
+  private enum PopupIdentifier {
+    static let signout = "signout"
+    static let deleteAccount = "deleteAccount"
+  }
+
   // MARK: - Properties
 
   private var keychain: KeychainManager
@@ -23,8 +53,8 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
 
   private lazy var authInfoView = SettingsAuthInfoView(keychain: self.keychain)
 
-  private lazy var signOutButton = self.makeButton(title: "로그아웃")
-  private lazy var deleteAccountButton = self.makeButton(title: "회원탈퇴")
+  private lazy var signoutButton = self.makeButton(title: Typo.signoutButtonTitle)
+  private lazy var deleteAccountButton = self.makeButton(title: Typo.deleteAccountButtonTitle)
 
   private let buttonStackView: UIStackView = {
     let stackView = UIStackView()
@@ -50,8 +80,8 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
 
   public func bind(reactor: SettingsAuthInfoViewReactor) {
     // Action
-    self.signOutButton.rx.tap
-      .map { Reactor.Action.signOutButtonDidTap }
+    self.signoutButton.rx.tap
+      .map { Reactor.Action.signoutButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -61,7 +91,21 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.pulse { $0.$signoutPulse }
+      .filter { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        owner.presentSignOutPopup()
+      })
+      .disposed(by: self.disposeBag)
 
+    reactor.pulse { $0.$deleteAccountPulse }
+      .filter { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        owner.presentDeleteAccountPopup()
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -77,7 +121,7 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
     }
 
     [
-      self.signOutButton,
+      self.signoutButton,
       self.deleteAccountButton
     ].forEach {
       self.buttonStackView.addArrangedSubview($0)
@@ -86,14 +130,14 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
 
   public override func setupConstraints() {
     self.authInfoView.snp.makeConstraints { make in
-      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(32.0)
+      make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(Metric.verticalInset)
       make.directionalHorizontalEdges.equalToSuperview()
-      make.height.equalTo(100.0)
+      make.height.equalTo(Metric.authInfoViewHeight)
     }
 
     self.buttonStackView.snp.makeConstraints { make in
-      make.top.equalTo(self.authInfoView.snp.bottom).offset(32.0)
-      make.directionalHorizontalEdges.equalToSuperview().inset(12.0)
+      make.top.equalTo(self.authInfoView.snp.bottom).offset(Metric.verticalInset)
+      make.directionalHorizontalEdges.equalToSuperview().inset(Metric.horizontalInset)
     }
   }
 }
@@ -118,14 +162,78 @@ private extension SettingsAuthInfoViewController {
         break
       }
     }
-    button.layer.cornerRadius = 8
+    button.layer.cornerRadius = Metric.buttonCornerRadius
     button.clipsToBounds = true
     button.contentHorizontalAlignment = .leading
 
     button.snp.makeConstraints { make in
-      make.height.equalTo(56.0)
+      make.height.equalTo(Metric.buttonHeight)
     }
 
     return button
+  }
+
+  func presentSignOutPopup() {
+    let actions = NewAlertPopup.ActionButtons(
+      reject: Typo.cancelButtonTitle,
+      accept: Typo.signoutAcceptButtonTitle
+    )
+    let signOutPopup = NewAlertPopup(
+      .onlyTitle(title: Typo.signoutPopupTitle, actions),
+      identifier: PopupIdentifier.signout
+    )
+    signOutPopup.modalPresentationStyle = .overFullScreen
+    signOutPopup.delegate = self
+
+    DispatchQueue.main.async {
+      self.present(signOutPopup, animated: false)
+    }
+  }
+
+  func presentDeleteAccountPopup() {
+    let description = NewAlertPopup.Description(
+      description: Typo.deleteAccountDescription,
+      numberOfLines: Metric.deleteAccountDescriptionNumberOfLines
+    )
+    let actions = NewAlertPopup.ActionButtons(
+      reject: Typo.cancelButtonTitle,
+      accept: Typo.deleteAccountAcceptButtonTitle
+    )
+    let deleteAccountPopup = NewAlertPopup(
+      .titleWithDescription(
+        title: Typo.deleteAccountPopupTitle,
+        description: description,
+        actions
+      ),
+      identifier: PopupIdentifier.deleteAccount
+    )
+    deleteAccountPopup.modalPresentationStyle = .overFullScreen
+    deleteAccountPopup.delegate = self
+
+    DispatchQueue.main.async {
+      self.present(deleteAccountPopup, animated: false)
+    }
+  }
+}
+
+// MARK: - Popup
+
+extension SettingsAuthInfoViewController: AlertPopupDelegate {
+  public func actionDidSelected(_ isAccepted: Bool, from title: String) {
+    guard let reactor = self.reactor else { return }
+
+    if isAccepted {
+      switch title {
+      case PopupIdentifier.signout:
+        reactor.action.onNext(.signoutDidRequested)
+      case PopupIdentifier.deleteAccount:
+        reactor.action.onNext(.deleteAccountDidRequested)
+      default:
+        os_log(.error, "Unknown identifier for popup.")
+      }
+    } else {
+      guard let popup = self.presentedViewController as? NewAlertPopup else { return }
+      popup.dismissPopup()
+    }
   }
 }
