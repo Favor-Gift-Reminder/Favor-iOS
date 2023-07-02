@@ -74,7 +74,8 @@ private extension SettingsRenderer {
     items.append(Item(
       type: .switchable(
         initialValue: UserInfoStorage.isLocalAuthEnabled,
-        .isLocalAuthEnabled),
+        .isLocalAuthEnabled
+      ),
       section: .appPrivacy,
       title: "암호 사용"
     ))
@@ -90,8 +91,9 @@ private extension SettingsRenderer {
       }
       items.append(Item(
         type: .switchable(
-          initialValue: UserInfoStorage.isBiometricAuthEnabled ?? false,
-          .isBiometricAuthEnabled),
+          initialValue: UserInfoStorage.isBiometricAuthEnabled,
+          .isBiometricAuthEnabled
+        ),
         section: .appPrivacy,
         title: biometricAuth
       ))
@@ -108,9 +110,6 @@ private extension SettingsRenderer {
         title: "암호 변경",
         step: .localAuthIsRequired(.askCurrent(resultHandler))
       ))
-
-      // 암호 삭제
-      items.append(Item(type: .navigatable, section: .appPrivacy, title: "암호 삭제"))
     }
 
     return items

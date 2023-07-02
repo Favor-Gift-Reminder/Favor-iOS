@@ -177,6 +177,10 @@ public final class LocalAuthViewController: BaseViewController, View {
           if UserInfoStorage.isBiometricAuthEnabled {
             owner.handleBiometricAuth()
           }
+        case .askNew:
+          if !UserInfoStorage.isLocalAuthEnabled {
+            owner.presentNewLocalAuthAlertPopup()
+          }
         default:
           break
         }
@@ -185,16 +189,16 @@ public final class LocalAuthViewController: BaseViewController, View {
 
     // State
     reactor.pulse { $0.$biometricAuthPromptPulse }
-      .asDriver(onErrorRecover: { _ in return .empty() })
       .filter { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
         owner.presentBiometricPopup()
       })
       .disposed(by: self.disposeBag)
 
     reactor.pulse { $0.$biometricAuthPulse }
-      .asDriver(onErrorRecover: { _ in return .empty() })
       .filter { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
         owner.handleBiometricAuth()
       })
@@ -310,6 +314,16 @@ private extension LocalAuthViewController {
       self.present(ac, animated: true)
     }
   }
+
+  func presentNewLocalAuthAlertPopup() {
+    let popup = NewLocalAuthPopup(335.0)
+    popup.modalPresentationStyle = .overFullScreen
+    popup.delegate = self
+
+    DispatchQueue.main.async {
+      self.present(popup, animated: false)
+    }
+  }
 }
 
 // MARK: - NumberKeypad
@@ -330,6 +344,18 @@ extension LocalAuthViewController: BiometricAuthPopupDelegate {
     }
     biometricPopup.dismissPopup {
       self.handleBiometricPopupResult(isConfirmed)
+    }
+  }
+}
+
+// MARK: - New Local Auth Popup
+
+extension LocalAuthViewController: NewLocalAuthPopupDelegate {
+  public func actionDidSelected(_ isAccepted: Bool) {
+    guard let popup = self.presentedViewController as? NewLocalAuthPopup else { return }
+    popup.dismissPopup()
+    if !isAccepted {
+      self.navigationController?.popViewController(animated: true)
     }
   }
 }
