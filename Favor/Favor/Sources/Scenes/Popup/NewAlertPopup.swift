@@ -11,7 +11,7 @@ import FavorKit
 import SnapKit
 
 public protocol AlertPopupDelegate: AnyObject {
-  func actionDidSelected(_ isAccepted: Bool, from title: String)
+  func actionDidSelected(_ isAccepted: Bool, from identifier: String)
 }
 
 public final class NewAlertPopup: BasePopup {

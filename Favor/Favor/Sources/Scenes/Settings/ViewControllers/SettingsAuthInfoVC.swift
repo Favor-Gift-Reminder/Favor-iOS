@@ -219,7 +219,7 @@ private extension SettingsAuthInfoViewController {
 // MARK: - Popup
 
 extension SettingsAuthInfoViewController: AlertPopupDelegate {
-  public func actionDidSelected(_ isAccepted: Bool, from title: String) {
+  public func actionDidSelected(_ isAccepted: Bool, from identifier: String) {
     guard let reactor = self.reactor else { return }
 
     if isAccepted {
