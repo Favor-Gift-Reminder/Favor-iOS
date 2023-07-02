@@ -63,8 +63,7 @@ private extension SettingsRenderer {
       Item(type: .navigatable, section: .appInfo, title: "팀", step: .devTeamInfoIsRequired),
       Item(type: .navigatable, section: .appInfo, title: "개발자 응원하기", step: .devTeamSupportIsRequired),
       Item(type: .navigatable, section: .appInfo, title: "서비스 이용약관", step: .serviceUsageTermIsRequired),
-      Item(type: .navigatable, section: .appInfo, title: "개인정보 처리방침", step: .privateInfoManagementTermIsRequired),
-      Item(type: .navigatable, section: .appInfo, title: "오픈 소스 라이선스", step: .openSourceUsageIsRequired)
+      Item(type: .navigatable, section: .appInfo, title: "개인정보 처리방침", step: .privateInfoManagementTermIsRequired)
     ]
   }
 
