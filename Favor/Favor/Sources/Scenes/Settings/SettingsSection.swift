@@ -77,7 +77,12 @@ extension SettingsSection: Comparable {
 
 extension SettingsSectionItem: Hashable {
   public static func == (lhs: SettingsSectionItem, rhs: SettingsSectionItem) -> Bool {
-    return lhs.title == rhs.title
+    switch (lhs.type, rhs.type) {
+    case let (.switchable(lhsInitialValue, _), .switchable(rhsInitialValue, _)):
+      return lhs.title == rhs.title && lhsInitialValue != rhsInitialValue
+    default:
+      return lhs.title == rhs.title
+    }
   }
 
   public func hash(into hasher: inout Hasher) {

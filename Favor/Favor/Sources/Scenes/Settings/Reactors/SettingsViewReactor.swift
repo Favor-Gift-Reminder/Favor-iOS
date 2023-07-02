@@ -26,7 +26,6 @@ public final class SettingsViewReactor: Reactor, Stepper {
     case viewNeedsLoaded
     case itemSelected(SettingsSectionItem)
     case switchDidToggled(UserDefaultsKey, to: Bool)
-    case cellsNeedsUpdated
     case doNothing
   }
 
@@ -63,9 +62,6 @@ public final class SettingsViewReactor: Reactor, Stepper {
 
     case let .switchDidToggled(key, isOn):
       return self.toggleUserDefaults(key, to: isOn)
-
-    case .cellsNeedsUpdated:
-      return .just(.updateItems(self.currentState.renderer))
 
     case .doNothing:
       return .empty()
