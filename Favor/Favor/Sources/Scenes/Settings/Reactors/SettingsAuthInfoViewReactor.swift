@@ -104,7 +104,7 @@ private extension SettingsAuthInfoViewReactor {
   func handleDeleteAccount() -> Single<User> {
     return Single<User>.create { single in
       let networking = UserNetworking()
-      let disposable = networking.request(.deleteUser(userNo: UserInfoStorage.userNo))
+      let disposable = networking.request(.deleteUser)
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
