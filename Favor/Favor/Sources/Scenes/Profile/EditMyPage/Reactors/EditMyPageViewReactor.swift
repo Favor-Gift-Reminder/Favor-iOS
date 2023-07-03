@@ -82,8 +82,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       return self.userNetworking.request(.patchUser(
         name: name ?? currentState.user.name,
         userId: id ?? currentState.user.searchID,
-        favorList: favors,
-        userNo: UserInfoStorage.userNo
+        favorList: favors
       ))
       .flatMap { _ -> Observable<Mutation> in
         self.steps.accept(AppStep.editMyPageIsComplete)

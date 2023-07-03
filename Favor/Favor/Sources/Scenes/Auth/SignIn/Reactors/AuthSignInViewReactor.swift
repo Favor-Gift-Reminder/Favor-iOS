@@ -107,7 +107,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
             return .just(.updateLoading(false))
           }
       ])
-
+      
     case .findPasswordButtonDidTap:
       self.steps.accept(AppStep.findPasswordIsRequired)
       return .empty()

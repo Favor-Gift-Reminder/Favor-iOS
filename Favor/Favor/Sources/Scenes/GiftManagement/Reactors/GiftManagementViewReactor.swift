@@ -213,7 +213,7 @@ private extension GiftManagementViewReactor {
       let networking = GiftNetworking()
       let requestDTO = gift.requestDTO()
 
-      let disposable = networking.request(.postGift(requestDTO, userNo: UserInfoStorage.userNo))
+      let disposable = networking.request(.postGift(requestDTO))
         .asSingle()
         .subscribe(with: self, onSuccess: { _, response in
           do {
@@ -229,7 +229,7 @@ private extension GiftManagementViewReactor {
       }
     }
   }
-
+  
   func requestPatchGift(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()

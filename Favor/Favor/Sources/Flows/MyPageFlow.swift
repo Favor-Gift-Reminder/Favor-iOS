@@ -46,6 +46,9 @@ final class MyPageFlow: Flow {
       
     case .friendPageIsRequired(let friend):
       return self.navigateToFriendPage(friend)
+      
+    case .newAnniversaryIsRequired:
+      return self.navigateToNewAnniversary()
 
     case .wayBackToRootIsRequired:
       return .one(flowContributor: .forwardToParentFlow(withStep: AppStep.wayBackToRootIsRequired))
@@ -74,6 +77,7 @@ extension MyPageFlow {
   
   private func navigateToEditMyPage(with user: User) -> FlowContributors {
     let editMyPageVC = EditMyPageViewController()
+    editMyPageVC.hidesBottomBarWhenPushed = true
     let editMyPageReactor = EditMyPageViewReactor(user: user)
     editMyPageVC.reactor = editMyPageReactor
 
@@ -121,6 +125,15 @@ extension MyPageFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: friendPageFlow,
       withNextStepper: OneStepper(withSingleStep: AppStep.friendPageIsRequired(friend))
+    ))
+  }
+  
+  private func navigateToNewAnniversary() -> FlowContributors {
+    let anniversaryFlow = AnniversaryFlow(rootViewController: self.rootViewController)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: anniversaryFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.newAnniversaryIsRequired)
     ))
   }
 }

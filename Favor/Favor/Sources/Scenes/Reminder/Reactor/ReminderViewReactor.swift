@@ -136,7 +136,7 @@ private extension ReminderViewReactor {
     // onRemote
     self.reminderFetcher.onRemote = {
       let networking =  UserNetworking()
-      let reminders = networking.request(.getAllReminderList(userNo: UserInfoStorage.userNo))
+      let reminders = networking.request(.getAllReminderList)
         .flatMap { reminders -> Observable<[Reminder]> in
           let responseData = reminders.data
           do {

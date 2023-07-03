@@ -24,6 +24,9 @@ extension ReminderAPI {
     case .patchReminder:
       return .patch
       
+    case .postFriendReminder:
+      return .post
+      
     case .postReminder:
       return .post
     }

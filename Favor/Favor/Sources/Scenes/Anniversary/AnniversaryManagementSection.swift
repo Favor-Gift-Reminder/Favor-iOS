@@ -14,7 +14,7 @@ import FavorKit
 
 public enum AnniversaryManagementSectionItem: ComposableItem {
   case name(String?)
-  case category
+  case category(AnniversaryCategory?)
   case date(Date?)
 }
 

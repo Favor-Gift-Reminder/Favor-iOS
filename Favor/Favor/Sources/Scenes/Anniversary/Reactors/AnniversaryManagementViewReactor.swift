@@ -29,43 +29,46 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
     case dateDidUpdate(Date?)
     case deleteButtonDidTap
   }
-
+  
   enum Mutation {
     case updateAnniversary(Anniversary)
     case updateAnniversaryDate(Date?)
   }
-
+  
   struct State {
     var viewType: AnniversaryManagementViewController.ViewType
     var anniversary: Anniversary
     var anniversaryDate: Date?
+    var anniversaryCategory: AnniversaryCategory?
     var sections: [Section] = [.name, .category, .date]
     var items: [Item]
     var isDoneButtonEnabled: Bool = false
   }
 
   // MARK: - Initializer
-
+  
   /// ViewType이 `.edit`일 경우 사용되는 생성자
   init(with anniversary: Anniversary) {
     self.initialState = State(
       viewType: .edit,
       anniversary: anniversary,
-      items: [.name(anniversary.name), .category, .date(anniversary.date)]
+      anniversaryDate: anniversary.date,
+      anniversaryCategory: anniversary.category,
+      items: [.name(anniversary.name), .category(anniversary.category), .date(anniversary.date)]
     )
   }
-
+  
   /// ViewType이 `.new`일 경우 사용되는 생성자
   init() {
     self.initialState = State(
       viewType: .new,
       anniversary: Anniversary(),
-      items: [.name(nil), .category, .date(nil)]
+      items: [.name(nil), .category(nil), .date(nil)]
     )
   }
-
+  
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     var anniversary = self.currentState.anniversary
     switch action {
@@ -100,11 +103,11 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
             return .empty()
           }
       }
-
+      
     case .nameDidUpdate(let name):
       anniversary.name = name ?? ""
       return .just(.updateAnniversary(anniversary))
-
+      
     case .categoryDidUpdate(let category):
       anniversary.category = category
       return .just(.updateAnniversary(anniversary))
@@ -139,13 +142,15 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
 
     return newState
   }
-
+  
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
+      
       let isTitleEmpty = state.anniversary.name.isEmpty
+      
       newState.isDoneButtonEnabled = !isTitleEmpty && state.anniversaryDate != nil
+      newState.items = [.name(nil), .category(state.anniversary.category), .date(nil)]
 
       return newState
     }
@@ -159,8 +164,8 @@ private extension AnniversaryManagementViewReactor {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()
       let requestDTO = anniversary.requestDTO()
-
-      let disposable = networking.request(.postAnniversary(requestDTO, userNo: UserInfoStorage.userNo))
+      
+      let disposable = networking.request(.postAnniversary(requestDTO))
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
@@ -199,13 +204,13 @@ private extension AnniversaryManagementViewReactor {
         }, onFailure: { error in
           single(.failure(error))
         })
-
+      
       return Disposables.create {
         disposable.dispose()
       }
     }
   }
-
+  
   func requestDeleteAnniversary(_ anniversaryNo: Int) -> Single<Anniversary> {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()

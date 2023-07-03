@@ -13,7 +13,7 @@ extension AnniversaryAPI {
   public func getPath() -> String {
     switch self {
     case .getAnniversaries:
-      return "/anniversaries"
+      return "/anniversaries/admin"
 
     case .getAnniversary(let anniversaryNo):
       return "/anniversaries/\(anniversaryNo)"
@@ -24,8 +24,11 @@ extension AnniversaryAPI {
     case .patchAnniversary(_, let anniversaryNo):
       return "/anniversaries/\(anniversaryNo)"
 
-    case .postAnniversary(_, let userNo):
-      return "/anniversaries/\(userNo)"
+    case .postAnniversary:
+      return "/anniversaries"
+      
+    case .patchAnniversaryPin(let anniversaryNo):
+      return "/anniversaries/pin/\(anniversaryNo)"
     }
   }
 }

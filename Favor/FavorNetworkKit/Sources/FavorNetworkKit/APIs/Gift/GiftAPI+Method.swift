@@ -26,6 +26,9 @@ extension GiftAPI {
       
     case .postGift:
       return .post
+      
+    case .patchPinGift:
+      return .patch
     }
   }
 }

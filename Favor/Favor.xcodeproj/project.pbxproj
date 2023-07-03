@@ -1555,6 +1555,23 @@
 			path = CellReactros;
 			sourceTree = "<group>";
 		};
+		E53191C52A4EADBA000DA2D7 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				E5FB769B2A21C13900BF3197 /* BasePopup.swift */,
+				E5FB769D2A21C22700BF3197 /* AlertPopup.swift */,
+				E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		E53191C62A4EADC0000DA2D7 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		E55CF7B8298A705F002940D1 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
@@ -1630,6 +1647,8 @@
 				2EEEF7162A51DCCF00D48038 /* NewLocalAuthPopup.swift */,
 				2E79754E2A4F42270083773B /* BiometricAuthPopup.swift */,
 				E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */,
+				E53191C62A4EADC0000DA2D7 /* Views */,
+				E53191C52A4EADBA000DA2D7 /* ViewControllers */,
 			);
 			path = Popup;
 			sourceTree = "<group>";

@@ -29,7 +29,7 @@ public class BaseFriendListViewReactor {
     // onRemote
     self.friendFetcher.onRemote = {
       let networking = UserNetworking()
-      let friends = networking.request(.getAllFriendList(userNo: UserInfoStorage.userNo))
+      let friends = networking.request(.getAllFriendList)
         .flatMap { friends -> Observable<[Friend]> in
           do {
             let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friends.data)

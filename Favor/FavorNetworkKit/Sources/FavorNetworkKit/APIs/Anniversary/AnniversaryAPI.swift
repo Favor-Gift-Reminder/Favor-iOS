@@ -20,7 +20,7 @@ public enum AnniversaryAPI {
 
   /// 기념일 삭제
   /// - Parameters:
-  ///   - 삭제하는 기념일의 DB 넘버 - `Path`
+  ///   - anniversaryNo: 삭제하는 기념일의 DB 넘버 - `Path`
   case deleteAnniversary(anniversaryNo: Int)
 
   /// 기념일 수정
@@ -46,8 +46,12 @@ public enum AnniversaryAPI {
   /// ```
   /// - Parameters:
   ///   - dto: 생성하는 기념일에 대한 정보를 담은 `AnniversaryRequestDTO` - `Body`
-  ///   - userNo: 기념일을 생성하는 회원의 DB 넘버 - `Path`
-  case postAnniversary(AnniversaryRequestDTO, userNo: Int)
+  case postAnniversary(AnniversaryRequestDTO)
+  
+  /// 기념일 핀 여부 수정
+  /// - Parameters:
+  ///  - annivesaryNo: 수정하는 기념일의 DB 넘버 - `Path`
+  case patchAnniversaryPin(anniversaryNo: Int)
 }
 
 extension AnniversaryAPI: BaseTargetType {

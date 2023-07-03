@@ -166,7 +166,7 @@ private extension NewGiftFriendViewReactor {
     // onRemote
     self.friendFetcher.onRemote = {
       let networking = UserNetworking()
-      let friends = networking.request(.getAllFriendList(userNo: UserInfoStorage.userNo))
+      let friends = networking.request(.getAllFriendList)
         .flatMap { response -> Observable<[Friend]> in
           let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Friend(dto: $0) })

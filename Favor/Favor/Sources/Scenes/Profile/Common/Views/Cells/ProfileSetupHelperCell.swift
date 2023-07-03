@@ -15,6 +15,8 @@ final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable, View {
   
   // MARK: - Properties
   
+  var goButtonHandler: (() -> Void)?
+  
   // MARK: - UI Components
 
   private let containerView = UIView()
@@ -66,6 +68,10 @@ final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable, View {
   
   func bind(reactor: ProfileSetupHelperCellReactor) {
     // Action
+    self.goButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in owner.goButtonHandler?() }
+      .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.type }

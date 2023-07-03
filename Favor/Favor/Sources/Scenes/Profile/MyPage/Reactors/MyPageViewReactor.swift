@@ -22,13 +22,14 @@ final class MyPageViewReactor: Reactor, Stepper {
   var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
   private let userFetcher = Fetcher<User>()
-
+  
   enum Action {
     case viewNeedsLoaded
     case editButtonDidTap
     case settingButtonDidTap
     case headerRightButtonDidTap(ProfileSection)
     case newFriendCellDidTap
+    case profileSetupCellDidTap(ProfileSetupHelperCellReactor.ProfileHelperType)
     case friendCellDidTap(Friend)
     case doNothing
   }
@@ -108,9 +109,18 @@ final class MyPageViewReactor: Reactor, Stepper {
       default: break
       }
       return .empty()
-
+      
     case .friendCellDidTap(let friend):
       self.steps.accept(AppStep.friendPageIsRequired(friend))
+      return .empty()
+      
+    case .profileSetupCellDidTap(let type):
+      switch type {
+      case .anniversary:
+        self.steps.accept(AppStep.newAnniversaryIsRequired)
+      case .favor:
+        self.steps.accept(AppStep.editMyPageIsRequired(self.currentState.user))
+      }
       return .empty()
 
     case .newFriendCellDidTap:
@@ -211,7 +221,7 @@ private extension MyPageViewReactor {
     // onRemote
     self.userFetcher.onRemote = {
       let networking = UserNetworking()
-      let user = networking.request(.getUser(userNo: UserInfoStorage.userNo))
+      let user = networking.request(.getUser)
         .flatMap { user -> Observable<[User]> in
           do {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(user.data)

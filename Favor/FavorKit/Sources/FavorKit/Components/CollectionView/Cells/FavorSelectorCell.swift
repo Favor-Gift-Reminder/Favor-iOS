@@ -57,7 +57,7 @@ open class FavorSelectorCell: BaseCollectionViewCell, Reusable {
     }
     return button
   }()
-
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -84,17 +84,17 @@ open class FavorSelectorCell: BaseCollectionViewCell, Reusable {
   }
 
   // MARK: - Functions
-
+  
   public func bind(unselectedTitle: String) {
-    self.isSelected = false
+    self.button.isSelected = false
     self.button.configuration?.updateAttributedTitle(
       unselectedTitle,
       font: .favorFont(.regular, size: 16)
     )
   }
-
+  
   public func bind(selectedTitle: String?) {
-    self.isSelected = true
+    self.button.isSelected = true
     self.button.configuration?.updateAttributedTitle(
       selectedTitle,
       font: .favorFont(.regular, size: 16)

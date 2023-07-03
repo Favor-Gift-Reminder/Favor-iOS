@@ -22,7 +22,7 @@ public class BaseProfileViewController: BaseViewController {
     /// 헤더와 컬렉션뷰가 겹치는 높이
     static let profileViewOverliedHeight = 24.0
   }
-
+  
   // MARK: - Properties
   
   lazy var dataSource: ProfileDataSource = {
@@ -36,6 +36,10 @@ public class BaseProfileViewController: BaseViewController {
         case .profileSetupHelper(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
           cell.reactor = reactor
+          // 바로 가기 버튼의 클로저 로직 입니다.
+          cell.goButtonHandler = { [weak self] in
+            self?.profileSetupGoButtonDidTap(at: reactor.currentState.type)
+          }
           return cell
         case .favors(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFavorCell
@@ -105,7 +109,7 @@ public class BaseProfileViewController: BaseViewController {
   }()
   
   // MARK: - UI Components
-
+  
   let profileView = ProfileView()
   private var profileViewHeightConstraint: Constraint?
 
@@ -146,7 +150,7 @@ public class BaseProfileViewController: BaseViewController {
     collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
-
+  
   // MARK: - Life Cycle
 
   public override func viewDidLoad() {
@@ -179,7 +183,7 @@ public class BaseProfileViewController: BaseViewController {
     let spaceBetweenTopAndContent = abs(offset.y)
     /// 컨텐츠의 최상단(`GiftStatsHeader`)이 화면 상단보다 아래에 있는 지 여부
     let isContentBelowTopOfScreen = offset.y < 0
-        
+    
     // 컨텐츠가 `ProfileView`의 최대 높이 범위(330) 안에 있는 경우
     // ProfileView의 높이 변화
     if isContentBelowTopOfScreen {
@@ -205,6 +209,7 @@ public class BaseProfileViewController: BaseViewController {
   
   public func injectReactor(to view: UICollectionReusableView) { }
   func headerRightButtonDidTap(at section: ProfileSection) { }
+  func profileSetupGoButtonDidTap(at type: ProfileSetupHelperCellReactor.ProfileHelperType) { }
 
   // MARK: - UI Setups
 

@@ -14,15 +14,11 @@ public enum UserAPI {
   case getAllUsers
 
   /// 단일 회원 조회
-  /// - Parameters:
-  ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
-  case getUser(userNo: Int)
+  case getUser
 
   /// 회원 탈퇴
-  /// - Parameters:
-  ///   - userNo: 탈퇴하는 유저의 DB 넘버 - `Path`
-  case deleteUser(userNo: Int)
-
+  case deleteUser
+  
   /// 회원 수정
   /// ``` json
   /// // userUpdateRequestDTO
@@ -39,38 +35,43 @@ public enum UserAPI {
   ///   - name: 수정하는 유저의 이름 - `Body`
   ///   - userId: 수정하는 유저의 검색 아이디(@) - `Body`
   ///   - favorList: 수정하는 유저의 취향 목록 - `Body`
-  ///   - userNo: 수정하는 유저의 DB 넘버 - `Path`
-  case patchUser(name: String, userId: String, favorList: [String], userNo: Int)
-
+  case patchUser(name: String, userId: String, favorList: [String])
+  
+  /// 회원의 기념일 전체 조회
+  case getAllAnnivesaryList
+  
   /// 회원의 친구 전체 조회
-  /// - Parameters:
-  ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
-  case getAllFriendList(userNo: Int)
+  case getAllFriendList
+  
+  /// 회원의 선물 전체 조회
+  case getAllGifts
 
   /// 카테고리로 회원 선물 조회
   /// - Parameters:
   ///   - category: 조회하는 선물의 카테고리 - `Path`
   ///     (*Available Values: 가벼운 선물, 생일, 집들이, 시험, 승진, 졸업, 기타*)
-  ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
-  case getGiftByCategory(category: String, userNo: Int)
+  case getGiftByCategory(category: String)
 
   /// 감정으로 회원 선물 조회
   /// - Parameters:
   ///   - emotion: 조회하는 선물의 감정 - `Path`
   ///     (*Available Values: 감동이에요, 기뻐요, 좋아요, 그냥그래요, 별로에요*)
-  ///   - userNo:조회하는 유저의 DB 넘버 - `Path`
-  case getGiftByEmotion(emotion: String, userNo: Int)
+  case getGiftByEmotion(emotion: String)
 
   /// 이름으로 회원 선물 조회
   /// - Parameters:
   ///   - giftName: 조회하는 선물의 이름 - `Path`
-  ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
-  case getGiftByName(giftName: String, userNo: Int)
-
-  /// 회원의 선물 전체 조회
+  case getGiftByName(giftName: String)
+  
+  /// 유저가 준 선물 전체 조회
   /// - Parameters:
-  ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
-  case getAllGifts(userNo: Int)
+  ///  - userNo: 조회하는 유저의 DB 넘버 - `Path`
+  case getGiftsGivenByUser(userNo: Int)
+  
+  /// 유저가 받은 선물 전체 조회
+  /// - Parameters:
+  ///  - userNo: 조회하는 유저의 DB 넘버 - `Path`
+  case getGiftsReceivedByUser(userNo: Int)
 
   /// 아이디로 회원 조회
   /// - Parameters:
@@ -88,14 +89,18 @@ public enum UserAPI {
   /// - Parameters:
   ///   - userId: 생성하는 유저 프로필의 검색 아이디(@) - `Body`
   ///   - name: 생성하는 유저 프로필의 이름 - `Body`
-  ///   - userNo: 프로필을 생성하는 유저의 DB 넘버 - `Path`
-  case patchProfile(userId: String, name: String, userNo: Int)
+  case patchProfile(userId: String, name: String)
 
   /// 회원의 리마인더 전체 조회
+  case getAllReminderList
+  
+  /// 회원의 리마인더 필터 조회
   /// - Parameters:
-  ///   - userNo: 조회하는 유저의 DB 넘버 - `Path`
-  case getAllReminderList(userNo: Int)
-
+  ///  - year: 리마인더를 조회할 년도 값입니다.
+  ///  - month: 리마인더를 조회할 월 값입니다.
+  case getAllFilterReminderList(year: Int, month: Int)
+  
+  
   /// 로그인
   /// ``` json
   /// // signDTO
