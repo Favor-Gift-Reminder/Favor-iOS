@@ -92,8 +92,9 @@ private extension AppFlow {
     let localAuthVC = LocalAuthViewController()
     localAuthVC.modalPresentationStyle = .overFullScreen
     localAuthVC.titleString = "암호"
+    let resultHandler: ((Data?) -> Void) = { _ in }
     let description = DescriptionMessage(description: "암호를 입력해주세요.")
-    let localAuthReactor = LocalAuthViewReactor(.authenticate(), description: description)
+    let localAuthReactor = LocalAuthViewReactor(.authenticate(resultHandler), description: description)
     localAuthVC.reactor = localAuthReactor
 
     DispatchQueue.main.async {

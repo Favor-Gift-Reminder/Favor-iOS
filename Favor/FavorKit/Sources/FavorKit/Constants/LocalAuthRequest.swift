@@ -10,9 +10,9 @@ import Foundation
 public enum LocalAuthRequest {
   public typealias ResultHandler = ((Data?) throws -> Void)
 
-  case authenticate(ResultHandler? = nil)
-  case askCurrent(ResultHandler? = nil)
-  case askNew(ResultHandler? = nil)
-  case confirmNew(String, ResultHandler? = nil)
-  case disable(ResultHandler? = nil)
+  case authenticate(ResultHandler)
+  case askCurrent(ResultHandler)
+  case askNew(ResultHandler)
+  case confirmNew(String, ResultHandler)
+  case disable(ResultHandler)
 }

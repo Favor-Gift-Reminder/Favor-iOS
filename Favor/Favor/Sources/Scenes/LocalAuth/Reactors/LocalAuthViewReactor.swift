@@ -14,6 +14,18 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
+
+// 암호 인증 / 생체 인증
+// authenticate: 암호 확인
+// - 암호 인증 or 생체 인증
+// askCurrent: 암호 변경을 위한 현재 암호 확인
+// - 암호 인증 or 생체 인증
+// askNew: 새 암호 입력
+// - 암호 입력
+// confirmNew: 새 암호 확인
+// - 암호 입력 and 생체 인증(Optional)
+// disable: 암호 삭제를 위한 암호 확인
+// - 암호 인증 or 생체 인증
 public final class LocalAuthViewReactor: Reactor, Stepper {
   typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
 
@@ -29,7 +41,7 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
   public enum Action {
     case keypadDidSelected(FavorNumberKeypadCellModel)
     case biometricPopupDidFinish(Bool)
-    case biometricAuthDidSucceed
+    case biometricAuthDidFinish(Bool)
   }
 
   public enum Mutation {
@@ -110,19 +122,47 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
     case .biometricPopupDidFinish(let isConfirmed):
       UserInfoStorage.isBiometricAuthEnabled = isConfirmed
-      self.steps.accept(AppStep.localAuthIsComplete)
-      return isConfirmed ? .just(.pulseBiometricAuth(true)) : .empty()
-
-    case .biometricAuthDidSucceed:
-      // TODO: 성공 처리
-      switch self.localAuthRequest {
-      case .authenticate:
+      if isConfirmed {
+        return .just(.pulseBiometricAuth(true))
+      } else {
         self.steps.accept(AppStep.localAuthIsComplete)
-      case .disable:
-        if
-          case let LocalAuthRequest.disable(resultHandler) = localAuthRequest,
-          let resultHandler = resultHandler
-        {
+        return .empty()
+      }
+
+    case .biometricAuthDidFinish(let isSuccess):
+      switch self.localAuthRequest {
+      case .authenticate(let resultHandler):
+        if isSuccess {
+          do {
+            try resultHandler(nil)
+          } catch {
+            os_log(.error, "\(error)")
+          }
+          self.steps.accept(AppStep.localAuthIsComplete)
+        }
+        
+      case .askCurrent(let resultHandler):
+        if isSuccess {
+          self.steps.accept(AppStep.localAuthIsRequired(.askNew(resultHandler)))
+        }
+
+      case .askNew: // no bioauth
+        break
+
+      case .confirmNew(_, let resultHandler):
+        if isSuccess {
+          do {
+            try resultHandler(nil)
+          } catch {
+            os_log(.error, "\(error)")
+          }
+        } else {
+          UserInfoStorage.isBiometricAuthEnabled = false
+        }
+        self.steps.accept(AppStep.localAuthIsComplete)
+
+      case .disable(let resultHandler):
+        if isSuccess {
           do {
             try resultHandler(nil)
             self.steps.accept(AppStep.localAuthIsComplete)
@@ -130,10 +170,6 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
             os_log(.error, "\(error)")
           }
         }
-      case .askCurrent:
-        self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
-      default:
-        break
       }
       return .empty()
     }
@@ -182,10 +218,7 @@ private extension LocalAuthViewReactor {
   /// 현재 암호를 묻는 입력이 완료됐을 때
   func handleAuthenticateInput(with key: String) -> Observable<Mutation> {
     if self.validateCurrentInput(key) { // 맞다면 dismiss
-      if
-        case let LocalAuthRequest.authenticate(resultHandler) = self.localAuthRequest,
-        let resultHandler = resultHandler
-      {
+      if case let LocalAuthRequest.authenticate(resultHandler) = self.localAuthRequest {
         do {
           try resultHandler(nil)
         } catch {
@@ -237,10 +270,7 @@ private extension LocalAuthViewReactor {
     else { return .empty() }
 
     if key == targetPassword {
-      if
-        case let LocalAuthRequest.confirmNew(_, resultHandler) = self.localAuthRequest,
-        let resultHandler = resultHandler
-      {
+      if case let LocalAuthRequest.confirmNew(_, resultHandler) = self.localAuthRequest {
         do {
           try resultHandler(keyData)
         } catch {
@@ -249,10 +279,15 @@ private extension LocalAuthViewReactor {
       }
 
       // 생체 인증 Prompt
-      return .concat([
-        .just(.resetInput),
-        .just(.pulseBiometricAuthPrompt(true))
-      ])
+      if UserInfoStorage.isBiometricAuthEnabled {
+        self.steps.accept(AppStep.localAuthIsComplete)
+        return .just(.resetInput)
+      } else {
+        return .concat([
+          .just(.resetInput),
+          .just(.pulseBiometricAuthPrompt(true))
+        ])
+      }
     } else {
       HapticManager.haptic(style: .heavy)
       return .concat([
@@ -265,10 +300,7 @@ private extension LocalAuthViewReactor {
   /// 암호를 제거할 경우 입력이 완료됐을 때
   func handleDisable(with key: String) -> Observable<Mutation> {
     if self.validateCurrentInput(key) {
-      if
-        case let LocalAuthRequest.disable(resultHandler) = self.localAuthRequest,
-        let resultHandler = resultHandler
-      {
+      if case let LocalAuthRequest.disable(resultHandler) = self.localAuthRequest {
         do {
           try resultHandler(nil)
         } catch {

@@ -265,10 +265,11 @@ private extension LocalAuthViewController {
     self.biometricAuth.handleBiometricAuth(
       target: self,
       onSuccess: { [weak self] in
-        guard let reactor = self?.reactor else { return }
-        reactor.action.onNext(.biometricAuthDidSucceed)
+        self?.handleBiometricAuthResult(true)
       },
-      onFailure: nil
+      onFailure: { [weak self] in
+        self?.handleBiometricAuthResult(false)
+      }
     )
   }
 
@@ -281,6 +282,11 @@ private extension LocalAuthViewController {
     DispatchQueue.main.async {
       self.present(popup, animated: false)
     }
+  }
+
+  func handleBiometricAuthResult(_ isSucceed: Bool) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.biometricAuthDidFinish(isSucceed))
   }
 }
 
