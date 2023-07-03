@@ -9,16 +9,16 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class FriendManagementViewReactor: Reactor, Stepper {
+public final class FriendManagementViewReactor: Reactor, Stepper {
+
+  public typealias Action = NoAction
   
-  typealias Action = NoAction
-  
-  struct State {
+  public struct State {
     
   }
   
   // MARK: - Properties
   
-  var steps = PublishRelay<Step>()
-  var initialState: State = State()
+  public var steps = PublishRelay<Step>()
+  public var initialState: State = State()
 }

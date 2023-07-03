@@ -90,7 +90,7 @@ public final class AuthNewPasswordViewController: BaseViewController, View {
     // Action
     self.newPasswordTextField.rx.text
       .orEmpty
-      .map { Reactor.Action.passwordTextFieldDidUpdate($0) }
+      .map { Reactor.Action.newPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -103,7 +103,7 @@ public final class AuthNewPasswordViewController: BaseViewController, View {
 
     self.pwValidateTextField.rx.text
       .orEmpty
-      .map { Reactor.Action.confirmPasswordTextFieldDidUpdate($0) }
+      .map { Reactor.Action.confirmNewPasswordTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 

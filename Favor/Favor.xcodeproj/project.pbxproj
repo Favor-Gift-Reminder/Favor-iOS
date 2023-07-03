@@ -35,6 +35,7 @@
 		2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75A29F80B63003342CA /* FriendListSection.swift */; };
 		2E3FA75E29F80D3C003342CA /* FriendListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75D29F80D3C003342CA /* FriendListCell.swift */; };
 		2E45690C2A47584E00DFAEA4 /* AuthTermSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E45690B2A47584E00DFAEA4 /* AuthTermSection.swift */; };
+		2E506C552A4D4B0100C59730 /* SettingsNewPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E506C542A4D4B0100C59730 /* SettingsNewPasswordVC.swift */; };
 		2E55501F2A27A5AE00E6AB26 /* Composer in Frameworks */ = {isa = PBXBuildFile; productRef = 2E55501E2A27A5AE00E6AB26 /* Composer */; };
 		2E59BB0B2A28C92500A9AF9F /* GiftManagementVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E59BB0A2A28C92500A9AF9F /* GiftManagementVC.swift */; };
 		2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */; };
@@ -63,7 +64,16 @@
 		2E72EAA22A3ACDB40088587A /* SearchEmotionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E72EAA12A3ACDB40088587A /* SearchEmotionVC.swift */; };
 		2E72EAA62A3ACE960088587A /* BaseSearchTagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E72EAA52A3ACE960088587A /* BaseSearchTagVC.swift */; };
 		2E730C6A29BA31F4003668D9 /* FavorNetworkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E730C6929BA31F4003668D9 /* FavorNetworkKit */; };
+		2E7330972A52D7DB009682D2 /* BasePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330912A52D7DA009682D2 /* BasePopup.swift */; };
+		2E7330982A52D7DB009682D2 /* NewAlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */; };
+		2E7330992A52D7DB009682D2 /* NewLocalAuthPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */; };
+		2E73309A2A52D7DB009682D2 /* BiometricAuthPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */; };
+		2E73309B2A52D7DB009682D2 /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330952A52D7DA009682D2 /* ReminderDatePopup.swift */; };
+		2E73309C2A52D7DB009682D2 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330962A52D7DB009682D2 /* AlertPopup.swift */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
+		2E79754D2A4E756D0083773B /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E79754C2A4E756D0083773B /* DeviceKit */; };
+		2E7975512A4FC5A00083773B /* SettingsAuthInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7975502A4FC5A00083773B /* SettingsAuthInfoView.swift */; };
+		2E7975532A4FE56F0083773B /* SettingsRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7975522A4FE56F0083773B /* SettingsRenderer.swift */; };
 		2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309B295D7C4300BAC43D /* AppDelegate.swift */; };
 		2E7C309E295D7C4300BAC43D /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */; };
 		2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E7C30A4295D7C4500BAC43D /* Assets.xcassets */; };
@@ -121,6 +131,8 @@
 		2EC52CC02A4213E10072998E /* SocialAuthButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC52CBF2A4213E10072998E /* SocialAuthButton.swift */; };
 		2EC6E11D29BC65BF006FBC11 /* HomeFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */; };
 		2EC6E11F29BC6656006FBC11 /* ReminderFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC6E11E29BC6656006FBC11 /* ReminderFlow.swift */; };
+		2EC826A22A4CD947003FA12B /* SettingsAuthInfoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC826A12A4CD947003FA12B /* SettingsAuthInfoVC.swift */; };
+		2EC826A42A4CD975003FA12B /* SettingsAuthInfoViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC826A32A4CD975003FA12B /* SettingsAuthInfoViewReactor.swift */; };
 		2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DA29967F1900C8C47F /* MyPageViewReactor.swift */; };
 		2EC939DD299684C000C8C47F /* MyPageFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939DC299684C000C8C47F /* MyPageFlow.swift */; };
 		2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC939E02998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift */; };
@@ -137,6 +149,8 @@
 		2ED17A6A2A40A4AD00806A9F /* GiftFriendsBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED17A692A40A4AD00806A9F /* GiftFriendsBottomSheet.swift */; };
 		2ED22DAF296FF4A900ED6221 /* AuthSignInVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DAE296FF4A900ED6221 /* AuthSignInVC.swift */; };
 		2ED22DB1296FF4D100ED6221 /* AuthSignInViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED22DB0296FF4D100ED6221 /* AuthSignInViewReactor.swift */; };
+		2ED2726A2A4D6FAE00E3E7FC /* LocalAuthVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED272692A4D6FAE00E3E7FC /* LocalAuthVC.swift */; };
+		2ED2726C2A4D787000E3E7FC /* LocalAuthViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED2726B2A4D787000E3E7FC /* LocalAuthViewReactor.swift */; };
 		2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B429B0F6EB001963D0 /* Terms.swift */; };
 		2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326B629B0F98C001963D0 /* TermAcceptAllView.swift */; };
 		2ED326BB29B2F765001963D0 /* AuthFindPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED326BA29B2F765001963D0 /* AuthFindPasswordVC.swift */; };
@@ -173,14 +187,24 @@
 		2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */; };
 		2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */; };
 		2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */; };
+		2EEEF7112A5172B800D48038 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 2EEEF7102A5172B800D48038 /* Settings.bundle */; };
 		2EEFD5B729BB7B4300BA46BA /* FavorKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2EEFD5B629BB7B4300BA46BA /* FavorKit */; };
 		2EF1585F29E3CDC100D199DF /* FavorTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */; };
+		2EF8C4942A4C72F3003E67A8 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */; };
+		2EF8C4962A4C734E003E67A8 /* SettingsViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4952A4C734E003E67A8 /* SettingsViewReactor.swift */; };
+		2EF8C4982A4C7900003E67A8 /* SettingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4972A4C7900003E67A8 /* SettingsSection.swift */; };
+		2EF8C49A2A4C79BF003E67A8 /* SettingsFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C4992A4C79BF003E67A8 /* SettingsFlow.swift */; };
+		2EF8C4A02A4C9E96003E67A8 /* SettingsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EF8C49F2A4C9E96003E67A8 /* SettingsHeaderView.swift */; };
 		2EFDA0F42A3AA83B009A11D7 /* SearchCategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F32A3AA83B009A11D7 /* SearchCategoryVC.swift */; };
 		2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */; };
 		2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */; };
 		2EFDE6792A4BF8BC007A808F /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */; };
 		E51A21F42A51C7AC003E676F /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A21F12A51C7AC003E676F /* AlertPopup.swift */; };
 		E51A21F52A51C7AC003E676F /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */; };
+		2EFF672C2A5058CA0097A664 /* SettingsNaviagatableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672B2A5058CA0097A664 /* SettingsNaviagatableCell.swift */; };
+		2EFF672E2A5058E50097A664 /* BaseSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */; };
+		2EFF67302A5059450097A664 /* SettingsTappableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */; };
+		2EFF67322A5059570097A664 /* SettingsSwitchableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */; };
 		E51F55842A4036650002EADB /* FavorTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51F55832A4036650002EADB /* FavorTabBar.swift */; };
 		E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */; };
 		E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */; };
@@ -255,6 +279,7 @@
 		2E3FA75A29F80B63003342CA /* FriendListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListSection.swift; sourceTree = "<group>"; };
 		2E3FA75D29F80D3C003342CA /* FriendListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListCell.swift; sourceTree = "<group>"; };
 		2E45690B2A47584E00DFAEA4 /* AuthTermSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTermSection.swift; sourceTree = "<group>"; };
+		2E506C542A4D4B0100C59730 /* SettingsNewPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNewPasswordVC.swift; sourceTree = "<group>"; };
 		2E59BB0A2A28C92500A9AF9F /* GiftManagementVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GiftManagementVC.swift; path = Favor/Sources/Scenes/GiftManagement/VIewControllers/GiftManagementVC.swift; sourceTree = SOURCE_ROOT; };
 		2E5D8A8129EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSectionBackgroundView.swift; sourceTree = "<group>"; };
 		2E634E262A172D0200DD51ED /* BaseAnniversaryListViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseAnniversaryListViewReactor.swift; sourceTree = "<group>"; };
@@ -279,8 +304,16 @@
 		2E72EAA12A3ACDB40088587A /* SearchEmotionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEmotionVC.swift; sourceTree = "<group>"; };
 		2E72EAA52A3ACE960088587A /* BaseSearchTagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSearchTagVC.swift; sourceTree = "<group>"; };
 		2E730C6829BA311C003668D9 /* FavorNetworkKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorNetworkKit; sourceTree = "<group>"; };
+		2E7330912A52D7DA009682D2 /* BasePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePopup.swift; sourceTree = "<group>"; };
+		2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewAlertPopup.swift; sourceTree = "<group>"; };
+		2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewLocalAuthPopup.swift; sourceTree = "<group>"; };
+		2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthPopup.swift; sourceTree = "<group>"; };
+		2E7330952A52D7DA009682D2 /* ReminderDatePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
+		2E7330962A52D7DB009682D2 /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
 		2E76F58429601CD6002FF001 /* SplashVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVC.swift; sourceTree = "<group>"; };
 		2E7942DB2A3037A2008132E7 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		2E7975502A4FC5A00083773B /* SettingsAuthInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAuthInfoView.swift; sourceTree = "<group>"; };
+		2E7975522A4FE56F0083773B /* SettingsRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRenderer.swift; sourceTree = "<group>"; };
 		2E7C3098295D7C4300BAC43D /* Favor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Favor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E7C309B295D7C4300BAC43D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2E7C309D295D7C4300BAC43D /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -333,6 +366,8 @@
 		2EC52CBF2A4213E10072998E /* SocialAuthButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialAuthButton.swift; sourceTree = "<group>"; };
 		2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeFlow.swift; sourceTree = "<group>"; };
 		2EC6E11E29BC6656006FBC11 /* ReminderFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderFlow.swift; sourceTree = "<group>"; };
+		2EC826A12A4CD947003FA12B /* SettingsAuthInfoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAuthInfoVC.swift; sourceTree = "<group>"; };
+		2EC826A32A4CD975003FA12B /* SettingsAuthInfoViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAuthInfoViewReactor.swift; sourceTree = "<group>"; };
 		2EC939DA29967F1900C8C47F /* MyPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewReactor.swift; sourceTree = "<group>"; };
 		2EC939DC299684C000C8C47F /* MyPageFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageFlow.swift; sourceTree = "<group>"; };
 		2EC939DE2998B80200C8C47F /* ProfileSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSection.swift; sourceTree = "<group>"; };
@@ -350,6 +385,8 @@
 		2ED17A692A40A4AD00806A9F /* GiftFriendsBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftFriendsBottomSheet.swift; sourceTree = "<group>"; };
 		2ED22DAE296FF4A900ED6221 /* AuthSignInVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSignInVC.swift; sourceTree = "<group>"; };
 		2ED22DB0296FF4D100ED6221 /* AuthSignInViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSignInViewReactor.swift; sourceTree = "<group>"; };
+		2ED272692A4D6FAE00E3E7FC /* LocalAuthVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthVC.swift; sourceTree = "<group>"; };
+		2ED2726B2A4D787000E3E7FC /* LocalAuthViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAuthViewReactor.swift; sourceTree = "<group>"; };
 		2ED326B429B0F6EB001963D0 /* Terms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Terms.swift; sourceTree = "<group>"; };
 		2ED326B629B0F98C001963D0 /* TermAcceptAllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermAcceptAllView.swift; sourceTree = "<group>"; };
 		2ED326BA29B2F765001963D0 /* AuthFindPasswordVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFindPasswordVC.swift; sourceTree = "<group>"; };
@@ -387,12 +424,22 @@
 		2EEC97D229D9881C00AACF38 /* ReminderEditVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditVC.swift; sourceTree = "<group>"; };
 		2EEC97D429D9885C00AACF38 /* ReminderEditViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderEditViewReactor.swift; sourceTree = "<group>"; };
 		2EEC97D629D9909800AACF38 /* BaseReminderVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseReminderVC.swift; sourceTree = "<group>"; };
+		2EEEF7102A5172B800D48038 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		2EEFD5B529BB7B3900BA46BA /* FavorKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorKit; sourceTree = "<group>"; };
 		2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavorTabBarController.swift; sourceTree = "<group>"; };
+		2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		2EF8C4952A4C734E003E67A8 /* SettingsViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewReactor.swift; sourceTree = "<group>"; };
+		2EF8C4972A4C7900003E67A8 /* SettingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSection.swift; sourceTree = "<group>"; };
+		2EF8C4992A4C79BF003E67A8 /* SettingsFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFlow.swift; sourceTree = "<group>"; };
+		2EF8C49F2A4C9E96003E67A8 /* SettingsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsHeaderView.swift; sourceTree = "<group>"; };
 		2EFDA0F32A3AA83B009A11D7 /* SearchCategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCategoryVC.swift; sourceTree = "<group>"; };
 		2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTagViewReactor.swift; sourceTree = "<group>"; };
 		E51A21F12A51C7AC003E676F /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
 		E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
+		2EFF672B2A5058CA0097A664 /* SettingsNaviagatableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsNaviagatableCell.swift; sourceTree = "<group>"; };
+		2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsCell.swift; sourceTree = "<group>"; };
+		2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTappableCell.swift; sourceTree = "<group>"; };
+		2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchableCell.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
 		E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirendPageVC.swift; sourceTree = "<group>"; };
 		E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageViewReactor.swift; sourceTree = "<group>"; };
@@ -442,6 +489,7 @@
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
 				2E55501F2A27A5AE00E6AB26 /* Composer in Frameworks */,
 				2E63538B295D900F00B23A14 /* RxMoya in Frameworks */,
+				2E79754D2A4E756D0083773B /* DeviceKit in Frameworks */,
 				2EFDE6792A4BF8BC007A808F /* RxKakaoSDKUser in Frameworks */,
 				2EE3BA8229AB60A4004FDCC9 /* Realm in Frameworks */,
 				2E635393295D906A00B23A14 /* RxDataSources in Frameworks */,
@@ -738,6 +786,7 @@
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
+				2EEEF7102A5172B800D48038 /* Settings.bundle */,
 				2E6E28EC2A25855D00E25DB6 /* ImageViewer */,
 				2EEFD5B529BB7B3900BA46BA /* FavorKit */,
 				2E730C6829BA311C003668D9 /* FavorNetworkKit */,
@@ -886,20 +935,22 @@
 				2E634E2B2A175D9800DD51ED /* Anniversary */,
 				2E9B4CBB2A1282F900C7E31E /* AnniversaryList */,
 				2EBB0152295E8CCA0072D158 /* Application */,
+				2E1C5659296C24AE0067FC78 /* Auth */,
 				E5E423F229DC0D3400A6B48D /* BottomSheet */,
 				2EF1585929E3CC3C00D199DF /* Dashboard */,
-				2E76F58629601EC3002FF001 /* Splash */,
-				2E1C5659296C24AE0067FC78 /* Auth */,
+				E593C8232A176AF800711C0F /* Friend */,
+				2E634E282A17566B00DD51ED /* FriendList */,
 				2EC358DC2A1E778C000313BB /* Gift */,
 				2EE07ED4296E8DFF00048A3C /* GiftManagement */,
 				2EE07EB9296E8CC700048A3C /* Home */,
-				2EE07E9F296C5F1D00048A3C /* Search */,
-				2E634E282A17566B00DD51ED /* FriendList */,
-				E593C8232A176AF800711C0F /* Friend */,
+				2ED272652A4D6F6E00E3E7FC /* LocalAuth */,
+				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				E5FB769A2A21C0FE00BF3197 /* Popup */,
 				2EE07EBD296E8D2300048A3C /* Profile */,
-				2E1C565F296C28BF0067FC78 /* Onboarding */,
 				2EE07EAA296E7BC100048A3C /* Reminder */,
+				2EE07E9F296C5F1D00048A3C /* Search */,
+				2EF8C48F2A4C72BE003E67A8 /* Settings */,
+				2E76F58629601EC3002FF001 /* Splash */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1176,6 +1227,31 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		2ED272652A4D6F6E00E3E7FC /* LocalAuth */ = {
+			isa = PBXGroup;
+			children = (
+				2ED272682A4D6F9E00E3E7FC /* Reactors */,
+				2ED272662A4D6F9000E3E7FC /* ViewControllers */,
+			);
+			path = LocalAuth;
+			sourceTree = "<group>";
+		};
+		2ED272662A4D6F9000E3E7FC /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2ED272692A4D6FAE00E3E7FC /* LocalAuthVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2ED272682A4D6F9E00E3E7FC /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2ED2726B2A4D787000E3E7FC /* LocalAuthViewReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
 		2EE07E9F296C5F1D00048A3C /* Search */ = {
 			isa = PBXGroup;
 			children = (
@@ -1369,6 +1445,58 @@
 			path = Dashboard;
 			sourceTree = "<group>";
 		};
+		2EF8C48F2A4C72BE003E67A8 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C4972A4C7900003E67A8 /* SettingsSection.swift */,
+				2E7975522A4FE56F0083773B /* SettingsRenderer.swift */,
+				2EF8C4922A4C72E7003E67A8 /* Reactors */,
+				2EF8C4912A4C72E2003E67A8 /* Views */,
+				2EF8C4902A4C72DB003E67A8 /* ViewControllers */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		2EF8C4902A4C72DB003E67A8 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C4932A4C72F3003E67A8 /* SettingsVC.swift */,
+				2EC826A12A4CD947003FA12B /* SettingsAuthInfoVC.swift */,
+				2E506C542A4D4B0100C59730 /* SettingsNewPasswordVC.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2EF8C4912A4C72E2003E67A8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2EFF67332A505D0F0097A664 /* Cells */,
+				2E7975502A4FC5A00083773B /* SettingsAuthInfoView.swift */,
+				2EF8C49F2A4C9E96003E67A8 /* SettingsHeaderView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		2EF8C4922A4C72E7003E67A8 /* Reactors */ = {
+			isa = PBXGroup;
+			children = (
+				2EF8C4952A4C734E003E67A8 /* SettingsViewReactor.swift */,
+				2EC826A32A4CD975003FA12B /* SettingsAuthInfoViewReactor.swift */,
+			);
+			path = Reactors;
+			sourceTree = "<group>";
+		};
+		2EFF67332A505D0F0097A664 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */,
+				2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */,
+				2EFF672B2A5058CA0097A664 /* SettingsNaviagatableCell.swift */,
+				2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 		E517803729A8E88A0011C220 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
@@ -1436,36 +1564,35 @@
 			children = (
 				E51A21F12A51C7AC003E676F /* AlertPopup.swift */,
 				E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */,
+				2E7330912A52D7DA009682D2 /* BasePopup.swift */,
+				2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */,
+				2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */,
+				2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */,
+				2E7330952A52D7DA009682D2 /* ReminderDatePopup.swift */,
 			);
 			path = ViewControllers;
-			sourceTree = "<group>";
-		};
-		E53191C62A4EADC0000DA2D7 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		E55CF7B8298A705F002940D1 /* Flows */ = {
 			isa = PBXGroup;
 			children = (
+				2E9B4CBF2A12831A00C7E31E /* AnniversaryFlow.swift */,
+				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
 				E5CFF72A298404F700E11D9A /* AppStep.swift */,
 				2EAC60A42A49F68B0047A572 /* AppStepper.swift */,
-				2EE6B3982983DF3900CDBC81 /* AppFlow.swift */,
 				E55CF7B9298A743B002940D1 /* AuthFlow.swift */,
 				E55CF7C5298B8EBB002940D1 /* DashboardFlow.swift */,
-				E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */,
-				2EA384B92992371C0081499C /* SearchFlow.swift */,
-				2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */,
-				2EC6E11E29BC6656006FBC11 /* ReminderFlow.swift */,
-				2EC939DC299684C000C8C47F /* MyPageFlow.swift */,
-				E523F64D2A24DC04007A6317 /* FriendPageFlow.swift */,
 				E59AB0992A17858C00F0AC7D /* FriendFlow.swift */,
 				2E9B4CB92A1277BC00C7E31E /* FriendListFlow.swift */,
-				E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */,
+				E523F64D2A24DC04007A6317 /* FriendPageFlow.swift */,
 				2E1DBE462A1E6E4100C9BC30 /* GiftFlow.swift */,
-				2E9B4CBF2A12831A00C7E31E /* AnniversaryFlow.swift */,
+				2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */,
+				2EC939DC299684C000C8C47F /* MyPageFlow.swift */,
+				E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */,
+				E55CF7C0298B5631002940D1 /* OnboardingFlow.swift */,
+				2EC6E11E29BC6656006FBC11 /* ReminderFlow.swift */,
+				2EA384B92992371C0081499C /* SearchFlow.swift */,
+				2EF8C4992A4C79BF003E67A8 /* SettingsFlow.swift */,
 			);
 			path = Flows;
 			sourceTree = "<group>";
@@ -1498,6 +1625,7 @@
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				2E7330962A52D7DB009682D2 /* AlertPopup.swift */,
 				2E68C70C2A394C9800B7ACD0 /* .gitkeep */,
 			);
 			path = Deprecated;
@@ -1515,7 +1643,6 @@
 		E5FB769A2A21C0FE00BF3197 /* Popup */ = {
 			isa = PBXGroup;
 			children = (
-				E53191C62A4EADC0000DA2D7 /* Views */,
 				E53191C52A4EADBA000DA2D7 /* ViewControllers */,
 			);
 			path = Popup;
@@ -1559,6 +1686,7 @@
 				2EAC60A72A4A018F0047A572 /* Hero */,
 				2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */,
 				2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */,
+				2E79754C2A4E756D0083773B /* DeviceKit */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1625,6 +1753,7 @@
 				2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */,
 				2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */,
 				2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
+				2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -1645,6 +1774,7 @@
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E68C70D2A394C9800B7ACD0 /* .gitkeep in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
+				2EEEF7112A5172B800D48038 /* Settings.bundle in Resources */,
 				2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1701,6 +1831,7 @@
 				2E8C663F29BB95C400006CBF /* AuthSignUpVC.swift in Sources */,
 				2E1DBE472A1E6E4100C9BC30 /* GiftFlow.swift in Sources */,
 				2EE1537329E5A6BE0023FEA5 /* SearchRecentCell.swift in Sources */,
+				2ED2726C2A4D787000E3E7FC /* LocalAuthViewReactor.swift in Sources */,
 				2EEC73482A14F808007A29A5 /* AnniversaryListModifyingVC.swift in Sources */,
 				2ECB681429A9CAC200F4C1F3 /* AppFlow.swift in Sources */,
 				2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */,
@@ -1710,6 +1841,8 @@
 				2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */,
 				2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */,
 				2E72EAA22A3ACDB40088587A /* SearchEmotionVC.swift in Sources */,
+				2E73309B2A52D7DB009682D2 /* ReminderDatePopup.swift in Sources */,
+				2EFF672E2A5058E50097A664 /* BaseSettingsCell.swift in Sources */,
 				2E1C81BA2A20AA0D00D4128E /* GiftDetailMemoCell.swift in Sources */,
 				2E1C81B62A1F12B600D4128E /* GiftDetailTagsCell.swift in Sources */,
 				2ED8CB4729B0C30400E7B547 /* AuthTermCell.swift in Sources */,
@@ -1726,6 +1859,7 @@
 				2ED22DB1296FF4D100ED6221 /* AuthSignInViewReactor.swift in Sources */,
 				2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */,
 				2E946FE32A2599CA00D0EED8 /* GiftShareViewReactor.swift in Sources */,
+				2E7330992A52D7DB009682D2 /* NewLocalAuthPopup.swift in Sources */,
 				2E1C81B42A1F008100D4128E /* GiftDetailPageFooterView.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */,
@@ -1743,6 +1877,7 @@
 				E5B61F3529B37F260031046C /* (null) in Sources */,
 				2EA384B6299234770081499C /* SearchVC.swift in Sources */,
 				2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */,
+				2EF8C4962A4C734E003E67A8 /* SettingsViewReactor.swift in Sources */,
 				2E87B8DA2A0BCE3200570386 /* FriendListModifyingViewReactor.swift in Sources */,
 				2E9B4CC62A12855800C7E31E /* AnniversaryListCell.swift in Sources */,
 				E59AB09A2A17858C00F0AC7D /* FriendFlow.swift in Sources */,
@@ -1761,6 +1896,7 @@
 				2E217C082A2F790700C91A46 /* RecentSearch.swift in Sources */,
 				2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */,
 				2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */,
+				2EF8C4A02A4C9E96003E67A8 /* SettingsHeaderView.swift in Sources */,
 				2EE07EE9296EDE9700048A3C /* AuthEntryViewReactor.swift in Sources */,
 				2ED17A6A2A40A4AD00806A9F /* GiftFriendsBottomSheet.swift in Sources */,
 				2E7065482A15FA6F007B1C94 /* AnniversaryManagementVC.swift in Sources */,
@@ -1768,6 +1904,7 @@
 				2E8FFDE02A3AAAFD00C7D254 /* SearchTagSection.swift in Sources */,
 				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */,
+				2E7330972A52D7DB009682D2 /* BasePopup.swift in Sources */,
 				2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */,
 				2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
@@ -1775,9 +1912,12 @@
 				2EC358E12A1E77AC000313BB /* GiftDetailVC.swift in Sources */,
 				2EE0D58329751EEF0064E932 /* AuthSignUpViewReactor.swift in Sources */,
 				2EC939EF299BB10D00C8C47F /* ProfileSectionHeaderReactor.swift in Sources */,
+				2EFF67322A5059570097A664 /* SettingsSwitchableCell.swift in Sources */,
+				2E7975532A4FE56F0083773B /* SettingsRenderer.swift in Sources */,
 				2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */,
 				2E6C90B129A607BD00AF963A /* ProfileFriendCell.swift in Sources */,
 				2E1C81B82A209FAD00D4128E /* GiftDetailTitleCell.swift in Sources */,
+				2E73309C2A52D7DB009682D2 /* AlertPopup.swift in Sources */,
 				2E87B8E22A0CA06900570386 /* BaseFriendListViewReactor.swift in Sources */,
 				2EC939DB29967F1900C8C47F /* MyPageViewReactor.swift in Sources */,
 				E523F64A2A2357CD007A6317 /* ProfileMemoCell.swift in Sources */,
@@ -1799,7 +1939,9 @@
 				2E45690C2A47584E00DFAEA4 /* AuthTermSection.swift in Sources */,
 				2EE07ECD296E8D9A00048A3C /* SettingVC.swift in Sources */,
 				E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */,
+				2EFF67302A5059450097A664 /* SettingsTappableCell.swift in Sources */,
 				E524C19429EA4014004CCC40 /* NewGiftFriendCell.swift in Sources */,
+				2EF8C4942A4C72F3003E67A8 /* SettingsVC.swift in Sources */,
 				2EE07EE7296EDE5100048A3C /* AuthEntryVC.swift in Sources */,
 				E59AC13A29EEEB6E00FCE0C0 /* NewGiftFriendFooterView.swift in Sources */,
 				2E00562329A91EEE006CF302 /* NewAnniversaryHeaderView.swift in Sources */,
@@ -1809,6 +1951,7 @@
 				2EDBB98B2A40B137000CF8AF /* GiftFriendsBottomSheetCell.swift in Sources */,
 				2EA3849D298D7C680081499C /* HomeTimelineCell.swift in Sources */,
 				2E6C90BE29A623E000AF963A /* EditMyPageViewReactor.swift in Sources */,
+				2E73309A2A52D7DB009682D2 /* BiometricAuthPopup.swift in Sources */,
 				E524C18929E923B9004CCC40 /* NewGiftFriendVC.swift in Sources */,
 				2E9C1B7029E9B6AF008122D7 /* BaseSearchVC.swift in Sources */,
 				2E3FA75E29F80D3C003342CA /* FriendListCell.swift in Sources */,
@@ -1818,16 +1961,22 @@
 				E55CF7C1298B5631002940D1 /* OnboardingFlow.swift in Sources */,
 				E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */,
 				2EEC97D729D9909800AACF38 /* BaseReminderVC.swift in Sources */,
+				2EF8C4982A4C7900003E67A8 /* SettingsSection.swift in Sources */,
 				2EC939E52998C68900C8C47F /* ProfileFavorCell.swift in Sources */,
 				2E7C309C295D7C4300BAC43D /* AppDelegate.swift in Sources */,
 				2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */,
 				E593C8252A176B4500711C0F /* FriendManagementVC.swift in Sources */,
+				2EC826A22A4CD947003FA12B /* SettingsAuthInfoVC.swift in Sources */,
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
+				2ED2726A2A4D6FAE00E3E7FC /* LocalAuthVC.swift in Sources */,
+				2E7330982A52D7DB009682D2 /* NewAlertPopup.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
+				2EC826A42A4CD975003FA12B /* SettingsAuthInfoViewReactor.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2E9B4CC22A12841C00C7E31E /* AnniversaryListVC.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* AuthNewPasswordVC.swift in Sources */,
 				2E6E28DC2A24603100E25DB6 /* GiftManagementCategoryViewCell.swift in Sources */,
+				2E7975512A4FC5A00083773B /* SettingsAuthInfoView.swift in Sources */,
 				2EC52CC02A4213E10072998E /* SocialAuthButton.swift in Sources */,
 				2EC939F5299CF6C400C8C47F /* ProfileFavorCellReactor.swift in Sources */,
 				2E9B4CBA2A1277BC00C7E31E /* FriendListFlow.swift in Sources */,
@@ -1835,10 +1984,12 @@
 				2E87B8D82A0BCCD400570386 /* FriendListModifyingVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				2E59BB0B2A28C92500A9AF9F /* GiftManagementVC.swift in Sources */,
+				2E506C552A4D4B0100C59730 /* SettingsNewPasswordVC.swift in Sources */,
 				2EB3E71929D49008008D10A0 /* ReminderHeaderView.swift in Sources */,
 				2EE0D587297524880064E932 /* AuthSetProfileViewReactor.swift in Sources */,
 				2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */,
 				E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */,
+				2EF8C49A2A4C79BF003E67A8 /* SettingsFlow.swift in Sources */,
 				2EE0D585297524660064E932 /* AuthSetProfileVC.swift in Sources */,
 				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
 				2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */,
@@ -1863,6 +2014,7 @@
 				E523F64C2A249F3B007A6317 /* ProfileAnniversarySetupHelperCell.swift in Sources */,
 				E583C58F2A1E619F00DC219A /* AnniversaryBottomSheetView.swift in Sources */,
 				E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */,
+				2EFF672C2A5058CA0097A664 /* SettingsNaviagatableCell.swift in Sources */,
 				2E634E312A18E24F00DD51ED /* AnniversaryListCellModel.swift in Sources */,
 				2E946FE52A25AE2900D0EED8 /* GiftShareView.swift in Sources */,
 				2E9B4CC82A1285E000C7E31E /* AnniversaryListSection.swift in Sources */,
@@ -2030,11 +2182,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = beta;
 				DEVELOPMENT_TEAM = XW996HTK32;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "페이버";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2045,7 +2198,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LIBTOOLFLAGS = "-WLinkingC true -XCBuildForPre true -XCExpApple true";
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2054,6 +2207,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
@@ -2070,11 +2224,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = beta;
 				DEVELOPMENT_TEAM = XW996HTK32;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "페이버";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -2085,7 +2240,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LIBTOOLFLAGS = "-WLinkingC true -XCBuildForPre true -XCExpApple true";
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2094,6 +2249,7 @@
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_STRICT_CONCURRENCY = minimal;
 				SWIFT_VERSION = 5.0;
@@ -2197,6 +2353,14 @@
 		2E63538F295D906A00B23A14 /* XCRemoteSwiftPackageReference "RxDataSources" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxDataSources";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devicekit/DeviceKit.git";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.0.0;
@@ -2313,6 +2477,11 @@
 		2E730C6929BA31F4003668D9 /* FavorNetworkKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FavorNetworkKit;
+		};
+		2E79754C2A4E756D0083773B /* DeviceKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */;
+			productName = DeviceKit;
 		};
 		2E7C30B0295D8DA400BAC43D /* ReactorKit */ = {
 			isa = XCSwiftPackageProductDependency;

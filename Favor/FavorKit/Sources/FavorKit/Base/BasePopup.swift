@@ -1,6 +1,6 @@
 //
 //  BasePopup.swift
-//  
+//  Favor
 //
 //  Created by 김응철 on 2023/05/27.
 //
@@ -11,7 +11,8 @@ import SnapKit
 import Then
 
 open class BasePopup: BaseViewController {
-  
+
+  // MARK: - Constants  
   private enum Metric {
     static let containerViewWidth: CGFloat = 335.0
   }
@@ -49,7 +50,7 @@ open class BasePopup: BaseViewController {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - LifeCycle
+  // MARK: - Life Cycle
   
   override public func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
@@ -86,6 +87,7 @@ open class BasePopup: BaseViewController {
     self.containerView.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       self.containerViewBottomInset = make.bottom.equalToSuperview().inset(100.0).constraint
+      make.width.equalTo(Metric.containerViewWidth)
       make.height.equalTo(self.containerViewHeight)
     }
   }
@@ -105,7 +107,7 @@ open class BasePopup: BaseViewController {
   // MARK: - Functions
   
   /// dismiss(animated:) 대신 이 메서드를 불러서 종료시켜야 합니다.
-  public func dismissPopup() {
+  public func dismissPopup(_ completion: (() -> Void)? = nil) {
     UIView.animate(
       withDuration: 0.2,
       delay: 0,
@@ -114,7 +116,10 @@ open class BasePopup: BaseViewController {
         self.containerView.alpha = 0
         self.view.layoutIfNeeded()
       },
-      completion: { _ in self.dismiss(animated: false) }
+      completion: { _ in
+        self.dismiss(animated: false)
+        if let completion { completion() }
+      }
     )
   }
   

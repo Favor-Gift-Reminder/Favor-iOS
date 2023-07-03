@@ -10,11 +10,12 @@ import Foundation
 import FavorKit
 import RxFlow
 
-enum AppStep: Step {
+public enum AppStep: Step {
   case imagePickerIsRequired(PHPickerManager)
 
   // MARK: - Root
   case splashIsRequired
+  case splashIsComplete
 
   // MARK: - Onboarding
   case onboardingIsRequired
@@ -25,11 +26,16 @@ enum AppStep: Step {
   case findPasswordIsRequired
   case validateEmailCodeIsRequired(String)
   case newPasswordIsRequired
+  case newPasswordIsComplete
   case signUpIsRequired
   case signInIsRequired
   case setProfileIsRequired(User)
   case termIsRequired(User)
   case authIsComplete
+
+  // MARK: - Local Auth
+  case localAuthIsRequired(LocalAuthRequest)
+  case localAuthIsComplete
 
   // MARK: - Main
   case dashboardIsRequired
@@ -57,7 +63,6 @@ enum AppStep: Step {
   case myPageIsRequired
   case editMyPageIsRequired(User)
   case editMyPageIsComplete
-  case settingIsRequired
 
   // MARK: - FriendList
   case friendListIsRequired
@@ -88,6 +93,18 @@ enum AppStep: Step {
   case giftDetailPhotoIsRequired(Int, Int)
   case giftShareIsRequired(Gift)
 
+  // MARK: - Settings
+  case settingsIsRequired
+  case authInfoIsRequired // 로그인 정보
+  // 비밀번호 변경 (newPasswordIsRequired)
+  case appPrivacyIsRequired // 앱 잠금
+  case devTeamInfoIsRequired // 팀
+  case devTeamSupportIsRequired // 개발자 응원하기
+  case serviceUsageTermIsRequired // 서비스 이용약관
+  case privateInfoManagementTermIsRequired // 개인정보 처리방침
+  case openSourceUsageIsRequired // 오픈소스 라이선스
+  case wayBackToRootIsRequired
+
   // MARK: - BottomSheet
   case memoBottomSheetIsRequired(String?)
   case memoBottomSheetIsComplete(String?)
@@ -99,5 +116,7 @@ enum AppStep: Step {
   // MARK: - Popup
   case alertPopupIsRequired(AlertPopup.PopupType)
   case alertPopupIsComplete(isConfirmed: Bool)
-  
+
+  // MARK: - Placeholder
+  case doNothing
 }

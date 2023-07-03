@@ -20,7 +20,6 @@ public final class AppFlow: Flow {
   // MARK: - Properties
 
   public var root: Presentable { self.rootViewController }
-  private let keychain = KeychainManager()
 
   /// Used only for testFlow.
   private let rootViewController: FavorTabBarController
@@ -39,11 +38,23 @@ public final class AppFlow: Flow {
     case .splashIsRequired:
       return self.navigateToSplash()
 
+    case .splashIsComplete:
+      return self.popFromSplash()
+
     case .dashboardIsRequired:
       return self.popToDashboard()
 
     case .authIsRequired:
       return self.navigateToAuth()
+
+    case .localAuthIsRequired(let location):
+      return self.navigateToLocalAuth(request: location)
+
+    case .localAuthIsComplete:
+      return self.popToDashboard()
+
+    case .wayBackToRootIsRequired:
+      return self.navigateWayBackToRoot()
 
     default:
       return .none
@@ -55,9 +66,6 @@ public final class AppFlow: Flow {
 
 private extension AppFlow {
   func navigateToSplash() -> FlowContributors {
-    let homeFlow = HomeFlow()
-    let myPageFlow = MyPageFlow()
-
     let splashVC = SplashViewController()
     let splashReactor = SplashViewReactor()
     splashVC.reactor = splashReactor
@@ -67,37 +75,44 @@ private extension AppFlow {
       self.rootViewController.present(splashVC, animated: false)
     }
 
-    Flows.use(
-      homeFlow,
-      myPageFlow,
-      when: .created
-    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
-      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
-      self.rootViewController.setViewControllers(navigationControllers, animated: false)
-    }
-
-    return .multiple(flowContributors: [
+    let splashContributor: [FlowContributor] = [
       .contribute(
         withNextPresentable: splashVC,
         withNextStepper: splashReactor,
         allowStepWhenNotPresented: true
-      ),
-      .contribute(
-        withNextPresentable: homeFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
-      ),
-      .contribute(withNext: self.rootViewController),
-      .contribute(
-        withNextPresentable: myPageFlow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
       )
-    ])
+    ]
+
+    return .multiple(flowContributors: splashContributor + self.dashboardContributors())
   }
 
-  func popToDashboard() -> FlowContributors {
-    self.rootViewController.dismiss(animated: true)
+  func popFromSplash() -> FlowContributors {
+    typealias DescriptionMessage = LocalAuthViewReactor.DescriptionMessage
 
-    return .none
+    let localAuthVC = LocalAuthViewController()
+    localAuthVC.modalPresentationStyle = .overFullScreen
+    localAuthVC.titleString = "암호"
+    let resultHandler: ((Data?) -> Void) = { _ in }
+    let description = DescriptionMessage(description: "암호를 입력해주세요.")
+    let localAuthReactor = LocalAuthViewReactor(.authenticate(resultHandler), description: description)
+    localAuthVC.reactor = localAuthReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.dismiss(animated: false) {
+        if UserInfoStorage.isLocalAuthEnabled {
+          self.rootViewController.present(localAuthVC, animated: false)
+        }
+      }
+    }
+
+    if UserInfoStorage.isLocalAuthEnabled {
+      return .one(flowContributor: .contribute(
+        withNextPresentable: localAuthVC,
+        withNextStepper: localAuthReactor
+      ))
+    } else {
+      return .none
+    }
   }
 
   func navigateToAuth() -> FlowContributors {
@@ -116,5 +131,68 @@ private extension AppFlow {
         withSingleStep: AppStep.authIsRequired
       )
     ))
+  }
+
+  func navigateToLocalAuth(request: LocalAuthRequest) -> FlowContributors {
+    typealias DescriptionMessage = LocalAuthViewController.DescriptionMessage
+    let localAuthVC = LocalAuthViewController()
+    let description: DescriptionMessage
+    switch request {
+    case .authenticate:
+      localAuthVC.titleString = "암호"
+      description = DescriptionMessage(description: "암호를 입력해주세요.")
+    default:
+      description = DescriptionMessage()
+    }
+    let localAuthReactor = LocalAuthViewReactor(request, description: description)
+    localAuthVC.reactor = localAuthReactor
+
+    DispatchQueue.main.async {
+      self.rootViewController.present(localAuthVC, animated: false)
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: localAuthVC,
+      withNextStepper: localAuthReactor
+    ))
+  }
+
+  func popToDashboard() -> FlowContributors {
+    self.rootViewController.dismiss(animated: true)
+
+    return .none
+  }
+
+  func navigateWayBackToRoot() -> FlowContributors {
+    return .one(flowContributor: .forwardToCurrentFlow(withStep: AppStep.authIsRequired))
+  }
+}
+
+// MARK: - Contributors
+
+private extension AppFlow {
+  func dashboardContributors() -> [FlowContributor] {
+    let homeFlow = HomeFlow()
+    let myPageFlow = MyPageFlow()
+
+    Flows.use(
+      homeFlow,
+      myPageFlow,
+      when: .created
+    ) { [unowned self] (homeNC: BaseNavigationController, myPageNC: BaseNavigationController) in
+      let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
+      self.rootViewController.setViewControllers(navigationControllers, animated: false)
+    }
+
+    return [
+      .contribute(
+        withNextPresentable: homeFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
+      ),
+      .contribute(
+        withNextPresentable: myPageFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
+      )
+    ]
   }
 }
