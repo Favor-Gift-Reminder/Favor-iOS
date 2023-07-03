@@ -56,28 +56,6 @@ public final class LocalAuthViewController: BaseViewController, View {
         return "생체 인증 사용하기"
       }
     }
-    static var biometricFailTitle: String {
-      if device.isFaceIDCapable {
-        return "Face ID를 사용할 수 없습니다"
-      } else if device.isTouchIDCapable {
-        return "Touch ID를 사용할 수 없습니다"
-      } else {
-        return "생체 인증을 사용할 수 없습니다"
-      }
-    }
-    static var biometricFailDescription: String {
-      let biometric: String
-      if device.isFaceIDCapable {
-        biometric = "Face ID"
-      } else if device.isTouchIDCapable {
-        biometric = "Touch ID"
-      } else {
-        biometric = "생체 인증"
-      }
-      return "설정 > 페이버 에서 " + biometric + " 권한을 허용해주세요."
-    }
-    static let biometricFailCancel: String = "취소"
-    static let biometricFailSetting: String = "설정"
   }
 
   public struct DescriptionMessage: Equatable {
@@ -86,6 +64,8 @@ public final class LocalAuthViewController: BaseViewController, View {
   }
 
   // MARK: - Properties
+
+  private let biometricAuth = BiometricAuthManager()
 
   public var titleString: String? {
     didSet { self.titleLabel.text = self.titleString }
@@ -110,8 +90,6 @@ public final class LocalAuthViewController: BaseViewController, View {
       return nil
     }
   }
-
-  private let authContext = LAContext()
 
   // MARK: - UI Components
 
@@ -140,14 +118,13 @@ public final class LocalAuthViewController: BaseViewController, View {
     let numbers: [FavorNumberKeypadCellModel] = (1...9).map { .keyString(String($0)) }
 
     // Biometric
-    let isBiometricAuthEnabled = UserInfoStorage.isBiometricAuthEnabled ?? false
     let biometricImage: UIImage = self.biometricImage ?? UIImage()
     guard let location = reactor?.localAuthRequest else { return FavorNumberKeypad([]) }
     let biometricPad: FavorNumberKeypadCellModel
     switch location {
-    case .authenticate, .askCurrent:
+    case .authenticate, .askCurrent, .disable:
       biometricPad = {
-        isBiometricAuthEnabled ? .keyImage(biometricImage) : .emptyKey
+        UserInfoStorage.isBiometricAuthEnabled ? .keyImage(biometricImage) : .emptyKey
       }()
     case .askNew, .confirmNew:
       biometricPad = .emptyKey
@@ -173,7 +150,7 @@ public final class LocalAuthViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, _ in
         switch reactor.localAuthRequest {
-        case .authenticate, .askCurrent:
+        case .authenticate, .askCurrent, .disable:
           if UserInfoStorage.isBiometricAuthEnabled {
             owner.handleBiometricAuth()
           }
@@ -285,36 +262,17 @@ private extension LocalAuthViewController {
 
   /// 생체 인증을 시도합니다.
   func handleBiometricAuth() {
-    var error: NSError?
-
-    if self.authContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-      // 권한이 있다면 생체 인증 설정 여부를 확인합니다.
-      let reason = "얼굴 대라"
-      self.authContext.evaluatePolicy(
-        .deviceOwnerAuthenticationWithBiometrics,
-        localizedReason: reason
-      ) { [weak self] isSucceed, _ in
-        DispatchQueue.main.async {
-          if isSucceed {
-            guard let reactor = self?.reactor else { return }
-            reactor.action.onNext(.biometricAuthDidSucceed)
-          }
-        }
-      }
-    } else {
-      // 권한이 없다면 권한 요청 알림 창을 띄웁니다.
-      let ac = UIAlertController(
-        title: Typo.biometricFailTitle,
-        message: Typo.biometricFailDescription,
-        preferredStyle: .alert)
-      ac.addAction(UIAlertAction(title: Typo.biometricFailCancel, style: .destructive))
-      ac.addAction(UIAlertAction(title: Typo.biometricFailSetting, style: .default) { _ in
-        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-      })
-      self.present(ac, animated: true)
-    }
+    self.biometricAuth.handleBiometricAuth(
+      target: self,
+      onSuccess: { [weak self] in
+        guard let reactor = self?.reactor else { return }
+        reactor.action.onNext(.biometricAuthDidSucceed)
+      },
+      onFailure: nil
+    )
   }
 
+  /// 암호 설정 경고 팝업
   func presentNewLocalAuthAlertPopup() {
     let popup = NewLocalAuthPopup(335.0)
     popup.modalPresentationStyle = .overFullScreen
@@ -335,7 +293,7 @@ extension LocalAuthViewController: FavorNumberKeypadDelegate {
   }
 }
 
-// MARK: - BiometricAuth Popup
+// MARK: - Biometric Auth Popup
 
 extension LocalAuthViewController: BiometricAuthPopupDelegate {
   public func biometricAuthUsageSelected(_ isConfirmed: Bool) {

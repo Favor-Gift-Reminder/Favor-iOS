@@ -26,14 +26,17 @@ public final class SettingsViewReactor: Reactor, Stepper {
     case viewNeedsLoaded
     case itemSelected(SettingsSectionItem)
     case switchDidToggled(UserDefaultsKey, to: Bool)
+    case biometricAuthDidFinish(Bool)
     case doNothing
   }
 
   public enum Mutation {
+    case pulseBiometricAuth
     case updateItems(SettingsRenderer)
   }
 
   public struct State {
+    @Pulse var biometricAuthPulse: Bool = false
     var items: [SettingsSectionItem]
     var renderer: SettingsRenderer
   }
@@ -55,6 +58,7 @@ public final class SettingsViewReactor: Reactor, Stepper {
       return .just(.updateItems(self.currentState.renderer))
 
     case .itemSelected(let item):
+      print("Selected")
       if let step = item.step {
         self.steps.accept(step)
       }
@@ -62,6 +66,11 @@ public final class SettingsViewReactor: Reactor, Stepper {
 
     case let .switchDidToggled(key, isOn):
       return self.toggleUserDefaults(key, to: isOn)
+
+    case .biometricAuthDidFinish(let isSucceed):
+      os_log(.debug, "Biometric Auth finished: \(isSucceed)")
+      UserInfoStorage.isBiometricAuthEnabled = true
+      return .just(.updateItems(self.currentState.renderer))
 
     case .doNothing:
       return .empty()
@@ -72,6 +81,9 @@ public final class SettingsViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
+    case .pulseBiometricAuth:
+      newState.biometricAuthPulse = true
+
     case .updateItems(let renderer):
       newState.items = renderer.items
     }
@@ -99,10 +111,14 @@ private extension SettingsViewReactor {
           UserInfoStorage.isLocalAuthEnabled = false
           UserInfoStorage.isBiometricAuthEnabled = false
         }
-        self.steps.accept(AppStep.localAuthIsRequired(.authenticate(resultHandler)))
+        self.steps.accept(AppStep.localAuthIsRequired(.disable(resultHandler)))
       }
     case .isBiometricAuthEnabled:
-      UserInfoStorage.isBiometricAuthEnabled = isOn
+      if isOn && !UserInfoStorage.isBiometricAuthEnabled {
+        return .just(.pulseBiometricAuth)
+      } else if !isOn {
+        UserInfoStorage.isBiometricAuthEnabled = false
+      }
     case .isReminderNotificationEnabled:
       UserInfoStorage.isReminderNotificationEnabled = isOn
     case .isMarketingNotificationEnabled:

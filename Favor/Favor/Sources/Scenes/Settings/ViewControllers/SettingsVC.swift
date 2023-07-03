@@ -19,6 +19,8 @@ public final class SettingsViewController: BaseViewController, View {
 
   // MARK: - Properties
 
+  private let biometricAuth = BiometricAuthManager()
+
   private var dataSource: SettingsDataSource?
 
   private lazy var composer: Composer<SettingsSection, SettingsSectionItem> = {
@@ -56,12 +58,8 @@ public final class SettingsViewController: BaseViewController, View {
 
   public func bind(reactor: SettingsViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.rx.viewWillAppear
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .throttle(.nanoseconds(500), scheduler: MainScheduler.asyncInstance)
       .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -75,7 +73,24 @@ public final class SettingsViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
+    reactor.pulse { $0.$biometricAuthPulse }
+      .filter { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        owner.biometricAuth.handleBiometricAuth(
+          target: self,
+          onSuccess: {
+            owner.handleBiometricAuthResult(true)
+          },
+          onFailure: {
+            owner.handleBiometricAuthResult(false)
+          }
+        )
+      })
+      .disposed(by: self.disposeBag)
+
     reactor.state.map { $0.items }
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, items in
         var snapshot = NSDiffableDataSourceSnapshot<SettingsSection, SettingsSectionItem>()
@@ -118,13 +133,13 @@ private extension SettingsViewController {
   func setupDataSource() {
     let tappableCellRegistration = UICollectionView.CellRegistration
     <SettingsTappableCell, SettingsSectionItem> { [weak self] cell, _, item in
-      guard let self = self else { return }
+      guard self != nil else { return }
       cell.bind(item)
     }
 
     let navigatableCellRegistration = UICollectionView.CellRegistration
     <SettingsNaviagatableCell, SettingsSectionItem> { [weak self] cell, _, item in
-      guard let self = self else { return }
+      guard self != nil else { return }
       cell.bind(item)
     }
 
@@ -197,12 +212,18 @@ private extension SettingsViewController {
       }
     }
   }
+
+  func handleBiometricAuthResult(_ isSucceed: Bool) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.biometricAuthDidFinish(isSucceed))
+  }
 }
 
 // MARK: - Settings Switchable Cell
 
 extension SettingsViewController: SettingsSwitchableCellDelegate {
   public func switchDidToggle(_ item: SettingsSectionItem, to isOn: Bool) {
+    // FIXME: items가 reload될 때마다 실행되는 현상 수정
     guard
       let reactor = self.reactor,
       case let SettingsSectionItem.CellType.switchable(_, key) = item.type

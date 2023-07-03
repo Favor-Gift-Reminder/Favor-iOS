@@ -14,4 +14,5 @@ public enum LocalAuthRequest {
   case askCurrent(ResultHandler? = nil)
   case askNew(ResultHandler? = nil)
   case confirmNew(String, ResultHandler? = nil)
+  case disable(ResultHandler? = nil)
 }

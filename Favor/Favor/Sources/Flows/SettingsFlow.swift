@@ -155,7 +155,7 @@ private extension SettingsFlow {
     let description: DescriptionMessage
     let animated: Bool
     switch request {
-    case .authenticate:
+    case .authenticate, .disable:
       localAuthVC.titleString = "암호"
       description = DescriptionMessage(description: "암호를 입력해주세요.")
       animated = true

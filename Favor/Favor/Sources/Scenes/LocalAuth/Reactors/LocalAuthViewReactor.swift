@@ -28,8 +28,8 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 
   public enum Action {
     case keypadDidSelected(FavorNumberKeypadCellModel)
-    case biometricAuthDidSucceed
     case biometricPopupDidFinish(Bool)
+    case biometricAuthDidSucceed
   }
 
   public enum Mutation {
@@ -89,6 +89,8 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
             return self.handleAskNewInput(with: key)
           case .confirmNew:
             return self.handleConfirmNewInput(with: key)
+          case .disable:
+            return self.handleDisable(with: key)
           }
         }
         return .just(.appendInput(keyNumber))
@@ -106,22 +108,34 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
         return .empty()
       }
 
+    case .biometricPopupDidFinish(let isConfirmed):
+      UserInfoStorage.isBiometricAuthEnabled = isConfirmed
+      self.steps.accept(AppStep.localAuthIsComplete)
+      return isConfirmed ? .just(.pulseBiometricAuth(true)) : .empty()
+
     case .biometricAuthDidSucceed:
-      os_log(.debug, "Local Auth Succeed!")
+      // TODO: 성공 처리
       switch self.localAuthRequest {
       case .authenticate:
         self.steps.accept(AppStep.localAuthIsComplete)
+      case .disable:
+        if
+          case let LocalAuthRequest.disable(resultHandler) = localAuthRequest,
+          let resultHandler = resultHandler
+        {
+          do {
+            try resultHandler(nil)
+            self.steps.accept(AppStep.localAuthIsComplete)
+          } catch {
+            os_log(.error, "\(error)")
+          }
+        }
       case .askCurrent:
         self.steps.accept(AppStep.localAuthIsRequired(.askNew()))
       default:
         break
       }
       return .empty()
-
-    case .biometricPopupDidFinish(let isConfirmed):
-      UserInfoStorage.isBiometricAuthEnabled = isConfirmed
-      self.steps.accept(AppStep.localAuthIsComplete)
-      return isConfirmed ? .just(.pulseBiometricAuth(true)) : .empty()
     }
   }
 
@@ -165,7 +179,7 @@ public final class LocalAuthViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension LocalAuthViewReactor {
-  /// 앱 실행 시 암호 입력이 완료됐을 때
+  /// 현재 암호를 묻는 입력이 완료됐을 때
   func handleAuthenticateInput(with key: String) -> Observable<Mutation> {
     if self.validateCurrentInput(key) { // 맞다면 dismiss
       if
@@ -245,6 +259,27 @@ private extension LocalAuthViewReactor {
         .just(.resetInput),
         .just(.announceWrongPassword)
       ])
+    }
+  }
+
+  /// 암호를 제거할 경우 입력이 완료됐을 때
+  func handleDisable(with key: String) -> Observable<Mutation> {
+    if self.validateCurrentInput(key) {
+      if
+        case let LocalAuthRequest.disable(resultHandler) = self.localAuthRequest,
+        let resultHandler = resultHandler
+      {
+        do {
+          try resultHandler(nil)
+        } catch {
+          os_log(.error, "\(error)")
+        }
+      }
+      self.steps.accept(AppStep.localAuthIsComplete)
+      return .empty()
+    } else {
+      HapticManager.haptic(style: .heavy)
+      return .just(.resetInput)
     }
   }
 
