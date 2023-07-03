@@ -20,7 +20,7 @@ final class MyPageViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  private let workbench = try! RealmWorkbench()
+  private let workbench = RealmWorkbench()
   private let userFetcher = Fetcher<User>()
   
   enum Action {
@@ -73,26 +73,31 @@ final class MyPageViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.userFetcher.fetch()
-        .flatMap { (status, user) -> Observable<Mutation> in
-          guard let user = user.first else { return .empty() }
-          return .concat([
-            .just(.updateUser(user)),
-            .just(.updateUserName(user.name)),
-            .just(.updateUserID(user.searchID)),
-            .just(.updateFavorSection(user.favorList)),
-            .just(.updateAnniversarySection(user.anniversaryList)),
-            .just(.updateFriendSection(user.friendList)),
-            .just(.updateLoading(status == .inProgress))
-          ])
-        }
+      switch FTUXStorage.authState {
+      case .undefined:
+        return .empty()
+      default:
+        return self.userFetcher.fetch()
+          .flatMap { (status, user) -> Observable<Mutation> in
+            guard let user = user.first else { return .empty() }
+            return .concat([
+              .just(.updateUser(user)),
+              .just(.updateUserName(user.name)),
+              .just(.updateUserID(user.searchID)),
+              .just(.updateFavorSection(user.favorList)),
+              .just(.updateAnniversarySection(user.anniversaryList)),
+              .just(.updateFriendSection(user.friendList)),
+              .just(.updateLoading(status == .inProgress))
+            ])
+          }
+      }
       
     case .editButtonDidTap:
       self.steps.accept(AppStep.editMyPageIsRequired(self.currentState.user))
       return .empty()
 
     case .settingButtonDidTap:
-      self.steps.accept(AppStep.settingIsRequired)
+      self.steps.accept(AppStep.settingsIsRequired)
       return .empty()
       
     case .headerRightButtonDidTap(let section):

@@ -11,9 +11,14 @@ import FavorKit
 import RxCocoa
 import SnapKit
 
-final class AlertPopup: BasePopup {
+@available(
+  *, deprecated,
+   renamed: "NewAlertPopup",
+   message: "NewAlertPopup으로 교체 후 네이밍 변경 필요"
+)
+public final class AlertPopup: BasePopup {
   
-  enum PopupType {
+  public enum PopupType {
     case register
     case remove
     
@@ -84,7 +89,7 @@ final class AlertPopup: BasePopup {
   
   // MARK: - Setup
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     super.setupLayouts()
     
     [
@@ -95,7 +100,7 @@ final class AlertPopup: BasePopup {
     }
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     super.setupConstraints()
     
     self.contentsLabel.snp.makeConstraints { make in
@@ -112,7 +117,7 @@ final class AlertPopup: BasePopup {
   
   // MARK: - Bind
   
-  override func bind() {
+  public override func bind() {
     super.bind()
 
     /// 확인 버튼이 클릭 될 때

@@ -68,7 +68,7 @@ private extension SplashViewReactor {
               account: KeychainManager.Accounts.accessToken.rawValue
             )
           }
-          self.steps.accept(AppStep.dashboardIsRequired)
+          self.steps.accept(AppStep.splashIsComplete)
           return .empty()
         }
     case .apple: // Apple 로그인

@@ -1,6 +1,6 @@
 //
 //  BasePopup.swift
-//  
+//  Favor
 //
 //  Created by 김응철 on 2023/05/27.
 //
@@ -11,8 +11,10 @@ import FavorKit
 import SnapKit
 import Then
 
-class BasePopup: BaseViewController {
-  
+public class BasePopup: BaseViewController {
+
+  // MARK: - Constants
+
   private enum Metric {
     static let containerViewWidth: CGFloat = 335.0
   }
@@ -24,7 +26,7 @@ class BasePopup: BaseViewController {
     $0.alpha = 0.0
   }
   
-  let containerView: UIView = UIView().then {
+  public let containerView: UIView = UIView().then {
     $0.layer.cornerRadius = 24.0
     $0.backgroundColor = .favorColor(.white)
   }
@@ -46,24 +48,24 @@ class BasePopup: BaseViewController {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - LifeCycle
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    
+  // MARK: - Life Cycle
+
+  public override func viewIsAppearing(_ animated: Bool) {
+    super.viewIsAppearing(animated)
+
     self.animateDimmedView()
     self.animateContainerView()
   }
   
-  // MARK: - Setup
-  
-  override func setupStyles() {
+  // MARK: - UI Setups
+
+  public override func setupStyles() {
     super.setupStyles()
     
     self.view.backgroundColor = .clear
   }
   
-  override func setupLayouts() {
+  public override func setupLayouts() {
     super.setupLayouts()
     
     [
@@ -74,7 +76,7 @@ class BasePopup: BaseViewController {
     }
   }
   
-  override func setupConstraints() {
+  public override func setupConstraints() {
     super.setupConstraints()
     
     self.dimmedView.snp.makeConstraints { make in
@@ -83,15 +85,15 @@ class BasePopup: BaseViewController {
     
     self.containerView.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.width.equalTo(Metric.containerViewWidth)
       self.containerViewBottomInset = make.bottom.equalToSuperview().inset(100.0).constraint
+      make.width.equalTo(Metric.containerViewWidth)
       make.height.equalTo(self.containerViewHeight)
     }
   }
   
   // MARK: - Bind
   
-  override func bind() {
+  public override func bind() {
     super.bind()
     
     self.dimmedView.rx.tapGesture()
@@ -104,7 +106,7 @@ class BasePopup: BaseViewController {
   // MARK: - Functions
   
   /// dismiss(animated:) 대신 이 메서드를 불러서 종료시켜야 합니다.
-  func dismissPopup() {
+  public func dismissPopup(_ completion: (() -> Void)? = nil) {
     // TODO: Coordinator 삭제
     UIView.animate(
       withDuration: 0.2,
@@ -115,7 +117,10 @@ class BasePopup: BaseViewController {
         self.containerView.alpha = 0
         self.view.layoutIfNeeded()
       },
-      completion: { _ in self.dismiss(animated: false) }
+      completion: { _ in
+        self.dismiss(animated: false)
+        if let completion { completion() }
+      }
     )
   }
   
@@ -130,7 +135,7 @@ class BasePopup: BaseViewController {
   
   /// 팝업 창을 아래에서 올라오는 애니메이션 메서드입니다.
   private func animateContainerView() {
-    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut) {
+    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
       self.containerViewBottomInset?.update(
         inset: (self.view.frame.height / 2) - self.containerViewHeight / 2
       )

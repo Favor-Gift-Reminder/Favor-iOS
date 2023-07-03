@@ -74,12 +74,6 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
-    self.notifySwitch.rx.isOn
-      .distinctUntilChanged()
-      .map { Reactor.Action.notifySwitchDidToggle($0) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
     self.doneButton.rx.tap
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
@@ -110,6 +104,12 @@ final class ReminderEditViewController: BaseReminderViewController, View {
   }
 
   // MARK: - Functions
+
+  // Favor Switch delegate
+  override func switchDidToggled(to state: Bool) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.notifySwitchDidToggle(state))
+  }
 
   // MARK: - UI Setups
   override func setupStyles() {
