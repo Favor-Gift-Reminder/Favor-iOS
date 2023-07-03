@@ -11,6 +11,11 @@ import FavorKit
 import RxCocoa
 import SnapKit
 
+@available(
+  *, deprecated,
+   renamed: "NewAlertPopup",
+   message: "NewAlertPopup으로 교체 후 네이밍 변경 필요"
+)
 public final class AlertPopup: BasePopup {
   
   public enum PopupType {

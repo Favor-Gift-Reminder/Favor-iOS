@@ -1559,7 +1559,6 @@
 			isa = PBXGroup;
 			children = (
 				2E7330912A52D7DA009682D2 /* BasePopup.swift */,
-				2E7330962A52D7DB009682D2 /* AlertPopup.swift */,
 				2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */,
 				2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */,
 				2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */,
@@ -1620,6 +1619,7 @@
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				2E7330962A52D7DB009682D2 /* AlertPopup.swift */,
 				2E68C70C2A394C9800B7ACD0 /* .gitkeep */,
 			);
 			path = Deprecated;
