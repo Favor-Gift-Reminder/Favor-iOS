@@ -105,7 +105,10 @@ public final class SettingsViewController: BaseViewController, View {
         }
 
         DispatchQueue.main.async {
-          owner.dataSource?.apply(snapshot)
+          owner.updateSwitchMethodsCallable(to: false)
+          owner.dataSource?.apply(snapshot, completion: {
+            owner.updateSwitchMethodsCallable(to: true)
+          })
         }
       })
       .disposed(by: self.disposeBag)
@@ -217,13 +220,17 @@ private extension SettingsViewController {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.biometricAuthDidFinish(isSucceed))
   }
+
+  func updateSwitchMethodsCallable(to isEnabled: Bool) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.switchMethodsCallableUpdated(isEnabled))
+  }
 }
 
 // MARK: - Settings Switchable Cell
 
 extension SettingsViewController: SettingsSwitchableCellDelegate {
   public func switchDidToggle(_ item: SettingsSectionItem, to isOn: Bool) {
-    // FIXME: items가 reload될 때마다 실행되는 현상 수정
     guard
       let reactor = self.reactor,
       case let SettingsSectionItem.CellType.switchable(_, key) = item.type

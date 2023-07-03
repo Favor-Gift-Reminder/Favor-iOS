@@ -35,8 +35,6 @@ public final class SettingsSwitchableCell: BaseSettingsCell {
   public override func bind(_ item: SettingsSectionItem) {
     super.bind(item)
     guard case let SettingsSectionItem.CellType.switchable(initialValue, _) = item.type else { return }
-
-    print(initialValue)
     self.toggleSwitch.isOn = initialValue
   }
 

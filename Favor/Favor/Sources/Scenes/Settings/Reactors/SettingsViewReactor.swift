@@ -24,6 +24,7 @@ public final class SettingsViewReactor: Reactor, Stepper {
 
   public enum Action {
     case viewNeedsLoaded
+    case switchMethodsCallableUpdated(Bool)
     case itemSelected(SettingsSectionItem)
     case switchDidToggled(UserDefaultsKey, to: Bool)
     case biometricAuthDidFinish(Bool)
@@ -32,10 +33,12 @@ public final class SettingsViewReactor: Reactor, Stepper {
 
   public enum Mutation {
     case pulseBiometricAuth
+    case updateSwitchMethodsCallable(Bool)
     case updateItems(SettingsRenderer)
   }
 
   public struct State {
+    var switchMethodsCallable: Bool = false
     @Pulse var biometricAuthPulse: Bool = false
     var items: [SettingsSectionItem]
     var renderer: SettingsRenderer
@@ -57,20 +60,24 @@ public final class SettingsViewReactor: Reactor, Stepper {
     case .viewNeedsLoaded:
       return .just(.updateItems(self.currentState.renderer))
 
+    case .switchMethodsCallableUpdated(let userInteractable):
+      return .just(.updateSwitchMethodsCallable(userInteractable))
+
     case .itemSelected(let item):
-      print("Selected")
       if let step = item.step {
         self.steps.accept(step)
       }
       return .empty()
 
     case let .switchDidToggled(key, isOn):
-      return self.toggleUserDefaults(key, to: isOn)
+      if self.currentState.switchMethodsCallable {
+        return self.toggleUserDefaults(key, to: isOn)
+      } else {
+        return .just(.updateItems(self.currentState.renderer))
+      }
 
     case .biometricAuthDidFinish(let isSucceed):
-      os_log(.debug, "Biometric Auth finished: \(isSucceed)")
-      UserInfoStorage.isBiometricAuthEnabled = true
-      return .just(.updateItems(self.currentState.renderer))
+      return self.handleBiometricAuthResult(isSucceed: isSucceed)
 
     case .doNothing:
       return .empty()
@@ -83,6 +90,9 @@ public final class SettingsViewReactor: Reactor, Stepper {
     switch mutation {
     case .pulseBiometricAuth:
       newState.biometricAuthPulse = true
+
+    case .updateSwitchMethodsCallable(let switchMethodsCallable):
+      newState.switchMethodsCallable = switchMethodsCallable
 
     case .updateItems(let renderer):
       newState.items = renderer.items
@@ -127,5 +137,12 @@ private extension SettingsViewReactor {
       break
     }
     return .empty()
+  }
+
+  func handleBiometricAuthResult(isSucceed: Bool) -> Observable<Mutation> {
+    let isSucceedString: String = isSucceed ? "true" : "false"
+    os_log(.debug, "Biometric Auth did finish with result: \(isSucceedString).")
+    UserInfoStorage.isBiometricAuthEnabled = isSucceed
+    return .just(.updateItems(self.currentState.renderer))
   }
 }
