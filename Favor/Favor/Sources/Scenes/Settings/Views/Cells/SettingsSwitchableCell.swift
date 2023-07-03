@@ -24,18 +24,11 @@ public final class SettingsSwitchableCell: BaseSettingsCell {
 
   // MARK: - UI Components
 
-  private let toggleSwitch = FavorSwitch()
-
-  // MARK: - Initializer
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    self.bind()
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
+  private lazy var toggleSwitch: FavorSwitch = {
+    let toggleSwitch = FavorSwitch()
+    toggleSwitch.delegate = self
+    return toggleSwitch
+  }()
 
   // MARK: - Functions
 
@@ -43,20 +36,8 @@ public final class SettingsSwitchableCell: BaseSettingsCell {
     super.bind(item)
     guard case let SettingsSectionItem.CellType.switchable(initialValue, _) = item.type else { return }
 
-    self.toggleSwitch.rx.isOn.onNext(initialValue)
-  }
-
-  // MARK: - Binding
-
-  private func bind() {
-    self.toggleSwitch.rx.isOn
-      .distinctUntilChanged()
-      .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self, onNext: { owner, isOn in
-        guard let item = self.cellModel else { return }
-        owner.delegate?.switchDidToggle(item, to: isOn)
-      })
-      .disposed(by: self.disposeBag)
+    print(initialValue)
+    self.toggleSwitch.isOn = initialValue
   }
 
   // MARK: - UI Setups
@@ -76,5 +57,14 @@ public final class SettingsSwitchableCell: BaseSettingsCell {
       make.width.equalTo(Metric.toggleSwitchWidth)
       make.height.equalTo(Metric.toggleSwitchHeight)
     }
+  }
+}
+
+// MARK: - Favor Switch
+
+extension SettingsSwitchableCell: FavorSwitchDelegate {
+  public func switchDidToggled(to state: Bool) {
+    guard let item = self.cellModel else { return }
+    self.delegate?.switchDidToggle(item, to: state)
   }
 }

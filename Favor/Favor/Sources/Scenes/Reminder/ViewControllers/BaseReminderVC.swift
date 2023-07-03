@@ -144,7 +144,11 @@ class BaseReminderViewController: BaseViewController {
     title: "알림",
     itemStackView: self.notifyTimeDateSelectorStack
   )
-  public let notifySwitch = FavorSwitch()
+  public lazy var notifySwitch: FavorSwitch = {
+    let notifySwitch = FavorSwitch()
+    notifySwitch.delegate = self
+    return notifySwitch
+  }()
 
   // 메모
   public lazy var memoTextView: RSKPlaceholderTextView = {
@@ -171,7 +175,7 @@ class BaseReminderViewController: BaseViewController {
 
   override func bind() {
     self.scrollView.rx.tapGesture(configuration: { [weak self] recognizer, delegate in
-      guard let `self` = self else { return }
+      guard let self = self else { return }
       recognizer.delegate = self
       delegate.simultaneousRecognitionPolicy = .never
     })
@@ -287,6 +291,8 @@ class BaseReminderViewController: BaseViewController {
     self.notifyDateSelectorButton.imageView?.isHidden = !isEditable
   }
 
+  func switchDidToggled(to state: Bool) { }
+
   // MARK: - UI Setups
 
   override func setupLayouts() {
@@ -334,3 +340,7 @@ extension BaseReminderViewController: UIGestureRecognizerDelegate {
     return true
   }
 }
+
+// MARK: - Favor Switch
+
+extension BaseReminderViewController: FavorSwitchDelegate { }

@@ -7,9 +7,11 @@
 
 import UIKit
 
-import RxCocoa
-import RxSwift
 import SnapKit
+
+public protocol FavorSwitchDelegate: AnyObject {
+  func switchDidToggled(to state: Bool)
+}
 
 public final class FavorSwitch: UIButton {
   public typealias SwitchColor = (bar: UIColor, thumb: UIColor)
@@ -18,11 +20,14 @@ public final class FavorSwitch: UIButton {
 
   // MARK: - Properties
 
-  private let disposeBag = DisposeBag()
+  public weak var delegate: FavorSwitchDelegate?
 
   private var animator: UIViewPropertyAnimator?
 
-  fileprivate var isOn = BehaviorRelay<Bool>(value: false)
+  public var isOn: Bool = false {
+    willSet { self.animateState(to: newValue) }
+    didSet { self.delegate?.switchDidToggled(to: self.isOn) }
+  }
 
   /// Switch가 켜졌을 때의 색상
   public var onTintColor: SwitchColor = (.favorColor(.main), .favorColor(.white))
@@ -35,6 +40,14 @@ public final class FavorSwitch: UIButton {
 
   /// Thumb와 Bar의 leading, trailing 간격
   public var thumbHorizontalPadding: CGFloat = 2.0
+
+  private var thumbOnLocation: CGFloat {
+    self.frame.width - (self.thumbView.frame.width / 2) - self.thumbHorizontalPadding
+  }
+
+  private var thumbOffLocation: CGFloat {
+    (self.thumbView.frame.width / 2) + self.thumbHorizontalPadding
+  }
 
   public var duration: TimeInterval = 0.2
 
@@ -60,13 +73,6 @@ public final class FavorSwitch: UIButton {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
-
-    self.isOn
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, isOn in
-        owner.updateState(isOn)
-      })
-      .disposed(by: self.disposeBag)
   }
 
   required init?(coder: NSCoder) {
@@ -76,24 +82,19 @@ public final class FavorSwitch: UIButton {
   // MARK: - Functions
 
   public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-    self.isOn.accept(!self.isOn.value)
+    self.isOn.toggle()
   }
 
   public override func layoutSublayers(of layer: CALayer) {
     super.layoutSublayers(of: layer)
     self.updateShape()
-    self.thumbView.snp.updateConstraints { make in
-      make.centerX.equalTo(self.thumbView.bounds.width / 2 + self.thumbHorizontalPadding)
-    }
   }
 }
 
 // MARK: - UI Setup
 
 extension FavorSwitch: BaseView {
-  public func setupStyles() {
-    //
-  }
+  public func setupStyles() { }
 
   public func setupLayouts() {
     self.addSubview(self.barView)
@@ -107,7 +108,7 @@ extension FavorSwitch: BaseView {
 
     self.thumbView.snp.makeConstraints { make in
       make.directionalVerticalEdges.equalToSuperview().inset(self.thumbVerticalPadding)
-      make.centerX.equalTo(self.thumbView.bounds.width / 2 + self.thumbHorizontalPadding)
+      make.centerX.equalTo(self.thumbOffLocation)
       make.width.equalTo(self.thumbView.snp.height)
     }
   }
@@ -116,17 +117,17 @@ extension FavorSwitch: BaseView {
 // MARK: - Privates
 
 private extension FavorSwitch {
-  func updateState(_ isOn: Bool) {
-    let centerX = isOn
-      ? self.frame.width - (self.thumbView.frame.width / 2) - self.thumbHorizontalPadding
-      : (self.thumbView.frame.width / 2) + self.thumbHorizontalPadding
+  func animateState(to isOn: Bool) {
+    self.layoutIfNeeded()
+    let centerX = isOn ? self.thumbOnLocation : self.thumbOffLocation
     self.animator = UIViewPropertyAnimator(
       duration: self.duration,
       curve: .easeInOut,
       animations: {
+        self.updateShape()
         self.updateColor(isOn)
         self.thumbView.snp.updateConstraints { make in
-          make.centerX.equalTo(centerX)
+          make.centerX.equalTo(centerX).priority(.required)
         }
         self.layoutSubviews()
         self.barView.layoutSubviews()
@@ -148,17 +149,5 @@ private extension FavorSwitch {
       self.barView.backgroundColor = self.offTintColor.bar
       self.thumbView.backgroundColor = self.offTintColor.thumb
     }
-  }
-}
-
-// MARK: - Reactive
-
-public extension Reactive where Base: FavorSwitch {
-  var isOn: ControlProperty<Bool> {
-    let source = base.isOn
-    let bindingObserver = Binder(self.base) { favorSwitch, isOn in
-      favorSwitch.isOn.accept(isOn)
-    }
-    return ControlProperty(values: source, valueSink: bindingObserver)
   }
 }
