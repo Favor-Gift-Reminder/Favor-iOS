@@ -59,11 +59,10 @@ public final class Networking<TargetType: BaseTargetType> {
         // Error Handling
         switch error {
         case APIError.timeOut:
-          // 타임 아웃
-          break
+          FavorNotificationManager.shared.showFavorPopup("요처시간이 초과되었습니다.")
         case APIError.internetConnection:
           // 인터넷 연결
-          break
+          FavorNotificationManager.shared.showFavorPopup("인터넷 연결이 불안정합니다.")
         case let APIError.restError(_, responseMessage):
           // 서버 응답 오류
           FavorNotificationManager.shared.showFavorPopup(responseMessage)
