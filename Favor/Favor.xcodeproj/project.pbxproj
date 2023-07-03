@@ -179,6 +179,8 @@
 		2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */; };
 		2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */; };
 		2EFDE6792A4BF8BC007A808F /* RxKakaoSDKUser in Frameworks */ = {isa = PBXBuildFile; productRef = 2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */; };
+		E51A21F42A51C7AC003E676F /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A21F12A51C7AC003E676F /* AlertPopup.swift */; };
+		E51A21F52A51C7AC003E676F /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */; };
 		E51F55842A4036650002EADB /* FavorTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51F55832A4036650002EADB /* FavorTabBar.swift */; };
 		E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */; };
 		E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */; };
@@ -213,9 +215,6 @@
 		E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
-		E5FB769C2A21C13900BF3197 /* BasePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FB769B2A21C13900BF3197 /* BasePopup.swift */; };
-		E5FB769E2A21C22700BF3197 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FB769D2A21C22700BF3197 /* AlertPopup.swift */; };
-		E5FB76A02A21C76200BF3197 /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -392,6 +391,8 @@
 		2EF1585E29E3CDC100D199DF /* FavorTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavorTabBarController.swift; sourceTree = "<group>"; };
 		2EFDA0F32A3AA83B009A11D7 /* SearchCategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCategoryVC.swift; sourceTree = "<group>"; };
 		2EFDA0F52A3AA867009A11D7 /* SearchTagViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTagViewReactor.swift; sourceTree = "<group>"; };
+		E51A21F12A51C7AC003E676F /* AlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
+		E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
 		E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirendPageVC.swift; sourceTree = "<group>"; };
 		E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageViewReactor.swift; sourceTree = "<group>"; };
@@ -423,9 +424,6 @@
 		E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListType.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
-		E5FB769B2A21C13900BF3197 /* BasePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePopup.swift; sourceTree = "<group>"; };
-		E5FB769D2A21C22700BF3197 /* AlertPopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPopup.swift; sourceTree = "<group>"; };
-		E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1436,9 +1434,8 @@
 		E53191C52A4EADBA000DA2D7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				E5FB769B2A21C13900BF3197 /* BasePopup.swift */,
-				E5FB769D2A21C22700BF3197 /* AlertPopup.swift */,
-				E5FB769F2A21C76200BF3197 /* ReminderDatePopup.swift */,
+				E51A21F12A51C7AC003E676F /* AlertPopup.swift */,
+				E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1718,8 +1715,10 @@
 				2ED8CB4729B0C30400E7B547 /* AuthTermCell.swift in Sources */,
 				2ED326C329B327DE001963D0 /* AuthValidateEmailViewReactor.swift in Sources */,
 				E583C5952A1E62A400DC219A /* MemoBottomSheet.swift in Sources */,
+				E51A21F52A51C7AC003E676F /* ReminderDatePopup.swift in Sources */,
 				E524C19629EAA50C004CCC40 /* NewGiftFriendHeaderView.swift in Sources */,
 				2E00561E29A8B131006CF302 /* ProfileSectionFooter.swift in Sources */,
+				E51A21F42A51C7AC003E676F /* AlertPopup.swift in Sources */,
 				2EC939E32998C63200C8C47F /* ProfileSetupHelperCell.swift in Sources */,
 				2EE1537B29E7E8790023FEA5 /* SelectedIndicatorBar.swift in Sources */,
 				2EEC97D529D9885C00AACF38 /* ReminderEditViewReactor.swift in Sources */,
@@ -1825,7 +1824,6 @@
 				E593C8252A176B4500711C0F /* FriendManagementVC.swift in Sources */,
 				E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */,
 				2ED326B529B0F6EB001963D0 /* Terms.swift in Sources */,
-				E5FB769C2A21C13900BF3197 /* BasePopup.swift in Sources */,
 				2EC939F3299CF6A300C8C47F /* ProfileSetupHelperCellReactor.swift in Sources */,
 				2E9B4CC22A12841C00C7E31E /* AnniversaryListVC.swift in Sources */,
 				2ED326C529B32C0C001963D0 /* AuthNewPasswordVC.swift in Sources */,
@@ -1840,8 +1838,6 @@
 				2EB3E71929D49008008D10A0 /* ReminderHeaderView.swift in Sources */,
 				2EE0D587297524880064E932 /* AuthSetProfileViewReactor.swift in Sources */,
 				2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */,
-				E5FB769E2A21C22700BF3197 /* AlertPopup.swift in Sources */,
-				E5FB76A02A21C76200BF3197 /* ReminderDatePopup.swift in Sources */,
 				E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */,
 				2EE0D585297524660064E932 /* AuthSetProfileVC.swift in Sources */,
 				E524C18D29E93758004CCC40 /* NewGiftFriendEmptyCell.swift in Sources */,
