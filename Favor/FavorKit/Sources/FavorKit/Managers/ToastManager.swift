@@ -24,7 +24,7 @@ public final class ToastManager {
       }
     }
   }
-
+  
   // MARK: - Properties
 
   public static let shared = ToastManager()
@@ -114,6 +114,7 @@ public final class ToastManager {
       make.centerX.equalToSuperview()
       make.bottom.equalTo(viewController.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(viewController.view.layoutMarginsGuide).inset(20)
+      make.height.equalTo(44.0)
     }
     viewController.view.layoutIfNeeded()
     

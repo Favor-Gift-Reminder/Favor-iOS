@@ -24,4 +24,16 @@ extension Networking {
     else { throw error }
     throw APIError.timeOut(urlError)
   }
+  
+  public func handleREST<T: Any>(_ error: Error) throws -> Single<T> {
+    guard error is APIError else {
+      let errorResponse = try? (error as? MoyaError)?.response?.mapJSON() as? [String: String]
+      
+      throw APIError.restError(
+        responseCode: errorResponse?["responseCode"] ?? "",
+        responseMessage: errorResponse?["responseMessage"] ?? ""
+      )
+    }
+    throw error
+  }
 }
