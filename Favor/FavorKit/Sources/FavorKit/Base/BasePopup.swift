@@ -87,7 +87,6 @@ open class BasePopup: BaseViewController {
     self.containerView.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       self.containerViewBottomInset = make.bottom.equalToSuperview().inset(100.0).constraint
-      make.width.equalTo(Metric.containerViewWidth)
       make.height.equalTo(self.containerViewHeight)
     }
   }
