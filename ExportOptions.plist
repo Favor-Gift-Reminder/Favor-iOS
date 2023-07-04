@@ -11,10 +11,10 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.favor.Favor.iOS</key>
-		<string>Favor GitHubActions Deploy</string>
+		<string>Favor-Apple-AppStore-Provision</string>
 	</dict>
 	<key>signingCertificate</key>
-	<string>D1A0458AB1EFFDCC500FB99039DF8E77BDABCBE9</string>
+	<string>Apple Distribution</string>
 	<key>signingStyle</key>
 	<string>manual</string>
 	<key>stripSwiftSymbols</key>
