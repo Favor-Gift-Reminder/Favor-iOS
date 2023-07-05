@@ -49,10 +49,10 @@ public class BasePopup: BaseViewController {
   }
   
   // MARK: - Life Cycle
-
-  public override func viewIsAppearing(_ animated: Bool) {
-    super.viewIsAppearing(animated)
-
+  
+  public override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
     self.animateDimmedView()
     self.animateContainerView()
   }
