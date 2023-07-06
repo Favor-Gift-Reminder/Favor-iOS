@@ -8,10 +8,14 @@
 import UIKit
 
 import FavorKit
-import Reusable
 import SnapKit
 
-final class EditMyPageCollectionHeaderView: UICollectionReusableView, Reusable {
+public protocol EditMyPageCollectionHeaderViewDelegate: AnyObject {
+  func profileBackgroundDidTap()
+  func profilePhotoDidTap()
+}
+
+public final class EditMyPageCollectionHeaderView: UICollectionReusableView {
 
   // MARK: - Constants
 
@@ -19,28 +23,62 @@ final class EditMyPageCollectionHeaderView: UICollectionReusableView, Reusable {
     static let backgroundImageHeight = 300.0
     static let profileImageSize = 120.0
   }
+  
+  public static let identifier = "EditMyPageCollectionHeaderView"
+  
+  // MARK: - Properties
+  
+  public weak var delegate: EditMyPageCollectionHeaderViewDelegate?
 
   // MARK: - UI Components
-
-  private lazy var backgroundImageView: UIImageView = {
-    let imageView = self.makeEditableButton()
+  
+  private let profileBackgroundImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.backgroundColor = .favorColor(.white)
     imageView.contentMode = .scaleAspectFill
-    imageView.backgroundColor = .favorColor(.sub)
-    imageView.clipsToBounds = true
     return imageView
   }()
-
-  private lazy var profileImageView: UIImageView = {
-    let imageView = self.makeEditableButton()
-    imageView.contentMode = .center
+  
+  private lazy var profileBackgroundButton: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .favorColor(.black).withAlphaComponent(0.3)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = .favorIcon(.gallery)?
+      .resize(newWidth: 28.0)
+      .withRenderingMode(.alwaysTemplate)
+    
+    let button = UIButton(configuration: config)
+    button.addTarget(self, action: #selector(self.profileBackgroundDidTap(_:)), for: .touchUpInside)
+    return button
+  }()
+  
+  private let profilePhotoDefaultImage: UIImage? = .favorIcon(.friend)?
+    .withTintColor(.favorColor(.white), renderingMode: .alwaysTemplate)
+    .resize(newWidth: 60)
+  
+  private lazy var profilePhotoImageView: UIImageView = {
+    let imageView = UIImageView()
     imageView.backgroundColor = .favorColor(.line3)
     imageView.layer.cornerRadius = Metric.profileImageSize / 2
     imageView.clipsToBounds = true
-    imageView.image = .favorIcon(.friend)?
-      .withRenderingMode(.alwaysTemplate)
-      .withTintColor(.favorColor(.white))
-      .resize(newWidth: 60)
+    imageView.contentMode = .center
+    imageView.image = self.profilePhotoDefaultImage
     return imageView
+  }()
+  
+  private lazy var profilePhotoButton: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .favorColor(.black).withAlphaComponent(0.3)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = .favorIcon(.gallery)?
+      .resize(newWidth: 28.0)
+      .withRenderingMode(.alwaysTemplate)
+    
+    let button = UIButton(configuration: config)
+    button.layer.cornerRadius = Metric.profileImageSize / 2
+    button.clipsToBounds = true
+    button.addTarget(self, action: #selector(self.profilePhotoDidTap(_:)), for: .touchUpInside)
+    return button
   }()
 
   // MARK: - Initializer
@@ -57,39 +95,62 @@ final class EditMyPageCollectionHeaderView: UICollectionReusableView, Reusable {
   }
 
   // MARK: - Functions
+  
+  public func updateBackgroundImage(_ image: UIImage?) {
+    self.profileBackgroundImageView.image = image
+  }
+  
+  public func updateProfilePhotoImage(_ image: UIImage?) {
+    self.profilePhotoImageView.image = image == nil ? self.profilePhotoDefaultImage : image
+    self.profilePhotoImageView.contentMode = image == nil ? .center : .scaleAspectFill
+  }
 
-  public func bind(with title: String) {
-
+  @objc
+  private func profileBackgroundDidTap(_ sender: UIButton) {
+    self.delegate?.profileBackgroundDidTap()
+  }
+  
+  @objc
+  private func profilePhotoDidTap(_ sender: UIButton) {
+    self.delegate?.profilePhotoDidTap()
   }
 }
 
 // MARK: - UI Setup
 
 extension EditMyPageCollectionHeaderView: BaseView {
-  func setupStyles() {
-    //
-  }
+  public func setupStyles() { }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     [
-      self.backgroundImageView,
-      self.profileImageView
+      self.profileBackgroundImageView,
+      self.profileBackgroundButton,
+      self.profilePhotoImageView,
+      self.profilePhotoButton
     ].forEach {
       self.addSubview($0)
     }
   }
 
-  func setupConstraints() {
-    self.backgroundImageView.snp.makeConstraints { make in
+  public func setupConstraints() {
+    self.profileBackgroundImageView.snp.makeConstraints { make in
       make.top.equalToSuperview()
       make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(Metric.backgroundImageHeight)
     }
-
-    self.profileImageView.snp.makeConstraints { make in
-      make.centerX.equalTo(self.backgroundImageView.snp.centerX)
-      make.centerY.equalTo(self.backgroundImageView.snp.bottom)
+    
+    self.profileBackgroundButton.snp.makeConstraints { make in
+      make.edges.equalTo(self.profileBackgroundImageView)
+    }
+    
+    self.profilePhotoImageView.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.centerY.equalTo(self.profileBackgroundImageView.snp.bottom)
       make.width.height.equalTo(Metric.profileImageSize)
+    }
+    
+    self.profilePhotoButton.snp.makeConstraints { make in
+      make.edges.equalTo(self.profilePhotoImageView)
     }
   }
 }
@@ -97,37 +158,5 @@ extension EditMyPageCollectionHeaderView: BaseView {
 // MARK: - Privates
 
 private extension EditMyPageCollectionHeaderView {
-  func makeEditableButton() -> UIImageView {
-    let imageView = UIImageView()
-
-    // Blur
-    let blurView = UIView()
-    blurView.backgroundColor = .favorColor(.black)
-    blurView.layer.opacity = 0.3
-
-    // Button
-    var config = UIButton.Configuration.plain()
-    config.image = .favorIcon(.gallery)?
-      .withRenderingMode(.alwaysTemplate)
-      .withTintColor(.favorColor(.white))
-      .resize(newWidth: 36)
-    let button = UIButton(configuration: config)
-
-    [
-      blurView,
-      button
-    ].forEach {
-      imageView.addSubview($0)
-    }
-
-    blurView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
-    }
-
-    button.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
-    }
-
-    return imageView
-  }
+  
 }

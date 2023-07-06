@@ -586,17 +586,9 @@
 		2E3FA74729F66B2A003342CA /* Reactors */ = {
 			isa = PBXGroup;
 			children = (
-				2E3FA74A29F70868003342CA /* CellReactors */,
 				2E6C90BD29A623E000AF963A /* EditMyPageViewReactor.swift */,
 			);
 			path = Reactors;
-			sourceTree = "<group>";
-		};
-		2E3FA74A29F70868003342CA /* CellReactors */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = CellReactors;
 			sourceTree = "<group>";
 		};
 		2E3FA74D29F709BE003342CA /* Cells */ = {
