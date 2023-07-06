@@ -26,7 +26,6 @@ final class EditMyPageViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let userNetworking = UserNetworking()
 
   enum Action {
     case viewNeedsLoaded
@@ -93,7 +92,9 @@ final class EditMyPageViewReactor: Reactor, Stepper {
         else { return nil }
         return favor.rawValue
       }
-      return self.userNetworking.request(.patchUser(
+      let networking = UserNetworking()
+      // TODO: Cache Image
+      return networking.request(.patchUser(
         name: self.currentState.name ?? "",
         userId: self.currentState.searchID ?? "",
         favorList: favors
