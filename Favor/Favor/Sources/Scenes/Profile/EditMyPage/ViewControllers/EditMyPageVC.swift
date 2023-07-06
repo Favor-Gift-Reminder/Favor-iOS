@@ -125,13 +125,14 @@ final class EditMyPageViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
-    reactor.state.map { (sections: $0.sections, items: $0.items) }
+    reactor.state.map { $0.items }
       .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self, onNext: { owner, sectionData in
+      .drive(with: self, onNext: { owner, items in
         var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
-        snapshot.appendSections(sectionData.sections)
-        sectionData.items.enumerated().forEach { idx, item in
-          snapshot.appendItems(item, toSection: sectionData.sections[idx])
+        let sections: [EditMyPageSection] = [.name, .id, .favor]
+        snapshot.appendSections(sections)
+        items.enumerated().forEach { idx, item in
+          snapshot.appendItems(item, toSection: sections[idx])
         }
         
         DispatchQueue.main.async {

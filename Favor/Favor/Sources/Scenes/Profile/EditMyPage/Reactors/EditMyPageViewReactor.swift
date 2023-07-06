@@ -46,7 +46,6 @@ final class EditMyPageViewReactor: Reactor, Stepper {
 
   struct State {
     var user: User
-    var sections: [EditMyPageSection] = []
     var items: [[EditMyPageSectionItem]] = []
     var nameItems: [EditMyPageSectionItem] = []
     var idItems: [EditMyPageSectionItem] = []
@@ -155,7 +154,6 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { (state: State) -> State in
       var newState = state
-      newState.sections = [.id, .name, .favor]
       newState.items = [state.nameItems, state.idItems, state.favorItems]
       return newState
     }
