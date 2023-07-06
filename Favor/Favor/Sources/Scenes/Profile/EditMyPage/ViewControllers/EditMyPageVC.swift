@@ -42,7 +42,7 @@ final class EditMyPageViewController: BaseViewController, View {
           bottom: 40,
           trailing: .zero
         ),
-        kind: EditMyPageCollectionHeaderView.identifier
+        kind: EditMyPageProfileHeader.identifier
       )
     )
     return composer
@@ -166,7 +166,33 @@ final class EditMyPageViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     // State
-
+    reactor.state.map { $0.profileBackgroundImage }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, image in
+        guard
+          let headerIndexPath = owner.collectionView.indexPathsForVisibleSupplementaryElements(
+            ofKind: EditMyPageProfileHeader.identifier).first,
+          let header = owner.collectionView.supplementaryView(
+            forElementKind: EditMyPageProfileHeader.identifier,
+            at: headerIndexPath) as? EditMyPageProfileHeader
+        else { return }
+        header.updateBackgroundImage(image)
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.profilePhotoImage }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, image in
+        guard
+          let headerIndexPath = owner.collectionView.indexPathsForVisibleSupplementaryElements(
+            ofKind: EditMyPageProfileHeader.identifier).first,
+          let header = owner.collectionView.supplementaryView(
+            forElementKind: EditMyPageProfileHeader.identifier,
+            at: headerIndexPath) as? EditMyPageProfileHeader
+        else { return }
+        header.updateProfilePhotoImage(image)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -232,8 +258,8 @@ private extension EditMyPageViewController {
     )
     
     let collectionHeaderRegistration = UICollectionView.SupplementaryRegistration
-    <EditMyPageCollectionHeaderView>(
-      elementKind: EditMyPageCollectionHeaderView.identifier,
+    <EditMyPageProfileHeader>(
+      elementKind: EditMyPageProfileHeader.identifier,
       handler: { [weak self] header, _, _ in
         guard let self = self else { return }
         header.delegate = self
@@ -267,7 +293,7 @@ private extension EditMyPageViewController {
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
       guard self != nil else { return UICollectionReusableView() }
       switch kind {
-      case EditMyPageCollectionHeaderView.identifier:
+      case EditMyPageProfileHeader.identifier:
         return collectionView.dequeueConfiguredReusableSupplementary(
           using: collectionHeaderRegistration, for: indexPath)
       case UICollectionView.elementKindSectionHeader:
@@ -285,12 +311,10 @@ private extension EditMyPageViewController {
 
 // MARK: - EditMyPageCollectionHeader
 
-extension EditMyPageViewController: EditMyPageCollectionHeaderViewDelegate {
-  func profileBackgroundDidTap() {
-    self.picker.present(selectionLimit: 1)
-  }
-  
-  func profilePhotoDidTap() {
+extension EditMyPageViewController: EditMyPageProfileHeaderDelegate {
+  func profileHeader(didTap imageType: EditMyPageProfileHeader.ImageType) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.profileHeaderDidTap(imageType))
     self.picker.present(selectionLimit: 1)
   }
 }
@@ -299,11 +323,13 @@ extension EditMyPageViewController: EditMyPageCollectionHeaderViewDelegate {
 
 extension EditMyPageViewController: PHPickerManagerDelegate {
   func pickerManager(didFinishPicking selections: PHPickerManager.Selections) {
+    guard let reactor = self.reactor else { return }
+    
     for selection in selections {
       PHPickerManager.fetch(selection.value, isLivePhotoEnabled: false) { [weak self] object, error in
-        guard let self = self else { return }
+        guard self != nil else { return }
         if let image = object as? UIImage {
-          print("Image: \(image)")
+          reactor.action.onNext(.imageDidFetched(image))
         } else if let error = error {
           os_log(.error, "\(error)")
         }

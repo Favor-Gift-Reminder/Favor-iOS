@@ -10,12 +10,17 @@ import UIKit
 import FavorKit
 import SnapKit
 
-public protocol EditMyPageCollectionHeaderViewDelegate: AnyObject {
-  func profileBackgroundDidTap()
-  func profilePhotoDidTap()
+public protocol EditMyPageProfileHeaderDelegate: AnyObject {
+  func profileHeader(didTap imageType: EditMyPageProfileHeader.ImageType)
 }
 
-public final class EditMyPageCollectionHeaderView: UICollectionReusableView {
+public final class EditMyPageProfileHeader: BaseCollectionViewCell {
+  
+  // MARK: - Enums
+  
+  public enum ImageType {
+    case background, photo
+  }
 
   // MARK: - Constants
 
@@ -28,7 +33,7 @@ public final class EditMyPageCollectionHeaderView: UICollectionReusableView {
   
   // MARK: - Properties
   
-  public weak var delegate: EditMyPageCollectionHeaderViewDelegate?
+  public weak var delegate: EditMyPageProfileHeaderDelegate?
 
   // MARK: - UI Components
   
@@ -36,6 +41,7 @@ public final class EditMyPageCollectionHeaderView: UICollectionReusableView {
     let imageView = UIImageView()
     imageView.backgroundColor = .favorColor(.white)
     imageView.contentMode = .scaleAspectFill
+    imageView.clipsToBounds = true
     return imageView
   }()
   
@@ -63,6 +69,7 @@ public final class EditMyPageCollectionHeaderView: UICollectionReusableView {
     imageView.clipsToBounds = true
     imageView.contentMode = .center
     imageView.image = self.profilePhotoDefaultImage
+    imageView.clipsToBounds = true
     return imageView
   }()
   
@@ -107,18 +114,18 @@ public final class EditMyPageCollectionHeaderView: UICollectionReusableView {
 
   @objc
   private func profileBackgroundDidTap(_ sender: UIButton) {
-    self.delegate?.profileBackgroundDidTap()
+    self.delegate?.profileHeader(didTap: .background)
   }
   
   @objc
   private func profilePhotoDidTap(_ sender: UIButton) {
-    self.delegate?.profilePhotoDidTap()
+    self.delegate?.profileHeader(didTap: .photo)
   }
 }
 
 // MARK: - UI Setup
 
-extension EditMyPageCollectionHeaderView: BaseView {
+extension EditMyPageProfileHeader: BaseView {
   public func setupStyles() { }
 
   public func setupLayouts() {
@@ -157,6 +164,6 @@ extension EditMyPageCollectionHeaderView: BaseView {
 
 // MARK: - Privates
 
-private extension EditMyPageCollectionHeaderView {
+private extension EditMyPageProfileHeader {
   
 }

@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/02/22.
 //
 
+import UIKit
+
 import FavorKit
 import FavorNetworkKit
 import ReactorKit
@@ -30,11 +32,15 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     case viewNeedsLoaded
     case cancelButtonDidTap
     case doneButtonDidTap(with: (String?, String?))
+    case profileHeaderDidTap(EditMyPageProfileHeader.ImageType)
+    case imageDidFetched(UIImage)
     case favorDidSelected(Int)
     case doNothing
   }
 
   enum Mutation {
+    case updateImageType(EditMyPageProfileHeader.ImageType)
+    case updateImage(UIImage)
     case updateFavor([EditMyPageSectionItem])
   }
 
@@ -45,6 +51,9 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     var nameItems: [EditMyPageSectionItem] = []
     var idItems: [EditMyPageSectionItem] = []
     var favorItems: [EditMyPageSectionItem] = []
+    var lastTappedProfileImage: EditMyPageProfileHeader.ImageType?
+    var profileBackgroundImage: UIImage?
+    var profilePhotoImage: UIImage?
   }
 
   // MARK: - Initializer
@@ -88,6 +97,12 @@ final class EditMyPageViewReactor: Reactor, Stepper {
         self.steps.accept(AppStep.editMyPageIsComplete)
         return .empty()
       }
+      
+    case .profileHeaderDidTap(let imageType):
+      return .just(.updateImageType(imageType))
+      
+    case .imageDidFetched(let image):
+      return .just(.updateImage(image))
 
     case .favorDidSelected(let indexPath):
       var favorItems = self.currentState.favorItems
@@ -117,6 +132,19 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
+    case .updateImageType(let imageType):
+      newState.lastTappedProfileImage = imageType
+      
+    case .updateImage(let image):
+      switch self.currentState.lastTappedProfileImage {
+      case .background:
+        newState.profileBackgroundImage = image
+      case .photo:
+        newState.profilePhotoImage = image
+      default:
+        break
+      }
+      
     case .updateFavor(let favorItems):
       newState.favorItems = favorItems
     }

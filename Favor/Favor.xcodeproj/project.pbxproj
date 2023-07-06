@@ -29,7 +29,7 @@
 		2E2DB8CD2A2DB36400E6F5C6 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
 		2E32E7CB29FEB8E400202E31 /* EditMyPageSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */; };
 		2E3FA74F29F709D1003342CA /* EditMyPageFavorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */; };
-		2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */; };
+		2E3FA75129F713A7003342CA /* EditMyPageProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75029F713A7003342CA /* EditMyPageProfileHeader.swift */; };
 		2E3FA75729F7C52D003342CA /* FriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75629F7C52D003342CA /* FriendListVC.swift */; };
 		2E3FA75929F7C561003342CA /* FriendListViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */; };
 		2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E3FA75A29F80B63003342CA /* FriendListSection.swift */; };
@@ -271,7 +271,7 @@
 		2E2B366A2A38515F0080171D /* SearchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSection.swift; sourceTree = "<group>"; };
 		2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageSection.swift; sourceTree = "<group>"; };
 		2E3FA74E29F709D1003342CA /* EditMyPageFavorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageFavorCell.swift; sourceTree = "<group>"; };
-		2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageCollectionHeaderView.swift; sourceTree = "<group>"; };
+		2E3FA75029F713A7003342CA /* EditMyPageProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageProfileHeader.swift; sourceTree = "<group>"; };
 		2E3FA75629F7C52D003342CA /* FriendListVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListVC.swift; sourceTree = "<group>"; };
 		2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListViewReactor.swift; sourceTree = "<group>"; };
 		2E3FA75A29F80B63003342CA /* FriendListSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListSection.swift; sourceTree = "<group>"; };
@@ -578,7 +578,7 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA74D29F709BE003342CA /* Cells */,
-				2E3FA75029F713A7003342CA /* EditMyPageCollectionHeaderView.swift */,
+				2E3FA75029F713A7003342CA /* EditMyPageProfileHeader.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1889,7 +1889,7 @@
 				2EB3E71B29D5EB77008D10A0 /* PastSectionBackgroundView.swift in Sources */,
 				2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */,
 				2E7330972A52D7DB009682D2 /* BasePopup.swift in Sources */,
-				2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */,
+				2E3FA75129F713A7003342CA /* EditMyPageProfileHeader.swift in Sources */,
 				2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2EC358E32A1E786B000313BB /* GiftDetailViewReactor.swift in Sources */,
