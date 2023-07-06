@@ -11,8 +11,6 @@ import FavorKit
 import RxFlow
 
 public enum AppStep: Step {
-  case imagePickerIsRequired(PHPickerManager)
-
   // MARK: - Root
   case splashIsRequired
   case splashIsComplete

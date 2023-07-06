@@ -20,7 +20,6 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
   
   public var initialState: State
   public var steps = PublishRelay<Step>()
-  private let pickerManager = PHPickerManager()
   private let workbench = RealmWorkbench()
 
   // Global States
@@ -63,8 +62,9 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .profileImageButtonDidTap:
-      self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
-      return Observable<Mutation>.empty()
+      // TODO: Picker
+//      self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
+      return .empty()
 
     case .nameTextFieldDidUpdate(let name):
       os_log(.debug, "Name TextField did update: \(name).")
@@ -104,10 +104,11 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
   }
   
   public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    let pickerMutation = self.pickerManager.pickedContents
-      .flatMap({ (picker) -> Observable<Mutation> in
-        return .just(.updateProfileImage(picker.first))
-      })
+    // TODO: Picker
+//    let pickerMutation = self.pickerManager.pickedContents
+//      .flatMap({ (picker) -> Observable<Mutation> in
+//        return .just(.updateProfileImage(picker.first))
+//      })
     let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
       self.isNameEmpty,
       self.idValidate,
@@ -118,7 +119,7 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
           return .validateNextButton(false)
         }
       })
-    return Observable.merge(mutation, pickerMutation, combineValidationsMutation)
+    return Observable.merge(mutation, combineValidationsMutation)
   }
   
   public func reduce(state: State, mutation: Mutation) -> State {

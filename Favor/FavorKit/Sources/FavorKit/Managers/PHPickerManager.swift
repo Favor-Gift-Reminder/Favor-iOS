@@ -8,60 +8,96 @@
 import OSLog
 import PhotosUI
 
-import RxRelay
-
-protocol PHPickerManagerProtocol {
-  var pickedContents: BehaviorRelay<[UIImage]> { get }
+public protocol PHPickerManagerDelegate: AnyObject {
+  func pickerManager(didFinishPicking selections: PHPickerManager.Selections)
 }
 
-public final class PHPickerManager: PHPickerManagerProtocol {
-  public var pickedContents = BehaviorRelay<[UIImage]>(value: [])
-
-  public init() { }
+public final class PHPickerManager {
+  public typealias Selections = [String: PHPickerResult]
   
-  /// PHPickerController를 선택한 NavigationController에 present합니다.
-  /// - Parameters:
-  ///   - navigationController: PHPicker를 present할 NavigationController
-  public func presentPHPicker(
-    at navigationController: UINavigationController
-  ) {
-    var config = PHPickerConfiguration()
-    config.filter = .images // Filter only images
-    let imagePickerController = PHPickerViewController(configuration: config)
-    imagePickerController.delegate = self
-    navigationController.present(imagePickerController, animated: true)
+  // MARK: - Properties
+  
+  private let target: UIViewController
+  public weak var delegate: PHPickerManagerDelegate?
+  
+  private var selections: Selections = [:]
+  private var selectedAssetIdentifiers: [String] = []
+  
+  // MARK: - Initializer
+
+  private init(_ target: UIViewController) {
+    self.target = target
   }
-}
-
-extension PHPickerManager: PHPickerViewControllerDelegate {
   
-  public func picker(
-    _ picker: PHPickerViewController,
-    didFinishPicking results: [PHPickerResult]
+  // MARK: - Functions
+  
+  public static func create(for presentingViewController: UIViewController) -> PHPickerManager {
+    let pickerManager = PHPickerManager(presentingViewController)
+    pickerManager.delegate = presentingViewController as? PHPickerManagerDelegate
+    return pickerManager
+  }
+  
+  /// PHPickerViewController를 VC에 `present`합니다.
+  ///
+  /// VC는 PHPickerManager를 초기화할 때 지정해줄 수 있습니다.
+  public func present(
+    filter: PHPickerFilter = .images,
+    selectionLimit: Int,
+    completion: (() -> Void)? = nil
   ) {
-    let cg = CoreGraphicManager()
-    let itemProvider = results.first?.itemProvider
-
-    if let itemProvider = itemProvider, itemProvider.canLoadObject(ofClass: UIImage.self) {
-      itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.image.identifier) { url, error in
-        if let url {
-          let targetSize = CGSize(width: 80, height: 80)
-          guard let downsampledImageData = cg.downsample(
-            at: url,
-            toSize: targetSize,
-            screenScale: UIScreen.main.scale
-          ) else { return }
-          guard let convertedImage = UIImage(data: downsampledImageData) else { return }
-          self.pickedContents.accept([convertedImage])
-        }
-        if let error {
-          os_log(.error, "\(error)")
-        }
-        DispatchQueue.main.async {
-          picker.dismiss(animated: true)
-        }
+    var config = PHPickerConfiguration(photoLibrary: .shared())
+    config.filter = filter
+    config.selection = .ordered
+    config.selectionLimit = selectionLimit
+    if selectionLimit != 1 {
+      config.preselectedAssetIdentifiers = self.selectedAssetIdentifiers
+    }
+    
+    let picker = PHPickerViewController(configuration: config)
+    picker.delegate = self
+    self.target.present(picker, animated: true) {
+      if let completion {
+        completion()
       }
     }
   }
   
+  /// 이미지 선택 결과를 전달하기 위한 Helper 메서드
+  public static func fetch(
+    _ pickerResult: PHPickerResult,
+    isLivePhotoEnabled: Bool,
+    completion: @escaping ((NSItemProviderReading?, Error?) -> Void)
+  ) {
+    let itemProvider = pickerResult.itemProvider
+    
+    if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) && isLivePhotoEnabled {
+      itemProvider.loadObject(ofClass: PHLivePhoto.self) { livePhoto, error in
+        completion(livePhoto, error)
+      }
+    } else if itemProvider.canLoadObject(ofClass: UIImage.self) {
+      itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+        completion(image, error)
+      }
+    }
+  }
+}
+
+// MARK: - Delegate
+
+extension PHPickerManager: PHPickerViewControllerDelegate {
+  public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+    self.target.dismiss(animated: true)
+    
+    let currentSelections = self.selections
+    var newSelections: Selections = [:]
+    for result in results {
+      let identifier = result.assetIdentifier!
+      newSelections[identifier] = currentSelections[identifier] ?? result
+    }
+    
+    self.selections = newSelections
+    self.selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
+    
+    self.delegate?.pickerManager(didFinishPicking: selections)
+  }
 }

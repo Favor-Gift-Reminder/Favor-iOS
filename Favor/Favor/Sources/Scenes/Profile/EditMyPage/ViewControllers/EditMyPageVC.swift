@@ -5,12 +5,13 @@
 //  Created by 이창준 on 2023/02/22.
 //
 
+import OSLog
+import PhotosUI
 import UIKit
 
 import Composer
 import FavorKit
 import ReactorKit
-import Reusable
 import SnapKit
 
 final class EditMyPageViewController: BaseViewController, View {
@@ -24,59 +25,9 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Properties
   
-  private var dataSource: EditMyPageDataSource?
+  private lazy var picker = PHPickerManager.create(for: self)
   
-//  private lazy var dataSource: EditMyPageDataSource = {
-//    let dataSource = EditMyPageDataSource(
-//      collectionView: self.collectionView,
-//      cellProvider: { collectionView, indexPath, item in
-//        switch item {
-//        case let .textField(text, placeholder):
-//          let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
-//          cell.bind(placeholder: placeholder)
-//          cell.bind(text: text)
-//          return cell
-//        case let .favor(isSelected, favor):
-//          let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPageFavorCell
-//          cell.isButtonSelected = isSelected
-//          cell.favor = favor
-//          return cell
-//        }
-//      }
-//    )
-//    dataSource.supplementaryViewProvider = { _, kind, indexPath in
-//      switch kind {
-//      case EditMyPageCollectionHeaderView.reuseIdentifier:
-//        let header = self.collectionView.dequeueReusableSupplementaryView(
-//          ofKind: kind,
-//          for: indexPath
-//        ) as EditMyPageCollectionHeaderView
-//        return header
-//      case UICollectionView.elementKindSectionHeader:
-//        let header = self.collectionView.dequeueReusableSupplementaryView(
-//          ofKind: kind,
-//          for: indexPath
-//        ) as FavorSectionHeaderView
-//        guard let headerTitle = dataSource.sectionIdentifier(for: indexPath.section)?.header else {
-//          return UICollectionReusableView()
-//        }
-//        header.bind(title: headerTitle)
-//        return header
-//      case UICollectionView.elementKindSectionFooter:
-//        let footer = self.collectionView.dequeueReusableSupplementaryView(
-//          ofKind: kind,
-//          for: indexPath
-//        ) as FavorSectionFooterView
-//        if let description = dataSource.sectionIdentifier(for: indexPath.section)?.footer {
-//          footer.footerDescription = description
-//        }
-//        return footer
-//      default:
-//        return UICollectionReusableView()
-//      }
-//    }
-//    return dataSource
-//  }()
+  private var dataSource: EditMyPageDataSource?
   
   private lazy var composer: Composer<EditMyPageSection, EditMyPageSectionItem> = {
     let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
@@ -336,10 +287,27 @@ private extension EditMyPageViewController {
 
 extension EditMyPageViewController: EditMyPageCollectionHeaderViewDelegate {
   func profileBackgroundDidTap() {
-    print("Background")
+    self.picker.present(selectionLimit: 1)
   }
   
   func profilePhotoDidTap() {
-    print("Photo")
+    self.picker.present(selectionLimit: 1)
+  }
+}
+
+// MARK: - PHPickerManager
+
+extension EditMyPageViewController: PHPickerManagerDelegate {
+  func pickerManager(didFinishPicking selections: PHPickerManager.Selections) {
+    for selection in selections {
+      PHPickerManager.fetch(selection.value, isLivePhotoEnabled: false) { [weak self] object, error in
+        guard let self = self else { return }
+        if let image = object as? UIImage {
+          print("Image: \(image)")
+        } else if let error = error {
+          os_log(.error, "\(error)")
+        }
+      }
+    }
   }
 }
