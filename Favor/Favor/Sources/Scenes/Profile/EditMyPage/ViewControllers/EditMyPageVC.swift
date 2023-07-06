@@ -75,22 +75,6 @@ final class EditMyPageViewController: BaseViewController, View {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-    
-    // Register
-//    collectionView.register(cellType: FavorTextFieldCell.self)
-//    collectionView.register(cellType: EditMyPageFavorCell.self)
-//    collectionView.register(
-//      supplementaryViewType: EditMyPageCollectionHeaderView.self,
-//      ofKind: EditMyPageCollectionHeaderView.reuseIdentifier
-//    )
-//    collectionView.register(
-//      supplementaryViewType: FavorSectionHeaderView.self,
-//      ofKind: UICollectionView.elementKindSectionHeader
-//    )
-//    collectionView.register(
-//      supplementaryViewType: FavorSectionFooterView.self,
-//      ofKind: UICollectionView.elementKindSectionFooter
-//    )
 
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInsetAdjustmentBehavior = .never
@@ -115,13 +99,33 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Binding
 
-  override func bind() {
-    guard let reactor = self.reactor else { return }
-    
+  public func bind(reactor: EditMyPageViewReactor) {
     // Action
+    self.rx.viewDidLoad
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.cancelButton.rx.tap
+      .map { Reactor.Action.cancelButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+
+    self.doneButton.rx.tap
+      .map { Reactor.Action.doneButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     self.collectionView.rx.itemSelected
       .map { Reactor.Action.favorDidSelected($0.item) }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.collectionView.rx.didScroll
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        owner.view.endEditing(false)
+      })
       .disposed(by: self.disposeBag)
     
     // State
@@ -140,33 +144,7 @@ final class EditMyPageViewController: BaseViewController, View {
         }
       })
       .disposed(by: self.disposeBag)
-  }
-
-  public func bind(reactor: EditMyPageViewReactor) {
-    // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.cancelButton.rx.tap
-      .map { Reactor.Action.cancelButtonDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    self.doneButton.rx.tap
-      .map { _ -> Reactor.Action in
-        guard
-          let nameCell = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? FavorTextFieldCell,
-          let idCell = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 1)) as? FavorTextFieldCell
-        else { return Reactor.Action.doNothing }
-        print(nameCell, idCell)
-        return Reactor.Action.doneButtonDidTap(with: (nameCell.text, idCell.text))
-      }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
-    // State
+    
     reactor.state.map { $0.profileBackgroundImage }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, image in
@@ -197,6 +175,11 @@ final class EditMyPageViewController: BaseViewController, View {
   }
 
   // MARK: - Functions
+  
+  @objc
+  private func collectionViewDidTap() {
+    self.view.endEditing(false)
+  }
 
   // MARK: - UI Setups
 
@@ -233,6 +216,7 @@ private extension EditMyPageViewController {
       guard case let EditMyPageSectionItem.textField(text, placeholder) = item else { return }
       cell.bind(text: text)
       cell.bind(placeholder: placeholder)
+      cell.delegate = self
     }
     
     let favorCellRegistration = UICollectionView.CellRegistration
@@ -317,6 +301,24 @@ extension EditMyPageViewController: EditMyPageProfileHeaderDelegate {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.profileHeaderDidTap(imageType))
     self.picker.present(selectionLimit: 1)
+  }
+}
+
+// MARK: - TextField Cell
+
+extension EditMyPageViewController: FavorTextFieldCellDelegate {
+  func textField(textFieldCell cell: FavorTextFieldCell, didUpdate text: String?) {
+    if
+      let reactor = self.reactor,
+      let cell = self.collectionView.visibleCells.first(where: { $0 === cell }),
+      let textFieldCell = cell as? FavorTextFieldCell,
+      let placeholder = textFieldCell.textField.placeholder {
+      if placeholder == "이름" {
+        reactor.action.onNext(.nameTextFieldDidUpdate(text))
+      } else if placeholder == "ID" {
+        reactor.action.onNext(.searchIDTextFieldDidUpdate(text))
+      }
+    }
   }
 }
 

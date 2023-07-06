@@ -13,7 +13,7 @@ import RxSwift
 import SnapKit
 
 public protocol FavorTextFieldCellDelegate: AnyObject {
-  func textFieldDidUpdate(from cell: FavorTextFieldCell, _ text: String?)
+  func textField(textFieldCell cell: FavorTextFieldCell, didUpdate text: String?)
 }
 
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
@@ -32,6 +32,7 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
     let textField = UITextField()
     textField.autocapitalizationType = .none
     textField.autocorrectionType = .no
+    textField.clearButtonMode = .whileEditing
     textField.font = .favorFont(.regular, size: 16)
     textField.textColor = .favorColor(.icon)
     return textField
@@ -57,7 +58,7 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
     self.textField.rx.text
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, text in
-        owner.delegate?.textFieldDidUpdate(from: self, text)
+        owner.delegate?.textField(textFieldCell: self, didUpdate: text)
       })
       .disposed(by: self.disposeBag)
   }
