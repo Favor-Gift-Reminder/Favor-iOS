@@ -200,13 +200,8 @@ final class EditMyPageViewController: BaseViewController, View {
 
 private extension EditMyPageViewController {
   func setupNavigationBar() {
-    self.navigationItem.leftBarButtonItem = self.cancelButton.toBarButtonItem()
     self.navigationItem.rightBarButtonItem = self.doneButton.toBarButtonItem()
-
-    let appearance = UINavigationBarAppearance()
-    appearance.configureWithTransparentBackground()
-    self.navigationController?.navigationBar.standardAppearance = appearance
-    self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+    self.navigationController?.navigationBar.tintColor = .favorColor(.white)
   }
   
   func setupDataSource() {

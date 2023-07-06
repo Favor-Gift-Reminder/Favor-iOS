@@ -116,7 +116,6 @@
 		2EA73C4929DE703F005097C0 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */; };
 		2EAC60A32A49DC5A0047A572 /* SplashViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC60A22A49DC5A0047A572 /* SplashViewReactor.swift */; };
 		2EAC60A52A49F68B0047A572 /* AppStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC60A42A49F68B0047A572 /* AppStepper.swift */; };
-		2EAC60A82A4A018F0047A572 /* Hero in Frameworks */ = {isa = PBXBuildFile; productRef = 2EAC60A72A4A018F0047A572 /* Hero */; };
 		2EB3E71129D4356A008D10A0 /* ReminderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71029D4356A008D10A0 /* ReminderViewReactor.swift */; };
 		2EB3E71329D4500D008D10A0 /* ReminderSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71229D4500D008D10A0 /* ReminderSection.swift */; };
 		2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EB3E71429D48B97008D10A0 /* ReminderCell.swift */; };
@@ -479,7 +478,6 @@
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
-				2EAC60A82A4A018F0047A572 /* Hero in Frameworks */,
 				2E946FDF2A2585BA00D0EED8 /* ImageViewer in Frameworks */,
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
 				2E7C30B1295D8DA400BAC43D /* ReactorKit in Frameworks */,
@@ -1669,7 +1667,6 @@
 				E59AB0972A17778700F0AC7D /* Then */,
 				2E946FDE2A2585BA00D0EED8 /* ImageViewer */,
 				2E55501E2A27A5AE00E6AB26 /* Composer */,
-				2EAC60A72A4A018F0047A572 /* Hero */,
 				2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */,
 				2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */,
 				2E79754C2A4E756D0083773B /* DeviceKit */,
@@ -1737,7 +1734,6 @@
 				2EE3BA8029AB60A4004FDCC9 /* XCRemoteSwiftPackageReference "realm-swift" */,
 				E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */,
 				2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */,
-				2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */,
 				2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */,
 			);
@@ -2366,14 +2362,6 @@
 				minimumVersion = 5.0.0;
 			};
 		};
-		2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/HeroTransitions/Hero.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.6.2;
-			};
-		};
 		2EC371F6299521AD00D1007B /* XCRemoteSwiftPackageReference "RxGesture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/RxSwiftCommunity/RxGesture";
@@ -2480,11 +2468,6 @@
 		2E946FDE2A2585BA00D0EED8 /* ImageViewer */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageViewer;
-		};
-		2EAC60A72A4A018F0047A572 /* Hero */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 2EAC60A62A4A018F0047A572 /* XCRemoteSwiftPackageReference "Hero" */;
-			productName = Hero;
 		};
 		2EC371F7299521AD00D1007B /* RxGesture */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -83,6 +83,7 @@ extension MyPageFlow {
 
     DispatchQueue.main.async {
       self.rootViewController.setupNavigationAppearance()
+      self.rootViewController.navigationBar.tintColor = .favorColor(.white)
       self.rootViewController.pushViewController(editMyPageVC, animated: true)
     }
     
