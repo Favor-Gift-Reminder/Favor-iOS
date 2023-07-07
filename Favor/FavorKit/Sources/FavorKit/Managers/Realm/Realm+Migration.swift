@@ -16,7 +16,7 @@ public class RealmMigration {
   /// Realm DB의 Scheme 버전
   ///
   /// [**Version History**](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
-  public static let version: UInt64 = 12
+  public static let version: UInt64 = 13
 
   public var migrationBlock: MigrationBlock = { migration, oldVersion in
     guard oldVersion < RealmMigration.version else {
@@ -67,10 +67,15 @@ public class RealmMigration {
       }
     }
     if oldVersion < 12 {
-      migration.enumerateObjects(ofType: UserObject.className()) { oldObject, newObject in
+      migration.enumerateObjects(ofType: UserObject.className()) { _, newObject in
         newObject!["givenGifts"] = 0
         newObject!["receivedGifts"] = 0
         newObject!["totalGifts"] = 0
+      }
+    }
+    if oldVersion < 13 {
+      migration.enumerateObjects(ofType: PhotoObject.className()) { _, newObject in
+        newObject!["local"] = ""
       }
     }
   }
