@@ -30,7 +30,7 @@ public final class ImageCacheManager {
   
   // MARK: - Properties
   
-  private let cacher: ImageCache
+  public let cacher: ImageCache
   
   // MARK: - Initialzier
   

@@ -56,7 +56,7 @@ final class HomeTimelineCell: BaseCollectionViewCell {
     // Image
     // TODO: 테스트 코드 삭제
     let url = URL(string: "https://picsum.photos/1200/1200")!
-    self.imageView.setImage(with: .network(url), mapper: CacheKeyMapper(gift: gift, subpath: .image(0)))
+    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(0)))
     self.pinnedIconView.isHidden = !gift.isPinned
   }
 }

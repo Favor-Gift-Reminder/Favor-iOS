@@ -11,24 +11,27 @@ import Kingfisher
 
 extension UIImageView {
   /// Kingfisher의 `setImage` 메서드를 **Favor**에 맞게 wrapping한 메서드
-  public func setImage(with source: Source?, mapper: CacheKeyMapper) {
+  public func setImage(from url: URL, mapper: CacheKeyMapper) {
     let cache = ImageCacheManager()
     let preferredSize = mapper.preferredSize ?? CGSize(width: 80, height: 80)
     let downsamplingProcessor = DownsamplingImageProcessor(size: preferredSize)
     
-    Task {
+    Task(priority: .high) {
       self.kf.indicatorType = .activity
       let cachedImage: UIImage? = await cache.fetch(from: mapper)
+      self.image = cachedImage
+      
       let options: KingfisherOptionsInfo = [
         .processor(downsamplingProcessor),
-        .retryStrategy(DelayRetryStrategy(maxRetryCount: 3, retryInterval: .seconds(2)))
+        .targetCache(cache.cacher),
+        .keepCurrentImageWhileLoading,
+        .retryStrategy(DelayRetryStrategy(maxRetryCount: 3, retryInterval: .seconds(2))),
+        .forceRefresh
       ]
       
-      self.kf.setImage(
-        with: source,
-        placeholder: cachedImage,
-        options: options
-      )
+      let resource: Resource = KF.ImageResource(downloadURL: url, cacheKey: mapper.key)
+      let source: Source = .network(resource)
+      self.kf.setImage(with: source, options: options)
     }
   }
 }
