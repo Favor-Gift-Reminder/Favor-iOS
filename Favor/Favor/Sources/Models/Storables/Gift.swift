@@ -202,6 +202,8 @@ extension FavorKit.CacheKeyMapper {
   }
   
   public init(gift: Gift, subpath: GiftSubpath) {
+    // TODO: url 추가
+    // "gift/\(gift.identifier)/\(subpath.rawValue)/\(subpath.index)/\(gift.photo.remote)"
     let key: String = "gift/\(gift.identifier)/\(subpath.rawValue)/\(subpath.index)"
     var mapper = CacheKeyMapper(key: key, cacheType: .disk)
     mapper.preferredSize = ImageCacheManager.Metric.bannerSize

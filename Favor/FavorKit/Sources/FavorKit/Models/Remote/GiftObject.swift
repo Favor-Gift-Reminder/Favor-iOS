@@ -20,7 +20,7 @@ public class GiftObject: Object {
   /// 선물 날짜
   @Persisted public var date: Date?
   /// 선물 사진 목록
-  @Persisted public var photoList: List<Photo>
+  @Persisted public var photoList: List<PhotoObject>
   /// 선물 메모
   @Persisted public var memo: String?
   /// 선물 카테고리

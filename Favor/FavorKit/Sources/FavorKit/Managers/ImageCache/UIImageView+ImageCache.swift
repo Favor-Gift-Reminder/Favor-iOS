@@ -5,6 +5,7 @@
 //  Created by 이창준 on 2023/07/07.
 //
 
+import OSLog
 import UIKit
 
 import Kingfisher
@@ -25,13 +26,15 @@ extension UIImageView {
         .processor(downsamplingProcessor),
         .targetCache(cache.cacher),
         .keepCurrentImageWhileLoading,
-        .retryStrategy(DelayRetryStrategy(maxRetryCount: 3, retryInterval: .seconds(2))),
-        .forceRefresh
+        .retryStrategy(DelayRetryStrategy(maxRetryCount: 3, retryInterval: .seconds(2)))
       ]
       
       let resource: Resource = KF.ImageResource(downloadURL: url, cacheKey: mapper.key)
       let source: Source = .network(resource)
       self.kf.setImage(with: source, options: options)
+      
+      let disk = try await cache.cacher.diskStorageSize
+      os_log(.debug, "💿 Disk storage size in use: \(disk)")
     }
   }
 }

@@ -138,6 +138,8 @@ extension FavorKit.CacheKeyMapper {
   }
   
   public init(friend: Friend, subpath: FriendSubpath) {
+    // TODO: url 추가
+    // "friend/\(friend.identifier)/\(subpath.rawValue)/\(friend.photo.remote)"
     let key: String = "friend/\(friend.identifier)/\(subpath.rawValue)"
     var mapper = CacheKeyMapper(key: key, cacheType: .memory)
     switch subpath {

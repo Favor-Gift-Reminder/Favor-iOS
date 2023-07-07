@@ -177,6 +177,8 @@ extension FavorKit.CacheKeyMapper {
   }
   
   public init(user: User, subpath: UserSubpath) {
+    // TODO: url 추가
+    // "user/\(user.identifier)/\(subpath.rawValue)/\(subpath.index)/\(user.photo.remote)"
     let key: String = "user/\(user.identifier)/\(subpath.rawValue)"
     var mapper = CacheKeyMapper(key: key, cacheType: .disk)
     switch subpath {
