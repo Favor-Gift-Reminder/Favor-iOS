@@ -202,6 +202,7 @@
 		2EFF672E2A5058E50097A664 /* BaseSettingsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */; };
 		2EFF67302A5059450097A664 /* SettingsTappableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */; };
 		2EFF67322A5059570097A664 /* SettingsSwitchableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */; };
+		DDA780DB2A57BCBF000B6E26 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA780DA2A57BCBF000B6E26 /* Photo.swift */; };
 		E51F55842A4036650002EADB /* FavorTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51F55832A4036650002EADB /* FavorTabBar.swift */; };
 		E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */; };
 		E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */; };
@@ -435,6 +436,7 @@
 		2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsCell.swift; sourceTree = "<group>"; };
 		2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTappableCell.swift; sourceTree = "<group>"; };
 		2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchableCell.swift; sourceTree = "<group>"; };
+		DDA780DA2A57BCBF000B6E26 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
 		E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirendPageVC.swift; sourceTree = "<group>"; };
 		E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageViewReactor.swift; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 				2E013D582A2EE99900FBE833 /* Reminder.swift */,
 				2E013D592A2EE99900FBE833 /* User.swift */,
 				2E013D5A2A2EE99900FBE833 /* Anniversary.swift */,
+				DDA780DA2A57BCBF000B6E26 /* Photo.swift */,
 				2E217C072A2F790700C91A46 /* RecentSearch.swift */,
 			);
 			path = Storables;
@@ -1821,6 +1824,7 @@
 				2E634E272A172D0200DD51ED /* BaseAnniversaryListViewReactor.swift in Sources */,
 				2ED326C129B327AA001963D0 /* AuthValidateEmailVC.swift in Sources */,
 				2ED326B729B0F98C001963D0 /* TermAcceptAllView.swift in Sources */,
+				DDA780DB2A57BCBF000B6E26 /* Photo.swift in Sources */,
 				2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */,
 				2E72EAA22A3ACDB40088587A /* SearchEmotionVC.swift in Sources */,
 				2E73309B2A52D7DB009682D2 /* ReminderDatePopup.swift in Sources */,

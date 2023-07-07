@@ -141,12 +141,7 @@ public class BaseProfileViewController: BaseViewController {
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
-    collectionView.contentInset = UIEdgeInsets(
-      top: .zero,
-      left: .zero,
-      bottom: .zero,
-      right: .zero
-    )
+    collectionView.contentInset = .zero
     collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
@@ -195,7 +190,6 @@ public class BaseProfileViewController: BaseViewController {
     // contentInset은 `.zero`로 고정하고 ProfileView는 숨겨짐
     else if !isContentBelowTopOfScreen {
       self.navigationItem.title = name
-      self.navigationItem.title = "김응철" // TODO: 코드 삭제 요청
       self.profileViewHeightConstraint?.update(offset: 0)
       self.profileView.updateBackgroundAlpha(to: 0)
     }

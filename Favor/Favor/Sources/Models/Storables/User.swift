@@ -167,3 +167,24 @@ extension User: Hashable {
     hasher.combine(self.identifier)
   }
 }
+
+// MARK: - Image Cache
+
+extension FavorKit.CacheKeyMapper {
+  public enum UserSubpath: String {
+    case background
+    case profilePhoto
+  }
+  
+  public init(user: User, subpath: UserSubpath) {
+    let key: String = "user/\(user.identifier)/\(subpath.rawValue)"
+    var mapper = CacheKeyMapper(key: key, cacheType: .disk)
+    switch subpath {
+    case .background:
+      mapper.preferredSize = ImageCacheManager.Metric.bannerSize
+    case .profilePhoto:
+      mapper.preferredSize = ImageCacheManager.Metric.profileSize
+    }
+    self = mapper
+  }
+}

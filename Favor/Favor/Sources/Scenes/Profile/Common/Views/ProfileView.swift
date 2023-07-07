@@ -74,6 +74,10 @@ public final class ProfileView: UIView {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    
+    // TODO: 테스트 코드 삭제
+    let url = URL(string: "https://picsum.photos/1200/1200")!
+    self.backgroundImageView.setImage(with: .network(url), mapper: CacheKeyMapper(user: User(), subpath: .background))
   }
 
   required init?(coder: NSCoder) {

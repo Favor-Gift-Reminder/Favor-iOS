@@ -128,3 +128,24 @@ extension Friend: Hashable {
     hasher.combine(self.identifier)
   }
 }
+
+// MARK: - Image Cache
+
+extension FavorKit.CacheKeyMapper {
+  public enum FriendSubpath: String {
+    case background
+    case profilePhoto
+  }
+  
+  public init(friend: Friend, subpath: FriendSubpath) {
+    let key: String = "friend/\(friend.identifier)/\(subpath.rawValue)"
+    var mapper = CacheKeyMapper(key: key, cacheType: .memory)
+    switch subpath {
+    case .background:
+      mapper.preferredSize = ImageCacheManager.Metric.bannerSize
+    case .profilePhoto:
+      mapper.preferredSize = ImageCacheManager.Metric.profileSize
+    }
+    self = mapper
+  }
+}
