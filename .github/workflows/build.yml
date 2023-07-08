@@ -21,7 +21,7 @@ env:
   # certification export key
   CERT_EXPORT_KEY: ${{ secrets.CERT_EXPORT_PW }}
 
-  KEYCHAIN: ${{ 'test.keychain' }}
+  KEYCHAIN: ${{ 'build.keychain' }}
 
 on:
   pull_request:
