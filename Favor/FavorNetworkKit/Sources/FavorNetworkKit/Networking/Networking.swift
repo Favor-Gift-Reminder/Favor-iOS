@@ -45,34 +45,37 @@ public final class Networking<TargetType: BaseTargetType> {
   public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return self.provider.rx.request(target)
+      .filterSuccessfulStatusCodes()
       .catch(self.handleInternetConnection)
       .catch(self.handleTimeOut)
+      .catch(self.handleREST)
       .do(onSuccess: { _ in
         let message = "🌐 ✅ SUCCESS: \(requestURL)"
         os_log(.debug, "\(message)")
       }, onError: { error in
-        if let response = (error as? MoyaError)?.response {
-          let message = "🌐 ❌ FAILURE: \(requestURL) [\(response.statusCode)]"
-          os_log(.error, "\(message)")
+        let message = "🌐 ❌ FAILURE: \(requestURL)"
+        os_log(.error, "\(message)")
+        
+        // Error Handling
+        switch error {
+        case APIError.timeOut:
+          FavorNotificationManager.shared.showFavorPopup("요처시간이 초과되었습니다.")
+        case APIError.internetConnection:
+          // 인터넷 연결
+          FavorNotificationManager.shared.showFavorPopup("인터넷 연결이 불안정합니다.")
+        case let APIError.restError(_, responseMessage):
+          // 서버 응답 오류
+          FavorNotificationManager.shared.showFavorPopup(responseMessage)
+        case APIError.decodeError:
+          // 디코딩 에러
+          break
+        default:
+          break
         }
       }, onSubscribed: {
         let message = "🌐 🟡 SUBSCRIBED: \(requestURL)"
         os_log(.debug, "\(message)")
       })
       .asObservable()
-      .flatMap { response -> Observable<Response> in
-        do {
-          if let filteredResponse = try? response.filterSuccessfulStatusCodes() { // 200..<300
-            return .just(filteredResponse)
-          } else { // REST error
-            let errorDTO: ErrorResponseDTO = try APIManager.decode(response.data)
-            return .error(APIError.restError(
-              responseCode: errorDTO.responseCode, responseMessage: errorDTO.responseMessage
-            ))
-          }
-        } catch {
-          return .error(error)
-        }
-      }
   }
 }

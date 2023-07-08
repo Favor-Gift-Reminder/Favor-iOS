@@ -29,6 +29,10 @@ public enum ToastMessage {
   case anniversaryModifed(String)
   case anniversaryDeleted(String)
   case anniversaryPinLimited
+  
+  // MARK: - Network
+  
+  case networkStatus
 
   // MARK: - Custom
 
@@ -51,6 +55,9 @@ extension ToastMessage {
       return "\"\(anniversaryTitle)\" 삭제 완료!"
     case .anniversaryPinLimited:
       return "최대 3개까지 고정 가능합니다."
+      
+    case .networkStatus:
+      return "인터넷 상태가 불안정합니다."
 
     case .custom(let text):
       return text
@@ -60,6 +67,8 @@ extension ToastMessage {
   public var viewType: ToastViewType {
     switch self {
     case .anniversaryPinLimited:
+      return .warning
+    case .networkStatus:
       return .warning
     default:
       return .basic

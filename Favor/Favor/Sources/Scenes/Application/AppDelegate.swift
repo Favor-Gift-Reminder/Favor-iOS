@@ -20,12 +20,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     // FavorKit Package의 Custom Font Register 메서드
     FavorKit.registerFonts()
-
+    
     // RealmDB의 파일 위치 출력
     RealmWorkbench().locateRealm()
     // KakaoSDK 초기화
     RxKakaoSDK.initSDK(appKey: "${NATIVE_APP_KEY}")
-
+    
+    // 네트워크 모니터링 시작
+    NetworkCheckManager.shared.startMonitoring()
+    
     #if DEBUG
     UserInfoStorage.userNo = 1
     #endif

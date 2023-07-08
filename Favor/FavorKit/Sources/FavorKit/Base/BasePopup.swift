@@ -7,26 +7,28 @@
 
 import UIKit
 
-import FavorKit
 import SnapKit
 import Then
 
-public class BasePopup: BaseViewController {
+open class BasePopup: BaseViewController {
 
-  // MARK: - Constants
-
+  // MARK: - Constants  
   private enum Metric {
     static let containerViewWidth: CGFloat = 335.0
   }
   
   // MARK: - UI Components
   
-  private let dimmedView: UIView = UIView().then {
-    $0.backgroundColor = .favorColor(.black)
-    $0.alpha = 0.0
+  private let backgroundView: UIView = UIView().then {
+    $0.backgroundColor = .clear
   }
   
+  /// 팝업 창 중앙에 있는 뷰 입니다.
+  /// 이 곳에 UI 컴포넌트의 레이러를 추가합니다.
   public let containerView: UIView = UIView().then {
+    $0.layer.shadowOpacity = 0.1
+    $0.layer.shadowColor = UIColor.favorColor(.black).cgColor
+    $0.layer.shadowOffset = .zero
     $0.layer.cornerRadius = 24.0
     $0.backgroundColor = .favorColor(.white)
   }
@@ -39,64 +41,62 @@ public class BasePopup: BaseViewController {
   
   // MARK: - Initializer
   
-  init(_ containerViewHeight: CGFloat) {
+  public init(_ containerViewHeight: CGFloat) {
     self.containerViewHeight = containerViewHeight
     super.init(nibName: nil, bundle: nil)
   }
   
-  required init?(coder: NSCoder) {
+  required public init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
   
   // MARK: - Life Cycle
   
-  public override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
+  override public func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
     
-    self.animateDimmedView()
     self.animateContainerView()
   }
   
-  // MARK: - UI Setups
-
-  public override func setupStyles() {
+  // MARK: - Setup
+  
+  override open func setupStyles() {
     super.setupStyles()
     
     self.view.backgroundColor = .clear
   }
   
-  public override func setupLayouts() {
+  override open func setupLayouts() {
     super.setupLayouts()
     
     [
-      self.dimmedView,
+      self.backgroundView,
       self.containerView
     ].forEach {
       self.view.addSubview($0)
     }
   }
   
-  public override func setupConstraints() {
+  override open func setupConstraints() {
     super.setupConstraints()
     
-    self.dimmedView.snp.makeConstraints { make in
+    self.backgroundView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
     
     self.containerView.snp.makeConstraints { make in
-      make.centerX.equalToSuperview()
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       self.containerViewBottomInset = make.bottom.equalToSuperview().inset(100.0).constraint
-      make.width.equalTo(Metric.containerViewWidth)
       make.height.equalTo(self.containerViewHeight)
     }
   }
   
   // MARK: - Bind
   
-  public override func bind() {
+  override open func bind() {
     super.bind()
     
-    self.dimmedView.rx.tapGesture()
+    self.backgroundView.rx.tapGesture()
       .skip(1)
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, _ in owner.dismissPopup() }
@@ -107,13 +107,11 @@ public class BasePopup: BaseViewController {
   
   /// dismiss(animated:) 대신 이 메서드를 불러서 종료시켜야 합니다.
   public func dismissPopup(_ completion: (() -> Void)? = nil) {
-    // TODO: Coordinator 삭제
     UIView.animate(
       withDuration: 0.2,
       delay: 0,
       options: .curveEaseInOut,
       animations: {
-        self.dimmedView.alpha = 0
         self.containerView.alpha = 0
         self.view.layoutIfNeeded()
       },
@@ -124,18 +122,9 @@ public class BasePopup: BaseViewController {
     )
   }
   
-  /// 배경의 알파 값을 조절하는 애니메이션 메서드입니다.
-  private func animateDimmedView() {
-    self.dimmedView.alpha = 0.0
-    UIView.animate(withDuration: 0.4) {
-      self.dimmedView.alpha = 0.3
-    }
-    self.view.layoutIfNeeded()
-  }
-  
   /// 팝업 창을 아래에서 올라오는 애니메이션 메서드입니다.
   private func animateContainerView() {
-    UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut) {
+    UIView.animate(withDuration: 0.1, delay: 0, options: .curveEaseOut) {
       self.containerViewBottomInset?.update(
         inset: (self.view.frame.height / 2) - self.containerViewHeight / 2
       )

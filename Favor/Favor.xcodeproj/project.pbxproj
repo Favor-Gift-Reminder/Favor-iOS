@@ -64,11 +64,9 @@
 		2E72EAA22A3ACDB40088587A /* SearchEmotionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E72EAA12A3ACDB40088587A /* SearchEmotionVC.swift */; };
 		2E72EAA62A3ACE960088587A /* BaseSearchTagVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E72EAA52A3ACE960088587A /* BaseSearchTagVC.swift */; };
 		2E730C6A29BA31F4003668D9 /* FavorNetworkKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E730C6929BA31F4003668D9 /* FavorNetworkKit */; };
-		2E7330972A52D7DB009682D2 /* BasePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330912A52D7DA009682D2 /* BasePopup.swift */; };
 		2E7330982A52D7DB009682D2 /* NewAlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */; };
 		2E7330992A52D7DB009682D2 /* NewLocalAuthPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */; };
 		2E73309A2A52D7DB009682D2 /* BiometricAuthPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */; };
-		2E73309B2A52D7DB009682D2 /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330952A52D7DA009682D2 /* ReminderDatePopup.swift */; };
 		2E73309C2A52D7DB009682D2 /* AlertPopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E7330962A52D7DB009682D2 /* AlertPopup.swift */; };
 		2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E76F58429601CD6002FF001 /* SplashVC.swift */; };
 		2E79754D2A4E756D0083773B /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2E79754C2A4E756D0083773B /* DeviceKit */; };
@@ -203,6 +201,7 @@
 		2EFF67302A5059450097A664 /* SettingsTappableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */; };
 		2EFF67322A5059570097A664 /* SettingsSwitchableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */; };
 		DDA780DB2A57BCBF000B6E26 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA780DA2A57BCBF000B6E26 /* Photo.swift */; };
+		DD30D6BE2A53E34A0043F1BE /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */; };
 		E51F55842A4036650002EADB /* FavorTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51F55832A4036650002EADB /* FavorTabBar.swift */; };
 		E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */; };
 		E523F6472A231B17007A6317 /* FriendPageViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */; };
@@ -302,7 +301,6 @@
 		2E72EAA12A3ACDB40088587A /* SearchEmotionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchEmotionVC.swift; sourceTree = "<group>"; };
 		2E72EAA52A3ACE960088587A /* BaseSearchTagVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSearchTagVC.swift; sourceTree = "<group>"; };
 		2E730C6829BA311C003668D9 /* FavorNetworkKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FavorNetworkKit; sourceTree = "<group>"; };
-		2E7330912A52D7DA009682D2 /* BasePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasePopup.swift; sourceTree = "<group>"; };
 		2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewAlertPopup.swift; sourceTree = "<group>"; };
 		2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewLocalAuthPopup.swift; sourceTree = "<group>"; };
 		2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BiometricAuthPopup.swift; sourceTree = "<group>"; };
@@ -437,6 +435,7 @@
 		2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTappableCell.swift; sourceTree = "<group>"; };
 		2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchableCell.swift; sourceTree = "<group>"; };
 		DDA780DA2A57BCBF000B6E26 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
 		E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirendPageVC.swift; sourceTree = "<group>"; };
 		E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageViewReactor.swift; sourceTree = "<group>"; };
@@ -1551,8 +1550,7 @@
 		E53191C52A4EADBA000DA2D7 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				2E7330912A52D7DA009682D2 /* BasePopup.swift */,
-				2E7330962A52D7DB009682D2 /* AlertPopup.swift */,
+				E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */,
 				2E7330942A52D7DA009682D2 /* BiometricAuthPopup.swift */,
 				2E7330922A52D7DA009682D2 /* NewAlertPopup.swift */,
 				2E7330932A52D7DA009682D2 /* NewLocalAuthPopup.swift */,
@@ -1613,6 +1611,7 @@
 		E5B61F3429B37ED90031046C /* Deprecated */ = {
 			isa = PBXGroup;
 			children = (
+				2E7330962A52D7DB009682D2 /* AlertPopup.swift */,
 				2E68C70C2A394C9800B7ACD0 /* .gitkeep */,
 			);
 			path = Deprecated;
@@ -1800,6 +1799,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD30D6BE2A53E34A0043F1BE /* ReminderDatePopup.swift in Sources */,
 				2E013D5D2A2EEAE600FBE833 /* Friend.swift in Sources */,
 				2E013D5E2A2EEAE600FBE833 /* Gift.swift in Sources */,
 				2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */,
@@ -1827,7 +1827,6 @@
 				DDA780DB2A57BCBF000B6E26 /* Photo.swift in Sources */,
 				2E3FA75B29F80B63003342CA /* FriendListSection.swift in Sources */,
 				2E72EAA22A3ACDB40088587A /* SearchEmotionVC.swift in Sources */,
-				2E73309B2A52D7DB009682D2 /* ReminderDatePopup.swift in Sources */,
 				2EFF672E2A5058E50097A664 /* BaseSettingsCell.swift in Sources */,
 				2E1C81BA2A20AA0D00D4128E /* GiftDetailMemoCell.swift in Sources */,
 				2E1C81B62A1F12B600D4128E /* GiftDetailTagsCell.swift in Sources */,
@@ -1890,6 +1889,7 @@
 				2EC939E12998BEAD00C8C47F /* ProfileGiftStatsCollectionHeader.swift in Sources */,
 				2E7330972A52D7DB009682D2 /* BasePopup.swift in Sources */,
 				2E3FA75129F713A7003342CA /* EditMyPageProfileHeader.swift in Sources */,
+				2E3FA75129F713A7003342CA /* EditMyPageCollectionHeaderView.swift in Sources */,
 				2E95E4B729E8FB8000A46C38 /* SearchUserResultCell.swift in Sources */,
 				2E76F58529601CD6002FF001 /* SplashVC.swift in Sources */,
 				2EC358E32A1E786B000313BB /* GiftDetailViewReactor.swift in Sources */,
@@ -2167,7 +2167,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = beta;
-				DEVELOPMENT_TEAM = XW996HTK32;
+				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
@@ -2188,6 +2188,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Favor GitHubActions Deploy";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor-iOS-Development-Provision";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor-Apple-Development-Provision";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -2209,7 +2211,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = beta;
-				DEVELOPMENT_TEAM = XW996HTK32;
+				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Favor/Info.plist;
@@ -2230,6 +2232,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Favor GitHubActions Deploy";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor-iOS-Development-Provision";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor-Apple-Development-Provision";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
