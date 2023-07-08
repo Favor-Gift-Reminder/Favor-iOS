@@ -65,8 +65,6 @@ jobs:
         
     - name : Configure Code Signing
       run: |
-        # GPG fix
-        export GPG_TTY=$(tty)
         # certificate 복호화
         gpg --batch --output ${{ env.DECRYPTED_CERT_FILE_PATH }} --decrypt --pinentry-mode=default --passphrase ${{ env.CERT_ENCRYPTION_KEY }} ${{ env.ENCRYPTED_CERT_FILE_PATH }}
         # provisioning 복호화
