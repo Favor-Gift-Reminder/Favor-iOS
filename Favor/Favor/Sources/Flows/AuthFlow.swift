@@ -64,9 +64,6 @@ public final class AuthFlow: Flow {
     case .termIsRequired(let user):
       return self.navigateToTerm(with: user)
 
-    case .imagePickerIsRequired(let manager):
-      return self.presentPHPicker(manager: manager)
-
     case .authIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
       
@@ -198,10 +195,5 @@ private extension AuthFlow {
       withNextPresentable: viewController,
       withNextStepper: reactor)
     )
-  }
-
-  func presentPHPicker(manager: PHPickerManager) -> FlowContributors {
-    manager.presentPHPicker(at: self.rootViewController)
-    return .none
   }
 }

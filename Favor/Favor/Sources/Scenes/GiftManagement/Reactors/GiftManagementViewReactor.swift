@@ -22,7 +22,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let pickerManager: PHPickerManager
+//  let pickerManager: PHPickerManager
 
   enum Action {
     case cancelButtonDidTap
@@ -60,20 +60,18 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init(_ viewType: GiftManagementViewController.ViewType, pickerManager: PHPickerManager) {
+  init(_ viewType: GiftManagementViewController.ViewType) {
     self.initialState = State(
       viewType: viewType,
       gift: Gift()
     )
-    self.pickerManager = pickerManager
   }
 
-  init(_ viewType: GiftManagementViewController.ViewType, with gift: Gift, pickerManager: PHPickerManager) {
+  init(_ viewType: GiftManagementViewController.ViewType, with gift: Gift) {
     self.initialState = State(
       viewType: viewType,
       gift: gift
     )
-    self.pickerManager = pickerManager
   }
 
   // MARK: - Functions
@@ -127,7 +125,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       if
         case Item.photo(let image) = item,
         image == nil {
-        self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
+        // TODO: Picker
+//        self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
       }
       return .empty()
 
@@ -149,13 +148,14 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     }
   }
 
-  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    let updatePickedContents = self.pickerManager.pickedContents
-      .flatMap { images -> Observable<Mutation> in
-        return .just(.updatePhotos(images))
-      }
-    return .merge(mutation, updatePickedContents)
-  }
+  // TODO: Picker
+//  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
+//    let updatePickedContents = self.pickerManager.pickedContents
+//      .flatMap { images -> Observable<Mutation> in
+//        return .just(.updatePhotos(images))
+//      }
+//    return .merge(mutation, updatePickedContents)
+//  }
 
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state

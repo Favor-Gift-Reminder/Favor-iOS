@@ -37,7 +37,7 @@ open class BaseNavigationController: UINavigationController {
     let backButtonAppearance = UIBarButtonItemAppearance()
 
     let leftArrowImage: UIImage? = .favorIcon(.left)!
-      .withRenderingMode(.alwaysOriginal)
+      .withRenderingMode(.alwaysTemplate)
       .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0))
 
     // 뒤로가기 버튼 타이틀 숨김

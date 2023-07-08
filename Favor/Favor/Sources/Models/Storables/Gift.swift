@@ -179,6 +179,38 @@ extension Gift: Hashable {
   }
 }
 
+// MARK: - Image Cache
+
+extension FavorKit.CacheKeyMapper {
+  public enum GiftSubpath {
+    
+    case image(Int)
+    
+    public var rawValue: String {
+      switch self {
+      case .image:
+        return "image"
+      }
+    }
+    
+    public var index: Int {
+      switch self {
+      case .image(let index):
+        return index
+      }
+    }
+  }
+  
+  public init(gift: Gift, subpath: GiftSubpath) {
+    // TODO: url 추가
+    // "gift/\(gift.identifier)/\(subpath.rawValue)/\(subpath.index)/\(gift.photo.remote)"
+    let key: String = "gift/\(gift.identifier)/\(subpath.rawValue)/\(subpath.index)"
+    var mapper = CacheKeyMapper(key: key, cacheType: .disk)
+    mapper.preferredSize = ImageCacheManager.Metric.bannerSize
+    self = mapper
+  }
+}
+
 // MARK: - Array Extension
 
 extension Array where Element == Gift {

@@ -92,7 +92,6 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     // Cell 선택
-    
     self.collectionView.rx.itemSelected
       .map { indexPath -> Reactor.Action in
         guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return .doNothing }
@@ -132,7 +131,6 @@ final class MyPageViewController: BaseProfileViewController, View {
           snapshot.appendItems(items, toSection: sectionData.sections[idx])
         }
         owner.dataSource.apply(snapshot, animatingDifferences: false)
-        owner.collectionView.collectionViewLayout.invalidateLayout()
       })
       .disposed(by: self.disposeBag)
   }

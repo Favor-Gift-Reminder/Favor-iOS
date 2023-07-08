@@ -368,7 +368,7 @@ extension GiftManagementViewController: GiftManagementCollectionHeaderViewDelega
 // MARK: - Title Cell
 
 extension GiftManagementViewController: FavorTextFieldCellDelegate {
-  func textFieldDidUpdate(from cell: FavorKit.FavorTextFieldCell, _ text: String?) {
+  func textField(textFieldCell cell: FavorKit.FavorTextFieldCell, didUpdate text: String?) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.titleDidUpdate(text))
   }

@@ -8,6 +8,7 @@
 import UIKit
 
 import FavorKit
+import Kingfisher
 import SnapKit
 
 final class HomeTimelineCell: BaseCollectionViewCell {
@@ -53,6 +54,9 @@ final class HomeTimelineCell: BaseCollectionViewCell {
 
   public func bind(with gift: Gift) {
     // Image
+    // TODO: 테스트 코드 삭제
+    let url = URL(string: "https://picsum.photos/1200/1200")!
+    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(0)))
     self.pinnedIconView.isHidden = !gift.isPinned
   }
 }
