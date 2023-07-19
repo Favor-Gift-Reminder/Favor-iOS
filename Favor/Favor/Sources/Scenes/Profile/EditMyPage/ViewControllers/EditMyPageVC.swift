@@ -5,12 +5,13 @@
 //  Created by 이창준 on 2023/02/22.
 //
 
+import OSLog
+import PhotosUI
 import UIKit
 
 import Composer
 import FavorKit
 import ReactorKit
-import Reusable
 import SnapKit
 
 final class EditMyPageViewController: BaseViewController, View {
@@ -24,57 +25,9 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Properties
   
-  private lazy var dataSource: EditMyPageDataSource = {
-    let dataSource = EditMyPageDataSource(
-      collectionView: self.collectionView,
-      cellProvider: { collectionView, indexPath, item in
-        switch item {
-        case let .textField(text, placeholder):
-          let cell = collectionView.dequeueReusableCell(for: indexPath) as FavorTextFieldCell
-          cell.bind(placeholder: placeholder)
-          cell.bind(text: text)
-          return cell
-        case let .favor(isSelected, favor):
-          let cell = collectionView.dequeueReusableCell(for: indexPath) as EditMyPageFavorCell
-          cell.isButtonSelected = isSelected
-          cell.favor = favor
-          return cell
-        }
-      }
-    )
-    dataSource.supplementaryViewProvider = { _, kind, indexPath in
-      switch kind {
-      case EditMyPageCollectionHeaderView.reuseIdentifier:
-        let header = self.collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          for: indexPath
-        ) as EditMyPageCollectionHeaderView
-        return header
-      case UICollectionView.elementKindSectionHeader:
-        let header = self.collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          for: indexPath
-        ) as FavorSectionHeaderView
-        guard let headerTitle = dataSource.sectionIdentifier(for: indexPath.section)?.header else {
-          return UICollectionReusableView()
-        }
-        header.bind(title: headerTitle)
-        return header
-      case UICollectionView.elementKindSectionFooter:
-        let footer = self.collectionView.dequeueReusableSupplementaryView(
-          ofKind: kind,
-          for: indexPath
-        ) as FavorSectionFooterView
-        if let description = dataSource.sectionIdentifier(for: indexPath.section)?.footer {
-          footer.footerDescription = description
-        }
-        return footer
-      default:
-        return UICollectionReusableView()
-      }
-    }
-    return dataSource
-  }()
+  private lazy var picker = PHPickerManager.create(for: self)
+  
+  private var dataSource: EditMyPageDataSource?
   
   private lazy var composer: Composer<EditMyPageSection, EditMyPageSectionItem> = {
     let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
@@ -89,7 +42,7 @@ final class EditMyPageViewController: BaseViewController, View {
           bottom: 40,
           trailing: .zero
         ),
-        kind: EditMyPageCollectionHeaderView.reuseIdentifier
+        kind: EditMyPageProfileHeader.identifier
       )
     )
     return composer
@@ -122,22 +75,6 @@ final class EditMyPageViewController: BaseViewController, View {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-    
-    // Register
-    collectionView.register(cellType: FavorTextFieldCell.self)
-    collectionView.register(cellType: EditMyPageFavorCell.self)
-    collectionView.register(
-      supplementaryViewType: EditMyPageCollectionHeaderView.self,
-      ofKind: EditMyPageCollectionHeaderView.reuseIdentifier
-    )
-    collectionView.register(
-      supplementaryViewType: FavorSectionHeaderView.self,
-      ofKind: UICollectionView.elementKindSectionHeader
-    )
-    collectionView.register(
-      supplementaryViewType: FavorSectionFooterView.self,
-      ofKind: UICollectionView.elementKindSectionFooter
-    )
 
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInsetAdjustmentBehavior = .never
@@ -150,6 +87,7 @@ final class EditMyPageViewController: BaseViewController, View {
   override func viewDidLoad() {
     super.viewDidLoad()
 
+    self.setupDataSource()
     self.composer.compose()
   }
 
@@ -161,59 +99,87 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Binding
 
-  override func bind() {
-    guard let reactor = self.reactor else { return }
-    
-    // Action
-    self.collectionView.rx.itemSelected
-      .map { Reactor.Action.favorDidSelected($0.item) }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    // State
-    reactor.state.map { (sections: $0.sections, items: $0.items) }
-      .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self, onNext: { owner, sectionData in
-        var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
-        snapshot.appendSections(sectionData.sections)
-        sectionData.items.enumerated().forEach { idx, item in
-          snapshot.appendItems(item, toSection: sectionData.sections[idx])
-        }
-        owner.dataSource.apply(snapshot, animatingDifferences: false)
-        owner.collectionView.invalidateIntrinsicContentSize()
-      })
-      .disposed(by: self.disposeBag)
-  }
-
   public func bind(reactor: EditMyPageViewReactor) {
     // Action
     self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
+      .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.cancelButton.rx.tap
       .map { Reactor.Action.cancelButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
     self.doneButton.rx.tap
-      .map { _ -> Reactor.Action in
-        guard
-          let nameCell = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 0)) as? FavorTextFieldCell,
-          let idCell = self.collectionView.cellForItem(at: IndexPath(item: 0, section: 1)) as? FavorTextFieldCell
-        else { return Reactor.Action.doNothing }
-        print(nameCell, idCell)
-        return Reactor.Action.doneButtonDidTap(with: (nameCell.text, idCell.text))
-      }
+      .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.collectionView.rx.itemSelected
+      .map { Reactor.Action.favorDidSelected($0.item) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.collectionView.rx.didScroll
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, _ in
+        owner.view.endEditing(false)
+      })
+      .disposed(by: self.disposeBag)
+    
     // State
-
+    reactor.state.map { $0.items }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, items in
+        var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
+        let sections: [EditMyPageSection] = [.name, .id, .favor]
+        snapshot.appendSections(sections)
+        items.enumerated().forEach { idx, item in
+          snapshot.appendItems(item, toSection: sections[idx])
+        }
+        
+        DispatchQueue.main.async {
+          owner.dataSource?.apply(snapshot, animatingDifferences: false)
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.profileBackgroundImage }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, image in
+        guard
+          let headerIndexPath = owner.collectionView.indexPathsForVisibleSupplementaryElements(
+            ofKind: EditMyPageProfileHeader.identifier).first,
+          let header = owner.collectionView.supplementaryView(
+            forElementKind: EditMyPageProfileHeader.identifier,
+            at: headerIndexPath) as? EditMyPageProfileHeader
+        else { return }
+        header.updateBackgroundImage(image)
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.profilePhotoImage }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, image in
+        guard
+          let headerIndexPath = owner.collectionView.indexPathsForVisibleSupplementaryElements(
+            ofKind: EditMyPageProfileHeader.identifier).first,
+          let header = owner.collectionView.supplementaryView(
+            forElementKind: EditMyPageProfileHeader.identifier,
+            at: headerIndexPath) as? EditMyPageProfileHeader
+        else { return }
+        header.updateProfilePhotoImage(image)
+      })
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
+  
+  @objc
+  private func collectionViewDidTap() {
+    self.view.endEditing(false)
+  }
 
   // MARK: - UI Setups
 
@@ -234,12 +200,138 @@ final class EditMyPageViewController: BaseViewController, View {
 
 private extension EditMyPageViewController {
   func setupNavigationBar() {
-    self.navigationItem.leftBarButtonItem = self.cancelButton.toBarButtonItem()
     self.navigationItem.rightBarButtonItem = self.doneButton.toBarButtonItem()
+    self.navigationController?.navigationBar.tintColor = .favorColor(.white)
+  }
+  
+  func setupDataSource() {
+    let textFieldCellRegistration = UICollectionView.CellRegistration
+    <FavorTextFieldCell, EditMyPageSectionItem> { [weak self] cell, _, item in
+      guard self != nil else { return }
+      guard case let EditMyPageSectionItem.textField(text, placeholder) = item else { return }
+      cell.bind(text: text)
+      cell.bind(placeholder: placeholder)
+      cell.delegate = self
+    }
+    
+    let favorCellRegistration = UICollectionView.CellRegistration
+    <EditMyPageFavorCell, EditMyPageSectionItem> { [weak self] cell, _, item in
+      guard self != nil else { return }
+      guard case let EditMyPageSectionItem.favor(isSelected, favor) = item else { return }
+      cell.isButtonSelected = isSelected
+      cell.favor = favor
+    }
+    
+    self.dataSource = EditMyPageDataSource(
+      collectionView: self.collectionView,
+      cellProvider: { [weak self] collectionView, indexPath, item in
+        guard self != nil else { return UICollectionViewCell() }
+        switch item {
+        case .textField:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: textFieldCellRegistration, for: indexPath, item: item)
+        case .favor:
+          return collectionView.dequeueConfiguredReusableCell(
+            using: favorCellRegistration, for: indexPath, item: item)
+        }
+      }
+    )
+    
+    let collectionHeaderRegistration = UICollectionView.SupplementaryRegistration
+    <EditMyPageProfileHeader>(
+      elementKind: EditMyPageProfileHeader.identifier,
+      handler: { [weak self] header, _, _ in
+        guard let self = self else { return }
+        header.delegate = self
+      }
+    )
+    
+    let headerRegistration = UICollectionView.SupplementaryRegistration
+    <FavorSectionHeaderCell>(
+      elementKind: UICollectionView.elementKindSectionHeader,
+      handler: { [weak self] header, _, indexPath in
+        guard
+          let self = self,
+          let section = self.dataSource?.sectionIdentifier(for: indexPath.section)
+        else { return }
+        header.bind(title: section.header)
+      }
+    )
+    
+    let footerRegistration = UICollectionView.SupplementaryRegistration
+    <FavorSectionFooterView>(
+      elementKind: UICollectionView.elementKindSectionFooter,
+      handler: { [weak self] footer, _, indexPath in
+        guard
+          let self = self,
+          let section = self.dataSource?.sectionIdentifier(for: indexPath.section)
+        else { return }
+        footer.footerDescription = section.footer
+      }
+    )
+    
+    self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
+      guard self != nil else { return UICollectionReusableView() }
+      switch kind {
+      case EditMyPageProfileHeader.identifier:
+        return collectionView.dequeueConfiguredReusableSupplementary(
+          using: collectionHeaderRegistration, for: indexPath)
+      case UICollectionView.elementKindSectionHeader:
+        return collectionView.dequeueConfiguredReusableSupplementary(
+          using: headerRegistration, for: indexPath)
+      case UICollectionView.elementKindSectionFooter:
+        return collectionView.dequeueConfiguredReusableSupplementary(
+          using: footerRegistration, for: indexPath)
+      default:
+        return UICollectionReusableView()
+      }
+    }
+  }
+}
 
-    let appearance = UINavigationBarAppearance()
-    appearance.configureWithTransparentBackground()
-    self.navigationController?.navigationBar.standardAppearance = appearance
-    self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+// MARK: - EditMyPageCollectionHeader
+
+extension EditMyPageViewController: EditMyPageProfileHeaderDelegate {
+  func profileHeader(didTap imageType: EditMyPageProfileHeader.ImageType) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.profileHeaderDidTap(imageType))
+    self.picker.present(selectionLimit: 1)
+  }
+}
+
+// MARK: - TextField Cell
+
+extension EditMyPageViewController: FavorTextFieldCellDelegate {
+  func textField(textFieldCell cell: FavorTextFieldCell, didUpdate text: String?) {
+    if
+      let reactor = self.reactor,
+      let cell = self.collectionView.visibleCells.first(where: { $0 === cell }),
+      let textFieldCell = cell as? FavorTextFieldCell,
+      let placeholder = textFieldCell.textField.placeholder {
+      if placeholder == "이름" {
+        reactor.action.onNext(.nameTextFieldDidUpdate(text))
+      } else if placeholder == "ID" {
+        reactor.action.onNext(.searchIDTextFieldDidUpdate(text))
+      }
+    }
+  }
+}
+
+// MARK: - PHPickerManager
+
+extension EditMyPageViewController: PHPickerManagerDelegate {
+  func pickerManager(didFinishPicking selections: PHPickerManager.Selections) {
+    guard let reactor = self.reactor else { return }
+    
+    for selection in selections {
+      PHPickerManager.fetch(selection.value, isLivePhotoEnabled: false) { [weak self] object, error in
+        guard self != nil else { return }
+        if let image = object as? UIImage {
+          reactor.action.onNext(.imageDidFetched(image))
+        } else if let error = error {
+          os_log(.error, "\(error)")
+        }
+      }
+    }
   }
 }

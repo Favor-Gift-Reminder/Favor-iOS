@@ -5,6 +5,8 @@
 //  Created by 이창준 on 2023/02/22.
 //
 
+import UIKit
+
 import FavorKit
 import FavorNetworkKit
 import ReactorKit
@@ -24,27 +26,38 @@ final class EditMyPageViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
-  let userNetworking = UserNetworking()
 
   enum Action {
     case viewNeedsLoaded
     case cancelButtonDidTap
-    case doneButtonDidTap(with: (String?, String?))
+    case doneButtonDidTap
+    case profileHeaderDidTap(EditMyPageProfileHeader.ImageType)
+    case imageDidFetched(UIImage)
+    case nameTextFieldDidUpdate(String?)
+    case searchIDTextFieldDidUpdate(String?)
     case favorDidSelected(Int)
     case doNothing
   }
 
   enum Mutation {
+    case updateImageType(EditMyPageProfileHeader.ImageType)
+    case updateImage(UIImage)
+    case updateName(String?)
+    case updateSearchID(String?)
     case updateFavor([EditMyPageSectionItem])
   }
 
   struct State {
     var user: User
-    var sections: [EditMyPageSection] = []
     var items: [[EditMyPageSectionItem]] = []
     var nameItems: [EditMyPageSectionItem] = []
     var idItems: [EditMyPageSectionItem] = []
     var favorItems: [EditMyPageSectionItem] = []
+    var lastTappedProfileImage: EditMyPageProfileHeader.ImageType?
+    var profileBackgroundImage: UIImage?
+    var profilePhotoImage: UIImage?
+    var name: String?
+    var searchID: String?
   }
 
   // MARK: - Initializer
@@ -53,10 +66,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     self.initialState = State(
       user: user,
       nameItems: [.textField(text: user.name, placeholder: "이름")],
-      idItems: [.textField(text: user.searchID, placeholder: "ID")],
-      favorItems: Favor.allCases.map { favor in
-        return .favor(isSelected: user.favorList.contains(favor), favor: favor)
-      }
+      idItems: [.textField(text: user.searchID, placeholder: "ID")]
     )
   }
 
@@ -65,13 +75,16 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return .empty()
+      let favorItems = Favor.allCases.map { favor -> EditMyPageSectionItem in
+        return .favor(isSelected: self.currentState.user.favorList.contains(favor), favor: favor)
+      }
+      return .just(.updateFavor(favorItems))
 
     case .cancelButtonDidTap:
       self.steps.accept(AppStep.editMyPageIsComplete)
       return .empty()
 
-    case let .doneButtonDidTap(with: (name, id)):
+    case .doneButtonDidTap:
       let favors = currentState.favorItems.compactMap { item -> String? in
         guard
           case let EditMyPageSectionItem.favor(isSelected, favor) = item,
@@ -79,15 +92,29 @@ final class EditMyPageViewReactor: Reactor, Stepper {
         else { return nil }
         return favor.rawValue
       }
-      return self.userNetworking.request(.patchUser(
-        name: name ?? currentState.user.name,
-        userId: id ?? currentState.user.searchID,
+      let networking = UserNetworking()
+      // TODO: Cache Image
+      return networking.request(.patchUser(
+        name: self.currentState.name ?? "",
+        userId: self.currentState.searchID ?? "",
         favorList: favors
       ))
       .flatMap { _ -> Observable<Mutation> in
         self.steps.accept(AppStep.editMyPageIsComplete)
         return .empty()
       }
+      
+    case .profileHeaderDidTap(let imageType):
+      return .just(.updateImageType(imageType))
+      
+    case .imageDidFetched(let image):
+      return .just(.updateImage(image))
+      
+    case .nameTextFieldDidUpdate(let name):
+      return .just(.updateName(name))
+      
+    case .searchIDTextFieldDidUpdate(let searchID):
+      return .just(.updateSearchID(searchID))
 
     case .favorDidSelected(let indexPath):
       var favorItems = self.currentState.favorItems
@@ -117,6 +144,25 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
+    case .updateImageType(let imageType):
+      newState.lastTappedProfileImage = imageType
+      
+    case .updateImage(let image):
+      switch self.currentState.lastTappedProfileImage {
+      case .background:
+        newState.profileBackgroundImage = image
+      case .photo:
+        newState.profilePhotoImage = image
+      default:
+        break
+      }
+      
+    case .updateName(let name):
+      newState.name = name
+      
+    case .updateSearchID(let searchID):
+      newState.searchID = searchID
+      
     case .updateFavor(let favorItems):
       newState.favorItems = favorItems
     }
@@ -127,7 +173,6 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { (state: State) -> State in
       var newState = state
-      newState.sections = [.id, .name, .favor]
       newState.items = [state.nameItems, state.idItems, state.favorItems]
       return newState
     }

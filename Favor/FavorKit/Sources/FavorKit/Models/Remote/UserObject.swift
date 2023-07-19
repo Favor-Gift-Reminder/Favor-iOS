@@ -28,9 +28,9 @@ public class UserObject: Object {
   /// 회원 친구 목록
   @Persisted public var friendList: List<FriendObject>
   /// 회원 사진
-  @Persisted public var userPhoto: Photo?
+  @Persisted public var userPhoto: PhotoObject?
   /// 회원 배경사진
-  @Persisted public var backgroundPhoto: Photo?
+  @Persisted public var backgroundPhoto: PhotoObject?
   /// 준 선물 개수
   @Persisted public var givenGifts: Int
   /// 받은 선물 개수
@@ -61,8 +61,8 @@ public class UserObject: Object {
     favorList: [String] = [], // enum화?
     anniversaryList: [AnniversaryObject] = [],
     friendList: [FriendObject] = [],
-    userPhoto: Photo? = nil,
-    backgroundPhoto: Photo? = nil,
+    userPhoto: PhotoObject? = nil,
+    backgroundPhoto: PhotoObject? = nil,
     givenGifts: Int,
     receivedGifts: Int,
     totalGifts: Int

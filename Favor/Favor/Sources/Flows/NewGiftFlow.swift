@@ -28,9 +28,6 @@ final class NewGiftFlow: Flow {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
-    case .imagePickerIsRequired(let manager):
-      return self.presentPHPicker(manager: manager)
-      
     case .giftManagementIsRequired:
       return self.navigateToNewGift()
       
@@ -58,7 +55,7 @@ private extension NewGiftFlow {
   @MainActor
   func navigateToNewGift() -> FlowContributors {
     let giftManagementVC = GiftManagementViewController()
-    let giftManagementReactor = GiftManagementViewReactor(.new, pickerManager: PHPickerManager())
+    let giftManagementReactor = GiftManagementViewReactor(.new)
     giftManagementVC.reactor = giftManagementReactor
     giftManagementVC.hidesBottomBarWhenPushed = true
 
@@ -101,10 +98,5 @@ private extension NewGiftFlow {
     self.rootViewController.dismiss(animated: true)
 
     return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
-  }
-  
-  func presentPHPicker(manager: PHPickerManager) -> FlowContributors {
-    manager.presentPHPicker(at: self.rootViewController)
-    return .none
   }
 }

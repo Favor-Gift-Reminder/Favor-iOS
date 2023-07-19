@@ -24,13 +24,11 @@ public class APIManager {
   }
   
   private enum ServerType: String {
-    case mock = "MockServer"
     case v1 = "Deployed_v1"
   }
 
   // MARK: - Properties
 
-  public static let mock = APIManager(.mock)
   public static let v1 = APIManager(.v1)
   private var type: ServerType
 

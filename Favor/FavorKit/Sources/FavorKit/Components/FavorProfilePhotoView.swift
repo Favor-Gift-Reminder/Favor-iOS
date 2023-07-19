@@ -20,23 +20,23 @@ public class FavorProfilePhotoView: UIView {
 
     public var size: CGFloat {
       switch self {
-      case .small: 48.0
-      case .big: 60.0
+      case .small: return 48.0
+      case .big: return 60.0
       }
     }
 
     /// borderWidth를 포함한 사이즈
     public var indicatorSize: CGFloat {
       switch self {
-      case .small: 14.0 + self.borderWidth
-      case .big: 16.0 + self.borderWidth
+      case .small: return 14.0 + self.borderWidth
+      case .big: return 16.0 + self.borderWidth
       }
     }
 
     public var borderWidth: CGFloat {
       switch self {
-      case .small: 2.0
-      case .big: 1.5
+      case .small: return 2.0
+      case .big: return 1.5
       }
     }
   }
