@@ -34,7 +34,7 @@ final class GiftFlow: Flow {
 
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
-
+    
     switch step {
     case .giftDetailIsRequired(let gift):
       return self.navigateToGiftDetail(with: gift)

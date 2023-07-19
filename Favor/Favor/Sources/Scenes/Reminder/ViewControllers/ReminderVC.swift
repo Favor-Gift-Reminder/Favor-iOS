@@ -43,7 +43,12 @@ final class ReminderViewController: BaseViewController, View {
 
   // MARK: - UI Components
   
-  private lazy var newReminderButton = FavorBarButtonItem(.addNoti)
+  private let newReminderButton: UIButton = {
+    var config = UIButton.Configuration.plain()
+    config.image = .favorIcon(.addNoti)
+    let button = UIButton(configuration: config)
+    return button
+  }()
   
   private let monthSelectorButton: UIButton = {
     var config = UIButton.Configuration.plain()
@@ -82,7 +87,7 @@ final class ReminderViewController: BaseViewController, View {
       frame: self.view.bounds,
       collectionViewLayout: self.setupCollectionViewLayout()
     )
-
+    
     // register
     collectionView.register(cellType: FavorEmptyCell.self)
     collectionView.register(cellType: ReminderCell.self)
@@ -142,12 +147,7 @@ final class ReminderViewController: BaseViewController, View {
       .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
-    self.rx.viewWillDisappear
-      .map { _ in Reactor.Action.viewWillDisappear }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-
+    
     self.newReminderButton.rx.tap
       .map { Reactor.Action.newReminderButtonDidTap }
       .bind(to: reactor.action)
@@ -224,7 +224,7 @@ final class ReminderViewController: BaseViewController, View {
 private extension ReminderViewController {
   func setupNavigationBar() {
     self.navigationItem.titleView = self.monthSelectorButton
-    self.navigationItem.setRightBarButton(self.newReminderButton, animated: false)
+    self.navigationItem.setRightBarButton(self.newReminderButton.toBarButtonItem(), animated: false)
   }
 
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {

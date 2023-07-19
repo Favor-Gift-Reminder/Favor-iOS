@@ -76,4 +76,40 @@ extension Date {
     formatter.dateFormat = "yyyy-MM-dd"
     return formatter.string(from: self)
   }
+  
+  public func toDTOTimeString() -> String {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "HH:mm"
+    return formatter.string(from: self)
+  }
+  
+  /// 리마인더 수정에서 필요한 날짜를
+  /// `NotifyDays` 열거형으로 변환하는 메서드입니다.
+  ///  - Parameters:
+  ///   - reminderDate: 알람으로 설정했던 시간입니다.
+  public func toNotifyDays(_ alarmDate: Date?) -> NotifyDays {
+    guard let alarmDate else { return .day }
+    var calendar = Calendar.current
+    
+    // 리마인더의 기념일 날짜와 차이를 구합니다.
+    let dateComponents = calendar.dateComponents([.day], from: self, to: alarmDate)
+    
+    // 구한 날짜의 일(day) 값입니다.
+    guard let dayComponent = dateComponents.day else { return .day }
+    
+    switch dayComponent {
+    case 0: // 당일
+      return .day
+    case -1: // 하루 전
+      return .dayBefore
+    case -2: // 이틀 전
+      return .twoDaysBefore
+    case -7: // 일주일 전
+      return .weekBefore
+    case -14: // 이주일 전
+      return .twoWeeksBefore
+    default: // 한달 전
+      return .monthBefore
+    }
+  }
 }

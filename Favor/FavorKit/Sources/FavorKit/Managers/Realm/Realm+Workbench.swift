@@ -20,7 +20,7 @@ public final class RealmWorkbench {
   private let migration = RealmMigration()
 
   // MARK: - Initializer
-
+  
   public init(
     reset: Bool = false,
     queue: DispatchQueue = DispatchQueue.realmThread
@@ -32,7 +32,7 @@ public final class RealmWorkbench {
         schemaVersion: RealmMigration.version,
         migrationBlock: self.migration.migrationBlock
       )
-
+      
       try self.realmQueue.sync {
         self.realm = try Realm(configuration: config, queue: self.realmQueue)
       }

@@ -53,21 +53,25 @@ public enum AppStep: Step {
 
   // MARK: - Reminder
   case reminderIsRequired
+  case reminderIsComplete
   case newReminderIsRequired
-  case newReminderIsComplete
   case reminderDetailIsRequired(Reminder)
   case reminderEditIsRequired(Reminder)
-  case reminderIsComplete
+  case reminderEditIsComplete(ToastMessage)
   
   // MARK: - MyPage
   case myPageIsRequired
   case editMyPageIsRequired(User)
   case editMyPageIsComplete
-
+  
   // MARK: - FriendList
   case friendListIsRequired
   case editFriendIsRequired
   case friendListIsComplete
+  
+  // MARK: - FriendSelector
+  case friendSelectorIsRequired([Friend] = [])
+  case friendSelectorIsComplete([Friend])
   
   // MARK: - FriendPage
   case friendManagementIsRequired(FriendManagementViewController.ViewControllerType)
@@ -104,7 +108,7 @@ public enum AppStep: Step {
   case privateInfoManagementTermIsRequired // 개인정보 처리방침
   case openSourceUsageIsRequired // 오픈소스 라이선스
   case wayBackToRootIsRequired
-
+  
   // MARK: - BottomSheet
   case memoBottomSheetIsRequired(String?)
   case memoBottomSheetIsComplete(String?)

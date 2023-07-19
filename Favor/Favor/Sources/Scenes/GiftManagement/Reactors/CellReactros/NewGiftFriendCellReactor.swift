@@ -21,7 +21,7 @@ final class NewGiftFriendCellReactor: Reactor {
   typealias Action = NoAction
   
   struct State: Hashable {
-    var rightButtonState: NewGiftFriendCell.RightButtonType = .add
+    var rightButtonState: FriendSelectorCell.RightButtonType = .add
     var friend: Friend
   }
   
@@ -33,7 +33,7 @@ final class NewGiftFriendCellReactor: Reactor {
   
   init(
     _ friend: Friend,
-    rightButtonState: NewGiftFriendCell.RightButtonType
+    rightButtonState: FriendSelectorCell.RightButtonType
   ) {
     self.initialState = State(
       rightButtonState: rightButtonState,

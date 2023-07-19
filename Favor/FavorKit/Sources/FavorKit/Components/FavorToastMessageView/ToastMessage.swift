@@ -30,6 +30,10 @@ public enum ToastMessage {
   case anniversaryDeleted(String)
   case anniversaryPinLimited
   
+  // MARK: - Reminder
+  
+  case reminderAdded
+  
   // MARK: - Network
   
   case networkStatus
@@ -55,6 +59,9 @@ extension ToastMessage {
       return "\"\(anniversaryTitle)\" 삭제 완료!"
     case .anniversaryPinLimited:
       return "최대 3개까지 고정 가능합니다."
+      
+    case .reminderAdded:
+      return "리마인더가 등록되었습니다."
       
     case .networkStatus:
       return "인터넷 상태가 불안정합니다."

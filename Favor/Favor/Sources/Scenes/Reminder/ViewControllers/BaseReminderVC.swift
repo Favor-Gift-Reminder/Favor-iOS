@@ -18,7 +18,7 @@ import SnapKit
 class BaseReminderViewController: BaseViewController {
 
   // MARK: - Properties
-
+  
   public var isEditable: Bool = false {
     didSet { self.setViewEditable(to: self.isEditable) }
   }
@@ -28,7 +28,7 @@ class BaseReminderViewController: BaseViewController {
   public var memoStackMinY: CGFloat { return self.memoStack.frame.minY }
 
   // MARK: - UI Components
-
+  
   public lazy var scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsHorizontalScrollIndicator = false
@@ -55,7 +55,7 @@ class BaseReminderViewController: BaseViewController {
     itemViews: [self.titleTextField],
     isDividerNeeded: false
   )
-
+  
   // 받을 사람
   public lazy var friendSelectorButton: FavorPlainButton = {
     let button = FavorPlainButton(with: .main("친구 선택", isRight: true))
@@ -66,9 +66,13 @@ class BaseReminderViewController: BaseViewController {
     title: "받을 사람",
     itemViews: [self.friendSelectorButton]
   )
-
+  
   // 날짜
-  public let dateSelectorTextField = FavorDatePickerTextField()
+  public let dateSelectorTextField: FavorDatePickerTextField = {
+    let tf = FavorDatePickerTextField()
+    tf.placeholder = "날짜 선택"
+    return tf
+  }()
   public lazy var dateSelectorStack = self.makeEditableStack(
     title: "날짜",
     itemViews: [self.dateSelectorTextField]
@@ -110,25 +114,28 @@ class BaseReminderViewController: BaseViewController {
 
     button.showsMenuAsPrimaryAction = true
     button.changesSelectionAsPrimaryAction = false
-
+    
     let actions = NotifyDays.allCases.compactMap { day in
       UIAction(title: day.stringValue, handler: { _ in
         self.updateNotifyDateSelectorButton(title: day.stringValue)
+        self.notifyDateDidChanged(day)
       })
     }
     let buttonMenu = UIMenu(title: "알림 기간", children: actions)
     button.menu = buttonMenu
-
+    
     button.setContentHuggingPriority(.defaultHigh, for: .vertical)
-
+    
     return button
   }()
+  
   public lazy var notifyTimeSelectorTextField: FavorDatePickerTextField = {
     let picker = FavorDatePickerTextField()
     picker.pickerMode = .time
     picker.placeholder = "시간 선택"
     return picker
   }()
+  
   public lazy var notifyTimeDateSelectorStack: UIStackView = {
     let stackView = UIStackView(
       arrangedSubviews: [
@@ -204,7 +211,7 @@ class BaseReminderViewController: BaseViewController {
   }
 
   // MARK: - Functions
-
+  
   public func makeEditableStack(
     title: String,
     itemViews: [UIView]? = nil,
@@ -292,12 +299,15 @@ class BaseReminderViewController: BaseViewController {
   }
 
   func switchDidToggled(to state: Bool) { }
+  
+  func notifyDateDidChanged(_ notifyDays: NotifyDays) { }
 
   // MARK: - UI Setups
-
+  
   override func setupLayouts() {
     self.view.addSubview(self.scrollView)
     self.notifySelectorStack.addSubview(self.notifySwitch)
+    self.titleStack.spacing = 4.0
   }
 
   override func setupConstraints() {

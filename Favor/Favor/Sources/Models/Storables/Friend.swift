@@ -23,9 +23,9 @@ public struct Friend: Storable, Receivable {
   public var userIdentifier: Int?
   public var anniversaryList: [Anniversary]
   public var favorList: [Favor]
-
+  
   // MARK: - Storable
-
+  
   public init(realmObject: FriendObject) {
     @ThreadSafe var rlmObjectRef = realmObject
     guard let realmObject = rlmObjectRef else { fatalError() }
@@ -39,7 +39,7 @@ public struct Friend: Storable, Receivable {
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
   }
-
+  
   public func realmObject() -> FriendObject {
     FriendObject(
       friendNo: self.identifier,
