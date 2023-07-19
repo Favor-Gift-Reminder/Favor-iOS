@@ -23,9 +23,9 @@ protocol ValidationManager {
 public final class AuthValidationManager: ValidationManager {
 
   // MARK: - Properties
-
+  
   public var type: AuthType
-
+  
   // MARK: - Initializer
 
   public init(type: AuthType) {

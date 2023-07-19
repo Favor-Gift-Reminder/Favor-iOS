@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
+final class FriendSelectorHeaderView: UICollectionReusableView, Reusable, View {
   
   // MARK: - UI Components
   
@@ -89,7 +89,7 @@ final class NewGiftFriendHeaderView: UICollectionReusableView, Reusable, View {
   }
 }
 
-extension NewGiftFriendHeaderView: BaseView {
+extension FriendSelectorHeaderView: BaseView {
   func setupStyles() {}
   
   func setupLayouts() {
@@ -104,7 +104,7 @@ extension NewGiftFriendHeaderView: BaseView {
   
   func setupConstraints() {
     self.titleLabel.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
+      make.leading.equalToSuperview()
       make.top.equalToSuperview().inset(32)
     }
     
@@ -115,7 +115,7 @@ extension NewGiftFriendHeaderView: BaseView {
     
     self.searchBar.snp.makeConstraints { make in
       make.top.equalTo(self.titleLabel.snp.bottom).offset(16)
-      make.leading.trailing.equalToSuperview().inset(20)
+      make.leading.trailing.equalToSuperview()
     }
   }
 }

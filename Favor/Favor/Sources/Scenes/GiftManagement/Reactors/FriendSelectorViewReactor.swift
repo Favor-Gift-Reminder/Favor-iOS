@@ -13,23 +13,40 @@ import ReactorKit
 import RxCocoa
 import RxFlow
 
-final class NewGiftFriendViewReactor: Reactor, Stepper {
-
+final class FriendSelectorViewReactor: Reactor, Stepper {
+  
+  /// 친구 선택 페이지를 분기처리하기 위한 열거형입니다.
+  enum ViewType {
+    case gift
+    case reminder
+    
+    /// 최대로 선택할 수 있는 친구 수
+    var maximumSelection: Int {
+      switch self {
+      case .gift:
+        return 5
+      case .reminder:
+        return 1
+      }
+    }
+  }
+  
   // MARK: - Properties
-
-  var initialState: State = State()
+  
+  var initialState: State
   var steps = PublishRelay<Step>()
-  private let workbench = try! RealmWorkbench()
+  private let workbench = RealmWorkbench()
   private let friendFetcher = Fetcher<Friend>()
-
+  
   /// 최초로 불러온 친구 목록 입니다.
   var allFriends: [Friend] = []
 
   enum Action {
     case viewDidLoad
-    case cellDidTap(IndexPath, NewGiftFriendCell.RightButtonType)
+    case cellDidTap(IndexPath, FriendSelectorCell.RightButtonType)
     case textFieldDidChange(String)
     case addFriendDidTap
+    case finishButtonDidTap
   }
   
   enum Mutation {
@@ -40,20 +57,22 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
   }
   
   struct State {
+    var viewType: ViewType
     /// 0: 선택된 친구들
     /// 1: 현재 친구들
     var items: [[NewGiftFriendItem]] = []
     /// 현재 리스트로 보여지고 있는 친구 목록입니다.
     var currentFriends: [Friend] = []
     /// 선택된 친구 목록입니다.
-    var selectedFriends: [Friend] = []
+    var selectedFriends: [Friend]
     var isEnabledFinishButton: Bool = false
     var isLoading: Bool = false
   }
   
   // MARK: - Initializer
   
-  init() {
+  init(_ viewType: ViewType, selectedFriends: [Friend] = []) {
+    self.initialState = State(viewType: viewType, selectedFriends: selectedFriends)
     self.setupFriendFetcher()
   }
   
@@ -78,9 +97,14 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
         switch rightButtonType {
         case .add:
           var selectedFriends = self.currentState.selectedFriends
-          let friend = self.currentState.currentFriends[indexPath.row]
-          selectedFriends.append(friend)
-          return .just(.updateSelectedFriends(selectedFriends))
+          if selectedFriends.count >= self.currentState.viewType.maximumSelection {
+            // 현재 최대 친구 수를 넘어서면 선택이 되지 않습니다.
+            return .empty()
+          } else {
+            let friend = self.currentState.currentFriends[indexPath.row]
+            selectedFriends.append(friend)
+            return .just(.updateSelectedFriends(selectedFriends))
+          }
         case .done:
           return .empty()
         case .remove:
@@ -98,6 +122,11 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       
     case .addFriendDidTap:
       self.steps.accept(AppStep.friendManagementIsRequired(.new))
+      return .empty()
+      
+    case .finishButtonDidTap:
+      let friends = self.currentState.selectedFriends
+      self.steps.accept(AppStep.friendSelectorIsComplete(friends))
       return .empty()
     }
   }
@@ -134,7 +163,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
       // 친구 아이템
       let friendItems = state.currentFriends
         .map { friend in
-          var buttonType: NewGiftFriendCell.RightButtonType = .add
+          var buttonType: FriendSelectorCell.RightButtonType = .add
           if state.selectedFriends.first(where: { $0 == friend }) != nil {
             buttonType = .done
           }
@@ -161,7 +190,7 @@ final class NewGiftFriendViewReactor: Reactor, Stepper {
 
 // MARK: - Fetcher
 
-private extension NewGiftFriendViewReactor {
+private extension FriendSelectorViewReactor {
   func setupFriendFetcher() {
     // onRemote
     self.friendFetcher.onRemote = {

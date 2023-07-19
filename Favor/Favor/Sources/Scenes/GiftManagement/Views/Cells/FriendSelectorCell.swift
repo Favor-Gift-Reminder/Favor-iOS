@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import Reusable
 
-final class NewGiftFriendCell: BaseFriendCell, View, Reusable {
+final class FriendSelectorCell: BaseFriendCell, View, Reusable {
   
   enum RightButtonType {
     case add

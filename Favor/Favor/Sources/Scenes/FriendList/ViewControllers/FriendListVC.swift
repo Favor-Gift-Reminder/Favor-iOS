@@ -34,7 +34,7 @@ final class FriendListViewController: BaseFriendListViewController, View {
     searchBar.placeholder = "친구를 검색해보세요"
     return searchBar
   }()
-
+    
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -100,7 +100,7 @@ final class FriendListViewController: BaseFriendListViewController, View {
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
 
   private func setupNavigationBar() {
@@ -117,13 +117,13 @@ final class FriendListViewController: BaseFriendListViewController, View {
       self.view.addSubview($0)
     }
   }
-
+  
   override func setupConstraints() {
     self.searchBar.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide).inset(32)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
-
+    
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.searchBar.snp.bottom).offset(16)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)

@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import Reusable
 
-final class NewGiftFriendViewController: BaseViewController, View {
+final class FriendSelectionViewController: BaseViewController, View {
   typealias DataSource = UICollectionViewDiffableDataSource<NewGiftFriendSection, NewGiftFriendItem>
   
   private enum Metric {
@@ -37,10 +37,10 @@ final class NewGiftFriendViewController: BaseViewController, View {
       cellProvider: { collectionView, indexPath, item in
         switch item {
         case .empty:
-          let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftFriendEmptyCell
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendSelectorEmptyCell
           return cell
         case .friend(let reactor):
-          let cell = collectionView.dequeueReusableCell(for: indexPath) as NewGiftFriendCell
+          let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendSelectorCell
           cell.reactor = reactor
           return cell
         }
@@ -55,7 +55,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
         let header = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as NewGiftFriendHeaderView
+        ) as FriendSelectorHeaderView
         let section = self.dataSource.sectionIdentifier(for: indexPath.section) ?? .friends
         let friends = section == .friends ?
         reactor.allFriends :
@@ -71,7 +71,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
         let footer = collectionView.dequeueReusableSupplementaryView(
           ofKind: kind,
           for: indexPath
-        ) as NewGiftFriendFooterView
+        ) as FriendSelectorFooterView
         // 탭 이벤트
         footer.tapCompletion = { [weak self] in
           self?.reactor?.action.onNext(.addFriendDidTap)
@@ -117,14 +117,14 @@ final class NewGiftFriendViewController: BaseViewController, View {
       collectionViewLayout: self.setupCollectionViewLayout()
     )
     cv.backgroundColor = .favorColor(.white)
-    cv.register(cellType: NewGiftFriendEmptyCell.self)
-    cv.register(cellType: NewGiftFriendCell.self)
+    cv.register(cellType: FriendSelectorEmptyCell.self)
+    cv.register(cellType: FriendSelectorCell.self)
     cv.register(
-      supplementaryViewType: NewGiftFriendHeaderView.self,
+      supplementaryViewType: FriendSelectorHeaderView.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
     cv.register(
-      supplementaryViewType: NewGiftFriendFooterView.self,
+      supplementaryViewType: FriendSelectorFooterView.self,
       ofKind: UICollectionView.elementKindSectionFooter
     )
     return cv
@@ -163,16 +163,17 @@ final class NewGiftFriendViewController: BaseViewController, View {
     super.setupConstraints()
     
     self.collectionView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.top.bottom.equalToSuperview()
     }
   }
   
   // MARK: - Bind
   
-  func bind(reactor: NewGiftFriendViewReactor) {
+  func bind(reactor: FriendSelectorViewReactor) {
     // Action
     self.rx.viewDidLoad
-      .map { NewGiftFriendViewReactor.Action.viewDidLoad }
+      .map { FriendSelectorViewReactor.Action.viewDidLoad }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -181,13 +182,18 @@ final class NewGiftFriendViewController: BaseViewController, View {
       .map { owner, indexPath in
         guard let cell = owner.collectionView.cellForItem(
           at: indexPath
-        ) as? NewGiftFriendCell
+        ) as? FriendSelectorCell
         else {
           return (IndexPath(row: -1, section: 0), .done)
         }
         return (indexPath, cell.currentButtonType)
       }
-      .map { NewGiftFriendViewReactor.Action.cellDidTap($0, $1) }
+      .map { FriendSelectorViewReactor.Action.cellDidTap($0, $1) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.finishButton.rx.tap
+      .map { FriendSelectorViewReactor.Action.finishButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -226,7 +232,7 @@ final class NewGiftFriendViewController: BaseViewController, View {
 
 // MARK: - Privates
 
-private extension NewGiftFriendViewController {
+private extension FriendSelectionViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(
       sectionProvider: { sectionIndex, _ in
@@ -281,9 +287,9 @@ private extension NewGiftFriendViewController {
     section.interGroupSpacing = Metric.interGroupSpacing
     section.contentInsets = NSDirectionalEdgeInsets(
       top: topContentInset,
-      leading: 20.0,
+      leading: 0,
       bottom: bottomContentInset,
-      trailing: 20.0
+      trailing: 0
     )
     section.boundarySupplementaryItems = [self.createHeader(section: sectionType)]
     

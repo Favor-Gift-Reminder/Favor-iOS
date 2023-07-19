@@ -14,7 +14,7 @@ public class BaseFriendListViewController: BaseViewController {
   public typealias FriendDataSource = UICollectionViewDiffableDataSource<FriendSection, FriendSectionItem>
 
   // MARK: - Constants
-
+  
   public enum FriendViewType {
     case list
     case edit

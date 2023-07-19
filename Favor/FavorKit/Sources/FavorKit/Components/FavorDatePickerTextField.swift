@@ -55,22 +55,25 @@ public final class FavorDatePickerTextField: UIView {
     stackView.spacing = 4
     return stackView
   }()
-
+  
   private lazy var downButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.image = .favorIcon(.down)?.resize(newWidth: 12).withRenderingMode(.alwaysTemplate)
     config.contentInsets = NSDirectionalEdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4)
     config.baseForegroundColor = .favorColor(.explain)
     config.baseBackgroundColor = .clear
     
     let btn = UIButton(configuration: config)
     btn.configurationUpdateHandler = { button in
-      let image: UIImage? = .favorIcon(.down)?.resize(newWidth: 12.0)
+      let image: UIImage? = .favorIcon(.down)?
+        .resize(newWidth: 12.0)
+        .withRenderingMode(.alwaysTemplate)
       switch button.state {
       case .normal:
         button.configuration?.image = image?.withTintColor(.favorColor(.explain))
+        button.configuration?.baseForegroundColor = .favorColor(.explain)
       case .selected:
         button.configuration?.image = image?.withTintColor(.favorColor(.icon))
+        button.configuration?.baseForegroundColor = .favorColor(.icon)
       default: break
       }
     }
@@ -139,15 +142,12 @@ public final class FavorDatePickerTextField: UIView {
   
   private func bind() {
     self.date
+      .compactMap { $0 }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
+        let dateString = owner.pickerMode == .time ? date.toTimeString() : date.toDateString()
+        owner.textField.text = dateString
         owner.isSelected = true
-        if let date {
-          let dateString = owner.pickerMode == .time ? date.toTimeString() : date.toDateString()
-          owner.textField.text = dateString
-        } else {
-          owner.textField.text = nil
-        }
       })
       .disposed(by: self.disposeBag)
 

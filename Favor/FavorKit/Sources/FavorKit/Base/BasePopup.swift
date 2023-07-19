@@ -108,7 +108,7 @@ open class BasePopup: BaseViewController {
   /// dismiss(animated:) 대신 이 메서드를 불러서 종료시켜야 합니다.
   public func dismissPopup(_ completion: (() -> Void)? = nil) {
     UIView.animate(
-      withDuration: 0.2,
+      withDuration: 0.1,
       delay: 0,
       options: .curveEaseInOut,
       animations: {

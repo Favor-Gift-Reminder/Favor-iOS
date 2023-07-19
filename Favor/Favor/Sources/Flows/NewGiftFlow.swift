@@ -66,11 +66,11 @@ private extension NewGiftFlow {
       withNextStepper: giftManagementReactor
     ))
   }
-
+  
   @MainActor
   func navigateToNewGiftFriend() -> FlowContributors {
-    let viewController = NewGiftFriendViewController()
-    let reactor = NewGiftFriendViewReactor()
+    let viewController = FriendSelectionViewController()
+    let reactor = FriendSelectorViewReactor(.gift)
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     

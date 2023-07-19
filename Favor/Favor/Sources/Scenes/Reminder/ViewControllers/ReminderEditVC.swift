@@ -18,11 +18,11 @@ final class ReminderEditViewController: BaseReminderViewController, View {
   private enum Metric {
     static let detailViewTopSpacing = 15.0
   }
-
+  
   // MARK: - Properties
 
   // MARK: - UI Components
-
+  
   private lazy var doneButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.baseBackgroundColor = .clear
@@ -40,7 +40,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     }
     return button
   }()
-
+  
   // View Items
   private let contentsView = UIView()
 
@@ -54,14 +54,19 @@ final class ReminderEditViewController: BaseReminderViewController, View {
   // MARK: - Life Cycle
 
   // MARK: - Binding
-
+  
   func bind(reactor: ReminderEditViewReactor) {
     // Action
     self.rx.viewDidLoad
       .map { Reactor.Action.viewDidLoad }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.friendSelectorButton.rx.tap
+      .map { Reactor.Action.friendSelectorButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     self.dateSelectorTextField.rx.date
       .distinctUntilChanged()
       .map { Reactor.Action.datePickerDidUpdate($0) }
@@ -73,12 +78,24 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .map { Reactor.Action.notifyTimePickerDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.doneButton.rx.tap
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.titleTextField.rx.text
+      .orEmpty
+      .map { Reactor.Action.titleTextFieldDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.memoTextView.rx.text
+      .orEmpty
+      .map { Reactor.Action.memoTextViewDidUpdate($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { $0.type }
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -91,15 +108,21 @@ final class ReminderEditViewController: BaseReminderViewController, View {
         )
       })
       .disposed(by: self.disposeBag)
-
-    reactor.state.map { $0.reminder }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, reminder in
-        owner.dateSelectorTextField.isSelected = true
-        owner.dateSelectorTextField.updateDate(reminder.date)
-        owner.notifyTimeSelectorTextField.isSelected = !(reminder.notifyDate == nil)
-        owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
-      })
+    
+    reactor.state.map { $0.isEnabledDoneButton }
+      .bind(to: self.doneButton.rx.isEnabled)
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.currentFriend }
+      .compactMap { $0 }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, friend in
+        owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friend.name)
+      }
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
 
@@ -110,7 +133,12 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.notifySwitchDidToggle(state))
   }
-
+  
+  override func notifyDateDidChanged(_ notifyDays: NotifyDays) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.notifyDateDidUpdate(notifyDays))
+  }
+  
   // MARK: - UI Setups
   override func setupStyles() {
     super.setupStyles()
@@ -143,13 +171,14 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       self.stackView.addArrangedSubview($0)
     }
   }
-
+  
   override func setupConstraints() {
     super.setupConstraints()
-
+    
     self.scrollView.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalToSuperview()
-      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
+      make.top.equalTo(self.view.safeAreaLayoutGuide)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top)
     }
 
     self.contentsView.snp.makeConstraints { make in

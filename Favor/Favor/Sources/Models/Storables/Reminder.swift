@@ -61,9 +61,9 @@ public struct Reminder: Storable, Receivable {
     self.notifyDate = dto.alarmTime
     self.relatedFriend = dto.friendNo
   }
-
+  
   // MARK: - Mock
-
+  
   /// 비어있는 구조체를 생성합니다.
   ///
   /// > **⚠️ Warning** :

@@ -11,7 +11,7 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class NewGiftFriendEmptyCell: BaseCollectionViewCell, Reusable {
+final class FriendSelectorEmptyCell: BaseCollectionViewCell, Reusable {
   
   // MARK: - Properties
   
@@ -43,7 +43,7 @@ final class NewGiftFriendEmptyCell: BaseCollectionViewCell, Reusable {
   }
 }
 
-extension NewGiftFriendEmptyCell: BaseView {
+extension FriendSelectorEmptyCell: BaseView {
   func setupStyles() {}
   
   func setupLayouts() {

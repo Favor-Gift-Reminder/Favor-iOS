@@ -23,9 +23,9 @@ final class ReminderFlow: Flow {
   init(rootViewController: BaseNavigationController) {
     self.rootViewController = rootViewController
   }
-
+  
   // MARK: - Navigate
-
+  
   func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
@@ -35,15 +35,24 @@ final class ReminderFlow: Flow {
 
     case .newReminderIsRequired:
       return self.navigateToNewReminder()
-
+      
     case .reminderDetailIsRequired(let reminder):
       return self.navigateToReminderDetail(reminder: reminder)
-
+      
     case .reminderEditIsRequired(let reminder):
       return self.navigateToEditReminder(reminder: reminder)
+      
+    case .reminderEditIsComplete(let message):
+      return self.popFromReminderEdit(message)
 
     case .reminderIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
+      
+    case .friendSelectorIsRequired(let friends):
+      return self.navigateToFriendSelector(friends)
+      
+    case .friendSelectorIsComplete(let friends):
+      return self.popFromFriendSelector(friends)
 
     default: return .none
     }
@@ -66,21 +75,21 @@ private extension ReminderFlow {
       withNextStepper: reminderReactor
     ))
   }
-
+  
   func navigateToNewReminder() -> FlowContributors {
     let newReminderVC = ReminderEditViewController()
     let newReminderReactor = ReminderEditViewReactor(.new)
     newReminderVC.reactor = newReminderReactor
     newReminderVC.isEditable = true
-
+    
     self.rootViewController.pushViewController(newReminderVC, animated: true)
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: newReminderVC,
       withNextStepper: newReminderReactor
     ))
   }
-
+  
   func navigateToReminderDetail(reminder: Reminder) -> FlowContributors {
     let reminderDetailVC = ReminderDetailViewController()
     let reminderDetailReactor = ReminderDetailViewReactor(reminder: reminder)
@@ -94,7 +103,7 @@ private extension ReminderFlow {
       withNextStepper: reminderDetailReactor
     ))
   }
-
+  
   func navigateToEditReminder(reminder: Reminder) -> FlowContributors {
     let reminderEditVC = ReminderEditViewController()
     let reminderEditReactor = ReminderEditViewReactor(reminder: reminder)
@@ -102,10 +111,50 @@ private extension ReminderFlow {
     reminderEditVC.isEditable = true
 
     self.rootViewController.pushViewController(reminderEditVC, animated: true)
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: reminderEditVC,
       withNextStepper: reminderEditReactor
+    ))
+  }
+  
+  func popFromReminderEdit(_ message: ToastMessage) -> FlowContributors {
+    if self.rootViewController.topViewController is ReminderEditViewController {
+      self.rootViewController.popViewController(animated: true)
+      guard
+        let reminderVC = self.rootViewController.topViewController as? ReminderViewController
+      else { return .none }
+      reminderVC.viewNeedsLoaded(with: message)
+    }
+    
+    return .none
+  }
+  
+  func popFromFriendSelector(_ friends: [Friend]) -> FlowContributors {
+    if self.rootViewController.topViewController is ReminderEditViewController {
+      self.rootViewController.popViewController(animated: true)
+      
+      guard
+        let reminderEditVC = self.rootViewController.topViewController as? ReminderEditViewController,
+        let friend = friends.first
+      else { return .none }
+      
+      reminderEditVC.reactor?.action.onNext(.friendDidChange(friend))
+    }
+    
+    return .none
+  }
+  
+  func navigateToFriendSelector(_ friends: [Friend]) -> FlowContributors {
+    let friendSelectorVC = FriendSelectionViewController()
+    let friendSelectorReactor = FriendSelectorViewReactor(.reminder, selectedFriends: friends)
+    friendSelectorVC.reactor = friendSelectorReactor
+    
+    self.rootViewController.pushViewController(friendSelectorVC, animated: true)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendSelectorVC,
+      withNextStepper: friendSelectorReactor
     ))
   }
 }

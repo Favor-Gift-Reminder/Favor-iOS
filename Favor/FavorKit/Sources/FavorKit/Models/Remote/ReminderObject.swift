@@ -30,7 +30,7 @@ public class ReminderObject: Object {
   @Persisted public var notifyTime: Date?
   /// 관련 친구의 회원 번호
   @Persisted public var friendNo: Int
-
+  
   public override class func propertiesMapping() -> [String: String] {
     [
       "date": "reminderDate",

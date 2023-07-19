@@ -10,7 +10,7 @@ import UIKit
 import FavorKit
 import Reusable
 
-final class NewGiftFriendFooterView: UICollectionReusableView, Reusable {
+final class FriendSelectorFooterView: UICollectionReusableView, Reusable {
   
   // MARK: - UI Components
 
@@ -68,7 +68,7 @@ final class NewGiftFriendFooterView: UICollectionReusableView, Reusable {
   }
 }
 
-extension NewGiftFriendFooterView: BaseView {
+extension FriendSelectorFooterView: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.white)
     self.addGestureRecognizer(self.tapGesture)
@@ -87,12 +87,12 @@ extension NewGiftFriendFooterView: BaseView {
   
   func setupConstraints() {
     self.divider.snp.makeConstraints { make in
-      make.leading.trailing.equalToSuperview().inset(20.0)
+      make.leading.trailing.equalToSuperview()
       make.top.equalToSuperview()
     }
     
     self.circleView.snp.makeConstraints { make in
-      make.leading.equalToSuperview().inset(20)
+      make.leading.equalToSuperview()
       make.top.equalTo(self.divider.snp.bottom).offset(16)
       make.width.height.equalTo(48.0)
     }

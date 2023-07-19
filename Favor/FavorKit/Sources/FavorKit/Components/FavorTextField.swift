@@ -281,10 +281,10 @@ extension FavorTextField {
     ].forEach {
       self.stackView.addArrangedSubview($0)
     }
-
+    
     self.textField.rightView = self.secureEyeButton
   }
-
+  
   func setupConstraints() {
     self.textField.snp.makeConstraints { make in
       make.top.directionalHorizontalEdges.equalToSuperview()
