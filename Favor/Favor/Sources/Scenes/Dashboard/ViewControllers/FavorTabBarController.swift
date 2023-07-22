@@ -51,10 +51,7 @@ final class FavorTabBarController: UITabBarController, Stepper {
     self.delegate = self
     self.setValue(self.favorTabBar, forKey: "tabBar")
     self.favorTabBar.selectedIndex = 0
-    
-    self.favorTabBar.middleButtonObserver = {
-      // TODO: GiftManagement페이지로 이동합니다.
-    }
+    self.favorTabBar.eventDelegate = self
   }
   
   /// 탭 바의 높이를 조정해주는 메서드입니다.
@@ -71,5 +68,12 @@ final class FavorTabBarController: UITabBarController, Stepper {
 extension FavorTabBarController: UITabBarControllerDelegate {
   override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
     HapticManager.haptic(style: .soft)
+  }
+}
+
+extension FavorTabBarController: FavorTabBarDelegate {
+  /// 중앙의 선물 추가 버튼을 누르면 실행되는 메서드입니다.
+  func didTapAddGiftButton() {
+    self.steps.accept(AppStep.giftManagementIsRequired())
   }
 }
