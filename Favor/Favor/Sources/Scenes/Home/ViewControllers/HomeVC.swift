@@ -28,7 +28,7 @@ final class HomeViewController: BaseViewController, View {
   private let searchButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(.search)
-
+    
     let button = UIButton(configuration: config)
     return button
   }()
@@ -62,7 +62,7 @@ final class HomeViewController: BaseViewController, View {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
+    
     self.setupNavigationBar()
   }
   
@@ -93,7 +93,7 @@ final class HomeViewController: BaseViewController, View {
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.collectionView.rx.itemSelected
       .map { indexPath in
         guard let dataSource = self.dataSource else { fatalError() }
@@ -184,7 +184,7 @@ private extension HomeViewController {
           cell.bindEmptyData(image: image, text: title)
         }
     }
-
+    
     let upcomingCellRegistration = UICollectionView.CellRegistration
       <HomeUpcomingCell, HomeSectionItem> { [weak self] cell, _, item in
         guard
@@ -193,7 +193,7 @@ private extension HomeViewController {
         else { return }
         cell.bind(with: reminder)
     }
-
+    
     let timelineCellRegistration = UICollectionView.CellRegistration
       <HomeTimelineCell, HomeSectionItem> { [weak self] cell, _, item in
         guard
@@ -202,7 +202,7 @@ private extension HomeViewController {
         else { return }
         cell.bind(with: gift)
     }
-
+    
     self.dataSource = HomeDataSource(
       collectionView: self.collectionView,
       cellProvider: { collectionView, indexPath, item in

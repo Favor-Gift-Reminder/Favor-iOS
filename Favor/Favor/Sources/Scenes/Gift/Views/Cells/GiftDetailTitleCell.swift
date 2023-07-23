@@ -39,23 +39,23 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   private let pinButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
-    config.image = .favorIcon(.pin)?.withRenderingMode(.alwaysTemplate)
+    let pinImage: UIImage? = .favorIcon(.pin)
     config.contentInsets = .zero
-
+    
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
-        button.configuration?.baseForegroundColor = .favorColor(.line2)
+        button.configuration?.image = pinImage?.withTintColor(.favorColor(.line2))
       case .selected:
-        button.configuration?.baseForegroundColor = .favorColor(.icon)
+        button.configuration?.image = pinImage?.withTintColor(.favorColor(.icon))
       default:
         break
       }
     }
     return button
   }()
-
+  
   private let titleStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
@@ -77,7 +77,7 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
     stackView.alignment = .leading
     return stackView
   }()
-
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -104,7 +104,7 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   }
 
   // MARK: - Functions
-
+  
   private func updateGift() {
     self.titleLabel.text = self.gift.name
     self.pinButton.isSelected = self.gift.isPinned

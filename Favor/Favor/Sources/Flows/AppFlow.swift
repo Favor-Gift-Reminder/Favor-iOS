@@ -165,17 +165,17 @@ private extension AppFlow {
 
     return .none
   }
-
+  
   func navigateWayBackToRoot() -> FlowContributors {
     return .one(flowContributor: .forwardToCurrentFlow(withStep: AppStep.authIsRequired))
   }
   
   func navigateToGiftManagement() -> FlowContributors {
     let newGiftFlow = NewGiftFlow()
-
+    
     Flows.use(newGiftFlow, when: .ready) { [unowned self] root in
       DispatchQueue.main.async {
-        root.modalPresentationStyle = .overFullScreen
+        root.modalPresentationStyle = .fullScreen
         self.rootViewController.present(root, animated: true)
       }
     }

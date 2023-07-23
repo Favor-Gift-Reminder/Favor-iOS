@@ -174,10 +174,10 @@ final class HomeViewReactor: Reactor, Stepper {
     case .updateTimelineLoading(let isLoading):
       newState.isTimelineLoading = isLoading
     }
-
+    
     return newState
   }
-
+  
   // transform(state:)는 State stream에 영향을 주지 않습니다.
   // 단지 View에 최종적으로 전달되는 State에 변형을 줄 뿐입니다. = 저장되어있는 State는 변하지 않습니다.
   func transform(state: Observable<State>) -> Observable<State> {
@@ -252,7 +252,7 @@ private extension HomeViewReactor {
       }
     }
   }
-
+  
   func setupGiftFetcher() {
     // onRemote
     self.giftFetcher.onRemote = {
@@ -277,8 +277,14 @@ private extension HomeViewReactor {
         .map { Gift(realmObject: $0) }
     }
     // onLocalUpdate
-    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
+    self.giftFetcher.onLocalUpdate = { localGifts, remoteGifts in
+      // 삭제시킬 선물을 찾습니다.
+      let deleteGifts = localGifts.filter { localGift in
+        !remoteGifts.map { $0.identifier }.contains(localGift.identifier)
+      }
+      
       try await self.workbench.write { transaction in
+        deleteGifts.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteGifts.map { $0.realmObject() })
       }
     }

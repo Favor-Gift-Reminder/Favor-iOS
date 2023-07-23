@@ -51,7 +51,7 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   }
 
   // MARK: - Functions
-
+  
   public func bind(with gift: Gift) {
     // Image
     // TODO: 테스트 코드 삭제

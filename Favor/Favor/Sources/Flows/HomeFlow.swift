@@ -62,7 +62,7 @@ private extension HomeFlow {
       withNextStepper: homeReactor
     ))
   }
-
+  
   func navigateToSearch() -> FlowContributors {
     let searchFlow = SearchFlow(rootViewController: self.rootViewController)
     
