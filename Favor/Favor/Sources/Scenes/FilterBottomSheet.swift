@@ -12,19 +12,23 @@ import RxCocoa
 import RxFlow
 import RxSwift
 
-final class FilterBottomSheet: BaseBottomSheet, Stepper {
+protocol FilterBottomSheetDelegate: AnyObject {
+  func didTapSortButton(_ sortType: SortType)
+}
+
+final class FilterBottomSheet: BaseBottomSheet {
   
   // MARK: - Properties
   
   private lazy var latestButton = self.makeSelectionButton(title: "최신순")
   private lazy var oldestButton = self.makeSelectionButton(title: "과거순")
   private lazy var buttons: [UIButton] = []
-  
-  var steps = PublishRelay<Step>()
-  
+    
   public var currentSortType: SortType = .latest {
     didSet { self.updateButton() }
   }
+  
+  weak var delegate: FilterBottomSheetDelegate?
   
   // MARK: - Setup
   
@@ -32,6 +36,7 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
     super.setupStyles()
     self.updateTitle("필터")
     self.cancelButton.isHidden = true
+    self.finishButton.isHidden = true
     self.buttons = [latestButton, oldestButton]
     self.updateButton()
   }
@@ -70,15 +75,17 @@ final class FilterBottomSheet: BaseBottomSheet, Stepper {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.currentSortType = .latest
-//        owner.steps.accept(AppStep.filterBottomSheetIsComplete(.latest))
+        owner.delegate?.didTapSortButton(.latest)
+        owner.dismissBottomSheet()
       })
       .disposed(by: self.disposeBag)
-
+    
     self.oldestButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.currentSortType = .oldest
-//        owner.steps.accept(AppStep.filterBottomSheetIsComplete(.oldest))
+        owner.delegate?.didTapSortButton(.oldest)
+        owner.dismissBottomSheet()
       })
       .disposed(by: self.disposeBag)
   }
@@ -105,7 +112,7 @@ private extension FilterBottomSheet {
     config.imagePlacement = .leading
     config.imagePadding = 20
     config.baseBackgroundColor = .clear
-
+    
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
       var config = button.configuration

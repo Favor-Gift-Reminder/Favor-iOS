@@ -22,14 +22,14 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   // MARK: - Properties
   
   // MARK: - UI Components
-
+  
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
     imageView.backgroundColor = .favorColor(.background)
     return imageView
   }()
-
+  
   private lazy var pinnedIconView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .center
@@ -53,7 +53,6 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   public func bind(with gift: Gift) {
-    print("PINSTATUS: \(gift.isPinned)")
     // Image
     // TODO: 테스트 코드 삭제
     let url = URL(string: "https://picsum.photos/1200/1200")!

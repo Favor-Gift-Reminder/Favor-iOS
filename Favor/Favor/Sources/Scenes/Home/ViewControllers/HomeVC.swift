@@ -152,14 +152,15 @@ final class HomeViewController: BaseViewController, View {
         snapshot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
+          snapshot.reconfigureItems(item)
         }
         
         DispatchQueue.main.async {
-          dataSource.applySnapshotUsingReloadData(snapshot)
+          dataSource.apply(snapshot)
         }
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
@@ -201,10 +202,6 @@ private extension HomeViewController {
           case let HomeSectionItem.timeline(.gift(gift)) = item
         else { return }
         cell.bind(with: gift)
-        
-        cell.configurationUpdateHandler = { cell, _ in
-          print(item)
-        }
     }
     
     self.dataSource = HomeDataSource(
@@ -271,11 +268,28 @@ private extension HomeViewController {
 extension HomeViewController: HomeHeaderViewDelegate {
   func rightButtonDidTap(from view: HomeHeaderView, for section: HomeSection) {
     guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.rightButtonDidTap(section))
+    switch section {
+    case .upcoming:
+      reactor.action.onNext(.rightButtonDidTap(section))
+    case .timeline:
+      let filterBottomSheet = FilterBottomSheet()
+      filterBottomSheet.currentSortType = reactor.currentState.currentSortType
+      filterBottomSheet.modalPresentationStyle = .overFullScreen
+      filterBottomSheet.delegate = self
+      self.present(filterBottomSheet, animated: false)
+    }
   }
 
   func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.filterButtonDidSelected(filterType))
+  }
+}
+
+extension HomeViewController: FilterBottomSheetDelegate {
+  func didTapSortButton(_ sortType: SortType) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.didChangeSortType(sortType))
+    reactor.action.onNext(.viewNeedsLoaded)
   }
 }
