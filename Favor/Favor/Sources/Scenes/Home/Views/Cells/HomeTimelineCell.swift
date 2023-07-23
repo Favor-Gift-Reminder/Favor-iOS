@@ -53,6 +53,7 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   public func bind(with gift: Gift) {
+    print("PINSTATUS: \(gift.isPinned)")
     // Image
     // TODO: 테스트 코드 삭제
     let url = URL(string: "https://picsum.photos/1200/1200")!

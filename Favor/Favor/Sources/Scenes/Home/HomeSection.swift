@@ -20,7 +20,7 @@ enum HomeSectionItem: ComposableItem {
     case empty(UIImage?, String)
     case reminder(Reminder)
   }
-
+  
   enum Timeline: Hashable {
     case empty(UIImage?, String)
     case gift(Gift)

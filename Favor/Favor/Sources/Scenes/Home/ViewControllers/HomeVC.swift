@@ -155,7 +155,7 @@ final class HomeViewController: BaseViewController, View {
         }
         
         DispatchQueue.main.async {
-          dataSource.apply(snapshot)
+          dataSource.applySnapshotUsingReloadData(snapshot)
         }
       })
       .disposed(by: self.disposeBag)
@@ -201,6 +201,10 @@ private extension HomeViewController {
           case let HomeSectionItem.timeline(.gift(gift)) = item
         else { return }
         cell.bind(with: gift)
+        
+        cell.configurationUpdateHandler = { cell, _ in
+          print(item)
+        }
     }
     
     self.dataSource = HomeDataSource(
