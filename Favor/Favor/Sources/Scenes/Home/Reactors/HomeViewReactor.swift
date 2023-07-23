@@ -188,7 +188,7 @@ final class HomeViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
+      
       // Upcoming 데이터를 조건에 따라 Item으로 변환합니다.
       let (futureReminders, _) = state.reminders.sort()
       let upcomingThreeReminders: [Reminder] = futureReminders.prefix(3).wrap()

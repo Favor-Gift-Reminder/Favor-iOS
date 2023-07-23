@@ -228,25 +228,25 @@ private extension HomeViewController {
           }
         }
       })
-
+    
     let headerRegistration = UICollectionView.SupplementaryRegistration<HomeHeaderView>(
       elementKind: UICollectionView.elementKindSectionHeader
     ) { [weak self] header, _, indexPath in
       guard
         let self = self,
-        let dataSource = self.dataSource
+        let section = self.dataSource?.sectionIdentifier(for: indexPath.section)
       else { return }
       header.delegate = self
-      let currentSnapshot = dataSource.snapshot()
-      header.section = currentSnapshot.sectionIdentifiers[indexPath.section]
+      header.section = section
+      header.toggleButton(self.reactor?.currentState.filterType ?? .all)
     }
-
+    
     let footerRegistration = UICollectionView.SupplementaryRegistration<FavorLoadingFooterView>(
       elementKind: UICollectionView.elementKindSectionFooter
     ) { [weak self] _, _, _ in
       guard self != nil else { return }
     }
-
+    
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
       guard self != nil else { return UICollectionReusableView() }
       switch kind {
@@ -279,12 +279,14 @@ extension HomeViewController: HomeHeaderViewDelegate {
       self.present(filterBottomSheet, animated: false)
     }
   }
-
+  
   func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.filterButtonDidSelected(filterType))
   }
 }
+
+// MARK: - FilterBottomSheet
 
 extension HomeViewController: FilterBottomSheetDelegate {
   func didTapSortButton(_ sortType: SortType) {

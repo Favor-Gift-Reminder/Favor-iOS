@@ -28,14 +28,18 @@ public class HomeHeaderView: UICollectionReusableView {
   // MARK: - Properties
   
   public var disposeBag = DisposeBag()
-
+  
   public weak var delegate: HomeHeaderViewDelegate?
 
   public var section: HomeSection {
     didSet { self.updateToSection() }
   }
 
-  private let selectedFilter = PublishRelay<GiftFilterType>()
+  private var selectedFilter: GiftFilterType = .all {
+    didSet {
+      self.delegate?.filterDidSelected(from: self, to: self.selectedFilter)
+    }
+  }
   
   // MARK: - UI Components
   
@@ -45,12 +49,12 @@ public class HomeHeaderView: UICollectionReusableView {
     label.text = "헤더 타이틀"
     return label
   }()
-
+  
   private let rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.icon)
-
+    
     let button = UIButton(configuration: config)
     return button
   }()
@@ -96,7 +100,7 @@ public class HomeHeaderView: UICollectionReusableView {
   }
   
   // MARK: - Binding
-
+  
   public func bind() {
     // Action
     self.rightButton.rx.tap
@@ -105,31 +109,23 @@ public class HomeHeaderView: UICollectionReusableView {
         owner.delegate?.rightButtonDidTap(from: owner, for: owner.section)
       })
       .disposed(by: self.disposeBag)
-
+    
     self.allButton.rx.tap
       .map { .all }
-      .bind(to: self.selectedFilter)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { $0.toggleButton($1) }
       .disposed(by: self.disposeBag)
-
+    
     self.receivedButton.rx.tap
       .map { .received }
-      .bind(to: self.selectedFilter)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { $0.toggleButton($1) }
       .disposed(by: self.disposeBag)
-
+    
     self.givenButton.rx.tap
       .map { .given }
-      .bind(to: self.selectedFilter)
-      .disposed(by: self.disposeBag)
-
-    self.selectedFilter
-      .distinctUntilChanged()
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, selectedFilter in
-        owner.allButton.isSelected = owner.allButton == owner.buttons[selectedFilter.rawValue]
-        owner.receivedButton.isSelected = owner.receivedButton == owner.buttons[selectedFilter.rawValue]
-        owner.givenButton.isSelected = owner.givenButton == owner.buttons[selectedFilter.rawValue]
-        owner.delegate?.filterDidSelected(from: owner, to: selectedFilter)
-      })
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { $0.toggleButton($1) }
       .disposed(by: self.disposeBag)
   }
 }
@@ -156,7 +152,7 @@ extension HomeHeaderView: BaseView {
     ].forEach {
       self.buttons.append($0)
     }
-
+    
     [
       self.allButton,
       self.receivedButton,
@@ -179,13 +175,13 @@ extension HomeHeaderView: BaseView {
       make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(Metric.rightButtonSize)
     }
-
+    
     self.secondLineStack.snp.makeConstraints { make in
       make.centerY.equalTo(self.firstLineStack.snp.bottom).offset(25)
       make.leading.equalToSuperview()
       make.height.greaterThanOrEqualTo(44)
     }
-
+    
     self.rightButton.snp.makeConstraints { make in
       make.width.height.equalTo(Metric.rightButtonSize)
     }
@@ -194,6 +190,12 @@ extension HomeHeaderView: BaseView {
     self.buttons.forEach {
       $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
+  }
+  
+  func toggleButton(_ filterType: GiftFilterType) {
+    self.buttons.forEach { $0.isSelected = false }
+    self.buttons[filterType.rawValue].isSelected = true
+    self.selectedFilter = filterType
   }
 }
 
@@ -222,7 +224,7 @@ private extension HomeHeaderView {
       button.configuration = config
     }
   }
-
+  
   func makeFilterButton(title: String) -> UIButton {
     var configuration = UIButton.Configuration.plain()
     var attributedTitle = AttributedString(title)
