@@ -46,7 +46,7 @@ public final class AppFlow: Flow {
 
     case .authIsRequired:
       return self.navigateToAuth()
-
+      
     case .localAuthIsRequired(let location):
       return self.navigateToLocalAuth(request: location)
 
@@ -55,7 +55,10 @@ public final class AppFlow: Flow {
 
     case .wayBackToRootIsRequired:
       return self.navigateWayBackToRoot()
-
+      
+    case .giftManagementIsRequired:
+      return self.navigateToGiftManagement()
+      
     default:
       return .none
     }
@@ -162,9 +165,25 @@ private extension AppFlow {
 
     return .none
   }
-
+  
   func navigateWayBackToRoot() -> FlowContributors {
     return .one(flowContributor: .forwardToCurrentFlow(withStep: AppStep.authIsRequired))
+  }
+  
+  func navigateToGiftManagement() -> FlowContributors {
+    let newGiftFlow = NewGiftFlow()
+    
+    Flows.use(newGiftFlow, when: .ready) { [unowned self] root in
+      DispatchQueue.main.async {
+        root.modalPresentationStyle = .fullScreen
+        self.rootViewController.present(root, animated: true)
+      }
+    }
+
+    return .one(flowContributor: .contribute(
+      withNextPresentable: newGiftFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.giftManagementIsRequired())
+    ))
   }
 }
 
@@ -192,7 +211,8 @@ private extension AppFlow {
       .contribute(
         withNextPresentable: myPageFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
-      )
+      ),
+      .contribute(withNext: self.rootViewController)
     ]
   }
 }

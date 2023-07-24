@@ -17,10 +17,10 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   typealias Item = GiftDetailSectionItem
 
   // MARK: - Properties
-
+  
   var initialState: State
   var steps = PublishRelay<Step>()
-
+  
   enum Action {
     case editButtonDidTap
     case deleteButtonDidTap
@@ -34,7 +34,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case friendsTagDidTap([Friend])
     case doNothing
   }
-
+  
   enum Mutation {
     case updateGift(Gift)
   }
@@ -46,21 +46,21 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   }
 
   // MARK: - Initializer
-
+  
   init(gift: Gift) {
     self.initialState = State(
       gift: gift
     )
   }
-
+  
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .editButtonDidTap:
       self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift))
       return .empty()
-
+      
     case .deleteButtonDidTap:
       return self.requestDeleteGift(self.currentState.gift)
         .asObservable()
@@ -82,9 +82,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return .empty()
 
     case .isPinnedButtonDidTap:
-      var updatedGift = self.currentState.gift
-      updatedGift.isPinned.toggle()
-      return self.requestToggleIsPinned(updatedGift)
+      return self.requestToggleIsPinned(self.currentState.gift)
         .asObservable()
         .flatMap { gift -> Observable<Mutation> in
           return .just(.updateGift(gift))
@@ -93,7 +91,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
           print(error)
           return .empty()
         }
-
+      
     case .emotionTagDidTap(let emotion):
       self.steps.accept(AppStep.searchEmotionResultIsRequired(emotion))
       return .empty()
@@ -101,7 +99,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case .categoryTagDidTap(let category):
       self.steps.accept(AppStep.searchCategoryResultIsRequired(category))
       return .empty()
-
+      
     case .isGivenTagDidTap(let isGiven):
       // TODO: 타임라인 단독 화면 만든 후 연결
       os_log(.debug, "IsGiven tag did tap: \(isGiven).")
@@ -168,11 +166,11 @@ private extension GiftDetailViewReactor {
       }
     }
   }
-
+  
   func requestToggleIsPinned(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
-      let disposable = networking.request(.patchGift(gift.updateRequestDTO(), giftNo: gift.identifier))
+      let disposable = networking.request(.patchPinGift(giftNo: gift.identifier))
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in

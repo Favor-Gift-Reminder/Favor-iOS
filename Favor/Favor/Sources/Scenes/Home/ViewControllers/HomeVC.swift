@@ -28,7 +28,7 @@ final class HomeViewController: BaseViewController, View {
   private let searchButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(.search)
-
+    
     let button = UIButton(configuration: config)
     return button
   }()
@@ -62,7 +62,7 @@ final class HomeViewController: BaseViewController, View {
 
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
-
+    
     self.setupNavigationBar()
   }
   
@@ -93,7 +93,7 @@ final class HomeViewController: BaseViewController, View {
       .map { Reactor.Action.searchButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.collectionView.rx.itemSelected
       .map { indexPath in
         guard let dataSource = self.dataSource else { fatalError() }
@@ -152,6 +152,7 @@ final class HomeViewController: BaseViewController, View {
         snapshot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
+          snapshot.reconfigureItems(item)
         }
         
         DispatchQueue.main.async {
@@ -159,7 +160,7 @@ final class HomeViewController: BaseViewController, View {
         }
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
@@ -184,7 +185,7 @@ private extension HomeViewController {
           cell.bindEmptyData(image: image, text: title)
         }
     }
-
+    
     let upcomingCellRegistration = UICollectionView.CellRegistration
       <HomeUpcomingCell, HomeSectionItem> { [weak self] cell, _, item in
         guard
@@ -193,7 +194,7 @@ private extension HomeViewController {
         else { return }
         cell.bind(with: reminder)
     }
-
+    
     let timelineCellRegistration = UICollectionView.CellRegistration
       <HomeTimelineCell, HomeSectionItem> { [weak self] cell, _, item in
         guard
@@ -202,7 +203,7 @@ private extension HomeViewController {
         else { return }
         cell.bind(with: gift)
     }
-
+    
     self.dataSource = HomeDataSource(
       collectionView: self.collectionView,
       cellProvider: { collectionView, indexPath, item in
@@ -227,25 +228,25 @@ private extension HomeViewController {
           }
         }
       })
-
+    
     let headerRegistration = UICollectionView.SupplementaryRegistration<HomeHeaderView>(
       elementKind: UICollectionView.elementKindSectionHeader
     ) { [weak self] header, _, indexPath in
       guard
         let self = self,
-        let dataSource = self.dataSource
+        let section = self.dataSource?.sectionIdentifier(for: indexPath.section)
       else { return }
       header.delegate = self
-      let currentSnapshot = dataSource.snapshot()
-      header.section = currentSnapshot.sectionIdentifiers[indexPath.section]
+      header.section = section
+      header.toggleButton(self.reactor?.currentState.filterType ?? .all)
     }
-
+    
     let footerRegistration = UICollectionView.SupplementaryRegistration<FavorLoadingFooterView>(
       elementKind: UICollectionView.elementKindSectionFooter
     ) { [weak self] _, _, _ in
       guard self != nil else { return }
     }
-
+    
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
       guard self != nil else { return UICollectionReusableView() }
       switch kind {
@@ -267,11 +268,30 @@ private extension HomeViewController {
 extension HomeViewController: HomeHeaderViewDelegate {
   func rightButtonDidTap(from view: HomeHeaderView, for section: HomeSection) {
     guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.rightButtonDidTap(section))
+    switch section {
+    case .upcoming:
+      reactor.action.onNext(.rightButtonDidTap(section))
+    case .timeline:
+      let filterBottomSheet = FilterBottomSheet()
+      filterBottomSheet.currentSortType = reactor.currentState.currentSortType
+      filterBottomSheet.modalPresentationStyle = .overFullScreen
+      filterBottomSheet.delegate = self
+      self.present(filterBottomSheet, animated: false)
+    }
   }
-
+  
   func filterDidSelected(from view: HomeHeaderView, to filterType: GiftFilterType) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.filterButtonDidSelected(filterType))
+  }
+}
+
+// MARK: - FilterBottomSheet
+
+extension HomeViewController: FilterBottomSheetDelegate {
+  func didTapSortButton(_ sortType: SortType) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.didChangeSortType(sortType))
+    reactor.action.onNext(.viewNeedsLoaded)
   }
 }

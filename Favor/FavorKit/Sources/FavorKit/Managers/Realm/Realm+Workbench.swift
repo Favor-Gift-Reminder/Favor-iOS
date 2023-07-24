@@ -26,7 +26,7 @@ public final class RealmWorkbench {
     queue: DispatchQueue = DispatchQueue.realmThread
   ) {
     self.realmQueue = queue
-
+    
     do {
       let config = Realm.Configuration(
         schemaVersion: RealmMigration.version,
@@ -47,7 +47,7 @@ public final class RealmWorkbench {
   public func locateRealm() {
     os_log(.debug, "💽 RealmDB is located at \(self.realm.configuration.fileURL!)")
   }
-
+  
   public func write(
     _ block: @escaping (_ transaction: Transaction) throws -> Void
   ) async throws {

@@ -11,6 +11,10 @@ import FavorKit
 import RxSwift
 import SnapKit
 
+protocol FavorTabBarDelegate: AnyObject {
+  func didTapAddGiftButton()
+}
+
 final class FavorTabBar: UITabBar {
   
   // MARK: - UI Components
@@ -35,7 +39,7 @@ final class FavorTabBar: UITabBar {
   }
   
   var isDrawn: Bool = false
-  var middleButtonObserver: (() -> Void)?
+  weak var eventDelegate: FavorTabBarDelegate?
   
   // MARK: - DrawCycle
   
@@ -201,7 +205,7 @@ final class FavorTabBar: UITabBar {
   
   /// 중앙 버튼이 터치될 때 불려지는 메서드입니다.
   @objc private func didTapMiddleButton() {
-    self.middleButtonObserver?()
+    self.eventDelegate?.didTapAddGiftButton()
   }
 }
 

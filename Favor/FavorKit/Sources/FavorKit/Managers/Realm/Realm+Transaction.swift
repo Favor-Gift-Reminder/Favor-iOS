@@ -51,7 +51,7 @@ public final class Transaction {
   ) where T: Object {
     self.realm.add(value, update: update)
   }
-
+  
   /// `RealmObject` 인스턴스를 여러개 받아 직접 `update` 합니다.
   public func update<T>(
     _ values: [T],
@@ -59,7 +59,7 @@ public final class Transaction {
   ) where T: Object {
     self.realm.add(values, update: update)
   }
-
+  
   /// `RealmObject` 인스턴스를 받아 직접 `delete`합니다.
   public func delete<T>(
     _ value: T

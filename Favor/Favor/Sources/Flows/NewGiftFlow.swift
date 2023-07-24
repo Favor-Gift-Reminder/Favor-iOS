@@ -36,10 +36,10 @@ final class NewGiftFlow: Flow {
       
     case .friendManagementIsRequired:
       return self.navigateToFriendManagement()
-
+      
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToTabBar()
-
+      
     case .newGiftIsComplete(let gift):
       return self.popToTabBar(with: gift)
       

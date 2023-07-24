@@ -32,6 +32,7 @@ final class HomeViewReactor: Reactor, Stepper {
   
   enum Action {
     case viewNeedsLoaded
+    case didChangeSortType(SortType)
     case searchButtonDidTap
     case rightButtonDidTap(HomeSection)
     case filterButtonDidSelected(GiftFilterType)
@@ -50,6 +51,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case updateFilterType(GiftFilterType)
     case updateLoading(Bool)
     case updateTimelineLoading(Bool)
+    case updateSortType(SortType)
   }
   
   struct State {
@@ -108,17 +110,15 @@ final class HomeViewReactor: Reactor, Stepper {
           ])
         }
       }
-
+      
     case .searchButtonDidTap:
       os_log(.debug, "Search button did tap.")
       self.steps.accept(AppStep.searchIsRequired)
       return .empty()
-
+      
     case .rightButtonDidTap(let section):
       if case Section.upcoming = section {
         self.steps.accept(AppStep.reminderIsRequired)
-      } else if case Section.timeline = section {
-        self.steps.accept(AppStep.filterBottomSheetIsRequired(self.currentSortType.value))
       }
       return .empty()
 
@@ -127,11 +127,10 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case let .updateMaxTimelineItems((currentMaxItems, unit)):
       return .just(.updateMaxTimelineItems((current: currentMaxItems, unit: unit)))
-
+      
     case .itemSelected(let item):
       if case let Item.upcoming(upcoming) = item {
         guard case let Item.Upcoming.reminder(reminder) = upcoming else { return .empty() }
-        print(reminder)
       } else if case let Item.timeline(timeline) = item {
         guard case let Item.Timeline.gift(gift) = timeline else { return .empty() }
         self.steps.accept(AppStep.giftDetailIsRequired(gift))
@@ -140,6 +139,9 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case .timelineNeedsLoaded(let isLoading):
       return .just(.updateTimelineLoading(isLoading))
+      
+    case .didChangeSortType(let sortType):
+      return .just(.updateSortType(sortType))
     }
   }
 
@@ -173,17 +175,20 @@ final class HomeViewReactor: Reactor, Stepper {
 
     case .updateTimelineLoading(let isLoading):
       newState.isTimelineLoading = isLoading
+      
+    case .updateSortType(let sortType):
+      newState.currentSortType = sortType
     }
-
+    
     return newState
   }
-
+  
   // transform(state:)는 State stream에 영향을 주지 않습니다.
   // 단지 View에 최종적으로 전달되는 State에 변형을 줄 뿐입니다. = 저장되어있는 State는 변하지 않습니다.
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
+      
       // Upcoming 데이터를 조건에 따라 Item으로 변환합니다.
       let (futureReminders, _) = state.reminders.sort()
       let upcomingThreeReminders: [Reminder] = futureReminders.prefix(3).wrap()
@@ -195,12 +200,18 @@ final class HomeViewReactor: Reactor, Stepper {
       } else {
         newState.upcomingItems = upcomingItems
       }
-
+      
       // Timeline 데이터를 조건에 따라 Item으로 변환합니다.
       let filteredGifts = state.gifts.filter(by: state.filterType)
       let (pinnedGifts, unpinnedGifts) = filteredGifts.sort(by: .isPinned)
-      let pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
-      let unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
+      var pinnedTimelines: [Item] = pinnedGifts.map { .timeline(.gift($0)) }
+      var unpinnedTimelines: [Item] = unpinnedGifts.map { .timeline(.gift($0)) }
+      
+      if self.currentState.currentSortType == .latest {
+        pinnedTimelines.reverse()
+        unpinnedTimelines.reverse()
+      }
+      
       let totalTimelines: [Item] = pinnedTimelines + unpinnedTimelines
       // Load 최대 개수 만큼만 반환
       let croppedTimelines = totalTimelines.prefix(self.currentState.maxTimelineItems.current).wrap()
@@ -211,7 +222,7 @@ final class HomeViewReactor: Reactor, Stepper {
       } else {
         newState.timelineItems = croppedTimelines
       }
-
+      
       newState.items = [newState.upcomingItems, newState.timelineItems]
 
       return newState
@@ -252,7 +263,7 @@ private extension HomeViewReactor {
       }
     }
   }
-
+  
   func setupGiftFetcher() {
     // onRemote
     self.giftFetcher.onRemote = {
@@ -277,8 +288,14 @@ private extension HomeViewReactor {
         .map { Gift(realmObject: $0) }
     }
     // onLocalUpdate
-    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
+    self.giftFetcher.onLocalUpdate = { localGifts, remoteGifts in
+      // 삭제시킬 선물을 찾습니다.
+      let deleteGifts = localGifts.filter { localGift in
+        !remoteGifts.map { $0.identifier }.contains(localGift.identifier)
+      }
+      
       try await self.workbench.write { transaction in
+        deleteGifts.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteGifts.map { $0.realmObject() })
       }
     }

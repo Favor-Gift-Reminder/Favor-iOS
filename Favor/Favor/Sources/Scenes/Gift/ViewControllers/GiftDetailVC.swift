@@ -205,13 +205,13 @@ private extension GiftDetailViewController {
       else { return }
       // Image
     }
-
+    
     let titleCellRegistration = UICollectionView.CellRegistration
     <GiftDetailTitleCell, GiftDetailSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.gift = reactor.currentState.gift
-
+      
       cell.configurationUpdateHandler = { cell, _ in
         guard
           let cell = cell as? GiftDetailTitleCell,
@@ -220,7 +220,7 @@ private extension GiftDetailViewController {
         cell.gift = reactor.currentState.gift
       }
     }
-
+    
     let tagsCellRegistration = UICollectionView.CellRegistration
     <GiftDetailTagsCell, GiftDetailSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }

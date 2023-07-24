@@ -20,7 +20,7 @@ enum HomeSectionItem: ComposableItem {
     case empty(UIImage?, String)
     case reminder(Reminder)
   }
-
+  
   enum Timeline: Hashable {
     case empty(UIImage?, String)
     case gift(Gift)
@@ -32,30 +32,6 @@ enum HomeSectionItem: ComposableItem {
 public enum HomeSection: ComposableSection {
   case upcoming(isEmpty: Bool)
   case timeline(isEmpty: Bool)
-}
-
-// MARK: - Hashable
-
-extension HomeSection {
-  public static func == (lhs: Self, rhs: Self) -> Bool {
-    switch (lhs, rhs) {
-    case (.upcoming, .upcoming):
-      return true
-    case (.timeline, .timeline):
-      return true
-    default:
-      return false
-    }
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    switch self {
-    case .upcoming:
-      hasher.combine("upcoming")
-    case .timeline:
-      hasher.combine("timeline")
-    }
-  }
 }
 
 // MARK: - Composer
