@@ -37,7 +37,7 @@ public struct Reminder: Storable, Receivable {
     self.notifyDate = realmObject.notifyTime
     self.relatedFriend = realmObject.friendNo
   }
-
+  
   public func realmObject() -> ReminderObject {
     ReminderObject(
       reminderNo: self.identifier,
