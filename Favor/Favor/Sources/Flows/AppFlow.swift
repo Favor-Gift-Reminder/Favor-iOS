@@ -202,7 +202,7 @@ private extension AppFlow {
       let navigationControllers: [BaseNavigationController] = [homeNC, myPageNC]
       self.rootViewController.setViewControllers(navigationControllers, animated: false)
     }
-
+    
     return [
       .contribute(
         withNextPresentable: homeFlow,
