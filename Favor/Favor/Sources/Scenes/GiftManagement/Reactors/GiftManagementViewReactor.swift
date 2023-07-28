@@ -48,12 +48,13 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case updateMemo(String?)
     case updateIsPinned(Bool)
   }
-
+  
   struct State {
     var viewType: GiftManagementViewController.ViewType
     var giftType: GiftManagementViewController.GiftType = .received
+    var isEnabledDoneButton: Bool = false
     var gift: Gift
-
+    
     var sections: [Section] = [.title, .category, .photos, .friends(isGiven: false), .date, .memo, .pin]
     var items: [[Item]] = []
   }
@@ -159,7 +160,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
-
+    
     switch mutation {
     case .updateGiftType(let isGiven):
       if let index = newState.sections.firstIndex(of: .friends(isGiven: !isGiven)) {
@@ -167,13 +168,13 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         newState.sections[index] = newFriendsSection
       }
       newState.giftType = isGiven ? .given : .received
-
+      
     case .updateTitle(let title):
       newState.gift.name = title ?? ""
-
+      
     case .updateCategory(let category):
       newState.gift.category = category
-
+      
     case .updatePhotos(let photos):
       newState.gift.photos = photos
 
@@ -199,7 +200,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       newState.items = [
         [.title], [.category], photoItems, [.friends], [.date], [.memo], [.pin]
       ]
-
+      
+      if !state.gift.name.isEmpty,
+         !(state.gift.date == nil) {
+        newState.isEnabledDoneButton = true
+      }
+      
       return newState
     }
   }

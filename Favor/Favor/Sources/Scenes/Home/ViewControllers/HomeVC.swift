@@ -74,8 +74,8 @@ final class HomeViewController: BaseViewController, View {
   
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
-      make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)
-      make.directionalHorizontalEdges.equalToSuperview()
+      make.top.directionalHorizontalEdges.equalTo(self.view.safeAreaLayoutGuide)
+      make.bottom.equalToSuperview()
     }
   }
 
@@ -164,6 +164,13 @@ final class HomeViewController: BaseViewController, View {
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
+  }
+  
+  // MARK: - Functions
+  
+  /// 선물이 생성된 후, `선물이 등록되었어요.`라는 메세지의 `ToastMessage`를 띄워주는 메서드
+  func giftDidCreated() {
+    self.presentToast(.giftAdded, duration: .short)
   }
 }
 

@@ -15,16 +15,17 @@ final class SearchGiftResultCell: BaseCollectionViewCell {
   // MARK: - Properties
 
   // MARK: - UI Components
-
+  
   private let thumbnailImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
     return imageView
   }()
-
+  
   private let titleLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 16)
+    label.textColor = .favorColor(.white)
     label.lineBreakMode = .byTruncatingTail
     label.text = "페이버"
     return label
@@ -33,6 +34,7 @@ final class SearchGiftResultCell: BaseCollectionViewCell {
   private let dateLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 14)
+    label.textColor = .favorColor(.white)
     return label
   }()
 
@@ -69,7 +71,7 @@ extension SearchGiftResultCell: BaseView {
   func setupStyles() {
     self.backgroundColor = .favorColor(.main)
   }
-
+  
   func setupLayouts() {
     [
       self.titleLabel,
@@ -85,7 +87,7 @@ extension SearchGiftResultCell: BaseView {
       self.addSubview($0)
     }
   }
-
+  
   func setupConstraints() {
     self.thumbnailImageView.snp.makeConstraints { make in
       make.edges.equalToSuperview()

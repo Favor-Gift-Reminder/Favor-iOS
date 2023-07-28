@@ -213,8 +213,8 @@ final class FavorTabBar: UITabBar {
 
 extension FavorTabBar: BaseView {
   func setupStyles() {
-    self.backgroundColor = .favorColor(.white)
-    self.barTintColor = .favorColor(.white)
+    self.backgroundColor = .clear
+    self.barTintColor = .clear
   }
   
   func setupLayouts() {

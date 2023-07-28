@@ -49,7 +49,7 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Functions
   
   public func bind(with gift: Gift) {

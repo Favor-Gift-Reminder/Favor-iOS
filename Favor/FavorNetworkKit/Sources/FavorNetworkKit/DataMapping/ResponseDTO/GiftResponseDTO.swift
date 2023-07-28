@@ -20,7 +20,7 @@ public struct GiftResponseDTO: Decodable {
   public let isGiven: Bool
   public let isPinned: Bool
   public let userNo: Int
-
+  
   private enum CodingKeys: CodingKey {
     case category
     case emotion
