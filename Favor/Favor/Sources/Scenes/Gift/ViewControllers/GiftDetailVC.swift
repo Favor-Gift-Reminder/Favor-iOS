@@ -103,8 +103,8 @@ final class GiftDetailViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.deleteButton.rx.tap
-      .map { Reactor.Action.deleteButtonDidTap }
-      .bind(to: reactor.action)
+      .asDriver()
+      .drive(with: self) { owner, _ in owner.presentRemovalPopup() }
       .disposed(by: self.disposeBag)
 
     self.shareButton.rx.tap
@@ -126,7 +126,7 @@ final class GiftDetailViewController: BaseViewController, View {
       }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     Observable.combineLatest(self.rx.viewDidLoad, reactor.state.map { $0.items })
       .debounce(.milliseconds(100), scheduler: MainScheduler.instance)
@@ -267,7 +267,7 @@ private extension GiftDetailViewController {
         totalPages: self.totalPages.asObservable()
       )
     }
-
+    
     self.dataSource?.supplementaryViewProvider = { [weak self] collectionView, kind, indexPath in
       guard self != nil else { return UICollectionReusableView() }
       switch kind {
@@ -278,6 +278,14 @@ private extension GiftDetailViewController {
         return UICollectionReusableView()
       }
     }
+  }
+  
+  func presentRemovalPopup() {
+    let removalPopup = NewAlertPopup(.onlyTitle(title: "삭제 하시겠습니까?", .init(reject: "취소", accept: "삭제")),
+      identifier: "RemoveGift"
+    )
+    removalPopup.modalPresentationStyle = .overFullScreen
+    self.present(removalPopup, animated: false)
   }
 }
 

@@ -63,7 +63,7 @@ open class BasePopup: BaseViewController {
   override open func setupStyles() {
     super.setupStyles()
     
-    self.view.backgroundColor = .clear
+    self.view.backgroundColor = .favorColor(.black).withAlphaComponent(0.2)
   }
   
   override open func setupLayouts() {

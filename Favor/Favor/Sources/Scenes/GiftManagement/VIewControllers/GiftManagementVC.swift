@@ -26,7 +26,7 @@ final class GiftManagementViewController: BaseViewController, View {
       case .edit: return "완료"
       }
     }
-
+    
     public var cancelButtonImage: UIImage.FavorIcon {
       switch self {
       case .new: return .down
@@ -128,9 +128,8 @@ final class GiftManagementViewController: BaseViewController, View {
       .map { Reactor.Action.cancelButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.doneButton.rx.tap
-      .debug("Done Button")
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -193,6 +192,10 @@ final class GiftManagementViewController: BaseViewController, View {
         owner.giftType = giftType
       })
       .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isEnabledDoneButton }
+      .bind(to: self.doneButton.rx.isEnabled)
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -208,7 +211,7 @@ final class GiftManagementViewController: BaseViewController, View {
       make.edges.equalToSuperview()
     }
   }
-
+  
   private func setupNavigationBar() {
     self.navigationItem.setRightBarButton(self.doneButton.toBarButtonItem(), animated: false)
     self.navigationItem.setLeftBarButton(self.cancelButton.toBarButtonItem(), animated: false)
