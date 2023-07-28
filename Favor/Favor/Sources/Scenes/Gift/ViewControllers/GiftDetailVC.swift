@@ -161,7 +161,7 @@ final class GiftDetailViewController: BaseViewController, View {
   }
 
   // MARK: - Functions
-
+  
   public func update(gift: Gift) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.giftNeedsUpdated(gift))
@@ -180,7 +180,7 @@ final class GiftDetailViewController: BaseViewController, View {
       animated: false
     )
   }
-
+  
   override func setupLayouts() {
     self.view.addSubview(self.collectionView)
   }
@@ -280,10 +280,16 @@ private extension GiftDetailViewController {
     }
   }
   
+  /// `deleteButton`을 클릭하면 `Popup`으로 전환되는 메서드
   func presentRemovalPopup() {
-    let removalPopup = NewAlertPopup(.onlyTitle(title: "삭제 하시겠습니까?", .init(reject: "취소", accept: "삭제")),
+    let removalPopup = NewAlertPopup(
+      .onlyTitle(
+        title: "삭제 하시겠습니까?",
+        NewAlertPopup.ActionButtons(reject: "취소", accept: "삭제")
+      ),
       identifier: "RemoveGift"
     )
+    removalPopup.delegate = self
     removalPopup.modalPresentationStyle = .overFullScreen
     self.present(removalPopup, animated: false)
   }
@@ -353,5 +359,15 @@ extension GiftDetailViewController: GalleryItemsDataSource {
       .swipeToDismissThresholdVelocity(500),
       .doubleTapToZoomDuration(0.3)
     ]
+  }
+}
+
+// MARK: - RemovalPopup
+
+extension GiftDetailViewController: AlertPopupDelegate {
+  /// `AlertPopup`에서 `삭제`버튼을 눌렀을 때 호출됩니다.
+  func actionDidSelected(_ isAccepted: Bool, from identifier: String) {
+    guard isAccepted else { return }
+    self.reactor?.action.onNext(.deleteButtonDidTap)
   }
 }

@@ -174,7 +174,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
     case .updateCategory(let category):
       newState.gift.category = category
-
+      
     case .updatePhotos(let photos):
       newState.gift.photos = photos
 

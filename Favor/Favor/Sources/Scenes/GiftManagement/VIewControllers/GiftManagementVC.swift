@@ -145,7 +145,7 @@ final class GiftManagementViewController: BaseViewController, View {
         owner.view.endEditing(true)
       }
       .disposed(by: self.disposeBag)
-
+    
     self.collectionView.rx.itemSelected
       .map { [weak self] indexPath in
         guard

@@ -21,7 +21,7 @@ public final class NewAlertPopup: BasePopup {
   public enum AlertType {
     case onlyTitle(title: String, ActionButtons)
     case titleWithDescription(title: String, description: Description, ActionButtons)
-
+    
     public var popupHeight: CGFloat {
       switch self {
       case .onlyTitle:
@@ -33,7 +33,7 @@ public final class NewAlertPopup: BasePopup {
         return descriptionHeight + descriptionSpacings + 94.0 + 104.0
       }
     }
-
+    
     public var title: String {
       switch self {
       case let .onlyTitle(title, _), let .titleWithDescription(title, _, _):
@@ -164,11 +164,13 @@ public final class NewAlertPopup: BasePopup {
 
   @objc
   private func handleRejectButtonTap(_ sender: UIButton) {
+    self.dismissPopup()
     self.delegate?.actionDidSelected(false, from: self.identifier)
   }
-
+  
   @objc
   private func handleAccepttButtonTap(_ sender: UIButton) {
+    self.dismissPopup()
     self.delegate?.actionDidSelected(true, from: self.identifier)
   }
 
@@ -208,14 +210,9 @@ public final class NewAlertPopup: BasePopup {
 
     self.buttonStackView.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview().inset(20.0)
+      make.height.equalTo(Metric.buttonHeight)
       make.bottom.equalToSuperview().inset(Metric.bottomInset)
-    }
-
-    [self.rejectButton, self.acceptButton].forEach {
-      $0.snp.makeConstraints { make in
-        make.width.equalTo(Metric.buttonWidth)
-        make.height.equalTo(Metric.buttonHeight)
-      }
     }
   }
 }

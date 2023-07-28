@@ -92,11 +92,10 @@ private extension NewGiftFlow {
       withNextStepper: reactor
     ))
   }
-
+  
   @MainActor
   func popToTabBar(with gift: Gift? = nil) -> FlowContributors {
     self.rootViewController.dismiss(animated: true)
-
     return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
   }
 }

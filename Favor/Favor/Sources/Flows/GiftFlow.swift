@@ -56,7 +56,7 @@ final class GiftFlow: Flow {
 
     case .giftDetailFriendsBottomSheetIsRequired(let friends):
       return self.navigateToFriends(with: friends)
-
+      
     case .friendPageIsRequired(let friend):
       return self.navigateToFriendPage(with: friend)
 
@@ -205,7 +205,7 @@ private extension GiftFlow {
       withNextStepper: friendPageReactor
     ))
   }
-
+  
   func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
     // TODO: 메모리 해제
     DispatchQueue.main.async {
@@ -219,7 +219,7 @@ private extension GiftFlow {
 
     return .none
   }
-
+  
   func navigateToGiftShare(with gift: Gift) -> FlowContributors {
     let giftShareVC = GiftShareViewController()
     let giftShareReactor = GiftShareViewReactor(gift: gift)
