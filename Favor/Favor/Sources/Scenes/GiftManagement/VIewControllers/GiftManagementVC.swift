@@ -34,7 +34,7 @@ final class GiftManagementViewController: BaseViewController, View {
       }
     }
   }
-
+  
   public enum GiftType {
     case received, given
 
@@ -114,24 +114,36 @@ final class GiftManagementViewController: BaseViewController, View {
     self.setupDataSource()
     self.composer.compose()
   }
-
+  
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(animated)
     self.setupNavigationBar()
   }
 
   // MARK: - Binding
-
+  
   func bind(reactor: GiftManagementViewReactor) {
     // Action
+    
+    // 취소 버튼 터치
     self.cancelButton.rx.tap
       .map { Reactor.Action.cancelButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    // 완료/등록 버튼 터치
     self.doneButton.rx.tap
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // 화면 빈공간 터치
+    self.collectionView.rx.tapGesture()
+      .skip(1)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        owner.view.endEditing(true)
+      }
       .disposed(by: self.disposeBag)
 
     self.collectionView.rx.itemSelected
@@ -184,7 +196,7 @@ final class GiftManagementViewController: BaseViewController, View {
           .withRenderingMode(.alwaysTemplate)
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.giftType }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -197,7 +209,7 @@ final class GiftManagementViewController: BaseViewController, View {
       .bind(to: self.doneButton.rx.isEnabled)
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
 
   // MARK: - UI Setups
@@ -205,10 +217,11 @@ final class GiftManagementViewController: BaseViewController, View {
   override func setupLayouts() {
     self.view.addSubview(self.collectionView)
   }
-
+  
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.top.directionalHorizontalEdges.equalTo(self.view.safeAreaLayoutGuide)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).inset(20.0)
     }
   }
   
@@ -231,7 +244,7 @@ private extension GiftManagementViewController {
       cell.bind(placeholder: "선물 이름 (최대 20자)")
       cell.bind(text: reactor.currentState.gift.name)
     }
-
+    
     let categoryCellRegistration = UICollectionView.CellRegistration
     <GiftManagementCategoryViewCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }
