@@ -20,7 +20,7 @@ final class ReminderViewController: BaseViewController, View {
   // MARK: - Constants
   
   // MARK: - Properties
-
+  
   private lazy var dataSource: ReminderDataSource = ReminderDataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
@@ -40,7 +40,7 @@ final class ReminderViewController: BaseViewController, View {
       return header
     }
   )
-
+  
   // MARK: - UI Components
   
   private let newReminderButton: UIButton = {
@@ -55,6 +55,7 @@ final class ReminderViewController: BaseViewController, View {
     config.image = .favorIcon(.pick)
     config.imagePlacement = .trailing
     config.imagePadding = 14.0
+    config.buttonSize = .medium
     let button = UIButton(configuration: config)
     return button
   }()
@@ -158,6 +159,7 @@ final class ReminderViewController: BaseViewController, View {
       .drive(with: self) { owner, _ in
         // 월 선택 팝업 창으로 전환합니다.
         let datePickerPopup = ReminderDatePopup(reactor.currentState.selectedDate)
+        datePickerPopup.delegate = self
         datePickerPopup.modalPresentationStyle = .overFullScreen
         owner.present(datePickerPopup, animated: false)
       }
@@ -173,7 +175,7 @@ final class ReminderViewController: BaseViewController, View {
         )
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.isLoading }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, isLoading in
@@ -181,7 +183,7 @@ final class ReminderViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
 
   // MARK: - UI Setups
@@ -193,10 +195,10 @@ final class ReminderViewController: BaseViewController, View {
     ].forEach {
       self.emptyContainerStack.addArrangedSubview($0)
     }
-
+    
     [
       self.emptyContainerStack,
-      self.collectionView
+      self.collectionView,
     ].forEach {
       self.view.addSubview($0)
     }
@@ -210,11 +212,15 @@ final class ReminderViewController: BaseViewController, View {
     self.emptyContainerStack.snp.makeConstraints { make in
       make.center.equalToSuperview()
     }
-
+    
     self.collectionView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalToSuperview()
+    }
+    
+    self.monthSelectorButton.snp.makeConstraints { make in
+      make.width.equalTo(200.0)
     }
   }
 }
@@ -226,7 +232,7 @@ private extension ReminderViewController {
     self.navigationItem.titleView = self.monthSelectorButton
     self.navigationItem.setRightBarButton(self.newReminderButton.toBarButtonItem(), animated: false)
   }
-
+  
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     let layout = UICollectionViewCompositionalLayout(sectionProvider: { sectionIndex, _ in
       let sectionType = self.dataSource[sectionIndex].model
@@ -238,7 +244,7 @@ private extension ReminderViewController {
     )
     return layout
   }
-
+  
   func createCollectionViewLayout(sectionType: ReminderSectionType) -> NSCollectionLayoutSection {
     // Item
     let item = NSCollectionLayoutItem(
@@ -246,7 +252,7 @@ private extension ReminderViewController {
         widthDimension: .fractionalWidth(1.0),
         heightDimension: .estimated(95))
     )
-
+    
     // Group
     let group = NSCollectionLayoutGroup.vertical(
       layoutSize: NSCollectionLayoutSize(
@@ -283,5 +289,14 @@ private extension ReminderViewController {
       elementKind: ReminderHeaderView.reuseIdentifier,
       alignment: .top
     )
+  }
+}
+
+// MARK: - ReminderDatePikcerPopup
+
+extension ReminderViewController: ReminderDatePopupDelegate {
+  /// 팝업이 선택되고 난 후 불려지는 메서드입니다.
+  func reminderDatePopupDidClose(_ dateComponents: DateComponents) {
+    self.reactor?.action.onNext(.selectedDateDidChange(dateComponents))
   }
 }

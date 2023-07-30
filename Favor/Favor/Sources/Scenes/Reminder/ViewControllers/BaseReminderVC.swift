@@ -140,7 +140,8 @@ class BaseReminderViewController: BaseViewController {
     let stackView = UIStackView(
       arrangedSubviews: [
         self.notifyDateSelectorButton,
-        self.notifyTimeSelectorTextField
+        self.notifyTimeSelectorTextField,
+        self.notifySwitch
       ]
     )
     stackView.axis = .horizontal
@@ -156,7 +157,7 @@ class BaseReminderViewController: BaseViewController {
     notifySwitch.delegate = self
     return notifySwitch
   }()
-
+  
   // 메모
   public lazy var memoTextView: RSKPlaceholderTextView = {
     let textView = RSKPlaceholderTextView()
@@ -201,15 +202,8 @@ class BaseReminderViewController: BaseViewController {
         }
       })
       .disposed(by: self.disposeBag)
-
-//    RxKeyboard.instance.visibleHeight
-//      .asDriver(onErrorRecover: { _ in return .empty()})
-//      .drive(with: self, onNext: { owner, height in
-//        owner.scrollView.contentInset.bottom = height + self.verticalSpacing
-//      })
-//      .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
   
   public func makeEditableStack(
@@ -221,10 +215,10 @@ class BaseReminderViewController: BaseViewController {
     let stackView = UIStackView()
     stackView.axis = .vertical
     stackView.spacing = 16
-
+    
     // Title Label
     let titleLabel = self.makeTitleLabel(title: title)
-
+    
     // Item View
     let itemsContainer = UIView()
     var itemStack = UIStackView()
@@ -236,7 +230,7 @@ class BaseReminderViewController: BaseViewController {
       itemStack = itemStackView
     }
     itemsContainer.addSubview(itemStack)
-
+    
     itemStack.snp.makeConstraints { make in
       if [self.memoTextView, self.titleTextField].contains(itemStack.arrangedSubviews.first) {
         make.edges.equalToSuperview()
@@ -244,11 +238,11 @@ class BaseReminderViewController: BaseViewController {
         make.directionalVerticalEdges.leading.equalToSuperview()
       }
     }
-
+    
     // Divider
     let divider = FavorDivider()
     divider.isHidden = isDividerNeeded ? false : true
-
+    
     [
       titleLabel,
       itemsContainer,
@@ -309,7 +303,7 @@ class BaseReminderViewController: BaseViewController {
     self.notifySelectorStack.addSubview(self.notifySwitch)
     self.titleStack.spacing = 4.0
   }
-
+  
   override func setupConstraints() {
     self.memoTextView.snp.makeConstraints { make in
       make.height.greaterThanOrEqualTo(self.memoMinimumHeight)

@@ -20,7 +20,7 @@ public struct FriendResponseDTO: Decodable {
   public let isUser: Bool
   public let reminderList: [ReminderResponseDTO]
   public let userNo: Int
-
+  
   enum CodingKeys: CodingKey {
     case anniversaryList
     case favorList
