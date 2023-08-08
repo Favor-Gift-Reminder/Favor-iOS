@@ -52,6 +52,12 @@ public final class EditMyPageProfileHeader: BaseCollectionViewCell {
     config.image = .favorIcon(.gallery)?
       .resize(newWidth: 28.0)
       .withRenderingMode(.alwaysTemplate)
+    config.title = "NULL"
+    config.attributedTitle = AttributedString("NULL", attributes: .init([
+      .foregroundColor: UIColor.clear
+    ]))
+    config.imagePlacement = .bottom
+    config.imagePadding = 24.0
     
     let button = UIButton(configuration: config)
     button.addTarget(self, action: #selector(self.profileBackgroundDidTap(_:)), for: .touchUpInside)

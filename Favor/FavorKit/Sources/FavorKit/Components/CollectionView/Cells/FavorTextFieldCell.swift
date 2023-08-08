@@ -19,15 +19,28 @@ public protocol FavorTextFieldCellDelegate: AnyObject {
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Properties
-
+  
   public weak var delegate: FavorTextFieldCellDelegate?
-
+  
   public var text: String? {
     self.textField.text
   }
+  
+  /// `textField`가 왼쪽을 기준으로 떨어져 있는 정도입니다.
+  private var textFieldLeadingSpacing: Constraint?
 
   // MARK: - UI Components
-
+  
+  /// `@`가 적혀있는 `UILabel`
+  private let atSignLabel: UILabel = {
+    let label = UILabel()
+    label.text = "@"
+    label.textColor = .favorColor(.icon)
+    label.font = .favorFont(.regular, size: 16.0)
+    label.isHidden = true
+    return label
+  }()
+  
   public let textField: UITextField = {
     let textField = UITextField()
     textField.autocapitalizationType = .none
@@ -53,7 +66,7 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
   }
 
   // MARK: - Functions
-
+  
   private func bind() {
     self.textField.rx.text
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -68,12 +81,16 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
   public func bind(placeholder: String) {
     self.textField.updateAttributedPlaceholder(placeholder, font: .favorFont(.regular, size: 16))
     self.textField.placeholder = placeholder
+    if placeholder == "ID" {
+      self.atSignLabel.isHidden = false
+      self.textFieldLeadingSpacing?.update(inset: 20.0)
+    }
   }
-
+  
   public func bind(text: String?) {
     self.textField.text = text
   }
-
+  
   @discardableResult
   open override func becomeFirstResponder() -> Bool {
     self.textField.becomeFirstResponder()
@@ -86,12 +103,23 @@ extension FavorTextFieldCell: BaseView {
   public func setupStyles() { }
 
   public func setupLayouts() {
-    self.addSubview(self.textField)
+    [
+      self.atSignLabel,
+      self.textField
+    ].forEach {
+      self.addSubview($0)
+    }
   }
-
+  
   public func setupConstraints() {
     self.textField.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.top.trailing.bottom.equalToSuperview()
+      self.textFieldLeadingSpacing = make.leading.equalToSuperview().constraint
+    }
+    
+    self.atSignLabel.snp.makeConstraints { make in
+      make.centerY.equalTo(self.textField)
+      make.leading.equalToSuperview()
     }
   }
 }

@@ -12,6 +12,7 @@ import UIKit
 import Composer
 import FavorKit
 import ReactorKit
+import RxGesture
 import SnapKit
 
 final class EditMyPageViewController: BaseViewController, View {
@@ -69,7 +70,16 @@ final class EditMyPageViewController: BaseViewController, View {
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
+  private let titleView: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.bold, size: 18.0)
+    label.textAlignment = .center
+    label.textColor = .favorColor(.white)
+    label.text = "프로필 수정"
+    return label
+  }()
+  
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
       frame: .zero,
@@ -121,15 +131,19 @@ final class EditMyPageViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    self.collectionView.rx.didScroll
+    self.collectionView.rx.tapGesture { gesture, _ in
+      gesture.cancelsTouchesInView = false
+    }
+      .when(.recognized)
       .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self, onNext: { owner, _ in
+      .drive(with: self) { owner, _ in
         owner.view.endEditing(false)
-      })
+      }
       .disposed(by: self.disposeBag)
     
     // State
     reactor.state.map { $0.items }
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, items in
         var snapshot: NSDiffableDataSourceSnapshot<EditMyPageSection, EditMyPageSectionItem> = .init()
@@ -175,22 +189,17 @@ final class EditMyPageViewController: BaseViewController, View {
   }
 
   // MARK: - Functions
-  
-  @objc
-  private func collectionViewDidTap() {
-    self.view.endEditing(false)
-  }
 
   // MARK: - UI Setups
-
+  
   override func setupLayouts() {
     self.view.addSubview(self.collectionView)
   }
-
+  
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
       make.top.equalToSuperview()
-      make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+      make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top)
       make.directionalHorizontalEdges.equalToSuperview()
     }
   }
@@ -201,6 +210,7 @@ final class EditMyPageViewController: BaseViewController, View {
 private extension EditMyPageViewController {
   func setupNavigationBar() {
     self.navigationItem.rightBarButtonItem = self.doneButton.toBarButtonItem()
+    self.navigationItem.titleView = self.titleView
     self.navigationController?.navigationBar.tintColor = .favorColor(.white)
   }
   
