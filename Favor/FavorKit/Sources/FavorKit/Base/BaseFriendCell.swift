@@ -53,12 +53,10 @@ open class BaseFriendCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   open func configure(
-    isUser: Bool,
     name: String,
     image: UIImage? = nil
   ) {
     self.favorProfilePhotoView.profileImage = image
-    self.favorProfilePhotoView.isUser = isUser
     self.friendName = name
   }
 

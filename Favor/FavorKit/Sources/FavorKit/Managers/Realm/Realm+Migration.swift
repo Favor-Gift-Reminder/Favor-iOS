@@ -17,7 +17,7 @@ public class RealmMigration {
   ///
   /// [**Version History**](https://www.notion.so/RealmDB-e1b9de8fcc784a2e9e13e0e1b15e4fed?pvs=4)
   public static let version: UInt64 = 13
-
+  
   public var migrationBlock: MigrationBlock = { migration, oldVersion in
     guard oldVersion < RealmMigration.version else {
       fatalError("RealmDB versioning error.")
@@ -81,6 +81,6 @@ public class RealmMigration {
   }
 
   // MARK: - Initializer
-
+  
   public init() { }
 }

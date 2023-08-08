@@ -10,41 +10,44 @@ import Foundation
 import FavorKit
 
 public struct FriendResponseDTO: Decodable {
-  public let anniversaryList: [AnniversaryResponseDTO]
-  public let favorList: [String]
-  public let friendMemo: String?
-  public let friendName: String
   public let friendNo: Int
-  public let friendUserNo: Int?
-  public let giftList: [GiftResponseDTO]
-  public let isUser: Bool
+  public let friendName: String
+  public let friendMemo: String
   public let reminderList: [ReminderResponseDTO]
+  public let favorList: [String]
+  public let anniversaryNoList: [AnniversaryResponseDTO]
+  public let givenGift: Int
+  public let receivedGift: Int
+  public let totalGift: Int
+  public let friendUserNo: Int
   public let userNo: Int
   
   enum CodingKeys: CodingKey {
-    case anniversaryList
-    case favorList
-    case friendMemo
-    case friendName
     case friendNo
-    case friendUserNo
-    case giftList
-    case isUser
+    case friendName
+    case friendMemo
     case reminderList
+    case favorList
+    case anniversaryNoList
+    case givenGift
+    case receivedGift
+    case totalGift
+    case friendUserNo
     case userNo
   }
-
+  
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.anniversaryList = try container.decode([AnniversaryResponseDTO].self, forKey: .anniversaryList)
+    self.anniversaryNoList = try container.decode([AnniversaryResponseDTO].self, forKey: .anniversaryNoList)
     self.favorList = try container.decode([String].self, forKey: .favorList)
-    self.friendMemo = try container.decodeIfPresent(String.self, forKey: .friendMemo)
+    self.friendMemo = try container.decode(String.self, forKey: .friendMemo)
     self.friendName = try container.decode(String.self, forKey: .friendName)
     self.friendNo = try container.decode(Int.self, forKey: .friendNo)
-    self.friendUserNo = try container.decodeIfPresent(Int.self, forKey: .friendUserNo)
-    self.giftList = try container.decode([GiftResponseDTO].self, forKey: .giftList)
-    self.isUser = try container.decode(Bool.self, forKey: .isUser)
+    self.friendUserNo = try container.decode(Int.self, forKey: .friendUserNo)
     self.reminderList = try container.decode([ReminderResponseDTO].self, forKey: .reminderList)
     self.userNo = try container.decode(Int.self, forKey: .userNo)
+    self.givenGift = try container.decode(Int.self, forKey: .givenGift)
+    self.receivedGift = try container.decode(Int.self, forKey: .receivedGift)
+    self.totalGift = try container.decode(Int.self, forKey: .totalGift)
   }
 }

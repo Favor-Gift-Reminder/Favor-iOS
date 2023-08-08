@@ -64,7 +64,6 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
         let friend = friendData.friend
         owner.nameLabel.text = friendData.isNewFriendCell ? "추가하기" : friend.name
         owner.favorProfilePhotoView.isNewFriendCell = friendData.isNewFriendCell
-        owner.favorProfilePhotoView.isUser = friend.isUser
         owner.favorProfilePhotoView.profileImage = friend.profilePhoto
       })
       .disposed(by: self.disposeBag)

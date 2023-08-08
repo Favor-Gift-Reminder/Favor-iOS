@@ -23,8 +23,6 @@ public class FriendObject: Object {
   @Persisted public var memo: String?
   /// 친구가 회원일 경우, 해당 친구의 회원 번호
   @Persisted public var friendUserNo: Int?
-  /// 친구의 회원 여부 (회원 = `true`)
-  @Persisted public var isUser: Bool
   /// 친구의 기념일 목록
   @Persisted public var anniversaryList: List<AnniversaryObject>
   /// 친구의 취향 태그
@@ -54,16 +52,13 @@ public class FriendObject: Object {
     favorList: [String] = [],
     profilePhoto: PhotoObject? = nil,
     memo: String? = nil,
-    friendUserNo: Int? = nil,
-    isUser: Bool
+    friendUserNo: Int? = nil
   ) {
     self.init()
     self.friendNo = friendNo
     self.name = name
     self.profilePhoto = profilePhoto
     self.memo = memo
-    self.friendUserNo = friendUserNo
-    self.isUser = isUser
     self.favorList.insert(objectsIn: favorList)
     let newAnniversaryList = List<AnniversaryObject>()
     newAnniversaryList.append(objectsIn: anniversaryList)

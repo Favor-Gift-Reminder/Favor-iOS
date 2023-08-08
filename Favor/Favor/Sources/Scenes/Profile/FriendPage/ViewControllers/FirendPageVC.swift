@@ -28,7 +28,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
   /// 유저가 유저인지 판별해주는 계산 프로퍼티입니다.
   private var isUser: Bool {
     guard let reactor = self.reactor else { return false }
-    return reactor.currentState.friend.isUser
+    return true
   }
   
   // MARK: - Setup

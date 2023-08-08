@@ -19,7 +19,6 @@ public struct Friend: Storable, Receivable {
   public var name: String
   public var profilePhoto: UIImage?
   public var memo: String?
-  public var isUser: Bool
   public var userIdentifier: Int?
   public var anniversaryList: [Anniversary]
   public var favorList: [Favor]
@@ -34,7 +33,6 @@ public struct Friend: Storable, Receivable {
     self.name = realmObject.name
 //    self.profilePhoto = realmObject.profilePhoto
     self.memo = realmObject.memo
-    self.isUser = realmObject.isUser
     self.userIdentifier = realmObject.friendUserNo
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
@@ -48,8 +46,7 @@ public struct Friend: Storable, Receivable {
       favorList: self.favorList.compactMap { $0.rawValue },
 //      profilePhoto: self.profilePhoto,
       memo: self.memo,
-      friendUserNo: self.userIdentifier,
-      isUser: self.isUser
+      friendUserNo: self.userIdentifier
     )
   }
 
@@ -60,9 +57,8 @@ public struct Friend: Storable, Receivable {
     self.name = dto.friendName
 //    self.profilePhoto = dto.
     self.memo = dto.friendMemo
-    self.isUser = dto.isUser
     self.userIdentifier = dto.friendUserNo
-    self.anniversaryList = dto.anniversaryList.compactMap(Anniversary.init(dto:))
+    self.anniversaryList = dto.anniversaryNoList.compactMap(Anniversary.init(dto:))
     self.favorList = dto.favorList.compactMap(Favor.init(rawValue:))
   }
 
@@ -75,7 +71,6 @@ public struct Friend: Storable, Receivable {
   public init() {
     self.identifier = -1
     self.name = ""
-    self.isUser = false
     self.anniversaryList = []
     self.favorList = []
   }
