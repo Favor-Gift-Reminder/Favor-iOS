@@ -79,7 +79,7 @@ public class RealmMigration {
       }
     }
   }
-
+  
   // MARK: - Initializer
   
   public init() { }

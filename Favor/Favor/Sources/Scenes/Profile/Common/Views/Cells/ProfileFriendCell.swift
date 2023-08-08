@@ -68,17 +68,15 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
-
+  
 }
 
 // MARK: - UI Setups
 
 extension ProfileFriendCell: BaseView {
-  func setupStyles() {
-    // 
-  }
+  func setupStyles() {}
 
   func setupLayouts() {
     [

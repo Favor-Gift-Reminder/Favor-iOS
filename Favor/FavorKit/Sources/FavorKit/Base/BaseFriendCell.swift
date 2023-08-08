@@ -61,7 +61,7 @@ open class BaseFriendCell: BaseCollectionViewCell {
   }
 
   // MARK: - Setup
-
+  
   open func setupStyles() {
     self.layer.cornerRadius = Metric.profileImageViewSize / 4
     self.clipsToBounds = true
