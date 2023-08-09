@@ -7,7 +7,7 @@
 
 import UIKit
 
-public enum AnniversaryCategory: String, CaseIterable, Hashable {
+public enum AnniversaryCategory: String, CaseIterable, Hashable, Codable {
   case couple = "연인"
   case congrat = "축하/생일"
   case gradu = "졸업"

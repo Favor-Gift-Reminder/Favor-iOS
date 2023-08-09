@@ -196,6 +196,7 @@ private extension AnniversaryListViewReactor {
       let requestDTO = AnniversaryUpdateRequestDTO(
         anniversaryTitle: anniversary.name,
         anniversaryDate: anniversary.date.toDTODateString(),
+        category: anniversary.category.rawValue,
         isPinned: !anniversary.isPinned
       )
 

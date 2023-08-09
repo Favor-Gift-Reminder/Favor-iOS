@@ -63,7 +63,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
     self.initialState = State(
       viewType: .new,
       anniversary: Anniversary(),
-      items: [.name(nil), .category(nil), .date(nil)]
+      items: [.name(nil), .category(.birth), .date(nil)]
     )
   }
   
@@ -150,7 +150,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
       let isTitleEmpty = state.anniversary.name.isEmpty
       
       newState.isDoneButtonEnabled = !isTitleEmpty && state.anniversaryDate != nil
-      newState.items = [.name(nil), .category(state.anniversary.category), .date(nil)]
+      newState.items[1] = .category(state.anniversary.category)
 
       return newState
     }
@@ -183,13 +183,14 @@ private extension AnniversaryManagementViewReactor {
       }
     }
   }
-
+  
   func requestPatchAnniversary(_ anniversary: Anniversary) -> Single<Anniversary> {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()
       let requestDTO = AnniversaryUpdateRequestDTO(
         anniversaryTitle: anniversary.name,
         anniversaryDate: anniversary.date.toDTODateString(),
+        category: anniversary.category.rawValue,
         isPinned: anniversary.isPinned
       )
       let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))

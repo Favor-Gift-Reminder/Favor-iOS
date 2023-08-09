@@ -91,9 +91,9 @@ final class AnniversaryManagementViewController: BaseViewController, View {
   private let doneButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
-    config.baseForegroundColor = .favorColor(.icon)
+    config.baseForegroundColor = .favorColor(.main)
     config.updateAttributedTitle("완료", font: .favorFont(.bold, size: 18))
-
+    
     let button = UIButton(configuration: config)
     return button
   }()
@@ -125,15 +125,15 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       supplementaryViewType: FavorSectionFooterView.self,
       ofKind: UICollectionView.elementKindSectionFooter
     )
-
+    
     collectionView.isScrollEnabled = false
     collectionView.contentInset = UIEdgeInsets(top: 32, left: .zero, bottom: 32, right: .zero)
     collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
 
-  private let deleteButton = FavorLargeButton(with: .main2("삭제하기"))
-
+  private let deleteButton = FavorLargeButton(with: .dark2("삭제하기"))
+  
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -147,7 +147,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
 
     self.setupNavigationBar()
   }
-
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 

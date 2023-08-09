@@ -704,7 +704,6 @@
 			children = (
 				2E70654F2A160AF2007B1C94 /* AnniversaryManagementSection.swift */,
 				2E634E2E2A175ECF00DD51ED /* Reactors */,
-				2E634E2F2A175EDD00DD51ED /* Views */,
 				2E634E2C2A175EC200DD51ED /* ViewControllers */,
 			);
 			path = Anniversary;
@@ -724,13 +723,6 @@
 				2E7065492A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift */,
 			);
 			path = Reactors;
-			sourceTree = "<group>";
-		};
-		2E634E2F2A175EDD00DD51ED /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		2E634E322A18EBBF00DD51ED /* CellModels */ = {
