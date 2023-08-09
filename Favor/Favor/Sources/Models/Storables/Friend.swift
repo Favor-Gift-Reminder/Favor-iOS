@@ -22,6 +22,9 @@ public struct Friend: Storable, Receivable {
   public var userIdentifier: Int?
   public var anniversaryList: [Anniversary]
   public var favorList: [Favor]
+  public let totalGift: Int
+  public let receivedGift: Int
+  public let givenGift: Int
   
   // MARK: - Storable
   
@@ -36,6 +39,9 @@ public struct Friend: Storable, Receivable {
     self.userIdentifier = realmObject.friendUserNo
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
+    self.totalGift = realmObject.totalGift
+    self.receivedGift = realmObject.receivedGift
+    self.givenGift = realmObject.givenGift
   }
   
   public func realmObject() -> FriendObject {
@@ -46,10 +52,13 @@ public struct Friend: Storable, Receivable {
       favorList: self.favorList.compactMap { $0.rawValue },
 //      profilePhoto: self.profilePhoto,
       memo: self.memo,
-      friendUserNo: self.userIdentifier
+      friendUserNo: self.userIdentifier,
+      totalGift: self.totalGift,
+      receivedGift: self.receivedGift,
+      givenGift: self.givenGift
     )
   }
-
+  
   // MARK: - Receivable
 
   public init(dto: FriendResponseDTO) {
@@ -60,6 +69,9 @@ public struct Friend: Storable, Receivable {
     self.userIdentifier = dto.friendUserNo
     self.anniversaryList = dto.anniversaryNoList.compactMap(Anniversary.init(dto:))
     self.favorList = dto.favorList.compactMap(Favor.init(rawValue:))
+    self.totalGift = dto.totalGift
+    self.receivedGift = dto.receivedGift
+    self.givenGift = dto.givenGift
   }
 
   // MARK: - Mock
@@ -73,6 +85,9 @@ public struct Friend: Storable, Receivable {
     self.name = ""
     self.anniversaryList = []
     self.favorList = []
+    self.givenGift = 0
+    self.totalGift = 0
+    self.receivedGift = 0
   }
 }
 

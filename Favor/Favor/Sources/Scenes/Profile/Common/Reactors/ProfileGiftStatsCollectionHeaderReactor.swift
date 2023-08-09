@@ -37,4 +37,12 @@ public final class ProfileGiftStatsCollectionHeaderReactor: Reactor {
       totalGifts: user.totalgifts
     )
   }
+  
+  public init(friend: Friend) {
+    self.initialState = State(
+      givenGifts: friend.givenGift,
+      receivedGifts: friend.receivedGift,
+      totalGifts: friend.totalGift
+    )
+  }
 }

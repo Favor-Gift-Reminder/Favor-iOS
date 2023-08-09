@@ -24,7 +24,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
   enum Action {
     case viewNeedsLoaded
     case doNothing
-    case memoCellDidTap(String?)
+    case modfiyMemeButtonDidTap
     case anniversarySetupHelperCellDidTap
     case memoDidChange(String?)
     case moreAnniversaryDidTap
@@ -64,8 +64,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
           ])
         }
 
-    case .memoCellDidTap(let memo):
-      self.steps.accept(AppStep.memoBottomSheetIsRequired(memo))
+    case .modfiyMemeButtonDidTap:
+      self.steps.accept(AppStep.memoBottomSheetIsRequired(self.currentState.friend.memo))
       return .empty()
       
     case .anniversarySetupHelperCellDidTap:
@@ -115,7 +115,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
       var newState = state
       var newSection: [ProfileSection] = []
       var newItems: [[ProfileSectionItem]] = []
-
+      
       // 취향
       if !state.friend.favorList.isEmpty {
         newSection.append(.favors)

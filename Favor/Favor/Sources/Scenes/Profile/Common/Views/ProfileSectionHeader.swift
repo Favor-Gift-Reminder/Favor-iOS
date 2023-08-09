@@ -27,7 +27,7 @@ final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
     label.text = "헤더 타이틀"
     return label
   }()
-
+  
   fileprivate let rightButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
@@ -63,7 +63,7 @@ final class ProfileSectionHeader: UICollectionReusableView, Reusable, View {
         owner.headerTitle.text = title
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.rightButtonTitle }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
