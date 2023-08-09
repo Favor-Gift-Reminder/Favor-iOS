@@ -167,7 +167,17 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       .map { Reactor.Action.deleteButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.view.rx.tapGesture { gesture, _ in
+      gesture.cancelsTouchesInView = false
+    }
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        owner.view.endEditing(true)
+      }
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { $0.viewType }
       .asDriver(onErrorRecover: { _ in return .empty()})

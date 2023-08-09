@@ -21,7 +21,7 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
 
   // MARK: - Constants
 
-  public enum CellType {
+  public enum CellType: Hashable {
     case list
     case edit
 
