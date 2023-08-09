@@ -121,7 +121,7 @@ final class MyPageViewController: BaseProfileViewController, View {
         owner.profileView.rx.id.onNext(id)
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in

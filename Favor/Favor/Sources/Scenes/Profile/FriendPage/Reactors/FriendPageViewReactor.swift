@@ -115,14 +115,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
       var newState = state
       var newSection: [ProfileSection] = []
       var newItems: [[ProfileSectionItem]] = []
-      
-      // 새 기념일 도움 섹션
-      // 유저가 아닌 친구 & 기념일 목록이 비어 있는 조건을 모두 만족해야합니다.
-      if state.friend.anniversaryList.isEmpty {
-        newSection.append(.anniversarySetupHelper)
-        newItems.append([.anniversarySetupHelper])
-      }
-      
+
       // 취향
       if !state.friend.favorList.isEmpty {
         newSection.append(.favors)

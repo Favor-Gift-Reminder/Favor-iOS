@@ -153,7 +153,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
 
     self.makeTitleTextFieldFirstResponder()
   }
-
+  
   // MARK: - Binding
 
   func bind(reactor: AnniversaryManagementViewReactor) {
