@@ -61,6 +61,11 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    self.floatyButton.rx.tap
+      .map { Reactor.Action.floatyButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { $0.shouldShowToast }
       .asDriver(onErrorRecover: { _ in return .empty() })

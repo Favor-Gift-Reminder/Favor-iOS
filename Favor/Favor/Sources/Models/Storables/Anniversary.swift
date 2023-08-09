@@ -42,9 +42,9 @@ public struct Anniversary: Storable, Receivable {
       isPinned: self.isPinned
     )
   }
-
+  
   // MARK: - Receivable
-
+  
   public init(dto: AnniversaryResponseDTO) {
     self.identifier = dto.anniversaryNo
     self.name = dto.anniversaryTitle
@@ -53,14 +53,15 @@ public struct Anniversary: Storable, Receivable {
     self.date = dto.anniversaryDate
     self.isPinned = dto.isPinned ?? false
   }
-
+  
   public func requestDTO() -> AnniversaryRequestDTO {
     AnniversaryRequestDTO(
       anniversaryTitle: self.name,
-      anniversaryDate: self.date.toDTODateString()
+      anniversaryDate: self.date.toDTODateString(),
+      category: self.category.rawValue
     )
   }
-
+  
   // MARK: - Mock
 
   /// 비어있는 구조체를 생성합니다.

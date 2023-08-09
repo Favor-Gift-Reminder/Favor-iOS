@@ -17,7 +17,7 @@ public protocol FavorTextFieldCellDelegate: AnyObject {
 }
 
 open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
-
+  
   // MARK: - Properties
   
   public weak var delegate: FavorTextFieldCellDelegate?
@@ -75,9 +75,9 @@ open class FavorTextFieldCell: BaseCollectionViewCell, Reusable {
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Bind
-
+  
   public func bind(placeholder: String) {
     self.textField.updateAttributedPlaceholder(placeholder, font: .favorFont(.regular, size: 16))
     self.textField.placeholder = placeholder
