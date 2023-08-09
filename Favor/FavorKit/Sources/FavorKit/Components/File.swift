@@ -16,7 +16,7 @@ public class FavorVerticalAlignmentLabel: UILabel {
   
   var verticalAlignment: VerticalAlignment = .top {
     didSet {
-      setNeedsDisplay()
+      self.setNeedsDisplay()
     }
   }
   

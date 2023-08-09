@@ -16,8 +16,8 @@ final class ProfileMemoCell: UICollectionViewCell, Reusable {
   
   // MARK: - UI Components
   
-  private let memoLabel: UILabel = {
-    let label = UILabel()
+  private let memoLabel: FavorVerticalAlignmentLabel = {
+    let label = FavorVerticalAlignmentLabel()
     label.numberOfLines = 0
     label.textAlignment = .justified
     label.lineBreakMode = .byWordWrapping
@@ -87,7 +87,7 @@ extension ProfileMemoCell: BaseView {
     }
     
     self.memoLabel.snp.makeConstraints { make in
-      make.top.directionalHorizontalEdges.equalToSuperview().inset(12.0)
+      make.edges.equalToSuperview().inset(12.0)
     }
   }
 }
