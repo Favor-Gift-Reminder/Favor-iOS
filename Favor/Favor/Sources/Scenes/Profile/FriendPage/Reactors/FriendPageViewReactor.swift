@@ -177,7 +177,6 @@ private extension FriendPageViewReactor {
   func setupFriendPatchFetcher() {
     // onRemote
     self.friendPatchFetcher.onRemote = {
-      
       let networking = FriendNetworking()
       let friend = networking.request(.patchFriendMemo(
         memo: self.currentState.friend.memo ?? "",
@@ -192,9 +191,7 @@ private extension FriendPageViewReactor {
     }
     // onLocal
     self.friendPatchFetcher.onLocal = {
-      return await self.workbench.values(FriendObject.self)
-        .where { $0.friendNo.in([self.currentState.friend.identifier]) }
-        .map { Friend(realmObject: $0) }
+      return [self.currentState.friend]
     }
     // onLocalUpdate
     self.friendPatchFetcher.onLocalUpdate = { _, remoteFriend in

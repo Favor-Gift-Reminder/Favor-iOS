@@ -62,11 +62,11 @@ final class ProfileMemoCell: UICollectionViewCell, Reusable {
       self.memoLabel.textColor = .favorColor(.icon)
     }
     if self.memoLabel.intrinsicContentSize.height > self.defaultLabelHeight {
-      print(self.memoLabel.intrinsicContentSize.height)
-      self.labelHeight?.update(offset: self.memoLabel.intrinsicContentSize.height)
+      self.labelHeight?.update(offset: self.memoLabel.intrinsicContentSize.height + 24.0)
     } else {
-      self.labelHeight?.update(offset: self.defaultLabelHeight)
+      self.labelHeight?.update(offset: self.defaultLabelHeight + 16.0)
     }
+    print("Height: \(self.memoLabel.intrinsicContentSize.height)")
   }
 }
 
@@ -83,11 +83,11 @@ extension ProfileMemoCell: BaseView {
   func setupConstraints() {
     self.containerView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
-      self.labelHeight = make.height.equalTo(self.defaultLabelHeight).constraint
+      make.height.greaterThanOrEqualTo(130.0)
     }
     
     self.memoLabel.snp.makeConstraints { make in
-      make.top.leading.trailing.equalToSuperview().inset(12.0)
+      make.top.directionalHorizontalEdges.equalToSuperview().inset(12.0)
     }
   }
 }
