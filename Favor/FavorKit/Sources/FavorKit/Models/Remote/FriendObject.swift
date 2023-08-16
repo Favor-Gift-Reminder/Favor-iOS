@@ -23,12 +23,16 @@ public class FriendObject: Object {
   @Persisted public var memo: String?
   /// 친구가 회원일 경우, 해당 친구의 회원 번호
   @Persisted public var friendUserNo: Int?
-  /// 친구의 회원 여부 (회원 = `true`)
-  @Persisted public var isUser: Bool
   /// 친구의 기념일 목록
   @Persisted public var anniversaryList: List<AnniversaryObject>
   /// 친구의 취향 태그
   @Persisted public var favorList: MutableSet<String>
+  /// 친구의 총 선물 갯수
+  @Persisted public var totalGift: Int
+  /// 친구의 받은 선물 갯수
+  @Persisted public var receivedGift: Int
+  /// 친구의 준 선물 갯수
+  @Persisted public var givenGift: Int
 
   public override class func propertiesMapping() -> [String: String] {
     [
@@ -47,6 +51,9 @@ public class FriendObject: Object {
   ///   - memo: 친구에 대한 메모
   ///   - friendUserNo: 친구가 회원일 경우, 해당 친구의 회원 번호
   ///   - isUser: 친구의 회원 여부 (true: 회원)
+  ///   - totalGift: 총 선물 갯수
+  ///   - receivedGift: 받은 선물 갯수
+  ///   - givenGift: 준 선물 갯수
   public convenience init(
     friendNo: Int,
     name: String,
@@ -55,18 +62,21 @@ public class FriendObject: Object {
     profilePhoto: PhotoObject? = nil,
     memo: String? = nil,
     friendUserNo: Int? = nil,
-    isUser: Bool
+    totalGift: Int,
+    receivedGift: Int,
+    givenGift: Int
   ) {
     self.init()
     self.friendNo = friendNo
     self.name = name
     self.profilePhoto = profilePhoto
     self.memo = memo
-    self.friendUserNo = friendUserNo
-    self.isUser = isUser
     self.favorList.insert(objectsIn: favorList)
     let newAnniversaryList = List<AnniversaryObject>()
     newAnniversaryList.append(objectsIn: anniversaryList)
     self.anniversaryList = newAnniversaryList
+    self.totalGift = totalGift
+    self.receivedGift = receivedGift
+    self.givenGift = givenGift
   }
 }

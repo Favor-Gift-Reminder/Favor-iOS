@@ -24,7 +24,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
   enum Action {
     case viewNeedsLoaded
     case doNothing
-    case memoCellDidTap(String?)
+    case modfiyMemeButtonDidTap
     case anniversarySetupHelperCellDidTap
     case memoDidChange(String?)
     case moreAnniversaryDidTap
@@ -64,8 +64,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
           ])
         }
 
-    case .memoCellDidTap(let memo):
-      self.steps.accept(AppStep.memoBottomSheetIsRequired(memo))
+    case .modfiyMemeButtonDidTap:
+      self.steps.accept(AppStep.memoBottomSheetIsRequired(self.currentState.friend.memo))
       return .empty()
       
     case .anniversarySetupHelperCellDidTap:
@@ -115,13 +115,6 @@ final class FriendPageViewReactor: Reactor, Stepper {
       var newState = state
       var newSection: [ProfileSection] = []
       var newItems: [[ProfileSectionItem]] = []
-      
-      // 새 기념일 도움 섹션
-      // 유저가 아닌 친구 & 기념일 목록이 비어 있는 조건을 모두 만족해야합니다.
-      if !state.friend.isUser, state.friend.anniversaryList.isEmpty {
-        newSection.append(.anniversarySetupHelper)
-        newItems.append([.anniversarySetupHelper])
-      }
       
       // 취향
       if !state.friend.favorList.isEmpty {
@@ -184,7 +177,6 @@ private extension FriendPageViewReactor {
   func setupFriendPatchFetcher() {
     // onRemote
     self.friendPatchFetcher.onRemote = {
-      
       let networking = FriendNetworking()
       let friend = networking.request(.patchFriendMemo(
         memo: self.currentState.friend.memo ?? "",
@@ -199,9 +191,7 @@ private extension FriendPageViewReactor {
     }
     // onLocal
     self.friendPatchFetcher.onLocal = {
-      return await self.workbench.values(FriendObject.self)
-        .where { $0.friendNo.in([self.currentState.friend.identifier]) }
-        .map { Friend(realmObject: $0) }
+      return [self.currentState.friend]
     }
     // onLocalUpdate
     self.friendPatchFetcher.onLocalUpdate = { _, remoteFriend in

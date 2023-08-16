@@ -91,9 +91,9 @@ final class AnniversaryManagementViewController: BaseViewController, View {
   private let doneButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.background.backgroundColor = .clear
-    config.baseForegroundColor = .favorColor(.icon)
+    config.baseForegroundColor = .favorColor(.main)
     config.updateAttributedTitle("완료", font: .favorFont(.bold, size: 18))
-
+    
     let button = UIButton(configuration: config)
     return button
   }()
@@ -125,15 +125,15 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       supplementaryViewType: FavorSectionFooterView.self,
       ofKind: UICollectionView.elementKindSectionFooter
     )
-
+    
     collectionView.isScrollEnabled = false
     collectionView.contentInset = UIEdgeInsets(top: 32, left: .zero, bottom: 32, right: .zero)
     collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()
 
-  private let deleteButton = FavorLargeButton(with: .main2("삭제하기"))
-
+  private let deleteButton = FavorLargeButton(with: .dark2("삭제하기"))
+  
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -147,13 +147,13 @@ final class AnniversaryManagementViewController: BaseViewController, View {
 
     self.setupNavigationBar()
   }
-
+  
   override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
     self.makeTitleTextFieldFirstResponder()
   }
-
+  
   // MARK: - Binding
 
   func bind(reactor: AnniversaryManagementViewReactor) {
@@ -167,7 +167,17 @@ final class AnniversaryManagementViewController: BaseViewController, View {
       .map { Reactor.Action.deleteButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.view.rx.tapGesture { gesture, _ in
+      gesture.cancelsTouchesInView = false
+    }
+      .when(.recognized)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        owner.view.endEditing(true)
+      }
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { $0.viewType }
       .asDriver(onErrorRecover: { _ in return .empty()})

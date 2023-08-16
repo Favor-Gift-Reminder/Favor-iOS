@@ -106,8 +106,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     case .doneButtonDidTap:
       guard let notifyDay = self.currentState.currentNotifyDay,
             let time = self.currentState.currentAlarmTime,
-            let date = self.currentState.currentDate,
-            let friend = self.currentState.currentFriend
+            let date = self.currentState.currentDate
       else { return .empty() }
       let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()
       
@@ -120,7 +119,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       )
       
       // 서버에 요청을 보냅니다.
-      return networking.request(.postReminder(requestDTO, friendNo: friend.identifier))
+      return networking.request(.postReminder(requestDTO, friendNo: 1))
         .flatMap { _ -> Observable<Mutation> in
           let message: ToastMessage = .reminderAdded
           // 현재 페이지를 종료합니다.
@@ -191,11 +190,12 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
       
-      if state.currentDate != nil,
-         state.currentAlarmTime != nil,
-         state.currentNotifyDay != nil,
-         state.currentFriend != nil,
-         !state.currentTitle.isEmpty {
+      if
+        state.currentDate != nil,
+        state.currentAlarmTime != nil,
+        state.currentNotifyDay != nil,
+        !state.currentTitle.isEmpty
+      {
         newState.isEnabledDoneButton = true
       } else {
         newState.isEnabledDoneButton = false

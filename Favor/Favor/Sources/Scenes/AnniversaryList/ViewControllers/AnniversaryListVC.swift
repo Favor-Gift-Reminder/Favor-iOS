@@ -61,6 +61,11 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    self.floatyButton.rx.tap
+      .map { Reactor.Action.floatyButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+        
     // State
     reactor.state.map { $0.shouldShowToast }
       .asDriver(onErrorRecover: { _ in return .empty() })
@@ -107,10 +112,10 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       self.navigationItem.title = "내 기념일"
     case .friend(let friend):
       self.navigationItem.title = "\(friend.name)의 기념일"
-      if friend.isUser {
-        self.floatyButton.isHidden = true
-        self.editButton.isHidden = true
-      }
+//      if friend.isUser {
+//        self.floatyButton.isHidden = true
+//        self.editButton.isHidden = true
+//      }
     }
   }
   

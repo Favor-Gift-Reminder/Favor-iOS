@@ -53,17 +53,15 @@ open class BaseFriendCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   open func configure(
-    isUser: Bool,
     name: String,
     image: UIImage? = nil
   ) {
     self.favorProfilePhotoView.profileImage = image
-    self.favorProfilePhotoView.isUser = isUser
     self.friendName = name
   }
 
   // MARK: - Setup
-
+  
   open func setupStyles() {
     self.layer.cornerRadius = Metric.profileImageViewSize / 4
     self.clipsToBounds = true

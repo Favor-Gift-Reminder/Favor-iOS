@@ -15,7 +15,7 @@ public struct AnniversaryResponseDTO: Decodable {
   public let anniversaryTitle: String
   public let isPinned: Bool?
   public let userNo: Int
-
+  
   private enum CodingKeys: CodingKey {
     case anniversaryDate
     case anniversaryNo

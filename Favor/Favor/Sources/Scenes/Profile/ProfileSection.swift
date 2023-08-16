@@ -89,11 +89,12 @@ extension ProfileSection {
     case .friends: return "친구"
     }
   }
-
+  
   var rightButtonTitle: String? {
     switch self {
     case .anniversaries: return "더보기"
     case .friends: return "전체보기"
+    case .memo: return "수정하기"
     default: return nil
     }
   }

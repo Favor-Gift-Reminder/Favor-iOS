@@ -18,9 +18,9 @@ final class MyPageViewController: BaseProfileViewController, View {
   // MARK: - Constants
   
   // MARK: - Properties
-
+  
   // MARK: - UI Components
-
+  
   private let editButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(.edit)?.withRenderingMode(.alwaysTemplate)
@@ -106,7 +106,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // MARK: - State
     reactor.state.map { $0.userName }
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -121,7 +121,7 @@ final class MyPageViewController: BaseProfileViewController, View {
         owner.profileView.rx.id.onNext(id)
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in

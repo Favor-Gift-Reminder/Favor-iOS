@@ -27,6 +27,7 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     case viewNeedsLoaded
     case editButtonDidTap
     case pinButtonDidTap(Anniversary)
+    case floatyButtonDidTap // 여기서부터
   }
   
   enum Mutation {
@@ -122,6 +123,10 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
             return .just(.updateAnniversaries(originalAnniversaries))
           }
       )
+      
+    case .floatyButtonDidTap:
+      self.steps.accept(AppStep.newAnniversaryIsRequired)
+      return .empty()
     }
   }
   
@@ -191,6 +196,7 @@ private extension AnniversaryListViewReactor {
       let requestDTO = AnniversaryUpdateRequestDTO(
         anniversaryTitle: anniversary.name,
         anniversaryDate: anniversary.date.toDTODateString(),
+        category: anniversary.category.rawValue,
         isPinned: !anniversary.isPinned
       )
 

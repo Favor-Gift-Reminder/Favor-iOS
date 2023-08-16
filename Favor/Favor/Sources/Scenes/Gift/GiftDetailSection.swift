@@ -100,10 +100,6 @@ extension GiftDetailSection: Composable {
 
 // MARK: - Sendable
 
-extension GiftDetailSection: Sendable {
+extension GiftDetailSection: Sendable {}
 
-}
-
-extension GiftDetailSectionItem: Sendable {
-  
-}
+extension GiftDetailSectionItem: Sendable {}

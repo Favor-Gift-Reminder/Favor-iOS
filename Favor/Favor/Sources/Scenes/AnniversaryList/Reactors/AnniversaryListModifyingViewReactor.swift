@@ -22,15 +22,14 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
 
   enum Action {
     case viewNeedsLoaded
-    case newButtonDidTap
     case editButtonDidTap(Anniversary)
   }
-
+  
   enum Mutation {
     case updateAnniversaries([Anniversary])
     case updateItems([Item])
   }
-
+  
   struct State {
     var anniversaries: [Anniversary]
     var section: Section = .empty
@@ -56,17 +55,13 @@ final class AnniversaryListModifyingViewReactor: BaseAnniversaryListViewReactor,
           guard let user = user.first else { return .empty() }
           return .just(.updateAnniversaries(user.anniversaryList))
         }
-
-    case .newButtonDidTap:
-      self.steps.accept(AppStep.newAnniversaryIsRequired)
-      return .empty()
-
+      
     case .editButtonDidTap(let anniversary):
       self.steps.accept(AppStep.anniversaryManagementIsRequired(anniversary))
       return .empty()
     }
   }
-
+  
   func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     return mutation.flatMap { originalMutation -> Observable<Mutation> in
       switch originalMutation {

@@ -121,6 +121,12 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       }
       .disposed(by: self.disposeBag)
     
+    reactor.state.map { $0.shouldNotify }
+      .distinctUntilChanged()
+      .observe(on: MainScheduler.asyncInstance)
+      .bind(to: self.notifySwitch.rx.isOn)
+      .disposed(by: self.disposeBag)
+    
     reactor.state.map { $0.isLoading }
       .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
@@ -150,22 +156,22 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       right: .zero
     )
   }
-
+  
   override func setupLayouts() {
     super.setupLayouts()
-
+    
     // Navigation Items
     self.navigationItem.setRightBarButton(self.doneButton.toBarButtonItem(), animated: true)
-
+    
     // View Items
     self.scrollView.addSubview(self.contentsView)
     self.contentsView.addSubview(self.stackView)
     
     [
       self.titleStack,
-      self.friendSelectorStack,
       self.dateSelectorStack,
       self.notifySelectorStack,
+      self.friendSelectorStack,
       self.memoStack
     ].forEach {
       self.stackView.addArrangedSubview($0)

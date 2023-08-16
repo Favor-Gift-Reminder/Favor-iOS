@@ -28,7 +28,7 @@ public final class FavorSwitch: UIButton {
     willSet { self.animateState(to: newValue) }
     didSet { self.delegate?.switchDidToggled(to: self.isOn) }
   }
-
+  
   /// Switch가 켜졌을 때의 색상
   public var onTintColor: SwitchColor = (.favorColor(.main), .favorColor(.white))
 

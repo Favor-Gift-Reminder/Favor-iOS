@@ -45,7 +45,6 @@ public class BaseFriendListViewController: BaseViewController {
           case .edit:
             let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListModifyingCell
             cell.configure(
-              isUser: friend.isUser,
               name: friend.name,
               image: friend.profilePhoto
             )

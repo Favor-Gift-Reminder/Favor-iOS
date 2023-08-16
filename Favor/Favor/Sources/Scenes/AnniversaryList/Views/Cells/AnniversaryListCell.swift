@@ -21,7 +21,7 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
 
   // MARK: - Constants
 
-  public enum CellType {
+  public enum CellType: Hashable {
     case list
     case edit
 
@@ -86,7 +86,7 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
   }
 
   // MARK: - UI Setups
-
+  
   public override func setupLayouts() {
     super.setupLayouts()
 
@@ -109,9 +109,10 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
 private extension AnniversaryListCell {
   func updateCell() {
     guard let cellModel else { return }
+    self.image = nil
     self.title = cellModel.item.name
     self.subtitle = cellModel.item.date.toShortenDateString()
-
+    
     // type == .list이고 isPinned일때만 .icon
     // 아니면 line2
     let iconColor: UIColor = cellModel.item.isPinned && cellModel.cellType == .list ?
@@ -121,5 +122,6 @@ private extension AnniversaryListCell {
       .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: Metric.rightButtonImageSize)
       .withTintColor(iconColor)
+    self.image = cellModel.item.category.image
   }
 }

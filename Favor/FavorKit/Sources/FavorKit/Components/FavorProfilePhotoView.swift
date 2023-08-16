@@ -24,32 +24,12 @@ public class FavorProfilePhotoView: UIView {
       case .big: return 60.0
       }
     }
-
-    /// borderWidth를 포함한 사이즈
-    public var indicatorSize: CGFloat {
-      switch self {
-      case .small: return 14.0 + self.borderWidth
-      case .big: return 16.0 + self.borderWidth
-      }
-    }
-
-    public var borderWidth: CGFloat {
-      switch self {
-      case .small: return 2.0
-      case .big: return 1.5
-      }
-    }
   }
 
   // MARK: - Properties
 
   public var type: ProfileImageViewType = .small {
     didSet { self.updateSize() }
-  }
-  
-  /// 사용자가 유저인지 판별합니다.
-  public var isUser: Bool = false {
-    willSet { self.isUserIndicator.isHidden = !newValue }
   }
   
   /// 추가하기 버튼으로 만들 수 있는 값입니다.
@@ -74,7 +54,6 @@ public class FavorProfilePhotoView: UIView {
   }
   
   private var profileImageViewSize: Constraint?
-  private var isUserIndicatorSize: Constraint?
 
   // MARK: - UI Components
   
@@ -113,16 +92,6 @@ public class FavorProfilePhotoView: UIView {
     return imageView
   }()
 
-  /// 유저인 친구를 표시 해줍니다.
-  private lazy var isUserIndicator: UIView = {
-    let view = UIView()
-    view.backgroundColor = .favorColor(.main)
-    view.layer.borderColor = UIColor.favorColor(.white).cgColor
-    view.layer.borderWidth = self.type.borderWidth
-    view.clipsToBounds = true
-    return view
-  }()
-
   // MARK: - Initializer
   
   override init(frame: CGRect) {
@@ -138,7 +107,6 @@ public class FavorProfilePhotoView: UIView {
     image: UIImage? = nil
   ) {
     self.init(frame: .zero)
-    self.isUser = isUser
     self.profileImage = image
     self.type = type
     self.updateSize()
@@ -147,20 +115,17 @@ public class FavorProfilePhotoView: UIView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Functions
   
   /// 사이즈를 업데이트 해줍니다.
   private func updateSize() {
     guard
-      let profileImageViewSize = self.profileImageViewSize,
-      let isUserIndicatorSize = self.isUserIndicatorSize
+      let profileImageViewSize = self.profileImageViewSize
     else { print("Size constraints missing."); return }
     profileImageViewSize.update(offset: self.type.size)
     profileImageViewSize.update(priority: .high)
     self.profileImageView.layer.cornerRadius = self.type.size / 2
-    isUserIndicatorSize.update(offset: self.type.indicatorSize)
-    self.isUserIndicator.layer.cornerRadius = self.type.indicatorSize / 2
   }
 }
 
@@ -171,8 +136,7 @@ extension FavorProfilePhotoView: BaseView {
 
   public func setupLayouts() {
     [
-      self.profileImageView,
-      self.isUserIndicator
+      self.profileImageView
     ].forEach {
       self.addSubview($0)
     }
@@ -188,14 +152,9 @@ extension FavorProfilePhotoView: BaseView {
     self.profileImageView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
-
+    
     self.defaultImageView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
-    }
-
-    self.isUserIndicator.snp.makeConstraints { make in
-      make.trailing.bottom.equalToSuperview()
-      self.isUserIndicatorSize = make.width.height.equalTo(self.type.indicatorSize).constraint
     }
   }
 }

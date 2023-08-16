@@ -16,19 +16,21 @@ final class ProfileMemoCell: UICollectionViewCell, Reusable {
   
   // MARK: - UI Components
   
-  private let memoLabel: UILabel = UILabel().then {
-    $0.numberOfLines = 0
-    $0.textAlignment = .justified
-    $0.lineBreakMode = .byWordWrapping
-    $0.font = .favorFont(.regular, size: 16.0)
-  }
+  private let memoLabel: FavorVerticalAlignmentLabel = {
+    let label = FavorVerticalAlignmentLabel()
+    label.numberOfLines = 0
+    label.textAlignment = .justified
+    label.lineBreakMode = .byWordWrapping
+    label.font = .favorFont(.regular, size: 16.0)
+    return label
+  }()
   
   private let containerView: UIView = {
     let view = UIView()
+    view.backgroundColor = .favorColor(.card)
+    view.layer.cornerRadius = 24.0
     return view
   }()
-  
-  private let divider = FavorDivider()
   
   // MARK: - Properties
   
@@ -51,19 +53,20 @@ final class ProfileMemoCell: UICollectionViewCell, Reusable {
   // MARK: - Functions
   
   func configure(with memo: String?) {
-    if memo == nil {
-      self.memoLabel.text = "친구의 취향, 관심사, 특징을 기록해보세요!"
+    guard let memo else { return }
+    if memo.isEmpty {
+      self.memoLabel.text = "친구의 관심사나 특징을 기록해보세요!"
       self.memoLabel.textColor = .favorColor(.explain)
     } else {
       self.memoLabel.text = memo
       self.memoLabel.textColor = .favorColor(.icon)
     }
     if self.memoLabel.intrinsicContentSize.height > self.defaultLabelHeight {
-      print(self.memoLabel.intrinsicContentSize.height)
-      self.labelHeight?.update(offset: self.memoLabel.intrinsicContentSize.height)
+      self.labelHeight?.update(offset: self.memoLabel.intrinsicContentSize.height + 24.0)
     } else {
-      self.labelHeight?.update(offset: self.defaultLabelHeight)
+      self.labelHeight?.update(offset: self.defaultLabelHeight + 16.0)
     }
+    print("Height: \(self.memoLabel.intrinsicContentSize.height)")
   }
 }
 
@@ -74,29 +77,17 @@ extension ProfileMemoCell: BaseView {
   
   func setupLayouts() {
     self.contentView.addSubview(self.containerView)
-    
-    [
-      self.memoLabel,
-      self.divider
-    ].forEach {
-      self.containerView.addSubview($0)
-    }
+    self.containerView.addSubview(self.memoLabel)
   }
   
   func setupConstraints() {
     self.containerView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
-      self.labelHeight = make.height.equalTo(self.defaultLabelHeight).constraint
+      make.height.greaterThanOrEqualTo(130.0)
     }
     
     self.memoLabel.snp.makeConstraints { make in
-      make.top.leading.trailing.equalToSuperview()
-    }
-    
-    self.divider.snp.makeConstraints { make in
-      make.top.equalTo(self.containerView.snp.bottom).offset(16.0)
-      make.leading.trailing.equalToSuperview()
-      make.height.equalTo(1.0)
+      make.edges.equalToSuperview().inset(12.0)
     }
   }
 }

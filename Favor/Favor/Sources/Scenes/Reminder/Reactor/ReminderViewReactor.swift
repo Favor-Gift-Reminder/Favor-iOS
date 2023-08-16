@@ -16,22 +16,23 @@ import RxCocoa
 import RxFlow
 
 final class ReminderViewReactor: Reactor, Stepper {
-
+  
   // MARK: - Properties
   
   var initialState: State
   var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
   private let reminderFetcher = Fetcher<Reminder>()
-
+  
   enum Action {
     case viewNeedsLoaded
-    case selectDateButtonDidTap
+    case selectedDateDidChange(DateComponents)
     case reminderDidSelected(ReminderSection.ReminderSectionItem)
     case newReminderButtonDidTap
   }
 
   enum Mutation {
+    case updateSelectedDate(DateComponents)
     case updateIsReminderEmpty(Bool)
     case updateUpcoming(ReminderSection.ReminderSectionModel)
     case updatePast(ReminderSection.ReminderSectionModel)
@@ -85,9 +86,8 @@ final class ReminderViewReactor: Reactor, Stepper {
           ])
         }
 
-    case .selectDateButtonDidTap:
-      os_log(.debug, "Select date button did tap.")
-      return .empty()
+    case .selectedDateDidChange(let selectedDate):
+      return .just(.updateSelectedDate(selectedDate))
       
     case .reminderDidSelected(let item):
       switch item {
@@ -118,6 +118,9 @@ final class ReminderViewReactor: Reactor, Stepper {
 
     case .updateLoading(let isLoading):
       newState.isLoading = isLoading
+      
+    case .updateSelectedDate(let selectedDate):
+      newState.selectedDate = selectedDate
     }
 
     return newState

@@ -28,7 +28,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
   /// 유저가 유저인지 판별해주는 계산 프로퍼티입니다.
   private var isUser: Bool {
     guard let reactor = self.reactor else { return false }
-    return reactor.currentState.friend.isUser
+    return true
   }
   
   // MARK: - Setup
@@ -71,8 +71,6 @@ final class FriendPageViewController: BaseProfileViewController, View {
       .map { indexPath -> FriendPageViewReactor.Action in
         guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return .doNothing }
         switch item {
-        case .memo(let memo):
-          return FriendPageViewReactor.Action.memoCellDidTap(memo)
         case .anniversarySetupHelper:
           return FriendPageViewReactor.Action.anniversarySetupHelperCellDidTap
         default:
@@ -112,9 +110,19 @@ final class FriendPageViewController: BaseProfileViewController, View {
     switch section {
     case .anniversaries:
       self.reactor?.action.onNext(.moreAnniversaryDidTap)
+    case .memo:
+      self.reactor?.action.onNext(.modfiyMemeButtonDidTap)
     default:
       break
     }
+  }
+  
+  override func injectReactor(to view: UICollectionReusableView) {
+    guard
+      let view = view as? ProfileGiftStatsCollectionHeader,
+      let reactor = self.reactor
+    else { return }
+    view.reactor = ProfileGiftStatsCollectionHeaderReactor(friend: reactor.currentState.friend)
   }
   
   func memoBottomSheetCompletion(memo: String?) {
