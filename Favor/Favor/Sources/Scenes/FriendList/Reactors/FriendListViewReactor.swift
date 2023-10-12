@@ -25,7 +25,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     case editButtonDidTap
     case searchTextDidUpdate(String?)
   }
-
+  
   enum Mutation {
     case updateFriendItems([FriendSectionItem])
   }
@@ -42,9 +42,9 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     self.initialState = State()
     super.init()
   }
-
+  
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
@@ -59,7 +59,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     case .editButtonDidTap:
       self.steps.accept(AppStep.editFriendIsRequired)
       return .empty()
-
+      
     case .searchTextDidUpdate(let text):
       return self.fetchFriendList(with: text ?? "")
         .asObservable()
@@ -105,19 +105,14 @@ private extension FriendListViewReactor {
   func fetchFriendList(with query: String) -> Single<[Friend]> {
     return Single<[Friend]>.create { single in
       let task = Task {
-        do {
-          let friends = await self.workbench.values(FriendObject.self)
-          if query.isEmpty {
-            single(.success(friends.map { Friend(realmObject: $0) }))
-          }
-          let filterFriends = friends
-            .where { $0.name.contains(query, options: .diacriticInsensitive) }
-          single(.success(filterFriends.map { Friend(realmObject: $0) }))
-        } catch {
-          single(.failure(error))
+        let friends = await self.workbench.values(FriendObject.self)
+        if query.isEmpty {
+          single(.success(friends.map { Friend(realmObject: $0) }))
         }
+        let filterFriends = friends
+          .where { $0.name.contains(query, options: .diacriticInsensitive) }
+        single(.success(filterFriends.map { Friend(realmObject: $0) }))
       }
-
       return Disposables.create {
         task.cancel()
       }

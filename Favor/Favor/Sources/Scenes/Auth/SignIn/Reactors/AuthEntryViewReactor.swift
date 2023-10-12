@@ -38,9 +38,9 @@ public final class AuthEntryViewReactor: Reactor, Stepper {
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      if FTUXStorage.isFirstLaunch {
-        self.steps.accept(AppStep.onboardingIsRequired)
-      }
+//      if FTUXStorage.isFirstLaunch {
+//        self.steps.accept(AppStep.onboardingIsRequired)
+//      }
       return .empty()
 
     case .signInButtonDidTap:

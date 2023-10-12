@@ -25,7 +25,7 @@ public final class SplashViewReactor: Reactor, Stepper {
   public enum Action {
     case viewNeedsLoaded
   }
-
+  
   public enum Mutation {
 
   }
@@ -120,7 +120,7 @@ private extension SplashViewReactor {
       }
     }
   }
-
+  
   func fetchAppleCredentialState() {
     let appleIDProvider = ASAuthorizationAppleIDProvider()
     guard let userID = try? self.keychain.get(account: KeychainManager.Accounts.userAppleID.rawValue) else { return }

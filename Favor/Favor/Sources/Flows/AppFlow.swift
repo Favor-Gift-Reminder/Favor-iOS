@@ -153,7 +153,7 @@ private extension AppFlow {
     DispatchQueue.main.async {
       self.rootViewController.present(localAuthVC, animated: false)
     }
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: localAuthVC,
       withNextStepper: localAuthReactor

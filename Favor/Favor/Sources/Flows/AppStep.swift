@@ -15,10 +15,6 @@ public enum AppStep: Step {
   case splashIsRequired
   case splashIsComplete
 
-  // MARK: - Onboarding
-  case onboardingIsRequired
-  case onboardingIsComplete
-
   // MARK: - Auth
   case authIsRequired
   case findPasswordIsRequired

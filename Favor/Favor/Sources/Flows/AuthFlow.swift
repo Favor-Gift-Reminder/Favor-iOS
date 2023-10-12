@@ -35,13 +35,6 @@ public final class AuthFlow: Flow {
     switch step {
     case .authIsRequired:
       return self.navigateToAuth()
-
-    case .onboardingIsRequired:
-      return self.navigateToOnboarding()
-
-    case .onboardingIsComplete:
-      self.rootViewController.presentedViewController?.dismiss(animated: true)
-      return .none
       
     case .signInIsRequired:
       return self.navigateToSignIn()
@@ -88,22 +81,6 @@ private extension AuthFlow {
     return .one(flowContributor: .contribute(
       withNextPresentable: authEntryVC,
       withNextStepper: authEntryReactor
-    ))
-  }
-  
-  func navigateToOnboarding() -> FlowContributors {
-    let onboardingFlow = OnboardingFlow()
-
-    Flows.use(onboardingFlow, when: .created) { [unowned self] root in
-      DispatchQueue.main.async {
-        root.modalPresentationStyle = .overFullScreen
-        self.rootViewController.present(root, animated: true)
-      }
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: onboardingFlow,
-      withNextStepper: OneStepper(withSingleStep: AppStep.onboardingIsRequired)
     ))
   }
   
