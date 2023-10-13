@@ -110,7 +110,7 @@ private extension FriendListViewReactor {
           single(.success(friends.map { Friend(realmObject: $0) }))
         }
         let filterFriends = friends
-          .where { $0.name.contains(query, options: .diacriticInsensitive) }
+          .where { $0.friendName.contains(query, options: .diacriticInsensitive) }
         single(.success(filterFriends.map { Friend(realmObject: $0) }))
       }
       return Disposables.create {

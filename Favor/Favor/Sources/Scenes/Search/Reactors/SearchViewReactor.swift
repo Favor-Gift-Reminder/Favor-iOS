@@ -34,7 +34,7 @@ final class SearchViewReactor: Reactor, Stepper {
   private let giftFetcher = Fetcher<Gift>()
   private let mode: SearchViewMode
   private var tasks: Set<Task<Void, Error>> = []
-
+  
   enum Action {
     case viewNeedsLoaded
     case editingDidBegin
@@ -47,6 +47,7 @@ final class SearchViewReactor: Reactor, Stepper {
     case searchRecentDeleteButtonDidTap(RecentSearch)
     case searchRequestedWith(String)
     case searchTypeDidSelected(SearchType)
+    case addFriendButtonDidTap(Int)
     case viewWillDisappear
     case doNothing
   }
@@ -59,6 +60,7 @@ final class SearchViewReactor: Reactor, Stepper {
     case updateSearchTypeBySearchResult
     case updateGiftResult([Gift])
     case updateUserResult([User])
+    case updateUserAlreadyFriend(Bool)
   }
   
   struct State {
@@ -73,6 +75,7 @@ final class SearchViewReactor: Reactor, Stepper {
     var giftSearchResults: [Gift] = []
     var giftSearchResultItems: [SearchResultSectionItem] = []
     var userSearchResults: [User] = []
+    var isUserAlreadyFriend: Bool = false
     var userSearchResultItems: [SearchResultSectionItem] = []
   }
   
@@ -91,7 +94,7 @@ final class SearchViewReactor: Reactor, Stepper {
   deinit {
     self.tasks.forEach { $0.cancel() }
   }
-
+  
   // MARK: - Functions
   
   func mutate(action: Action) -> Observable<Mutation> {
@@ -132,7 +135,7 @@ final class SearchViewReactor: Reactor, Stepper {
     case .categoryButtonDidTap(let category):
       self.steps.accept(AppStep.searchCategoryResultIsRequired(category))
       return .empty()
-
+      
     case .emotionButtonDidTap(let emotion):
       self.steps.accept(AppStep.searchEmotionResultIsRequired(emotion))
       return .empty()
@@ -144,7 +147,7 @@ final class SearchViewReactor: Reactor, Stepper {
     // transform에서 처리
     case .searchRecentDidSelected:
       return .empty()
-
+      
     case .searchRecentDeleteButtonDidTap(let recentSearch):
       return self.deleteRecentSearch(recentSearch)
         .asObservable()
@@ -169,11 +172,17 @@ final class SearchViewReactor: Reactor, Stepper {
             },
           self.fetchRemoteUser(with: searchQuery)
             .asObservable()
-            .flatMap { (user: User?) -> Observable<Mutation> in
+            .flatMap { (user: User?, isAlreadyFriend: Bool) -> Observable<Mutation> in
               if let user {
-                return .just(.updateUserResult([user]))
+                return .concat([
+                  .just(.updateUserResult([user])),
+                  .just(.updateUserAlreadyFriend(isAlreadyFriend))
+                ])
               } else {
-                return .just(.updateUserResult([]))
+                return .concat([
+                  .just(.updateUserResult([])),
+                  .just(.updateUserAlreadyFriend(isAlreadyFriend))
+                ])
               }
             },
           .just(.toggleIsEditingTo(false)),
@@ -183,12 +192,19 @@ final class SearchViewReactor: Reactor, Stepper {
 
     case .searchTypeDidSelected(let searchType):
       return .just(.updateSearchType(searchType))
-
+      
     case .doNothing:
       return .empty()
+      
+    case .addFriendButtonDidTap:
+      return self.addFriend()
+        .asObservable()
+        .flatMap { isAlreadyFriend in
+          return Observable<Mutation>.just(.updateUserAlreadyFriend(isAlreadyFriend))
+        }
     }
   }
-
+  
   func transform(action: Observable<Action>) -> Observable<Action> {
     return action.map { action in
       switch action {
@@ -212,7 +228,7 @@ final class SearchViewReactor: Reactor, Stepper {
 
     case .updateText(let text):
       newState.searchQuery = text
-
+      
     case .updateRecentSearches(let recentSearches):
       newState.recentSearches = recentSearches
 
@@ -228,17 +244,24 @@ final class SearchViewReactor: Reactor, Stepper {
           newState.selectedSearchType = .gift
         }
       }
-
+      
     case .updateGiftResult(let gifts):
       newState.giftSearchResults = gifts
-
+      
     case .updateUserResult(let users):
-      newState.userSearchResults = users
+      if users.isEmpty {
+        newState.userSearchResults = []
+      } else {
+        newState.userSearchResults = users
+      }
+      
+    case .updateUserAlreadyFriend(let isAlreadyFriend):
+      newState.isUserAlreadyFriend = isAlreadyFriend
     }
 
     return newState
   }
-
+  
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
@@ -253,9 +276,9 @@ final class SearchViewReactor: Reactor, Stepper {
       if state.userSearchResults.isEmpty {
         newState.userSearchResultItems = [.empty(nil, "검색 결과가 없습니다.")]
       } else {
-        newState.userSearchResultItems = state.userSearchResults.map { .user($0) }
+        newState.userSearchResultItems = state.userSearchResults
+          .map { user in .user(user, isAlreadyFriend: state.isUserAlreadyFriend) }
       }
-
       newState.recentSearchItems = state.recentSearches.map { SearchSectionItem.recent($0) }
 
       if !state.recentSearches.isEmpty && state.isEditing {
@@ -279,7 +302,7 @@ private extension SearchViewReactor {
     }
     self.tasks.insert(task)
   }
-
+  
   func deleteRecentSearch(_ recentSearch: RecentSearch) -> Single<RecentSearch> {
     return Single<RecentSearch>.create { single in
       let task = Task {
@@ -292,17 +315,37 @@ private extension SearchViewReactor {
           single(.failure(error))
         }
       }
-
+      
       return Disposables.create {
         task.cancel()
       }
     }
   }
-}
-
-// MARK: - Fetcher
-
-private extension SearchViewReactor {
+  
+  func addFriend() -> Single<Bool> {
+    guard let userFriendNo = self.currentState.userSearchResults.first?.identifier else { fatalError() }
+    return Single<Bool>.create { single in
+      let networking = FriendNetworking()
+      _ = networking.request(.postUserFriend(userFriendNo: userFriendNo))
+        .asSingle()
+        .observe(on: MainScheduler.asyncInstance)
+        .subscribe(onSuccess: { response in
+          guard 
+            let responseDTO: ResponseDTO<FriendSingleResponseDTO> = try? APIManager
+              .decode(response.data) else { fatalError() }
+          Task {
+            try await self.workbench.write { transaction in
+              transaction.update(Friend(dto: responseDTO.data).realmObject())
+              single(.success(true))
+            }
+          }
+        }, onFailure: { _ in
+          single(.success(true))
+        })
+      return Disposables.create()
+    }
+  }
+  
   func fetchRecentSearches() -> Observable<[RecentSearch]> {
     return Observable<[RecentSearch]>.create { observer in
       let task = Task {
@@ -317,7 +360,33 @@ private extension SearchViewReactor {
       }
     }
   }
-
+  
+  func fetchRemoteUser(with queryString: String) -> Single<(User?, Bool)> {
+    return Single<(User?, Bool)>.create { single in
+      let networking = UserNetworking()
+      _ = networking.request(.getUserId(userId: queryString))
+        .asSingle()
+      // FIXME: DecodeError 처리 필요..! ResponseMessage가 "USER_NOT_FOUND"일 때
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
+            Task {
+              let friendObjects = await self.workbench.values(FriendObject.self)
+              single(.success((
+                User(dto: responseDTO.data),
+                friendObjects.contains(where: { $0.friendName == responseDTO.data.name })
+              )))
+            }
+          } catch {
+            print(error)
+          }
+        }, onFailure: {_ in
+          single(.success((nil, false)))
+        })
+      return Disposables.create()
+    }
+  }
+  
   func setupGiftFetcher(with queryString: String) {
     // onRemote
     self.giftFetcher.onRemote = {
@@ -340,30 +409,6 @@ private extension SearchViewReactor {
     self.giftFetcher.onLocalUpdate = { _, remoteGifts in
       try await self.workbench.write { transaction in
         transaction.update(remoteGifts.map { $0.realmObject() })
-      }
-    }
-  }
-
-  func fetchRemoteUser(with queryString: String) -> Single<User?> {
-    return Single<User?>.create { single in
-      let networking = UserNetworking()
-      let disposable = networking.request(.getUserId(userId: queryString))
-        .take(1)
-        .asSingle()
-      // FIXME: DecodeError 처리 필요..! ResponseMessage가 "USER_NOT_FOUND"일 때
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
-            single(.success(User(dto: responseDTO.data)))
-          } catch {
-            print(error)
-          }
-        }, onFailure: {_ in 
-          single(.success(nil))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
       }
     }
   }

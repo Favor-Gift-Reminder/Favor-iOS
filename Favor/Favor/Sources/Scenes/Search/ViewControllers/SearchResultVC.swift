@@ -19,9 +19,9 @@ final class SearchResultViewController: BaseSearchViewController {
   // MARK: - Constants
   
   // MARK: - Properties
-
+  
   private var dataSource: SearchResultDataSource?
-
+  
   private lazy var composer: Composer<SearchResultSection, SearchResultSectionItem> = {
     let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
     return composer
@@ -48,13 +48,12 @@ final class SearchResultViewController: BaseSearchViewController {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-
     collectionView.showsVerticalScrollIndicator = false
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.alwaysBounceVertical = false
     return collectionView
   }()
-
+  
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -101,7 +100,7 @@ final class SearchResultViewController: BaseSearchViewController {
         owner.searchTextField.textField.text = searchString
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.selectedSearchType }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -110,7 +109,7 @@ final class SearchResultViewController: BaseSearchViewController {
         owner.collectionView.isScrollEnabled = selected == .gift
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { state -> [SearchResultSectionItem] in
       switch state.selectedSearchType {
       case .gift:
@@ -119,7 +118,6 @@ final class SearchResultViewController: BaseSearchViewController {
         return state.userSearchResultItems
       }
     }
-    .debug()
     .asDriver(onErrorRecover: { _ in return .empty()})
     .drive(with: self, onNext: { owner, items in
       guard let firstItem = items.first else { return }
@@ -256,14 +254,15 @@ private extension SearchResultViewController {
       else { return }
       cell.bind(with: gift)
     }
-
+    
     let userResultCellRegistration = UICollectionView.CellRegistration
     <SearchUserResultCell, SearchResultSectionItem> { [weak self] cell, _, item in
       guard
         self != nil,
-        case let SearchResultSectionItem.user(user) = item
+        case let SearchResultSectionItem.user(user, isAlreadyFriend) = item
       else { return }
-      cell.bind(with: user)
+      cell.bind(user: user, isAlreadyFriend: isAlreadyFriend)
+      cell.delegate = self
     }
 
     self.dataSource = SearchResultDataSource(
@@ -283,5 +282,12 @@ private extension SearchResultViewController {
         }
       }
     )
+  }
+}
+
+extension SearchResultViewController: SearchUserResultCellDelegate {
+  func addFriendButtonDidTap(_ friendUserNo: Int) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.addFriendButtonDidTap(friendUserNo))
   }
 }

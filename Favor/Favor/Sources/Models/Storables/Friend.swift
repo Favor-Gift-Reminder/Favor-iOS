@@ -12,14 +12,14 @@ import FavorNetworkKit
 import class RealmSwift.ThreadSafe
 
 public struct Friend: Storable, Receivable {
-
+  
   // MARK: - Properties
-
+  
   public let identifier: Int
-  public var name: String
+  public var friendName: String
+  public var friendID: String
   public var profilePhoto: UIImage?
   public var memo: String?
-  public var userIdentifier: Int?
   public var anniversaryList: [Anniversary]
   public var favorList: [Favor]
   public let totalGift: Int
@@ -33,10 +33,10 @@ public struct Friend: Storable, Receivable {
     guard let realmObject = rlmObjectRef else { fatalError() }
     
     self.identifier = realmObject.friendNo
-    self.name = realmObject.name
+    self.friendName = realmObject.friendName
+    self.friendID = realmObject.friendID
 //    self.profilePhoto = realmObject.profilePhoto
     self.memo = realmObject.memo
-    self.userIdentifier = realmObject.friendUserNo
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
     self.totalGift = realmObject.totalGift
@@ -47,12 +47,12 @@ public struct Friend: Storable, Receivable {
   public func realmObject() -> FriendObject {
     FriendObject(
       friendNo: self.identifier,
-      name: self.name,
+      friendName: self.friendName,
+      friendID: self.friendID,
       anniversaryList: self.anniversaryList.compactMap { $0.realmObject() },
       favorList: self.favorList.compactMap { $0.rawValue },
 //      profilePhoto: self.profilePhoto,
       memo: self.memo,
-      friendUserNo: self.userIdentifier,
       totalGift: self.totalGift,
       receivedGift: self.receivedGift,
       givenGift: self.givenGift
@@ -60,20 +60,32 @@ public struct Friend: Storable, Receivable {
   }
   
   // MARK: - Receivable
-
-  public init(dto: FriendResponseDTO) {
-    self.identifier = dto.friendNo
-    self.name = dto.friendName
+  
+  public init(friendResponseDTO: FriendResponseDTO) {
+    self.identifier = friendResponseDTO.friendNo
+    self.friendName = friendResponseDTO.friendName
+    self.friendID = ""
 //    self.profilePhoto = dto.
+    self.memo = ""
+    self.anniversaryList = []
+    self.favorList = []
+    self.totalGift = -1
+    self.receivedGift = -1
+    self.givenGift = -1
+  }
+  
+  public init(dto: FriendSingleResponseDTO) {
+    self.identifier = dto.friendNo
+    self.friendName = dto.friendName
     self.memo = dto.friendMemo
-    self.userIdentifier = dto.friendUserNo
-    self.anniversaryList = dto.anniversaryNoList.compactMap(Anniversary.init(dto:))
-    self.favorList = dto.favorList.compactMap(Favor.init(rawValue:))
+    self.anniversaryList = dto.anniversaryList.map { Anniversary(dto: $0) }
+    self.favorList = dto.favorList.compactMap { Favor(rawValue: $0) }
     self.totalGift = dto.totalGift
     self.receivedGift = dto.receivedGift
     self.givenGift = dto.givenGift
+    self.friendID = dto.friendId
   }
-
+  
   // MARK: - Mock
 
   /// 비어있는 구조체를 생성합니다.
@@ -82,7 +94,8 @@ public struct Friend: Storable, Receivable {
   ///   `identifier` 값을 -1로 줍니다. 값을 임시로 담을 때만 사용해주세요.
   public init() {
     self.identifier = -1
-    self.name = ""
+    self.friendName = ""
+    self.friendID = ""
     self.anniversaryList = []
     self.favorList = []
     self.givenGift = 0

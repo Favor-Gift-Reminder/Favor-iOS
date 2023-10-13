@@ -32,7 +32,7 @@ public class BaseFriendListViewReactor {
       let friends = networking.request(.getAllFriendList)
         .flatMap { friends -> Observable<[Friend]> in
           do {
-            let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friends.data)
+            let responseDTO: ResponseDTO<[FriendSingleResponseDTO]> = try APIManager.decode(friends.data)
             let friends = responseDTO.data.map { Friend(dto: $0) }
             return .just(friends)
           } catch {

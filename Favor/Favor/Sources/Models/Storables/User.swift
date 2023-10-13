@@ -67,9 +67,9 @@ public struct User: Storable, Receivable {
 //      backgroundPhoto: self.profileBackgroundPhoto
     )
   }
-
+  
   // MARK: - Receivable
-
+  
   public init(dto: UserResponseDTO) {
     self.identifier = dto.userNo
     self.email = dto.email
@@ -78,7 +78,7 @@ public struct User: Storable, Receivable {
     self.favorList = dto.favorList.compactMap(Favor.init(rawValue:))
     self.reminderList = dto.reminderList.compactMap(Reminder.init(dto:))
     self.anniversaryList = dto.anniversaryList.compactMap(Anniversary.init(dto:))
-    self.friendList = dto.friendList.compactMap(Friend.init(dto:))
+    self.friendList = dto.friendList.compactMap(Friend.init(friendResponseDTO:))
     self.givenGifts = dto.givenGift
     self.receivedGifts = dto.receivedGift
     self.totalgifts = dto.totalGift

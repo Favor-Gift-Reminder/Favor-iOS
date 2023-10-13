@@ -15,7 +15,7 @@ import FavorKit
 public enum SearchResultSectionItem: ComposableItem {
   case empty(UIImage?, String)
   case gift(Gift)
-  case user(User)
+  case user(User, isAlreadyFriend: Bool)
 }
 
 // MARK: - Section
@@ -37,7 +37,7 @@ extension SearchResultSectionItem: Hashable {
       hasher.combine("Empty")
     case .gift(let gift):
       hasher.combine(gift)
-    case .user(let user):
+    case .user(let user, _):
       hasher.combine(user)
     }
   }

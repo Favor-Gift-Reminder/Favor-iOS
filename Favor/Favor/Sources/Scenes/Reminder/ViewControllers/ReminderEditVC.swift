@@ -117,7 +117,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .compactMap { $0 }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, friend in
-        owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friend.name)
+        owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friend.friendName)
       }
       .disposed(by: self.disposeBag)
     

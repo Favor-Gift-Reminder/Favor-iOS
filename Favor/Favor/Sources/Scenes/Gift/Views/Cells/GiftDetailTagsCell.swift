@@ -101,7 +101,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     )
     let friends = gift.relatedFriends
     guard let firstFriend = friends.first else { return }
-    let friendsTitle = friends.count == 1 ? firstFriend.name : "\(firstFriend.name) 외 \(friends.count)"
+    let friendsTitle = friends.count == 1 ? firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count)"
     self.relatedFriendsButton.configuration?.updateAttributedTitle(
       friendsTitle,
       font: .favorFont(.regular, size: 12)

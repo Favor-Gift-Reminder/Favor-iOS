@@ -117,7 +117,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     case .textFieldDidChange(let text):
       let friends = text.isEmpty ?
       self.allFriends :
-      self.allFriends.filter { $0.name.contains(text) }
+      self.allFriends.filter { $0.friendName.contains(text) }
       return .just(.updateFriends(friends))
       
     case .addFriendDidTap:
@@ -197,7 +197,7 @@ private extension FriendSelectorViewReactor {
       let networking = UserNetworking()
       let friends = networking.request(.getAllFriendList)
         .flatMap { response -> Observable<[Friend]> in
-          let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(response.data)
+          let responseDTO: ResponseDTO<[FriendSingleResponseDTO]> = try APIManager.decode(response.data)
           return .just(responseDTO.data.map { Friend(dto: $0) })
         }
         .asSingle()

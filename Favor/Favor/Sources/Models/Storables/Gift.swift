@@ -70,7 +70,7 @@ public struct Gift: Storable, Receivable {
     self.category = dto.category
     self.emotion = dto.emotion
     self.isPinned = dto.isPinned
-    self.relatedFriends = dto.friendList.compactMap(Friend.init(dto:)) 
+    self.relatedFriends = dto.friendList.compactMap(Friend.init(friendResponseDTO:)) 
     self.isGiven = dto.isGiven
   }
 

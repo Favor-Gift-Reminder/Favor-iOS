@@ -62,7 +62,7 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, friendData in
         let friend = friendData.friend
-        owner.nameLabel.text = friendData.isNewFriendCell ? "추가하기" : friend.name
+        owner.nameLabel.text = friendData.isNewFriendCell ? "추가하기" : friend.friendName
         owner.favorProfilePhotoView.isNewFriendCell = friendData.isNewFriendCell
         owner.favorProfilePhotoView.profileImage = friend.profilePhoto
       })

@@ -48,7 +48,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
 
   public func bind(_ friend: Friend) {
     self.profileImageView.profileImage = friend.profilePhoto
-    self.nameLabel.text = friend.name
+    self.nameLabel.text = friend.friendName
   }
 }
 

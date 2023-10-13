@@ -218,7 +218,7 @@ private extension GiftManagementViewReactor {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()
       let requestDTO = gift.requestDTO()
-
+      
       let disposable = networking.request(.postGift(requestDTO))
         .asSingle()
         .subscribe(with: self, onSuccess: { _, response in

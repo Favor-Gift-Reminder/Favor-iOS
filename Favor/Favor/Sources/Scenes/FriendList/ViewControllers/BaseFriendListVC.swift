@@ -45,7 +45,7 @@ public class BaseFriendListViewController: BaseViewController {
           case .edit:
             let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListModifyingCell
             cell.configure(
-              name: friend.name,
+              name: friend.friendName,
               image: friend.profilePhoto
             )
             cell.deleteButton.rx.tap

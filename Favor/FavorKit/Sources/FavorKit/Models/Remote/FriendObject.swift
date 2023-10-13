@@ -8,15 +8,17 @@
 import RealmSwift
 
 public class FriendObject: Object {
-
+  
   // MARK: - Properties
-
+  
   /// 친구 번호
   @Persisted(primaryKey: true) public var friendNo: Int
   /// 친구를 보유한 회원의 회원 번호
   @Persisted(originProperty: "friendList") public var userNo: LinkingObjects<UserObject>
   /// 친구 이름
-  @Persisted public var name: String
+  @Persisted public var friendName: String
+  /// 친구 아이디
+  @Persisted public var friendID: String
   /// 친구 사진
   @Persisted public var profilePhoto: PhotoObject?
   /// 친구에 대한 메모
@@ -56,7 +58,8 @@ public class FriendObject: Object {
   ///   - givenGift: 준 선물 갯수
   public convenience init(
     friendNo: Int,
-    name: String,
+    friendName: String,
+    friendID: String,
     anniversaryList: [AnniversaryObject] = [],
     favorList: [String] = [],
     profilePhoto: PhotoObject? = nil,
@@ -68,7 +71,9 @@ public class FriendObject: Object {
   ) {
     self.init()
     self.friendNo = friendNo
-    self.name = name
+    self.friendUserNo = friendUserNo
+    self.friendName = friendName
+    self.friendID = friendID
     self.profilePhoto = profilePhoto
     self.memo = memo
     self.favorList.insert(objectsIn: favorList)
@@ -78,5 +83,5 @@ public class FriendObject: Object {
     self.totalGift = totalGift
     self.receivedGift = receivedGift
     self.givenGift = givenGift
-  }
+  }  
 }

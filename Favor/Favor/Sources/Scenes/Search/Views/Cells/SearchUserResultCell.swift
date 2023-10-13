@@ -11,7 +11,7 @@ import FavorKit
 import SnapKit
 
 public protocol SearchUserResultCellDelegate: AnyObject {
-  func addFriendButtonDidTap()
+  func addFriendButtonDidTap(_ friendUserNo: Int)
 }
 
 final class SearchUserResultCell: BaseCollectionViewCell {
@@ -22,13 +22,14 @@ final class SearchUserResultCell: BaseCollectionViewCell {
     static let profileImageSize = 120.0
     static let buttonHeight = 56.0
   }
-
+  
   // MARK: - Properties
 
   public weak var delegate: SearchUserResultCellDelegate?
-
+  private var user: User?
+  
   // MARK: - UI Components
-
+  
   private lazy var profileImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
@@ -45,7 +46,7 @@ final class SearchUserResultCell: BaseCollectionViewCell {
     label.textAlignment = .center
     return label
   }()
-
+  
   private lazy var idLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 14)
@@ -60,15 +61,33 @@ final class SearchUserResultCell: BaseCollectionViewCell {
     stackView.spacing = 8
     return stackView
   }()
-
-  fileprivate lazy var addFriendButton: FavorLargeButton = {
-    let button = FavorLargeButton(with: .main2("친구맺기"))
-    button.layer.cornerRadius = Metric.buttonHeight / 2
-    button.layer.borderWidth = 1
-    button.layer.borderColor = UIColor.favorColor(.divider).cgColor
+  
+  fileprivate lazy var addFriendButton: FavorButton = {
+    let button = FavorButton("친구해요!")
+    button.baseBackgroundColor = .favorColor(.main)
+    button.baseForegroundColor = .white
+    button.cornerRadius = Metric.buttonHeight / 2
+    button.borderWidth = 1.0
+    button.font = .favorFont(.bold, size: 16.0)
+    button.addTarget(self, action: #selector(self.addFriendButtonDidTap), for: .touchUpInside)
+    button.configurationUpdateHandler = { button in
+      guard let button = button as? FavorButton else { return }
+      switch button.state {
+      case .disabled:
+        button.baseBackgroundColor = .favorColor(.white)
+        button.baseForegroundColor = .favorColor(.subtext)
+        button.borderColor = .favorColor(.divider)
+        button.title = "친구가 되었어요!"
+      default:
+        button.baseBackgroundColor = .favorColor(.main)
+        button.baseForegroundColor = .favorColor(.white)
+        button.borderColor = .clear
+        button.title = "친구해요!"
+      }
+    }
     return button
   }()
-
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -77,28 +96,33 @@ final class SearchUserResultCell: BaseCollectionViewCell {
     self.setupLayouts()
     self.setupConstraints()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Binding
-
-  public func bind(with user: User) {
+  
+  public func bind(user: User, isAlreadyFriend: Bool) {
+    self.user = user
     self.nameLabel.text = user.name
     self.idLabel.text = "@" + user.searchID
+    self.addFriendButton.isEnabled = !isAlreadyFriend
   }
-
+  
   // MARK: - Functions
-
+  
+  @objc
+  private func addFriendButtonDidTap() {
+    guard let user = user else { return }
+    self.delegate?.addFriendButtonDidTap(user.identifier)
+  }
 }
 
 // MARK: - UI Setups
 
 extension SearchUserResultCell: BaseView {
-  func setupStyles() {
-    //
-  }
+  func setupStyles() {}
 
   func setupLayouts() {
     [
@@ -131,7 +155,7 @@ extension SearchUserResultCell: BaseView {
 
     self.addFriendButton.snp.makeConstraints { make in
       make.bottom.equalToSuperview().inset(24)
-      make.directionalHorizontalEdges.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview().inset(24.0)
       make.height.equalTo(Metric.buttonHeight)
     }
   }

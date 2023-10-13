@@ -60,7 +60,7 @@ final class FriendListCell: BaseFriendCell, Pressable, Reusable {
   
   func configure(_ friend: Friend) {
     super.configure(
-      name: friend.name,
+      name: friend.friendName,
       image: friend.profilePhoto
     )
   }

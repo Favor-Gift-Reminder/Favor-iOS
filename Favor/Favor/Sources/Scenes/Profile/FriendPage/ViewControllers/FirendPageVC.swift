@@ -63,7 +63,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
     self.collectionView.rx.contentOffset
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, offset in
-        owner.updateProfileViewLayout(by: offset, name: reactor.currentState.friend.name)
+        owner.updateProfileViewLayout(by: offset, name: reactor.currentState.friend.friendName)
       })
       .disposed(by: self.disposeBag)
     
@@ -82,7 +82,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
     
     // MARK: - State
     
-    reactor.state.map { $0.friend.name }
+    reactor.state.map { $0.friend.friendName }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, name in
         owner.profileView.rx.name.onNext(name)

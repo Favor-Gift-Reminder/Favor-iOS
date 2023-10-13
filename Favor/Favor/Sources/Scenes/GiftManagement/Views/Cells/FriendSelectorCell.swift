@@ -50,7 +50,7 @@ final class FriendSelectorCell: BaseFriendCell, View, Reusable {
     reactor.state.map { $0.friend }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, friend in
-        owner.friendName = friend.name
+        owner.friendName = friend.friendName
       }) // TODO: 이미지 설정
       .disposed(by: self.disposeBag)
     

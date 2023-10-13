@@ -11,7 +11,7 @@ import Foundation
 public struct UserDefault<T: Codable> {
   private let key: UserDefaultsKey
   private let defaultValue: T
-
+  
   init(key: UserDefaultsKey, defaultValue: T) {
     self.key = key
     self.defaultValue = defaultValue

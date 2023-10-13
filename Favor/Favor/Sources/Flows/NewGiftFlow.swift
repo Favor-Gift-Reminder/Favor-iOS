@@ -18,7 +18,7 @@ final class NewGiftFlow: Flow {
   var root: Presentable {
     self.rootViewController
   }
-
+  
   private let rootViewController = BaseNavigationController()
   
   // MARK: - Navigate

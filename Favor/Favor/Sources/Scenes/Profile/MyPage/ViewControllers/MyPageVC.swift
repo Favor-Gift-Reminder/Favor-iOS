@@ -76,7 +76,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // 설정 버튼 Tap
     self.settingButton.rx.tap
       .map { Reactor.Action.settingButtonDidTap }
@@ -90,7 +90,7 @@ final class MyPageViewController: BaseProfileViewController, View {
         owner.updateProfileViewLayout(by: offset, name: reactor.currentState.userName)
       })
       .disposed(by: self.disposeBag)
-
+    
     // Cell 선택
     self.collectionView.rx.itemSelected
       .map { indexPath -> Reactor.Action in

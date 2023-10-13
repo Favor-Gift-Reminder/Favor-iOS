@@ -111,7 +111,7 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
     case .mine:
       self.navigationItem.title = "내 기념일"
     case .friend(let friend):
-      self.navigationItem.title = "\(friend.name)의 기념일"
+      self.navigationItem.title = "\(friend.friendName)의 기념일"
 //      if friend.isUser {
 //        self.floatyButton.isHidden = true
 //        self.editButton.isHidden = true
