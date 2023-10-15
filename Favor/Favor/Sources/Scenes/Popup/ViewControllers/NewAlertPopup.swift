@@ -68,12 +68,13 @@ public final class NewAlertPopup: BasePopup {
   private var alertType: AlertType
   private let identifier: String
   public weak var delegate: AlertPopupDelegate?
+  var accpetButtonCompletion: (() -> Void)?
 
   // MARK: - UI Components
 
   private let titleLabel: UILabel = {
     let label = UILabel()
-    label.font = .favorFont(.bold, size: 18)
+    label.font = .favorFont(.bold, size: 16)
     label.textColor = .favorColor(.icon)
     label.textAlignment = .center
     return label
@@ -120,7 +121,7 @@ public final class NewAlertPopup: BasePopup {
 
   // MARK: - Initializer
 
-  public init(_ alertType: AlertType, identifier: String) {
+  public init(_ alertType: AlertType, identifier: String = "") {
     self.alertType = alertType
     self.identifier = identifier
     super.init(alertType.popupHeight)
@@ -171,6 +172,7 @@ public final class NewAlertPopup: BasePopup {
   @objc
   private func handleAccepttButtonTap(_ sender: UIButton) {
     self.dismissPopup()
+    self.accpetButtonCompletion?()
     self.delegate?.actionDidSelected(true, from: self.identifier)
   }
 

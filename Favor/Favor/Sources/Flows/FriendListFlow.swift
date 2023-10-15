@@ -39,6 +39,9 @@ final class FriendListFlow: Flow {
     case .friendListIsComplete:
       return self.navigateToMyPage()
       
+    case .friendPageIsRequired(let friend):
+      return self.navigateToFriendPage(with: friend)
+      
     default:
       return .none
     }
@@ -82,5 +85,15 @@ private extension FriendListFlow {
   func navigateToMyPage() -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
     return .end(forwardToParentFlowWithStep: AppStep.friendListIsComplete)
+  }
+  
+  private func navigateToFriendPage(with friend: Friend) -> FlowContributors {
+    let friendPageFlow = FriendPageFlow(rootViewController: self.rootViewController)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendPageFlow,
+      withNextStepper: OneStepper(withSingleStep: AppStep.friendPageIsRequired(friend))
+    ))
+    
   }
 }

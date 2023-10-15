@@ -50,7 +50,7 @@ final class FriendListViewController: BaseFriendListViewController, View {
   }
 
   // MARK: - Binding
-
+  
   func bind(reactor: FriendListViewReactor) {
     // Action
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
@@ -69,14 +69,13 @@ final class FriendListViewController: BaseFriendListViewController, View {
       .disposed(by: self.disposeBag)
 
     self.collectionView.rx.itemSelected
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { _, indexPath in
-        print(indexPath)
-      })
+      .map { Reactor.Action.friendCellDidTap($0.row) }
+      .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
+      .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot: NSDiffableDataSourceSnapshot<FriendSection, FriendSectionItem> = .init()

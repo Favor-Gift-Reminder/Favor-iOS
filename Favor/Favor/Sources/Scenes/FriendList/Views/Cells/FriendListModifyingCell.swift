@@ -22,14 +22,14 @@ final class FriendListModifyingCell: BaseFriendCell, Reusable {
   // MARK: - Properties
 
   // MARK: - UI Components
-
+  
   public let deleteButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.image = .favorIcon(.remove)?
       .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: 16)
       .withTintColor(.favorColor(.line2))
-
+    
     let button = UIButton(configuration: config)
     button.contentMode = .center
     button.isUserInteractionEnabled = true

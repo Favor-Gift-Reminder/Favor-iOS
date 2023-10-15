@@ -56,22 +56,15 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
         }
       
     case .deleteButtonDidTap(let friend):
-      
-      return self.friendNetworking.request(.deleteFriend(friendNo: friend.identifier))
-        .flatMap { response -> Observable<Mutation> in
-          do {
-            let response: ResponseDTO<FriendResponseDTO> = try APIManager.decode(response.data)
-            return self.friendFetcher.fetch()
-              .flatMap { (_, friends) -> Observable<Mutation> in
-                let friendItems = friends.map { friend -> FriendSectionItem in
-                  return .friend(friend)
-                }
-                return .just(.updateFriendItems(friendItems))
-              }
-          } catch {
-            print(error)
-            return .empty()
+      return self.friendNetworking.request(.deleteFriend(friendNo: friend.identifier))   
+        .flatMap { _ in
+          Task {
+            try await self.workbench.write { transaction in
+              transaction.delete(friend.realmObject())
+            }
+            self.action.onNext(.viewNeedsLoaded)
           }
+          return Observable<Mutation>.empty()
         }
     }
   }

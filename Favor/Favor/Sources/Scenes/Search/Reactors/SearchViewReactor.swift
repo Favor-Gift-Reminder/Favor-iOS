@@ -328,7 +328,6 @@ private extension SearchViewReactor {
       let networking = FriendNetworking()
       _ = networking.request(.postUserFriend(userFriendNo: userFriendNo))
         .asSingle()
-        .observe(on: MainScheduler.asyncInstance)
         .subscribe(onSuccess: { response in
           guard 
             let responseDTO: ResponseDTO<FriendSingleResponseDTO> = try? APIManager
@@ -354,7 +353,7 @@ private extension SearchViewReactor {
         observer.onNext(Array(searches))
         observer.onCompleted()
       }
-
+      
       return Disposables.create {
         task.cancel()
       }

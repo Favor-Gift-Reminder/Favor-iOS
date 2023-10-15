@@ -31,6 +31,15 @@ public final class AlertPopup: BasePopup {
         return "삭제하시겠습니까?"
       }
     }
+    
+    var confirmButtonTitle: String {
+      switch self {
+      case .remove:
+        return "삭제"
+      default:
+        return "확인"
+      }
+    }
   }
   
   private enum Metric {
@@ -48,7 +57,7 @@ public final class AlertPopup: BasePopup {
   private lazy var confirmButton = self.makeButton(
     backgroundColor: .favorColor(.main),
     foregroundColor: .favorColor(.white),
-    title: "확인"
+    title: self.popupType.confirmButtonTitle
   )
   
   /// 취소 버튼 입니다.

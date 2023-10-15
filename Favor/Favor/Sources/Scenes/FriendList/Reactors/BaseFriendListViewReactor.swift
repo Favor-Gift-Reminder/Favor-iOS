@@ -22,9 +22,9 @@ public class BaseFriendListViewReactor {
   public init() {
     self.setupFriendFetcher()
   }
-
+  
   // MARK: - Fetcher
-
+  
   public func setupFriendFetcher() {
     // onRemote
     self.friendFetcher.onRemote = {
@@ -32,8 +32,8 @@ public class BaseFriendListViewReactor {
       let friends = networking.request(.getAllFriendList)
         .flatMap { friends -> Observable<[Friend]> in
           do {
-            let responseDTO: ResponseDTO<[FriendSingleResponseDTO]> = try APIManager.decode(friends.data)
-            let friends = responseDTO.data.map { Friend(dto: $0) }
+            let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friends.data)
+            let friends = responseDTO.data.map { Friend(friendResponseDTO: $0) }
             return .just(friends)
           } catch {
             print(error)

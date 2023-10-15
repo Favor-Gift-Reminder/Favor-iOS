@@ -24,16 +24,17 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     case viewNeedsLoaded
     case editButtonDidTap
     case searchTextDidUpdate(String?)
+    case friendCellDidTap(Int)
   }
   
   enum Mutation {
-    case updateFriendItems([FriendSectionItem])
+    case updateFriends([Friend])
   }
 
   struct State {
+    var friends: [Friend] = []
     var sections: [FriendSection] = []
     var items: [[FriendSectionItem]] = []
-    var friendItems: [FriendSectionItem] = []
   }
 
   // MARK: - Initializer
@@ -50,10 +51,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     case .viewNeedsLoaded:
       return self.friendFetcher.fetch()
         .flatMap { (_, friend) -> Observable<Mutation> in
-          let friendItems = friend.map { friend -> FriendSectionItem in
-            return .friend(friend)
-          }
-          return .just(.updateFriendItems(friendItems))
+          return .just(.updateFriends(friend))
         }
 
     case .editButtonDidTap:
@@ -64,35 +62,33 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
       return self.fetchFriendList(with: text ?? "")
         .asObservable()
         .flatMap { friends -> Observable<Mutation> in
-          let friendItems = friends.map { friend -> FriendSectionItem in
-            return .friend(friend)
-          }
-          return .just(.updateFriendItems(friendItems))
+          return .just(.updateFriends(friends))
         }
+      
+    case .friendCellDidTap(let index):
+      let friend = self.currentState.friends[index]
+      self.steps.accept(AppStep.friendPageIsRequired(friend))
+      return .empty()
     }
   }
-
+  
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
     switch mutation {
-    case .updateFriendItems(let friendItems):
-      newState.friendItems = friendItems
+    case .updateFriends(let friends):
+      newState.friends = friends
     }
 
     return newState
   }
-
+  
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
 
-      if state.friendItems.isEmpty {
-        newState.sections.append(.empty)
-      } else {
-        newState.sections.append(.friend)
-        newState.items.append(state.friendItems)
-      }
+      newState.sections.append(.friend)
+      newState.items.append(state.friends.map { FriendSectionItem.friend($0) })
       
       return newState
     }

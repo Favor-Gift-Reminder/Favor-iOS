@@ -63,12 +63,15 @@ final class FriendListModifyingViewController: BaseFriendListViewController, Vie
     else { return }
     
     // 친구 삭제 확인 팝업을 띄웁니다.
-    let popup = AlertPopup(.remove)
+    let popup = NewAlertPopup(
+      .onlyTitle(title: "삭제하시겠습니까?",
+      .init(reject: "취소", accept: "삭제"))
+    )
     popup.modalPresentationStyle = .overFullScreen
     self.present(popup, animated: false)
     
     // 삭제 버튼을 눌렸을 때 실행되는 클로저입니다.
-    popup.confirmButtonHandler = {
+    popup.accpetButtonCompletion = {
       reactor.action.onNext(.deleteButtonDidTap(data))
     }
   }
