@@ -16,7 +16,7 @@ import RxFlow
 final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
 
   // MARK: - Properties
-
+  
   var initialState: State
   var steps = PublishRelay<Step>()
 
@@ -30,7 +30,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
   enum Mutation {
     case updateFriends([Friend])
   }
-
+  
   struct State {
     var friends: [Friend] = []
     var sections: [FriendSection] = []

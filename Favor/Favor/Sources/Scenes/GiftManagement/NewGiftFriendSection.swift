@@ -14,16 +14,7 @@ import FavorKit
 
 enum NewGiftFriendItem: ComposableItem {
   case empty
-  case friend(NewGiftFriendCellReactor)
-
-  var reactor: NewGiftFriendCellReactor? {
-    switch self {
-    case .empty:
-      return nil
-    case .friend(let reactor):
-      return reactor
-    }
-  }
+  case friend(friend: Friend, buttonType: FriendSelectorCell.RightButtonType)
 }
 
 // MARK: - Section
@@ -31,29 +22,4 @@ enum NewGiftFriendItem: ComposableItem {
 enum NewGiftFriendSection: ComposableSection {
   case selectedFriends
   case friends
-}
-
-// MARK: - Hashable
-
-extension NewGiftFriendItem {
-  static func == (lhs: NewGiftFriendItem, rhs: NewGiftFriendItem) -> Bool {
-    switch (lhs, rhs) {
-    case (.empty, .empty):
-      return true
-    case let (.friend(lhsReactor), .friend(rhsReactor)):
-      return lhsReactor === rhsReactor
-    default:
-      return false
-    }
-  }
-
-  func hash(into hasher: inout Hasher) {
-    switch self {
-    case .empty:
-      hasher.combine(0)
-    case .friend(let reactor):
-      hasher.combine(1)
-      hasher.combine(ObjectIdentifier(reactor))
-    }
-  }
 }

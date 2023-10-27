@@ -210,7 +210,6 @@
 		E524C18929E923B9004CCC40 /* FriendSelectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18829E923B9004CCC40 /* FriendSelectionVC.swift */; };
 		E524C18B29E924A8004CCC40 /* NewGiftFriendSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */; };
 		E524C18D29E93758004CCC40 /* FriendSelectorEmptyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18C29E93758004CCC40 /* FriendSelectorEmptyCell.swift */; };
-		E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C18E29E99C19004CCC40 /* NewGiftFriendCellReactor.swift */; };
 		E524C19229E9A34B004CCC40 /* FriendSelectorViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19129E9A34B004CCC40 /* FriendSelectorViewReactor.swift */; };
 		E524C19429EA4014004CCC40 /* FriendSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19329EA4014004CCC40 /* FriendSelectorCell.swift */; };
 		E524C19629EAA50C004CCC40 /* FriendSelectorHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E524C19529EAA50C004CCC40 /* FriendSelectorHeaderView.swift */; };
@@ -226,7 +225,6 @@
 		E59AB09A2A17858C00F0AC7D /* FriendFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AB0992A17858C00F0AC7D /* FriendFlow.swift */; };
 		E59AB09C2A178ADE00F0AC7D /* FriendManagementViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */; };
 		E59AC13A29EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */; };
-		E5A18E7E2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */; };
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
@@ -439,7 +437,6 @@
 		E524C18829E923B9004CCC40 /* FriendSelectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectionVC.swift; sourceTree = "<group>"; };
 		E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendSection.swift; sourceTree = "<group>"; };
 		E524C18C29E93758004CCC40 /* FriendSelectorEmptyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorEmptyCell.swift; sourceTree = "<group>"; };
-		E524C18E29E99C19004CCC40 /* NewGiftFriendCellReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendCellReactor.swift; sourceTree = "<group>"; };
 		E524C19129E9A34B004CCC40 /* FriendSelectorViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorViewReactor.swift; sourceTree = "<group>"; };
 		E524C19329EA4014004CCC40 /* FriendSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorCell.swift; sourceTree = "<group>"; };
 		E524C19529EAA50C004CCC40 /* FriendSelectorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorHeaderView.swift; sourceTree = "<group>"; };
@@ -453,7 +450,6 @@
 		E59AB0992A17858C00F0AC7D /* FriendFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendFlow.swift; sourceTree = "<group>"; };
 		E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManagementViewReactor.swift; sourceTree = "<group>"; };
 		E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorFooterView.swift; sourceTree = "<group>"; };
-		E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFriendHeaderViewReactor.swift; sourceTree = "<group>"; };
 		E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListType.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
@@ -583,6 +579,7 @@
 			isa = PBXGroup;
 			children = (
 				2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */,
+				E524C18829E923B9004CCC40 /* FriendSelectionVC.swift */,
 				2E3FA75629F7C52D003342CA /* FriendListVC.swift */,
 				2E87B8D72A0BCCD400570386 /* FriendListModifyingVC.swift */,
 			);
@@ -593,6 +590,7 @@
 			isa = PBXGroup;
 			children = (
 				2E87B8E12A0CA06900570386 /* BaseFriendListViewReactor.swift */,
+				E524C19129E9A34B004CCC40 /* FriendSelectorViewReactor.swift */,
 				2E3FA75829F7C561003342CA /* FriendListViewReactor.swift */,
 				2E87B8D92A0BCE3200570386 /* FriendListModifyingViewReactor.swift */,
 			);
@@ -602,6 +600,8 @@
 		2E3FA75529F7C522003342CA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				E524C19529EAA50C004CCC40 /* FriendSelectorHeaderView.swift */,
+				E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */,
 				2E3FA75C29F80D30003342CA /* Cells */,
 			);
 			path = Views;
@@ -610,6 +610,8 @@
 		2E3FA75C29F80D30003342CA /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				E524C18C29E93758004CCC40 /* FriendSelectorEmptyCell.swift */,
+				E524C19329EA4014004CCC40 /* FriendSelectorCell.swift */,
 				2E3FA75D29F80D3C003342CA /* FriendListCell.swift */,
 				2E87B8DF2A0C881A00570386 /* FriendListModifyingCell.swift */,
 			);
@@ -1354,8 +1356,6 @@
 			children = (
 				2EF1585429E1C06000D199DF /* Cells */,
 				2E6E28D92A24432C00E25DB6 /* GiftManagementCollectionHeaderView.swift */,
-				E524C19529EAA50C004CCC40 /* FriendSelectorHeaderView.swift */,
-				E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1365,8 +1365,6 @@
 			children = (
 				E524C19029E9A31A004CCC40 /* CellReactros */,
 				2E6E28D72A243B1F00E25DB6 /* GiftManagementViewReactor.swift */,
-				E524C19129E9A34B004CCC40 /* FriendSelectorViewReactor.swift */,
-				E5A18E7D2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -1387,8 +1385,6 @@
 				2E6E28DD2A24636600E25DB6 /* GiftManagementPhotoCell.swift */,
 				2E6E28DF2A24694700E25DB6 /* GiftManagementMemoCell.swift */,
 				2E6E28E32A246C6600E25DB6 /* GiftManagementPinCell.swift */,
-				E524C18C29E93758004CCC40 /* FriendSelectorEmptyCell.swift */,
-				E524C19329EA4014004CCC40 /* FriendSelectorCell.swift */,
 				2EDB7FFD2A29BA8300347A2A /* FavorSectionHeaderCell.swift */,
 			);
 			path = Cells;
@@ -1512,7 +1508,6 @@
 		E524C19029E9A31A004CCC40 /* CellReactros */ = {
 			isa = PBXGroup;
 			children = (
-				E524C18E29E99C19004CCC40 /* NewGiftFriendCellReactor.swift */,
 			);
 			path = CellReactros;
 			sourceTree = "<group>";
@@ -1554,8 +1549,9 @@
 		E593C8232A176AF800711C0F /* Friend */ = {
 			isa = PBXGroup;
 			children = (
-				E593C8272A176BD000711C0F /* Reactors */,
+				E5D754812AEC3C3C00C866CE /* View */,
 				E593C8262A176BC400711C0F /* ViewControllers */,
+				E593C8272A176BD000711C0F /* Reactors */,
 			);
 			path = Friend;
 			sourceTree = "<group>";
@@ -1563,7 +1559,6 @@
 		E593C8262A176BC400711C0F /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				E524C18829E923B9004CCC40 /* FriendSelectionVC.swift */,
 				E593C8242A176B4500711C0F /* FriendManagementVC.swift */,
 			);
 			path = ViewControllers;
@@ -1584,6 +1579,13 @@
 				2E68C70C2A394C9800B7ACD0 /* .gitkeep */,
 			);
 			path = Deprecated;
+			sourceTree = "<group>";
+		};
+		E5D754812AEC3C3C00C866CE /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		E5E423F229DC0D3400A6B48D /* BottomSheet */ = {
@@ -1843,7 +1845,6 @@
 				2EA3849C298D7C680081499C /* HomeUpcomingCell.swift in Sources */,
 				2EC939E72998C6D100C8C47F /* ProfileAnniversaryCell.swift in Sources */,
 				2E013D5C2A2EE9AF00FBE833 /* GiftTags.swift in Sources */,
-				E5A18E7E2A0CC8700054CC53 /* NewGiftFriendHeaderViewReactor.swift in Sources */,
 				2E217C082A2F790700C91A46 /* RecentSearch.swift in Sources */,
 				2E6E28C52A23C1A900E25DB6 /* GiftDetailPhotoHeaderView.swift in Sources */,
 				2E70654A2A15FAAC007B1C94 /* AnniversaryManagementViewReactor.swift in Sources */,
@@ -1960,7 +1961,6 @@
 				E523F64E2A24DC04007A6317 /* FriendPageFlow.swift in Sources */,
 				E523F64C2A249F3B007A6317 /* ProfileAnniversarySetupHelperCell.swift in Sources */,
 				E583C58F2A1E619F00DC219A /* AnniversaryBottomSheetView.swift in Sources */,
-				E524C18F29E99C19004CCC40 /* NewGiftFriendCellReactor.swift in Sources */,
 				2EFF672C2A5058CA0097A664 /* SettingsNaviagatableCell.swift in Sources */,
 				2E634E312A18E24F00DD51ED /* AnniversaryListCellModel.swift in Sources */,
 				2E946FE52A25AE2900D0EED8 /* GiftShareView.swift in Sources */,

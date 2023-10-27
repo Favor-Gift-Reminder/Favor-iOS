@@ -8,10 +8,9 @@
 import UIKit
 
 import FavorKit
-import ReactorKit
 import Reusable
 
-final class FriendSelectorCell: BaseFriendCell, View, Reusable {
+final class FriendSelectorCell: BaseFriendCell, Reusable {
   
   enum RightButtonType {
     case add
@@ -43,25 +42,7 @@ final class FriendSelectorCell: BaseFriendCell, View, Reusable {
       self.rightImageView.image = image
     }
   }
-  
-  // MARK: - Bind
-  
-  func bind(reactor: NewGiftFriendCellReactor) {
-    reactor.state.map { $0.friend }
-      .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self, onNext: { owner, friend in
-        owner.friendName = friend.friendName
-      }) // TODO: 이미지 설정
-      .disposed(by: self.disposeBag)
-    
-    reactor.state.map { $0.rightButtonState }
-      .asDriver(onErrorJustReturn: .add)
-      .drive(with: self, onNext: { owner, state in
-        owner.currentButtonType = state
-      })
-      .disposed(by: self.disposeBag)
-  }
-  
+
   // MARK: - Setup
   
   override func setupLayouts() {
@@ -78,5 +59,12 @@ final class FriendSelectorCell: BaseFriendCell, View, Reusable {
       make.centerY.equalToSuperview()
       make.trailing.equalToSuperview()
     }
+  }
+  
+  // MARK: - Configure
+  
+  func configure(with friend: Friend, buttonType: RightButtonType) {
+    self.friendName = friend.friendName
+    self.currentButtonType = buttonType
   }
 }

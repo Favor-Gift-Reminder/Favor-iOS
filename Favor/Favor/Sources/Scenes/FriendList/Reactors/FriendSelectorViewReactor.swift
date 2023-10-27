@@ -36,11 +36,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   var initialState: State
   var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
-  private let friendFetcher = Fetcher<Friend>()
   
-  /// 최초로 불러온 친구 목록 입니다.
-  var allFriends: [Friend] = []
-
   enum Action {
     case viewDidLoad
     case cellDidTap(IndexPath, FriendSelectorCell.RightButtonType)
@@ -58,6 +54,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   
   struct State {
     var viewType: ViewType
+    var sections: [NewGiftFriendSection] = []
     /// 0: 선택된 친구들
     /// 1: 현재 친구들
     var items: [[NewGiftFriendItem]] = []
@@ -69,11 +66,14 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     var isLoading: Bool = false
   }
   
+  // MARK: - Properties
+  
+  var allFriends: [Friend] = []
+  
   // MARK: - Initializer
   
   init(_ viewType: ViewType, selectedFriends: [Friend] = []) {
     self.initialState = State(viewType: viewType, selectedFriends: selectedFriends)
-    self.setupFriendFetcher()
   }
   
   // MARK: - Functions
@@ -81,13 +81,11 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      return self.friendFetcher.fetch()
-        .flatMap { (status, friends) -> Observable<Mutation> in
+      return self.fetchFriendList()
+        .asObservable()
+        .flatMap { friends in
           self.allFriends = friends
-          return .concat([
-            .just(.updateFriends(friends)),
-            .just(.updateLoading(status == .inProgress))
-          ])
+          return Observable<Mutation>.just(.updateFriends(friends))
         }
       
     case let .cellDidTap(indexPath, rightButtonType):
@@ -115,10 +113,10 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       }
       
     case .textFieldDidChange(let text):
-      let friends = text.isEmpty ?
-      self.allFriends :
-      self.allFriends.filter { $0.friendName.contains(text) }
-      return .just(.updateFriends(friends))
+      let allFriends = self.allFriends
+      let filteredFriends = text.isEmpty ?
+      allFriends : allFriends.filter { $0.friendName.contains(text) }
+      return .just(.updateFriends(filteredFriends))
       
     case .addFriendDidTap:
       self.steps.accept(AppStep.friendManagementIsRequired(.new))
@@ -160,6 +158,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       // 친구 배열과 선택된 친구 배열을 참조하여
       // 새로운 아이템 2차원 배열을 만듭니다.
       var newItems: [[NewGiftFriendItem]] = []
+      let newSections: [NewGiftFriendSection] = [.selectedFriends, .friends]
       // 친구 아이템
       let friendItems = state.currentFriends
         .map { friend in
@@ -167,13 +166,11 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
           if state.selectedFriends.first(where: { $0 == friend }) != nil {
             buttonType = .done
           }
-          return NewGiftFriendItem.friend(
-            NewGiftFriendCellReactor(friend, rightButtonState: buttonType)
-          )
+          return NewGiftFriendItem.friend(friend: friend, buttonType: buttonType)
         }
       // 선택된 친구 아이템
       var selectedFriendItems = state.selectedFriends
-        .map { NewGiftFriendItem.friend(NewGiftFriendCellReactor($0, rightButtonState: .remove)) }
+        .map { NewGiftFriendItem.friend(friend: $0, buttonType: .remove) }
       selectedFriendItems = selectedFriendItems.isEmpty ? [.empty] : selectedFriendItems
       // 마지막으로 각 아이템들을 2차원 배열 안에 주입합니다.
       newItems.append(selectedFriendItems)
@@ -183,36 +180,22 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       newState.isEnabledFinishButton = state.selectedFriends.isEmpty ? false : true
       // 2차원 배열의 아이템을 새로운 State값에 주입합니다.
       newState.items = newItems
+      newState.sections = newSections
       return newState
     }
   }
 }
 
-// MARK: - Fetcher
+// MARK: - Privates
 
 private extension FriendSelectorViewReactor {
-  func setupFriendFetcher() {
-    // onRemote
-    self.friendFetcher.onRemote = {
-      let networking = UserNetworking()
-      let friends = networking.request(.getAllFriendList)
-        .flatMap { response -> Observable<[Friend]> in
-          let responseDTO: ResponseDTO<[FriendSingleResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Friend(dto: $0) })
-        }
-        .asSingle()
-      return friends
-    }
-    // onLocal
-    self.friendFetcher.onLocal = {
-      return await self.workbench.values(FriendObject.self)
-        .map { Friend(realmObject: $0) }
-    }
-    // onLocalUpdate
-    self.friendFetcher.onLocalUpdate = { _, remoteFriends in
-      try await self.workbench.write { transaction in
-        transaction.update(remoteFriends.map { $0.realmObject() })
+  func fetchFriendList() -> Single<[Friend]> {
+    return Single<[Friend]>.create { single in
+      Task {
+        let friends = await self.workbench.values(FriendObject.self)
+        single(.success(friends.map { Friend(realmObject: $0) }))
       }
+      return Disposables.create()
     }
   }
 }

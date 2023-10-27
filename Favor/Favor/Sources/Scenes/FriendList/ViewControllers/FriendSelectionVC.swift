@@ -39,9 +39,9 @@ final class FriendSelectionViewController: BaseViewController, View {
         case .empty:
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendSelectorEmptyCell
           return cell
-        case .friend(let reactor):
+        case let .friend(friend, buttonType):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendSelectorCell
-          cell.reactor = reactor
+          cell.configure(with: friend, buttonType: buttonType)
           return cell
         }
       }
@@ -60,12 +60,7 @@ final class FriendSelectionViewController: BaseViewController, View {
         let friends = section == .friends ?
         reactor.allFriends :
         reactor.currentState.selectedFriends
-        header.reactor = NewGiftFriendHeaderViewReactor(section, friends: friends)
-        // 서치바 이벤트
-        header.textFieldChanged = { [weak self] in
-          self?.reactor?.action.onNext(.textFieldDidChange($0))
-        }
-        
+        header.configure(section: section, friendsCount: friends.count)
         return header
       case UICollectionView.elementKindSectionFooter:
         let footer = collectionView.dequeueReusableSupplementaryView(
@@ -81,7 +76,6 @@ final class FriendSelectionViewController: BaseViewController, View {
         return UICollectionReusableView()
       }
     }
-
     return dataSource
   }()
   
@@ -130,18 +124,28 @@ final class FriendSelectionViewController: BaseViewController, View {
     return cv
   }()
   
+  private let searchBar: FavorSearchBar = {
+    let searchBar = FavorSearchBar()
+    searchBar.hasBackButton = false
+    return searchBar
+  }()
+  
   private lazy var tapGestureRecongnizer: UITapGestureRecognizer = {
     let tg = UITapGestureRecognizer()
     tg.addTarget(self, action: #selector(self.didTapBackgroundView))
     tg.cancelsTouchesInView = false
     return tg
   }()
-
-  private let mainView: UIView = {
-    let view = UIView()
-    view.backgroundColor = .favorColor(.black)
-    return view
-  }()
+  
+  private var friendsHeaderView: FriendSelectorHeaderView!
+  
+  // MARK: - LifeCycle
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    self.setupSearchBar()
+  }
   
   // MARK: - Setup
   
@@ -155,7 +159,7 @@ final class FriendSelectionViewController: BaseViewController, View {
     super.setupLayouts()
     
     self.view.addSubview(self.collectionView)
-    self.view.addSubview(self.mainView)
+    self.view.addSubview(self.searchBar)
     self.view.addGestureRecognizer(self.tapGestureRecongnizer)
   }
   
@@ -165,6 +169,17 @@ final class FriendSelectionViewController: BaseViewController, View {
     self.collectionView.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.top.bottom.equalToSuperview()
+    }
+  }
+  
+  private func setupSearchBar() {
+    let header = self.collectionView.supplementaryView(
+      forElementKind: UICollectionView.elementKindSectionHeader,
+      at: IndexPath(row: 0, section: 1)
+    )
+    self.searchBar.snp.makeConstraints { make in
+      make.directionalHorizontalEdges.equalToSuperview().inset(24.0)
+      make.top.equalTo(header!.snp.bottom).offset(-28.0)
     }
   }
   
@@ -197,19 +212,24 @@ final class FriendSelectionViewController: BaseViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    self.searchBar.rx.text.orEmpty
+      .map { FriendSelectorViewReactor.Action.textFieldDidChange($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
-    reactor.state.map { $0.items }
-      .distinctUntilChanged()
-      .asDriver(onErrorJustReturn: [])
-      .drive(with: self, onNext: { owner, items in
-        var snapShot = NSDiffableDataSourceSnapshot<NewGiftFriendSection, NewGiftFriendItem>()
-        let sections: [NewGiftFriendSection] = [.selectedFriends, .friends]
-        snapShot.appendSections(sections)
-        snapShot.reloadSections([.selectedFriends])
-        items.enumerated().forEach { index, items in
-          snapShot.appendItems(items, toSection: sections[index])
+    reactor.state.map { (sections: $0.sections, items: $0.items) }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, sectionItems in
+        var snapshot = NSDiffableDataSourceSnapshot<NewGiftFriendSection, NewGiftFriendItem>()
+        snapshot.appendSections(sectionItems.sections)
+        snapshot.reloadSections([.selectedFriends])
+        sectionItems.items.enumerated().forEach { index, items in
+          snapshot.appendItems(items, toSection: sectionItems.sections[index])
         }
-        owner.dataSource.apply(snapShot, animatingDifferences: false)
+        DispatchQueue.main.async {
+          owner.dataSource.apply(snapshot, animatingDifferences: false)
+        }
       })
       .disposed(by: self.disposeBag)
     
