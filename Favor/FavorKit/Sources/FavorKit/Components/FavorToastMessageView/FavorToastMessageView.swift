@@ -62,7 +62,7 @@ public final class FavorToastMessageView: UIView {
   
   // MARK: - Initializer
   
-  init(_ message: ToastMessage) {
+  public init(_ message: ToastMessage) {
     super.init(frame: .zero)
     
     self.message = message

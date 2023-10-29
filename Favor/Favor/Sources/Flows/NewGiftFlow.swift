@@ -15,9 +15,7 @@ final class NewGiftFlow: Flow {
 
   // MARK: - Properties
   
-  var root: Presentable {
-    self.rootViewController
-  }
+  var root: Presentable { self.rootViewController }
   
   private let rootViewController = BaseNavigationController()
   
@@ -31,11 +29,17 @@ final class NewGiftFlow: Flow {
     case .giftManagementIsRequired:
       return self.navigateToNewGift()
       
-    case .newGiftFriendIsRequired:
-      return self.navigateToNewGiftFriend()
+    case .friendSelectorIsRequired(let friends):
+      return self.navigateToFriendSelection(friends: friends)
       
     case .friendManagementIsRequired:
       return self.navigateToFriendManagement()
+      
+    case .friendManagementIsComplete(let friendName):
+      return self.popToFriendSelection(friendName: friendName)
+      
+    case .friendSelectorIsComplete(let friends):
+      return self.popFromFriendSelection(friends: friends)
       
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToTabBar()
@@ -68,18 +72,17 @@ private extension NewGiftFlow {
   }
   
   @MainActor
-  func navigateToNewGiftFriend() -> FlowContributors {
+  func navigateToFriendSelection(friends: [Friend]) -> FlowContributors {
     let viewController = FriendSelectionViewController()
-    let reactor = FriendSelectorViewReactor(.gift)
+    let reactor = FriendSelectorViewReactor(.gift, selectedFriends: friends)
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
-    
     return .one(flowContributor: .contribute(
       withNextPresentable: viewController,
       withNextStepper: reactor
     ))
   }
-
+  
   @MainActor
   func navigateToFriendManagement() -> FlowContributors {
     let viewController = FriendManagementViewController(.new)
@@ -94,8 +97,29 @@ private extension NewGiftFlow {
   }
   
   @MainActor
+  func popToFriendSelection(friendName: String) -> FlowContributors {
+    self.rootViewController.popViewController(animated: true)
+    ToastManager.shared.showNewToast(FavorToastMessageView(.tempFriendAdded(friendName)))
+    guard 
+      let friendSelectionVC = self.rootViewController.topViewController as? FriendSelectionViewController
+    else { return .none }
+    friendSelectionVC.tempFriendAdded(friendName)
+    return .none
+  }
+  
+  @MainActor
   func popToTabBar(with gift: Gift? = nil) -> FlowContributors {
     self.rootViewController.dismiss(animated: true)
     return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
+  }
+  
+  @MainActor
+  func popFromFriendSelection(friends: [Friend]) -> FlowContributors {
+    self.rootViewController.popViewController(animated: true)
+    guard 
+      let giftManagementVC = self.rootViewController.topViewController as? GiftManagementViewController
+    else { return .none }
+    giftManagementVC.friendsDidAdd(friends)
+    return .none
   }
 }

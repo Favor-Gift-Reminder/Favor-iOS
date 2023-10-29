@@ -43,6 +43,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     case textFieldDidChange(String)
     case addFriendDidTap
     case finishButtonDidTap
+    case tempFriendAdded(String)
   }
   
   enum Mutation {
@@ -126,6 +127,12 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       let friends = self.currentState.selectedFriends
       self.steps.accept(AppStep.friendSelectorIsComplete(friends))
       return .empty()
+      
+    case .tempFriendAdded(let friendName):
+      let tempFriend = Friend(friendName: friendName)
+      var selectedFriends = self.currentState.selectedFriends
+      selectedFriends.append(tempFriend)
+      return .just(.updateSelectedFriends(selectedFriends))
     }
   }
   

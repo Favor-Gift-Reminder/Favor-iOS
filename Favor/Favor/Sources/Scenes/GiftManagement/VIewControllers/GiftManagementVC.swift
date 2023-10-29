@@ -55,22 +55,26 @@ final class GiftManagementViewController: BaseViewController, View {
   // MARK: - UI Components
 
   // NavigationBar
-  private lazy var doneButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-
-    let button = UIButton(configuration: config)
-    button.configurationUpdateHandler = { button in
+  private let doneButton: FavorButton = {
+    let button = FavorButton("등록")
+    button.contentInset = .zero
+    button.font = .favorFont(.bold, size: 18.0)
+    button.baseBackgroundColor = .white
+    button.isEnabled = false
+    let handler: UIButton.ConfigurationUpdateHandler = { button in
+      guard let button = button as? FavorButton else { return }
       switch button.state {
       case .disabled:
-        button.configuration?.baseForegroundColor = .favorColor(.line2)
-      case .normal:
-        button.configuration?.baseForegroundColor = .favorColor(.icon)
+        button.baseForegroundColor = .favorColor(.line2)
+        button.configuration?.background.backgroundColor = .white
       default:
-        break
+        button.baseForegroundColor = .favorColor(.main)
       }
     }
+    button.configurationUpdateHandler = handler
     return button
   }()
+  
   private var cancelButton: UIButton = {
     var config = UIButton.Configuration.plain()
     config.baseForegroundColor = .favorColor(.icon)
@@ -163,7 +167,7 @@ final class GiftManagementViewController: BaseViewController, View {
       }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     let sectionData = reactor.state.map { state in
       (sections: state.sections, items: state.items)
@@ -177,13 +181,12 @@ final class GiftManagementViewController: BaseViewController, View {
         sectionData.items.enumerated().forEach { idx, items in
           snapshot.appendItems(items, toSection: sectionData.sections[idx])
         }
-
         DispatchQueue.main.async {
           owner.dataSource?.apply(snapshot)
         }
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.viewType }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -211,7 +214,11 @@ final class GiftManagementViewController: BaseViewController, View {
   }
   
   // MARK: - Functions
-
+  
+  func friendsDidAdd(_ friends: [Friend]) {
+    self.reactor?.action.onNext(.friendsDidAdd(friends))
+  }
+  
   // MARK: - UI Setups
 
   override func setupLayouts() {
@@ -251,17 +258,29 @@ private extension GiftManagementViewController {
       cell.delegate = self
       cell.bind(with: reactor.currentState.gift.category)
     }
-
+    
     let photoCellRegistration = UICollectionView.CellRegistration
     <GiftManagementPhotoCell, GiftManagementSectionItem> { [weak self] cell, _, itemIdentifier in
       guard let self = self, case let GiftManagementSectionItem.photo(image) = itemIdentifier else { return }
       cell.delegate = self
       cell.bind(with: image)
     }
-
+    
     let friendCellRegistration = UICollectionView.CellRegistration
-    <FavorSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
+    <FavorSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, itemIdentifier in
+      guard let self = self, case let GiftManagementSectionItem.friends(friends) = itemIdentifier else {
+        return }
       cell.delegate = self
+      if friends.isEmpty {
+        cell.bind(unselectedTitle: "선택")
+      } else {
+        let friendName = friends.first?.friendName ?? ""
+        if friends.count == 1 {
+          cell.bind(selectedTitle: "\(friendName)")
+        } else {
+          cell.bind(selectedTitle: "\(friendName) 외 \(friends.count - 1)")
+        }
+      }
     }
 
     let dateCellRegistration = UICollectionView.CellRegistration
@@ -284,7 +303,7 @@ private extension GiftManagementViewController {
       cell.delegate = self
       cell.bind(with: reactor.currentState.gift.isPinned)
     }
-
+    
     self.dataSource = GiftManagementDataSource(
       collectionView: self.collectionView,
       cellProvider: { [weak self] collectionView, indexPath, item in

@@ -22,7 +22,7 @@ extension Toastable {
     guard let toastMessage = message else { return }
     self.toast = ToastManager.shared.prepareToast(toastMessage)
     guard let toast = self.toast else { return }
-    ToastManager.shared.showNewToast(toast, at: self)
+    ToastManager.shared.showNewToast(toast)
   }
 
   public func dismissToast() {

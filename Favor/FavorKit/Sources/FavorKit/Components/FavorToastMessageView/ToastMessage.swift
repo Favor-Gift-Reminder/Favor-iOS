@@ -31,6 +31,10 @@ public enum ToastMessage {
   case anniversaryDeleted(String)
   case anniversaryPinLimited
   
+  // MARK: - Friend
+  
+  case tempFriendAdded(String)
+  
   // MARK: - Reminder
   
   case reminderAdded
@@ -62,6 +66,9 @@ extension ToastMessage {
       return "\"\(anniversaryTitle)\" 삭제 완료!"
     case .anniversaryPinLimited:
       return "최대 3개까지 고정 가능합니다."
+      
+    case .tempFriendAdded(let friendName):
+      return "\(friendName)님이 등록되었습니다."
       
     case .reminderAdded:
       return "리마인더가 등록되었습니다."

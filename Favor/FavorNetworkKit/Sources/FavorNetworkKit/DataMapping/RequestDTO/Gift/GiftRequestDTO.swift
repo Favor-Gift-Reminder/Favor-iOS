@@ -11,11 +11,12 @@ public struct GiftRequestDTO: Encodable {
   let giftName: String
   let giftDate: String
   let giftMemo: String
-  let category: String
+  let giftCategory: String
   let emotion: String
   let isPinned: Bool
   let isGiven: Bool
   let friendNoList: [Int]
+  let tempFriendList: [String]
   
   public init(
     giftName: String,
@@ -25,15 +26,17 @@ public struct GiftRequestDTO: Encodable {
     emotion: FavorEmotion,
     isPinned: Bool = false,
     isGiven: Bool = false,
-    friendNoList: [Int]
+    friendNoList: [Int],
+    tempFriendList: [String]
   ) {
     self.giftName = giftName
     self.giftDate = giftDate
     self.giftMemo = giftMemo
-    self.category = category.rawValue
+    self.giftCategory = category.rawValue
     self.emotion = emotion.rawValue
     self.isPinned = isPinned
     self.isGiven = isGiven
     self.friendNoList = friendNoList
+    self.tempFriendList = tempFriendList
   }
 }

@@ -102,6 +102,19 @@ public struct Friend: Storable, Receivable {
     self.totalGift = 0
     self.receivedGift = 0
   }
+  
+  /// 비회원 친구 구조체를 생성합니다.
+  /// 비회원 친구는 `identifier`가 `-1`를 갖습니다.
+  public init(friendName: String) {
+    self.identifier = -1
+    self.friendName = friendName
+    self.friendID = ""
+    self.anniversaryList = []
+    self.favorList = []
+    self.givenGift = 0
+    self.totalGift = 0
+    self.receivedGift = 0
+  }
 }
 
 // MARK: - PropertyValue

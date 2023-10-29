@@ -51,12 +51,12 @@ public class FavorButton: UIButton {
   
   /// 버튼의 `BackgroundColor`
   public var baseBackgroundColor: UIColor? {
-    willSet { self.configuration?.background.backgroundColor = newValue }
+    willSet { self.configuration?.baseBackgroundColor = newValue }
   }
   
   /// 버튼의 `ForegroundColor`
   public var baseForegroundColor: UIColor? {
-    willSet { self.configuration?.background.strokeColor = newValue }
+    willSet { self.configuration?.baseForegroundColor = newValue }
   }
   
   /// 버튼의 `EdgeInset`

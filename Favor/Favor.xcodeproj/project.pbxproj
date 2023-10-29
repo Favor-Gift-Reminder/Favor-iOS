@@ -1549,7 +1549,6 @@
 		E593C8232A176AF800711C0F /* Friend */ = {
 			isa = PBXGroup;
 			children = (
-				E5D754812AEC3C3C00C866CE /* View */,
 				E593C8262A176BC400711C0F /* ViewControllers */,
 				E593C8272A176BD000711C0F /* Reactors */,
 			);
@@ -1579,13 +1578,6 @@
 				2E68C70C2A394C9800B7ACD0 /* .gitkeep */,
 			);
 			path = Deprecated;
-			sourceTree = "<group>";
-		};
-		E5D754812AEC3C3C00C866CE /* View */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = View;
 			sourceTree = "<group>";
 		};
 		E5E423F229DC0D3400A6B48D /* BottomSheet */ = {

@@ -18,50 +18,37 @@ public final class FriendManagementViewController: BaseViewController, View {
     case edit(Friend)
   }
   
-  private enum Metric {
-    static let topSpacing: CGFloat = 56.0
-    static let nameTextFieldTopSpacing: CGFloat = 40.0
-  }
-  
   // MARK: - UI Components
   
-  private let profileImageRegisterButton: FavorProfileImageRegisterButton = {
-    let button = FavorProfileImageRegisterButton()
-    button.isHiddenPlusView = false
-    return button
-  }()
-
   private lazy var nameTextField: FavorTextField = FavorTextField().then {
-    $0.titleLabelText = "이름"
+    $0.titleLabelText = "친구 이름"
     switch self.viewControllerType {
     case .new:
-      $0.placeholder = "친구의 이름"
+      $0.placeholder = "친구 이름 (최대 10자)"
     case .edit:
       break
     }
   }
   
-  private lazy var finishButton: UIButton = UIButton().then {
-    var config = UIButton.Configuration.plain()
-    let title: String
-    switch self.viewControllerType {
-    case .new: title = "등록"
-    case .edit: title = "완료"
-    }
-    var container: AttributeContainer = AttributeContainer()
-    container.font = .favorFont(.bold, size: 18)
-    config.attributedTitle = AttributedString(title, attributes: container)
-    $0.configuration = config
-    $0.configurationUpdateHandler = { button in
+  private let finishButton: FavorButton = {
+    let button = FavorButton("완료")
+    button.baseBackgroundColor = .white
+    button.contentInset = .zero
+    button.font = .favorFont(.bold, size: 18.0)
+    let handler: UIButton.ConfigurationUpdateHandler = { button in
+      guard let button = button as? FavorButton else { return }
       switch button.state {
       case .disabled:
-        button.configuration?.baseForegroundColor = .favorColor(.line2)
+        button.configuration?.background.backgroundColor = .white
+        button.baseForegroundColor = .favorColor(.line2)
       default:
-        button.configuration?.baseForegroundColor = .favorColor(.icon)
+        button.baseForegroundColor = .favorColor(.main)
       }
     }
-  }
-  
+    button.configurationUpdateHandler = handler
+    return button
+  }()
+
   // MARK: - Properties
   
   private let viewControllerType: ViewControllerType
@@ -82,7 +69,7 @@ public final class FriendManagementViewController: BaseViewController, View {
   public override func setupStyles() {
     let title: String
     switch self.viewControllerType {
-    case .new: title = "새 친구"
+    case .new: title = "직접 입력하기"
     case .edit: title = "프로필 수정"
     }
     self.navigationItem.title = title
@@ -93,7 +80,6 @@ public final class FriendManagementViewController: BaseViewController, View {
   
   public override func setupLayouts() {
     [
-      self.profileImageRegisterButton,
       self.nameTextField
     ].forEach {
       self.view.addSubview($0)
@@ -101,13 +87,8 @@ public final class FriendManagementViewController: BaseViewController, View {
   }
   
   public override func setupConstraints() {
-    self.profileImageRegisterButton.snp.makeConstraints { make in
-      make.centerX.equalToSuperview()
-      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.topSpacing)
-    }
-    
     self.nameTextField.snp.makeConstraints { make in
-      make.top.equalTo(self.profileImageRegisterButton.snp.bottom).offset(Metric.nameTextFieldTopSpacing)
+      make.top.equalTo(self.view.safeAreaLayoutGuide).inset(32.0)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }
@@ -115,6 +96,29 @@ public final class FriendManagementViewController: BaseViewController, View {
   // MARK: - Bind
   
   public func bind(reactor: FriendManagementViewReactor) {
+    // Action
+    self.nameTextField.rx.text.orEmpty
+      .scan("") { previous, new in
+        if new.count > 10 {
+          self.nameTextField.rx.text.onNext(previous)
+          return previous
+        } else {
+          return new
+        }
+      }
+      .map { Reactor.Action.textFieldDidChange($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
+    self.finishButton.rx.tap
+      .map { Reactor.Action.finishButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    // State
+    reactor.state.map { $0.isEnabledFinishButton }
+      .distinctUntilChanged()
+      .bind(to: self.finishButton.rx.isEnabled)
+      .disposed(by: self.disposeBag)
   }
 }

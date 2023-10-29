@@ -23,7 +23,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   var initialState: State
   var steps = PublishRelay<Step>()
 //  let pickerManager: PHPickerManager
-
+  
   enum Action {
     case cancelButtonDidTap
     case doneButtonDidTap
@@ -36,9 +36,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case dateDidUpdate(Date?)
     case memoDidUpdate(String?)
     case pinButtonDidTap(Bool)
+    case friendsDidAdd([Friend])
     case doNothing
   }
-
+  
   enum Mutation {
     case updateGiftType(isGiven: Bool)
     case updateTitle(String?)
@@ -46,6 +47,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case updatePhotos([UIImage])
     case updateDate(Date?)
     case updateMemo(String?)
+    case updateFriends([Friend])
     case updateIsPinned(Bool)
   }
   
@@ -55,7 +57,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var isEnabledDoneButton: Bool = false
     var gift: Gift
     
-    var sections: [Section] = [.title, .category, .photos, .friends(isGiven: false), .date, .memo, .pin]
+    var sections: [Section] = [.title, .category, .photos, .date, .friends(isGiven: false), .memo, .pin]
     var items: [[Item]] = []
   }
 
@@ -108,12 +110,11 @@ final class GiftManagementViewReactor: Reactor, Stepper {
             return .empty()
           }
       }
-
+      
     case .giftTypeButtonDidTap(let isGiven):
       return .just(.updateGiftType(isGiven: isGiven))
 
-    case .itemSelected(let indexPath):
-      print(indexPath)
+    case .itemSelected:
       return .empty()
 
     case .titleDidUpdate(let title):
@@ -132,7 +133,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       return .empty()
 
     case .friendsSelectorButtonDidTap:
-      self.steps.accept(AppStep.newGiftFriendIsRequired)
+      self.steps.accept(AppStep.friendSelectorIsRequired(self.currentState.gift.relatedFriends))
       return .empty()
 
     case .dateDidUpdate(let date):
@@ -143,12 +144,15 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     case .pinButtonDidTap(let isPinned):
       return .just(.updateIsPinned(isPinned))
+      
+    case .friendsDidAdd(let friends):
+      return .just(.updateFriends(friends))
 
     case .doNothing:
       return .empty()
     }
   }
-
+  
   // TODO: Picker
 //  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
 //    let updatePickedContents = self.pickerManager.pickedContents
@@ -183,6 +187,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     case .updateMemo(let memo):
       newState.gift.memo = memo
+      
+    case .updateFriends(let friends):
+      newState.gift.relatedFriends = friends
 
     case .updateIsPinned(let isPinned):
       newState.gift.isPinned = isPinned
@@ -190,20 +197,28 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     return newState
   }
-
+  
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
+      
       var photoItems: [Item] = state.gift.photos.map { .photo($0) }
       photoItems.insert(.photo(nil), at: .zero)
       newState.items = [
-        [.title], [.category], photoItems, [.friends], [.date], [.memo], [.pin]
+        [.title],
+        [.category],
+        photoItems,
+        [.date],
+        [.friends(state.gift.relatedFriends)],
+        [.memo],
+        [.pin]
       ]
       
-      if !state.gift.name.isEmpty,
+      if !state.gift.name.isEmpty &&
          !(state.gift.date == nil) {
         newState.isEnabledDoneButton = true
+      } else {
+        newState.isEnabledDoneButton = false
       }
       
       return newState

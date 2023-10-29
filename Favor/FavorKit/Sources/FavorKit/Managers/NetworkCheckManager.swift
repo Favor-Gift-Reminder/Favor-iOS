@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import Network
 import OSLog
 
@@ -30,11 +31,8 @@ final public class NetworkCheckManager {
           ToastManager.shared.resetToast()
         } else {
           // 인터넷 연결이 끊겼을 때
-          guard let topViewController = UIApplication.shared.topViewController() as? BaseViewController
-          else { return }
           ToastManager.shared.showNewToast(
             FavorToastMessageView(.networkStatus),
-            at: topViewController,
             duration: .long
           )
         }

@@ -49,17 +49,20 @@ public final class ToastManager {
   /// ToastView를 최상단 VC 위에 띄웁니다.
   public func showNewToast(
     _ toast: FavorToastMessageView,
-    at viewController: Toastable,
     duration: ToastManager.Duration = .short,
     completion: (() -> Void)? = nil
   ) {
     toast.duration = duration
     self.queue.enqueue(toast)
-
+    
+    guard
+      let topViewController = UIApplication.shared.topViewController() as? BaseViewController
+    else { return }
+    
     if self.queue.peek() === toast { // Queue에 쌓인 토스트가 없을 경우 (현재 토스트가 present 될 수 있을 경우)
       self.showToast(
         toast,
-        at: viewController,
+        at: topViewController,
         completion: completion
       )
     } else { // Queue에 쌓인 토스트가 있을 경우

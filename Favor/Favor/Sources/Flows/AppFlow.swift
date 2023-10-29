@@ -179,7 +179,7 @@ private extension AppFlow {
         self.rootViewController.present(root, animated: true)
       }
     }
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: newGiftFlow,
       withNextStepper: OneStepper(withSingleStep: AppStep.giftManagementIsRequired())

@@ -57,10 +57,9 @@ final class FriendSelectionViewController: BaseViewController, View {
           for: indexPath
         ) as FriendSelectorHeaderView
         let section = self.dataSource.sectionIdentifier(for: indexPath.section) ?? .friends
-        let friends = section == .friends ?
-        reactor.allFriends :
-        reactor.currentState.selectedFriends
+        let friends = section == .friends ? reactor.allFriends : reactor.currentState.selectedFriends
         header.configure(section: section, friendsCount: friends.count)
+        self.setupSearchBar()
         return header
       case UICollectionView.elementKindSectionFooter:
         let footer = collectionView.dequeueReusableSupplementaryView(
@@ -82,26 +81,23 @@ final class FriendSelectionViewController: BaseViewController, View {
   // MARK: - UI Components
   
   // Navigation Items
-  private let finishButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 4)
-    config.attributedTitle = AttributedString(
-      "완료",
-      attributes: .init([.font: UIFont.favorFont(.bold, size: 18)])
-    )
-    let btn = UIButton(configuration: config)
-    btn.configurationUpdateHandler = {
-      switch $0.state {
+  private let finishButton: FavorButton = {
+    let button = FavorButton("완료")
+    button.baseBackgroundColor = .white
+    button.font = .favorFont(.bold, size: 18.0)
+    button.contentInset = .zero
+    let handler: UIButton.ConfigurationUpdateHandler = { button in
+      guard let button = button as? FavorButton else { return }
+      switch button.state {
       case .disabled:
-        config.baseForegroundColor = .favorColor(.line2)
-      case .normal:
-        config.baseForegroundColor = .favorColor(.icon)
+        button.baseForegroundColor = .favorColor(.line2)
+        button.configuration?.background.backgroundColor = .white
       default:
-        break
+        button.baseForegroundColor = .favorColor(.main)
       }
     }
-    btn.isEnabled = false
-    return btn
+    button.configurationUpdateHandler = handler
+    return button
   }()
   
   // View Items
@@ -137,15 +133,7 @@ final class FriendSelectionViewController: BaseViewController, View {
     return tg
   }()
   
-  private var friendsHeaderView: FriendSelectorHeaderView!
-  
   // MARK: - LifeCycle
-  
-  override func viewDidAppear(_ animated: Bool) {
-    super.viewDidAppear(animated)
-    
-    self.setupSearchBar()
-  }
   
   // MARK: - Setup
   
@@ -173,13 +161,15 @@ final class FriendSelectionViewController: BaseViewController, View {
   }
   
   private func setupSearchBar() {
-    let header = self.collectionView.supplementaryView(
+    guard let header = self.collectionView.supplementaryView(
       forElementKind: UICollectionView.elementKindSectionHeader,
       at: IndexPath(row: 0, section: 1)
-    )
-    self.searchBar.snp.makeConstraints { make in
-      make.directionalHorizontalEdges.equalToSuperview().inset(24.0)
-      make.top.equalTo(header!.snp.bottom).offset(-28.0)
+    ) else { return }
+    DispatchQueue.main.async {
+      self.searchBar.snp.makeConstraints { make in
+        make.directionalHorizontalEdges.equalToSuperview().inset(24.0)
+        make.top.equalTo(header.snp.bottom).offset(-28.0)
+      }
     }
   }
   
@@ -233,10 +223,6 @@ final class FriendSelectionViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.map { $0.isLoading }
-      .bind(to: self.rx.isLoading)
-      .disposed(by: self.disposeBag)
-    
     reactor.state.map { $0.isEnabledFinishButton }
       .bind(to: self.finishButton.rx.isEnabled)
       .disposed(by: self.disposeBag)
@@ -247,6 +233,10 @@ final class FriendSelectionViewController: BaseViewController, View {
   @objc
   private func didTapBackgroundView() {
     self.view.endEditing(true)
+  }
+  
+  func tempFriendAdded(_ friendName: String) {
+    self.reactor?.action.onNext(.tempFriendAdded(friendName))
   }
 }
 

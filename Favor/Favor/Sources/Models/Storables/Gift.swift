@@ -67,15 +67,17 @@ public struct Gift: Storable, Receivable {
     self.date = dto.giftDate
     self.photos = []
     self.memo = dto.giftMemo
-    self.category = dto.category
+    self.category = dto.giftCategory
     self.emotion = dto.emotion
     self.isPinned = dto.isPinned
     self.relatedFriends = dto.friendList.compactMap(Friend.init(friendResponseDTO:)) 
     self.isGiven = dto.isGiven
   }
-
+  
   public func requestDTO() -> GiftRequestDTO {
-    GiftRequestDTO(
+    let friendNoList = self.relatedFriends.filter { $0.identifier > 0 }.map { $0.identifier }
+    let tempFriendList = self.relatedFriends.filter { $0.identifier < 0 }.map { $0.friendName }
+    return GiftRequestDTO(
       giftName: self.name,
       giftDate: (self.date ?? .distantPast).toDTODateString(),
       giftMemo: self.memo ?? "",
@@ -83,7 +85,8 @@ public struct Gift: Storable, Receivable {
       emotion: self.emotion ?? .good,
       isPinned: self.isPinned,
       isGiven: self.isGiven,
-      friendNoList: self.relatedFriends.map { $0.identifier }
+      friendNoList: friendNoList,
+      tempFriendList: tempFriendList
     )
   }
 
@@ -110,7 +113,7 @@ public struct Gift: Storable, Receivable {
     self.identifier = -1
     self.name = ""
     self.photos = []
-    self.category = .etc
+    self.category = .lightGift
     self.emotion = .xoxo
     self.isPinned = false
     self.relatedFriends = []

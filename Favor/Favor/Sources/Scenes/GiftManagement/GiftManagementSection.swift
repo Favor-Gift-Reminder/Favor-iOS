@@ -16,7 +16,7 @@ public enum GiftManagementSectionItem: ComposableItem {
   case title
   case category
   case photo(UIImage?)
-  case friends
+  case friends([Friend])
   case date
   case memo
   case pin
@@ -46,50 +46,6 @@ extension GiftManagementSection {
     case .date: return "날짜"
     case .memo: return "메모"
     case .pin: return ""
-    }
-  }
-}
-
-// MARK: - Hashable
-
-extension GiftManagementSectionItem: Hashable {
-  public static func == (lhs: GiftManagementSectionItem, rhs: GiftManagementSectionItem) -> Bool {
-    switch (lhs, rhs) {
-    case (.title, .title):
-      return true
-    case (.category, .category):
-      return true
-    case let (.photo(lhsImage), .photo(rhsImage)):
-      return lhsImage == rhsImage
-    case (.friends, .friends):
-      return true
-    case (.date, .date):
-      return true
-    case (.memo, .memo):
-      return true
-    case (.pin, .pin):
-      return true
-    default:
-      return false
-    }
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    switch self {
-    case .title:
-      hasher.combine("title")
-    case .category:
-      hasher.combine("category")
-    case .photo(let image):
-      hasher.combine(image)
-    case .friends:
-      hasher.combine("friends")
-    case .date:
-      hasher.combine("date")
-    case .memo:
-      hasher.combine("memo")
-    case .pin:
-      hasher.combine("pin")
     }
   }
 }

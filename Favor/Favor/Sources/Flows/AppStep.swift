@@ -14,7 +14,7 @@ public enum AppStep: Step {
   // MARK: - Root
   case splashIsRequired
   case splashIsComplete
-
+  
   // MARK: - Auth
   case authIsRequired
   case findPasswordIsRequired
@@ -69,6 +69,7 @@ public enum AppStep: Step {
   
   // MARK: - FriendPage
   case friendManagementIsRequired(FriendManagementViewController.ViewControllerType)
+  case friendManagementIsComplete(String)
   case friendPageIsRequired(Friend)
   
   // MARK: - AnniversaryList
@@ -78,13 +79,12 @@ public enum AppStep: Step {
   case newAnniversaryIsRequired
   case anniversaryManagementIsRequired(Anniversary)
   case anniversaryManagementIsComplete(ToastMessage)
-
+  
   // MARK: - Gift
   case giftManagementIsRequired(Gift? = nil)
   case giftManagementIsCompleteWithNoChanges
   case newGiftIsComplete(Gift)
   case editGiftIsComplete(Gift)
-  case newGiftFriendIsRequired
   case giftDetailIsRequired(Gift)
   case giftDetailFriendsBottomSheetIsRequired([Friend])
   case giftDetailIsComplete(Gift)
