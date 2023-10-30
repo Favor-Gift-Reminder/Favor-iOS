@@ -13,7 +13,7 @@ import RxSwift
 import SnapKit
 
 public protocol GiftManagementPhotoCellDelegate: AnyObject {
-  func removeButtonDidTap(from cell: GiftManagementPhotoCell)
+  func removeButtonDidTap(from image: UIImage?)
 }
 
 public final class GiftManagementPhotoCell: BaseCollectionViewCell {
@@ -27,7 +27,7 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
   // MARK: - Properties
 
   public weak var delegate: GiftManagementPhotoCellDelegate?
-  public var removeButtonTapped: (() -> Void)?
+  public var removeButtonTapped: ((UIImage?) -> Void)?
 
   // MARK: - UI Components
 
@@ -75,8 +75,7 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
     self.removeButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.removeButtonTapped?()
-        owner.delegate?.removeButtonDidTap(from: self)
+        owner.delegate?.removeButtonDidTap(from: owner.imageView.image)
       })
       .disposed(by: self.disposeBag)
   }

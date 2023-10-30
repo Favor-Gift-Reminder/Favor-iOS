@@ -45,7 +45,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     /// 사진이 갤러리에서 추가 되었음
     case photoAdded(UIImage?)
     /// 선택된 사진 삭제
-    case removeButtonTapped(Int)
+    case removeButtonTapped(UIImage?)
     case doNothing
   }
   
@@ -159,6 +159,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         let pickerManager = PHPickerManager()
         self.pickerManager = pickerManager
         let selectionLimit = 5 - self.currentState.imageList.count
+        // 사진 선택은 5개까지가 최대입니다.
         if selectionLimit > 0 {
           self.steps.accept(AppStep.imagePickerIsRequired(pickerManager, selectionLimit: selectionLimit))
         }
@@ -183,11 +184,14 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
     case .photoAdded(let image):
       self.pickerManager = nil
-      return .just(.updateImageList([image]))
-      
-    case .removeButtonTapped(let index):
       var imageList = self.currentState.imageList
-      _ = imageList.remove(at: index - 1)
+      imageList.append(image)
+      return .just(.updateImageList(imageList))
+      
+    case .removeButtonTapped(let image):
+      var imageList = self.currentState.imageList
+      guard let removeIndex = imageList.firstIndex(of: image) else { return .empty() }
+      imageList.remove(at: removeIndex)
       return .just(.updateImageList(imageList))
 
     case .doNothing:
@@ -225,7 +229,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       newState.gift.isPinned = isPinned
       
     case .updateImageList(let imageList):
-      newState.imageList.append(contentsOf: imageList)
+      newState.imageList = imageList
     }
 
     return newState

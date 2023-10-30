@@ -271,7 +271,6 @@ private extension GiftManagementViewController {
       else { return }
       cell.delegate = self
       cell.bind(with: image)
-      cell.removeButtonTapped = { self.reactor?.action.onNext(.removeButtonTapped(indexPath.item)) }
     }
     
     let friendCellRegistration = UICollectionView.CellRegistration
@@ -429,9 +428,9 @@ extension GiftManagementViewController: GiftManagementCategoryViewCellDelegate {
 // MARK: - Photo Cell
 
 extension GiftManagementViewController: GiftManagementPhotoCellDelegate {
-  func removeButtonDidTap(from cell: GiftManagementPhotoCell) {
+  func removeButtonDidTap(from image: UIImage?) {
     guard let reactor = self.reactor else { return }
-    
+    reactor.action.onNext(.removeButtonTapped(image))
   }
 }
 

@@ -78,7 +78,7 @@ extension APIManager {
       throw APIError.decodeError(error)
     }
   }
-
+  
   public static func header(for header: HeaderType) -> [String: String] {
     switch header {
     case .json: return ["Content-Type": "application/json"]
