@@ -19,6 +19,7 @@ extension UIImageView {
     
     Task(priority: .high) {
       self.kf.indicatorType = .activity
+      // 캐시된 이미지를 가져옴
       let cachedImage: UIImage? = await cache.fetch(from: mapper)
       self.image = cachedImage
       

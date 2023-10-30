@@ -10,5 +10,5 @@ import Foundation
 public protocol Receivable {
   associatedtype DTO: Decodable
 
-  init(dto: DTO)
+  init(singleDTO: DTO)
 }

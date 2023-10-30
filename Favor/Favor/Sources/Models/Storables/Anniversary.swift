@@ -45,13 +45,13 @@ public struct Anniversary: Storable, Receivable {
   
   // MARK: - Receivable
   
-  public init(dto: AnniversaryResponseDTO) {
-    self.identifier = dto.anniversaryNo
-    self.name = dto.anniversaryTitle
+  public init(singleDTO: AnniversaryResponseDTO) {
+    self.identifier = singleDTO.anniversaryNo
+    self.name = singleDTO.anniversaryTitle
     // TODO: DTO에 추가 후 수정
     self.category = .birth
-    self.date = dto.anniversaryDate
-    self.isPinned = dto.isPinned ?? false
+    self.date = singleDTO.anniversaryDate
+    self.isPinned = singleDTO.isPinned ?? false
   }
   
   public func requestDTO() -> AnniversaryRequestDTO {

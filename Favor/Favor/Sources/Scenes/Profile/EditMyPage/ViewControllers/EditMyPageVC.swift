@@ -26,7 +26,7 @@ final class EditMyPageViewController: BaseViewController, View {
 
   // MARK: - Properties
   
-  private lazy var picker = PHPickerManager.create(for: self)
+//  private lazy var picker = PHPickerManager.create(for: self)
   
   private var dataSource: EditMyPageDataSource?
   
@@ -305,7 +305,7 @@ extension EditMyPageViewController: EditMyPageProfileHeaderDelegate {
   func profileHeader(didTap imageType: EditMyPageProfileHeader.ImageType) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.profileHeaderDidTap(imageType))
-    self.picker.present(selectionLimit: 1)
+//    self.picker.present(selectionLimit: 1)
   }
 }
 
@@ -330,18 +330,7 @@ extension EditMyPageViewController: FavorTextFieldCellDelegate {
 // MARK: - PHPickerManager
 
 extension EditMyPageViewController: PHPickerManagerDelegate {
-  func pickerManager(didFinishPicking selections: PHPickerManager.Selections) {
-    guard let reactor = self.reactor else { return }
+  func pickerManager(didFinishPicking image: UIImage?) {
     
-    for selection in selections {
-      PHPickerManager.fetch(selection.value, isLivePhotoEnabled: false) { [weak self] object, error in
-        guard self != nil else { return }
-        if let image = object as? UIImage {
-          reactor.action.onNext(.imageDidFetched(image))
-        } else if let error = error {
-          os_log(.error, "\(error)")
-        }
-      }
-    }
   }
 }

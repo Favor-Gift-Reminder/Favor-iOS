@@ -219,7 +219,7 @@ private extension MyPageViewReactor {
         .flatMap { user -> Observable<[User]> in
           do {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(user.data)
-            return .just([User(dto: responseDTO.data)])
+            return .just([User(singleDTO: responseDTO.data)])
           } catch {
             print(error)
             return .just([])

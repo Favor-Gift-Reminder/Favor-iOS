@@ -153,7 +153,7 @@ private extension FriendPageViewReactor {
       return networking.request(.getFriend(friendNo: self.currentState.friend.identifier))
         .flatMap { response -> Observable<[Friend]> in
           let responseDTO: ResponseDTO<FriendSingleResponseDTO> = try APIManager.decode(response.data)
-          return .just([Friend(dto: responseDTO.data)])
+          return .just([Friend(singleDTO: responseDTO.data)])
         }
         .asSingle()
     }
@@ -184,7 +184,7 @@ private extension FriendPageViewReactor {
       ))
         .flatMap { response -> Observable<[Friend]> in
           let responseDTO: ResponseDTO<FriendSingleResponseDTO> = try APIManager.decode(response.data)
-          return .just([Friend(dto: responseDTO.data)])
+          return .just([Friend(singleDTO: responseDTO.data)])
         }
         .asSingle()
       return friend

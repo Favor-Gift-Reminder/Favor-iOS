@@ -152,8 +152,8 @@ private extension GiftDetailViewReactor {
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
-            let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(dto: responseDTO.data)))
+            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
+            single(.success(Gift(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -175,8 +175,8 @@ private extension GiftDetailViewReactor {
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
-            let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(dto: responseDTO.data)))
+            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
+            single(.success(Gift(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

@@ -163,7 +163,7 @@ private extension AuthSetProfileViewReactor {
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
-            single(.success(User(dto: responseDTO.data)))
+            single(.success(User(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

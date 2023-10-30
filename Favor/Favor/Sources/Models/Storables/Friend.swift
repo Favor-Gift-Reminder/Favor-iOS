@@ -74,16 +74,16 @@ public struct Friend: Storable, Receivable {
     self.givenGift = -1
   }
   
-  public init(dto: FriendSingleResponseDTO) {
-    self.identifier = dto.friendNo
-    self.friendName = dto.friendName
-    self.memo = dto.friendMemo
-    self.anniversaryList = dto.anniversaryList.map { Anniversary(dto: $0) }
-    self.favorList = dto.favorList.compactMap { Favor(rawValue: $0) }
-    self.totalGift = dto.totalGift
-    self.receivedGift = dto.receivedGift
-    self.givenGift = dto.givenGift
-    self.friendID = dto.friendId
+  public init(singleDTO: FriendSingleResponseDTO) {
+    self.identifier = singleDTO.friendNo
+    self.friendName = singleDTO.friendName
+    self.memo = singleDTO.friendMemo
+    self.anniversaryList = singleDTO.anniversaryList.map { Anniversary(singleDTO: $0) }
+    self.favorList = singleDTO.favorList.compactMap { Favor(rawValue: $0) }
+    self.totalGift = singleDTO.totalGift
+    self.receivedGift = singleDTO.receivedGift
+    self.givenGift = singleDTO.givenGift
+    self.friendID = singleDTO.friendId
   }
   
   // MARK: - Mock

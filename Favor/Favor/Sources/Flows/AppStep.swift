@@ -114,6 +114,10 @@ public enum AppStep: Step {
   // MARK: - Popup
   case alertPopupIsRequired(AlertPopup.PopupType)
   case alertPopupIsComplete(isConfirmed: Bool)
+  
+  // MARK: - ImagePicker
+  case imagePickerIsRequired(PHPickerManager, selectionLimit: Int)
+  case imagePickerIsComplete
 
   // MARK: - Placeholder
   case doNothing

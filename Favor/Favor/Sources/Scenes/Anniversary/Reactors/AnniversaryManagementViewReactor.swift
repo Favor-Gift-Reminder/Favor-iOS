@@ -170,7 +170,7 @@ private extension AnniversaryManagementViewReactor {
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Anniversary(dto: responseDTO.data)))
+            single(.success(Anniversary(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -198,7 +198,7 @@ private extension AnniversaryManagementViewReactor {
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Anniversary(dto: responseDTO.data)))
+            single(.success(Anniversary(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -220,7 +220,7 @@ private extension AnniversaryManagementViewReactor {
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            let anniversary = Anniversary(dto: responseDTO.data)
+            let anniversary = Anniversary(singleDTO: responseDTO.data)
             single(.success(anniversary))
           } catch {
             single(.failure(error))

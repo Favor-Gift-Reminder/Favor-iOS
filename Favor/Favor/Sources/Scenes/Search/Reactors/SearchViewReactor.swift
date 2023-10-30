@@ -334,7 +334,7 @@ private extension SearchViewReactor {
               .decode(response.data) else { fatalError() }
           Task {
             try await self.workbench.write { transaction in
-              transaction.update(Friend(dto: responseDTO.data).realmObject())
+              transaction.update(Friend(singleDTO: responseDTO.data).realmObject())
               single(.success(true))
             }
           }
@@ -372,7 +372,7 @@ private extension SearchViewReactor {
             Task {
               let friendObjects = await self.workbench.values(FriendObject.self)
               single(.success((
-                User(dto: responseDTO.data),
+                User(singleDTO: responseDTO.data),
                 friendObjects.contains(where: { $0.friendName == responseDTO.data.name })
               )))
             }
@@ -392,8 +392,8 @@ private extension SearchViewReactor {
       let networking = UserNetworking()
       let gifts = networking.request(.getGiftByName(giftName: queryString))
         .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Gift(dto: $0) })
+          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Gift(singleDTO: $0) })
         }
         .asSingle()
       return gifts

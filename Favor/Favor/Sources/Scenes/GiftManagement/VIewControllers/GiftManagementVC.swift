@@ -117,17 +117,18 @@ final class GiftManagementViewController: BaseViewController, View {
     super.viewDidLoad()
     self.setupDataSource()
     self.composer.compose()
-  }
-  
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
     self.setupNavigationBar()
   }
-
+  
   // MARK: - Binding
   
   func bind(reactor: GiftManagementViewReactor) {
     // Action
+    
+    self.rx.viewDidLoad
+      .map { Reactor.Action.viewDidLoad }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
     
     // 취소 버튼 터치
     self.cancelButton.rx.tap
@@ -142,7 +143,9 @@ final class GiftManagementViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
     
     // 화면 빈공간 터치
-    self.collectionView.rx.tapGesture()
+    self.collectionView.rx.tapGesture { delegate, _ in
+      delegate.cancelsTouchesInView = false
+    }
       .skip(1)
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, _ in
@@ -150,6 +153,7 @@ final class GiftManagementViewController: BaseViewController, View {
       }
       .disposed(by: self.disposeBag)
     
+    // 셀 선택
     self.collectionView.rx.itemSelected
       .map { [weak self] indexPath in
         guard
@@ -233,8 +237,8 @@ final class GiftManagementViewController: BaseViewController, View {
   }
   
   private func setupNavigationBar() {
-    self.navigationItem.setRightBarButton(self.doneButton.toBarButtonItem(), animated: false)
     self.navigationItem.setLeftBarButton(self.cancelButton.toBarButtonItem(), animated: false)
+    self.navigationItem.rightBarButtonItem = self.doneButton.toBarButtonItem()
     self.navigationItem.titleView = self.giftImageView
   }
 }
@@ -260,10 +264,14 @@ private extension GiftManagementViewController {
     }
     
     let photoCellRegistration = UICollectionView.CellRegistration
-    <GiftManagementPhotoCell, GiftManagementSectionItem> { [weak self] cell, _, itemIdentifier in
-      guard let self = self, case let GiftManagementSectionItem.photo(image) = itemIdentifier else { return }
+    <GiftManagementPhotoCell, GiftManagementSectionItem> 
+    { [weak self] cell, indexPath, itemIdentifier in
+      guard let self = self,
+            case let GiftManagementSectionItem.photo(image) = itemIdentifier
+      else { return }
       cell.delegate = self
       cell.bind(with: image)
+      cell.removeButtonTapped = { self.reactor?.action.onNext(.removeButtonTapped(indexPath.item)) }
     }
     
     let friendCellRegistration = UICollectionView.CellRegistration
@@ -342,7 +350,7 @@ private extension GiftManagementViewController {
       guard let self = self else { return }
       header.delegate = self
     }
-
+    
     let sectionHeaderRegistration: UICollectionView.SupplementaryRegistration<FavorSectionHeaderCell> =
     UICollectionView.SupplementaryRegistration(
       elementKind: UICollectionView.elementKindSectionHeader
@@ -422,9 +430,8 @@ extension GiftManagementViewController: GiftManagementCategoryViewCellDelegate {
 
 extension GiftManagementViewController: GiftManagementPhotoCellDelegate {
   func removeButtonDidTap(from cell: GiftManagementPhotoCell) {
-//    guard let reactor = self.reactor else { return }
-    print("Remove")
-    // TODO: 이미지 다중 선택 / 삭제
+    guard let reactor = self.reactor else { return }
+    
   }
 }
 
@@ -461,5 +468,13 @@ extension GiftManagementViewController: GiftManagementPinCellDelegate {
   func pinButtonDidTap(from cell: GiftManagementPinCell, isPinned: Bool) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.pinButtonDidTap(isPinned))
+  }
+}
+
+// MARK: - PHPickerViewController
+
+extension GiftManagementViewController: PHPickerManagerDelegate {
+  func pickerManager(didFinishPicking image: UIImage?) {
+    self.reactor?.action.onNext(.photoAdded(image))
   }
 }

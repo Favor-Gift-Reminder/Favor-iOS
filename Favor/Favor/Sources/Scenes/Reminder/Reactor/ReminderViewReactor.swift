@@ -139,7 +139,7 @@ private extension ReminderViewReactor {
           let responseData = reminders.data
           do {
             let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(responseData)
-            return .just(responseDTO.data.map { Reminder(dto: $0) })
+            return .just(responseDTO.data.map { Reminder(singleDTO: $0) })
           } catch {
             return .just([])
           }

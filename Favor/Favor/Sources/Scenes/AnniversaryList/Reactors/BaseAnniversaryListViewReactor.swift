@@ -30,7 +30,7 @@ public class BaseAnniversaryListViewReactor {
       return networking.request(.getFriend(friendNo: friend.identifier))
         .flatMap { response -> Observable<[Friend]> in
           let responseDTO: ResponseDTO<FriendSingleResponseDTO> = try APIManager.decode(response.data)
-          return .just([Friend(dto: responseDTO.data)])
+          return .just([Friend(singleDTO: responseDTO.data)])
         }
         .asSingle()
     }
@@ -60,7 +60,7 @@ public class BaseAnniversaryListViewReactor {
           let userData = user.data
           do {
             let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
-            let user = User(dto: responseDTO.data)
+            let user = User(singleDTO: responseDTO.data)
             return .just([user])
           } catch {
             print(error)

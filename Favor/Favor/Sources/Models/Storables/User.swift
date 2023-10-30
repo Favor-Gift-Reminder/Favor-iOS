@@ -70,18 +70,18 @@ public struct User: Storable, Receivable {
   
   // MARK: - Receivable
   
-  public init(dto: UserResponseDTO) {
-    self.identifier = dto.userNo
-    self.email = dto.email
-    self.searchID = dto.userID
-    self.name = dto.name
-    self.favorList = dto.favorList.compactMap(Favor.init(rawValue:))
-    self.reminderList = dto.reminderList.compactMap(Reminder.init(dto:))
-    self.anniversaryList = dto.anniversaryList.compactMap(Anniversary.init(dto:))
-    self.friendList = dto.friendList.compactMap(Friend.init(friendResponseDTO:))
-    self.givenGifts = dto.givenGift
-    self.receivedGifts = dto.receivedGift
-    self.totalgifts = dto.totalGift
+  public init(singleDTO: UserResponseDTO) {
+    self.identifier = singleDTO.userNo
+    self.email = singleDTO.email
+    self.searchID = singleDTO.userID
+    self.name = singleDTO.name
+    self.favorList = singleDTO.favorList.compactMap(Favor.init(rawValue:))
+    self.reminderList = singleDTO.reminderList.compactMap(Reminder.init(singleDTO:))
+    self.anniversaryList = singleDTO.anniversaryList.compactMap(Anniversary.init(singleDTO:))
+    self.friendList = singleDTO.friendList.compactMap(Friend.init(friendResponseDTO:))
+    self.givenGifts = singleDTO.givenGift
+    self.receivedGifts = singleDTO.receivedGift
+    self.totalgifts = singleDTO.totalGift
   }
 
   // MARK: - Mock

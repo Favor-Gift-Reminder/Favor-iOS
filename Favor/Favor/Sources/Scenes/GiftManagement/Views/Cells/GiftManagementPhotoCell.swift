@@ -27,6 +27,7 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
   // MARK: - Properties
 
   public weak var delegate: GiftManagementPhotoCellDelegate?
+  public var removeButtonTapped: (() -> Void)?
 
   // MARK: - UI Components
 
@@ -74,6 +75,7 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
     self.removeButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
+        owner.removeButtonTapped?()
         owner.delegate?.removeButtonDidTap(from: self)
       })
       .disposed(by: self.disposeBag)
@@ -82,7 +84,11 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
   // MARK: - Functions
 
   public func bind(with image: UIImage?) {
-    guard let image else { return }
+    imageView.image = .favorIcon(.gallery)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 40)
+      .withTintColor(.favorColor(.white))
+    guard let image = image else { return }
     self.imageView.contentMode = .scaleAspectFill
     self.imageView.image = image
     self.removeButton.isHidden = false

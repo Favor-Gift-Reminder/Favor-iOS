@@ -206,7 +206,7 @@ private extension AnniversaryListViewReactor {
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Anniversary(dto: responseDTO.data)))
+            single(.success(Anniversary(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

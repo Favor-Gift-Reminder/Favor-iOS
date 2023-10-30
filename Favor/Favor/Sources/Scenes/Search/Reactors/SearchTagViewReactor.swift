@@ -120,8 +120,8 @@ private extension SearchTagViewReactor {
       let networking = UserNetworking()
       let gifts = networking.request(.getGiftByCategory(category: category.rawValue))
         .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Gift(dto: $0) })
+          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Gift(singleDTO: $0) })
         }
         .asSingle()
       return gifts
@@ -146,8 +146,8 @@ private extension SearchTagViewReactor {
       let networking = UserNetworking()
       let gifts = networking.request(.getGiftByEmotion(emotion: emotion.rawValue))
         .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Gift(dto: $0) })
+          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Gift(singleDTO: $0) })
         }
         .asSingle()
       return gifts

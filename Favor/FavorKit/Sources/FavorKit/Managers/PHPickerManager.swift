@@ -8,8 +8,10 @@
 import OSLog
 import PhotosUI
 
+import RxSwift
+
 public protocol PHPickerManagerDelegate: AnyObject {
-  func pickerManager(didFinishPicking selections: PHPickerManager.Selections)
+  func pickerManager(didFinishPicking image: UIImage?)
 }
 
 public final class PHPickerManager {
@@ -17,30 +19,20 @@ public final class PHPickerManager {
   
   // MARK: - Properties
   
-  private let target: UIViewController
   public weak var delegate: PHPickerManagerDelegate?
-  
   private var selections: Selections = [:]
   private var selectedAssetIdentifiers: [String] = []
   
   // MARK: - Initializer
-
-  private init(_ target: UIViewController) {
-    self.target = target
-  }
+  
+  public init() {}
   
   // MARK: - Functions
-  
-  public static func create(for presentingViewController: UIViewController) -> PHPickerManager {
-    let pickerManager = PHPickerManager(presentingViewController)
-    pickerManager.delegate = presentingViewController as? PHPickerManagerDelegate
-    return pickerManager
-  }
   
   /// PHPickerViewController를 VC에 `present`합니다.
   ///
   /// VC는 PHPickerManager를 초기화할 때 지정해줄 수 있습니다.
-  public func present(
+  public  func present(
     filter: PHPickerFilter = .images,
     selectionLimit: Int,
     completion: (() -> Void)? = nil
@@ -52,10 +44,11 @@ public final class PHPickerManager {
     if selectionLimit != 1 {
       config.preselectedAssetIdentifiers = self.selectedAssetIdentifiers
     }
-    
     let picker = PHPickerViewController(configuration: config)
+    picker.modalPresentationStyle = .overFullScreen
     picker.delegate = self
-    self.target.present(picker, animated: true) {
+    self.delegate = UIApplication.shared.topViewController() as? PHPickerManagerDelegate
+    UIApplication.shared.topViewController().present(picker, animated: true) {
       if let completion {
         completion()
       }
@@ -63,41 +56,51 @@ public final class PHPickerManager {
   }
   
   /// 이미지 선택 결과를 전달하기 위한 Helper 메서드
-  public static func fetch(
+  private func fetch(
     _ pickerResult: PHPickerResult,
-    isLivePhotoEnabled: Bool,
-    completion: @escaping ((NSItemProviderReading?, Error?) -> Void)
+    completion: @escaping ((UIImage?, Error?) -> Void)
   ) {
     let itemProvider = pickerResult.itemProvider
     
-    if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) && isLivePhotoEnabled {
+    if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) {
       itemProvider.loadObject(ofClass: PHLivePhoto.self) { livePhoto, error in
-        completion(livePhoto, error)
+        guard let livePhoto = livePhoto as? PHLivePhoto else {
+          completion(nil, error)
+          return
+        }
+        // Live Photo의 이미지 데이터를 JPEG로 변환
+        let image = livePhoto.value(forKey: "imageData") as? UIImage
+        completion(image, error)
       }
     } else if itemProvider.canLoadObject(ofClass: UIImage.self) {
       itemProvider.loadObject(ofClass: UIImage.self) { image, error in
+        guard let image = image as? UIImage else {
+          completion(nil, error)
+          return
+        }
         completion(image, error)
       }
     }
   }
 }
 
-// MARK: - Delegate
-
 extension PHPickerManager: PHPickerViewControllerDelegate {
   public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-    self.target.dismiss(animated: true)
-    
     let currentSelections = self.selections
     var newSelections: Selections = [:]
     for result in results {
       let identifier = result.assetIdentifier!
       newSelections[identifier] = currentSelections[identifier] ?? result
+      self.fetch(result) { image, error in
+        if let error = error {
+          os_log(.error, "❌ 사진을 가져오는데 실패했습니다! \(error.localizedDescription)")
+          return
+        }
+        self.delegate?.pickerManager(didFinishPicking: image)
+      }
     }
-    
     self.selections = newSelections
     self.selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
-    
-    self.delegate?.pickerManager(didFinishPicking: selections)
+    UIApplication.shared.topViewController().dismiss(animated: true)
   }
 }

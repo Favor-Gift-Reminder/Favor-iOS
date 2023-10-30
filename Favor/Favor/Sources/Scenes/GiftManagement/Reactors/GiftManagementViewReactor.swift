@@ -10,6 +10,7 @@ import UIKit
 
 import FavorKit
 import FavorNetworkKit
+import Kingfisher
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -19,12 +20,15 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   typealias Item = GiftManagementSectionItem
 
   // MARK: - Properties
-
+  
   var initialState: State
   var steps = PublishRelay<Step>()
-//  let pickerManager: PHPickerManager
+  private var pickerManager: PHPickerManager?
   
   enum Action {
+    /// 화면 최초 접속
+    case viewDidLoad
+    /// 취소 버튼 클릭
     case cancelButtonDidTap
     case doneButtonDidTap
     case giftTypeButtonDidTap(isGiven: Bool)
@@ -36,7 +40,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case dateDidUpdate(Date?)
     case memoDidUpdate(String?)
     case pinButtonDidTap(Bool)
+    /// 회원/비회원 친구 추가
     case friendsDidAdd([Friend])
+    /// 사진이 갤러리에서 추가 되었음
+    case photoAdded(UIImage?)
+    /// 선택된 사진 삭제
+    case removeButtonTapped(Int)
     case doNothing
   }
   
@@ -44,11 +53,11 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case updateGiftType(isGiven: Bool)
     case updateTitle(String?)
     case updateCategory(FavorCategory)
-    case updatePhotos([UIImage])
     case updateDate(Date?)
     case updateMemo(String?)
     case updateFriends([Friend])
     case updateIsPinned(Bool)
+    case updateImageList([UIImage?])
   }
   
   struct State {
@@ -56,11 +65,20 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var giftType: GiftManagementViewController.GiftType = .received
     var isEnabledDoneButton: Bool = false
     var gift: Gift
+    var imageList: [UIImage?] = []
     
-    var sections: [Section] = [.title, .category, .photos, .date, .friends(isGiven: false), .memo, .pin]
+    var sections: [Section] = [
+      .title,
+      .category,
+      .photos,
+      .date,
+      .friends(isGiven: false),
+      .memo,
+      .pin
+    ]
     var items: [[Item]] = []
   }
-
+  
   // MARK: - Initializer
 
   init(_ viewType: GiftManagementViewController.ViewType) {
@@ -70,17 +88,30 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     )
   }
 
-  init(_ viewType: GiftManagementViewController.ViewType, with gift: Gift) {
+  init(
+    _ viewType: GiftManagementViewController.ViewType,
+    with gift: Gift
+  ) {
     self.initialState = State(
       viewType: viewType,
       gift: gift
     )
   }
-
+  
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .viewDidLoad:
+      var imageList: [UIImage?] = []
+      self.currentState.gift.photos.forEach { photo in
+        guard let url = URL(string: photo.remote) else { return }
+        var image: UIImage?
+        ImageDownloaderManager.downloadImage(from: url) { image = $0 }
+        imageList.append(image)
+      }
+      return .just(.updateImageList(imageList))
+      
     case .cancelButtonDidTap:
       self.steps.accept(AppStep.giftManagementIsCompleteWithNoChanges)
       return .empty()
@@ -119,19 +150,21 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     case .titleDidUpdate(let title):
       return .just(.updateTitle(title))
-
+      
     case .categoryDidUpdate(let category):
       return .just(.updateCategory(category))
-
-    case .photoDidSelected(let item):
-      if
-        case Item.photo(let image) = item,
-        image == nil {
-        // TODO: Picker
-//        self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
+      
+    case let .photoDidSelected(item):
+      if case Item.photo(let image) = item, image == nil {
+        let pickerManager = PHPickerManager()
+        self.pickerManager = pickerManager
+        let selectionLimit = 5 - self.currentState.imageList.count
+        if selectionLimit > 0 {
+          self.steps.accept(AppStep.imagePickerIsRequired(pickerManager, selectionLimit: selectionLimit))
+        }
       }
       return .empty()
-
+      
     case .friendsSelectorButtonDidTap:
       self.steps.accept(AppStep.friendSelectorIsRequired(self.currentState.gift.relatedFriends))
       return .empty()
@@ -147,21 +180,21 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
     case .friendsDidAdd(let friends):
       return .just(.updateFriends(friends))
+      
+    case .photoAdded(let image):
+      self.pickerManager = nil
+      return .just(.updateImageList([image]))
+      
+    case .removeButtonTapped(let index):
+      var imageList = self.currentState.imageList
+      _ = imageList.remove(at: index - 1)
+      return .just(.updateImageList(imageList))
 
     case .doNothing:
       return .empty()
     }
   }
   
-  // TODO: Picker
-//  func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-//    let updatePickedContents = self.pickerManager.pickedContents
-//      .flatMap { images -> Observable<Mutation> in
-//        return .just(.updatePhotos(images))
-//      }
-//    return .merge(mutation, updatePickedContents)
-//  }
-
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
     
@@ -179,9 +212,6 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case .updateCategory(let category):
       newState.gift.category = category
       
-    case .updatePhotos(let photos):
-      newState.gift.photos = photos
-
     case .updateDate(let date):
       newState.gift.date = date
 
@@ -190,9 +220,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
     case .updateFriends(let friends):
       newState.gift.relatedFriends = friends
-
+      
     case .updateIsPinned(let isPinned):
       newState.gift.isPinned = isPinned
+      
+    case .updateImageList(let imageList):
+      newState.imageList.append(contentsOf: imageList)
     }
 
     return newState
@@ -202,8 +235,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
       
-      var photoItems: [Item] = state.gift.photos.map { .photo($0) }
-      photoItems.insert(.photo(nil), at: .zero)
+      let photoItems: [Item] = [.photo(nil)] + state.imageList.map { .photo($0) }
       newState.items = [
         [.title],
         [.category],
@@ -214,8 +246,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         [.pin]
       ]
       
-      if !state.gift.name.isEmpty &&
-         !(state.gift.date == nil) {
+      if !state.gift.name.isEmpty,
+         !(state.gift.date == nil),
+         !state.imageList.isEmpty {
         newState.isEnabledDoneButton = true
       } else {
         newState.isEnabledDoneButton = false
@@ -226,7 +259,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   }
 }
 
-// MARK: - Privates
+// MARK: - Network
 
 private extension GiftManagementViewReactor {
   func requestPostGift(_ gift: Gift) -> Single<Gift> {
@@ -238,8 +271,8 @@ private extension GiftManagementViewReactor {
         .asSingle()
         .subscribe(with: self, onSuccess: { _, response in
           do {
-            let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(dto: responseDTO.data)))
+            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
+            single(.success(Gift(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }
@@ -260,8 +293,8 @@ private extension GiftManagementViewReactor {
         .asSingle()
         .subscribe(with: self, onSuccess: { _, response in
           do {
-            let responseDTO: ResponseDTO<GiftResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(dto: responseDTO.data)))
+            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
+            single(.success(Gift(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))
           }

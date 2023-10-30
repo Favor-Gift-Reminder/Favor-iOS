@@ -18,16 +18,16 @@ public struct Gift: Storable, Receivable {
   public let identifier: Int
   public var name: String
   public var date: Date?
-  public var photos: [UIImage]
+  public var photos: [Photo]
   public var memo: String?
   public var category: FavorCategory
   public var emotion: FavorEmotion?
   public var isPinned: Bool
   public var relatedFriends: [Friend]
   public var isGiven: Bool
-
+  
   // MARK: - Storable
-
+  
   public init(realmObject: GiftObject) {
     @ThreadSafe var rlmObjectRef = realmObject
     guard let realmObject = rlmObjectRef else { fatalError() }
@@ -44,7 +44,7 @@ public struct Gift: Storable, Receivable {
     self.relatedFriends = realmObject.friendList.compactMap(Friend.init(realmObject:))
     self.isGiven = realmObject.isGiven
   }
-
+  
   public func realmObject() -> GiftObject {
     GiftObject(
       giftNo: self.identifier,
@@ -58,20 +58,32 @@ public struct Gift: Storable, Receivable {
       isGiven: self.isGiven
     )
   }
-
+  
   // MARK: - Receivable
 
+  public init(singleDTO: GiftSingleResponseDTO) {
+    self.identifier = singleDTO.giftNo
+    self.name = singleDTO.giftName
+    self.date = singleDTO.giftDate
+    self.photos = []
+    self.memo = singleDTO.giftMemo
+    self.category = singleDTO.giftCategory
+    self.emotion = singleDTO.emotion
+    self.isPinned = singleDTO.isPinned
+    self.relatedFriends = singleDTO.friendList.compactMap(Friend.init(friendResponseDTO:)) 
+    self.isGiven = singleDTO.isGiven
+  }
+  
   public init(dto: GiftResponseDTO) {
     self.identifier = dto.giftNo
     self.name = dto.giftName
     self.date = dto.giftDate
     self.photos = []
-    self.memo = dto.giftMemo
-    self.category = dto.giftCategory
-    self.emotion = dto.emotion
-    self.isPinned = dto.isPinned
-    self.relatedFriends = dto.friendList.compactMap(Friend.init(friendResponseDTO:)) 
-    self.isGiven = dto.isGiven
+    self.category = .etc
+    self.emotion = .boring
+    self.isPinned = false
+    self.relatedFriends = []
+    self.isGiven = false
   }
   
   public func requestDTO() -> GiftRequestDTO {

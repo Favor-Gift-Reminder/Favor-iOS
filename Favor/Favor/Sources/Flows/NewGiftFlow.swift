@@ -37,7 +37,7 @@ final class NewGiftFlow: Flow {
       
     case .friendManagementIsComplete(let friendName):
       return self.popToFriendSelection(friendName: friendName)
-      
+       
     case .friendSelectorIsComplete(let friends):
       return self.popFromFriendSelection(friends: friends)
       
@@ -46,6 +46,9 @@ final class NewGiftFlow: Flow {
       
     case .newGiftIsComplete(let gift):
       return self.popToTabBar(with: gift)
+      
+    case let .imagePickerIsRequired(pickerManager, selectionLimit):
+      return self.presentToImagePickerVC(pickerManager: pickerManager, selectionLimit: selectionLimit)
       
     default:
       return .none
@@ -120,6 +123,12 @@ private extension NewGiftFlow {
       let giftManagementVC = self.rootViewController.topViewController as? GiftManagementViewController
     else { return .none }
     giftManagementVC.friendsDidAdd(friends)
+    return .none
+  }
+  
+  @MainActor
+  func presentToImagePickerVC(pickerManager: PHPickerManager, selectionLimit: Int) -> FlowContributors {
+    pickerManager.present(selectionLimit: selectionLimit)
     return .none
   }
 }

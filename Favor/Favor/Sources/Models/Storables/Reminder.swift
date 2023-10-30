@@ -52,14 +52,14 @@ public struct Reminder: Storable, Receivable {
 
   // MARK: - Receivable
 
-  public init(dto: ReminderResponseDTO) {
-    self.identifier = dto.reminderNo
-    self.name = dto.reminderTitle
-    self.date = dto.reminderDate
-    self.memo = dto.memo
-    self.shouldNotify = dto.isAlarmSet
-    self.notifyDate = dto.alarmTime
-    self.relatedFriend = dto.friendNo
+  public init(singleDTO: ReminderResponseDTO) {
+    self.identifier = singleDTO.reminderNo
+    self.name = singleDTO.reminderTitle
+    self.date = singleDTO.reminderDate
+    self.memo = singleDTO.memo
+    self.shouldNotify = singleDTO.isAlarmSet
+    self.notifyDate = singleDTO.alarmTime
+    self.relatedFriend = singleDTO.friendNo
   }
   
   // MARK: - Mock

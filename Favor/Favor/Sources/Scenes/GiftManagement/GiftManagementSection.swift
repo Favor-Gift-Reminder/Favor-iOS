@@ -50,29 +50,6 @@ extension GiftManagementSection {
   }
 }
 
-extension GiftManagementSection: Hashable {
-  public static func == (lhs: Self, rhs: Self) -> Bool {
-    switch (lhs, rhs) {
-    case (.title, .title):
-      return true
-    case (.category, .category):
-      return true
-    case (.photos, .photos):
-      return true
-    case let (.friends(lhsIsGiven), .friends(rhsIsGiven)):
-      return lhsIsGiven == rhsIsGiven
-    case (.date, .date):
-      return true
-    case (.memo, .memo):
-      return true
-    case (.pin, .pin):
-      return true
-    default:
-      return false
-    }
-  }
-}
-
 // MARK: - Composable
 
 extension GiftManagementSection: Composable {
@@ -104,7 +81,7 @@ extension GiftManagementSection: Composable {
     case .photos:
       return .flow(
         height: .absolute(100),
-        numberOfItems: 5,
+        numberOfItems: 6,
         spacing: .fixed(6)
       )
     case .friends:
