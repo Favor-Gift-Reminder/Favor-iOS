@@ -35,8 +35,7 @@ public struct Gift: Storable, Receivable {
     self.identifier = realmObject.giftNo
     self.name = realmObject.name
     self.date = realmObject.date
-//    self.photos = realmObject.photoList.toArray()
-    self.photos = []
+    self.photos = realmObject.photoList.map { Photo(realmObject: $0) }
     self.memo = realmObject.memo
     self.category = realmObject.category
     self.emotion = realmObject.emotion
@@ -51,6 +50,7 @@ public struct Gift: Storable, Receivable {
       name: self.name,
       date: self.date,
       memo: self.memo,
+      photoList: self.photos.map { $0.realmObject() },
       category: self.category,
       emotion: self.emotion,
       isPinned: self.isPinned,
@@ -60,12 +60,12 @@ public struct Gift: Storable, Receivable {
   }
   
   // MARK: - Receivable
-
+  
   public init(singleDTO: GiftSingleResponseDTO) {
     self.identifier = singleDTO.giftNo
     self.name = singleDTO.giftName
     self.date = singleDTO.giftDate
-    self.photos = []
+    self.photos = singleDTO.giftPhotoList.map { Photo(singleDTO: $0) }
     self.memo = singleDTO.giftMemo
     self.category = singleDTO.giftCategory
     self.emotion = singleDTO.emotion
@@ -101,7 +101,7 @@ public struct Gift: Storable, Receivable {
       tempFriendList: tempFriendList
     )
   }
-
+  
   public func updateRequestDTO() -> GiftUpdateRequestDTO {
     GiftUpdateRequestDTO(
       giftName: self.name,

@@ -162,7 +162,7 @@ private extension AuthSetProfileViewReactor {
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
-            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
+            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
             single(.success(User(singleDTO: responseDTO.data)))
           } catch {
             single(.failure(error))

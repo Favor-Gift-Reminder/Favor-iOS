@@ -70,7 +70,7 @@ public struct User: Storable, Receivable {
   
   // MARK: - Receivable
   
-  public init(singleDTO: UserResponseDTO) {
+  public init(singleDTO: UserSingleResponseDTO) {
     self.identifier = singleDTO.userNo
     self.email = singleDTO.email
     self.searchID = singleDTO.userID

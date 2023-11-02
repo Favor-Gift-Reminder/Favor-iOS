@@ -18,12 +18,8 @@ extension GiftPhotoAPI {
         encoding: URLEncoding.queryString
       )
       
-    case let .postGiftPhotos(file, giftNo):
-      return .requestCompositeData(
-        bodyData: file,
-        urlParameters: ["giftNo": giftNo]
-      )
-      
+    case let .postGiftPhotos(multiPart, giftNo):
+      return .uploadCompositeMultipart([multiPart], urlParameters: ["giftNo": giftNo])
       
     case let .deleteGiftPhotos(fileUrl, giftNo):
       return .requestParameters(

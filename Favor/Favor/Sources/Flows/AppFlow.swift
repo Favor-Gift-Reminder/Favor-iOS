@@ -72,12 +72,12 @@ private extension AppFlow {
     let splashVC = SplashViewController()
     let splashReactor = SplashViewReactor()
     splashVC.reactor = splashReactor
-
+    
     DispatchQueue.main.async {
       splashVC.modalPresentationStyle = .overFullScreen
       self.rootViewController.present(splashVC, animated: false)
     }
-
+    
     let splashContributor: [FlowContributor] = [
       .contribute(
         withNextPresentable: splashVC,

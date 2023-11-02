@@ -26,6 +26,7 @@ final class HomeViewReactor: Reactor, Stepper {
   private let workbench = RealmWorkbench()
   private let reminderFetcher = Fetcher<Reminder>()
   private let giftFetcher = Fetcher<Gift>()
+  private let userFetcher = Fetcher<User>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -82,6 +83,7 @@ final class HomeViewReactor: Reactor, Stepper {
     )
     self.setupReminderFetcher()
     self.setupGiftFetcher()
+    self.setupUserFetcher()
   }
   
   // MARK: - Functions
@@ -100,15 +102,20 @@ final class HomeViewReactor: Reactor, Stepper {
           resultSelector: { reminderResult, giftResult -> ([Reminder], [Gift]) in
             return (reminderResult.results, giftResult.results)
           })
-        return fetchedDatas.flatMap { fetchedData -> Observable<Mutation> in
-          let reminders = fetchedData.reminders
-          let gifts = fetchedData.gifts
-          return .concat([
-            .just(.updateReminders(reminders)),
-            .just(.updateGifts(gifts)),
-            .just(.updateTimelineLoading(false))
-          ])
-        }
+        return self.userFetcher.fetch()
+          .flatMap { fetchData in
+            UserInfoStorage.userNo = fetchData.results.first!.identifier
+            return fetchedDatas
+          }
+          .flatMap { fetchData -> Observable<Mutation> in
+            let reminders = fetchData.reminders
+            let gifts = fetchData.gifts
+            return .concat([
+              .just(.updateReminders(reminders)),
+              .just(.updateGifts(gifts)),
+              .just(.updateTimelineLoading(false))
+            ])
+          }
       }
       
     case .searchButtonDidTap:
@@ -300,6 +307,32 @@ private extension HomeViewReactor {
       try await self.workbench.write { transaction in
         deleteGifts.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteGifts.map { $0.realmObject() })
+      }
+    }
+  }
+  
+  func setupUserFetcher() {
+    // onRemote
+    self.userFetcher.onRemote = {
+      let networking = UserNetworking()
+      let user = networking.request(.getUser)
+        .flatMap { response -> Observable<[User]> in
+          let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
+          UserInfoStorage.userNo = responseDTO.data.userNo
+          return .just([User(singleDTO: responseDTO.data)])
+        }
+        .asSingle()
+      return user
+    }
+    // onLocal
+    self.userFetcher.onLocal = {
+      return await self.workbench.values(UserObject.self)
+        .map { User(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.userFetcher.onLocalUpdate = { _, remoteUser in
+      try await self.workbench.write { transaction in
+        transaction.update(remoteUser.map { $0.realmObject() })
       }
     }
   }

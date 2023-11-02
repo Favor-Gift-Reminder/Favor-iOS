@@ -59,7 +59,7 @@ public class BaseAnniversaryListViewReactor {
         .flatMap { user -> Observable<[User]> in
           let userData = user.data
           do {
-            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(userData)
+            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(userData)
             let user = User(singleDTO: responseDTO.data)
             return .just([user])
           } catch {

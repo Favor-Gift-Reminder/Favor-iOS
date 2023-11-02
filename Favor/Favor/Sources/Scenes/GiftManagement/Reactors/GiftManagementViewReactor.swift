@@ -18,6 +18,13 @@ import RxFlow
 final class GiftManagementViewReactor: Reactor, Stepper {
   typealias Section = GiftManagementSection
   typealias Item = GiftManagementSectionItem
+  
+  struct GiftManagementPhotoModel {
+    /// 해당 속성이 있으면 Url로 가져온 사진임을 의미합니다.
+    let url: String?
+    let isNew: Bool
+    let image: UIImage?
+  }
 
   // MARK: - Properties
   
@@ -43,9 +50,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     /// 회원/비회원 친구 추가
     case friendsDidAdd([Friend])
     /// 사진이 갤러리에서 추가 되었음
-    case photoAdded(UIImage?)
+    case photoDidAdd(UIImage?)
     /// 선택된 사진 삭제
-    case removeButtonTapped(UIImage?)
+    case removeButtonDidTap(UIImage?)
+    /// 동작 없음
     case doNothing
   }
   
@@ -57,7 +65,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case updateMemo(String?)
     case updateFriends([Friend])
     case updateIsPinned(Bool)
-    case updateImageList([UIImage?])
+    case updateImageList([GiftManagementPhotoModel])
+    case updateRemoveTargetUrls(String)
   }
   
   struct State {
@@ -65,7 +74,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var giftType: GiftManagementViewController.GiftType = .received
     var isEnabledDoneButton: Bool = false
     var gift: Gift
-    var imageList: [UIImage?] = []
+    /// 갤러리에서 추가된 이미지들입니다.
+    var imageList: [GiftManagementPhotoModel] = []
+    /// 기존에 저장되어 있는 있는 사진을 삭제할 URL 모음입니다.
+    var removeTargetUrls: [String] = []
     
     var sections: [Section] = [
       .title,
@@ -103,12 +115,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      var imageList: [UIImage?] = []
+      var imageList: [GiftManagementPhotoModel] = []
       self.currentState.gift.photos.forEach { photo in
         guard let url = URL(string: photo.remote) else { return }
         var image: UIImage?
         ImageDownloaderManager.downloadImage(from: url) { image = $0 }
-        imageList.append(image)
+        imageList.append(.init(url: photo.remote, isNew: false, image: image))
       }
       return .just(.updateImageList(imageList))
       
@@ -121,8 +133,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       case .new:
         return self.requestPostGift(self.currentState.gift)
           .asObservable()
-          .flatMap { gift -> Observable<Mutation> in
-            self.steps.accept(AppStep.newGiftIsComplete(gift))
+          .flatMap { _ -> Observable<Mutation> in
+            self.steps.accept(AppStep.newGiftIsComplete)
             return .empty()
           }
           .catch { error in
@@ -172,7 +184,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     case .dateDidUpdate(let date):
       return .just(.updateDate(date))
-
+      
     case .memoDidUpdate(let memo):
       return .just(.updateMemo(memo))
 
@@ -182,18 +194,25 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case .friendsDidAdd(let friends):
       return .just(.updateFriends(friends))
       
-    case .photoAdded(let image):
+    case .photoDidAdd(let image):
       self.pickerManager = nil
       var imageList = self.currentState.imageList
-      imageList.append(image)
+      imageList.append(.init(url: nil, isNew: true, image: image))
       return .just(.updateImageList(imageList))
       
-    case .removeButtonTapped(let image):
+    case .removeButtonDidTap(let image):
       var imageList = self.currentState.imageList
-      guard let removeIndex = imageList.firstIndex(of: image) else { return .empty() }
-      imageList.remove(at: removeIndex)
-      return .just(.updateImageList(imageList))
-
+      guard let removeIndex = imageList.firstIndex(where: { $0.image === image }) else { return .empty() }
+      let photoModel = imageList.remove(at: removeIndex)
+      if let url = photoModel.url {
+        return .concat([
+          .just(.updateRemoveTargetUrls(url)),
+          .just(.updateImageList(imageList))
+        ])
+      } else {
+        return .just(.updateImageList(imageList))
+      }
+      
     case .doNothing:
       return .empty()
     }
@@ -230,6 +249,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
     case .updateImageList(let imageList):
       newState.imageList = imageList
+      
+    case .updateRemoveTargetUrls(let urlString):
+      newState.removeTargetUrls.append(urlString)
     }
 
     return newState
@@ -239,15 +261,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
       
-      let photoItems: [Item] = [.photo(nil)] + state.imageList.map { .photo($0) }
+      let photoItems: [Item] = [.photo(nil)] + state.imageList.map { .photo($0.image) }
+      
       newState.items = [
-        [.title],
-        [.category],
-        photoItems,
-        [.date],
-        [.friends(state.gift.relatedFriends)],
-        [.memo],
-        [.pin]
+        [.title], [.category], photoItems, [.date], [.friends(state.gift.relatedFriends)], [.memo], [.pin]
       ]
       
       if !state.gift.name.isEmpty,
@@ -266,22 +283,40 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 // MARK: - Network
 
 private extension GiftManagementViewReactor {
-  func requestPostGift(_ gift: Gift) -> Single<Gift> {
-    return Single<Gift>.create { single in
+  func requestPostGift(_ gift: Gift) -> Single<Void> {
+    return Single<Void>.create { single in
       let networking = GiftNetworking()
       let requestDTO = gift.requestDTO()
       
       let disposable = networking.request(.postGift(requestDTO))
         .asSingle()
-        .subscribe(with: self, onSuccess: { _, response in
-          do {
-            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+        .subscribe(with: self, onSuccess: { owner, response in
+          Task {
+            do {
+              let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
+              // 선물 사진 등록
+              let networking = GiftPhotoNetworking()
+              let giftNo = responseDTO.data.giftNo
+              let imageList = self.currentState.imageList
+              for (index, image) in imageList.enumerated() {
+                let multiPart = APIManager.createMultiPartForm(image.image)
+                do {
+                  let response = try await networking
+                    .request(.postGiftPhotos(file: multiPart, giftNo: responseDTO.data.giftNo))
+                    .toAsync()
+                    .filterSuccessfulStatusCodes()
+                  if (index == imageList.count - 1) {
+                    single(.success(()))
+                  }
+                } catch {
+                  single(.failure(error))
+                }
+              }
+            } catch {
+              single(.failure(error))
+            }
           }
         })
-
       return Disposables.create {
         disposable.dispose()
       }
@@ -303,10 +338,30 @@ private extension GiftManagementViewReactor {
             single(.failure(error))
           }
         })
-
+      
       return Disposables.create {
         disposable.dispose()
       }
     }
+  }
+  
+  /// 기존 선물의 사진을 네트워크를 통해 삭제를 요청합니다.
+  ///
+  /// - Returns:
+  ///   - 네트워크 성공 여부
+  func requestDeleteGiftPhoto(_ urls: [String], giftNo: Int) async -> Bool {
+    let networking = GiftPhotoNetworking()
+    for url in urls {
+      guard let response = try? await networking
+        .request(.deleteGiftPhotos(fileUrl: url, giftNo: giftNo))
+        .toAsync()
+      else { return false }
+      do {
+        _ = try response.filterSuccessfulStatusCodes()
+      } catch {
+        return false
+      }
+    }
+    return true
   }
 }

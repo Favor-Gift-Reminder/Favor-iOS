@@ -74,6 +74,7 @@ public class GiftObject: Object {
     name: String,
     date: Date? = nil,
     memo: String? = nil,
+    photoList: [PhotoObject] = [],
     category: FavorCategory,
     emotion: FavorEmotion? = nil,
     isPinned: Bool = false,
@@ -85,6 +86,9 @@ public class GiftObject: Object {
     self.name = name
     self.date = date
     self.memo = memo
+    let newPhotoList = List<PhotoObject>()
+    newPhotoList.append(objectsIn: photoList)
+    self.photoList = newPhotoList
     self.privateCategory = category.rawValue
     self.privateEmotion = emotion?.rawValue
     self.isPinned = isPinned

@@ -430,7 +430,7 @@ extension GiftManagementViewController: GiftManagementCategoryViewCellDelegate {
 extension GiftManagementViewController: GiftManagementPhotoCellDelegate {
   func removeButtonDidTap(from image: UIImage?) {
     guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.removeButtonTapped(image))
+    reactor.action.onNext(.removeButtonDidTap(image))
   }
 }
 
@@ -474,6 +474,6 @@ extension GiftManagementViewController: GiftManagementPinCellDelegate {
 
 extension GiftManagementViewController: PHPickerManagerDelegate {
   func pickerManager(didFinishPicking image: UIImage?) {
-    self.reactor?.action.onNext(.photoAdded(image))
+    self.reactor?.action.onNext(.photoDidAdd(image))
   }
 }

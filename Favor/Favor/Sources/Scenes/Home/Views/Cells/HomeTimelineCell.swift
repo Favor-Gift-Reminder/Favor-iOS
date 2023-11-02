@@ -25,7 +25,7 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .scaleAspectFill
+    imageView.contentMode = .scaleToFill
     imageView.backgroundColor = .favorColor(.background)
     return imageView
   }()
@@ -53,10 +53,11 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   public func bind(with gift: Gift) {
-    // Image
-    // TODO: 테스트 코드 삭제
-    let url = URL(string: "https://picsum.photos/1200/1200")!
-    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(0)))
+    print("셀에 들어가는 Gift입니다. \(gift)")
+    guard let firstPhotoURL = gift.photos.first?.remote else { return }
+    guard let url = URL(string: firstPhotoURL) else { return }
+    self.imageView.kf.setImage(with: url)
+//    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(0)))
     self.pinnedIconView.isHidden = !gift.isPinned
   }
 }

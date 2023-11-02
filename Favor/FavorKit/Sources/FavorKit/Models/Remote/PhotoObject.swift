@@ -8,9 +8,16 @@
 import RealmSwift
 
 public class PhotoObject: Object {
-  @Persisted(primaryKey: true) var photoNo: Int
+  @Persisted(primaryKey: true) public var photoNo: Int
   /// Remote URL
-  @Persisted var remote: String
+  @Persisted public var remote: String
   /// Cache Key
-  @Persisted var local: String
+  @Persisted public var local: String
+
+  public convenience init(photoNo: Int, remote: String, local: String) {
+    self.init()
+    self.photoNo = photoNo
+    self.remote = remote
+    self.local = local
+  }
 }

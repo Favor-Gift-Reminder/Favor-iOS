@@ -8,8 +8,17 @@
 import UIKit
 
 import class RxSwift.DisposeBag
+import SnapKit
 
 open class BaseViewController: UIViewController, Toastable {
+  
+  // MARK: - Properties
+  
+  private let indicatorView: UIActivityIndicatorView = {
+    let indicatorView = UIActivityIndicatorView()
+    indicatorView.color = .darkGray
+    return indicatorView
+  }()
 
   /// A dispose bag. 각 ViewController에 종속적이다.
   public final var disposeBag = DisposeBag()
@@ -26,6 +35,8 @@ open class BaseViewController: UIViewController, Toastable {
     super.viewDidDisappear(animated)
     ToastManager.shared.resetToast()
   }
+  
+  // MARK: - Setup
 
   /// UI 프로퍼티를 view에 할당합니다.
   ///
@@ -69,6 +80,31 @@ open class BaseViewController: UIViewController, Toastable {
   }
 
   open func bind() { }
+  
+  // MARK: - Functions
+  
+  /// `indicator`의 상태를 변경합니다.
+  /// 최상단 레이어의 정중앙에서 재생됩니다.
+  ///
+  /// - Parameters:
+  ///  - isLoading: 현재 로딩의 상태입니다.
+  public func isLoadingWillChange(_ isLoading: Bool) {
+    DispatchQueue.main.async {
+      if isLoading {
+        // 로딩 중
+        self.indicatorView.startAnimating()
+        self.view.addSubview(self.indicatorView)
+        
+        self.indicatorView.snp.makeConstraints { make in
+          make.center.equalToSuperview()
+        }
+      } else {
+        // 로딩 중이 아님
+        self.indicatorView.stopAnimating()
+        self.indicatorView.removeFromSuperview()
+      }      
+    }
+  }
 
   // MARK: - Toast
 

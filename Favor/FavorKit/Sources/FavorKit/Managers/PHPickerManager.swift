@@ -48,7 +48,7 @@ public final class PHPickerManager {
     picker.modalPresentationStyle = .overFullScreen
     picker.delegate = self
     self.delegate = UIApplication.shared.topViewController() as? PHPickerManagerDelegate
-    UIApplication.shared.topViewController().present(picker, animated: true) {
+    UIApplication.shared.topViewController()?.present(picker, animated: true) {
       if let completion {
         completion()
       }
@@ -101,6 +101,6 @@ extension PHPickerManager: PHPickerViewControllerDelegate {
     }
     self.selections = newSelections
     self.selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
-    UIApplication.shared.topViewController().dismiss(animated: true)
+    UIApplication.shared.topViewController()?.dismiss(animated: true)
   }
 }

@@ -368,7 +368,7 @@ private extension SearchViewReactor {
       // FIXME: DecodeError 처리 필요..! ResponseMessage가 "USER_NOT_FOUND"일 때
         .subscribe(onSuccess: { response in
           do {
-            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(response.data)
+            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
             Task {
               let friendObjects = await self.workbench.values(FriendObject.self)
               single(.success((

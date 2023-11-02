@@ -15,6 +15,7 @@ public enum UserDefaultsKey: String {
   // MARK: - User Info
 
   case userNo
+  case user
   case isLocalAuthEnabled
   case isBiometricAuthEnabled
   case isReminderNotificationEnabled

@@ -19,7 +19,7 @@ public enum GiftPhotoAPI {
   /// - Parameters:
   ///   - file: 사진 `formData`형식의 파일
   ///   - giftNo: 선물 식별자
-  case postGiftPhotos(file: Data, giftNo: Int)
+  case postGiftPhotos(file: MultipartFormData, giftNo: Int)
   
   /// 선물 사진 삭제
   /// - Parameters:

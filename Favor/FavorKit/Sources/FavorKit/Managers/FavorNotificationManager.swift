@@ -27,6 +27,6 @@ final public class FavorNotificationManager {
   public func showFavorPopup(_ message: String) {
     let favorPopup = FavorPopup(message)
     favorPopup.modalPresentationStyle = .overFullScreen
-    UIApplication.shared.topViewController().present(favorPopup, animated: false)
+    UIApplication.shared.topViewController()?.present(favorPopup, animated: false)
   }
 }

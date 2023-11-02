@@ -41,7 +41,7 @@ public final class SplashViewReactor: Reactor, Stepper {
   }
 
   // MARK: - Functions
-
+  
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
@@ -57,9 +57,11 @@ private extension SplashViewReactor {
     switch FTUXStorage.authState {
     case .email: // Email 로그인
       // 자동 로그인
-      return self.requestSignIn()
-        .asObservable()
-        .flatMap { token -> Observable<Mutation> in
+      return Observable.zip(
+        self.requestSignIn().asObservable(),
+        self.requestUser().asObservable()
+      )
+        .flatMap { token, userNo -> Observable<Mutation> in
           os_log(.debug, "🔐 Signed in via 📨 Email: Navigating to dashboardflow.")
           // Token 저장
           if let tokenData = token.data(using: .utf8) {
@@ -68,6 +70,7 @@ private extension SplashViewReactor {
               account: KeychainManager.Accounts.accessToken.rawValue
             )
           }
+          UserInfoStorage.userNo = userNo
           self.steps.accept(AppStep.splashIsComplete)
           return .empty()
         }
@@ -90,7 +93,7 @@ private extension SplashViewReactor {
       return .empty()
     }
   }
-
+  
   func requestSignIn() -> Single<String> {
     return Single<String>.create { single in
       let networking = UserNetworking()
@@ -100,9 +103,8 @@ private extension SplashViewReactor {
       else { return Disposables.create() }
       let email = String(decoding: emailData, as: UTF8.self)
       let password = String(decoding: passwordData, as: UTF8.self)
-
+      
       let disposable = networking.request(.postSignIn(email: email, password: password))
-        .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
           do {
@@ -115,6 +117,25 @@ private extension SplashViewReactor {
           single(.failure(error))
         })
 
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+  
+  func requestUser() -> Single<Int> {
+    return Single<Int>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.getUser).asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.userNo))
+          } catch {
+            single(.failure(error))
+          }
+        })
+      
       return Disposables.create {
         disposable.dispose()
       }

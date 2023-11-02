@@ -7,13 +7,16 @@
 
 import UIKit
 
+import RxSwift
+import RxCocoa
+
 extension UIApplication {
   /// 최상단 ViewController를 참조할 수 있게 도와주는 메서드입니다.
-  func topViewController(
+  public func topViewController(
     _ base: UIViewController? = (
       UIApplication.shared.connectedScenes.first as? UIWindowScene
     )?.windows.first?.rootViewController
-  ) -> UIViewController {
+  ) -> UIViewController? {
     if let nav = base as? UINavigationController {
       return topViewController(nav.visibleViewController)
     }
@@ -28,6 +31,17 @@ extension UIApplication {
       return topViewController(presented)
     }
     
-    return base!
+    return base
+  }
+  
+  public func topViewControllerAsObservable() -> Observable<UIViewController?> {
+    return Observable.create { observer in
+      DispatchQueue.main.async {
+        let topViewController = UIApplication.shared.topViewController()
+        observer.onNext(topViewController)
+        observer.onCompleted()
+      }
+      return Disposables.create()
+    }
   }
 }

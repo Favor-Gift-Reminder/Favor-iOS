@@ -218,7 +218,7 @@ private extension MyPageViewReactor {
       let user = networking.request(.getUser)
         .flatMap { user -> Observable<[User]> in
           do {
-            let responseDTO: ResponseDTO<UserResponseDTO> = try APIManager.decode(user.data)
+            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(user.data)
             return .just([User(singleDTO: responseDTO.data)])
           } catch {
             print(error)

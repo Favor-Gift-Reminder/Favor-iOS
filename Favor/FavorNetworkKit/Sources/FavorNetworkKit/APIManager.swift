@@ -5,10 +5,11 @@
 //  Created by 이창준 on 2023/02/28.
 //
 
-import Foundation
+import UIKit
 import OSLog
 
 import FavorKit
+import Moya
 
 /// > Usage:
 ///   ``` swift
@@ -98,4 +99,17 @@ extension APIManager {
     }
     return ""
   }
+  
+  public static func createMultiPartForm(_ image: UIImage?) -> MultipartFormData {
+    guard let imageData = image?.jpegData(compressionQuality: 0.9)
+    else { fatalError("❌ 사진을 데이터로 변환을 실패했습니다!") }
+    let formData = MultipartFormData(
+      provider: .data(imageData),
+      name: "file",
+      fileName: "\(UserInfoStorage.userNo).jpg",
+      mimeType: "image.jpg"
+    )
+    return formData
+  }
 }
+

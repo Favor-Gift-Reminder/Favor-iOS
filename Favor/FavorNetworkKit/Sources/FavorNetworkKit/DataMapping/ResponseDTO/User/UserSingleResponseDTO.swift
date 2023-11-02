@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct UserResponseDTO: Decodable {
+public struct UserSingleResponseDTO: Decodable {
   public let anniversaryList: [AnniversaryResponseDTO]
   public let email: String
   public let favorList: [String] // [Enum]

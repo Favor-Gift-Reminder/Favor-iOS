@@ -44,8 +44,8 @@ final class NewGiftFlow: Flow {
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToTabBar()
       
-    case .newGiftIsComplete(let gift):
-      return self.popToTabBar(with: gift)
+    case .newGiftIsComplete:
+      return self.popToTabBar()
       
     case let .imagePickerIsRequired(pickerManager, selectionLimit):
       return self.presentToImagePickerVC(pickerManager: pickerManager, selectionLimit: selectionLimit)
