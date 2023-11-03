@@ -29,6 +29,9 @@ extension GiftAPI {
       
     case .patchPinGift:
       return .patch
+      
+    case .patchTempFriendList:
+      return .patch
     }
   }
 }

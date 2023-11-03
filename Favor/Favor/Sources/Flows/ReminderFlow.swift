@@ -146,7 +146,7 @@ private extension ReminderFlow {
   }
   
   func navigateToFriendSelector(_ friends: [Friend]) -> FlowContributors {
-    let friendSelectorVC = FriendSelectionViewController()
+    let friendSelectorVC = FriendSelectorViewController()
     let friendSelectorReactor = FriendSelectorViewReactor(.reminder, selectedFriends: friends)
     friendSelectorVC.reactor = friendSelectorReactor
     

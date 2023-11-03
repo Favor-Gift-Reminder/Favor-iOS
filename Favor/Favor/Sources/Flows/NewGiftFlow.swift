@@ -76,7 +76,7 @@ private extension NewGiftFlow {
   
   @MainActor
   func navigateToFriendSelection(friends: [Friend]) -> FlowContributors {
-    let viewController = FriendSelectionViewController()
+    let viewController = FriendSelectorViewController()
     let reactor = FriendSelectorViewReactor(.gift, selectedFriends: friends)
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
@@ -104,7 +104,7 @@ private extension NewGiftFlow {
     self.rootViewController.popViewController(animated: true)
     ToastManager.shared.showNewToast(FavorToastMessageView(.tempFriendAdded(friendName)))
     guard 
-      let friendSelectionVC = self.rootViewController.topViewController as? FriendSelectionViewController
+      let friendSelectionVC = self.rootViewController.topViewController as? FriendSelectorViewController
     else { return .none }
     friendSelectionVC.tempFriendAdded(friendName)
     return .none

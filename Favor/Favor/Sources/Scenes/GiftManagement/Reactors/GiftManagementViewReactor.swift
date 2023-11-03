@@ -77,20 +77,12 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var gift: Gift
     /// 최초의 핀 상태를 저장합니다. (네트워크 요청을 위한)
     var initialPinState: Bool = false
-    /// 갤러리에서 추가된 이미지들입니다.
+    /// 현재 보여지는 이미지들입니다.
     var imageList: [GiftManagementPhotoModel] = []
     /// 기존에 저장되어 있는 있는 사진을 삭제할 URL 모음입니다.
     var removeTargetUrls: [String] = []
     
-    var sections: [Section] = [
-      .title,
-      .category,
-      .photos,
-      .date,
-      .friends(isGiven: false),
-      .memo,
-      .pin
-    ]
+    var sections: [Section] = []
     var items: [[Item]] = []
   }
   
@@ -109,6 +101,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   ) {
     self.initialState = State(
       viewType: viewType,
+      giftType: gift.isGiven ? .given : .received,
       gift: gift,
       initialPinState: gift.isPinned
     )
@@ -233,6 +226,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         newState.sections[index] = newFriendsSection
       }
       newState.giftType = isGiven ? .given : .received
+      newState.gift.isGiven = isGiven
       
     case .updateTitle(let title):
       newState.gift.name = title ?? ""
@@ -268,6 +262,15 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
       let photoItems: [Item] = [.photo(nil)] + state.imageList.map { .photo($0.image) }
       
+      newState.sections = [
+        .title,
+        .category,
+        .photos,
+        .date,
+        .friends(isGiven: state.gift.isGiven),
+        .memo,
+        .pin
+      ]
       newState.items = [
         [.title], [.category], photoItems, [.date], [.friends(state.gift.relatedFriends)], [.memo], [.pin]
       ]
@@ -290,18 +293,14 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 private extension GiftManagementViewReactor {
   func loadImages(_ gift: Gift) -> Single<[GiftManagementPhotoModel]> {
     return Single<[GiftManagementPhotoModel]>.create { single in
-      var imageList: [GiftManagementPhotoModel] = []
-      for photo in gift.photos {
-        guard let url = URL(string: photo.remote) else { break }
-        ImageDownloader.default.downloadImage(with: url) { result in
-          switch result {
-          case .success(let image):
-            imageList.append(.init(url: photo.remote, isNew: false, image: image.image))
-            if imageList.count == gift.photos.count {
-              single(.success(imageList))
-            }
-          case .failure(let error):
-            single(.failure(error))
+      Task {
+        var imageList: [GiftManagementPhotoModel] = []
+        for photo in gift.photos {
+          guard let url = URL(string: photo.remote) else { break }
+          let image = try await ImageDownloadManager.downloadImage(with: url)
+          imageList.append(.init(url: photo.remote, isNew: false, image: image))
+          if imageList.count == gift.photos.count {
+            single(.success(imageList))
           }
         }
       }
@@ -313,76 +312,49 @@ private extension GiftManagementViewReactor {
 // MARK: - Network
 
 private extension GiftManagementViewReactor {
-  func requestPostGift(_ gift: Gift) -> Single<Void> {
-    return Single<Void>.create { single in
-      let networking = GiftNetworking()
-      let requestDTO = gift.requestDTO()
-      
-      let disposable = networking.request(.postGift(requestDTO))
-        .flatMap { response -> Observable<Int> in
-          guard
-            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try? APIManager.decode(response.data)
-          else { return .empty() }
-          let giftNo = responseDTO.data.giftNo
-          if self.currentState.gift.isPinned {
-            // 고정된 선물
-            return self.requestPatchPinGift(giftNo)
-          } else {
-            return Observable.just(giftNo)
-          }
+  func requestPostGift(_ gift: Gift) -> Observable<Void> {
+    let giftNetworking = GiftNetworking()
+    let requestDTO = gift.requestDTO()
+    let imageList = self.currentState.imageList
+    return giftNetworking.request(.postGift(requestDTO))
+      .map(ResponseDTO<GiftSingleResponseDTO>.self)
+      .map { $0.data.giftNo }
+      .flatMap { giftNo in
+        if gift.isPinned {
+          return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in giftNo }
+        } else {
+          return Observable<Int>.just(giftNo)
         }
-        .asSingle()
-        .subscribe(onSuccess: { giftNo in
-          Task {
-            let imageList = self.currentState.imageList
-            for (index, image) in imageList.enumerated() {
-              let multiPart = APIManager.createMultiPartForm(image.image)
-              let networking = GiftPhotoNetworking()
-              do {
-                _ = try await networking
-                  .request(.postGiftPhotos(file: multiPart, giftNo: giftNo))
-                  .toAsync()
-                  .filterSuccessfulStatusCodes()
-                if index == imageList.count - 1 {
-                  single(.success(()))
-                }
-              } catch {
-                single(.failure(error))
-              }
-            }
-          }
-        })
-      return Disposables.create {
-        disposable.dispose()
       }
-    }
+      .flatMap { self.requestPostGiftPhoto(imageList, giftNo: $0) }
   }
   
-  func requestPatchGift(_ gift: Gift) -> Single<Gift> {
-    return Single<Gift>.create { single in
-      let networking = GiftNetworking()
-      let requestDTO = gift.updateRequestDTO()
-      
-      // 1. 선물 수정
-      // 2. 임시 친구 목록 수정
-      // 3. 선물 사진 수정
-      // 4. 핀 수정
-      
-      let disposable = networking.request(.patchGift(requestDTO, giftNo: gift.identifier))
-        .asSingle()
-        .subscribe(with: self, onSuccess: { _, response in
-          do {
-            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
-          }
-        })
-      
-      return Disposables.create {
-        disposable.dispose()
+  func requestPatchGift(_ gift: Gift) -> Observable<Gift> {
+    let giftNetworking = GiftNetworking()
+    let tempFriendList = gift.relatedFriends.filter { $0.identifier < 0 }.map { $0.friendName }
+    let requestDTO = gift.updateRequestDTO()
+    let giftNo = gift.identifier
+    let removeTargetUrls = self.currentState.removeTargetUrls
+    let imageList = self.currentState.imageList
+    let initialPinState = self.currentState.initialPinState
+    
+    return Observable.concat(
+      self.requestDeleteGiftPhoto(removeTargetUrls, giftNo: giftNo),
+      self.requestPostGiftPhoto(imageList, giftNo: giftNo)
+    )
+    .flatMap { _ in
+      giftNetworking.request(.patchTempFriendList(giftNo: giftNo, tempFriendList: tempFriendList))
+    }
+    .flatMap { _ in
+      if initialPinState != gift.isPinned {
+        return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in Void() }
+      } else {
+        return .just(Void())
       }
     }
+    .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo)) }
+    .map(ResponseDTO<GiftSingleResponseDTO>.self)
+    .map { Gift(singleDTO: $0.data) }
   }
   
   func requestPatchPinGift(_ giftNo: Int) -> Observable<Int> {
@@ -396,24 +368,35 @@ private extension GiftManagementViewReactor {
     }
   }
   
-  /// 기존 선물의 사진을 네트워크를 통해 삭제를 요청합니다.
-  ///
-  /// - Returns:
-  ///   - 네트워크 성공 여부
-  func requestDeleteGiftPhoto(_ urls: [String], giftNo: Int) async -> Bool {
+  func requestPostGiftPhoto(_ imageList: [GiftManagementPhotoModel], giftNo: Int) -> Observable<Void> {
     let networking = GiftPhotoNetworking()
-    for url in urls {
-      guard let response = try? await networking
-        .request(.deleteGiftPhotos(fileUrl: url, giftNo: giftNo))
-        .toAsync()
-      else { return false }
-      do {
-        _ = try response.filterSuccessfulStatusCodes()
-      } catch {
-        return false
-      }
+    let imageList = imageList.filter { $0.isNew }
+    if imageList.isEmpty {
+      return .just(Void())
+    } else {
+      return Observable.concat(
+        imageList.filter { $0.isNew }.map {
+          let data = APIManager.createMultiPartForm($0.image)
+          return networking.request(.postGiftPhotos(file: data, giftNo: giftNo))
+        }
+      )
+      .toArray()
+      .map { _ in }
+      .asObservable()
     }
-    return true
   }
   
+  func requestDeleteGiftPhoto(_ urls: [String], giftNo: Int) -> Observable<Void> {
+    let networking = GiftPhotoNetworking()
+    if urls.isEmpty {
+      return .just(Void())
+    } else {
+      return Observable.concat(
+        urls.map { networking.request(.deleteGiftPhotos(fileUrl: $0, giftNo: giftNo)) }
+      )
+      .toArray()
+      .map { _ in }
+      .asObservable()
+    }
+  }
 }

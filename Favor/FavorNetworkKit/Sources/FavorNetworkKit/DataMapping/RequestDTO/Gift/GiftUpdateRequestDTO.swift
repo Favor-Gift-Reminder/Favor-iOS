@@ -13,9 +13,8 @@ public struct GiftUpdateRequestDTO: Encodable {
   let giftName: String
   let giftDate: String
   let giftMemo: String
-  let category: String
+  let giftCategory: String
   let emotion: String
-  let isPinned: Bool
   let isGiven: Bool
   let friendNoList: [Int]
 
@@ -25,16 +24,14 @@ public struct GiftUpdateRequestDTO: Encodable {
     giftMemo: String,
     category: FavorCategory,
     emotion: FavorEmotion,
-    isPinned: Bool,
     isGiven: Bool,
     friendNoList: [Int]
   ) {
     self.giftName = giftName
     self.giftDate = giftDate
     self.giftMemo = giftMemo
-    self.category = category.rawValue
+    self.giftCategory = category.rawValue
     self.emotion = emotion.rawValue
-    self.isPinned = isPinned
     self.isGiven = isGiven
     self.friendNoList = friendNoList
   }

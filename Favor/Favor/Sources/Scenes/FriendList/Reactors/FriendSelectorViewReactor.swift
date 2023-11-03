@@ -35,6 +35,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  private let fetcher = Fetcher<Friend>()
   private let workbench = RealmWorkbench()
   
   enum Action {
@@ -43,7 +44,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     case textFieldDidChange(String)
     case addFriendDidTap
     case finishButtonDidTap
-    case tempFriendAdded(String)
+    case tempFriendDidAdd(String)
   }
   
   enum Mutation {
@@ -69,12 +70,11 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   
   // MARK: - Properties
   
-  var allFriends: [Friend] = []
-  
   // MARK: - Initializer
   
   init(_ viewType: ViewType, selectedFriends: [Friend] = []) {
     self.initialState = State(viewType: viewType, selectedFriends: selectedFriends)
+    self.setupFriendFetcher()
   }
   
   // MARK: - Functions
@@ -82,10 +82,10 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewDidLoad:
-      return self.fetchFriendList()
+      return self.fetcher.fetch()
+        .map { $0.results }
         .asObservable()
         .flatMap { friends in
-          self.allFriends = friends
           return Observable<Mutation>.just(.updateFriends(friends))
         }
       
@@ -114,7 +114,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       }
       
     case .textFieldDidChange(let text):
-      let allFriends = self.allFriends
+      let allFriends = self.currentState.currentFriends
       let filteredFriends = text.isEmpty ?
       allFriends : allFriends.filter { $0.friendName.contains(text) }
       return .just(.updateFriends(filteredFriends))
@@ -128,7 +128,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       self.steps.accept(AppStep.friendSelectorIsComplete(friends))
       return .empty()
       
-    case .tempFriendAdded(let friendName):
+    case .tempFriendDidAdd(let friendName):
       let tempFriend = Friend(friendName: friendName)
       var selectedFriends = self.currentState.selectedFriends
       selectedFriends.append(tempFriend)
@@ -196,13 +196,26 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension FriendSelectorViewReactor {
-  func fetchFriendList() -> Single<[Friend]> {
-    return Single<[Friend]>.create { single in
-      Task {
-        let friends = await self.workbench.values(FriendObject.self)
-        single(.success(friends.map { Friend(realmObject: $0) }))
+  func setupFriendFetcher() {
+    // onRemote
+    self.fetcher.onRemote = {
+      let networking = UserNetworking()
+      return networking.request(.getAllFriendList)
+        .map(ResponseDTO<[FriendResponseDTO]>.self)
+        .map { $0.data.map { Friend(friendResponseDTO: $0) } }
+        .asSingle()
+    }
+    // onLocal
+    self.fetcher.onLocal = {
+      return await self.workbench.values(FriendObject.self)
+        .filter { $0.friendNo > 0 }
+        .map { return Friend(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.fetcher.onLocalUpdate = { _, remoteFriend in
+      try await self.workbench.write { transaction in
+        transaction.update(remoteFriend.map { $0.realmObject() })
       }
-      return Disposables.create()
     }
   }
 }

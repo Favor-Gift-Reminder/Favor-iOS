@@ -29,6 +29,9 @@ extension GiftAPI {
       
     case .patchPinGift(let giftNo):
       return "/gifts/pin/\(giftNo)"
+      
+    case .patchTempFriendList(let giftNo, _):
+      return "/gifts/temp-friend-list/\(giftNo)"
     }
   }
 }

@@ -47,31 +47,37 @@ final class GiftFlow: Flow {
 
     case .giftManagementIsRequired(let gift):
       return self.navigateToGiftManagement(with: gift)
-
+      
     case .searchEmotionResultIsRequired(let emotion):
       return self.navigateToSearchEmotionResult(with: emotion)
-
+      
     case .searchCategoryResultIsRequired(let category):
       return self.navigateToSearchCategoryResult(with: category)
-
+      
     case .giftDetailFriendsBottomSheetIsRequired(let friends):
       return self.navigateToFriends(with: friends)
       
     case .friendPageIsRequired(let friend):
       return self.navigateToFriendPage(with: friend)
-
+      
     case .giftManagementIsCompleteWithNoChanges:
       return self.popToGiftDetail()
-
+      
     case .newGiftIsComplete:
       return self.popToGiftDetail()
-
+      
     case .editGiftIsComplete(let gift):
       return self.popToGiftDetail(with: gift)
-
+      
     case .giftShareIsRequired(let gift):
       return self.navigateToGiftShare(with: gift)
-
+      
+    case .friendSelectorIsRequired(let friends):
+      return self.navigateToFriendSelector(with: friends)
+      
+    case .friendSelectorIsComplete(let friends):
+      return self.popFromFriendSelection(friends: friends)
+      
     default:
       return .none
     }
@@ -117,7 +123,7 @@ private extension GiftFlow {
 
     return .none
   }
-
+  
   func popToHome(with gift: Gift) -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
     guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return .none }
@@ -131,9 +137,11 @@ private extension GiftFlow {
     let giftManagementVC = GiftManagementViewController()
     let giftManagementReactor = GiftManagementViewReactor(.edit, with: gift)
     giftManagementVC.reactor = giftManagementReactor
-
-    self.rootViewController.pushViewController(giftManagementVC, animated: true)
-
+    
+    DispatchQueue.main.async {
+      self.rootViewController.pushViewController(giftManagementVC, animated: true)
+    }
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: giftManagementVC,
       withNextStepper: giftManagementReactor
@@ -167,7 +175,7 @@ private extension GiftFlow {
       self.rootViewController.pushViewController(searchCategoryVC, animated: true)
       searchCategoryVC.requestCategory(category)
     }
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: searchCategoryVC,
       withNextStepper: searchCategoryReactor
@@ -177,13 +185,13 @@ private extension GiftFlow {
   func navigateToFriends(with friends: [Friend]) -> FlowContributors {
     let friendsBottomSheet = GiftFriendsBottomSheet()
     friendsBottomSheet.modalPresentationStyle = .overFullScreen
-
+    
     DispatchQueue.main.async {
       self.rootViewController.present(friendsBottomSheet, animated: false)
       friendsBottomSheet.friends = friends
       self.friendsBottomSheet = friendsBottomSheet
     }
-
+    
     return .one(flowContributor: .contribute(
       withNextPresentable: friendsBottomSheet,
       withNextStepper: friendsBottomSheet
@@ -207,17 +215,19 @@ private extension GiftFlow {
   }
   
   func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
-    // TODO: 메모리 해제
-    DispatchQueue.main.async {
+    if let viewController = self.rootViewController.topViewController as? GiftManagementViewController {
       self.rootViewController.popViewController(animated: true)
-      if
-        let gift,
-        let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
-        giftDetailVC.update(gift: gift)
+      DispatchQueue.main.async {
+        if
+          let gift,
+          let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
+          giftDetailVC.update(gift: gift)
+        }
       }
-    } 
-
-    return .none
+      return .none
+    } else {
+      return .none
+    }
   }
   
   func navigateToGiftShare(with gift: Gift) -> FlowContributors {
@@ -232,5 +242,26 @@ private extension GiftFlow {
       withNextPresentable: giftShareVC,
       withNextStepper: giftShareReactor
     ))
+  }
+  
+  func navigateToFriendSelector(with friends: [Friend]) -> FlowContributors {
+    let friendSelectorVC = FriendSelectorViewController()
+    let friendSelectorReactor = FriendSelectorViewReactor(.gift, selectedFriends: friends)
+    friendSelectorVC.reactor = friendSelectorReactor
+    self.rootViewController.pushViewController(friendSelectorVC, animated: true)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendSelectorVC,
+      withNextStepper: friendSelectorReactor
+    ))
+  }
+  
+  func popFromFriendSelection(friends: [Friend]) -> FlowContributors {
+    self.rootViewController.popViewController(animated: true)
+    guard
+      let giftManagementVC = self.rootViewController.topViewController as? GiftManagementViewController
+    else { return .none }
+    giftManagementVC.friendsDidAdd(friends)
+    return .none
   }
 }

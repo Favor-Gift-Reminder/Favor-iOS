@@ -112,9 +112,8 @@ public struct Gift: Storable, Receivable {
       giftMemo: self.memo ?? "",
       category: self.category,
       emotion: self.emotion ?? .good,
-      isPinned: self.isPinned,
       isGiven: self.isGiven,
-      friendNoList: self.relatedFriends.map { $0.identifier }
+      friendNoList: self.relatedFriends.filter { $0.identifier > 0 }.map { $0.identifier }
     )
   }
 

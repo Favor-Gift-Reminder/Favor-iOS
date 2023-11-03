@@ -346,7 +346,8 @@ private extension GiftManagementViewController {
     UICollectionView.SupplementaryRegistration(
       elementKind: GiftManagementCollectionHeaderView.identifier
     ) { [weak self] header, _, _ in
-      guard let self = self else { return }
+      guard let self = self, let reactor = self.reactor else { return }
+      header.bind(with: reactor.currentState.gift.isGiven)
       header.delegate = self
     }
     

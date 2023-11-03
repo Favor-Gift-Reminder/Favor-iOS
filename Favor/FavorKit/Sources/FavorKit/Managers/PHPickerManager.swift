@@ -57,40 +57,23 @@ public final class PHPickerManager {
   }
   
   /// 이미지 선택 결과를 전달하기 위한 Helper 메서드
-  private func fetch(
-    _ pickerResult: PHPickerResult,
-    completion: @escaping ((UIImage?, Error?) -> Void)
-  ) {
+  private func fetch(_ pickerResult: PHPickerResult) async throws -> UIImage? {
     let itemProvider = pickerResult.itemProvider
     
     if itemProvider.canLoadObject(ofClass: PHLivePhoto.self) {
-      itemProvider.loadObject(ofClass: PHLivePhoto.self) { livePhoto, error in
-        guard let livePhoto = livePhoto as? PHLivePhoto else {
-          completion(nil, error)
-          return
-        }
-        // Live Photo의 이미지 데이터를 JPEG로 변환
-        let image = livePhoto.value(forKey: "imageData") as? UIImage
-        completion(image, error)
-      }
+      let livePhoto = try await itemProvider.loadObject(ofClass: PHLivePhoto.self)
+      let image = livePhoto.value(forKey: "imageData") as? UIImage
+      return image
     } else if itemProvider.canLoadObject(ofClass: UIImage.self) {
-      itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-        guard let image = image as? UIImage else {
-          completion(nil, error)
-          return
-        }
-        completion(image, error)
-      }
+      let image = try await itemProvider.loadObject(ofClass: UIImage.self)
+      return image
     } else {
       if itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
-        itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) 
-        { data, error in
-          guard let data = data else { return completion(nil, error) }
-          let image = UIImage(data: data)
-          completion(image, nil)
-        }
+        let data = try await itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier)
+        let image = UIImage(data: data)
+        return image
       } else {
-        os_log(.error, "사진 변환을 실패했습니다!")
+        return nil
       }
     }
   }
@@ -98,22 +81,12 @@ public final class PHPickerManager {
 
 extension PHPickerManager: PHPickerViewControllerDelegate {
   public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-    let currentSelections = self.selections
-    var newSelections: Selections = [:]
-    for result in results {
-      let identifier = result.assetIdentifier!
-      newSelections[identifier] = currentSelections[identifier] ?? result
-      self.fetch(result) { image, error in
-        if let error = error {
-          os_log(.error, "❌ 사진을 가져오는데 실패했습니다! \(error.localizedDescription)")
-          return
-        }
+    Task {
+      for result in results {
+        let image = try await self.fetch(result)
         self.delegate?.pickerManager(didFinishPicking: image)
       }
     }
-
-    self.selections = newSelections
-    self.selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
     UIApplication.shared.topViewController()?.dismiss(animated: true)
   }
 }

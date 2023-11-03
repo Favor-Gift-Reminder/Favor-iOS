@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import Reusable
 
-final class FriendSelectionViewController: BaseViewController, View {
+final class FriendSelectorViewController: BaseViewController, View {
   typealias DataSource = UICollectionViewDiffableDataSource<NewGiftFriendSection, NewGiftFriendItem>
   
   private enum Metric {
@@ -57,7 +57,8 @@ final class FriendSelectionViewController: BaseViewController, View {
           for: indexPath
         ) as FriendSelectorHeaderView
         let section = self.dataSource.sectionIdentifier(for: indexPath.section) ?? .friends
-        let friends = section == .friends ? reactor.allFriends : reactor.currentState.selectedFriends
+        let friends = section == .friends ?
+        reactor.currentState.currentFriends : reactor.currentState.selectedFriends
         header.configure(section: section, friendsCount: friends.count)
         self.setupSearchBar()
         return header
@@ -236,13 +237,13 @@ final class FriendSelectionViewController: BaseViewController, View {
   }
   
   func tempFriendAdded(_ friendName: String) {
-    self.reactor?.action.onNext(.tempFriendAdded(friendName))
+    self.reactor?.action.onNext(.tempFriendDidAdd(friendName))
   }
 }
 
 // MARK: - Privates
 
-private extension FriendSelectionViewController {
+private extension FriendSelectorViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(
       sectionProvider: { sectionIndex, _ in

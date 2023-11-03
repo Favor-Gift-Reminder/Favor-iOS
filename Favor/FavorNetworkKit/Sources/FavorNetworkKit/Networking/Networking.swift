@@ -44,6 +44,7 @@ public final class Networking<TargetType: BaseTargetType> {
   
   // MARK: - Functions
   
+  @discardableResult
   public func request(_ target: TargetType) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return UIApplication.shared.topViewControllerAsObservable()

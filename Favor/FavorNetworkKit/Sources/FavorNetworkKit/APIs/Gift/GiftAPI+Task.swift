@@ -30,6 +30,12 @@ extension GiftAPI {
       
     case .patchPinGift:
       return .requestPlain
+      
+    case let .patchTempFriendList(_, tempFriendList):
+      return .requestParameters(
+        parameters: ["tempFriendList": tempFriendList],
+        encoding: JSONEncoding.default
+      )
     }
   }
 }

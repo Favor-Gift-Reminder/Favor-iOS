@@ -62,6 +62,12 @@ public enum GiftAPI {
   /// - Parameters:
   ///  - giftNo: 핀 여부를 수정하는 선물의 DB 넘버 - `Path`
   case patchPinGift(giftNo: Int)
+  
+  /// 선물 임시친구목록 수정
+  ///  - Parameters:
+  ///   - giftNo: 선물의 DB 넘버 - `Path`
+  ///   - tempFriendListDto: 임시친구목록 `Body`
+  case patchTempFriendList(giftNo: Int, tempFriendList: [String])
 }
 
 extension GiftAPI: BaseTargetType {

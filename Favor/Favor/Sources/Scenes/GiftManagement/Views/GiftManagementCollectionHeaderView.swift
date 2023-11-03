@@ -74,6 +74,13 @@ final class GiftManagementCollectionHeaderView: UICollectionReusableView {
       })
       .disposed(by: self.disposeBag)
   }
+  
+  // MARK: - Functions
+  
+  public func bind(with isGiven: Bool) {
+    self.receivedGiftButton.isSelected = !isGiven
+    self.givenGiftButton.isSelected = isGiven
+  }
 }
 
 // MARK: - UI Setups
