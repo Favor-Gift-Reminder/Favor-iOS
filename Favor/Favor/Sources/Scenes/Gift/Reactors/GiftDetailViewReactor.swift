@@ -124,7 +124,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 
     return newState
   }
-
+  
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state

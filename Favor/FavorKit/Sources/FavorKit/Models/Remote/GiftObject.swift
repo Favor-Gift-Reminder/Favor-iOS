@@ -46,7 +46,7 @@ public class GiftObject: Object {
     }
     set { self.privateEmotion = newValue?.rawValue }
   }
-
+  
   public override class func propertiesMapping() -> [String: String] {
     [
       "name": "giftName",
@@ -56,7 +56,7 @@ public class GiftObject: Object {
       "privateEmotion": "emotion"
     ]
   }
-
+  
   // MARK: - Initializer
 
   /// - Parameters:

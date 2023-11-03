@@ -70,7 +70,10 @@ public struct Gift: Storable, Receivable {
     self.category = singleDTO.giftCategory
     self.emotion = singleDTO.emotion
     self.isPinned = singleDTO.isPinned
-    self.relatedFriends = singleDTO.friendList.compactMap(Friend.init(friendResponseDTO:)) 
+    var friendList: [Friend] = []
+    friendList.append(contentsOf: singleDTO.friendList.compactMap(Friend.init(friendResponseDTO:)))
+    friendList.append(contentsOf: singleDTO.tempFriendList.map(Friend.init(tempFriendName:)))
+    self.relatedFriends = friendList
     self.isGiven = singleDTO.isGiven
   }
   

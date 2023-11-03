@@ -26,6 +26,21 @@ public struct Friend: Storable, Receivable {
   public let receivedGift: Int
   public let givenGift: Int
   
+  // MARK: - Init
+  
+  public init(tempFriendName: String) {
+    self.identifier = -1
+    self.friendName = tempFriendName
+    self.friendID = ""
+//    self.profilePhoto = dto.
+    self.memo = ""
+    self.anniversaryList = []
+    self.favorList = []
+    self.totalGift = -1
+    self.receivedGift = -1
+    self.givenGift = -1
+  }
+  
   // MARK: - Storable
   
   public init(realmObject: FriendObject) {

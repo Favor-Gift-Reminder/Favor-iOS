@@ -272,7 +272,7 @@ private extension GiftManagementViewController {
       cell.delegate = self
       cell.bind(with: image)
     }
-    
+
     let friendCellRegistration = UICollectionView.CellRegistration
     <FavorSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, itemIdentifier in
       guard let self = self, case let GiftManagementSectionItem.friends(friends) = itemIdentifier else {
@@ -289,14 +289,14 @@ private extension GiftManagementViewController {
         }
       }
     }
-
+    
     let dateCellRegistration = UICollectionView.CellRegistration
     <FavorDateSelectorCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.bind(date: reactor.currentState.gift.date)
     }
-
+    
     let memoCellRegistration = UICollectionView.CellRegistration
     <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }
