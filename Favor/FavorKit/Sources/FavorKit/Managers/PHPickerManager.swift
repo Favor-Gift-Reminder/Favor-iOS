@@ -7,6 +7,7 @@
 
 import OSLog
 import PhotosUI
+import UniformTypeIdentifiers
 
 import RxSwift
 
@@ -80,6 +81,17 @@ public final class PHPickerManager {
         }
         completion(image, error)
       }
+    } else {
+      if itemProvider.hasItemConformingToTypeIdentifier(UTType.image.identifier) {
+        itemProvider.loadDataRepresentation(forTypeIdentifier: UTType.image.identifier) 
+        { data, error in
+          guard let data = data else { return completion(nil, error) }
+          let image = UIImage(data: data)
+          completion(image, nil)
+        }
+      } else {
+        os_log(.error, "사진 변환을 실패했습니다!")
+      }
     }
   }
 }
@@ -99,6 +111,7 @@ extension PHPickerManager: PHPickerViewControllerDelegate {
         self.delegate?.pickerManager(didFinishPicking: image)
       }
     }
+
     self.selections = newSelections
     self.selectedAssetIdentifiers = results.compactMap { $0.assetIdentifier }
     UIApplication.shared.topViewController()?.dismiss(animated: true)

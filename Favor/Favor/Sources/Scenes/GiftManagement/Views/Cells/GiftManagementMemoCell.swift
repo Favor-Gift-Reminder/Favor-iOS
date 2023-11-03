@@ -20,9 +20,15 @@ public protocol GiftManagementMemoCellDelegate: AnyObject {
 final class GiftManagementMemoCell: BaseCollectionViewCell {
 
   // MARK: - Properties
-
+  
   public weak var delegate: GiftManagementMemoCellDelegate?
-
+  
+  var selectedEmotion: FavorEmotion = .touching {
+    didSet {
+      guard let emotionButton = self.emotionStackView.arrangedSubviews[self.selectedEmotion.index] as? FavorEmotionButton else { return }
+    }
+  }
+  
   // MARK: - UI Components
 
   private let memoView: RSKPlaceholderTextView = {
@@ -34,14 +40,23 @@ final class GiftManagementMemoCell: BaseCollectionViewCell {
         .foregroundColor: UIColor.favorColor(.explain)
       ]
     )
-    textView.isScrollEnabled = false
     textView.font = .favorFont(.regular, size: 16)
     textView.textColor = .favorColor(.icon)
     textView.textContainerInset = .zero
     textView.textContainer.lineFragmentPadding = .zero
     return textView
   }()
-
+  
+  private let emotionStackView: UIStackView = {
+    let stackView = UIStackView()
+    FavorEmotion.allCases.forEach {
+      stackView.addArrangedSubview(FavorEmotionButton($0))
+    }
+    stackView.axis = .horizontal
+    stackView.distribution = .equalSpacing
+    return stackView
+  }()
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -51,7 +66,7 @@ final class GiftManagementMemoCell: BaseCollectionViewCell {
     self.setupConstraints()
     self.bind()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -80,11 +95,18 @@ extension GiftManagementMemoCell: BaseView {
 
   func setupLayouts() {
     self.addSubview(self.memoView)
+    self.addSubview(self.emotionStackView)
   }
-
+  
   func setupConstraints() {
+    self.emotionStackView.snp.makeConstraints { make in
+      make.top.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(40.0)
+    }
+    
     self.memoView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+      make.top.equalTo(self.emotionStackView.snp.bottom).offset(16.0)
+      make.bottom.directionalHorizontalEdges.equalToSuperview()
     }
   }
 }

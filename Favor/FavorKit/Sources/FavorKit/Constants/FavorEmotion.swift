@@ -15,6 +15,16 @@ public enum FavorEmotion: String, Codable, CaseIterable {
   case xoxo = "그냥그래요"
   case boring = "별로에요"
   
+  public var index: Int {
+    switch self {
+    case .touching: 0
+    case .excited: 1
+    case .good: 2
+    case .xoxo: 3
+    case .boring: 4
+    }
+  }
+  
   public var emoji: String {
     switch self {
     case .touching:
