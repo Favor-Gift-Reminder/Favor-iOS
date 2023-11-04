@@ -33,7 +33,7 @@ public final class AuthValidationManager: ValidationManager {
   }
 
   // MARK: - Functions
-
+  
   /// **이메일**이나 **비밀번호** 필드의 값이 기준에 맞는지 검증합니다.
   /// - Parameters:
   ///   - content: 텍스트 필드에 입력된 텍스트
@@ -47,7 +47,7 @@ public final class AuthValidationManager: ValidationManager {
     return .valid
   }
 
-  /// **비밀번호 확인** 필드의 값을 비밀번호와 비교합니다.
+  /// **비밀번호 확인** 필드의 값을 비밀번호와 비교합니다..
   /// - Parameters:
   ///   - content: 비밀번호 확인 필드에 입력된 텍스트
   ///   - criterion: 비교 기준이 되는 비밀번호 텍스트
