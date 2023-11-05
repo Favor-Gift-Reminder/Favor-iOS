@@ -51,7 +51,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
   }
   
   // MARK: - Functions
-  
+
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:

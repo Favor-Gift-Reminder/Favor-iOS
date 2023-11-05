@@ -214,7 +214,9 @@ private extension FriendSelectorViewReactor {
     // onLocalUpdate
     self.fetcher.onLocalUpdate = { _, remoteFriend in
       try await self.workbench.write { transaction in
-        transaction.update(remoteFriend.map { $0.realmObject() })
+        remoteFriend.forEach { friend in
+          transaction.update(Friend.self, values: [.name(friend.friendName)])
+        }
       }
     }
   }

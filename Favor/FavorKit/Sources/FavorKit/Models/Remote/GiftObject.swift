@@ -29,8 +29,10 @@ public class GiftObject: Object {
   @Persisted public var privateEmotion: String?
   /// 선물 핀 여부
   @Persisted public var isPinned: Bool
-  /// 선물과 관련된 친구 번호
+  /// 선물과 관련된 친구
   @Persisted public var friendList: List<FriendObject>
+  /// 선물과 관련된 비회원 친구
+  @Persisted public var tempFriendList: List<String>
   /// 받은 선물 / 준 선물 여부 (받은 선물 = `true`)
   @Persisted public var isGiven: Bool
 
@@ -79,6 +81,7 @@ public class GiftObject: Object {
     emotion: FavorEmotion? = nil,
     isPinned: Bool = false,
     friendList: [FriendObject] = [],
+    tempFriendList: [String] = [],
     isGiven: Bool = false
   ) {
     self.init()
@@ -95,6 +98,9 @@ public class GiftObject: Object {
     let newFriendList = List<FriendObject>()
     newFriendList.append(objectsIn: friendList)
     self.friendList = newFriendList
+    let newTempFriendList = List<String>()
+    newTempFriendList.append(objectsIn: tempFriendList)
+    self.tempFriendList = newTempFriendList
     self.isGiven = isGiven
   }
 }

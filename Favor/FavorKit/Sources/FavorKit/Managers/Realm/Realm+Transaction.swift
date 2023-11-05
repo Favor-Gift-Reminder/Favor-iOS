@@ -40,7 +40,7 @@ public final class Transaction {
       let pair = $0.propertyValuePair
       dict[pair.name] = pair.value
     }
-
+    
     self.realm.create(T.RealmObject.self, value: dict, update: .modified)
   }
 

@@ -53,7 +53,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
         .flatMap { (_, friend) -> Observable<Mutation> in
           return .just(.updateFriends(friend))
         }
-
+      
     case .editButtonDidTap:
       self.steps.accept(AppStep.editFriendIsRequired)
       return .empty()
@@ -74,7 +74,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
   
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
-
+    
     switch mutation {
     case .updateFriends(let friends):
       newState.friends = friends

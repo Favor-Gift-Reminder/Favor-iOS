@@ -78,6 +78,16 @@ final class GiftFlow: Flow {
     case .friendSelectorIsComplete(let friends):
       return self.popFromFriendSelection(friends: friends)
       
+    case let .imagePickerIsRequired(imagePickerManager, selectionLimit):
+      imagePickerManager.present(selectionLimit: selectionLimit)
+      return .none
+      
+    case .friendManagementIsRequired(.new):
+      return self.navigateToFriendManagement()
+      
+    case .friendManagementIsComplete(let friendName):
+      return self.popFromFriendManagement(friendName)
+      
     default:
       return .none
     }
@@ -217,12 +227,11 @@ private extension GiftFlow {
   func popToGiftDetail(with gift: Gift? = nil) -> FlowContributors {
     if let viewController = self.rootViewController.topViewController as? GiftManagementViewController {
       self.rootViewController.popViewController(animated: true)
-      DispatchQueue.main.async {
-        if
-          let gift,
-          let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
-          giftDetailVC.update(gift: gift)
-        }
+      if
+        let gift,
+        let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
+        print("YESGift: \(gift)")
+        giftDetailVC.update(gift: gift)
       }
       return .none
     } else {
@@ -262,6 +271,28 @@ private extension GiftFlow {
       let giftManagementVC = self.rootViewController.topViewController as? GiftManagementViewController
     else { return .none }
     giftManagementVC.friendsDidAdd(friends)
+    return .none
+  }
+  
+  func navigateToFriendManagement() -> FlowContributors {
+    let friendManagementVC = FriendManagementViewController(.new)
+    let friendManagementReactor = FriendManagementViewReactor()
+    friendManagementVC.reactor = friendManagementReactor
+    self.rootViewController.pushViewController(friendManagementVC, animated: true)
+    
+    return .one(flowContributor: .contribute(
+      withNextPresentable: friendManagementVC,
+      withNextStepper: friendManagementReactor
+    ))
+  }
+  
+  func popFromFriendManagement(_ friendName: String) -> FlowContributors {
+    self.rootViewController.popViewController(animated: true)
+    ToastManager.shared.showNewToast(FavorToastMessageView(.tempFriendAdded(friendName)))
+    guard
+      let friendSelectionVC = self.rootViewController.topViewController as? FriendSelectorViewController
+    else { return .none }
+    friendSelectionVC.tempFriendAdded(friendName)
     return .none
   }
 }

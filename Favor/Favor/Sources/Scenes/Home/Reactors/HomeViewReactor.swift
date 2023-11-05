@@ -303,7 +303,6 @@ private extension HomeViewReactor {
       let deleteGifts = localGifts.filter { localGift in
         !remoteGifts.map { $0.identifier }.contains(localGift.identifier)
       }
-      
       try await self.workbench.write { transaction in
         deleteGifts.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteGifts.map { $0.realmObject() })

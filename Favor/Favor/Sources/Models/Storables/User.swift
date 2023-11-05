@@ -50,7 +50,7 @@ public struct User: Storable, Receivable {
 //    self.profilePhoto = realmObject.userPhoto
 //    self.profileBackgroundPhoto = realmObject.backgroundPhoto
   }
-
+  
   public func realmObject() -> UserObject {
     UserObject(
       userNo: self.identifier,

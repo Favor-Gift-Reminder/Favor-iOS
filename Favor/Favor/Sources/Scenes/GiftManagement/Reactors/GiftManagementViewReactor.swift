@@ -177,7 +177,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       return .empty()
       
     case .friendsSelectorButtonDidTap:
-      self.steps.accept(AppStep.friendSelectorIsRequired(self.currentState.gift.relatedFriends))
+      self.steps.accept(AppStep.friendSelectorIsRequired(self.currentState.gift.friends))
       return .empty()
 
     case .dateDidUpdate(let date):
@@ -203,11 +203,13 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       guard let removeIndex = imageList.firstIndex(where: { $0.image === image }) else { return .empty() }
       let photoModel = imageList.remove(at: removeIndex)
       if let url = photoModel.url {
+        // 기존에 존재했던 사진
         return .concat([
           .just(.updateRemoveTargetUrls(url)),
           .just(.updateImageList(imageList))
         ])
       } else {
+        // 갤러리에서 첨부한 사진
         return .just(.updateImageList(imageList))
       }
       
@@ -241,7 +243,8 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       newState.gift.memo = memo
       
     case .updateFriends(let friends):
-      newState.gift.relatedFriends = friends
+      newState.gift.relatedFriends = friends.filter { $0.identifier > 0 }
+      newState.gift.tempFriends = friends.filter { $0.identifier < 0 }.map { $0.friendName }
       
     case .updateIsPinned(let isPinned):
       newState.gift.isPinned = isPinned
@@ -272,7 +275,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         .pin
       ]
       newState.items = [
-        [.title], [.category], photoItems, [.date], [.friends(state.gift.relatedFriends)], [.memo], [.pin]
+        [.title], [.category], photoItems, [.date], [.friends(state.gift.friends)], [.memo], [.pin]
       ]
       
       if !state.gift.name.isEmpty,
@@ -297,10 +300,14 @@ private extension GiftManagementViewReactor {
         var imageList: [GiftManagementPhotoModel] = []
         for photo in gift.photos {
           guard let url = URL(string: photo.remote) else { break }
-          let image = try await ImageDownloadManager.downloadImage(with: url)
-          imageList.append(.init(url: photo.remote, isNew: false, image: image))
-          if imageList.count == gift.photos.count {
-            single(.success(imageList))
+          do {
+            let image = try await ImageDownloadManager.downloadImage(with: url)
+            imageList.append(.init(url: photo.remote, isNew: false, image: image))
+            if imageList.count == gift.photos.count {
+              single(.success(imageList))
+            }
+          } catch {
+            print(error)
           }
         }
       }
@@ -331,30 +338,27 @@ private extension GiftManagementViewReactor {
   
   func requestPatchGift(_ gift: Gift) -> Observable<Gift> {
     let giftNetworking = GiftNetworking()
-    let tempFriendList = gift.relatedFriends.filter { $0.identifier < 0 }.map { $0.friendName }
     let requestDTO = gift.updateRequestDTO()
     let giftNo = gift.identifier
     let removeTargetUrls = self.currentState.removeTargetUrls
     let imageList = self.currentState.imageList
     let initialPinState = self.currentState.initialPinState
     
-    return Observable.concat(
-      self.requestDeleteGiftPhoto(removeTargetUrls, giftNo: giftNo),
-      self.requestPostGiftPhoto(imageList, giftNo: giftNo)
-    )
-    .flatMap { _ in
-      giftNetworking.request(.patchTempFriendList(giftNo: giftNo, tempFriendList: tempFriendList))
-    }
-    .flatMap { _ in
-      if initialPinState != gift.isPinned {
-        return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in Void() }
-      } else {
-        return .just(Void())
+    return self.requestDeleteGiftPhoto(removeTargetUrls, giftNo: giftNo)
+      .flatMap { _ in self.requestPostGiftPhoto(imageList, giftNo: giftNo) }
+      .flatMap { _ in
+        giftNetworking.request(.patchTempFriendList(giftNo: giftNo, tempFriendList: gift.tempFriends))
       }
-    }
-    .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo)) }
-    .map(ResponseDTO<GiftSingleResponseDTO>.self)
-    .map { Gift(singleDTO: $0.data) }
+      .flatMap { _ in
+        if initialPinState != gift.isPinned {
+          return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in Void() }
+        } else {
+          return .just(Void())
+        }
+      }
+      .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo)) }
+      .map(ResponseDTO<GiftSingleResponseDTO>.self)
+      .map { Gift(singleDTO: $0.data) }
   }
   
   func requestPatchPinGift(_ giftNo: Int) -> Observable<Int> {
@@ -374,15 +378,22 @@ private extension GiftManagementViewReactor {
     if imageList.isEmpty {
       return .just(Void())
     } else {
-      return Observable.concat(
-        imageList.filter { $0.isNew }.map {
-          let data = APIManager.createMultiPartForm($0.image)
-          return networking.request(.postGiftPhotos(file: data, giftNo: giftNo))
-        }
-      )
-      .toArray()
-      .map { _ in }
-      .asObservable()
+      return Observable<Void>.create { observer in
+        var completeCount: Int = 0
+        _ = Observable.from(imageList)
+          .concatMap { item in
+            let file = APIManager.createMultiPartForm(item.image)
+            return networking.request(.postGiftPhotos(file: file, giftNo: giftNo))
+          }
+          .subscribe { _ in
+            completeCount += 1
+            if completeCount == imageList.count {
+              observer.onNext(Void())
+              observer.onCompleted()
+            }
+          }
+        return Disposables.create()
+      }
     }
   }
   
@@ -391,12 +402,21 @@ private extension GiftManagementViewReactor {
     if urls.isEmpty {
       return .just(Void())
     } else {
-      return Observable.concat(
-        urls.map { networking.request(.deleteGiftPhotos(fileUrl: $0, giftNo: giftNo)) }
-      )
-      .toArray()
-      .map { _ in }
-      .asObservable()
+      return Observable<Void>.create { observer in
+        var completeCount: Int = 0
+        _ = Observable.from(urls)
+          .concatMap { url in
+            return networking.request(.deleteGiftPhotos(fileUrl: url, giftNo: giftNo))
+          }
+          .subscribe { _ in
+            completeCount += 1
+            if completeCount == urls.count {
+              observer.onNext(Void())
+              observer.onCompleted()
+            }
+          }
+        return Disposables.create()
+      }
     }
   }
 }

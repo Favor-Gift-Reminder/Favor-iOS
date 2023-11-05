@@ -33,8 +33,8 @@ extension GiftAPI {
       
     case let .patchTempFriendList(_, tempFriendList):
       return .requestParameters(
-        parameters: ["tempFriendList": tempFriendList],
-        encoding: JSONEncoding.default
+        parameters: ["tempFrindList": tempFriendList],
+        encoding: JSONEncoding.prettyPrinted
       )
     }
   }

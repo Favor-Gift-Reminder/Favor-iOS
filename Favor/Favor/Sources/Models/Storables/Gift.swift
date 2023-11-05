@@ -12,7 +12,7 @@ import FavorNetworkKit
 import class RealmSwift.ThreadSafe
 
 public struct Gift: Storable, Receivable {
-
+  
   // MARK: - Properties
 
   public let identifier: Int
@@ -24,7 +24,12 @@ public struct Gift: Storable, Receivable {
   public var emotion: FavorEmotion?
   public var isPinned: Bool
   public var relatedFriends: [Friend]
+  public var tempFriends: [String]
   public var isGiven: Bool
+  
+  public var friends: [Friend] {
+    self.relatedFriends + self.tempFriends.map { Friend(friendName: $0) }
+  }
   
   // MARK: - Storable
   
@@ -41,6 +46,7 @@ public struct Gift: Storable, Receivable {
     self.emotion = realmObject.emotion
     self.isPinned = realmObject.isPinned
     self.relatedFriends = realmObject.friendList.compactMap(Friend.init(realmObject:))
+    self.tempFriends = realmObject.tempFriendList.toArray()
     self.isGiven = realmObject.isGiven
   }
   
@@ -54,7 +60,8 @@ public struct Gift: Storable, Receivable {
       category: self.category,
       emotion: self.emotion,
       isPinned: self.isPinned,
-      friendList: self.relatedFriends.compactMap { $0.realmObject() },
+      friendList: self.relatedFriends.filter { $0.identifier > 0 }.compactMap { $0.realmObject() },
+      tempFriendList: self.tempFriends,
       isGiven: self.isGiven
     )
   }
@@ -70,10 +77,8 @@ public struct Gift: Storable, Receivable {
     self.category = singleDTO.giftCategory
     self.emotion = singleDTO.emotion
     self.isPinned = singleDTO.isPinned
-    var friendList: [Friend] = []
-    friendList.append(contentsOf: singleDTO.friendList.compactMap(Friend.init(friendResponseDTO:)))
-    friendList.append(contentsOf: singleDTO.tempFriendList.map(Friend.init(tempFriendName:)))
-    self.relatedFriends = friendList
+    self.relatedFriends = singleDTO.friendList.map { Friend(friendResponseDTO: $0) }
+    self.tempFriends = singleDTO.tempFriendList
     self.isGiven = singleDTO.isGiven
   }
   
@@ -86,12 +91,11 @@ public struct Gift: Storable, Receivable {
     self.emotion = .boring
     self.isPinned = false
     self.relatedFriends = []
+    self.tempFriends = []
     self.isGiven = false
   }
   
   public func requestDTO() -> GiftRequestDTO {
-    let friendNoList = self.relatedFriends.filter { $0.identifier > 0 }.map { $0.identifier }
-    let tempFriendList = self.relatedFriends.filter { $0.identifier < 0 }.map { $0.friendName }
     return GiftRequestDTO(
       giftName: self.name,
       giftDate: (self.date ?? .distantPast).toDTODateString(),
@@ -100,8 +104,8 @@ public struct Gift: Storable, Receivable {
       emotion: self.emotion ?? .good,
       isPinned: self.isPinned,
       isGiven: self.isGiven,
-      friendNoList: friendNoList,
-      tempFriendList: tempFriendList
+      friendNoList: self.relatedFriends.map { $0.identifier },
+      tempFriendList: self.tempFriends
     )
   }
   
@@ -131,9 +135,10 @@ public struct Gift: Storable, Receivable {
     self.emotion = .xoxo
     self.isPinned = false
     self.relatedFriends = []
+    self.tempFriends = []
     self.isGiven = false
   }
-
+  
   // MARK: - Sort
 
   public enum SortType {

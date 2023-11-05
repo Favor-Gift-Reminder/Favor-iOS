@@ -19,9 +19,9 @@ final class GiftDetailViewController: BaseViewController, View {
   typealias GiftDetailDataSource = UICollectionViewDiffableDataSource<GiftDetailSection, GiftDetailSectionItem>
 
   // MARK: - Constants
-
+  
   // MARK: - Properties
-
+  
   private var dataSource: GiftDetailDataSource?
 
   private let currentPage = BehaviorRelay<Int>(value: 0)
@@ -233,7 +233,7 @@ private extension GiftDetailViewController {
       guard let self = self, let reactor = self.reactor else { return }
       cell.gift = reactor.currentState.gift
     }
-
+    
     self.dataSource = GiftDetailDataSource(
       collectionView: self.collectionView,
       cellProvider: { [weak self] collectionView, indexPath, item in

@@ -106,7 +106,8 @@ extension GiftManagementMemoCell: BaseView {
     
     self.memoView.snp.makeConstraints { make in
       make.top.equalTo(self.emotionStackView.snp.bottom).offset(16.0)
-      make.bottom.directionalHorizontalEdges.equalToSuperview()
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(113.0)
     }
   }
 }

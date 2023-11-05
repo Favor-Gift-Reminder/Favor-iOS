@@ -14,7 +14,7 @@ import class RealmSwift.ThreadSafe
 public struct Friend: Storable, Receivable {
   
   // MARK: - Properties
-  
+  public let uuid = UUID()
   public let identifier: Int
   public var friendName: String
   public var friendID: String
@@ -25,21 +25,6 @@ public struct Friend: Storable, Receivable {
   public let totalGift: Int
   public let receivedGift: Int
   public let givenGift: Int
-  
-  // MARK: - Init
-  
-  public init(tempFriendName: String) {
-    self.identifier = -1
-    self.friendName = tempFriendName
-    self.friendID = ""
-//    self.profilePhoto = dto.
-    self.memo = ""
-    self.anniversaryList = []
-    self.favorList = []
-    self.totalGift = -1
-    self.receivedGift = -1
-    self.givenGift = -1
-  }
   
   // MARK: - Storable
   
@@ -119,7 +104,7 @@ public struct Friend: Storable, Receivable {
   }
   
   /// 비회원 친구 구조체를 생성합니다.
-  /// 비회원 친구는 `identifier`가 `-1`를 갖습니다.
+  /// 비회원 친구는 `identifier`가 `음수`를 갖습니다.
   public init(friendName: String) {
     self.identifier = -1
     self.friendName = friendName
@@ -127,7 +112,7 @@ public struct Friend: Storable, Receivable {
     self.anniversaryList = []
     self.favorList = []
     self.givenGift = 0
-    self.totalGift = 0
+    self.totalGift = 0 
     self.receivedGift = 0
   }
 }
@@ -171,12 +156,9 @@ extension Friend {
 // MARK: - Hashable
 
 extension Friend: Hashable {
-  public static func == (lhs: Friend, rhs: Friend) -> Bool {
-    return lhs.identifier == rhs.identifier
-  }
-
   public func hash(into hasher: inout Hasher) {
     hasher.combine(self.identifier)
+    hasher.combine(self.uuid.uuidString)
   }
 }
 

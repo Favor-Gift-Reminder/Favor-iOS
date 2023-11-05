@@ -16,8 +16,14 @@ open class BaseViewController: UIViewController, Toastable {
   
   private let indicatorView: UIActivityIndicatorView = {
     let indicatorView = UIActivityIndicatorView()
-    indicatorView.color = .darkGray
     return indicatorView
+  }()
+  
+  private lazy var loadingView: UIView = {
+    let view = UIView()
+    view.backgroundColor = .clear
+    view.addSubview(self.indicatorView)
+    return view
   }()
 
   /// A dispose bag. 각 ViewController에 종속적이다.
@@ -28,6 +34,7 @@ open class BaseViewController: UIViewController, Toastable {
     self.setupLayouts()
     self.setupConstraints()
     self.setupStyles()
+    self.setupLoadingView()
     self.bind()
   }
 
@@ -78,6 +85,14 @@ open class BaseViewController: UIViewController, Toastable {
       top: 0, leading: 20.0, bottom: 0, trailing: 20.0
     )
   }
+  
+  private func setupLoadingView() {
+    self.loadingView.addSubview(self.indicatorView)
+    
+    self.indicatorView.snp.makeConstraints { make in
+      make.center.equalToSuperview()
+    }
+  }
 
   open func bind() { }
   
@@ -93,16 +108,16 @@ open class BaseViewController: UIViewController, Toastable {
       if isLoading {
         // 로딩 중
         self.indicatorView.startAnimating()
-        self.view.addSubview(self.indicatorView)
-        
-        self.indicatorView.snp.makeConstraints { make in
-          make.center.equalToSuperview()
+        self.loadingView.isHidden = false
+        self.view.addSubview(self.loadingView)
+        self.loadingView.snp.makeConstraints { make in
+          make.edges.equalToSuperview()
         }
       } else {
         // 로딩 중이 아님
         self.indicatorView.stopAnimating()
-        self.indicatorView.removeFromSuperview()
-      }      
+        self.loadingView.removeFromSuperview()
+      }
     }
   }
 

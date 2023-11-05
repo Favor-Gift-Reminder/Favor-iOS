@@ -110,7 +110,7 @@ final class GiftManagementViewController: BaseViewController, View {
     )
     return composer
   }()
-
+  
   // MARK: - Life Cycle
 
   override func viewDidLoad() {
@@ -138,6 +138,7 @@ final class GiftManagementViewController: BaseViewController, View {
     
     // 완료/등록 버튼 터치
     self.doneButton.rx.tap
+      .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)

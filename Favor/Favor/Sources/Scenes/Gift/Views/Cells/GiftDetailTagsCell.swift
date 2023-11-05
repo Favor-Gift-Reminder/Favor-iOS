@@ -21,7 +21,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   // MARK: - Properties
 
   public weak var delegate: GiftDetailTagsCellDelegate?
-
+  
   public var gift: Gift = Gift() {
     didSet { self.updateGift() }
   }
@@ -71,14 +71,14 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
         owner.delegate?.tagDidSelected(.category(self.gift.category))
       })
       .disposed(by: self.disposeBag)
-
+    
     self.isGivenButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
         owner.delegate?.tagDidSelected(.isGiven(self.gift.isGiven))
       })
       .disposed(by: self.disposeBag)
-
+    
     self.relatedFriendsButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
@@ -86,9 +86,9 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
-
+  
   private func updateGift() {
 //    self.emotionButton.configuration?.image = gift.emotion
     self.categoryButton.configuration?.updateAttributedTitle(
@@ -99,9 +99,10 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       gift.isGiven ? "준 선물" : "받은 선물",
       font: .favorFont(.regular, size: 12)
     )
-    let friends = gift.relatedFriends
+    var friends: [Friend] = gift.relatedFriends
+    friends.append(contentsOf: gift.tempFriends.map { Friend(friendName: $0) })
     guard let firstFriend = friends.first else { return }
-    let friendsTitle = friends.count == 1 ? firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count)"
+    let friendsTitle = friends.count == 1 ? firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count - 1)"
     self.relatedFriendsButton.configuration?.updateAttributedTitle(
       friendsTitle,
       font: .favorFont(.regular, size: 12)
