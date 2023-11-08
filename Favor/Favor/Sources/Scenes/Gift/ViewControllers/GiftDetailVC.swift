@@ -93,11 +93,19 @@ final class GiftDetailViewController: BaseViewController, View {
     
     self.setupNavigationBar()
   }
-
+  
   // MARK: - Binding
-
+  
   func bind(reactor: GiftDetailViewReactor) {
     // Action
+    Observable.combineLatest(
+      self.rx.viewDidLoad,
+      self.rx.viewWillAppear
+    )
+    .map { _ in Reactor.Action.viewNeedsLoad }
+    .bind(to: reactor.action)
+    .disposed(by: self.disposeBag)
+    
     self.editButton.rx.tap
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
@@ -130,7 +138,6 @@ final class GiftDetailViewController: BaseViewController, View {
     
     // State
     Observable.combineLatest(self.rx.viewDidLoad, reactor.state.map { $0.items })
-      .debounce(.milliseconds(100), scheduler: MainScheduler.instance)
       .map { $0.1 }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, items in
@@ -144,7 +151,6 @@ final class GiftDetailViewController: BaseViewController, View {
 
         DispatchQueue.main.async {
           dataSource.apply(snapshot)
-          owner.collectionView.collectionViewLayout.invalidateLayout()
         }
       })
       .disposed(by: self.disposeBag)

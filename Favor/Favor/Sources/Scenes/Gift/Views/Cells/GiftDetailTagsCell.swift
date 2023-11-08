@@ -25,7 +25,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   public var gift: Gift = Gift() {
     didSet { self.updateGift() }
   }
-
+  
   // MARK: - UI Components
 
   private let emotionButton = FavorSmallButton(with: .grayWithEmotion(.favorIcon(.deselect)))

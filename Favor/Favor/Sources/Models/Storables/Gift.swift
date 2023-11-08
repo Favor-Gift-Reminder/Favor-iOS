@@ -154,7 +154,7 @@ extension Gift {
     case identifier(Int)
     case name(String)
     case date(Date?)
-    case photos([UIImage])
+    case photos([String])
     case memo(String?)
     case category(FavorCategory)
     case emotion(String)
@@ -191,21 +191,7 @@ extension Gift {
 
 // MARK: - Hashable
 
-extension Gift: Hashable {
-  public static func == (lhs: Gift, rhs: Gift) -> Bool {
-    if lhs.photos == rhs.photos,
-       lhs.identifier == rhs.identifier,
-       lhs.isPinned == rhs.isPinned {
-      return true
-    } else {
-      return false
-    }
-  }
-  
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(self.identifier)
-  }
-}
+extension Gift: Hashable {}
 
 // MARK: - Image Cache
 

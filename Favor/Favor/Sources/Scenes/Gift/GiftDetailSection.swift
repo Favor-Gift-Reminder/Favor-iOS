@@ -14,9 +14,9 @@ import FavorKit
 
 public enum GiftDetailSectionItem: ComposableItem {
   case image(String)
-  case title(Bool)
-  case tags
-  case memo
+  case title(Gift)
+  case tags(Gift)
+  case memo(Gift)
 }
 
 // MARK: - Section

@@ -20,8 +20,11 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  private let fetcher = Fetcher<Gift>()
+  private let workBench = RealmWorkbench()
   
   enum Action {
+    case viewNeedsLoad
     case editButtonDidTap
     case deleteButtonDidTap
     case shareButtonDidTap
@@ -51,12 +54,18 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     self.initialState = State(
       gift: gift
     )
+    self.setupFetcher(with: gift.identifier)
   }
   
   // MARK: - Functions
   
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
+    case .viewNeedsLoad:
+      return self.fetcher.fetch()
+        .compactMap { $0.results.first }
+        .flatMap { return Observable<Mutation>.just(.updateGift($0)) }
+      
     case .editButtonDidTap:
       self.steps.accept(AppStep.giftManagementIsRequired(self.currentState.gift))
       return .empty()
@@ -80,7 +89,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       let total = self.currentState.gift.photos.count 
       self.steps.accept(AppStep.giftDetailPhotoIsRequired(item, total))
       return .empty()
-
+      
     case .isPinnedButtonDidTap:
       return self.requestToggleIsPinned(self.currentState.gift)
         .asObservable()
@@ -108,7 +117,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     case .friendsTagDidTap(let friends):
       self.steps.accept(AppStep.giftDetailFriendsBottomSheetIsRequired(friends))
       return .empty()
-
+      
     case .doNothing:
       return .empty()
     }
@@ -129,9 +138,10 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
       
+      let gift = state.gift
       let imageItems: [Item] = state.gift.photos.map { .image($0.remote) }
       newState.imageItems = imageItems
-      newState.items = [imageItems, [.title(state.gift.isPinned)], [.tags], [.memo]]
+      newState.items = [imageItems, [.title(gift)], [.tags(gift)], [.memo(gift)]]
 
       return newState
     }
@@ -141,6 +151,32 @@ final class GiftDetailViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension GiftDetailViewReactor {
+  func setupFetcher(with identifier: Int) {
+    // onRemote
+    self.fetcher.onRemote = {
+      let networking = GiftNetworking()
+      let gift = networking.request(.getGift(giftNo: identifier))
+        .flatMap { response -> Observable<[Gift]> in
+          let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
+          return .just([Gift(singleDTO: responseDTO.data)])
+        }
+        .asSingle()
+      return gift
+    }
+    // onLocal
+    self.fetcher.onLocal = {
+      return await self.workBench.values(GiftObject.self)
+        .filter { $0.giftNo == identifier } 
+        .map { Gift(realmObject: $0) }
+    }
+    // onLocalUpdate
+    self.fetcher.onLocalUpdate = { _, remoteGifts in
+      try await self.workBench.write { transaction in
+        transaction.update(remoteGifts.map { $0.realmObject() })
+      }
+    }
+  }
+  
   func requestDeleteGift(_ gift: Gift) -> Single<Gift> {
     return Single<Gift>.create { single in
       let networking = GiftNetworking()

@@ -52,33 +52,41 @@ public class BaseSearchTagViewController: BaseViewController, View {
 
   public func bind(reactor: SearchTagViewReactor) {
     // Action
-    self.rx.viewDidLoad
-      .map { Reactor.Action.viewNeedsLoaded }
+    Observable.combineLatest(
+      self.rx.viewDidLoad,
+      self.rx.viewWillAppear.map { _ in }
+    )
+    .debug()
+      .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
+    self.collectionView.rx.itemSelected
+      .compactMap { self.dataSource?.itemIdentifier(for: $0) }
+      .map { Reactor.Action.itemSelected($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { ($0.sections, $0.giftItems) }
-      .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
-        let (sections, items) = sectionData
+          let (sections, items) = sectionData
         var snapshot = NSDiffableDataSourceSnapshot<SearchTagSection, SearchTagSectionItem>()
         snapshot.appendSections(sections)
         guard let section = sections.first else { return }
         snapshot.appendItems(items, toSection: section)
-
+        
         DispatchQueue.main.async {
           owner.dataSource?.apply(snapshot)
         }
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
 
   // MARK: - UI Setups
-
 }
 
 // MARK: - DataSource

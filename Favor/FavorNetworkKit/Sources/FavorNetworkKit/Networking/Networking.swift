@@ -45,7 +45,7 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Functions
   
   @discardableResult
-  public func request(_ target: TargetType) -> Observable<Response> {
+  public func request(_ target: TargetType, isOpeningPopup: Bool = true) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return UIApplication.shared.topViewControllerAsObservable()
       .flatMap { topViewController -> Observable<Response> in
@@ -74,7 +74,9 @@ public final class Networking<TargetType: BaseTargetType> {
               FavorNotificationManager.shared.showFavorPopup("인터넷 연결이 불안정합니다.")
             case let APIError.restError(_, responseMessage):
               // 서버 응답 오류
-              FavorNotificationManager.shared.showFavorPopup(responseMessage)
+              if isOpeningPopup {
+                FavorNotificationManager.shared.showFavorPopup(responseMessage)
+              }
             case APIError.decodeError:
               // 디코딩 에러
               break

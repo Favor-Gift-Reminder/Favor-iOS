@@ -19,6 +19,7 @@ final class SearchGiftResultCell: BaseCollectionViewCell {
   private let thumbnailImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
+    imageView.layer.masksToBounds = true
     return imageView
   }()
   
@@ -58,10 +59,13 @@ final class SearchGiftResultCell: BaseCollectionViewCell {
   }
 
   // MARK: - Binding
-
+  
   public func bind(with gift: Gift) {
     self.titleLabel.text = gift.name
     self.dateLabel.text = gift.date?.toShortenDateString()
+    guard let firstUrl = gift.photos.first?.remote else { return }
+    guard let url = URL(string: firstUrl) else { return }
+    self.thumbnailImageView.setImage(from: url, mapper: .init(gift: gift, subpath: .image(firstUrl)))
   }
 }
 

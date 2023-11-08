@@ -32,30 +32,23 @@ public final class SearchCategoryViewController: BaseSearchTagViewController {
 
   public override func bind(reactor: SearchTagViewReactor) {
     super.bind(reactor: reactor)
-
+    
     // Action
     self.categoryView.currentCategory
       .distinctUntilChanged()
       .map { Reactor.Action.categoryDidSelected($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
-    reactor.state.map { $0.category ?? .lightGift }
-      .distinctUntilChanged()
+    reactor.state.map { $0.category }
+      .take(1)
       .observe(on: MainScheduler.asyncInstance)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, category in
         owner.categoryView.setSelectedCategory(category)
       })
       .disposed(by: self.disposeBag)
-  }
-
-  // MARK: - Functions
-
-  public func requestCategory(_ category: FavorCategory) {
-    guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.categoryDidSelected(category))
   }
 
   // MARK: - UI Setups
@@ -76,7 +69,7 @@ public final class SearchCategoryViewController: BaseSearchTagViewController {
     }
 
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.categoryView.snp.bottom)
+      make.top.equalTo(self.categoryView.snp.bottom).offset(16.0)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
     }

@@ -14,7 +14,6 @@ import class RealmSwift.ThreadSafe
 public struct Friend: Storable, Receivable {
   
   // MARK: - Properties
-  public let uuid = UUID()
   public let identifier: Int
   public var friendName: String
   public var friendID: String
@@ -155,12 +154,7 @@ extension Friend {
 
 // MARK: - Hashable
 
-extension Friend: Hashable {
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(self.identifier)
-    hasher.combine(self.uuid.uuidString)
-  }
-}
+extension Friend: Hashable {}
 
 // MARK: - Image Cache
 

@@ -12,6 +12,11 @@ import RxCocoa
 import RxFlow
 
 public final class SearchTagViewReactor: Reactor, Stepper {
+  
+  enum ViewType {
+    case category(FavorCategory)
+    case emotion(FavorEmotion)
+  }
 
   // MARK: - Properties
 
@@ -19,22 +24,24 @@ public final class SearchTagViewReactor: Reactor, Stepper {
   public var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
   private let giftFetcher = Fetcher<Gift>()
-
+  
   public enum Action {
     case viewNeedsLoaded
     case categoryDidSelected(FavorCategory)
     case emotionDidSelected(FavorEmotion)
+    case itemSelected(SearchTagSectionItem)
   }
-
+  
   public enum Mutation {
     case updateSelectedCategory(FavorCategory)
     case updateSelectedEmotion(FavorEmotion)
     case updateGifts([Gift])
   }
-
+  
   public struct State {
-    var category: FavorCategory?
-    var emotion: FavorEmotion?
+    var viewType: ViewType
+    var category: FavorCategory = .graduation
+    var emotion: FavorEmotion = .xoxo
     var sections: [SearchTagSection] = []
     var gifts: [Gift] = []
     var giftItems: [SearchTagSectionItem] = []
@@ -42,41 +49,44 @@ public final class SearchTagViewReactor: Reactor, Stepper {
 
   // MARK: - Initializer
 
-  init() {
-    self.initialState = State()
+  init(_ viewType: ViewType) {
+    switch viewType {
+    case .category(let favorCategory):
+      self.initialState = State(viewType: viewType, category: favorCategory)
+    case .emotion(let favorEmotion):
+      self.initialState = State(viewType: viewType, emotion: favorEmotion)
+    }
+    self.setupFetcher()
   }
 
   // MARK: - Functions
-
+  
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return .empty()
-
+      return self.giftFetcher.fetch()
+        .asObservable()
+        .flatMap { gifts -> Observable<Mutation> in
+          return .just(.updateGifts(gifts.results))
+        }
+      
     case .categoryDidSelected(let category):
-      self.setupFetcher(with: category)
-      return .concat(
-        .just(.updateSelectedCategory(category)),
-        self.giftFetcher.fetch()
-          .asObservable()
-          .flatMap { gifts -> Observable<Mutation> in
-            return .just(.updateGifts(gifts.results))
-          }
-      )
-
+      return .just(.updateSelectedCategory(category))
+      
     case .emotionDidSelected(let emotion):
-      self.setupFetcher(with: emotion)
-      return .concat(
-        .just(.updateSelectedEmotion(emotion)),
-        self.giftFetcher.fetch()
-          .asObservable()
-          .flatMap { gifts -> Observable<Mutation> in
-            return .just(.updateGifts(gifts.results))
-          }
-      )
+      return .just(.updateSelectedEmotion(emotion))
+      
+    case .itemSelected(let item):
+      switch item {
+      case .gift(let gift):
+        self.steps.accept(AppStep.giftDetailIsRequired(gift))
+        return .empty()
+      default:
+        return .empty()
+      }
     }
   }
-
+  
   public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -93,7 +103,7 @@ public final class SearchTagViewReactor: Reactor, Stepper {
 
     return newState
   }
-
+  
   public func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
@@ -103,7 +113,16 @@ public final class SearchTagViewReactor: Reactor, Stepper {
         newState.giftItems = [.empty(nil, "검색 결과가 없습니다.")]
       } else {
         newState.sections = [.gift]
-        newState.giftItems = state.gifts.map { .gift($0) }
+        switch state.viewType {
+        case .category:
+          newState.giftItems = state.gifts
+            .filter { $0.category == state.category }
+            .map { .gift($0) }
+        case .emotion:
+          newState.giftItems = state.gifts
+            .filter { $0.emotion == state.emotion }
+            .map { .gift($0) }
+        }
       }
 
       return newState
@@ -114,14 +133,17 @@ public final class SearchTagViewReactor: Reactor, Stepper {
 // MARK: - Fetcher
 
 private extension SearchTagViewReactor {
-  func setupFetcher(with category: FavorCategory) {
+  func setupFetcher() {
+    let viewType = self.currentState.viewType
     // onRemote
     self.giftFetcher.onRemote = {
-      let networking = UserNetworking()
-      let gifts = networking.request(.getGiftByCategory(category: category.rawValue))
-        .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Gift(singleDTO: $0) })
+      let networking = GiftNetworking()
+      let gifts = networking.request(.getAllGifts)
+        .map(ResponseDTO<[GiftSingleResponseDTO]>.self)
+        .map { $0.data.filter { $0.userNo == UserInfoStorage.userNo } }
+        .map { $0.map { Gift(singleDTO: $0) } }
+        .flatMap { gifts -> Observable<[Gift]> in
+          return .just(gifts)
         }
         .asSingle()
       return gifts
@@ -129,39 +151,17 @@ private extension SearchTagViewReactor {
     // onLocal
     self.giftFetcher.onLocal = {
       return await self.workbench.values(GiftObject.self)
-        .filter { $0.category == category }
         .map { Gift(realmObject: $0) }
     }
     // onLocalUpdate
-    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
-      try await self.workbench.write { transaction in
-        transaction.update(remoteGifts.map { $00.realmObject() })
+    self.giftFetcher.onLocalUpdate = { localGifts, remoteGifts in
+      // 삭제시킬 선물을 찾습니다.
+      let deleteGifts = localGifts.filter { localGift in
+        !remoteGifts.map { $0.identifier }.contains(localGift.identifier)
       }
-    }
-  }
-
-  func setupFetcher(with emotion: FavorEmotion) {
-    // onRemote
-    self.giftFetcher.onRemote = {
-      let networking = UserNetworking()
-      let gifts = networking.request(.getGiftByEmotion(emotion: emotion.rawValue))
-        .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Gift(singleDTO: $0) })
-        }
-        .asSingle()
-      return gifts
-    }
-    // onLocal
-    self.giftFetcher.onLocal = {
-      return await self.workbench.values(GiftObject.self)
-        .filter { $0.emotion == emotion }
-        .map { Gift(realmObject: $0) }
-    }
-    // onLocalUpdate
-    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
       try await self.workbench.write { transaction in
-        transaction.update(remoteGifts.map { $00.realmObject() })
+        deleteGifts.forEach { transaction.delete($0.realmObject()) }
+        transaction.update(remoteGifts.map { $0.realmObject() })
       }
     }
   }

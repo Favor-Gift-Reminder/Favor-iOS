@@ -43,7 +43,7 @@ final class GiftFlow: Flow {
       return self.navigateToGiftDetailPhoto(with: selectedItem, total: total)
 
     case .giftDetailIsComplete(let gift):
-      return self.popToHome(with: gift)
+      return self.popFromGiftDetail(gift)
 
     case .giftManagementIsRequired(let gift):
       return self.navigateToGiftManagement(with: gift)
@@ -116,16 +116,18 @@ private extension GiftFlow {
       let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController
     else { return .none }
     giftDetailVC.presentImageGallery(index: item, total: total)
-
     return .none
   }
   
-  func popToHome(with gift: Gift) -> FlowContributors {
+  func popFromGiftDetail(_ gift: Gift) -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
-    guard let homeVC = self.rootViewController.topViewController as? HomeViewController else { return .none }
-//    homeVC.presentToast(.giftDeleted(gift.name), duration: .short)
-
-    return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
+    if self.rootViewController.topViewController is HomeViewController {
+      ToastManager.shared.showNewToast(.init(.giftDeleted(gift.name)))
+      return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
+    } else {
+      ToastManager.shared.showNewToast(.init(.giftDeleted(gift.name)))
+      return .none
+    }
   }
 
   func navigateToGiftManagement(with gift: Gift?) -> FlowContributors {
@@ -146,7 +148,7 @@ private extension GiftFlow {
 
   func navigateToSearchEmotionResult(with emotion: FavorEmotion) -> FlowContributors {
     let searchEmotionVC = SearchEmotionViewController()
-    let searchEmotionReactor = SearchTagViewReactor()
+    let searchEmotionReactor = SearchTagViewReactor(.emotion(emotion))
     searchEmotionVC.reactor = searchEmotionReactor
     searchEmotionVC.title = "선물 감정"
 
@@ -163,13 +165,12 @@ private extension GiftFlow {
 
   func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
     let searchCategoryVC = SearchCategoryViewController()
-    let searchCategoryReactor = SearchTagViewReactor()
+    let searchCategoryReactor = SearchTagViewReactor(.category(category))
     searchCategoryVC.reactor = searchCategoryReactor
     searchCategoryVC.title = "선물 카테고리"
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(searchCategoryVC, animated: true)
-      searchCategoryVC.requestCategory(category)
     }
     
     return .one(flowContributor: .contribute(
@@ -216,7 +217,6 @@ private extension GiftFlow {
       if
         let gift,
         let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController {
-        print("YESGift: \(gift)")
         giftDetailVC.update(gift: gift)
       }
       return .none

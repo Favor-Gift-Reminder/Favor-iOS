@@ -94,14 +94,13 @@ private extension SearchFlow {
 
   func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
     let searchCategoryVC = SearchCategoryViewController()
-    let searchCategoryReactor = SearchTagViewReactor()
+    let searchCategoryReactor = SearchTagViewReactor(.category(category))
     searchCategoryVC.reactor = searchCategoryReactor
     searchCategoryVC.title = "선물 카테고리"
 
     DispatchQueue.main.async {
       self.rootViewController.pushViewController(searchCategoryVC, animated: true)
       self.rootViewController.setNavigationBarHidden(false, animated: false)
-      searchCategoryVC.requestCategory(category)
     }
 
     return .one(flowContributor: .contribute(
@@ -111,7 +110,7 @@ private extension SearchFlow {
 
   func navigateToSearchEmotionResult(with emotion: FavorEmotion) -> FlowContributors {
     let searchEmotionVC = SearchEmotionViewController()
-    let searchEmotionReactor = SearchTagViewReactor()
+    let searchEmotionReactor = SearchTagViewReactor(.emotion(emotion))
     searchEmotionVC.reactor = searchEmotionReactor
     searchEmotionVC.title = "선물 감정"
 
