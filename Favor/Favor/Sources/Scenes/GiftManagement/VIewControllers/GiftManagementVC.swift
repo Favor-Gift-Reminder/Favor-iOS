@@ -266,12 +266,13 @@ private extension GiftManagementViewController {
     
     let photoCellRegistration = UICollectionView.CellRegistration
     <GiftManagementPhotoCell, GiftManagementSectionItem> 
-    { [weak self] cell, indexPath, itemIdentifier in
+    { [weak self] cell, _, itemIdentifier in
       guard let self = self,
-            case let GiftManagementSectionItem.photo(image) = itemIdentifier
+            let reactor = self.reactor,
+            case let GiftManagementSectionItem.photo(imageModel) = itemIdentifier
       else { return }
       cell.delegate = self
-      cell.bind(with: image)
+      cell.bind(with: imageModel, gift: reactor.currentState.gift)
     }
 
     let friendCellRegistration = UICollectionView.CellRegistration
@@ -430,9 +431,10 @@ extension GiftManagementViewController: GiftManagementCategoryViewCellDelegate {
 // MARK: - Photo Cell
 
 extension GiftManagementViewController: GiftManagementPhotoCellDelegate {
-  func removeButtonDidTap(from image: UIImage?) {
-    guard let reactor = self.reactor else { return }
-    reactor.action.onNext(.removeButtonDidTap(image))
+  func removeButtonDidTap(from imageModel: GiftManagementPhotoModel?) {
+    guard let reactor = self.reactor,
+          let imageModel = imageModel else { return }
+    reactor.action.onNext(.removeButtonDidTap(imageModel))
   }
 }
 

@@ -55,7 +55,6 @@ public enum FavorSmallButtonType {
       config.image = userProfileImage
       config.baseBackgroundColor = .favorColor(.card)
       config.baseForegroundColor = .favorColor(.titleAndLine)
-      config.image = .favorIcon(.friend)
     case let .grayWithEmotion(emotion):
       titleString = ""
       config.image = emotion

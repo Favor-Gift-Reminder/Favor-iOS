@@ -11,7 +11,7 @@ import FavorKit
 import FavorNetworkKit
 import class RealmSwift.ThreadSafe
 
-public struct Photo: Receivable, Storable {
+public struct Photo: Receivable, Storable, Hashable {
   
   // MARK: - Properties
   

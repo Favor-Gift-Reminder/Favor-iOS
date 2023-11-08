@@ -15,7 +15,7 @@ import FavorKit
 public enum GiftManagementSectionItem: ComposableItem {
   case title
   case category
-  case photo(UIImage?)
+  case photo(GiftManagementPhotoModel?)
   case friends([Friend])
   case date
   case memo

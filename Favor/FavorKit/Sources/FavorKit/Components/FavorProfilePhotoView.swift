@@ -16,12 +16,13 @@ public class FavorProfilePhotoView: UIView {
   // MARK: - Constants
 
   public enum ProfileImageViewType {
-    case small, big
+    case small, big, verySmall
 
     public var size: CGFloat {
       switch self {
       case .small: return 48.0
       case .big: return 60.0
+      case .verySmall: return 16.0
       }
     }
   }
@@ -30,6 +31,10 @@ public class FavorProfilePhotoView: UIView {
 
   public var type: ProfileImageViewType = .small {
     didSet { self.updateSize() }
+  }
+  
+  public var isTempUser: Bool = false {
+    didSet { self.updateBorderLine() }
   }
   
   /// 추가하기 버튼으로 만들 수 있는 값입니다.
@@ -56,6 +61,15 @@ public class FavorProfilePhotoView: UIView {
   private var profileImageViewSize: Constraint?
 
   // MARK: - UI Components
+  
+  private let borderLineView: UIView = {
+    let view = UIView()
+    view.layer.borderWidth = 2.5
+    view.layer.borderColor = UIColor.favorColor(.main).cgColor
+    view.layer.cornerRadius = 30.0
+    view.isHidden = true
+    return view
+  }()
   
   /// 기본 이미지에 들어갈 친구 아이콘 입니다.
   private lazy var friendImage: UIImage? = {
@@ -103,7 +117,6 @@ public class FavorProfilePhotoView: UIView {
   
   public convenience init(
     _ type: ProfileImageViewType,
-    isUser: Bool,
     image: UIImage? = nil
   ) {
     self.init(frame: .zero)
@@ -127,6 +140,14 @@ public class FavorProfilePhotoView: UIView {
     profileImageViewSize.update(priority: .high)
     self.profileImageView.layer.cornerRadius = self.type.size / 2
   }
+  
+  private func updateBorderLine() {
+    if self.isTempUser {
+      self.borderLineView.isHidden = true
+    } else {
+      self.borderLineView.isHidden = false
+    }
+  }
 }
 
 // MARK: - UI Setups
@@ -136,14 +157,15 @@ extension FavorProfilePhotoView: BaseView {
 
   public func setupLayouts() {
     [
-      self.profileImageView
+      self.profileImageView,
+      self.borderLineView
     ].forEach {
       self.addSubview($0)
     }
     
     self.profileImageView.addSubview(self.defaultImageView)
   }
-
+  
   public func setupConstraints() {
     self.snp.makeConstraints { make in
       self.profileImageViewSize = make.width.height.equalTo(self.type.size).priority(.high).constraint
@@ -154,6 +176,10 @@ extension FavorProfilePhotoView: BaseView {
     }
     
     self.defaultImageView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
+    }
+    
+    self.borderLineView.snp.makeConstraints { make in
       make.edges.equalToSuperview()
     }
   }

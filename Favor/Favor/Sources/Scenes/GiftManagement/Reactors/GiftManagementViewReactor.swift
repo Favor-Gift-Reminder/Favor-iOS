@@ -18,14 +18,6 @@ import RxFlow
 final class GiftManagementViewReactor: Reactor, Stepper {
   typealias Section = GiftManagementSection
   typealias Item = GiftManagementSectionItem
-  
-  struct GiftManagementPhotoModel {
-    /// 해당 속성이 있으면 Url로 가져온 사진임을 의미합니다.
-    /// 또, 기존 사진을 삭제 시킬 때 필요합니다.
-    let url: String?
-    let isNew: Bool
-    let image: UIImage?
-  }
 
   // MARK: - Properties
   
@@ -53,7 +45,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     /// 사진이 갤러리에서 추가 되었음
     case photoDidAdd(UIImage?)
     /// 선택된 사진 삭제
-    case removeButtonDidTap(UIImage?)
+    case removeButtonDidTap(GiftManagementPhotoModel)
     /// 동작 없음
     case doNothing
   }
@@ -81,7 +73,6 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     var imageList: [GiftManagementPhotoModel] = []
     /// 기존에 저장되어 있는 있는 사진을 삭제할 URL 모음입니다.
     var removeTargetUrls: [String] = []
-    
     var sections: [Section] = []
     var items: [[Item]] = []
   }
@@ -113,11 +104,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     switch action {
     case .viewDidLoad:
       if self.currentState.viewType == .edit {
-        return self.loadImages(self.currentState.gift)
-          .asObservable()
-          .flatMap { imageList -> Observable<Mutation> in
-            return .just(.updateImageList(imageList))
-          }
+        return .just(.updateImageList(self.currentState.gift.photos
+          .map { .init(url: $0.remote, isNew: false, image: nil) }
+        ))
       } else {
         return .empty()
       }
@@ -198,9 +187,10 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       imageList.append(.init(url: nil, isNew: true, image: image))
       return .just(.updateImageList(imageList))
       
-    case .removeButtonDidTap(let image):
+    case .removeButtonDidTap(let photoModel):
       var imageList = self.currentState.imageList
-      guard let removeIndex = imageList.firstIndex(where: { $0.image === image }) else { return .empty() }
+      guard let removeIndex = imageList.firstIndex(where: { $0 == photoModel })
+      else { return .empty() }
       let photoModel = imageList.remove(at: removeIndex)
       if let url = photoModel.url {
         // 기존에 존재했던 사진
@@ -263,7 +253,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     return state.map { state in
       var newState = state
       
-      let photoItems: [Item] = [.photo(nil)] + state.imageList.map { .photo($0.image) }
+      let photoItems: [Item] = [.photo(nil)] + state.imageList.map { .photo($0) }
       
       newState.sections = [
         .title,

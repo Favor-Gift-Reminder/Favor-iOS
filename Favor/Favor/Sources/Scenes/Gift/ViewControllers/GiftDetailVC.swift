@@ -26,6 +26,7 @@ final class GiftDetailViewController: BaseViewController, View {
 
   private let currentPage = BehaviorRelay<Int>(value: 0)
   private let totalPages = BehaviorRelay<Int>(value: 0)
+  private var galleryItems: [GalleryItem] = []
 
   // MARK: - UI Components
 
@@ -152,9 +153,7 @@ final class GiftDetailViewController: BaseViewController, View {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { (owner: GiftDetailViewController, gift: Gift) in
         var totalGifts: Int = gift.photos.count
-        #if DEBUG
         totalGifts = gift.photos.isEmpty ? 4 : gift.photos.count
-        #endif
         owner.totalPages.accept(totalGifts)
       })
       .disposed(by: self.disposeBag)
@@ -198,25 +197,18 @@ final class GiftDetailViewController: BaseViewController, View {
 private extension GiftDetailViewController {
   func setupDataSource() {
     let imageCellRegistration = UICollectionView.CellRegistration
-    <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] _, _, item in
-      guard
-        self != nil,
-        case GiftDetailSectionItem.image = item
-      else { return }
-      // Image
+    <GiftDetailImageCell, GiftDetailSectionItem> { [weak self] cell, indexPath, _ in
+      guard let self = self, let reactor = self.reactor else { return }
+      cell.configure(gift: reactor.currentState.gift, index: indexPath.item)
     }
     
     let titleCellRegistration = UICollectionView.CellRegistration
-    <GiftDetailTitleCell, GiftDetailSectionItem> { [weak self] cell, _, _ in
+    <GiftDetailTitleCell, GiftDetailSectionItem> { [weak self] cell, _, item in
       guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
       cell.gift = reactor.currentState.gift
       
-      cell.configurationUpdateHandler = { cell, _ in
-        guard
-          let cell = cell as? GiftDetailTitleCell,
-          let reactor = self.reactor
-        else { return }
+      cell.configurationUpdateHandler = { _, _ in
         cell.gift = reactor.currentState.gift
       }
     }
@@ -254,7 +246,7 @@ private extension GiftDetailViewController {
         }
       }
     )
-
+    
     let pageFooterRegistration: UICollectionView.SupplementaryRegistration<GiftDetailPageFooterView> = UICollectionView.SupplementaryRegistration<GiftDetailPageFooterView>(
       elementKind: UICollectionView.elementKindSectionFooter
     ) { [weak self] footer, _, indexPath in
@@ -326,32 +318,56 @@ extension GiftDetailViewController: GiftDetailTagsCellDelegate {
 // MARK: - GalleryView
 
 extension GiftDetailViewController: GalleryItemsDataSource {
-  public func presentGalleryImageViewer(startingIndex: Int) {
-    
+  public func presentImageGallery(index: Int, total: Int) {
+    guard let reactor = self.reactor else { return }
+    let gift = reactor.currentState.gift
+    let cache = ImageCacheManager()
+    Task {
+      for photo in gift.photos {
+        let mapper = CacheKeyMapper(gift: gift, subpath: .image(photo.remote))
+        if cache.cacher.isCached(forKey: mapper.key) {
+          let image: UIImage? = await cache.fetch(from: mapper)
+          self.galleryItems.append(.image { $0(image) })
+        } else {
+          guard let url = URL(string: photo.remote) else { return }
+          let image = try await ImageDownloadManager.downloadImage(with: url)
+          cache.cache(image, mapper: mapper)
+          self.galleryItems.append(.image { $0(image) })
+        }
+      }
+      let galleryVC = GalleryViewController(
+        startIndex: index,
+        itemsDataSource: self,
+        configuration: self.galleryConfiguration()
+      )
+      let headerView = GiftDetailPhotoHeaderView()
+      headerView.total = total
+      
+      galleryVC.headerView = headerView
+      galleryVC.landedPageAtIndexCompletion = { index in
+        headerView.currentIndex = index
+      }
+      self.present(galleryVC, animated: false)
+    }
   }
-
-  nonisolated func itemCount() -> Int {
+  
+  func itemCount() -> Int {
     guard let reactor = self.reactor else { return 1 }
     return reactor.currentState.gift.photos.count
   }
-
-  nonisolated func provideGalleryItem(_ index: Int) -> ImageViewer.GalleryItem {
-    return GalleryItem.image { $0(UIImage(named: "MyPageHeaderPlaceholder")) }
+  
+  func provideGalleryItem(_ index: Int) -> ImageViewer.GalleryItem {
+    return self.galleryItems[index]
   }
-
+  
   public func galleryConfiguration() -> GalleryConfiguration {
-    var config = UIButton.Configuration.plain()
-    config.image = .favorIcon(.down)?
-      .withRenderingMode(.alwaysTemplate)
-    config.baseForegroundColor = .favorColor(.white)
-    let closeButton = UIButton(configuration: config)
     return [
-      .closeButtonMode(.custom(closeButton)),
+      .closeButtonMode(.builtIn),
       .closeLayout(.pinLeft(28, 22)),
       .deleteButtonMode(.none),
       .thumbnailsButtonMode(.none),
       .pagingMode(.standard),
-      .presentationStyle(.fade),
+      .presentationStyle(.displacement),
       .hideDecorationViewsOnLaunch(false),
       .swipeToDismissMode(.vertical),
       .activityViewByLongPress(false),

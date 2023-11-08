@@ -14,14 +14,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
 
   // MARK: - UI Components
 
-  private let stackView: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .vertical
-    stackView.spacing = 10
-    return stackView
-  }()
-
-  private let profileImageView = FavorProfilePhotoView(.big, isUser: false)
+  private let profileImageView = FavorProfilePhotoView(.big)
 
   private let nameLabel: UILabel = {
     let label = UILabel()
@@ -45,10 +38,11 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   }
 
   // MARK: - Functions
-
+  
   public func bind(_ friend: Friend) {
     self.profileImageView.profileImage = friend.profilePhoto
     self.nameLabel.text = friend.friendName
+    self.profileImageView.isTempUser = friend.identifier < 0
   }
 }
 
@@ -62,15 +56,19 @@ extension GiftFriendsBottomSheetCell: BaseView {
       self.profileImageView,
       self.nameLabel
     ].forEach {
-      self.stackView.addArrangedSubview($0)
+      self.addSubview($0)
     }
-
-    self.addSubview(self.stackView)
   }
 
   public func setupConstraints() {
-    self.stackView.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+    self.nameLabel.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.bottom.equalToSuperview()
+    }
+    
+    self.profileImageView.snp.makeConstraints { make in
+      make.centerX.equalToSuperview()
+      make.bottom.equalTo(self.nameLabel.snp.top).offset(-10.0)
     }
   }
 }

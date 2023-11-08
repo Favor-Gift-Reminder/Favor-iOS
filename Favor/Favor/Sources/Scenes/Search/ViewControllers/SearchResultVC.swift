@@ -133,7 +133,6 @@ final class SearchResultViewController: BaseSearchViewController {
         snapshot.appendSections([.result(.user)])
         snapshot.appendItems(items, toSection: .result(.user))
       }
-
       DispatchQueue.main.async {
         owner.dataSource?.apply(snapshot, animatingDifferences: true)
       }

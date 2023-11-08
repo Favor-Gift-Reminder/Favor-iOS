@@ -50,16 +50,17 @@ public final class GiftFriendsBottomSheet: BaseBottomSheet, Stepper {
     self.setupDataSource()
     self.composer.compose()
   }
-
+  
   // MARK: - Bind
-
+  
   public override func bind() {
     self.collectionView.rx.itemSelected
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, indexPath in
         guard
           let dataSource = owner.dataSource,
-          let item = dataSource.itemIdentifier(for: indexPath)
+          let item = dataSource.itemIdentifier(for: indexPath),
+          item.friend.identifier > 0
         else { return }
         self.steps.accept(AppStep.friendPageIsRequired(item.friend))
       })

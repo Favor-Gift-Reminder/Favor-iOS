@@ -13,7 +13,7 @@ import RxSwift
 import SnapKit
 
 public protocol GiftManagementPhotoCellDelegate: AnyObject {
-  func removeButtonDidTap(from image: UIImage?)
+  func removeButtonDidTap(from imageModel: GiftManagementPhotoModel?)
 }
 
 public final class GiftManagementPhotoCell: BaseCollectionViewCell {
@@ -28,6 +28,7 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
 
   public weak var delegate: GiftManagementPhotoCellDelegate?
   public var removeButtonTapped: ((UIImage?) -> Void)?
+  private var imageModel: GiftManagementPhotoModel?
 
   // MARK: - UI Components
 
@@ -35,10 +36,7 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
     let imageView = UIImageView()
     imageView.backgroundColor = .favorColor(.line3)
     imageView.contentMode = .center
-    imageView.image = .favorIcon(.gallery)?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: 40)
-      .withTintColor(.favorColor(.white))
+    imageView.contentMode = .scaleAspectFill
     return imageView
   }()
 
@@ -75,21 +73,33 @@ public final class GiftManagementPhotoCell: BaseCollectionViewCell {
     self.removeButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.removeButtonDidTap(from: owner.imageView.image)
+        owner.delegate?.removeButtonDidTap(from: self.imageModel)
       })
       .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
 
-  public func bind(with image: UIImage?) {
-    imageView.image = .favorIcon(.gallery)?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: 40)
-      .withTintColor(.favorColor(.white))
-    guard let image = image else { return }
+  public func bind(with model: GiftManagementPhotoModel?, gift: Gift = Gift()) {
+    guard let model = model else {
+      self.imageView.contentMode = .center
+      self.imageView.image = .favorIcon(.gallery)?
+        .withRenderingMode(.alwaysTemplate)
+        .resize(newWidth: 40)
+        .withTintColor(.favorColor(.white))
+      return
+    }
+    
+    self.imageModel = model
+    if let urlString = model.url {
+      // URL을 가지고 있는 기존에 저장되어 있는 이미지
+      guard let url = URL(string: urlString) else { return }
+      self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(urlString)))
+    } else {
+      // 갤러리에서 추가된 이미지
+      self.imageView.image = model.image
+    }
     self.imageView.contentMode = .scaleAspectFill
-    self.imageView.image = image
     self.removeButton.isHidden = false
   }
 }

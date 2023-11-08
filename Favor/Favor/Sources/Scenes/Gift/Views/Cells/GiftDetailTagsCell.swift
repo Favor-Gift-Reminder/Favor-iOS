@@ -32,7 +32,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   private let categoryButton = FavorSmallButton(with: .gray("카테고리"))
   private let isGivenButton = FavorSmallButton(with: .gray("준 선물"))
   private let relatedFriendsButton = FavorSmallButton(with: .grayWithUser("친구", image: .favorIcon(.friend)))
-
+  
   private let stackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .horizontal
@@ -49,13 +49,13 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.setupConstraints()
     self.bind()
   }
-
+  
   required init(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
+  
   // MARK: - Bind
-
+  
   private func bind() {
     self.emotionButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -82,7 +82,9 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.relatedFriendsButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.tagDidSelected(.friends(self.gift.relatedFriends))
+        var friends: [Friend] =
+        owner.gift.relatedFriends + owner.gift.tempFriends.map { Friend(friendName: $0) }
+        owner.delegate?.tagDidSelected(.friends(friends))
       })
       .disposed(by: self.disposeBag)
   }
@@ -113,14 +115,16 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
 // MARK: - UI Setups
 
 extension GiftDetailTagsCell: BaseView {
-  func setupStyles() { }
+  func setupStyles() {
+    self.relatedFriendsButton.imageView?.layer.cornerRadius = 8.0
+  }
 
   func setupLayouts() {
     [
       self.emotionButton,
       self.categoryButton,
       self.isGivenButton,
-      self.relatedFriendsButton
+      self.relatedFriendsButton,
     ].forEach {
       self.stackView.addArrangedSubview($0)
     }

@@ -152,7 +152,6 @@ final class HomeViewController: BaseViewController, View {
         snapshot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sectionData.sections[idx])
-          snapshot.reconfigureItems(item)
         }
         DispatchQueue.main.async {
           dataSource.apply(snapshot)

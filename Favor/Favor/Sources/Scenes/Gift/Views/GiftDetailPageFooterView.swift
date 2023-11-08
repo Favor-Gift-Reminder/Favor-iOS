@@ -49,7 +49,7 @@ public final class GiftDetailPageFooterView: UICollectionViewCell {
     self.setupConstraints()
     self.updateLabel()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -58,7 +58,6 @@ public final class GiftDetailPageFooterView: UICollectionViewCell {
 
   public func bind(currentPage: Observable<Int>, totalPages: Observable<Int>) {
     Observable.combineLatest(currentPage, totalPages)
-      .distinctUntilChanged { $0.0 == $1.0 }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, pages in
         owner.current = pages.0 + 1

@@ -13,8 +13,8 @@ import FavorKit
 // MARK: - Item
 
 public enum GiftDetailSectionItem: ComposableItem {
-  case image(UIImage?)
-  case title
+  case image(String)
+  case title(Bool)
   case tags
   case memo
 }
@@ -26,32 +26,6 @@ public enum GiftDetailSection: ComposableSection {
   case title
   case tags
   case memo
-}
-
-// MARK: - Hashable
-
-extension GiftDetailSectionItem {
-  public static func == (lhs: Self, rhs: Self) -> Bool {
-    switch (lhs, rhs) {
-    case let (.image(lhsImage), .image(rhsImage)):
-      return lhsImage == rhsImage
-    default:
-      return false
-    }
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    switch self {
-    case .image(let image):
-      hasher.combine(image)
-    case .title:
-      hasher.combine("title")
-    case .tags:
-      hasher.combine("tags")
-    case .memo:
-      hasher.combine("memo")
-    }
-  }
 }
 
 // MARK: - Composable

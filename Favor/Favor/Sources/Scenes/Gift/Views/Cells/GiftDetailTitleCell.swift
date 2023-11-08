@@ -79,7 +79,7 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   }()
   
   // MARK: - Initializer
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
@@ -107,8 +107,8 @@ final class GiftDetailTitleCell: BaseCollectionViewCell {
   
   private func updateGift() {
     self.titleLabel.text = self.gift.name
-    self.pinButton.isSelected = self.gift.isPinned
     self.dateLabel.text = self.gift.date?.toShortenDateString()
+    self.pinButton.isSelected = self.gift.isPinned
   }
 }
 

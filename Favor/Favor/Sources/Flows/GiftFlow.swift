@@ -115,21 +115,7 @@ private extension GiftFlow {
     guard
       let giftDetailVC = self.rootViewController.topViewController as? GiftDetailViewController
     else { return .none }
-
-    let galleryVC = GalleryViewController(
-      startIndex: item,
-      itemsDataSource: giftDetailVC,
-      configuration: giftDetailVC.galleryConfiguration()
-    )
-    let headerView = GiftDetailPhotoHeaderView()
-    headerView.total = total
-    
-    galleryVC.headerView = headerView
-    galleryVC.landedPageAtIndexCompletion = { index in
-      headerView.currentIndex = index
-    }
-
-    giftDetailVC.presentImageGallery(galleryVC)
+    giftDetailVC.presentImageGallery(index: item, total: total)
 
     return .none
   }

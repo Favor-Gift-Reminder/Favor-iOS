@@ -20,7 +20,7 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
     
   // MARK: - UI Components
   
-  private let favorProfilePhotoView = FavorProfilePhotoView(.big, isUser: false)
+  private let favorProfilePhotoView = FavorProfilePhotoView(.big)
   
   private let stackView: UIStackView = {
     let stackView = UIStackView()

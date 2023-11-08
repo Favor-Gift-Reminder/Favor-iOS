@@ -44,7 +44,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
     var items: [[Item]] = []
     var imageItems: [Item] = []
   }
-
+  
   // MARK: - Initializer
   
   init(gift: Gift) {
@@ -128,13 +128,10 @@ final class GiftDetailViewReactor: Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
-      if state.gift.photos.count == .zero {
-        newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
-      } else {
-        newState.imageItems = [.image(nil), .image(.favorIcon(.add)), .image(.favorIcon(.addFriend)), .image(.favorIcon(.addNoti))]
-      }
-      newState.items = [newState.imageItems, [.title], [.tags], [.memo]]
+      
+      let imageItems: [Item] = state.gift.photos.map { .image($0.remote) }
+      newState.imageItems = imageItems
+      newState.items = [imageItems, [.title(state.gift.isPinned)], [.tags], [.memo]]
 
       return newState
     }

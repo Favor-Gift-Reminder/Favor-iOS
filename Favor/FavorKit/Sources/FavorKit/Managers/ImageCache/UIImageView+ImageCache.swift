@@ -27,7 +27,7 @@ extension UIImageView {
         .processor(downsamplingProcessor),
         .targetCache(cache.cacher),
         .keepCurrentImageWhileLoading,
-        .retryStrategy(DelayRetryStrategy(maxRetryCount: 3, retryInterval: .seconds(2)))
+        .retryStrategy(DelayRetryStrategy(maxRetryCount: 3, retryInterval: .seconds(2))),
       ]
       
       let resource: Resource = KF.ImageResource(downloadURL: url, cacheKey: mapper.key)
@@ -36,6 +36,7 @@ extension UIImageView {
       
       let disk = try await cache.cacher.diskStorageSize
       os_log(.debug, "💿 Disk storage size in use: \(disk)")
+      os_log(.debug, "🔗 CacheURL Info: \(mapper.key)")
     }
   }
 }

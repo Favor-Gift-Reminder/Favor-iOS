@@ -18,9 +18,10 @@ public final class GiftDetailImageCell: BaseCollectionViewCell {
   private let imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
+    imageView.layer.masksToBounds = true
     return imageView
   }()
-
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -29,22 +30,24 @@ public final class GiftDetailImageCell: BaseCollectionViewCell {
     self.setupLayouts()
     self.setupConstraints()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+  
+  // MARK: - Configure
+  
+  public func configure(gift: Gift, index: Int) {
+    let urlString = gift.photos[index].remote
+    guard let url = URL(string: urlString) else { return }
+    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(urlString)))
   }
 }
 
 // MARK: - UI Setups
 
 extension GiftDetailImageCell: BaseView {
-  public func setupStyles() {
-    let colors: [UIColor] = [
-      .systemRed, .systemBlue, .systemMint, .systemPink, .systemRed, .systemPink, .systemYellow,
-      .systemBrown, .systemPurple, .systemIndigo, .systemOrange, .favorColor(.main)
-    ]
-    self.imageView.backgroundColor = colors.randomElement()
-  }
+  public func setupStyles() {}
 
   public func setupLayouts() {
     self.addSubview(self.imageView)

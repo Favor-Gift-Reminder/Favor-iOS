@@ -55,8 +55,7 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   public func bind(with gift: Gift) {
     guard let firstPhotoURL = gift.photos.first?.remote else { return }
     guard let url = URL(string: firstPhotoURL) else { return }
-    self.imageView.kf.setImage(with: url)
-//    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(0)))
+    self.imageView.setImage(from: url, mapper: CacheKeyMapper(gift: gift, subpath: .image(firstPhotoURL)))
     self.pinnedIconView.isHidden = !gift.isPinned
   }
 }

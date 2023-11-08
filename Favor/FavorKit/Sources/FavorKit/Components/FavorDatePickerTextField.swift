@@ -110,6 +110,7 @@ public final class FavorDatePickerTextField: UIView {
     tf.font = .favorFont(.regular, size: 16)
     tf.inputView = self.datePicker
     tf.inputAccessoryView = self.toolBar
+    tf.delegate = self
     return tf
   }()
 
@@ -232,5 +233,13 @@ public extension Reactive where Base: FavorDatePickerTextField {
       picker.date.accept(date)
     }
     return ControlProperty(values: source, valueSink: bindingObserver)
+  }
+}
+
+// MARK: - TextFieldDelegate
+
+extension FavorDatePickerTextField: UITextFieldDelegate {
+  public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    return false
   }
 }

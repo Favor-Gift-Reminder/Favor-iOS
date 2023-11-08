@@ -29,7 +29,7 @@ open class BaseFriendCell: BaseCollectionViewCell {
     return label
   }()
   
-  private let favorProfilePhotoView = FavorProfilePhotoView(.small, isUser: false)
+  private let favorProfilePhotoView = FavorProfilePhotoView(.small)
   
   // MARK: - Properties
   

@@ -216,6 +216,7 @@
 		E52F565B29D5698A004E85A6 /* NewGiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */ = {isa = PBXBuildFile; productRef = E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */; };
+		E581BD522AF92C08007C4A62 /* GiftManagementImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581BD512AF92C08007C4A62 /* GiftManagementImageModel.swift */; };
 		E583C58F2A1E619F00DC219A /* AnniversaryBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583C58E2A1E619F00DC219A /* AnniversaryBottomSheetView.swift */; };
 		E583C5912A1E627800DC219A /* FilterBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583C5902A1E627800DC219A /* FilterBottomSheet.swift */; };
 		E583C5932A1E629D00DC219A /* AnniversaryBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583C5922A1E629D00DC219A /* AnniversaryBottomSheet.swift */; };
@@ -442,6 +443,7 @@
 		E524C19529EAA50C004CCC40 /* FriendSelectorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorHeaderView.swift; sourceTree = "<group>"; };
 		E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFlow.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
+		E581BD512AF92C08007C4A62 /* GiftManagementImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementImageModel.swift; sourceTree = "<group>"; };
 		E583C58E2A1E619F00DC219A /* AnniversaryBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryBottomSheetView.swift; sourceTree = "<group>"; };
 		E583C5902A1E627800DC219A /* FilterBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheet.swift; sourceTree = "<group>"; };
 		E583C5922A1E629D00DC219A /* AnniversaryBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryBottomSheet.swift; sourceTree = "<group>"; };
@@ -676,6 +678,7 @@
 			isa = PBXGroup;
 			children = (
 				2E3FA75A29F80B63003342CA /* FriendListSection.swift */,
+				E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */,
 				2E3FA75429F7C515003342CA /* Reactors */,
 				2E3FA75529F7C522003342CA /* Views */,
 				2E3FA75329F7C50F003342CA /* ViewControllers */,
@@ -1335,7 +1338,7 @@
 			isa = PBXGroup;
 			children = (
 				2E6E28D52A24369B00E25DB6 /* GiftManagementSection.swift */,
-				E524C18A29E924A8004CCC40 /* NewGiftFriendSection.swift */,
+				E581BD512AF92C08007C4A62 /* GiftManagementImageModel.swift */,
 				2EE07EDA296E8E4400048A3C /* Views */,
 				2EE07EDB296E8E4800048A3C /* Reactors */,
 				2EE07ED5296E8E0C00048A3C /* ViewControllers */,
@@ -1766,6 +1769,7 @@
 				2E013D5D2A2EEAE600FBE833 /* Friend.swift in Sources */,
 				2E013D5E2A2EEAE600FBE833 /* Gift.swift in Sources */,
 				2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */,
+				E581BD522AF92C08007C4A62 /* GiftManagementImageModel.swift in Sources */,
 				2E013D5F2A2EEAE600FBE833 /* Reminder.swift in Sources */,
 				2E013D602A2EEAE600FBE833 /* User.swift in Sources */,
 				2E013D612A2EEAE600FBE833 /* Anniversary.swift in Sources */,
