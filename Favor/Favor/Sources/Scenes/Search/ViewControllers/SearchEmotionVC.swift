@@ -19,18 +19,8 @@ public final class SearchEmotionViewController: BaseSearchTagViewController {
   // MARK: - Properties
 
   // MARK: - UI Components
-
-  private let emotionButtonStack: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.distribution = .equalCentering
-
-    FavorEmotion.allCases.forEach {
-      stackView.addArrangedSubview(FavorEmotionButton($0))
-    }
-
-    return stackView
-  }()
+  
+  private let emotionView = FavorEmotionView()
 
   // MARK: - Life Cycle
 
@@ -40,14 +30,11 @@ public final class SearchEmotionViewController: BaseSearchTagViewController {
     super.bind(reactor: reactor)
 
     // Action
-    self.emotionButtonStack.arrangedSubviews.forEach { arrangedSubviews in
-      guard let button = arrangedSubviews as? FavorEmotionButton else { return }
-      button.rx.tap
-        .map { Reactor.Action.emotionDidSelected(button.emotion) }
-        .bind(to: reactor.action)
-        .disposed(by: self.disposeBag)
-    }
-
+    self.emotionView.emotionSubject
+      .map { Reactor.Action.emotionDidSelected($0) }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
     
   }
@@ -57,13 +44,14 @@ public final class SearchEmotionViewController: BaseSearchTagViewController {
   public func requestEmotion(_ emotion: FavorEmotion) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.emotionDidSelected(emotion))
+    self.emotionView.updateEmotion(emotion)
   }
 
   // MARK: - UI Setups
 
   public override func setupLayouts() {
     [
-      self.emotionButtonStack,
+      self.emotionView,
       self.collectionView
     ].forEach {
       self.view.addSubview($0)
@@ -71,13 +59,13 @@ public final class SearchEmotionViewController: BaseSearchTagViewController {
   }
 
   public override func setupConstraints() {
-    self.emotionButtonStack.snp.makeConstraints { make in
+    self.emotionView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(32)
       make.directionalHorizontalEdges.equalToSuperview().inset(20)
     }
 
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.emotionButtonStack.snp.bottom)
+      make.top.equalTo(self.emotionView.snp.bottom)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
     }

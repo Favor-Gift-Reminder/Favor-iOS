@@ -61,6 +61,13 @@ extension UIImage {
     case kakao
     case naver
     case apple
+    
+    // Emotion
+    case touching
+    case excited
+    case good
+    case xoxo
+    case boring
   }
 
   public static func favorIcon(_ icon: FavorIcon) -> UIImage? {

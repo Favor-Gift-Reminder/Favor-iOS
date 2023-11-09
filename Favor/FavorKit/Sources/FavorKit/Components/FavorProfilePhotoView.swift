@@ -37,6 +37,10 @@ public class FavorProfilePhotoView: UIView {
     didSet { self.updateBorderLine() }
   }
   
+  public var baseBackgroundColor: UIColor = .favorColor(.line3) {
+    willSet { self.profileImageView.backgroundColor = newValue }
+  }
+  
   /// 추가하기 버튼으로 만들 수 있는 값입니다.
   /// 이 값은 `.big`일 때만 사용할 수 있습니다.
   public var isNewFriendCell: Bool = false {
@@ -108,20 +112,16 @@ public class FavorProfilePhotoView: UIView {
 
   // MARK: - Initializer
   
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-    self.setupStyles()
-    self.setupLayouts()
-    self.setupConstraints()
-  }
-  
-  public convenience init(
+  public init(
     _ type: ProfileImageViewType,
     image: UIImage? = nil
   ) {
-    self.init(frame: .zero)
+    super.init(frame: .zero)
     self.profileImage = image
     self.type = type
+    self.setupStyles()
+    self.setupLayouts()
+    self.setupConstraints()
     self.updateSize()
   }
   

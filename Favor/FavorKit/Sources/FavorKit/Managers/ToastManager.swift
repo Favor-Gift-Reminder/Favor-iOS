@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import OSLog
 
 import SnapKit
 
@@ -55,9 +56,10 @@ public final class ToastManager {
     toast.duration = duration
     self.queue.enqueue(toast)
     
-    guard
-      let topViewController = UIApplication.shared.topViewController() as? BaseViewController
-    else { return }
+    guard let topViewController = UIApplication.shared.topViewController() else {
+      os_log(.error, "뷰컨트롤러를 참조되지 못했습니다.")
+      return
+    }
     
     if self.queue.peek() === toast { // Queue에 쌓인 토스트가 없을 경우 (현재 토스트가 present 될 수 있을 경우)
       self.showToast(
@@ -69,10 +71,10 @@ public final class ToastManager {
       return
     }
   }
-
+  
   public func hideToast(
     _ toast: FavorToastMessageView,
-    from viewController: Toastable,
+    from viewController: UIViewController,
     duration: ToastManager.Duration? = nil
   ) {
     let animator = UIViewPropertyAnimator(duration: self.popOutDuration, curve: .easeInOut) {
@@ -107,7 +109,7 @@ public final class ToastManager {
   
   private func showToast(
     _ toast: FavorToastMessageView,
-    at viewController: Toastable,
+    at viewController: UIViewController,
     completion: (() -> Void)? = nil
   ) {
     toast.alpha = 0.0

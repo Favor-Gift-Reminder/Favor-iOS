@@ -107,7 +107,7 @@ public final class SearchTagViewReactor: Reactor, Stepper {
   public func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
+      
       if state.gifts.isEmpty {
         newState.sections = [.empty]
         newState.giftItems = [.empty(nil, "검색 결과가 없습니다.")]

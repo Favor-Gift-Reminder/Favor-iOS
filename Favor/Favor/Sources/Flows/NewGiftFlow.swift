@@ -102,7 +102,6 @@ private extension NewGiftFlow {
   @MainActor
   func popToFriendSelection(friendName: String) -> FlowContributors {
     self.rootViewController.popViewController(animated: true)
-    ToastManager.shared.showNewToast(FavorToastMessageView(.tempFriendAdded(friendName)))
     guard 
       let friendSelectionVC = self.rootViewController.topViewController as? FriendSelectorViewController
     else { return .none }
@@ -113,6 +112,7 @@ private extension NewGiftFlow {
   @MainActor
   func popToTabBar(with gift: Gift? = nil) -> FlowContributors {
     self.rootViewController.dismiss(animated: true)
+    ToastManager.shared.showNewToast(FavorToastMessageView(.giftAdded))
     return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
   }
   

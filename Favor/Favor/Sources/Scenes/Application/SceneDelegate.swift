@@ -25,7 +25,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.window = window
 
     self.enableNavigateLog()
-
+    
     let appFlow = AppFlow()
     self.coordinator.coordinate(flow: appFlow, with: AppStepper())
 

@@ -77,7 +77,7 @@ final class GiftDetailViewReactor: Reactor, Stepper {
           self.steps.accept(AppStep.giftDetailIsComplete(gift))
           return .empty()
         }
-
+      
     case .shareButtonDidTap:
       self.steps.accept(AppStep.giftShareIsRequired(self.currentState.gift))
       return .empty()
@@ -94,6 +94,9 @@ final class GiftDetailViewReactor: Reactor, Stepper {
       return self.requestToggleIsPinned(self.currentState.gift)
         .asObservable()
         .flatMap { gift -> Observable<Mutation> in
+          if gift.isPinned {
+            ToastManager.shared.showNewToast(.init(.custom("홈 타임라인에 고정되었습니다.")))
+          }
           return .just(.updateGift(gift))
         }
         .catch { error in

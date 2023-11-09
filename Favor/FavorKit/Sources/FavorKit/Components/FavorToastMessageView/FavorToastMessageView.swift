@@ -110,7 +110,7 @@ extension FavorToastMessageView: BaseView {
   
   public func setupConstraints() {
     self.snp.makeConstraints { make in
-      make.width.equalTo(self.width)
+//      make.width.equalTo(self.width)
       make.height.equalTo(self.height)
     }
     

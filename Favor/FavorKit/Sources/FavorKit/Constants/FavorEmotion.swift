@@ -5,7 +5,7 @@
 //  Created by 이창준 on 6/15/23.
 //
 
-import Foundation
+import UIKit
 
 // TODO: 임시 감정
 public enum FavorEmotion: String, Codable, CaseIterable {
@@ -22,6 +22,21 @@ public enum FavorEmotion: String, Codable, CaseIterable {
     case .good: 2
     case .xoxo: 3
     case .boring: 4
+    }
+  }
+  
+  public var image: UIImage? {
+    switch self {
+    case .touching:
+      return .favorIcon(.touching)
+    case .excited:
+      return .favorIcon(.excited)
+    case .good:
+      return .favorIcon(.good)
+    case .xoxo:
+      return .favorIcon(.xoxo)
+    case .boring:
+      return .favorIcon(.boring)
     }
   }
   

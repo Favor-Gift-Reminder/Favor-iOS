@@ -7,8 +7,8 @@
 
 import UIKit
 
-import RxSwift
 import RxCocoa
+import RxSwift
 
 extension UIApplication {
   /// 최상단 ViewController를 참조할 수 있게 도와주는 메서드입니다.

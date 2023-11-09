@@ -14,10 +14,9 @@ open class BaseNavigationController: UINavigationController {
   public var isValid: Bool = true
 
   // MARK: - Life Cycle
-
+  
   open override func viewDidLoad() {
     super.viewDidLoad()
-    
     self.setupNavigationAppearance()
   }
 
@@ -38,6 +37,7 @@ open class BaseNavigationController: UINavigationController {
 
     let leftArrowImage: UIImage? = .favorIcon(.left)!
       .withRenderingMode(.alwaysTemplate)
+      .withTintColor(.favorColor(.icon))
       .withAlignmentRectInsets(UIEdgeInsets(top: 0, left: -12, bottom: 0, right: 0))
 
     // 뒤로가기 버튼 타이틀 숨김
@@ -50,17 +50,16 @@ open class BaseNavigationController: UINavigationController {
     appearance.configureWithTransparentBackground()
     appearance.backButtonAppearance = backButtonAppearance
     appearance.setBackIndicatorImage(leftArrowImage, transitionMaskImage: leftArrowImage)
+    appearance.titleTextAttributes = [
+      .foregroundColor: UIColor.favorColor(.icon),
+      .font: UIFont.favorFont(.bold, size: 18)
+    ]
 
     // Set Appearance
     self.navigationBar.compactAppearance = appearance
     self.navigationBar.standardAppearance = appearance
     self.navigationBar.scrollEdgeAppearance = appearance
-
     self.navigationBar.tintColor = UIColor.favorColor(.icon)
-    self.navigationBar.titleTextAttributes = [
-      .foregroundColor: UIColor.favorColor(.icon),
-      .font: UIFont.favorFont(.bold, size: 18)
-    ]
     navigationItem.backButtonDisplayMode = .minimal
   }
 }

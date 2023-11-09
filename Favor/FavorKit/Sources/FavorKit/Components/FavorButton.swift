@@ -39,6 +39,8 @@ public class FavorButton: UIButton {
     }
   }
   
+  public var emotion: FavorEmotion?
+  
   /// 버튼의 `CornerRadius`
   public var cornerRadius: CGFloat = 0 {
     willSet { self.configuration?.background.cornerRadius = newValue }
@@ -152,6 +154,10 @@ public class FavorButton: UIButton {
     willSet { self.configuration?.background.strokeColor = newValue }
   }
   
+  public var leftProfileView = FavorProfilePhotoView(.verySmall) {
+    willSet { self.updateLeftProfileView() }
+  }
+  
   // MARK: - Init
   
   public init(_ title: String = "", image: UIImage? = nil) {
@@ -198,5 +204,23 @@ public class FavorButton: UIButton {
     config.imagePlacement = .leading
     config.imagePadding = 6.0
     self.configuration = config
+  }
+  
+  // MARK: - Update
+  
+  private func updateLeftProfileView() {
+    self.configuration?.contentInsets = .init(top: 8.5, leading: 34.0, bottom: 8.5, trailing: 12.0)
+    self.leftProfileView.baseBackgroundColor = .favorColor(.line2)
+    self.leftProfileView.isUserInteractionEnabled = false
+    self.addSubview(self.leftProfileView)
+    self.leftProfileView.snp.makeConstraints { make in
+      make.centerY.equalToSuperview()
+      make.leading.equalToSuperview().inset(12.0)
+    }
+  }
+  
+  public func updateEmotion(_ emotion: FavorEmotion?, size: CGFloat) {
+    self.emotion = emotion
+    self.image = emotion?.image?.resize(newWidth: size)
   }
 }

@@ -52,7 +52,7 @@ public final class SearchCategoryViewController: BaseSearchTagViewController {
   }
 
   // MARK: - UI Setups
-
+  
   public override func setupLayouts() {
     [
       self.categoryView,

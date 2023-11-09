@@ -27,11 +27,11 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   }
   
   // MARK: - UI Components
-
-  private let emotionButton = FavorSmallButton(with: .grayWithEmotion(.favorIcon(.deselect)))
+  
   private let categoryButton = FavorSmallButton(with: .gray("카테고리"))
   private let isGivenButton = FavorSmallButton(with: .gray("준 선물"))
-  private let relatedFriendsButton = FavorSmallButton(with: .grayWithUser("친구", image: .favorIcon(.friend)))
+  private lazy var emotionButton = self.getTagButton()
+  private lazy var relatedFriendsButton = self.getTagButton()
   
   private let stackView: UIStackView = {
     let stackView = UIStackView()
@@ -39,9 +39,9 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     stackView.spacing = 10
     return stackView
   }()
-
+  
   // MARK: - Initializer
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
@@ -82,7 +82,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     self.relatedFriendsButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        var friends: [Friend] =
+        let friends: [Friend] =
         owner.gift.relatedFriends + owner.gift.tempFriends.map { Friend(friendName: $0) }
         owner.delegate?.tagDidSelected(.friends(friends))
       })
@@ -92,23 +92,36 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   private func updateGift() {
-//    self.emotionButton.configuration?.image = gift.emotion
+    // Emotion
+    self.emotionButton.updateEmotion(gift.emotion, size: 16.0)
+    // Category
     self.categoryButton.configuration?.updateAttributedTitle(
       gift.category.rawValue,
       font: .favorFont(.regular, size: 12)
     )
+    // isGiven
     self.isGivenButton.configuration?.updateAttributedTitle(
       gift.isGiven ? "준 선물" : "받은 선물",
       font: .favorFont(.regular, size: 12)
     )
-    var friends: [Friend] = gift.relatedFriends
-    friends.append(contentsOf: gift.tempFriends.map { Friend(friendName: $0) })
+    // relatedFriends
+    self.relatedFriendsButton.leftProfileView = .init(.verySmall)
+    let friends: [Friend] = gift.relatedFriends + gift.tempFriends.map { Friend(friendName: $0) }
+    self.relatedFriendsButton.isHidden = friends.isEmpty
     guard let firstFriend = friends.first else { return }
-    let friendsTitle = friends.count == 1 ? firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count - 1)"
-    self.relatedFriendsButton.configuration?.updateAttributedTitle(
-      friendsTitle,
-      font: .favorFont(.regular, size: 12)
-    )
+    let friendsTitle = friends.count == 1 ? 
+    firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count - 1)"
+    self.relatedFriendsButton.title = friendsTitle
+  }
+  
+  private func getTagButton() -> FavorButton {
+    let button = FavorButton()
+    button.baseBackgroundColor = .favorColor(.card)
+    button.baseForegroundColor = .favorColor(.subtext)
+    button.contentInset = .init(top: 8.5, leading: 12, bottom: 8.5, trailing: 12)
+    button.font = .favorFont(.regular, size: 12.0)
+    button.cornerRadius = 16.0
+    return button
   }
 }
 

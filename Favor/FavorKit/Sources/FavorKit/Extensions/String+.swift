@@ -17,7 +17,7 @@ extension String {
     (self as NSString).draw(
       in: rect,
       withAttributes: [
-        NSAttributedString.Key.font: UIFont.systemFont(ofSize: size.width * 0.9, weight: .regular)
+        NSAttributedString.Key.font: UIFont.systemFont(ofSize: size.width, weight: .regular)
       ]
     )
     let image = UIGraphicsGetImageFromCurrentImageContext()
@@ -25,7 +25,7 @@ extension String {
     
     return image
   }
-
+  
   public func toDate(_ format: String? = nil) -> Date? {
     let dateFormatter = DateFormatter()
     if let format {
