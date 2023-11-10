@@ -77,7 +77,7 @@ extension HomeSection: Composable {
         return .grid(
           height: .fractionalWidth(0.5),
           numberOfItems: 2,
-          spacing: .fixed(5)
+          spacing: .fixed(6)
         )
       }
     }
@@ -108,7 +108,7 @@ extension HomeSection: Composable {
         )
       } else {
         return .base(
-          spacing: 5,
+          spacing: 3,
           contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),
           boundaryItems: [
             .header(

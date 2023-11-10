@@ -23,6 +23,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
+  private let workBench = RealmWorkbench()
   private var pickerManager: PHPickerManager?
   
   enum Action {
@@ -39,6 +40,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case friendsSelectorButtonDidTap
     case dateDidUpdate(Date?)
     case memoDidUpdate(String?)
+    case emotionDidUpdate(FavorEmotion)
     case pinButtonDidTap(Bool)
     /// 회원/비회원 친구 추가
     case friendsDidAdd([Friend])
@@ -56,6 +58,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
     case updateCategory(FavorCategory)
     case updateDate(Date?)
     case updateMemo(String?)
+    case updateEmotion(FavorEmotion)
     case updateFriends([Friend])
     case updateIsPinned(Bool)
     case updateImageList([GiftManagementPhotoModel])
@@ -85,7 +88,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       gift: Gift()
     )
   }
-
+  
   init(
     _ viewType: GiftManagementViewController.ViewType,
     with gift: Gift
@@ -203,6 +206,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
         return .just(.updateImageList(imageList))
       }
       
+    case .emotionDidUpdate(let emotion):
+      return .just(.updateEmotion(emotion))
+      
     case .doNothing:
       return .empty()
     }
@@ -231,6 +237,9 @@ final class GiftManagementViewReactor: Reactor, Stepper {
 
     case .updateMemo(let memo):
       newState.gift.memo = memo
+      
+    case .updateEmotion(let emotion):
+      newState.gift.emotion = emotion
       
     case .updateFriends(let friends):
       newState.gift.relatedFriends = friends.filter { $0.identifier > 0 }
@@ -313,17 +322,35 @@ private extension GiftManagementViewReactor {
     let giftNetworking = GiftNetworking()
     let requestDTO = gift.requestDTO()
     let imageList = self.currentState.imageList
-    return giftNetworking.request(.postGift(requestDTO))
-      .map(ResponseDTO<GiftSingleResponseDTO>.self)
-      .map { $0.data.giftNo }
-      .flatMap { giftNo in
-        if gift.isPinned {
-          return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in giftNo }
-        } else {
-          return Observable<Int>.just(giftNo)
+    var giftNo: Int = 0
+    return Observable<Void>.create { observer in
+      return giftNetworking.request(.postGift(requestDTO))
+        .map(ResponseDTO<GiftSingleResponseDTO>.self)
+        .map { giftNo = $0.data.giftNo }
+        .flatMap {
+          if gift.isPinned {
+            return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in giftNo }
+          } else {
+            return Observable<Int>.just(giftNo)
+          }
         }
-      }
-      .flatMap { self.requestPostGiftPhoto(imageList, giftNo: $0) }
+        .flatMap { self.requestPostGiftPhoto(imageList, giftNo: $0) }
+        .flatMap { giftNetworking.request(.getGift(giftNo: giftNo)) }
+        .map(ResponseDTO<GiftSingleResponseDTO>.self)
+        .map { Gift(singleDTO: $0.data) }
+        .subscribe { gift in
+          Task {
+            let workBench = RealmWorkbench()
+            try await workBench.write { transaction in
+              transaction.update(gift.realmObject())
+              DispatchQueue.main.async {
+                observer.onNext(())
+                observer.onCompleted()
+              }
+            }
+          }
+        }
+    }
   }
   
   func requestPatchGift(_ gift: Gift) -> Observable<Gift> {
@@ -334,21 +361,34 @@ private extension GiftManagementViewReactor {
     let imageList = self.currentState.imageList
     let initialPinState = self.currentState.initialPinState
     
-    return self.requestDeleteGiftPhoto(removeTargetUrls, giftNo: giftNo)
-      .flatMap { _ in self.requestPostGiftPhoto(imageList, giftNo: giftNo) }
-      .flatMap { _ in
-        giftNetworking.request(.patchTempFriendList(giftNo: giftNo, tempFriendList: gift.tempFriends))
-      }
-      .flatMap { _ in
-        if initialPinState != gift.isPinned {
-          return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in Void() }
-        } else {
-          return .just(Void())
+    return Observable<Gift>.create { observer in
+      return self.requestDeleteGiftPhoto(removeTargetUrls, giftNo: giftNo)
+        .flatMap { _ in self.requestPostGiftPhoto(imageList, giftNo: giftNo) }
+        .flatMap { _ in
+          giftNetworking.request(.patchTempFriendList(giftNo: giftNo, tempFriendList: gift.tempFriends))
         }
-      }
-      .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo)) }
-      .map(ResponseDTO<GiftSingleResponseDTO>.self)
-      .map { Gift(singleDTO: $0.data) }
+        .flatMap { _ in
+          if initialPinState != gift.isPinned {
+            return giftNetworking.request(.patchPinGift(giftNo: giftNo)).map { _ in Void() }
+          } else {
+            return .just(Void())
+          }
+        }
+        .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo)) }
+        .map(ResponseDTO<GiftSingleResponseDTO>.self)
+        .map { Gift(singleDTO: $0.data) }
+        .subscribe { gift in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.update(gift.realmObject())
+              DispatchQueue.main.async {
+                observer.onNext(gift)
+                observer.onCompleted()
+              }
+            }
+          }
+        }
+    }
   }
   
   func requestPatchPinGift(_ giftNo: Int) -> Observable<Int> {

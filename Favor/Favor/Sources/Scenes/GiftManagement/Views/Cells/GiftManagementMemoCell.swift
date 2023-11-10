@@ -15,6 +15,7 @@ import SnapKit
 
 public protocol GiftManagementMemoCellDelegate: AnyObject {
   func memoDidUpdate(_ memo: String?)
+  func emotionDidUpdate(_ emotion: FavorEmotion)
 }
 
 final class GiftManagementMemoCell: BaseCollectionViewCell {
@@ -22,43 +23,39 @@ final class GiftManagementMemoCell: BaseCollectionViewCell {
   // MARK: - Properties
   
   public weak var delegate: GiftManagementMemoCellDelegate?
-  
-  var selectedEmotion: FavorEmotion = .touching {
-    didSet {
-      guard let emotionButton = self.emotionStackView.arrangedSubviews[self.selectedEmotion.index] as? FavorEmotionButton else { return }
-    }
-  }
-  
+      
   // MARK: - UI Components
-
-  private let memoView: RSKPlaceholderTextView = {
+  
+  private let memoTextView: RSKPlaceholderTextView = {
     let textView = RSKPlaceholderTextView()
     textView.attributedPlaceholder = NSAttributedString(
-      string: "메모가 없습니다.",
+      string: "자유롭게 작성해보세요.",
       attributes: [
         .font: UIFont.favorFont(.regular, size: 16),
-        .foregroundColor: UIColor.favorColor(.explain)
+        .foregroundColor: UIColor.favorColor(.explain),
       ]
     )
+    textView.backgroundColor = .favorColor(.card)
     textView.font = .favorFont(.regular, size: 16)
     textView.textColor = .favorColor(.icon)
     textView.textContainerInset = .zero
-    textView.textContainer.lineFragmentPadding = .zero
     return textView
   }()
   
-  private let emotionStackView: UIStackView = {
-    let stackView = UIStackView()
-    FavorEmotion.allCases.forEach {
-      stackView.addArrangedSubview(FavorEmotionButton($0))
-    }
-    stackView.axis = .horizontal
-    stackView.distribution = .equalSpacing
-    return stackView
+  private let memoView: UIView = {
+    let view = UIView()
+    view.backgroundColor = .favorColor(.card)
+    view.layer.cornerRadius = 24
+    return view
+  }()
+  
+  private let emotionView: FavorEmotionView = {
+    let view = FavorEmotionView()
+    return view
   }()
   
   // MARK: - Initializer
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
@@ -73,17 +70,25 @@ final class GiftManagementMemoCell: BaseCollectionViewCell {
 
   // MARK: - Functions
 
-  public func bind(with memo: String?) {
-    self.memoView.text = memo
+  public func bind(with gift: Gift) {
+    self.memoTextView.text = gift.memo
+    self.emotionView.updateEmotion(gift.emotion)
   }
-
+  
   private func bind() {
-    self.memoView.rx.text
+    self.memoTextView.rx.text
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
-        owner.delegate?.memoDidUpdate(owner.memoView.text)
+        owner.delegate?.memoDidUpdate(owner.memoTextView.text)
       })
+      .disposed(by: self.disposeBag)
+    
+    self.emotionView.emotionSubject
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, emotion in
+        owner.delegate?.emotionDidUpdate(emotion)
+      }
       .disposed(by: self.disposeBag)
   }
 }
@@ -95,19 +100,24 @@ extension GiftManagementMemoCell: BaseView {
 
   func setupLayouts() {
     self.addSubview(self.memoView)
-    self.addSubview(self.emotionStackView)
+    self.memoView.addSubview(self.memoTextView)
+    self.addSubview(self.emotionView)
   }
   
   func setupConstraints() {
-    self.emotionStackView.snp.makeConstraints { make in
+    self.emotionView.snp.makeConstraints { make in
       make.top.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(40.0)
     }
     
     self.memoView.snp.makeConstraints { make in
-      make.top.equalTo(self.emotionStackView.snp.bottom).offset(16.0)
+      make.top.equalTo(self.emotionView.snp.bottom).offset(16.0)
       make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(113.0)
+    }
+    
+    self.memoTextView.snp.makeConstraints { make in
+      make.edges.equalToSuperview().inset(12.0)
     }
   }
 }

@@ -25,8 +25,10 @@ final class HomeTimelineCell: BaseCollectionViewCell {
   
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.contentMode = .scaleToFill
+    imageView.contentMode = .scaleAspectFill
+    imageView.layer.masksToBounds = true
     imageView.backgroundColor = .favorColor(.background)
+    imageView.layer.cornerRadius = 4
     return imageView
   }()
   

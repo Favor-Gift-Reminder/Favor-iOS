@@ -137,7 +137,14 @@ extension GiftManagementSection: Composable {
     case .date:
       return defaultSection
     case .memo:
-      return defaultSection
+      return .base(
+        spacing: nil,
+        contentInsets: NSDirectionalEdgeInsets(
+          top: 15, leading: 20, bottom: 15, trailing: 20),
+        orthogonalScrolling: nil,
+        boundaryItems: [sectionHeader],
+        decorationItems: nil
+      )
     case .pin:
       return .base(
         contentInsets: NSDirectionalEdgeInsets(

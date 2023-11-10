@@ -15,7 +15,7 @@ import RxFlow
 
 final class GiftDetailViewReactor: Reactor, Stepper {
   typealias Item = GiftDetailSectionItem
-
+  
   // MARK: - Properties
   
   var initialState: State
@@ -180,49 +180,41 @@ private extension GiftDetailViewReactor {
     }
   }
   
-  func requestDeleteGift(_ gift: Gift) -> Single<Gift> {
-    return Single<Gift>.create { single in
-      let networking = GiftNetworking()
-      let disposable = networking.request(.deleteGift(giftNo: gift.identifier))
-        .take(1)
-        .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+  func requestDeleteGift(_ gift: Gift) -> Observable<Gift> {
+    let networking = GiftNetworking()
+    return Observable<Gift>.create { observer in
+      return networking.request(.deleteGift(giftNo: gift.identifier))
+        .subscribe { _ in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.delete(gift.realmObject())
+              DispatchQueue.main.async {
+                observer.onNext(gift)
+                observer.onCompleted()
+              }
+            }
           }
-        }, onFailure: { error in
-          single(.failure(error))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
+        }
     }
   }
   
-  func requestToggleIsPinned(_ gift: Gift) -> Single<Gift> {
-    return Single<Gift>.create { single in
+  func requestToggleIsPinned(_ gift: Gift) -> Observable<Gift> {
+    return Observable<Gift>.create { observer in
       let networking = GiftNetworking()
-      let disposable = networking.request(.patchPinGift(giftNo: gift.identifier))
-        .take(1)
-        .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<GiftSingleResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Gift(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+      return networking.request(.patchPinGift(giftNo: gift.identifier))
+        .map(ResponseDTO<GiftSingleResponseDTO>.self)
+        .map { Gift(singleDTO: $0.data) }
+        .subscribe { gift in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.update(gift.realmObject())
+              DispatchQueue.main.async {
+                observer.onNext(gift)
+                observer.onCompleted()
+              }
+            }
           }
-        }, onFailure: { error in
-          single(.failure(error))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
+        }
     }
   }
 }

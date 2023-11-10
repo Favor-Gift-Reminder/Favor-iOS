@@ -20,6 +20,7 @@ final class SearchGiftResultCell: BaseCollectionViewCell {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
     imageView.layer.masksToBounds = true
+    imageView.layer.cornerRadius = 4
     return imageView
   }()
   
@@ -73,7 +74,7 @@ final class SearchGiftResultCell: BaseCollectionViewCell {
 
 extension SearchGiftResultCell: BaseView {
   func setupStyles() {
-    self.backgroundColor = .favorColor(.main)
+    self.backgroundColor = .clear
   }
   
   func setupLayouts() {

@@ -55,7 +55,8 @@ extension SearchResultSection: Composable {
     case .gift:
       return .grid(
         width: .fractionalWidth(0.5),
-        height: .fractionalWidth(0.5))
+        height: .fractionalWidth(0.5)
+      )
     case .user:
       return .full()
     }
@@ -68,7 +69,7 @@ extension SearchResultSection: Composable {
     case .empty:
       return .full()
     case .gift:
-      return .grid(height: .fractionalWidth(0.5), numberOfItems: 2, spacing: .fixed(5))
+      return .grid(height: .fractionalWidth(0.5), numberOfItems: 2, spacing: .fixed(3))
     case .user:
       return .full()
     }
@@ -82,7 +83,7 @@ extension SearchResultSection: Composable {
       return .base()
     case .gift:
       return .base(
-        contentInsets: NSDirectionalEdgeInsets(top: 32, leading: 20, bottom: 32, trailing: 20)
+        contentInsets: NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 32, trailing: 20)
       )
     case .user:
       return .base()

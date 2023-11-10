@@ -28,7 +28,7 @@ public final class FavorEmotionView: UIView {
         case .selected:
           button.alpha = 1.0
         default:
-          button.alpha = 0.5
+          button.alpha = 0.3
         }
       }
       let action = UIAction { [weak self] _ in
@@ -67,7 +67,7 @@ public final class FavorEmotionView: UIView {
   
   // MARK: - Functions
   
-  public func updateEmotion(_ emotion: FavorEmotion) {
+  public func updateEmotion(_ emotion: FavorEmotion?) {
     self.buttons.forEach { $0.isSelected = false }
     if let firstIndex = self.buttons.firstIndex(where: { $0.emotion == emotion }) {
       self.buttons[firstIndex].isSelected = true

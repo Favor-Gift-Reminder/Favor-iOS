@@ -65,7 +65,7 @@ public final class SearchEmotionViewController: BaseSearchTagViewController {
     }
 
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.emotionView.snp.bottom)
+      make.top.equalTo(self.emotionView.snp.bottom).offset(32.0)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
     }

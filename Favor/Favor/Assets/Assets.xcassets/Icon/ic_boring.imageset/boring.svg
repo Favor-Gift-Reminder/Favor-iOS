@@ -1,0 +1,28 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 26086526">
+<circle id="Ellipse 3103" cx="60" cy="60" r="60" fill="#5C43F2"/>
+<g id="Group 26086516">
+<circle id="Ellipse 3084" cx="78" cy="52" r="16" fill="white"/>
+<circle id="Ellipse 3085" cx="78" cy="52" r="10" fill="black"/>
+<circle id="Ellipse 3086" cx="42" cy="52" r="16" fill="white"/>
+<circle id="Ellipse 3087" cx="42" cy="52" r="10" fill="black"/>
+</g>
+<rect id="Rectangle 628" x="18" y="24" width="85" height="24" fill="#5C43F2"/>
+<g id="Ellipse 3104" filter="url(#filter0_d_4491_11454)">
+<path d="M103.703 52.4054C105.013 52.4054 106.221 51.971 107.192 51.2383C110.037 49.0907 109.345 44.752 107.859 41.5115C107.592 40.929 107.303 40.4046 107 40C106.333 39 105.5 37.5 102 35C100.648 34.0538 97.6741 32.2744 94.8912 31.4223C94.3972 31.2711 94.0995 31.9038 94.4645 32.2694C96.0722 33.8796 97.9054 36.468 97.9054 39.473V46.6081C97.9054 49.8099 100.501 52.4054 103.703 52.4054Z" fill="#B9E9FC"/>
+</g>
+<path id="Line 45" d="M69 75V75C63.8673 70.4376 56.1327 70.4376 51 75V75" stroke="black" stroke-width="4" stroke-linecap="round"/>
+</g>
+<defs>
+<filter id="filter0_d_4491_11454" x="90.3022" y="31.3994" width="22.8477" height="29.006" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_4491_11454"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_4491_11454" result="shape"/>
+</filter>
+</defs>
+</svg>

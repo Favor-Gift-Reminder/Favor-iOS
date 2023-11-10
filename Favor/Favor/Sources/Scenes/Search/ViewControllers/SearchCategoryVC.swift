@@ -61,7 +61,7 @@ public final class SearchCategoryViewController: BaseSearchTagViewController {
       self.view.addSubview($0)
     }
   }
-
+  
   public override func setupConstraints() {
     self.categoryView.snp.makeConstraints { make in
       make.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).inset(32)
@@ -69,7 +69,7 @@ public final class SearchCategoryViewController: BaseSearchTagViewController {
     }
 
     self.collectionView.snp.makeConstraints { make in
-      make.top.equalTo(self.categoryView.snp.bottom).offset(16.0)
+      make.top.equalTo(self.categoryView.snp.bottom).offset(32.0)
       make.directionalHorizontalEdges.equalToSuperview()
       make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
     }

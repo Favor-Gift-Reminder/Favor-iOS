@@ -32,7 +32,7 @@ final class HomeViewController: BaseViewController, View {
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
   private lazy var composer: Composer<HomeSection, HomeSectionItem> = {
     let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
     return composer

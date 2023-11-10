@@ -138,7 +138,7 @@ final class GiftManagementViewController: BaseViewController, View {
     
     // 완료/등록 버튼 터치
     self.doneButton.rx.tap
-      .throttle(.seconds(1), latest: false, scheduler: MainScheduler.asyncInstance)
+      .throttle(.seconds(3), latest: false, scheduler: MainScheduler.asyncInstance)
       .map { Reactor.Action.doneButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -303,7 +303,7 @@ private extension GiftManagementViewController {
     <GiftManagementMemoCell, GiftManagementSectionItem> { [weak self] cell, _, _ in
       guard let self = self, let reactor = self.reactor else { return }
       cell.delegate = self
-      cell.bind(with: reactor.currentState.gift.memo)
+      cell.bind(with: reactor.currentState.gift)
     }
 
     let pinCellRegistration = UICollectionView.CellRegistration
@@ -462,6 +462,11 @@ extension GiftManagementViewController: GiftManagementMemoCellDelegate {
   func memoDidUpdate(_ memo: String?) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.memoDidUpdate(memo))
+  }
+  
+  func emotionDidUpdate(_ emotion: FavorEmotion) {
+    guard let reactor = self.reactor else { return }
+    reactor.action.onNext(.emotionDidUpdate(emotion))
   }
 }
 

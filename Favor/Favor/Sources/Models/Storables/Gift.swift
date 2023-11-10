@@ -132,7 +132,7 @@ public struct Gift: Storable, Receivable {
     self.name = ""
     self.photos = []
     self.category = .lightGift
-    self.emotion = .xoxo
+    self.emotion = .touching
     self.isPinned = false
     self.relatedFriends = []
     self.tempFriends = []

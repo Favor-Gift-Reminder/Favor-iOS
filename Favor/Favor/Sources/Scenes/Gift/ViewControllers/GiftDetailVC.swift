@@ -189,7 +189,7 @@ final class GiftDetailViewController: BaseViewController, View {
   override func setupLayouts() {
     self.view.addSubview(self.collectionView)
   }
-
+  
   override func setupConstraints() {
     self.collectionView.snp.makeConstraints { make in
       make.directionalVerticalEdges.equalTo(self.view.safeAreaLayoutGuide)

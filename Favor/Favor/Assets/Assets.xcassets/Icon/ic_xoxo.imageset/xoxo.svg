@@ -1,0 +1,16 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group 26086525">
+<circle id="Ellipse 3100" cx="60" cy="60" r="60" fill="#FDB72B"/>
+<g id="Group 26086513">
+<g id="Group 26086211">
+<circle id="Ellipse 3084" cx="78" cy="52" r="16" fill="white"/>
+<circle id="Ellipse 3085" cx="78" cy="52" r="10" fill="black"/>
+</g>
+<g id="Group 26086212">
+<circle id="Ellipse 3086" cx="42" cy="52" r="16" fill="white"/>
+<circle id="Ellipse 3087" cx="42" cy="52" r="10" fill="black"/>
+</g>
+</g>
+<path id="Line 44" d="M51 74H69" stroke="black" stroke-width="4" stroke-linecap="round"/>
+</g>
+</svg>

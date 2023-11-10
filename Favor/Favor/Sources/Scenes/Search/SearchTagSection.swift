@@ -67,7 +67,7 @@ extension SearchTagSection: Composable {
     case .empty:
       return .full()
     case .gift:
-      return .grid(height: .fractionalWidth(0.5), numberOfItems: 2, spacing: .fixed(5))
+      return .grid(height: .fractionalWidth(0.5), numberOfItems: 2, spacing: .fixed(6))
     }
   }
 
@@ -77,7 +77,7 @@ extension SearchTagSection: Composable {
       return .base()
     case .gift:
       return .base(
-        contentInsets: NSDirectionalEdgeInsets(top: 16.0, leading: 20, bottom: 32, trailing: 20)
+        contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: 32, trailing: 20)
       )
     }
   }
