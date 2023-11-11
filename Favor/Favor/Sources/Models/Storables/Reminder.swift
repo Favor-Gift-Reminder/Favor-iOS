@@ -20,8 +20,8 @@ public struct Reminder: Storable, Receivable {
   public var date: Date
   public var memo: String?
   public var shouldNotify: Bool
-  public var notifyDate: Date?
-  public var relatedFriend: Int
+  public var notifyDate: Date
+  public var relatedFriend: Friend
 
   // MARK: - Storable
 
@@ -35,7 +35,7 @@ public struct Reminder: Storable, Receivable {
     self.memo = realmObject.memo
     self.shouldNotify = realmObject.shouldNotify
     self.notifyDate = realmObject.notifyTime
-    self.relatedFriend = realmObject.friendNo
+    self.relatedFriend = Friend(realmObject: realmObject.friend ?? .init())
   }
   
   public func realmObject() -> ReminderObject {
@@ -46,20 +46,29 @@ public struct Reminder: Storable, Receivable {
       memo: self.memo,
       shouldNotify: self.shouldNotify,
       notifyTime: self.notifyDate,
-      friendNo: self.relatedFriend
+      friend: self.relatedFriend.realmObject()
     )
   }
 
   // MARK: - Receivable
 
-  public init(singleDTO: ReminderResponseDTO) {
+  public init(singleDTO: ReminderSingleResponseDTO) {
     self.identifier = singleDTO.reminderNo
     self.name = singleDTO.reminderTitle
     self.date = singleDTO.reminderDate
-    self.memo = singleDTO.memo
+    self.memo = singleDTO.reminderMemo
     self.shouldNotify = singleDTO.isAlarmSet
-    self.notifyDate = singleDTO.alarmTime
-    self.relatedFriend = singleDTO.friendNo
+    self.notifyDate = singleDTO.reminderDate
+    self.relatedFriend = Friend(friendResponseDTO: singleDTO.friendSimpleDto)
+  }
+  
+  public init(dto: ReminderResponseDTO) {
+    self.identifier = dto.reminderNo
+    self.name = dto.reminderTitle
+    self.date = dto.reminderDate
+    self.shouldNotify = dto.alarmSet
+    self.notifyDate = .distantPast
+    self.relatedFriend = .init()
   }
   
   // MARK: - Mock
@@ -72,8 +81,9 @@ public struct Reminder: Storable, Receivable {
     self.identifier = -1
     self.name = ""
     self.date = .distantPast
+    self.notifyDate = .distantPast
     self.shouldNotify = false
-    self.relatedFriend = -1
+    self.relatedFriend = .init()
   }
 }
 

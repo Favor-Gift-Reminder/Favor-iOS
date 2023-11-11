@@ -76,7 +76,7 @@ public struct User: Storable, Receivable {
     self.searchID = singleDTO.userID
     self.name = singleDTO.name
     self.favorList = singleDTO.favorList.compactMap(Favor.init(rawValue:))
-    self.reminderList = singleDTO.reminderList.compactMap(Reminder.init(singleDTO:))
+    self.reminderList = singleDTO.reminderList.compactMap(Reminder.init(dto:))
     self.anniversaryList = singleDTO.anniversaryList.compactMap(Anniversary.init(singleDTO:))
     self.friendList = singleDTO.friendList.compactMap(Friend.init(friendResponseDTO:))
     self.givenGifts = singleDTO.givenGift

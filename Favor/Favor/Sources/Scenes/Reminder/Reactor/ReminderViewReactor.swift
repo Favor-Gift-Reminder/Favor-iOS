@@ -122,8 +122,18 @@ final class ReminderViewReactor: Reactor, Stepper {
     case .updateSelectedDate(let selectedDate):
       newState.selectedDate = selectedDate
     }
-
+    
     return newState
+  }
+  
+  func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+      
+      
+      
+      return newState
+    }
   }
 }
 
@@ -139,7 +149,7 @@ private extension ReminderViewReactor {
           let responseData = reminders.data
           do {
             let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(responseData)
-            return .just(responseDTO.data.map { Reminder(singleDTO: $0) })
+            return .just(responseDTO.data.map { Reminder(dto: $0) })
           } catch {
             return .just([])
           }

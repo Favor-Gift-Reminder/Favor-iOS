@@ -28,7 +28,7 @@ extension ReminderAPI {
       return "/reminders/\(anniversaryNo)"
       
     case .postReminder(_, let friendNo):
-      return "/reminders/\(friendNo)"
+      return "/reminders/new/\(friendNo)"
     }
   }
 }

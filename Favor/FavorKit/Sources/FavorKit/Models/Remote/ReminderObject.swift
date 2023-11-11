@@ -12,7 +12,7 @@ import RealmSwift
 public class ReminderObject: Object {
 
   // MARK: - Properties
-
+  
   /// 리마인더  번호
   @Persisted(primaryKey: true) public var reminderNo: Int
   /// 리마인더 보유 회원 번호
@@ -27,16 +27,17 @@ public class ReminderObject: Object {
   /// 리마인더 알림 여부
   @Persisted public var shouldNotify: Bool
   /// 리마인더 알림 시간
-  @Persisted public var notifyTime: Date?
+  @Persisted public var notifyTime: Date
   /// 관련 친구의 회원 번호
-  @Persisted public var friendNo: Int
+  @Persisted public var friend: FriendObject?
   
   public override class func propertiesMapping() -> [String: String] {
     [
       "date": "reminderDate",
       "memo": "reminderMemo",
       "shouldNotify": "isAlarmSet",
-      "notifyTime": "alarmTime"
+      "notifyTime": "alarmTime",
+      "relatedFriend": "friend"
     ]
   }
 
@@ -49,15 +50,15 @@ public class ReminderObject: Object {
   ///   - memo: *`Optional`* 리마인더 메모
   ///   - isAlarmSet: 리마인더 알림 여부
   ///   - alarmTime: *`Optional`* 리마인더 알림 시간
-  ///   - friendNo: 관련된 친구의 회원 번호
+  ///   - friend: 관련된 친구
   public convenience init(
     reminderNo: Int,
     title: String,
     date: Date,
     memo: String? = nil,
     shouldNotify: Bool,
-    notifyTime: Date? = nil,
-    friendNo: Int
+    notifyTime: Date,
+    friend: FriendObject?
   ) {
     self.init()
     self.reminderNo = reminderNo
@@ -66,6 +67,6 @@ public class ReminderObject: Object {
     self.memo = memo
     self.shouldNotify = shouldNotify
     self.notifyTime = notifyTime
-    self.friendNo = friendNo
+    self.friend = friend
   }
 }

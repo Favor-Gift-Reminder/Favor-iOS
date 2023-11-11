@@ -90,22 +90,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       return .concat([
         .just(.updateLoading(true)),
         self.requestSignIn(email: email, password: password)
-          .asObservable()
-          .flatMap { token -> Observable<Mutation> in
-            do {
-              try self.handleSignInSuccess(email: email, password: password, token: token)
-              self.steps.accept(AppStep.authIsComplete)
-            } catch {
-              os_log(.error, "\(error)")
-            }
-            return .just(.updateLoading(false))
-          }
-          .catch { error in
-            if let error = error as? APIError {
-              os_log(.error, "\(error.description)")
-            }
-            return .just(.updateLoading(false))
-          }
+          .flatMap { return Observable<Mutation>.just(.updateLoading(false)) }
       ])
       
     case .findPasswordButtonDidTap:
@@ -162,26 +147,22 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension AuthSignInViewReactor {
-  func requestSignIn(email: String, password: String) -> Single<String> {
-    return Single<String>.create { single in
+  func requestSignIn(email: String, password: String) -> Observable<Void> {
+    return Observable<Void>.create { observer in
       let networking = UserNetworking()
-      let disposable = networking.request(.postSignIn(email: email, password: password))
-        .take(1)
-        .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<SignInResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.token))
-          } catch {
-            single(.failure(error))
-          }
-        }, onFailure: { error in
-          single(.failure(error))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
+      return networking.request(.postSignIn(email: email, password: password))
+        .map(ResponseDTO<SignInResponseDTO>.self)
+        .flatMap { responseDTO in
+          try self.handleSignInSuccess(email: email, password: password, token: responseDTO.data.token)
+          return networking.request(.getUser)
+        }
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { $0.data }
+        .subscribe { userData in
+          UserInfoStorage.userNo = userData.userNo
+          observer.onNext(())
+          observer.onCompleted()
+        }
     }
   }
 

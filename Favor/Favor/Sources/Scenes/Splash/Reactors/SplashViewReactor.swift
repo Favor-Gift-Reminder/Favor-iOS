@@ -126,7 +126,8 @@ private extension SplashViewReactor {
   func requestUser() -> Single<Int> {
     return Single<Int>.create { single in
       let networking = UserNetworking()
-      let disposable = networking.request(.getUser).asSingle()
+      let disposable = networking.request(.getUser)
+        .asSingle()
         .subscribe(onSuccess: { response in
           do {
             let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)

@@ -27,12 +27,13 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     var config = UIButton.Configuration.plain()
     config.baseBackgroundColor = .clear
     config.baseForegroundColor = .favorColor(.line2)
+    config.contentInsets = .zero
 
     let button = UIButton(configuration: config)
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
-        button.configuration?.baseForegroundColor = .favorColor(.icon)
+        button.configuration?.baseForegroundColor = .favorColor(.main)
       case .disabled:
         button.configuration?.baseForegroundColor = .favorColor(.line2)
       default: break
@@ -119,16 +120,6 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .drive(with: self) { owner, friend in
         owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friend.friendName)
       }
-      .disposed(by: self.disposeBag)
-    
-    reactor.state.map { $0.shouldNotify }
-      .distinctUntilChanged()
-      .observe(on: MainScheduler.asyncInstance)
-      .bind(to: self.notifySwitch.rx.isOn)
-      .disposed(by: self.disposeBag)
-    
-    reactor.state.map { $0.isLoading }
-      .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
 

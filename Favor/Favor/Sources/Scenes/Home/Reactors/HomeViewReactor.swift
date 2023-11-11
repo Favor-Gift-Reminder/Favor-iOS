@@ -104,7 +104,9 @@ final class HomeViewReactor: Reactor, Stepper {
           })
         return self.userFetcher.fetch()
           .flatMap { fetchData in
-            UserInfoStorage.userNo = fetchData.results.first!.identifier
+            if let identifier = fetchData.results.first?.identifier {
+              UserInfoStorage.userNo = identifier
+            }
             return fetchedDatas
           }
           .flatMap { fetchData -> Observable<Mutation> in
@@ -247,7 +249,7 @@ private extension HomeViewReactor {
       let reminders = networking.request(.getAllReminderList)
         .flatMap { response -> Observable<[Reminder]> in
           let responseDTO: ResponseDTO<[ReminderResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Reminder(singleDTO: $0) })
+          return .just(responseDTO.data.map { Reminder(dto: $0) })
         }
         .catch { error in
           if let error = error as? APIError {

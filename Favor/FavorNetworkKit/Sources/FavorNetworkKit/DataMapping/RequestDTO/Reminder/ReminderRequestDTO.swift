@@ -8,7 +8,7 @@
 import Foundation
 
 public struct ReminderRequestDTO: Encodable {
-  let title: String
+  let reminderTitle: String
   let reminderDate: String
   let isAlarmSet: Bool
   let alarmTime: String
@@ -21,7 +21,7 @@ public struct ReminderRequestDTO: Encodable {
     alarmTime: String,
     reminderMemo: String
   ) {
-    self.title = title
+    self.reminderTitle = title
     self.reminderDate = reminderDate
     self.isAlarmSet = isAlarmSet
     self.alarmTime = alarmTime

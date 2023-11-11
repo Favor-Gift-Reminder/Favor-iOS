@@ -131,7 +131,7 @@ private extension ReminderFlow {
   }
   
   func popFromFriendSelector(_ friends: [Friend]) -> FlowContributors {
-    if self.rootViewController.topViewController is ReminderEditViewController {
+    if self.rootViewController.topViewController is FriendSelectorViewController {
       self.rootViewController.popViewController(animated: true)
       
       guard
@@ -141,7 +141,6 @@ private extension ReminderFlow {
       
       reminderEditVC.reactor?.action.onNext(.friendDidChange(friend))
     }
-    
     return .none
   }
   

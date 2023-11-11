@@ -77,7 +77,7 @@ class BaseReminderViewController: BaseViewController {
     title: "날짜",
     itemViews: [self.dateSelectorTextField]
   )
-
+  
   // 알림
   public lazy var notifyDateSelectorButton: UIButton = {
     var config = UIButton.Configuration.plain()
@@ -140,8 +140,7 @@ class BaseReminderViewController: BaseViewController {
     let stackView = UIStackView(
       arrangedSubviews: [
         self.notifyDateSelectorButton,
-        self.notifyTimeSelectorTextField,
-        self.notifySwitch
+        self.notifyTimeSelectorTextField
       ]
     )
     stackView.axis = .horizontal
@@ -152,11 +151,6 @@ class BaseReminderViewController: BaseViewController {
     title: "알림",
     itemStackView: self.notifyTimeDateSelectorStack
   )
-  public lazy var notifySwitch: FavorSwitch = {
-    let notifySwitch = FavorSwitch()
-    notifySwitch.delegate = self
-    return notifySwitch
-  }()
   
   // 메모
   public lazy var memoTextView: RSKPlaceholderTextView = {
@@ -273,7 +267,6 @@ class BaseReminderViewController: BaseViewController {
     self.updateNotifyDateSelectorButton(toEditable: isEditable)
     self.notifyTimeSelectorTextField.updateIsUserInteractable(to: isEditable)
     self.notifyTimeDateSelectorStack.spacing = isEditable ? 16 : -16
-    self.notifySwitch.isHidden = !isEditable
     // 메모
     self.memoTextView.isUserInteractionEnabled = isEditable
     let placeholderText = isEditable ? "자유롭게 작성해주세요!" : "메모가 없습니다."
@@ -300,20 +293,12 @@ class BaseReminderViewController: BaseViewController {
   
   override func setupLayouts() {
     self.view.addSubview(self.scrollView)
-    self.notifySelectorStack.addSubview(self.notifySwitch)
     self.titleStack.spacing = 4.0
   }
   
   override func setupConstraints() {
     self.memoTextView.snp.makeConstraints { make in
       make.height.greaterThanOrEqualTo(self.memoMinimumHeight)
-    }
-
-    self.notifySwitch.snp.makeConstraints { make in
-      make.centerY.equalToSuperview()
-      make.trailing.equalToSuperview().inset(20)
-      make.width.equalTo(40)
-      make.height.equalTo(24)
     }
   }
 }
@@ -338,8 +323,7 @@ extension BaseReminderViewController: UIGestureRecognizerDelegate {
     shouldReceive touch: UITouch
   ) -> Bool {
     guard
-      touch.view?.isDescendant(of: self.memoTextView) == false,
-      touch.view?.isDescendant(of: self.notifySwitch) == false
+      touch.view?.isDescendant(of: self.memoTextView) == false
     else { return false }
     return true
   }

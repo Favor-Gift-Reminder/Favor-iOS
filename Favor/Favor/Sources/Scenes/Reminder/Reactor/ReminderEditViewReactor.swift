@@ -76,7 +76,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       reminder: reminder,
       currentTitle: reminder.name,
       currentDate: reminder.date,
-      currentAlarmTime: reminder.notifyDate?.toTimeString().toDate("a h시 mm분"),
+      currentAlarmTime: reminder.notifyDate.toTimeString().toDate("a h시 mm분"),
       currentNotifyDay: reminder.date.toNotifyDays(reminder.notifyDate)
     )
   }
@@ -98,28 +98,13 @@ final class ReminderEditViewReactor: Reactor, Stepper {
         .just(.updateReminderDate(self.currentState.reminder.date)),
         .just(.updateNotifyTime(self.currentState.reminder.notifyDate))
       )
-
+      
     case .friendSelectorButtonDidTap:
       self.steps.accept(AppStep.friendSelectorIsRequired([]))
       return .empty()
       
     case .doneButtonDidTap:
-      guard let notifyDay = self.currentState.currentNotifyDay,
-            let time = self.currentState.currentAlarmTime,
-            let date = self.currentState.currentDate
-      else { return .empty() }
-      let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()
-      
-      let requestDTO = ReminderRequestDTO(
-        title: self.currentState.currentTitle,
-        reminderDate: date.toDTODateString(),
-        isAlarmSet: self.currentState.shouldNotify,
-        alarmTime: alarmString,
-        reminderMemo: self.currentState.currentMemo
-      )
-      
-      // 서버에 요청을 보냅니다.
-      return networking.request(.postReminder(requestDTO, friendNo: 1))
+      return self.requestPostReminder()
         .flatMap { _ -> Observable<Mutation> in
           let message: ToastMessage = .reminderAdded
           // 현재 페이지를 종료합니다.
@@ -155,7 +140,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     
     switch mutation {
     case .updateReminderDate(let date):
-      newState.reminder.notifyDate = date
+      newState.reminder.notifyDate = date ?? .distantPast
       newState.currentDate = date
 
     case .updateMemo(let memo):
@@ -194,7 +179,8 @@ final class ReminderEditViewReactor: Reactor, Stepper {
         state.currentDate != nil,
         state.currentAlarmTime != nil,
         state.currentNotifyDay != nil,
-        !state.currentTitle.isEmpty
+        !state.currentTitle.isEmpty,
+        state.currentFriend != nil
       {
         newState.isEnabledDoneButton = true
       } else {
@@ -202,6 +188,43 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       }
       
       return newState
+    }
+  }
+}
+
+// MARK: - Network
+
+private extension ReminderEditViewReactor {
+  func requestPostReminder() -> Observable<Void> {
+    guard let notifyDay = self.currentState.currentNotifyDay,
+          let time = self.currentState.currentAlarmTime,
+          let date = self.currentState.currentDate,
+          let friend = self.currentState.currentFriend
+    else { return .empty() }
+    let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()
+    let networking = ReminderNetworking()
+    
+    let requestDTO = ReminderRequestDTO(
+      title: self.currentState.currentTitle,
+      reminderDate: date.toDTODateString(),
+      isAlarmSet: self.currentState.shouldNotify,
+      alarmTime: alarmString,
+      reminderMemo: self.currentState.currentMemo
+    )
+    
+    return Observable<Void>.create { observer in
+      return networking.request(.postReminder(requestDTO, friendNo: friend.identifier))
+        .map(ResponseDTO<ReminderSingleResponseDTO>.self)
+        .map { Reminder(singleDTO: $0.data) }
+        .subscribe { reminder in
+          Task {
+            try await self.workBranch.write { transaction in
+              transaction.update(reminder.realmObject())
+              observer.onNext(())
+              observer.onCompleted()
+            }
+          }
+        }
     }
   }
 }
