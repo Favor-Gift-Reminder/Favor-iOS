@@ -131,46 +131,6 @@ final class ReminderDatePopup: BasePopup {
     }
   }
   
-  // MARK: - Make
-  
-  private func makeArrowButton(image: UIImage?) -> UIButton {
-    let button = UIButton()
-    let image = image?.resize(newWidth: 20.0)
-    button.setImage(image, for: .normal)
-    return button
-  }
-  
-  private func makeMonthButton(month: Int) -> UIButton {
-    var config = UIButton.Configuration.filled()
-    var container = AttributeContainer()
-    container.font = .favorFont(.bold, size: 16.0)
-    config.attributedTitle = AttributedString("\(month)월", attributes: container)
-    config.background.cornerRadius = 20.0
-    config.baseForegroundColor = .favorColor(.subtext)
-    config.baseBackgroundColor = .favorColor(.button)
-    let button = UIButton(configuration: config)
-    button.configurationUpdateHandler = {
-      switch $0.state {
-      case .selected:
-        $0.configuration?.baseBackgroundColor = .favorColor(.main)
-        $0.configuration?.baseForegroundColor = .favorColor(.white)
-      default:
-        $0.configuration?.baseBackgroundColor = .favorColor(.button)
-        $0.configuration?.baseForegroundColor = .favorColor(.subtext)
-      }
-    }
-    return button
-  }
-  
-  private func makeHorizontalStack(_ buttons: [UIButton]) -> UIStackView {
-    let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.spacing = Metric.buttonStackHorizontalSpacing
-    stackView.distribution = .fillEqually
-    buttons.forEach { stackView.addArrangedSubview($0) }
-    return stackView
-  }
-  
   // MARK: - Bind
   
   override func bind() {
@@ -202,7 +162,18 @@ final class ReminderDatePopup: BasePopup {
   
   /// 년도 값을 달라지면 호출되는 메서드입니다.
   private func yearDidChange() {
-    self.monthButtons.forEach { $0.isSelected = false }
+    self.monthButtons.forEach {
+      $0.isSelected = false
+      $0.isEnabled = true
+    }
+    // 미래는 버튼 선택이 되지 않게 함
+    if Date().currentYear <= self.currentDate.year ?? 1 {
+      if Date().currentYear == self.currentDate.year {
+        self.monthButtons[Date().currentMonth...11].forEach { $0.isEnabled = false }
+      } else {
+        self.monthButtons.forEach { $0.isEnabled = false }
+      }
+    }
     if self.initialYear == self.currentDate.year {
       // 화면에 처음 진입했을 때의 년도 값과 현재 선택된 년도 값이 일치했을 경우,
       let month = self.currentDate.month ?? 0
@@ -225,5 +196,50 @@ final class ReminderDatePopup: BasePopup {
     self.delegate?.reminderDatePopupDidClose(self.currentDate)
     // 팝업 창을 닫습니다.
     self.dismissPopup()
+  }
+}
+
+// MARK: - Privates
+
+private extension ReminderDatePopup {
+  func makeArrowButton(image: UIImage?) -> UIButton {
+    let button = UIButton()
+    let image = image?.resize(newWidth: 20.0)
+    button.setImage(image, for: .normal)
+    return button
+  }
+  
+  func makeMonthButton(month: Int) -> UIButton {
+    var config = UIButton.Configuration.filled()
+    var container = AttributeContainer()
+    container.font = .favorFont(.bold, size: 16.0)
+    config.attributedTitle = AttributedString("\(month)월", attributes: container)
+    config.background.cornerRadius = 20.0
+    config.baseForegroundColor = .favorColor(.subtext)
+    config.baseBackgroundColor = .favorColor(.button)
+    let button = UIButton(configuration: config)
+    button.configurationUpdateHandler = {
+      switch $0.state {
+      case .selected:
+        $0.configuration?.background.backgroundColor = .favorColor(.main)
+        $0.configuration?.baseForegroundColor = .favorColor(.white)
+      case .disabled:
+        $0.configuration?.background.backgroundColor = .favorColor(.button)
+        $0.configuration?.baseForegroundColor = .favorColor(.line2)
+      default:
+        $0.configuration?.background.backgroundColor = .favorColor(.button)
+        $0.configuration?.baseForegroundColor = .favorColor(.subtext)
+      }
+    }
+    return button
+  }
+  
+  func makeHorizontalStack(_ buttons: [UIButton]) -> UIStackView {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = Metric.buttonStackHorizontalSpacing
+    stackView.distribution = .fillEqually
+    buttons.forEach { stackView.addArrangedSubview($0) }
+    return stackView
   }
 }
