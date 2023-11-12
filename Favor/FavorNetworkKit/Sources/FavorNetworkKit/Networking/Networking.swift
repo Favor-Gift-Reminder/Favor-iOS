@@ -19,6 +19,7 @@ public typealias GiftNetworking = Networking<GiftAPI>
 public typealias GiftPhotoNetworking = Networking<GiftPhotoAPI>
 public typealias ReminderNetworking = Networking<ReminderAPI>
 public typealias UserNetworking = Networking<UserAPI>
+public typealias UserPhotoNetworking = Networking<UserPhotoAPI>
 
 public final class Networking<TargetType: BaseTargetType> {
 

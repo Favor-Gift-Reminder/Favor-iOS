@@ -94,7 +94,7 @@ public class Fetcher<T: Storable & Receivable> {
           }
         } catch {
           observer.onError(error)
-          os_log(.error, "📂 ❌ FETCHER STATUS: error")
+          os_log(.error, "📂 ❌ FETCHER STATUS: error \(error.localizedDescription)")
         }
       }
 

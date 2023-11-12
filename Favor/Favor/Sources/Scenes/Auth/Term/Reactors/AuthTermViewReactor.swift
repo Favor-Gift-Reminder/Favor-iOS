@@ -46,7 +46,6 @@ public final class AuthTermViewReactor: Reactor, Stepper {
 
   init(with user: User) {
     self.initialState = State(
-      userProfile: user.profilePhoto,
       userName: user.name
     )
   }

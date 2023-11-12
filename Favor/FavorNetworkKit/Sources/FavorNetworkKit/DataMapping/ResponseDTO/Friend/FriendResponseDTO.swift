@@ -10,5 +10,5 @@ import Foundation
 public struct FriendResponseDTO: Decodable {
   public let friendName: String
   public let friendNo: Int
-  public let photo: [PhotoResponseDTO]?
+  public let photo: PhotoResponseDTO?
 }

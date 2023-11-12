@@ -52,6 +52,9 @@ final class MyPageFlow: Flow {
 
     case .wayBackToRootIsRequired:
       return .one(flowContributor: .forwardToParentFlow(withStep: AppStep.wayBackToRootIsRequired))
+      
+    case let .imagePickerIsRequired(pickerManager, _):
+      return self.navigateToImagePicker(pickerManager)
 
     default:
       return .none
@@ -136,5 +139,11 @@ extension MyPageFlow {
       withNextPresentable: anniversaryFlow,
       withNextStepper: OneStepper(withSingleStep: AppStep.newAnniversaryIsRequired)
     ))
+  }
+  
+  private func navigateToImagePicker(_ pickerManager: PHPickerManager) -> FlowContributors {
+    pickerManager.present(selectionLimit: 1)
+    
+    return .none
   }
 }

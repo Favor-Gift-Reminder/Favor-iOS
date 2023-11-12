@@ -14,7 +14,11 @@ public class PhotoObject: Object {
   /// Cache Key
   @Persisted public var local: String
 
-  public convenience init(photoNo: Int, remote: String, local: String) {
+  public convenience init(
+    photoNo: Int,
+    remote: String,
+    local: String
+  ) {
     self.init()
     self.photoNo = photoNo
     self.remote = remote

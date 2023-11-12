@@ -40,7 +40,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   public func bind(_ friend: Friend) {
-    self.profileImageView.profileImage = friend.profilePhoto
+//    self.profileImageView.profileImage = friend.profilePhoto
     self.nameLabel.text = friend.friendName
     self.profileImageView.isTempUser = friend.identifier < 0
   }

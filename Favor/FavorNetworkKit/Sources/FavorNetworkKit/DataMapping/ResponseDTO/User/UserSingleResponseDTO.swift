@@ -20,6 +20,8 @@ public struct UserSingleResponseDTO: Decodable {
   public let givenGift: Int
   public let receivedGift: Int
   public let totalGift: Int
+  public let userBackgroundUserPhoto: PhotoResponseDTO?
+  public let userProfileUserPhoto: PhotoResponseDTO?
 
   private enum CodingKeys: String, CodingKey {
     case anniversaryList
@@ -34,6 +36,8 @@ public struct UserSingleResponseDTO: Decodable {
     case givenGift
     case receivedGift
     case totalGift
+    case userBackgroundUserPhoto
+    case userProfileUserPhoto
   }
 
   public init(from decoder: Decoder) throws {
@@ -50,5 +54,7 @@ public struct UserSingleResponseDTO: Decodable {
     self.givenGift = try container.decode(Int.self, forKey: .givenGift)
     self.receivedGift = try container.decode(Int.self, forKey: .receivedGift)
     self.totalGift = try container.decode(Int.self, forKey: .totalGift)
+    self.userBackgroundUserPhoto = try container.decode(PhotoResponseDTO?.self, forKey: .userBackgroundUserPhoto)
+    self.userProfileUserPhoto = try container.decode(PhotoResponseDTO?.self, forKey: .userProfileUserPhoto)
   }
 }

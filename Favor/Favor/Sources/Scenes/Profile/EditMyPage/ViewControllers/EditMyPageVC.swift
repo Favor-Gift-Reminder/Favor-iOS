@@ -319,9 +319,9 @@ extension EditMyPageViewController: FavorTextFieldCellDelegate {
       let textFieldCell = cell as? FavorTextFieldCell,
       let placeholder = textFieldCell.textField.placeholder {
       if placeholder == "이름" {
-        reactor.action.onNext(.nameTextFieldDidUpdate(text))
+        reactor.action.onNext(.nameTextFieldDidUpdate(text ?? ""))
       } else if placeholder == "ID" {
-        reactor.action.onNext(.searchIDTextFieldDidUpdate(text))
+        reactor.action.onNext(.searchIDTextFieldDidUpdate(text ?? ""))
       }
     }
   }
@@ -331,6 +331,6 @@ extension EditMyPageViewController: FavorTextFieldCellDelegate {
 
 extension EditMyPageViewController: PHPickerManagerDelegate {
   func pickerManager(didFinishPicking image: UIImage?) {
-    
+    self.reactor?.action.onNext(.imageDidFetched(image))
   }
 }

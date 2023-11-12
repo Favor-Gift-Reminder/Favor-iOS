@@ -29,7 +29,7 @@ final class FavorPopup: BasePopup {
     lb.font = .favorFont(.bold, size: 16)
     lb.textColor = .favorColor(.icon)
     lb.textAlignment = .center
-    lb.numberOfLines = 2
+    lb.numberOfLines = 0
     lb.text = self.message
     return lb
   }()
@@ -70,7 +70,7 @@ final class FavorPopup: BasePopup {
     }
     
     self.descriptionLabel.snp.makeConstraints { make in
-      make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
+      make.directionalHorizontalEdges.equalTo(self.containerView).inset(24.0)
       make.bottom.equalTo(self.confirmButton.snp.top).offset(-36.0)
     }
   }

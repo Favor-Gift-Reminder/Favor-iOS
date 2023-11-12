@@ -17,7 +17,7 @@ public struct Friend: Storable, Receivable {
   public let identifier: Int
   public var friendName: String
   public var friendID: String
-  public var profilePhoto: UIImage?
+  public var profilePhoto: Photo?
   public var memo: String?
   public var anniversaryList: [Anniversary]
   public var favorList: [Favor]
@@ -34,7 +34,9 @@ public struct Friend: Storable, Receivable {
     self.identifier = realmObject.friendNo
     self.friendName = realmObject.friendName
     self.friendID = realmObject.friendID
-//    self.profilePhoto = realmObject.profilePhoto
+    if let photoObject = realmObject.profilePhoto {
+      self.profilePhoto = Photo(realmObject: photoObject)
+    }
     self.memo = realmObject.memo
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
@@ -50,7 +52,7 @@ public struct Friend: Storable, Receivable {
       friendID: self.friendID,
       anniversaryList: self.anniversaryList.compactMap { $0.realmObject() },
       favorList: self.favorList.compactMap { $0.rawValue },
-//      profilePhoto: self.profilePhoto,
+      profilePhoto: self.profilePhoto?.realmObject(),
       memo: self.memo,
       totalGift: self.totalGift,
       receivedGift: self.receivedGift,
@@ -64,7 +66,9 @@ public struct Friend: Storable, Receivable {
     self.identifier = friendResponseDTO.friendNo
     self.friendName = friendResponseDTO.friendName
     self.friendID = ""
-//    self.profilePhoto = dto.
+    if let photoDTO = friendResponseDTO.photo {
+      self.profilePhoto = Photo(singleDTO: photoDTO)
+    }
     self.memo = ""
     self.anniversaryList = []
     self.favorList = []

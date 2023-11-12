@@ -23,8 +23,8 @@ public struct User: Storable, Receivable {
   public var reminderList: [Reminder]
   public var anniversaryList: [Anniversary]
   public var friendList: [Friend]
-  public var profilePhoto: UIImage?
-  public var profileBackgroundPhoto: UIImage?
+  public var profilePhoto: Photo?
+  public var profileBackgroundPhoto: Photo?
   public var givenGifts: Int
   public var receivedGifts: Int
   public var totalgifts: Int
@@ -46,9 +46,12 @@ public struct User: Storable, Receivable {
     self.givenGifts = realmObject.givenGifts
     self.receivedGifts = realmObject.receivedGifts
     self.totalgifts = realmObject.totalGifts
-    // TODO: 이미지 구현 후 적용
-//    self.profilePhoto = realmObject.userPhoto
-//    self.profileBackgroundPhoto = realmObject.backgroundPhoto
+    if let userPhotoObject = realmObject.userPhoto {
+      self.profilePhoto =  Photo(realmObject: userPhotoObject)
+    }
+    if let backgroundPhotoObject = realmObject.backgroundPhoto {
+      self.profileBackgroundPhoto = Photo(realmObject: backgroundPhotoObject)
+    }
   }
   
   public func realmObject() -> UserObject {
@@ -60,11 +63,11 @@ public struct User: Storable, Receivable {
       favorList: self.favorList.map { $0.rawValue },
       anniversaryList: self.anniversaryList.compactMap { $0.realmObject() },
       friendList: self.friendList.compactMap { $0.realmObject() },
+      userPhoto: self.profilePhoto?.realmObject(),
+      backgroundPhoto: self.profileBackgroundPhoto?.realmObject(),
       givenGifts: self.givenGifts,
       receivedGifts: self.receivedGifts,
       totalGifts: self.totalgifts
-//      userPhoto: self.profilePhoto,
-//      backgroundPhoto: self.profileBackgroundPhoto
     )
   }
   
@@ -82,6 +85,12 @@ public struct User: Storable, Receivable {
     self.givenGifts = singleDTO.givenGift
     self.receivedGifts = singleDTO.receivedGift
     self.totalgifts = singleDTO.totalGift
+    if let profileBackgroundPhoto = singleDTO.userBackgroundUserPhoto {
+      self.profileBackgroundPhoto = Photo(singleDTO: profileBackgroundPhoto)
+    }
+    if let profilePhoto = singleDTO.userProfileUserPhoto {
+      self.profilePhoto = Photo(singleDTO: profilePhoto)
+    }
   }
 
   // MARK: - Mock

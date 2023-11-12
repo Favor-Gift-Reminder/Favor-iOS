@@ -26,24 +26,26 @@ final class EditMyPageViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
+  private let workBench = RealmWorkbench()
+  private var pickerManager: PHPickerManager?
 
   enum Action {
     case viewNeedsLoaded
     case cancelButtonDidTap
     case doneButtonDidTap
     case profileHeaderDidTap(EditMyPageProfileHeader.ImageType)
-    case imageDidFetched(UIImage)
-    case nameTextFieldDidUpdate(String?)
-    case searchIDTextFieldDidUpdate(String?)
+    case imageDidFetched(UIImage?)
+    case nameTextFieldDidUpdate(String)
+    case searchIDTextFieldDidUpdate(String)
     case favorDidSelected(Int)
     case doNothing
   }
 
   enum Mutation {
     case updateImageType(EditMyPageProfileHeader.ImageType)
-    case updateImage(UIImage)
-    case updateName(String?)
-    case updateSearchID(String?)
+    case updateImage(UIImage?)
+    case updateName(String)
+    case updateSearchID(String)
     case updateFavor([EditMyPageSectionItem])
   }
 
@@ -56,8 +58,9 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     var lastTappedProfileImage: EditMyPageProfileHeader.ImageType?
     var profileBackgroundImage: UIImage?
     var profilePhotoImage: UIImage?
-    var name: String?
-    var searchID: String?
+    var name: String
+    var searchID: String
+    var favorList: [Favor]
   }
 
   // MARK: - Initializer
@@ -66,7 +69,10 @@ final class EditMyPageViewReactor: Reactor, Stepper {
     self.initialState = State(
       user: user,
       nameItems: [.textField(text: user.name, placeholder: "이름")],
-      idItems: [.textField(text: user.searchID, placeholder: "ID")]
+      idItems: [.textField(text: user.searchID, placeholder: "ID")],
+      name: user.name,
+      searchID: user.searchID,
+      favorList: user.favorList
     )
   }
 
@@ -85,26 +91,16 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       return .empty()
 
     case .doneButtonDidTap:
-      let favors = currentState.favorItems.compactMap { item -> String? in
-        guard
-          case let EditMyPageSectionItem.favor(isSelected, favor) = item,
-          isSelected
-        else { return nil }
-        return favor.rawValue
-      }
-      let networking = UserNetworking()
-      // TODO: Cache Image
-      return networking.request(.patchUser(
-        name: self.currentState.name ?? "",
-        userId: self.currentState.searchID ?? "",
-        favorList: favors
-      ))
-      .flatMap { _ -> Observable<Mutation> in
-        self.steps.accept(AppStep.editMyPageIsComplete)
-        return .empty()
+      return self.requestPatchUser()
+        .flatMap { _ -> Observable<Mutation> in
+          self.steps.accept(AppStep.editMyPageIsComplete)
+          return .empty()
       }
       
     case .profileHeaderDidTap(let imageType):
+      let pickerManager = PHPickerManager()
+      self.pickerManager = pickerManager
+      self.steps.accept(AppStep.imagePickerIsRequired(pickerManager, selectionLimit: 1))
       return .just(.updateImageType(imageType))
       
     case .imageDidFetched(let image):
@@ -131,7 +127,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       }
       // 선택된 취향의 개수가 5개 이상이고 선택된 Cell의 취향이 선택되지 않은 상태일 때 (5개 초과의 취향을 선택하고자 할 때)
       if selectedFavorsCount >= Constant.maximumSelectedFavor && !isSelected { return .empty() }
-
+      
       favorItems[indexPath] = EditMyPageSectionItem.favor(isSelected: !isSelected, favor: favor)
       return .just(.updateFavor(favorItems))
 
@@ -164,7 +160,16 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       newState.searchID = searchID
       
     case .updateFavor(let favorItems):
+      var favorList: [Favor] = []
       newState.favorItems = favorItems
+      favorItems.forEach { item in
+        guard
+          case let EditMyPageSectionItem.favor(isSelected, favor) = item,
+          isSelected
+        else { return }
+        favorList.append(favor)
+      }
+      newState.favorList = favorList
     }
 
     return newState
@@ -176,5 +181,49 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       newState.items = [state.nameItems, state.idItems, state.favorItems]
       return newState
     }
+  }
+}
+
+// MARK: - Privates
+
+private extension EditMyPageViewReactor {
+  func requestPatchUser() -> Observable<Void> {
+    let networking = UserNetworking()
+    let name = self.currentState.name
+    let userId = self.currentState.searchID
+    let favorList = self.currentState.favorList.map { $0.rawValue }
+    
+    return Observable<Void>.create { observer in
+      return self.requestPostProfile()
+        .flatMap { _ in self.requestPostBackground() }
+        .flatMap { _ in
+          networking.request(.patchUser(name: name, userId: userId, favorList: favorList))
+        }
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { User(singleDTO: $0.data) }
+        .subscribe { user in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.update(user.realmObject())
+              observer.onNext(())
+              observer.onCompleted()
+            }
+          }
+        }
+    }
+  }
+  
+  func requestPostBackground() -> Observable<Void> {
+    guard let image = self.currentState.profileBackgroundImage else { return .empty() }
+    let networking = UserPhotoNetworking()
+    return networking.request(.postBackground(file: APIManager.createMultiPartForm(image)))
+      .map { _ in }
+  }
+  
+  func requestPostProfile() -> Observable<Void> {
+    guard let image = self.currentState.profilePhotoImage else { return .empty() }
+    let networking = UserPhotoNetworking()
+    return networking.request(.postProfile(file: APIManager.createMultiPartForm(image)))
+      .map { _ in }
   }
 }

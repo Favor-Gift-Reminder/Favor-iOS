@@ -47,6 +47,14 @@ public struct Photo: Receivable, Storable, Hashable {
       local: self.local
     )
   }
+  
+  // MARK: - Mock
+  
+  public init() {
+    self.identifier = -1
+    self.remote = ""
+    self.local = ""
+  }
 }
 
 // MARK: - PropertyValue

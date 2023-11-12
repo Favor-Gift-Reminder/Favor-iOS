@@ -144,7 +144,7 @@ final class MyPageViewReactor: Reactor, Stepper {
       
     case .updateUserID(let id):
       newState.userID = id
-
+      
     case .updateFavorSection(let favors):
       let favorSection = favors.map { favor -> ProfileSectionItem in
         return .favors(ProfileFavorCellReactor(favor: favor))
