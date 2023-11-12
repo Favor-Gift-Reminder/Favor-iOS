@@ -10,7 +10,7 @@ import FavorKit
 public struct AnniversaryUpdateRequestDTO: Encodable {
   public let anniversaryTitle: String
   public let anniversaryDate: String
-  public let category: String
+  public let anniversaryCategory: String
   public let isPinned: Bool
   
   public init(
@@ -21,7 +21,7 @@ public struct AnniversaryUpdateRequestDTO: Encodable {
   ) {
     self.anniversaryTitle = anniversaryTitle
     self.anniversaryDate = anniversaryDate
-    self.category = category
+    self.anniversaryCategory = category
     self.isPinned = isPinned
   }
 }

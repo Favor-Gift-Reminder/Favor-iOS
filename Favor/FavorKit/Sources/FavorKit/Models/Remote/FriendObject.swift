@@ -43,7 +43,7 @@ public class FriendObject: Object {
       "memo": "friendMemo"
     ]
   }
-
+  
   // MARK: - Initializer
   
   /// - Parameters:

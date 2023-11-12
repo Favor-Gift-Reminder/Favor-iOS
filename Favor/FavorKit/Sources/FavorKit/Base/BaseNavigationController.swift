@@ -54,7 +54,7 @@ open class BaseNavigationController: UINavigationController {
       .foregroundColor: UIColor.favorColor(.icon),
       .font: UIFont.favorFont(.bold, size: 18)
     ]
-
+    
     // Set Appearance
     self.navigationBar.compactAppearance = appearance
     self.navigationBar.standardAppearance = appearance

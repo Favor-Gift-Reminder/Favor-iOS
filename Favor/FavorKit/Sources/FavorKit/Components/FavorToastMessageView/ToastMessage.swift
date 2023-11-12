@@ -29,6 +29,7 @@ public enum ToastMessage {
   case anniversaryAdded(String)
   case anniversaryModifed(String)
   case anniversaryDeleted(String)
+  case anniversaryisPinned(Bool)
   case anniversaryPinLimited
   
   // MARK: - Friend
@@ -38,7 +39,7 @@ public enum ToastMessage {
   // MARK: - Reminder
   
   case reminderAdded
-  
+    
   // MARK: - Network
   
   case networkStatus
@@ -66,6 +67,8 @@ extension ToastMessage {
       return "\"\(anniversaryTitle)\" 삭제 완료!"
     case .anniversaryPinLimited:
       return "최대 3개까지 고정 가능합니다."
+    case .anniversaryisPinned(let isPinned):
+      return isPinned ? "고정 되었습니다." : "고정 해제되었습니다."
       
     case .tempFriendAdded(let friendName):
       return "\(friendName)님이 등록되었습니다."
@@ -94,7 +97,7 @@ extension ToastMessage {
   
   public var bottomInset: CGFloat {
     switch self {
-    case .anniversaryPinLimited:
+    case .anniversaryPinLimited, .anniversaryisPinned:
       return 94.0
     default:
       return 46.0

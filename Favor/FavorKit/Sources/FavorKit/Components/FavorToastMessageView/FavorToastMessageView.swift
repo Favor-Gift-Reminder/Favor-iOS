@@ -94,10 +94,10 @@ extension FavorToastMessageView: BaseView {
     
     switch self.message?.viewType {
     case .basic:
-      self.backgroundColor = .favorColor(.toast2)
+      self.backgroundColor = .favorColor(.toast2).withAlphaComponent(0.7)
       self.warningImageView.isHidden = true
     case .warning:
-      self.backgroundColor = .favorColor(.toast1)
+      self.backgroundColor = .favorColor(.toast1).withAlphaComponent(0.7)
       self.warningImageView.isHidden = false
     default:
       break

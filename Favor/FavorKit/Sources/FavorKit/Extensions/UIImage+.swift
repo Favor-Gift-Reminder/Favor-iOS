@@ -13,6 +13,7 @@ extension UIImage {
     case add
     case addFriend
     case addNoti
+    case baby
     case check
     case checkFilled
     case close
@@ -55,6 +56,7 @@ extension UIImage {
     case couple
     case employed
     case graduate
+    case gradu
     case housewarm
     case pass
 

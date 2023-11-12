@@ -124,7 +124,7 @@ private extension ReminderFlow {
       guard
         let reminderVC = self.rootViewController.topViewController as? ReminderViewController
       else { return .none }
-      reminderVC.viewNeedsLoaded(with: message)
+      ToastManager.shared.showNewToast(.init(.reminderAdded))
     }
     
     return .none

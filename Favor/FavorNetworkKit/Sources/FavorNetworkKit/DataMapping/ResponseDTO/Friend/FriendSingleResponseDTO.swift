@@ -16,7 +16,7 @@ public struct FriendSingleResponseDTO: Decodable {
   public let friendMemo: String
   public let reminderList: [ReminderSingleResponseDTO]
   public let favorList: [String]
-  public let anniversaryList: [AnniversaryResponseDTO]
+  public let anniversaryList: [AnniversarySingleResponseDTO]
   public let givenGift: Int
   public let receivedGift: Int
   public let totalGift: Int
@@ -38,7 +38,7 @@ public struct FriendSingleResponseDTO: Decodable {
   
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.anniversaryList = try container.decode([AnniversaryResponseDTO].self, forKey: .anniversaryList)
+    self.anniversaryList = try container.decode([AnniversarySingleResponseDTO].self, forKey: .anniversaryList)
     self.favorList = try container.decode([String].self, forKey: .favorList)
     self.friendMemo = try container.decode(String.self, forKey: .friendMemo)
     self.friendName = try container.decode(String.self, forKey: .friendName)

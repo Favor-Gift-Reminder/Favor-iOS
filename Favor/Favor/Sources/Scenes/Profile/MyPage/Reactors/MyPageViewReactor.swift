@@ -131,7 +131,7 @@ final class MyPageViewReactor: Reactor, Stepper {
       return .empty()
     }
   }
-
+  
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -152,6 +152,8 @@ final class MyPageViewReactor: Reactor, Stepper {
       newState.favorItems = favorSection
       
     case .updateAnniversarySection(let anniversaries):
+      let anniversaries =
+      anniversaries.reversed().filter { $0.isPinned } + anniversaries.reversed().filter { !$0.isPinned }
       let anniversarySection = anniversaries.map { anniversary -> ProfileSectionItem in
         return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
       }
@@ -187,7 +189,6 @@ final class MyPageViewReactor: Reactor, Stepper {
       // 기념일
       if !state.anniversaryItems.isEmpty {
         newSections.append(.anniversaries)
-        // TODO: 고정된 아이템만 or 없으면 상단 세 개
         newItems.append(state.anniversaryItems.prefix(3).wrap())
       } else {
         profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))

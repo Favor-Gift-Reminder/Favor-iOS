@@ -43,7 +43,7 @@ final class AnniversaryFlow: Flow {
       return self.navigateToAnniversaryManagement(.edit, with: anniversary)
 
     case .anniversaryManagementIsComplete(let message):
-      return self.popFromAnniversaryModifying(with: message)
+      return self.popFromAnniversaryManagement(with: message)
 
     case .anniversaryListIsComplete:
       return self.popFromAnniversaryList()
@@ -118,18 +118,15 @@ private extension AnniversaryFlow {
     ))
   }
 
-  func popFromAnniversaryModifying(with message: ToastMessage) -> FlowContributors {
-    DispatchQueue.main.async {
-      if self.rootViewController.topViewController is AnniversaryManagementViewController {
-        self.rootViewController.popViewController(animated: true)
-        guard
-          let anniversaryListModifyingVC = self.rootViewController.topViewController
-            as? AnniversaryListModifyingViewController
-        else { return }
-        anniversaryListModifyingVC.viewNeedsLoaded(with: message)
-      }
+  func popFromAnniversaryManagement(with message: ToastMessage) -> FlowContributors {
+    if self.rootViewController.topViewController is AnniversaryManagementViewController {
+      self.rootViewController.popViewController(animated: true)
+      guard
+        let anniversaryListModifyingVC = self.rootViewController.topViewController
+          as? AnniversaryListModifyingViewController
+      else { return .none }
+      ToastManager.shared.showNewToast(.init(message))
     }
-
     return .none
   }
 

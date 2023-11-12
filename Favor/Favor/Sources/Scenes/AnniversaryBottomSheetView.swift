@@ -22,14 +22,14 @@ final class AnniversaryBottomSheetView: UIView {
   // MARK: - UI Components
   
   private lazy var iconLabel: UILabel = UILabel().then {
-    $0.textColor = .favorColor(.line3)
+    $0.textColor = .favorColor(.icon)
     $0.font = .favorFont(.regular, size: 16)
     $0.textAlignment = .center
     $0.text = self.anniversaryCategory.rawValue
   }
   
   private lazy var iconImageView: UIImageView = UIImageView().then {
-    $0.image = self.anniversaryCategory.image?.withRenderingMode(.alwaysTemplate)
+    $0.image = self.anniversaryCategory.image
   }
   
   // MARK: - Properties
@@ -41,11 +41,11 @@ final class AnniversaryBottomSheetView: UIView {
   var isSelected: Bool = false {
     didSet {
       if isSelected {
-        self.iconLabel.textColor = .favorColor(.main)
-        self.iconImageView.tintColor = .favorColor(.main)
+        self.iconLabel.alpha = 1.0
+        self.iconImageView.alpha = 1.0
       } else {
-        self.iconLabel.textColor = .favorColor(.line3)
-        self.iconImageView.tintColor = .favorColor(.line3)
+        self.iconLabel.alpha = 0.2
+        self.iconImageView.alpha = 0.2
       }
     }
   }

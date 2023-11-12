@@ -9,18 +9,21 @@ import UIKit
 
 import FavorKit
 import Reusable
+import SnapKit
 
 final class ReminderHeaderView: UICollectionReusableView, Reusable {
 
   // MARK: - Constants
 
   // MARK: - Properties
+  
+  private var bottomConstraint: Constraint?
 
   // MARK: - UI Components
 
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
-    label.font = .favorFont(.bold, size: 22)
+    label.font = .favorFont(.bold, size: 20)
     label.textAlignment = .left
     label.text = "헤더"
     return label
@@ -43,6 +46,11 @@ final class ReminderHeaderView: UICollectionReusableView, Reusable {
 
   func updateTitle(_ title: String) {
     self.titleLabel.text = title
+    if title == "다가오는 기념일" {
+      self.bottomConstraint?.update(inset: 20.0)
+    } else {
+      self.bottomConstraint?.update(inset: 52.0)
+    }
   }
 
   // MARK: - UI Setups
@@ -61,7 +69,7 @@ extension ReminderHeaderView: BaseView {
   func setupConstraints() {
     self.titleLabel.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalToSuperview()
-      make.centerY.equalToSuperview()
+      self.bottomConstraint = make.bottom.equalToSuperview().constraint
     }
   }
 }

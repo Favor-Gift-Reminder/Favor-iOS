@@ -33,7 +33,6 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
   enum Mutation {
     case updateAnniversaries([Anniversary])
     case updateAllSection([Item])
-    case updateToast(ToastMessage)
   }
   
   struct State {
@@ -41,7 +40,6 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     var sections: [Section] = []
     var items: [Item] = []
     var anniversaryListType: AnniversaryListType
-    @Pulse var shouldShowToast: ToastMessage?
   }
   
   // MARK: - Initializer
@@ -87,7 +85,8 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
       
       guard originalPinnedAnniversaries.count + isPinnedTargetAnniversary < 4 else {
         // 고정된 기념일이 3개 초과되었을 경우입니다.
-        return .just(.updateToast(.anniversaryPinLimited))
+        ToastManager.shared.showNewToast(.init(.anniversaryPinLimited))
+        return .empty()
       }
       
       // 1. 현재 상태의 값을 백업
@@ -115,7 +114,12 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
         .just(.updateAnniversaries(newAnniversaries)),
         self.requestToggleAnniversaryPin(with: tappedAnniversary)
           .asObservable()
-          .flatMap { _ -> Observable<Mutation> in
+          .flatMap { anniversary -> Observable<Mutation> in
+            if anniversary.isPinned {
+              ToastManager.shared.showNewToast(.init(.anniversaryisPinned(true)))
+            } else {
+              ToastManager.shared.showNewToast(.init(.anniversaryisPinned(false)))
+            }
             return .empty()
           }
           .catch { error -> Observable<Mutation> in
@@ -158,8 +162,6 @@ final class AnniversaryListViewReactor: BaseAnniversaryListViewReactor, Reactor,
     case .updateAllSection(let allItems):
       newState.items = allItems
       
-    case .updateToast(let shouldShowToast):
-      newState.shouldShowToast = shouldShowToast
     }
 
     return newState
@@ -193,30 +195,23 @@ private extension AnniversaryListViewReactor {
   func requestToggleAnniversaryPin(with anniversary: Anniversary) -> Single<Anniversary> {
     return Single<Anniversary>.create { single in
       let networking = AnniversaryNetworking()
-      let requestDTO = AnniversaryUpdateRequestDTO(
-        anniversaryTitle: anniversary.name,
-        anniversaryDate: anniversary.date.toDTODateString(),
-        category: anniversary.category.rawValue,
-        isPinned: !anniversary.isPinned
-      )
-
-      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))
-        .take(1)
+      
+      return networking.request(.patchAnniversaryPin(anniversaryNo: anniversary.identifier))
         .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Anniversary(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+        .map(ResponseDTO<AnniversarySingleResponseDTO>.self)
+        .map { Anniversary(singleDTO: $0.data) }
+        .subscribe(onSuccess: { anniversary in
+          Task {
+            try await self.workbench.write { transaction in
+              transaction.update(anniversary.realmObject())
+              DispatchQueue.main.async {
+                single(.success(anniversary))
+              }
+            }
           }
         }, onFailure: { error in
           single(.failure(error))
         })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
     }
   }
 }

@@ -25,6 +25,7 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.icon)
     config.updateAttributedTitle("편집", font: .favorFont(.bold, size: 18))
+    config.contentInsets = .zero
     let button = UIButton(configuration: config)
     return button
   }()
@@ -67,13 +68,6 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       .disposed(by: self.disposeBag)
         
     // State
-    reactor.state.map { $0.shouldShowToast }
-      .asDriver(onErrorRecover: { _ in return .empty() })
-      .drive(with: self) { owner, toastMessage in
-        owner.presentToast(toastMessage, duration: .short)
-      }
-      .disposed(by: self.disposeBag)
-    
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
@@ -82,10 +76,7 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
         snapshot.appendItems(sectionData.items)
         snapshot.reloadSections(sectionData.sections)
         DispatchQueue.main.async {
-          owner.dataSource.apply(
-            snapshot,
-            animatingDifferences: true
-          )
+          owner.dataSource.applySnapshotUsingReloadData(snapshot)
         }
       })
       .disposed(by: self.disposeBag)
@@ -112,10 +103,6 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       self.navigationItem.title = "내 기념일"
     case .friend(let friend):
       self.navigationItem.title = "\(friend.friendName)의 기념일"
-//      if friend.isUser {
-//        self.floatyButton.isHidden = true
-//        self.editButton.isHidden = true
-//      }
     }
   }
   

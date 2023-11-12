@@ -121,19 +121,10 @@ final class ReminderViewReactor: Reactor, Stepper {
       
     case .updateSelectedDate(let selectedDate):
       newState.selectedDate = selectedDate
+      self.action.onNext(.viewNeedsLoaded)
     }
     
     return newState
-  }
-  
-  func transform(state: Observable<State>) -> Observable<State> {
-    return state.map { state in
-      var newState = state
-      
-      
-      
-      return newState
-    }
   }
 }
 
@@ -163,6 +154,8 @@ private extension ReminderViewReactor {
     // onLocal
     self.reminderFetcher.onLocal = {
       return await self.workbench.values(ReminderObject.self)
+        .filter { $0.date.currentYear == self.currentState.selectedDate.year ?? 2023 }
+        .filter { $0.date.currentMonth == self.currentState.selectedDate.month ?? 1 }
         .map { Reminder(realmObject: $0) }
     }
     // onLocalUpdate

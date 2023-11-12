@@ -93,6 +93,7 @@ final class AnniversaryManagementViewController: BaseViewController, View {
     config.background.backgroundColor = .clear
     config.baseForegroundColor = .favorColor(.main)
     config.updateAttributedTitle("완료", font: .favorFont(.bold, size: 18))
+    config.contentInsets = .zero
     
     let button = UIButton(configuration: config)
     return button

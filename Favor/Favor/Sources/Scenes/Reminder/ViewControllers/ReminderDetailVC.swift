@@ -114,10 +114,12 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
         owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
         // 메모
         owner.memoTextView.text = reminder.memo
+        // 친구
+        owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: reminder.relatedFriend.friendName)
       })
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
 
   // MARK: - UI Setups
@@ -158,9 +160,9 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     self.notifySelectorStack.insertArrangedSubview(self.notifyEmptyLabel, at: 2)
     [
       self.eventStack,
-      self.friendSelectorStack,
       self.dateSelectorStack,
       self.notifySelectorStack,
+      self.friendSelectorStack,
       self.memoStack
     ].forEach {
       self.stackView.addArrangedSubview($0)

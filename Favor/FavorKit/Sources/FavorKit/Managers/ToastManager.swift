@@ -19,8 +19,8 @@ public final class ToastManager {
 
     var timeInterval: TimeInterval {
       switch self {
-      case .short: return 3.0
-      case .long: return 5.0
+      case .short: return 1.0
+      case .long: return 3.0
       case .forever: return 180.0
       }
     }

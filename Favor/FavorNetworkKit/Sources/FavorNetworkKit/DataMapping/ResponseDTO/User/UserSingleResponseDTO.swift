@@ -8,7 +8,7 @@
 import Foundation
 
 public struct UserSingleResponseDTO: Decodable {
-  public let anniversaryList: [AnniversaryResponseDTO]
+  public let anniversaryList: [AnniversarySingleResponseDTO]
   public let email: String
   public let favorList: [String] // [Enum]
   public let friendList: [FriendResponseDTO]
@@ -38,7 +38,7 @@ public struct UserSingleResponseDTO: Decodable {
 
   public init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.anniversaryList = try container.decode([AnniversaryResponseDTO].self, forKey: .anniversaryList)
+    self.anniversaryList = try container.decode([AnniversarySingleResponseDTO].self, forKey: .anniversaryList)
     self.email = try container.decode(String.self, forKey: .email)
     self.favorList = try container.decode([String].self, forKey: .favorList)
     self.friendList = try container.decode([FriendResponseDTO].self, forKey: .friendList)

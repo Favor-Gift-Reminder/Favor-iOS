@@ -8,11 +8,11 @@
 public struct AnniversaryRequestDTO: Encodable {
   public let anniversaryTitle: String
   public let anniversaryDate: String
-  public let category: String
+  public let anniversaryCategory: String
   
   public init(anniversaryTitle: String, anniversaryDate: String, category: String) {
     self.anniversaryTitle = anniversaryTitle
     self.anniversaryDate = anniversaryDate
-    self.category = category
+    self.anniversaryCategory = category
   }
 }

@@ -1,15 +1,12 @@
 {
   "images" : [
     {
-      "filename" : "ic_congrat.pdf",
+      "filename" : "ic_congrat.svg",
       "idiom" : "universal"
     }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
-  },
-  "properties" : {
-    "preserves-vector-representation" : true
   }
 }

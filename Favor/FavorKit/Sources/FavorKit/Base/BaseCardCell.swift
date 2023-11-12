@@ -26,13 +26,6 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
       case .reminder: return 24
       }
     }
-
-    public var imageColor: UIColor {
-      switch self {
-      case .anniversary: return .favorColor(.icon)
-      case .reminder: return .favorColor(.white)
-      }
-    }
   }
 
   private enum Metric {
@@ -60,9 +53,9 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   public var subtitle: String? {
     didSet { self.updateLabels() }
   }
-
+  
   // MARK: - UI Components
-
+  
   /// Cell 좌측에 위치한 아이콘이나 프로필 사진 등의 이미지가 채워지는 ImageView
   private lazy var profileDefaultImageView: UIImageView = {
     let imageView = UIImageView()
@@ -80,10 +73,6 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
   private lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.backgroundColor = .clear
-    imageView.image = .favorIcon(.favor)?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: 36)
-      .withTintColor(.favorColor(.icon))
     imageView.contentMode = .center
     imageView.clipsToBounds = true
     return imageView
@@ -142,7 +131,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
     ].forEach {
       self.labelStack.addArrangedSubview($0)
     }
-
+    
     [
       self.profileDefaultImageView,
       self.imageView,
@@ -151,7 +140,7 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
       self.addSubview($0)
     }
   }
-
+  
   open func setupConstraints() {
     self.imageView.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(24)
@@ -192,9 +181,7 @@ private extension BaseCardCell {
       fatalError("CellType of Card Cell should be defined.")
     }
     self.imageView.image = self.image?
-      .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: cellType.imageSize)
-      .withTintColor(cellType.imageColor)
   }
 
   func updateLabels() {

@@ -37,6 +37,7 @@ public struct Anniversary: Storable, Receivable {
   public func realmObject() -> AnniversaryObject {
     AnniversaryObject(
       anniversaryNo: self.identifier,
+      anniversaryCategory: self.category,
       title: self.name,
       date: self.date,
       isPinned: self.isPinned
@@ -45,13 +46,12 @@ public struct Anniversary: Storable, Receivable {
   
   // MARK: - Receivable
   
-  public init(singleDTO: AnniversaryResponseDTO) {
+  public init(singleDTO: AnniversarySingleResponseDTO) {
     self.identifier = singleDTO.anniversaryNo
     self.name = singleDTO.anniversaryTitle
-    // TODO: DTO에 추가 후 수정
-    self.category = .birth
+    self.category = singleDTO.anniversaryCategory
     self.date = singleDTO.anniversaryDate
-    self.isPinned = singleDTO.isPinned ?? false
+    self.isPinned = singleDTO.isPinned
   }
   
   public func requestDTO() -> AnniversaryRequestDTO {

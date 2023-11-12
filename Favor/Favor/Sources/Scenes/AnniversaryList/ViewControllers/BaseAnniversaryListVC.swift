@@ -82,7 +82,7 @@ public class BaseAnniversaryListViewController: BaseViewController, CellModelTra
       supplementaryViewType: FavorSectionHeaderView.self,
       ofKind: UICollectionView.elementKindSectionHeader
     )
-
+    
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInset = UIEdgeInsets(top: 32, left: .zero, bottom: 32, right: .zero)

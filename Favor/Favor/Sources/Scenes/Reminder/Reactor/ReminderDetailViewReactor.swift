@@ -42,7 +42,7 @@ final class ReminderDetailViewReactor: Reactor, Stepper {
 
 
   // MARK: - Functions
-
+  
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .editButtonDidTap:

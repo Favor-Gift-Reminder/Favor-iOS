@@ -31,7 +31,7 @@ final class ReminderCell: BaseCardCell, Reusable, View {
       .map { Reactor.Action.notifySwitchDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { $0.reminderData }
       .asDriver(onErrorRecover: { _ in return .empty()})

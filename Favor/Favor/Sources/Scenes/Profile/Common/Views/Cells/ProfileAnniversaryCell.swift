@@ -23,9 +23,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
     let imageView = UIImageView()
     imageView.contentMode = .center
     imageView.image = .favorIcon(.congrat)?
-      .withRenderingMode(.alwaysTemplate)
       .resize(newWidth: 36)
-      .withTintColor(.favorColor(.icon))
     imageView.contentMode = .center
     return imageView
   }()
@@ -84,6 +82,7 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
       .drive(with: self, onNext: { owner, anniversary in
         owner.titleLabel.text = anniversary.name
         owner.dateLabel.text = anniversary.date.toShortenDateString()
+        owner.iconImageView.image = anniversary.category.image?.resize(newWidth: 36.0)
       })
       .disposed(by: self.disposeBag)
   }

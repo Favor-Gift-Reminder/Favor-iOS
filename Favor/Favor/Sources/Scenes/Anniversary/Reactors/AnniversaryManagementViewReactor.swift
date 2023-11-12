@@ -21,6 +21,7 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
 
   var initialState: State
   var steps = PublishRelay<Step>()
+  private let workBench = RealmWorkbench()
 
   enum Action {
     case doneButtonDidTap
@@ -76,7 +77,6 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
       switch self.currentState.viewType {
       case .new:
         return self.requestNewAnniversary(with: self.currentState.anniversary)
-          .asObservable()
           .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
             let message: ToastMessage = .anniversaryAdded(anniversary.name)
             self.steps.accept(AppStep.anniversaryManagementIsComplete(message))
@@ -114,12 +114,12 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
 
     case .dateDidUpdate(let date):
       return .just(.updateAnniversaryDate(date))
-
+      
     case .deleteButtonDidTap:
       return self.requestDeleteAnniversary(self.currentState.anniversary.identifier)
         .asObservable()
-        .flatMap { (anniversary: Anniversary) -> Observable<Mutation> in
-          let message: ToastMessage = .anniversaryDeleted(anniversary.name)
+        .flatMap { _ -> Observable<Mutation> in
+          let message: ToastMessage = .anniversaryDeleted(self.currentState.anniversary.name)
           self.steps.accept(AppStep.anniversaryManagementIsComplete(message))
           return .empty()
         }
@@ -160,27 +160,23 @@ final class AnniversaryManagementViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension AnniversaryManagementViewReactor {
-  func requestNewAnniversary(with anniversary: Anniversary) -> Single<Anniversary> {
-    return Single<Anniversary>.create { single in
+  func requestNewAnniversary(with anniversary: Anniversary) -> Observable<Anniversary> {
+    return Observable<Anniversary>.create { observer in
       let networking = AnniversaryNetworking()
       let requestDTO = anniversary.requestDTO()
       
-      let disposable = networking.request(.postAnniversary(requestDTO))
-        .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Anniversary(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+      return networking.request(.postAnniversary(requestDTO))
+        .map(ResponseDTO<AnniversarySingleResponseDTO>.self)
+        .map { Anniversary(singleDTO: $0.data) }
+        .subscribe { anniversary in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.update(anniversary.realmObject())
+              observer.onNext(anniversary)
+              observer.onCompleted()
+            }
           }
-        }, onFailure: { error in
-          single(.failure(error))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
+        }
     }
   }
   
@@ -193,45 +189,42 @@ private extension AnniversaryManagementViewReactor {
         category: anniversary.category.rawValue,
         isPinned: anniversary.isPinned
       )
-      let disposable = networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))
+      return networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))
         .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            single(.success(Anniversary(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+        .map(ResponseDTO<AnniversarySingleResponseDTO>.self)
+        .map { Anniversary(singleDTO: $0.data) }
+        .subscribe(onSuccess: { anniversary in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.update(anniversary.realmObject())
+              DispatchQueue.main.async {
+                single(.success(anniversary))
+              }
+            }
           }
         }, onFailure: { error in
           single(.failure(error))
         })
-      
-      return Disposables.create {
-        disposable.dispose()
-      }
     }
   }
   
-  func requestDeleteAnniversary(_ anniversaryNo: Int) -> Single<Anniversary> {
-    return Single<Anniversary>.create { single in
+  func requestDeleteAnniversary(_ anniversaryNo: Int) -> Single<Void> {
+    return Single<Void>.create { single in
       let networking = AnniversaryNetworking()
-      let disposable = networking.request(.deleteAnniversary(anniversaryNo: anniversaryNo))
+      return networking.request(.deleteAnniversary(anniversaryNo: anniversaryNo))
         .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<AnniversaryResponseDTO> = try APIManager.decode(response.data)
-            let anniversary = Anniversary(singleDTO: responseDTO.data)
-            single(.success(anniversary))
-          } catch {
-            single(.failure(error))
+        .subscribe(onSuccess: { anniversary in
+          Task {
+            try await self.workBench.write { transaction in
+              transaction.delete(self.currentState.anniversary.realmObject())
+              DispatchQueue.main.async {
+                single(.success(()))
+              }
+            }
           }
         }, onFailure: { error in
           single(.failure(error))
         })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
     }
   }
 }

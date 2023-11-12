@@ -47,12 +47,14 @@ public final class AnniversaryObject: Object {
   ///   - isPinned: 마이페이지의 기념일 고정 여부
   public convenience init(
     anniversaryNo: Int,
+    anniversaryCategory: AnniversaryCategory,
     title: String,
     date: Date,
     isPinned: Bool
   ) {
     self.init()
     self.anniversaryNo = anniversaryNo
+    self.privateCategory = anniversaryCategory.rawValue
     self.title = title
     self.date = date
     self.isPinned = isPinned

@@ -94,6 +94,7 @@ extension HomeSection: Composable {
         )
       } else {
         return .base(
+          spacing: 10,
           contentInsets: NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20),
           boundaryItems: [header]
         )

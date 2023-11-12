@@ -120,7 +120,7 @@ final class ReminderViewController: BaseViewController, View {
       .map { item in Reactor.Action.reminderDidSelected(item) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     reactor.state
       .map { state -> [ReminderSection.ReminderSectionModel] in
         [state.upcomingSection, state.pastSection]
@@ -131,6 +131,16 @@ final class ReminderViewController: BaseViewController, View {
       }
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
+    
+//    reactor.state.map { (past: $0.pastSection, upcoming: $0.upcomingSection) }
+//      .asDriver(onErrorRecover: { _ in return .empty() })
+//      .drive(with: self, onNext: { owner, sectionData in
+//        owner.navigationController?.navigationBar.backgroundColor = .white
+//        if !sectionData.past.items.isEmpty, sectionData.upcoming.items.isEmpty {
+//          owner.navigationController?.navigationBar.backgroundColor = .favorColor(.card)
+//        }
+//      })
+//      .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.isReminderEmpty }
       .distinctUntilChanged()
@@ -280,7 +290,7 @@ private extension ReminderViewController {
 
     return section
   }
-
+  
   func createHeader(sectionType: ReminderSectionType) -> NSCollectionLayoutBoundarySupplementaryItem {
     return NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: NSCollectionLayoutSize(
