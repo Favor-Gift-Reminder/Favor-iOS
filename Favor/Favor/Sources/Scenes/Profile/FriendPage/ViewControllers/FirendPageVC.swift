@@ -39,7 +39,6 @@ final class FriendPageViewController: BaseProfileViewController, View {
     if !self.isUser {
       self.profileView.idLabel.isHidden = true
       self.profileView.nameLabel.textColor = .favorColor(.black)
-      self.profileView.rx.backgroundImage.onNext(nil)
     }
   }
   

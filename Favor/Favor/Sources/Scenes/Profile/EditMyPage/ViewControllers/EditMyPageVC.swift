@@ -159,7 +159,7 @@ final class EditMyPageViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.map { $0.profileBackgroundImage }
+    reactor.state.compactMap { $0.profileBackgroundImage }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, image in
         guard
@@ -173,7 +173,7 @@ final class EditMyPageViewController: BaseViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.map { $0.profilePhotoImage }
+    reactor.state.compactMap { $0.profilePhotoImage }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, image in
         guard
@@ -253,6 +253,7 @@ private extension EditMyPageViewController {
       handler: { [weak self] header, _, _ in
         guard let self = self else { return }
         header.delegate = self
+        header.updateUser(user: self.reactor?.currentState.user ?? .init())
       }
     )
     

@@ -48,6 +48,8 @@ final class MyPageViewReactor: Reactor, Stepper {
     var user = User()
     var userName: String = ""
     var userID: String = ""
+    var backgroundURL: String?
+    var profileURL: String?
     /// 0: 새 프로필
     /// 1: 취향
     /// 2: 기념일
@@ -138,6 +140,12 @@ final class MyPageViewReactor: Reactor, Stepper {
     switch mutation {
     case .updateUser(let user):
       newState.user = user
+      if let url = user.profileBackgroundPhoto?.remote {
+        newState.backgroundURL = url
+      }
+      if let url = user.profilePhoto?.remote {
+        newState.profileURL = url
+      }
 
     case .updateUserName(let name):
       newState.userName = name
@@ -147,7 +155,7 @@ final class MyPageViewReactor: Reactor, Stepper {
       
     case .updateFavorSection(let favors):
       let favorSection = favors.map { favor -> ProfileSectionItem in
-        return .favors(ProfileFavorCellReactor(favor: favor))
+        return .favors(favor)
       }
       newState.favorItems = favorSection
       
@@ -158,7 +166,7 @@ final class MyPageViewReactor: Reactor, Stepper {
         return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
       }
       newState.anniversaryItems = anniversarySection
-
+      
     case .updateFriendSection(let friends):
       let friendSection = friends.map { friend -> ProfileSectionItem in
         return .friends(ProfileFriendCellReactor(friend: friend))

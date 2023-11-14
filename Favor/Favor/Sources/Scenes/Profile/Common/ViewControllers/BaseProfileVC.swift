@@ -41,9 +41,9 @@ public class BaseProfileViewController: BaseViewController {
             self?.profileSetupGoButtonDidTap(at: reactor.currentState.type)
           }
           return cell
-        case .favors(let reactor):
+        case .favors(let favor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFavorCell
-          cell.reactor = reactor
+          cell.updateFavor(favor)
           return cell
         case .anniversaries(let reactor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversaryCell

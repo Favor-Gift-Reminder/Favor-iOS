@@ -32,7 +32,7 @@ public struct UserSingleResponseDTO: Decodable {
     case reminderList
     case role
     case userNo
-    case userID = "userid"
+    case userID = "userId"
     case givenGift
     case receivedGift
     case totalGift

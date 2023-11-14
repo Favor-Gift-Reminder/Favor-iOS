@@ -21,7 +21,7 @@ enum ProfileElementKind {
 enum ProfileSectionItem: ComposableItem {
   case profileSetupHelper(ProfileSetupHelperCellReactor)
   case anniversarySetupHelper
-  case favors(ProfileFavorCellReactor)
+  case favors(Favor)
   case anniversaries(ProfileAnniversaryCellReactor)
   case memo(String?)
   case friends(ProfileFriendCellReactor)
@@ -46,7 +46,7 @@ extension ProfileSectionItem {
     case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
       return lhsValue === rhsValue
     case let (.favors(lhsValue), .favors(rhsValue)):
-      return lhsValue === rhsValue
+      return lhsValue == rhsValue
     case let (.anniversaries(lhsValue), .anniversaries(rhsValue)):
       return lhsValue === rhsValue
     case (.memo, .memo):
@@ -62,8 +62,8 @@ extension ProfileSectionItem {
     switch self {
     case let .profileSetupHelper(reactor):
       hasher.combine(ObjectIdentifier(reactor))
-    case let .favors(reactor):
-      hasher.combine(ObjectIdentifier(reactor))
+    case let .favors(favor):
+      hasher.combine(favor.rawValue)
     case let .anniversaries(reactor):
       hasher.combine(ObjectIdentifier(reactor))
     case .memo(let memo):
@@ -114,7 +114,7 @@ extension ProfileSection: Composable {
       )
     case .favors:
       return .grid(
-        width: .estimated(50),
+        width: .estimated(100),
         height: .absolute(32)
       )
     case .anniversaries:
@@ -148,15 +148,12 @@ extension ProfileSection: Composable {
         spacing: .fixed(8)
       )
     case .favors:
-      let innerGroup: UICollectionViewComposableLayout.Group = .flow(
+      return .custom(
+        width: .estimated(100),
         height: .absolute(32),
-        numberOfItems: 3,
+        direction: .horizontal,
+        numberOfItems: 1,
         spacing: .fixed(10)
-      )
-      return .list(
-        numberOfItems: 2,
-        spacing: .fixed(10),
-        innerGroup: innerGroup
       )
     case .anniversaries:
       return .list(spacing: .fixed(10))
@@ -196,7 +193,9 @@ extension ProfileSection: Composable {
       )
     case .favors:
       return .base(
+        spacing: 10,
         contentInsets: defaultInsets,
+        orthogonalScrolling: .continuous,
         boundaryItems: [header],
         decorationItems: [whiteBackground]
       )

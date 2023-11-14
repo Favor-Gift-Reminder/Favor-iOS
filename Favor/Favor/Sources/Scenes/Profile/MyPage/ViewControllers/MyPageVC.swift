@@ -109,6 +109,7 @@ final class MyPageViewController: BaseProfileViewController, View {
     
     // MARK: - State
     reactor.state.map { $0.userName }
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, name in
         owner.profileView.rx.name.onNext(name)
@@ -116,10 +117,29 @@ final class MyPageViewController: BaseProfileViewController, View {
       .disposed(by: self.disposeBag)
 
     reactor.state.map { $0.userID }
+      .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, id in
         owner.profileView.rx.id.onNext(id)
       })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.compactMap { $0.backgroundURL }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, url in
+        let user = owner.reactor?.currentState.user ?? .init()
+        owner.profileView.updateBackgroundImage(url, user: user)
+      }
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.compactMap { $0.profileURL }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, url in
+        let user = owner.reactor?.currentState.user ?? .init()
+        owner.profileView.updateProfileImage(url, user: user)
+      }
       .disposed(by: self.disposeBag)
     
     reactor.state.map { (sections: $0.sections, items: $0.items) }
@@ -130,7 +150,9 @@ final class MyPageViewController: BaseProfileViewController, View {
         sectionData.items.enumerated().forEach { idx, items in
           snapshot.appendItems(items, toSection: sectionData.sections[idx])
         }
-        owner.dataSource.apply(snapshot, animatingDifferences: false)
+        DispatchQueue.main.async {
+          owner.dataSource.apply(snapshot)
+        }
       })
       .disposed(by: self.disposeBag)
   }
@@ -140,9 +162,7 @@ final class MyPageViewController: BaseProfileViewController, View {
   private func setupNavigationBar() {
     self.navigationController?.setNavigationBarHidden(false, animated: true)
     let rightBarItems = [self.settingButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
-    let leftBarItem = self.favorLabelButton.toBarButtonItem()
     self.navigationItem.setRightBarButtonItems(rightBarItems, animated: false)
-    self.navigationItem.setLeftBarButton(leftBarItem, animated: false)
   }
   
   override func injectReactor(to view: UICollectionReusableView) {

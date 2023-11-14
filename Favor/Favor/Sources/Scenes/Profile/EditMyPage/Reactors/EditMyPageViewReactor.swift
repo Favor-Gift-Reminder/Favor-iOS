@@ -18,7 +18,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   // MARK: - Constants
 
   private enum Constant {
-    static let numberOfFavors = 18
+    static let numberOfFavors = 16
     static let maximumSelectedFavor = 5
   }
 
@@ -64,7 +64,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   }
 
   // MARK: - Initializer
-
+  
   init(user: User) {
     self.initialState = State(
       user: user,
@@ -111,7 +111,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       
     case .searchIDTextFieldDidUpdate(let searchID):
       return .just(.updateSearchID(searchID))
-
+      
     case .favorDidSelected(let indexPath):
       var favorItems = self.currentState.favorItems
       guard
@@ -135,7 +135,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       return .empty()
     }
   }
-
+  
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -214,14 +214,14 @@ private extension EditMyPageViewReactor {
   }
   
   func requestPostBackground() -> Observable<Void> {
-    guard let image = self.currentState.profileBackgroundImage else { return .empty() }
+    guard let image = self.currentState.profileBackgroundImage else { return .just(()) }
     let networking = UserPhotoNetworking()
     return networking.request(.postBackground(file: APIManager.createMultiPartForm(image)))
       .map { _ in }
   }
   
   func requestPostProfile() -> Observable<Void> {
-    guard let image = self.currentState.profilePhotoImage else { return .empty() }
+    guard let image = self.currentState.profilePhotoImage else { return .just(()) }
     let networking = UserPhotoNetworking()
     return networking.request(.postProfile(file: APIManager.createMultiPartForm(image)))
       .map { _ in }

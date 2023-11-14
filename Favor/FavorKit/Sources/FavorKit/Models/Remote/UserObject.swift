@@ -20,7 +20,7 @@ public class UserObject: Object {
   /// 회원 이름
   @Persisted public var name: String
   /// 회원 취향 태그
-  @Persisted public var favorList: MutableSet<String>
+  @Persisted public var favorList: List<String>
   /// 리마인더 목록
   @Persisted public var reminderList: List<ReminderObject>
   /// 기념일 목록
@@ -37,7 +37,7 @@ public class UserObject: Object {
   @Persisted public var receivedGifts: Int
   /// 총 선물 개수
   @Persisted public var totalGifts: Int
-
+  
   public override class func propertiesMapping() -> [String: String] {
     [
       "userID": "userId"
@@ -72,7 +72,9 @@ public class UserObject: Object {
     self.email = email
     self.userID = userID
     self.name = name
-    self.favorList.insert(objectsIn: favorList)
+    let newFavorList = List<String>()
+    newFavorList.append(objectsIn: favorList)
+    self.favorList = newFavorList
     let newAnniversaryList = List<AnniversaryObject>()
     newAnniversaryList.append(objectsIn: anniversaryList)
     self.anniversaryList = newAnniversaryList

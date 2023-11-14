@@ -57,6 +57,14 @@ public final class ImageCacheManager {
     }
   }
   
+  /// 캐시에 이미지를 삭제합니다.
+  ///
+  /// - Parameters:
+  ///   - mapper: 캐시에 저장할 키를 생성하는 `CacheKeyMapper`
+  public func removeCache(_ mapper: CacheKeyMapper) {
+    self.cacher.removeImage(forKey: mapper.key)
+  }
+  
   /// 캐시에 저장된 이미지를 불러옵니다.
   ///
   /// - Parameters:

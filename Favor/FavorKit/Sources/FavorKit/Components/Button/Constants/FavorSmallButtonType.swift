@@ -61,10 +61,6 @@ public enum FavorSmallButtonType {
       config.baseBackgroundColor = .favorColor(.button)
     case let .hashtag(favor):
       titleString = favor
-      config.image = .favorIcon(.hashtag)?
-        .withRenderingMode(.alwaysTemplate)
-        .resize(newWidth: 16)
-      config.imagePadding = 2
       config.baseBackgroundColor = .favorColor(.button)
       config.baseForegroundColor = .favorColor(.icon)
     }

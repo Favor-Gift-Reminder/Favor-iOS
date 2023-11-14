@@ -119,7 +119,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
       // 취향
       if !state.friend.favorList.isEmpty {
         newSection.append(.favors)
-        newItems.append(state.friend.favorList.map { ProfileSectionItem.favors(.init(favor: $0)) })
+        newItems.append(state.friend.favorList.map { ProfileSectionItem.favors($0) })
       }
       
       // 기념일

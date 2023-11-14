@@ -75,7 +75,6 @@ public final class EditMyPageProfileHeader: BaseCollectionViewCell {
     imageView.clipsToBounds = true
     imageView.contentMode = .center
     imageView.image = self.profilePhotoDefaultImage
-    imageView.clipsToBounds = true
     return imageView
   }()
   
@@ -109,13 +108,31 @@ public final class EditMyPageProfileHeader: BaseCollectionViewCell {
 
   // MARK: - Functions
   
-  public func updateBackgroundImage(_ image: UIImage?) {
+  public func updateUser(user: User) {
+    if let urlString = user.profileBackgroundPhoto?.remote {
+      guard let url = URL(string: urlString) else { return }
+      self.profileBackgroundImageView.setImage(
+        from: url,
+        mapper: .init(user: user, subpath: .background(urlString))
+      )
+    }
+    if let urlString = user.profilePhoto?.remote {
+      guard let url = URL(string: urlString) else { return }
+      self.profilePhotoImageView.setImage(
+        from: url,
+        mapper: .init(user: user, subpath: .profilePhoto(urlString))
+      )
+      self.profilePhotoImageView.contentMode = .scaleAspectFill
+    }
+  }
+  
+  public func updateBackgroundImage(_ image: UIImage) {
     self.profileBackgroundImageView.image = image
   }
   
-  public func updateProfilePhotoImage(_ image: UIImage?) {
-    self.profilePhotoImageView.image = image == nil ? self.profilePhotoDefaultImage : image
-    self.profilePhotoImageView.contentMode = image == nil ? .center : .scaleAspectFill
+  public func updateProfilePhotoImage(_ image: UIImage) {
+    self.profilePhotoImageView.image = image
+    self.profilePhotoImageView.contentMode = .scaleAspectFill
   }
 
   @objc

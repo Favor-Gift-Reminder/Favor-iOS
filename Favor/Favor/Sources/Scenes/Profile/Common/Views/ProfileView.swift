@@ -21,27 +21,35 @@ public final class ProfileView: UIView {
   // MARK: - Properties
   
   // MARK: - UI Components
-
+  
   let backgroundImageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.image = UIImage(named: "MyPageHeaderPlaceholder")
     imageView.contentMode = .scaleAspectFill
     imageView.backgroundColor = .favorColor(.background)
     return imageView
   }()
 
-  fileprivate let profileImageButton: UIButton = {
-    var config = UIButton.Configuration.filled()
-    config.baseBackgroundColor = .favorColor(.line3)
-    config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.friend)?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: 30)
-      .withTintColor(.favorColor(.white))
-    config.background.cornerRadius = 30
-
-    let button = UIButton(configuration: config)
-    return button
+//  fileprivate let profileImageButton: UIButton = {
+//    var config = UIButton.Configuration.filled()
+//    config.baseBackgroundColor = .favorColor(.line3)
+//    config.baseForegroundColor = .favorColor(.white)
+//    config.image = .favorIcon(.friend)?
+//      .withRenderingMode(.alwaysTemplate)
+//      .resize(newWidth: 30)
+//      .withTintColor(.favorColor(.white))
+//    config.background.cornerRadius = 30
+//
+//    let button = UIButton(configuration: config)
+//    return button
+//  }()
+  
+  private let profileImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .scaleAspectFill
+    imageView.layer.cornerRadius = 30.0
+    imageView.layer.masksToBounds = true
+    imageView.backgroundColor = .favorColor(.line3)
+    return imageView
   }()
   
   let nameLabel: UILabel = {
@@ -74,10 +82,6 @@ public final class ProfileView: UIView {
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
-    
-    // TODO: 테스트 코드 삭제
-    let url = URL(string: "https://picsum.photos/1200/1200")!
-    self.backgroundImageView.setImage(from: url, mapper: CacheKeyMapper(user: User(), subpath: .background))
   }
 
   required init?(coder: NSCoder) {
@@ -88,11 +92,42 @@ public final class ProfileView: UIView {
   
   // MARK: - Functions
   
+  func updateName(_ name: String) {
+    self.nameLabel.text = name
+  }
+  
+  func updateId(_ id: String) {
+    self.idLabel.text = "@\(id)"
+  }
+  
+  func updateBackgroundImage(_ urlString: String, user: User) {
+    if let url = URL(string: urlString) {
+      self.backgroundImageView.setImage(from: url, mapper: .init(user: user, subpath: .background(urlString)))
+    } else {
+      let url = URL(string: "https://picsum.photos/1200/1200")!
+      self.backgroundImageView.setImage(from: url, mapper: CacheKeyMapper(
+        user: User(),
+        subpath: .background("https://picsum.photos/1200/1200")
+      ))
+    }
+  }
+  
+  func updateProfileImage(_ urlString: String, user: User) {
+    if let url = URL(string: urlString) {
+      self.profileImageView.setImage(from: url, mapper: .init(user: user, subpath: .profilePhoto(urlString)))
+    } else {
+      self.profileImageView.image = .favorIcon(.friend)?
+        .withRenderingMode(.alwaysTemplate)
+        .resize(newWidth: 30)
+        .withTintColor(.favorColor(.white))
+    }
+  }
+  
   func updateBackgroundAlpha(to alpha: CGFloat) {
     [
       self.backgroundImageView,
       self.profileStackView,
-      self.profileImageButton
+      self.profileImageView
     ].forEach {
       $0.alpha = alpha
     }
@@ -109,7 +144,7 @@ extension ProfileView: BaseView {
   public func setupLayouts() {
     [
       self.backgroundImageView,
-      self.profileImageButton,
+      self.profileImageView,
       self.profileStackView
     ].forEach {
       self.addSubview($0)
@@ -128,15 +163,15 @@ extension ProfileView: BaseView {
       make.edges.equalToSuperview()
     }
 
-    self.profileImageButton.snp.makeConstraints { make in
+    self.profileImageView.snp.makeConstraints { make in
       make.leading.equalToSuperview().inset(20)
       make.bottom.equalToSuperview().inset(60)
       make.width.height.equalTo(60)
     }
     
     self.profileStackView.snp.makeConstraints { make in
-      make.leading.equalTo(self.profileImageButton.snp.trailing).offset(16)
-      make.centerY.equalTo(self.profileImageButton.snp.centerY)
+      make.leading.equalTo(self.profileImageView.snp.trailing).offset(16)
+      make.centerY.equalTo(self.profileImageView.snp.centerY)
     }
   }
 }
@@ -156,12 +191,5 @@ extension Reactive where Base: ProfileView {
     return Binder(self.base, binding: { view, id in
       view.idLabel.text = "@\(id)"
     })
-  }
-
-  @MainActor
-  public var backgroundImage: Binder<UIImage?> {
-    return Binder(self.base) { view, image in
-      view.backgroundImageView.image = image
-    }
   }
 }

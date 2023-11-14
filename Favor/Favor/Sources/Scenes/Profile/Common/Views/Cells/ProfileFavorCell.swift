@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-class ProfileFavorCell: UICollectionViewCell, Reusable, View {
+class ProfileFavorCell: UICollectionViewCell, Reusable {
   
   // MARK: - Properties
   
@@ -20,7 +20,12 @@ class ProfileFavorCell: UICollectionViewCell, Reusable, View {
   
   // MARK: - UI Components
   
-  private let button = FavorSmallButton(with: .hashtag("취향"))
+  private let favorLabel: UILabel = {
+    let label = UILabel()
+    label.font = .favorFont(.bold, size: 14)
+    label.textColor = .favorColor(.icon)
+    return label
+  }()
   
   // MARK: - Initializer
   
@@ -35,21 +40,10 @@ class ProfileFavorCell: UICollectionViewCell, Reusable, View {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - Bind
+  // MARK: - Functions
   
-  func bind(reactor: ProfileFavorCellReactor) {
-    // Action
-    
-    // State
-    reactor.state.map { $0.favor }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, favor in
-        owner.button.configuration?.updateAttributedTitle(
-          favor.rawValue,
-          font: .favorFont(.bold, size: 14)
-        )
-      })
-      .disposed(by: self.disposeBag)
+  func updateFavor(_ favor: Favor) {
+    self.favorLabel.text = "# \(favor.rawValue)"
   }
 }
 
@@ -57,20 +51,22 @@ class ProfileFavorCell: UICollectionViewCell, Reusable, View {
 
 extension ProfileFavorCell: BaseView {
   func setupStyles() {
-    //
+    self.contentView.backgroundColor = .favorColor(.card)
+    self.contentView.layer.cornerRadius = 16
   }
   
   func setupLayouts() {
     [
-      self.button
+      self.favorLabel
     ].forEach {
-      self.addSubview($0)
+      self.contentView.addSubview($0)
     }
   }
   
   func setupConstraints() {
-    self.button.snp.makeConstraints { make in
-      make.edges.equalToSuperview()
+    self.favorLabel.snp.makeConstraints { make in
+      make.directionalVerticalEdges.equalToSuperview().inset(8)
+      make.directionalHorizontalEdges.equalToSuperview().inset(16)
     }
   }
 }
