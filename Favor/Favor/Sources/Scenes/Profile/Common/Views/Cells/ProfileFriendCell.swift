@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 import SnapKit
 
-final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
+final class ProfileFriendCell: BaseCollectionViewCell, Reusable {
 
   // MARK: - Constants
 
@@ -21,6 +21,15 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
   // MARK: - UI Components
   
   private let favorProfilePhotoView = FavorProfilePhotoView(.big)
+  
+  private let imageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.layer.cornerRadius = 30
+    imageView.isHidden = true
+    imageView.contentMode = .scaleAspectFill
+    imageView.layer.masksToBounds = true
+    return imageView
+  }()
   
   private let stackView: UIStackView = {
     let stackView = UIStackView()
@@ -51,26 +60,19 @@ final class ProfileFriendCell: BaseCollectionViewCell, Reusable, View {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
-  // MARK: - Binding
-  
-  func bind(reactor: ProfileFriendCellReactor) {
-    // Action
-    
-    // State
-    reactor.state.map { (friend: $0.friend, isNewFriendCell: $0.isNewFriendCell) }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, friendData in
-        let friend = friendData.friend
-        owner.nameLabel.text = friendData.isNewFriendCell ? "추가하기" : friend.friendName
-        owner.favorProfilePhotoView.isNewFriendCell = friendData.isNewFriendCell
-//        owner.favorProfilePhotoView.profileImage = friend.profilePhoto
-      })
-      .disposed(by: self.disposeBag)
-  }
   
   // MARK: - Functions
   
+  func configure(with friend: Friend) {
+    self.nameLabel.text = friend.friendName
+    if let urlString = friend.profilePhoto?.remote {
+      guard let url = URL(string: urlString) else { return }
+      self.imageView.isHidden = false
+      self.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString)))
+    } else {
+      self.imageView.isHidden = true
+    }
+  }
 }
 
 // MARK: - UI Setups
@@ -86,6 +88,7 @@ extension ProfileFriendCell: BaseView {
       self.stackView.addArrangedSubview($0)
     }
 
+    self.favorProfilePhotoView.addSubview(self.imageView)
     self.addSubview(self.stackView)
   }
 
@@ -96,6 +99,10 @@ extension ProfileFriendCell: BaseView {
 
     self.favorProfilePhotoView.snp.makeConstraints { make in
       make.width.height.equalTo(60)
+    }
+    
+    self.imageView.snp.makeConstraints { make in
+      make.edges.equalToSuperview()
     }
   }
 }

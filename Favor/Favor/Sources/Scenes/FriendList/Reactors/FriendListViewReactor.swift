@@ -29,12 +29,14 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
   
   enum Mutation {
     case updateFriends([Friend])
+    case updateQuery(String)
   }
   
   struct State {
     var friends: [Friend] = []
     var sections: [FriendSection] = []
     var items: [[FriendSectionItem]] = []
+    var query: String = ""
   }
 
   // MARK: - Initializer
@@ -49,9 +51,11 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.friendFetcher.fetch()
-        .flatMap { (_, friend) -> Observable<Mutation> in
-          return .just(.updateFriends(friend))
+      return self.userFetcher.fetch()
+        .flatMap { (_, user) -> Observable<Mutation> in
+          guard let user = user.first else { return .empty() }
+          let friends = user.friendList
+          return .just(.updateFriends(friends))
         }
       
     case .editButtonDidTap:
@@ -59,11 +63,7 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
       return .empty()
       
     case .searchTextDidUpdate(let text):
-      return self.fetchFriendList(with: text ?? "")
-        .asObservable()
-        .flatMap { friends -> Observable<Mutation> in
-          return .just(.updateFriends(friends))
-        }
+      return .just(.updateQuery(text ?? ""))
       
     case .friendCellDidTap(let index):
       let friend = self.currentState.friends[index]
@@ -78,6 +78,9 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
     switch mutation {
     case .updateFriends(let friends):
       newState.friends = friends
+      
+    case .updateQuery(let query):
+      newState.query = query
     }
 
     return newState
@@ -86,9 +89,17 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
   func transform(state: Observable<State>) -> Observable<State> {
     return state.map { state in
       var newState = state
-
+      
       newState.sections.append(.friend)
-      newState.items.append(state.friends.map { FriendSectionItem.friend($0) })
+      
+      if state.query.isEmpty {
+        newState.items.append(state.friends.map { FriendSectionItem.friend($0) })
+      } else {
+        newState.items.append(state.friends
+          .filter { $0.friendName.localizedCaseInsensitiveContains(state.query) }
+          .map { FriendSectionItem.friend($0) }
+        )
+      }
       
       return newState
     }
@@ -98,16 +109,19 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
 // MARK: - Privates
 
 private extension FriendListViewReactor {
+  
+  
   func fetchFriendList(with query: String) -> Single<[Friend]> {
     return Single<[Friend]>.create { single in
       let task = Task {
-        let friends = await self.workbench.values(FriendObject.self)
+        let user = await self.workbench.values(UserObject.self).first
+        let friends = user?.friendList.toArray().map { Friend(realmObject: $0) } ?? []
         if query.isEmpty {
-          single(.success(friends.map { Friend(realmObject: $0) }))
+          single(.success(friends))
         }
         let filterFriends = friends
-          .where { $0.friendName.contains(query, options: .diacriticInsensitive) }
-        single(.success(filterFriends.map { Friend(realmObject: $0) }))
+          .filter { $0.friendName.contains(query) }
+        single(.success(filterFriends))
       }
       return Disposables.create {
         task.cancel()

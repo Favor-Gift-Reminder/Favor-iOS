@@ -163,21 +163,37 @@ extension Friend: Hashable {}
 // MARK: - Image Cache
 
 extension FavorKit.CacheKeyMapper {
-  public enum FriendSubpath: String {
-    case background
-    case profilePhoto
+  public enum FriendSubpath {
+    case background(String)
+    case profilePhoto(String)
+    
+    var rawValue: String {
+      switch self {
+      case .background:
+        return "background"
+      case .profilePhoto:
+        return "profilePhoto"
+      }
+    }
+    
+    var remote: String {
+      switch self {
+      case .background(let url):
+        return url
+      case .profilePhoto(let url):
+        return url
+      }
+    }
   }
   
   public init(friend: Friend, subpath: FriendSubpath) {
-    // TODO: url 추가
-    // "friend/\(friend.identifier)/\(subpath.rawValue)/\(friend.photo.remote)"
-    let key: String = "friend/\(friend.identifier)/\(subpath.rawValue)"
+    let key: String = "friend/\(friend.identifier)/\(subpath.rawValue)/\(subpath.remote)"
     var mapper = CacheKeyMapper(key: key, cacheType: .memory)
     switch subpath {
     case .background:
       mapper.preferredSize = ImageCacheManager.Metric.bannerSize
     case .profilePhoto:
-      mapper.preferredSize = ImageCacheManager.Metric.profileSize
+      mapper.preferredSize = ImageCacheManager.Metric.bannerSize
     }
     self = mapper
   }

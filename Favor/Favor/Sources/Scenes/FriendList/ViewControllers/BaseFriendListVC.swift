@@ -40,14 +40,27 @@ public class BaseFriendListViewController: BaseViewController {
           switch viewType {
           case .list:
             let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListCell
-            cell.configure(friend)
+            if let profileUrl = friend.profilePhoto?.remote {
+              cell.configure(
+                friendName: friend.friendName,
+                profileURL: profileUrl,
+                mapper: .init(friend: friend, subpath: .profilePhoto(profileUrl))
+              )
+            } else {
+              cell.configure(friendName: friend.friendName)
+            }
             return cell
           case .edit:
             let cell = collectionView.dequeueReusableCell(for: indexPath) as FriendListModifyingCell
-            cell.configure(
-              name: friend.friendName
-//              image: friend.profilePhoto
-            )
+            if let profileUrl = friend.profilePhoto?.remote {
+              cell.configure(
+                friendName: friend.friendName,
+                profileURL: profileUrl,
+                mapper: .init(friend: friend, subpath: .profilePhoto(profileUrl))
+              )
+            } else {
+              cell.configure(friendName: friend.friendName)
+            }
             cell.deleteButton.rx.tap
               .subscribe(with: cell, onNext: { _, _ in
                 guard case let FriendSectionItem.friend(friend) = item else { return }
@@ -96,6 +109,7 @@ public class BaseFriendListViewController: BaseViewController {
       ofKind: UICollectionView.elementKindSectionHeader
     )
 
+    collectionView.keyboardDismissMode = .onDrag
     collectionView.showsVerticalScrollIndicator = false
     collectionView.contentInset = UIEdgeInsets(top: 16, left: .zero, bottom: .zero, right: .zero)
     return collectionView

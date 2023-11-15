@@ -96,10 +96,8 @@ final class MyPageViewController: BaseProfileViewController, View {
       .map { indexPath -> Reactor.Action in
         guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return .doNothing }
         switch item {
-        case .friends(let reactor):
-          return reactor.currentState.isNewFriendCell ?
-            .newFriendCellDidTap :
-            .friendCellDidTap(reactor.currentState.friend)
+        case .friends(let friend):
+          return .friendCellDidTap(friend)
         default:
           return .doNothing
         }
@@ -151,7 +149,7 @@ final class MyPageViewController: BaseProfileViewController, View {
           snapshot.appendItems(items, toSection: sectionData.sections[idx])
         }
         DispatchQueue.main.async {
-          owner.dataSource.apply(snapshot)
+          owner.dataSource.applySnapshotUsingReloadData(snapshot)
         }
       })
       .disposed(by: self.disposeBag)

@@ -21,7 +21,7 @@ open class BaseFriendCell: BaseCollectionViewCell {
   
   public var containerView = UIView()
   
-  private let nameLabel: UILabel = {
+  public let nameLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 16)
     label.textColor = .favorColor(.icon)
@@ -29,7 +29,16 @@ open class BaseFriendCell: BaseCollectionViewCell {
     return label
   }()
   
-  private let favorProfilePhotoView = FavorProfilePhotoView(.small)
+  private let imageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.contentMode = .scaleAspectFill
+    imageView.layer.masksToBounds = true
+    imageView.layer.cornerRadius = 24
+    imageView.isHidden = true
+    return imageView
+  }()
+  
+  public let favorProfilePhotoView = FavorProfilePhotoView(.small)
   
   // MARK: - Properties
   
@@ -53,11 +62,18 @@ open class BaseFriendCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   open func configure(
-    name: String,
-    image: UIImage? = nil
+    friendName: String,
+    profileURL: String? = nil,
+    mapper: CacheKeyMapper? = nil
   ) {
-    self.favorProfilePhotoView.profileImage = image
-    self.friendName = name
+    self.friendName = friendName
+    if let profileURL = profileURL, let mapper = mapper {
+      guard let url = URL(string: profileURL) else { return }
+      self.imageView.setImage(from: url, mapper: mapper)
+      self.imageView.isHidden = false
+    } else {
+      self.imageView.isHidden = true
+    }
   }
 
   // MARK: - Setup
@@ -72,7 +88,8 @@ open class BaseFriendCell: BaseCollectionViewCell {
     
     [
       self.favorProfilePhotoView,
-      self.nameLabel
+      self.nameLabel,
+      self.imageView
     ].forEach {
       self.containerView.addSubview($0)
     }
@@ -84,6 +101,12 @@ open class BaseFriendCell: BaseCollectionViewCell {
     }
     
     self.favorProfilePhotoView.snp.makeConstraints { make in
+      make.leading.equalToSuperview()
+      make.centerY.equalToSuperview()
+      make.width.height.equalTo(Metric.profileImageViewSize)
+    }
+    
+    self.imageView.snp.makeConstraints { make in
       make.leading.equalToSuperview()
       make.centerY.equalToSuperview()
       make.width.height.equalTo(Metric.profileImageViewSize)

@@ -47,9 +47,10 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
   func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .viewNeedsLoaded:
-      return self.friendFetcher.fetch()
-        .flatMap { (_, friends) -> Observable<Mutation> in
-          let friendItems = friends.map { friend -> FriendSectionItem in
+      return self.userFetcher.fetch()
+        .flatMap { (_, user) -> Observable<Mutation> in
+          guard let user = user.first else { return .empty() }
+          let friendItems = user.friendList.map { friend -> FriendSectionItem in
             return .friend(friend)
           }
           return .just(.updateFriendItems(friendItems))

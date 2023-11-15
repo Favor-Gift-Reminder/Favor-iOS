@@ -50,6 +50,9 @@ final class MyPageViewReactor: Reactor, Stepper {
     var userID: String = ""
     var backgroundURL: String?
     var profileURL: String?
+    var totalGift: Int = 0
+    var receivedGift: Int = 0
+    var givenGift: Int = 0
     /// 0: 새 프로필
     /// 1: 취향
     /// 2: 기념일
@@ -146,6 +149,9 @@ final class MyPageViewReactor: Reactor, Stepper {
       if let url = user.profilePhoto?.remote {
         newState.profileURL = url
       }
+      newState.receivedGift = user.receivedGifts
+      newState.givenGift = user.givenGifts
+      newState.totalGift = user.totalgifts
 
     case .updateUserName(let name):
       newState.userName = name
@@ -169,7 +175,7 @@ final class MyPageViewReactor: Reactor, Stepper {
       
     case .updateFriendSection(let friends):
       let friendSection = friends.map { friend -> ProfileSectionItem in
-        return .friends(ProfileFriendCellReactor(friend: friend))
+        return .friends(friend)
       }
       newState.friendItems = friendSection
 

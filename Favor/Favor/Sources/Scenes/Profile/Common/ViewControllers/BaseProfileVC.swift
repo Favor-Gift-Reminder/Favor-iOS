@@ -53,9 +53,9 @@ public class BaseProfileViewController: BaseViewController {
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileMemoCell
           cell.configure(with: memo)
           return cell
-        case .friends(let reactor):
+        case .friends(let friend):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFriendCell
-          cell.reactor = reactor
+          cell.configure(with: friend)
           return cell
         }
       }
@@ -152,6 +152,12 @@ public class BaseProfileViewController: BaseViewController {
     super.viewDidLoad()
     
     self.composer.compose()
+  }
+  
+  public override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    self.navigationController?.navigationBar.tintColor = .favorColor(.icon)
   }
   
   public override func viewSafeAreaInsetsDidChange() {

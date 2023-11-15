@@ -24,7 +24,7 @@ enum ProfileSectionItem: ComposableItem {
   case favors(Favor)
   case anniversaries(ProfileAnniversaryCellReactor)
   case memo(String?)
-  case friends(ProfileFriendCellReactor)
+  case friends(Friend)
 }
 
 // MARK: - Section
@@ -52,7 +52,7 @@ extension ProfileSectionItem {
     case (.memo, .memo):
       return true
     case let (.friends(lhsValue), .friends(rhsValue)):
-      return lhsValue === rhsValue
+      return lhsValue == rhsValue
     default:
       return false
     }
@@ -68,8 +68,8 @@ extension ProfileSectionItem {
       hasher.combine(ObjectIdentifier(reactor))
     case .memo(let memo):
       hasher.combine(memo)
-    case let .friends(reactor):
-      hasher.combine(ObjectIdentifier(reactor))
+    case let .friends(friend):
+      hasher.combine(friend)
     default:
       break
     }

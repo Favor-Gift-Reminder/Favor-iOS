@@ -75,7 +75,6 @@ final class FriendListViewController: BaseFriendListViewController, View {
     
     // State
     reactor.state.map { (sections: $0.sections, items: $0.items) }
-      .debug()
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, sectionData in
         var snapshot: NSDiffableDataSourceSnapshot<FriendSection, FriendSectionItem> = .init()

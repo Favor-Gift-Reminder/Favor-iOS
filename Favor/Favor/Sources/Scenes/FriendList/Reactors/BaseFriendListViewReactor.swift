@@ -15,7 +15,7 @@ public class BaseFriendListViewReactor {
   // MARK: - Properties
 
   public let workbench = RealmWorkbench()
-  public let friendFetcher = Fetcher<Friend>()
+  public let userFetcher = Fetcher<User>()
 
   // MARK: - Initializer
 
@@ -27,31 +27,23 @@ public class BaseFriendListViewReactor {
   
   public func setupFriendFetcher() {
     // onRemote
-    self.friendFetcher.onRemote = {
+    self.userFetcher.onRemote = {
       let networking = UserNetworking()
-      let friends = networking.request(.getAllFriendList)
-        .flatMap { friends -> Observable<[Friend]> in
-          do {
-            let responseDTO: ResponseDTO<[FriendResponseDTO]> = try APIManager.decode(friends.data)
-            let friends = responseDTO.data.map { Friend(friendResponseDTO: $0) }
-            return .just(friends)
-          } catch {
-            print(error)
-            return .just([])
-          }
-        }
+      let user = networking.request(.getUser)
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { [User(singleDTO: $0.data)] }
         .asSingle()
-      return friends
+      return user
     }
     // onLocal
-    self.friendFetcher.onLocal = {
-      return await self.workbench.values(FriendObject.self)
-        .map { Friend(realmObject: $0) }
+    self.userFetcher.onLocal = {
+      return await self.workbench.values(UserObject.self)
+        .map { User(realmObject: $0) }
     }
     // onLocalUpdate
-    self.friendFetcher.onLocalUpdate = { _, remoteFriends in
+    self.userFetcher.onLocalUpdate = { _, remoteUser in
       try await self.workbench.write { transaction in
-        transaction.update(remoteFriends.map { $0.realmObject() })
+        transaction.update(remoteUser.map { $0.realmObject() })
       }
     }
   }

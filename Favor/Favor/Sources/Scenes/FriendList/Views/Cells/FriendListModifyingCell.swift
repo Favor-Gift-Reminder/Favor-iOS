@@ -35,7 +35,7 @@ final class FriendListModifyingCell: BaseFriendCell, Reusable {
     button.isUserInteractionEnabled = true
     return button
   }()
-
+  
   // MARK: - UI Setups
 
   override func setupLayouts() {
