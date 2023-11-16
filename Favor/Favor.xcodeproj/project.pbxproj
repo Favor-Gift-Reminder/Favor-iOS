@@ -22,7 +22,6 @@
 		2E1C81B62A1F12B600D4128E /* GiftDetailTagsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C81B52A1F12B600D4128E /* GiftDetailTagsCell.swift */; };
 		2E1C81B82A209FAD00D4128E /* GiftDetailTitleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C81B72A209FAD00D4128E /* GiftDetailTitleCell.swift */; };
 		2E1C81BA2A20AA0D00D4128E /* GiftDetailMemoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1C81B92A20AA0D00D4128E /* GiftDetailMemoCell.swift */; };
-		2E1DBE472A1E6E4100C9BC30 /* GiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E1DBE462A1E6E4100C9BC30 /* GiftFlow.swift */; };
 		2E217C082A2F790700C91A46 /* RecentSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E217C072A2F790700C91A46 /* RecentSearch.swift */; };
 		2E2B366B2A38515F0080171D /* SearchSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E2B366A2A38515F0080171D /* SearchSection.swift */; };
 		2E2DB8CD2A2DB36400E6F5C6 /* BaseFriendListVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E87B8D22A0BC8FF00570386 /* BaseFriendListVC.swift */; };
@@ -216,6 +215,8 @@
 		E52F565B29D5698A004E85A6 /* NewGiftFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */; };
 		E55CF7BA298A743B002940D1 /* AuthFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55CF7B9298A743B002940D1 /* AuthFlow.swift */; };
 		E56260FC2991E4EA00D14020 /* RSKPlaceholderTextView in Frameworks */ = {isa = PBXBuildFile; productRef = E56260FB2991E4EA00D14020 /* RSKPlaceholderTextView */; };
+		E56379342B05B7EF00377D9D /* GiftDetailFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56379332B05B7EF00377D9D /* GiftDetailFlow.swift */; };
+		E56379362B05B87300377D9D /* GiftManagementFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56379352B05B87300377D9D /* GiftManagementFlow.swift */; };
 		E581BD522AF92C08007C4A62 /* GiftManagementImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E581BD512AF92C08007C4A62 /* GiftManagementImageModel.swift */; };
 		E583C58F2A1E619F00DC219A /* AnniversaryBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583C58E2A1E619F00DC219A /* AnniversaryBottomSheetView.swift */; };
 		E583C5912A1E627800DC219A /* FilterBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E583C5902A1E627800DC219A /* FilterBottomSheet.swift */; };
@@ -258,7 +259,6 @@
 		2E1C81B52A1F12B600D4128E /* GiftDetailTagsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDetailTagsCell.swift; sourceTree = "<group>"; };
 		2E1C81B72A209FAD00D4128E /* GiftDetailTitleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDetailTitleCell.swift; sourceTree = "<group>"; };
 		2E1C81B92A20AA0D00D4128E /* GiftDetailMemoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDetailMemoCell.swift; sourceTree = "<group>"; };
-		2E1DBE462A1E6E4100C9BC30 /* GiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftFlow.swift; sourceTree = "<group>"; };
 		2E217C072A2F790700C91A46 /* RecentSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearch.swift; sourceTree = "<group>"; };
 		2E2B366A2A38515F0080171D /* SearchSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchSection.swift; sourceTree = "<group>"; };
 		2E32E7CA29FEB8E400202E31 /* EditMyPageSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMyPageSection.swift; sourceTree = "<group>"; };
@@ -443,6 +443,8 @@
 		E524C19529EAA50C004CCC40 /* FriendSelectorHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorHeaderView.swift; sourceTree = "<group>"; };
 		E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewGiftFlow.swift; sourceTree = "<group>"; };
 		E55CF7B9298A743B002940D1 /* AuthFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFlow.swift; sourceTree = "<group>"; };
+		E56379332B05B7EF00377D9D /* GiftDetailFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftDetailFlow.swift; sourceTree = "<group>"; };
+		E56379352B05B87300377D9D /* GiftManagementFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementFlow.swift; sourceTree = "<group>"; };
 		E581BD512AF92C08007C4A62 /* GiftManagementImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GiftManagementImageModel.swift; sourceTree = "<group>"; };
 		E583C58E2A1E619F00DC219A /* AnniversaryBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryBottomSheetView.swift; sourceTree = "<group>"; };
 		E583C5902A1E627800DC219A /* FilterBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBottomSheet.swift; sourceTree = "<group>"; };
@@ -1538,7 +1540,8 @@
 				E59AB0992A17858C00F0AC7D /* FriendFlow.swift */,
 				2E9B4CB92A1277BC00C7E31E /* FriendListFlow.swift */,
 				E523F64D2A24DC04007A6317 /* FriendPageFlow.swift */,
-				2E1DBE462A1E6E4100C9BC30 /* GiftFlow.swift */,
+				E56379332B05B7EF00377D9D /* GiftDetailFlow.swift */,
+				E56379352B05B87300377D9D /* GiftManagementFlow.swift */,
 				2EC6E11C29BC65BF006FBC11 /* HomeFlow.swift */,
 				2EC939DC299684C000C8C47F /* MyPageFlow.swift */,
 				E52F565A29D5698A004E85A6 /* NewGiftFlow.swift */,
@@ -1781,7 +1784,6 @@
 				2EEC734A2A14F819007A29A5 /* AnniversaryListModifyingViewReactor.swift in Sources */,
 				E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */,
 				2E8C663F29BB95C400006CBF /* AuthSignUpVC.swift in Sources */,
-				2E1DBE472A1E6E4100C9BC30 /* GiftFlow.swift in Sources */,
 				2EE1537329E5A6BE0023FEA5 /* SearchRecentCell.swift in Sources */,
 				2ED2726C2A4D787000E3E7FC /* LocalAuthViewReactor.swift in Sources */,
 				2EEC73482A14F808007A29A5 /* AnniversaryListModifyingVC.swift in Sources */,
@@ -1813,6 +1815,7 @@
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */,
 				2EDB7FFE2A29BA8300347A2A /* FavorSectionHeaderCell.swift in Sources */,
+				E56379362B05B87300377D9D /* GiftManagementFlow.swift in Sources */,
 				2EB3E71529D48B97008D10A0 /* ReminderCell.swift in Sources */,
 				2E6E28E02A24694700E25DB6 /* GiftManagementMemoCell.swift in Sources */,
 				2E6C90BC29A6239600AF963A /* EditMyPageVC.swift in Sources */,
@@ -1871,6 +1874,7 @@
 				E523F64A2A2357CD007A6317 /* ProfileMemoCell.swift in Sources */,
 				2E2B366B2A38515F0080171D /* SearchSection.swift in Sources */,
 				2E5D8A8229EECD4F00AD49D1 /* ProfileSectionBackgroundView.swift in Sources */,
+				E56379342B05B7EF00377D9D /* GiftDetailFlow.swift in Sources */,
 				2EBCC90229EE85F6008044DC /* BaseProfileVC.swift in Sources */,
 				2E9B4CC02A12831A00C7E31E /* AnniversaryFlow.swift in Sources */,
 				2E00562529A91F2A006CF302 /* NewAnniversaryHeaderViewReactor.swift in Sources */,

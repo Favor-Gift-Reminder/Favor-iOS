@@ -81,15 +81,17 @@ public enum AppStep: Step {
   case anniversaryManagementIsComplete(ToastMessage)
   
   // MARK: - Gift
-  case giftManagementIsRequired(Gift? = nil)
-  case giftManagementIsCompleteWithNoChanges
-  case newGiftIsComplete
-  case editGiftIsComplete(Gift)
   case giftDetailIsRequired(Gift)
   case giftDetailFriendsBottomSheetIsRequired([Friend])
   case giftDetailIsComplete(Gift)
   case giftDetailPhotoIsRequired(Int, Int)
   case giftShareIsRequired(Gift)
+  
+  // MARK: - GiftManagement
+  case giftManagementIsRequired(Gift? = nil)
+  case giftManagementIsCompleteWithNoChanges
+  case newGiftIsComplete
+  case editGiftIsComplete(Gift)
 
   // MARK: - Settings
   case settingsIsRequired

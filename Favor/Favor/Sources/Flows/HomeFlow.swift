@@ -79,10 +79,9 @@ private extension HomeFlow {
   }
 
   func navigateToGift(with gift: Gift) -> FlowContributors {
-    let giftFlow = GiftFlow(rootViewController: self.rootViewController)
-
+    let flow = GiftDetailFlow(rootViewController: self.rootViewController)
     return .one(flowContributor: .contribute(
-      withNextPresentable: giftFlow,
+      withNextPresentable: flow,
       withNextStepper: OneStepper(withSingleStep: AppStep.giftDetailIsRequired(gift))
     ))
   }

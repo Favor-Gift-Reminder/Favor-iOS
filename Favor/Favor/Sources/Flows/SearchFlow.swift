@@ -33,106 +33,85 @@ final class SearchFlow: Flow {
     
     switch step {
     case .searchIsRequired:
-      return self.navigateToSearch()
+      let searchVC = SearchViewController()
+      let searchReactor = SearchViewReactor(mode: .search)
+      searchVC.reactor = searchReactor
+      searchVC.hidesBottomBarWhenPushed = true
+
+      DispatchQueue.main.async {
+        self.rootViewController.pushViewController(searchVC, animated: true)
+        self.rootViewController.setNavigationBarHidden(true, animated: false)
+      }
+
+      return .one(flowContributor: .contribute(
+        withNextPresentable: searchVC,
+        withNextStepper: searchReactor
+      ))
 
     case .searchIsComplete:
-      return self.popSearch()
+      self.rootViewController.popViewController(animated: true)
+      self.rootViewController.setNavigationBarHidden(false, animated: false)
+      return .end(forwardToParentFlowWithStep: AppStep.searchIsComplete)
 
     case .searchResultIsRequired(let queryString):
-      return self.navigateToSearchResult(with: queryString)
+      let searchResultVC = SearchResultViewController()
+      let searchResultReactor = SearchViewReactor(mode: .result, searchQuery: queryString)
+      searchResultVC.reactor = searchResultReactor
 
+      DispatchQueue.main.async {
+        self.rootViewController.pushViewController(searchResultVC, animated: true)
+        searchResultVC.requestSearchQuery(with: queryString)
+      }
+
+      return .one(flowContributor: .contribute(
+        withNextPresentable: searchResultVC,
+        withNextStepper: searchResultReactor
+      ))
+      
     case .searchResultIsComplete:
-      return self.popSearchResult()
-
+      self.rootViewController.popViewController(animated: true)
+      return .none
+      
     case .searchCategoryResultIsRequired(let category):
-      return self.navigateToSearchCategoryResult(with: category)
-
+      let searchCategoryVC = SearchCategoryViewController()
+      let searchCategoryReactor = SearchTagViewReactor(.category(category))
+      searchCategoryVC.reactor = searchCategoryReactor
+      searchCategoryVC.title = "선물 카테고리"
+      
+      DispatchQueue.main.async {
+        self.rootViewController.pushViewController(searchCategoryVC, animated: true)
+        self.rootViewController.setNavigationBarHidden(false, animated: false)
+      }
+      
+      return .one(flowContributor: .contribute(
+        withNextPresentable: searchCategoryVC, withNextStepper: searchCategoryReactor
+      ))
+      
     case .searchEmotionResultIsRequired(let emotion):
-      return self.navigateToSearchEmotionResult(with: emotion)
+      let searchEmotionVC = SearchEmotionViewController()
+      let searchEmotionReactor = SearchTagViewReactor(.emotion(emotion))
+      searchEmotionVC.reactor = searchEmotionReactor
+      searchEmotionVC.title = "선물 감정"
+      
+      DispatchQueue.main.async {
+        self.rootViewController.pushViewController(searchEmotionVC, animated: true)
+        self.rootViewController.setNavigationBarHidden(false, animated: false)
+        searchEmotionVC.requestEmotion(emotion)
+      }
+      
+      return .one(flowContributor: .contribute(
+        withNextPresentable: searchEmotionVC, withNextStepper: searchEmotionReactor
+      ))
+      
+    case .giftDetailIsRequired(let gift):
+      let flow = GiftDetailFlow(rootViewController: self.rootViewController)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: flow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.giftDetailIsRequired(gift))
+      ))
 
     default:
       return .none
     }
-  }
-}
-
-// MARK: - Navigates
-
-private extension SearchFlow {
-  func navigateToSearch() -> FlowContributors {
-    let searchVC = SearchViewController()
-    let searchReactor = SearchViewReactor(mode: .search)
-    searchVC.reactor = searchReactor
-    searchVC.hidesBottomBarWhenPushed = true
-
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(searchVC, animated: true)
-      self.rootViewController.setNavigationBarHidden(true, animated: false)
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: searchVC,
-      withNextStepper: searchReactor
-    ))
-  }
-
-  func navigateToSearchResult(with searchQuery: String) -> FlowContributors {
-    let searchResultVC = SearchResultViewController()
-    let searchResultReactor = SearchViewReactor(mode: .result, searchQuery: searchQuery)
-    searchResultVC.reactor = searchResultReactor
-
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(searchResultVC, animated: true)
-      searchResultVC.requestSearchQuery(with: searchQuery)
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: searchResultVC,
-      withNextStepper: searchResultReactor
-    ))
-  }
-
-  func navigateToSearchCategoryResult(with category: FavorCategory) -> FlowContributors {
-    let searchCategoryVC = SearchCategoryViewController()
-    let searchCategoryReactor = SearchTagViewReactor(.category(category))
-    searchCategoryVC.reactor = searchCategoryReactor
-    searchCategoryVC.title = "선물 카테고리"
-
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(searchCategoryVC, animated: true)
-      self.rootViewController.setNavigationBarHidden(false, animated: false)
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: searchCategoryVC, withNextStepper: searchCategoryReactor
-    ))
-  }
-
-  func navigateToSearchEmotionResult(with emotion: FavorEmotion) -> FlowContributors {
-    let searchEmotionVC = SearchEmotionViewController()
-    let searchEmotionReactor = SearchTagViewReactor(.emotion(emotion))
-    searchEmotionVC.reactor = searchEmotionReactor
-    searchEmotionVC.title = "선물 감정"
-
-    DispatchQueue.main.async {
-      self.rootViewController.pushViewController(searchEmotionVC, animated: true)
-      self.rootViewController.setNavigationBarHidden(false, animated: false)
-      searchEmotionVC.requestEmotion(emotion)
-    }
-
-    return .one(flowContributor: .contribute(
-      withNextPresentable: searchEmotionVC, withNextStepper: searchEmotionReactor
-    ))
-  }
-
-  func popSearchResult() -> FlowContributors {
-    self.rootViewController.popViewController(animated: true)
-    return .none
-  }
-
-  func popSearch() -> FlowContributors {
-    self.rootViewController.popViewController(animated: true)
-    self.rootViewController.setNavigationBarHidden(false, animated: false)
-    return .end(forwardToParentFlowWithStep: AppStep.searchIsComplete)
   }
 }

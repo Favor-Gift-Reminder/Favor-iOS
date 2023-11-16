@@ -171,7 +171,7 @@ private extension AppFlow {
   }
   
   func navigateToGiftManagement() -> FlowContributors {
-    let newGiftFlow = NewGiftFlow()
+    let newGiftFlow = GiftManagementFlow()
     
     Flows.use(newGiftFlow, when: .ready) { [unowned self] root in
       DispatchQueue.main.async {
