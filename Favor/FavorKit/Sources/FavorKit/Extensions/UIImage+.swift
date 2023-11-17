@@ -64,6 +64,8 @@ extension UIImage {
     case naver
     case apple
     
+    case user_circle
+    
     // Emotion
     case touching
     case excited

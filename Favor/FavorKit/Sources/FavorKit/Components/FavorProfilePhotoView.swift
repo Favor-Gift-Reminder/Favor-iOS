@@ -68,8 +68,8 @@ public class FavorProfilePhotoView: UIView {
   
   private let borderLineView: UIView = {
     let view = UIView()
-    view.layer.borderWidth = 2.5
-    view.layer.borderColor = UIColor.favorColor(.main).cgColor
+    view.layer.borderWidth = 5
+    view.layer.borderColor = UIColor.white.cgColor
     view.layer.cornerRadius = 30.0
     view.isHidden = true
     return view

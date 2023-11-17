@@ -10,7 +10,6 @@ import UIKit
 import FavorKit
 import RxFlow
 
-@MainActor
 final class FriendPageFlow: Flow {
   
   // MARK: - Properties

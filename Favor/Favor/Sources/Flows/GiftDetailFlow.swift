@@ -86,7 +86,14 @@ final class GiftDetailFlow: Flow {
         withNextPresentable: flow,
         withNextStepper: OneStepper(withSingleStep: AppStep.searchEmotionResultIsRequired(emotion))
       ))
-        
+      
+    case .giftDetailFriendsBottomSheetIsRequired(let friends):
+      let viewController = GiftFriendsBottomSheet()
+      viewController.friends = friends
+      viewController.modalPresentationStyle = .overFullScreen
+      self.rootViewController.present(viewController, animated: false)
+      return .one(flowContributor: .contribute(withNext: viewController))
+      
     default:
       return .none
     }

@@ -49,7 +49,8 @@ final class ReminderFlow: Flow {
       return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
       
     case .friendSelectorIsRequired(let friends):
-      return self.navigateToFriendSelector(friends)
+//      return self.navigateToFriendSelector(friends)
+      return .none
       
     case .friendSelectorIsComplete(let friends):
       return self.popFromFriendSelector(friends)

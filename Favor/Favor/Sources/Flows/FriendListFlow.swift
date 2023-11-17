@@ -10,7 +10,6 @@ import UIKit
 import FavorKit
 import RxFlow
 
-@MainActor
 final class FriendListFlow: Flow {
 
   // MARK: - Properties
@@ -41,6 +40,39 @@ final class FriendListFlow: Flow {
       
     case .friendPageIsRequired(let friend):
       return self.navigateToFriendPage(with: friend)
+      
+    case let .friendSelectorIsRequired(friends, viewType):
+      let viewController = FriendSelectorViewController()
+      let reactor = FriendSelectorViewReactor(viewType, selectedFriends: friends)
+      viewController.reactor = reactor
+      self.rootViewController.pushViewController(viewController, animated: true)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: viewController,
+        withNextStepper: reactor
+      ))
+      
+    case .friendSelectorIsComplete(let friends):
+      self.rootViewController.popViewController(animated: true)
+      return .end(forwardToParentFlowWithStep: AppStep.friendSelectorIsComplete(friends))
+      
+    case .friendManagementIsRequired(let viewType):
+      let viewController = FriendManagementViewController(viewType)
+      let reactor = FriendManagementViewReactor()
+      viewController.reactor = reactor
+      self.rootViewController.pushViewController(viewController, animated: true)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: viewController,
+        withNextStepper: reactor
+      ))
+      
+    case .friendManagementIsComplete(let friendName):
+      self.rootViewController.popViewController(animated: true)
+      guard
+        let friendSelectorVC = self.rootViewController
+          .topViewController as? FriendSelectorViewController
+      else { return .none }
+      friendSelectorVC.tempFriendAdded(friendName)
+      return .none
       
     default:
       return .none

@@ -113,7 +113,7 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
     firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count - 1)"
     self.relatedFriendsButton.title = friendsTitle
   }
-  
+
   private func getTagButton() -> FavorButton {
     let button = FavorButton()
     button.baseBackgroundColor = .favorColor(.card)

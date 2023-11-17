@@ -69,14 +69,13 @@ final class GiftManagementFlow: Flow {
       pickerManager.present(selectionLimit: selectionLimit)
       return .none
       
-    case .friendSelectorIsRequired(let friends):
-      let viewController = FriendSelectorViewController()
-      let reactor = FriendSelectorViewReactor(.gift, selectedFriends: friends)
-      viewController.reactor = reactor
-      self.rootViewController.pushViewController(viewController, animated: true)
+    case let .friendSelectorIsRequired(friends, viewType):
+      let flow = FriendListFlow(rootViewController: self.rootViewController)
       return .one(flowContributor: .contribute(
-        withNextPresentable: viewController,
-        withNextStepper: reactor
+        withNextPresentable: flow,
+        withNextStepper: OneStepper(
+          withSingleStep: AppStep.friendSelectorIsRequired(friends, viewType: viewType)
+        )
       ))
       
     case .friendManagementIsRequired:
@@ -98,8 +97,7 @@ final class GiftManagementFlow: Flow {
       return .none
       
     case .friendSelectorIsComplete(let friends):
-      self.rootViewController.popViewController(animated: true)
-      guard 
+      guard
         let giftManagementVC = self.rootViewController.topViewController
           as? GiftManagementViewController 
       else {

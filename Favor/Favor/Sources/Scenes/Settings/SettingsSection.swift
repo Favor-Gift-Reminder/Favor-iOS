@@ -32,7 +32,7 @@ public struct SettingsSectionItem: ComposableItem {
   public var title: String
   public var subtitle: String?
   public var staticInfo: String?
-  public var step: AppStep?
+  var step: AppStep?
 
 }
 

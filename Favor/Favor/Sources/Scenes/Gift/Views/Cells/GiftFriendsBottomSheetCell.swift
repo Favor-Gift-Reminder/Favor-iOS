@@ -23,6 +23,12 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
     label.textAlignment = .center
     return label
   }()
+  
+  private let isUserImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.image = .favorIcon(.user_circle)
+    return imageView
+  }()
 
   // MARK: - Initializer
   
@@ -40,8 +46,8 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   // MARK: - Functions
   
   public func bind(_ friend: Friend) {
-//    self.profileImageView.profileImage = friend.profilePhoto
     self.nameLabel.text = friend.friendName
+    self.isUserImageView.isHidden = friend.identifier < 0
     self.profileImageView.isTempUser = friend.identifier < 0
   }
 }
@@ -54,7 +60,8 @@ extension GiftFriendsBottomSheetCell: BaseView {
   public func setupLayouts() {
     [
       self.profileImageView,
-      self.nameLabel
+      self.nameLabel,
+      self.isUserImageView
     ].forEach {
       self.addSubview($0)
     }
@@ -69,6 +76,10 @@ extension GiftFriendsBottomSheetCell: BaseView {
     self.profileImageView.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
       make.bottom.equalTo(self.nameLabel.snp.top).offset(-10.0)
+    }
+    
+    self.isUserImageView.snp.makeConstraints { make in
+      make.edges.equalTo(self.profileImageView)
     }
   }
 }

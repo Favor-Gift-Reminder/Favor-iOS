@@ -100,7 +100,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       )
       
     case .friendSelectorButtonDidTap:
-      self.steps.accept(AppStep.friendSelectorIsRequired([]))
+      self.steps.accept(AppStep.friendSelectorIsRequired([], viewType: .reminder))
       return .empty()
       
     case .doneButtonDidTap:

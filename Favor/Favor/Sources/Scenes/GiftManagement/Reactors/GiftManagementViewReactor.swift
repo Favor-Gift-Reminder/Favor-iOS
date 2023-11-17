@@ -169,7 +169,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       return .empty()
       
     case .friendsSelectorButtonDidTap:
-      self.steps.accept(AppStep.friendSelectorIsRequired(self.currentState.gift.friends))
+      self.steps.accept(AppStep.friendSelectorIsRequired(self.currentState.gift.friends, viewType:  .gift))
       return .empty()
 
     case .dateDidUpdate(let date):

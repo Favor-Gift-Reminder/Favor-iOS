@@ -10,7 +10,7 @@ import Foundation
 import FavorKit
 import RxFlow
 
-public enum AppStep: Step {
+enum AppStep: Step {
   // MARK: - Root
   case splashIsRequired
   case splashIsComplete
@@ -64,7 +64,7 @@ public enum AppStep: Step {
   case friendListIsComplete
   
   // MARK: - FriendSelector
-  case friendSelectorIsRequired([Friend] = [])
+  case friendSelectorIsRequired([Friend] = [], viewType: FriendSelectorViewReactor.ViewType)
   case friendSelectorIsComplete([Friend])
   
   // MARK: - FriendPage

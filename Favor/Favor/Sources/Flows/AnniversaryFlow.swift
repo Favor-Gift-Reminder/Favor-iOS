@@ -10,7 +10,6 @@ import UIKit
 import FavorKit
 import RxFlow
 
-@MainActor
 final class AnniversaryFlow: Flow {
 
   // MARK: - Properties
