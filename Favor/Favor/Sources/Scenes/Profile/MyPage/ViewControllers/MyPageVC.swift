@@ -149,7 +149,10 @@ final class MyPageViewController: BaseProfileViewController, View {
           snapshot.appendItems(items, toSection: sectionData.sections[idx])
         }
         DispatchQueue.main.async {
-          owner.dataSource.applySnapshotUsingReloadData(snapshot)
+          if let header = self.giftStatsHeader {
+            header.configure(with: owner.reactor?.currentState.user ?? .init())
+          }
+          owner.dataSource.apply(snapshot)
         }
       })
       .disposed(by: self.disposeBag)

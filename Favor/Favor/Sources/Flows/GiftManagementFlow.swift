@@ -79,6 +79,24 @@ final class GiftManagementFlow: Flow {
         withNextStepper: reactor
       ))
       
+    case .friendManagementIsRequired:
+      let viewController = FriendManagementViewController(.new)
+      let reactor = FriendManagementViewReactor()
+      viewController.reactor = reactor
+      return .one(flowContributor: .contribute(
+        withNextPresentable: viewController,
+        withNextStepper: reactor
+      ))
+      
+    case .friendManagementIsComplete(let friendName):
+      self.rootViewController.popViewController(animated: true)
+      guard
+        let giftManagementVC = self.rootViewController
+          .topViewController as? GiftManagementViewController
+      else { return .none }
+      giftManagementVC.friendsDidAdd([.init(friendName: friendName)])
+      return .none
+      
     case .friendSelectorIsComplete(let friends):
       self.rootViewController.popViewController(animated: true)
       guard 

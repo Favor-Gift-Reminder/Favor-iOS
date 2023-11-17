@@ -12,9 +12,9 @@ import ReactorKit
 import SnapKit
 
 class BaseSearchViewController: BaseViewController, View {
-
+  
   // MARK: - UI Components
-
+  
   // SearchBar
   public lazy var searchTextField: FavorSearchBar = {
     let searchBar = FavorSearchBar()
@@ -34,6 +34,7 @@ class BaseSearchViewController: BaseViewController, View {
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
+    self.navigationController?.setNavigationBarHidden(false, animated: false)
     self.setEditing(false, animated: true)
   }
 
@@ -108,7 +109,8 @@ extension BaseSearchViewController: UIGestureRecognizerDelegate {
   ) -> Bool {
     guard
       !(touch.view is UIControl),
-      !(touch.view is SearchRecentCell)
+      !(touch.view is SearchRecentCell),
+      !(touch.view is SearchGiftResultCell)
     else { return false }
     return true
   }

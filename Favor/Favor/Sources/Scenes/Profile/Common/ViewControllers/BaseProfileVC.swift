@@ -25,6 +25,8 @@ public class BaseProfileViewController: BaseViewController {
   
   // MARK: - Properties
   
+  var giftStatsHeader: ProfileGiftStatsCollectionHeader?
+  
   lazy var dataSource: ProfileDataSource = {
     let dataSource = ProfileDataSource(
       collectionView: self.collectionView,
@@ -68,6 +70,7 @@ public class BaseProfileViewController: BaseViewController {
           for: indexPath
         ) as ProfileGiftStatsCollectionHeader
         self.injectReactor(to: header)
+        self.giftStatsHeader = header
         return header
       case UICollectionView.elementKindSectionHeader:
         let header = collectionView.dequeueReusableSupplementaryView(

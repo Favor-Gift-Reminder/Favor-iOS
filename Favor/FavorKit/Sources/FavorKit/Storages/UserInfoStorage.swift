@@ -10,7 +10,7 @@ import Foundation
 public final class UserInfoStorage {
   @UserDefault(key: .userNo, defaultValue: -1)
   public static var userNo: Int
-
+  
   /// 앱 잠금 자체에 대한 활성화 여부 Boolean
   @UserDefault(key: .isLocalAuthEnabled, defaultValue: false)
   public static var isLocalAuthEnabled: Bool

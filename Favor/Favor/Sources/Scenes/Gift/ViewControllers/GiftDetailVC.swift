@@ -110,12 +110,12 @@ final class GiftDetailViewController: BaseViewController, View {
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.deleteButton.rx.tap
       .asDriver()
       .drive(with: self) { owner, _ in owner.presentRemovalPopup() }
       .disposed(by: self.disposeBag)
-
+    
     self.shareButton.rx.tap
       .map { Reactor.Action.shareButtonDidTap }
       .bind(to: reactor.action)
@@ -148,7 +148,6 @@ final class GiftDetailViewController: BaseViewController, View {
         items.enumerated().forEach { idx, item in
           snapshot.appendItems(item, toSection: sections[idx])
         }
-
         DispatchQueue.main.async {
           dataSource.apply(snapshot)
         }

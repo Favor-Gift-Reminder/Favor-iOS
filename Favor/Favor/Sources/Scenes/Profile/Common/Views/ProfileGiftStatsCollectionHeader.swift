@@ -84,6 +84,23 @@ final class ProfileGiftStatsCollectionHeader: UICollectionReusableView, Reusable
       })
       .disposed(by: self.disposeBag)
   }
+  
+  // MARK: - Configure
+  
+  func configure(with user: User) {
+    self.totalGiftsButton.configuration?.updateAttributedTitle(
+      "\(user.totalgifts)",
+      font: self.buttonFont
+    )
+    self.receivedGiftsButton.configuration?.updateAttributedTitle(
+      "\(user.receivedGifts)",
+      font: self.buttonFont
+    )
+    self.givenGiftsButton.configuration?.updateAttributedTitle(
+      "\(user.givenGifts)",
+      font: self.buttonFont
+    )
+  }
 }
 
 // MARK: - Setup

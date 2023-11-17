@@ -31,7 +31,6 @@ final class SearchViewReactor: Reactor, Stepper {
   var initialState: State
   var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
-  private let giftFetcher = Fetcher<Gift>()
   private let mode: SearchViewMode
   private var tasks: Set<Task<Void, Error>> = []
   
@@ -49,6 +48,7 @@ final class SearchViewReactor: Reactor, Stepper {
     case searchTypeDidSelected(SearchType)
     case addFriendButtonDidTap(Int)
     case viewWillDisappear
+    case itemSelected(SearchResultSectionItem)
     case doNothing
   }
   
@@ -87,7 +87,7 @@ final class SearchViewReactor: Reactor, Stepper {
     )
     self.mode = mode
     if let searchQuery {
-      self.setupGiftFetcher(with: searchQuery)
+      self.fetchGift(with: searchQuery)
     }
   }
 
@@ -163,11 +163,10 @@ final class SearchViewReactor: Reactor, Stepper {
         self.updateAndNavigateToSearchResult(searchQuery)
         return .just(.toggleIsEditingTo(false))
       case .result:
-        self.setupGiftFetcher(with: searchQuery)
         return .concat(
-          self.giftFetcher.fetch()
+          self.fetchGift(with: searchQuery)
             .flatMap { fetchResult -> Observable<Mutation> in
-              let (_, gifts) = fetchResult
+              let gifts = fetchResult
               return .just(.updateGiftResult(gifts))
             },
           self.fetchRemoteUser(with: searchQuery)
@@ -202,6 +201,15 @@ final class SearchViewReactor: Reactor, Stepper {
         .flatMap { isAlreadyFriend in
           return Observable<Mutation>.just(.updateUserAlreadyFriend(isAlreadyFriend))
         }
+      
+    case .itemSelected(let item):
+      switch item {
+      case .gift(let gift):
+        self.steps.accept(AppStep.giftDetailIsRequired(gift))
+        return .empty()
+      default:
+        return .empty()
+      }
     }
   }
   
@@ -363,52 +371,33 @@ private extension SearchViewReactor {
   func fetchRemoteUser(with queryString: String) -> Single<(User?, Bool)> {
     return Single<(User?, Bool)>.create { single in
       let networking = UserNetworking()
-      _ = networking.request(.getUserId(userId: queryString))
+      _ = networking.request(.getUserId(userId: queryString), isOpeningPopup: false)
         .asSingle()
-      // FIXME: DecodeError 처리 필요..! ResponseMessage가 "USER_NOT_FOUND"일 때
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
         .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
-            Task {
-              let friendObjects = await self.workbench.values(FriendObject.self)
-              single(.success((
-                User(singleDTO: responseDTO.data),
-                friendObjects.contains(where: { $0.friendName == responseDTO.data.name })
-              )))
-            }
-          } catch {
-            print(error)
+          Task {
+            let friendObjects = await self.workbench.values(FriendObject.self)
+            single(.success((
+              User(singleDTO: response.data),
+              friendObjects.contains(where: { $0.friendName == response.data.name })
+            )))
           }
-        }, onFailure: {_ in
+        }, onFailure: { _ in
           single(.success((nil, false)))
         })
       return Disposables.create()
     }
   }
   
-  func setupGiftFetcher(with queryString: String) {
-    // onRemote
-    self.giftFetcher.onRemote = {
-      let networking = UserNetworking()
-      let gifts = networking.request(.getGiftByName(giftName: queryString))
-        .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data.map { Gift(singleDTO: $0) })
-        }
-        .asSingle()
-      return gifts
-    }
-    // onLocal
-    self.giftFetcher.onLocal = {
-      return await self.workbench.values(GiftObject.self)
-        .where { $0.name.contains(queryString) }
-        .map { Gift(realmObject: $0) }
-    }
-    // onLocalUpdate
-    self.giftFetcher.onLocalUpdate = { _, remoteGifts in
-      try await self.workbench.write { transaction in
-        transaction.update(remoteGifts.map { $0.realmObject() })
+  func fetchGift(with queryString: String) -> Observable<[Gift]> {
+    return Observable<[Gift]>.create { observer in
+      Task {
+        let gifts = await self.workbench.values(GiftObject.self)
+          .map { Gift(realmObject: $0) }
+        observer.onNext(gifts.filter { $0.name.localizedCaseInsensitiveContains(queryString) })
+        observer.onCompleted()
       }
+      return Disposables.create()
     }
   }
 }

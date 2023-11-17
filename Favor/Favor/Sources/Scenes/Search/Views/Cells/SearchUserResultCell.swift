@@ -108,6 +108,14 @@ final class SearchUserResultCell: BaseCollectionViewCell {
     self.nameLabel.text = user.name
     self.idLabel.text = "@" + user.searchID
     self.addFriendButton.isEnabled = !isAlreadyFriend
+    if let urlString = user.profilePhoto?.remote {
+      guard let url = URL(string: urlString) else { return }
+      self.profileImageView.setImage(from: url, mapper: .init(user: user, subpath: .profilePhoto(urlString)))
+      self.profileImageView.contentMode = .scaleAspectFill
+    } else {
+      self.profileImageView.image = .favorIcon(.friend)?.resize(newWidth: 70).withTintColor(.white)
+      self.profileImageView.contentMode = .center
+    }
   }
   
   // MARK: - Functions

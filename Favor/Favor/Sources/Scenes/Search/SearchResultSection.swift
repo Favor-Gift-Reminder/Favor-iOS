@@ -83,7 +83,7 @@ extension SearchResultSection: Composable {
       return .base()
     case .gift:
       return .base(
-        contentInsets: NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 32, trailing: 20)
+        contentInsets: NSDirectionalEdgeInsets(top: 32, leading: 20, bottom: 32, trailing: 20)
       )
     case .user:
       return .base()

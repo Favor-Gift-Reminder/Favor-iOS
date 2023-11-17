@@ -91,7 +91,19 @@ final class SearchResultViewController: BaseSearchViewController {
         owner.view.endEditing(true)
       })
       .disposed(by: self.disposeBag)
-
+    
+    self.collectionView.rx.itemSelected
+      .map { indexPath in
+        guard let dataSource = self.dataSource else { fatalError() }
+        let currentSnapshot = dataSource.snapshot()
+        let sections = currentSnapshot.sectionIdentifiers
+        let items = currentSnapshot.itemIdentifiers(inSection: sections[indexPath.section])
+        let selectedItem = items[indexPath.item]
+        return Reactor.Action.itemSelected(selectedItem)
+      }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // State
     reactor.state.map { $0.searchQuery }
       .take(1) // 최초 1회만 필요
@@ -203,7 +215,6 @@ final class SearchResultViewController: BaseSearchViewController {
 private extension SearchResultViewController {
   func makeSelectedSearchButton(with title: String) -> UIButton {
     var config = UIButton.Configuration.plain()
-    config.updateAttributedTitle(title, font: .favorFont(.regular, size: 18))
     config.background.backgroundColor = .clear
 
     let button = UIButton(configuration: config)
@@ -211,8 +222,10 @@ private extension SearchResultViewController {
       switch button.state {
       case .normal:
         button.configuration?.baseForegroundColor = .favorColor(.line2)
+        button.configuration?.updateAttributedTitle(title, font: .favorFont(.regular, size: 16))
       case .selected:
         button.configuration?.baseForegroundColor = .favorColor(.icon)
+        button.configuration?.updateAttributedTitle(title, font: .favorFont(.bold, size: 16))
       default: break
       }
     }

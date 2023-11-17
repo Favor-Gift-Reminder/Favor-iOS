@@ -132,7 +132,7 @@ extension ProfileSection: Composable {
       )
     }
   }
-
+  
   public var group: UICollectionViewComposableLayout.Group {
     switch self {
     case .anniversarySetupHelper:
@@ -169,14 +169,14 @@ extension ProfileSection: Composable {
       )
     }
   }
-
+  
   public var section: UICollectionViewComposableLayout.Section {
     let header = UICollectionViewComposableLayout.BoundaryItem.header(height: .estimated(32))
     let whiteBackground = UICollectionViewComposableLayout.DecorationItem.background(
       kind: ProfileElementKind.sectionWhiteBackground
     )
     let defaultInsets = NSDirectionalEdgeInsets(top: 16, leading: 20, bottom: 40, trailing: 20)
-
+    
     switch self {
     case .anniversarySetupHelper:
       return .base(
