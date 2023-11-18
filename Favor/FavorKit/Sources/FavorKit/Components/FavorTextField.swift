@@ -19,6 +19,10 @@ public class FavorTextField: UIView {
   private var isEditingOrSelected: Bool = false {
     didSet { self.updateColor() }
   }
+  
+  public var title: String? {
+    didSet { self.updateTextField() }
+  }
 
   /// TextField 오른쪽에 SecureEyeButton이 있는지 여부 Boolean
   public var isSecureField: Bool = false {
@@ -225,7 +229,7 @@ public class FavorTextField: UIView {
       self.messageLabelAnimator?.startAnimation()
     }
   }
-
+  
   public func addLeftItem(item: UIView) {
     self.textField.leftView = item
     self.textField.leftView?.snp.makeConstraints { make in

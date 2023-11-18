@@ -90,7 +90,10 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       return .concat([
         .just(.updateLoading(true)),
         self.requestSignIn(email: email, password: password)
-          .flatMap { return Observable<Mutation>.just(.updateLoading(false)) }
+          .flatMap {
+            self.steps.accept(AppStep.authIsComplete)
+            return Observable<Mutation>.just(.updateLoading(false))
+          }
       ])
       
     case .findPasswordButtonDidTap:

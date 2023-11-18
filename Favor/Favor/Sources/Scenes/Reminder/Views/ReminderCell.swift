@@ -39,6 +39,14 @@ final class ReminderCell: BaseCardCell, Reusable, View {
         owner.title = reminder.name
         owner.subtitle = reminder.date.toDday()
         owner.toggleSwitch.isOn = reminder.shouldNotify
+        if let friend = reminder.relatedFriend,
+           let urlString = friend.profilePhoto?.remote
+        {
+          guard let url = URL(string: urlString) else { return }
+          owner.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString)))
+        } else {
+          owner.imageView.image = nil
+        }
       })
       .disposed(by: self.disposeBag)
   }

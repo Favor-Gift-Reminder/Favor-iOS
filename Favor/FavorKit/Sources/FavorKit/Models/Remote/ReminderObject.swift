@@ -23,7 +23,7 @@ public class ReminderObject: Object {
   /// 리마인더로 등록한 이벤트의 날짜
   @Persisted public var date: Date
   /// 리마인더 메모
-  @Persisted public var memo: String?
+  @Persisted public var memo: String
   /// 리마인더 알림 여부
   @Persisted public var shouldNotify: Bool
   /// 리마인더 알림 시간
@@ -37,7 +37,7 @@ public class ReminderObject: Object {
       "memo": "reminderMemo",
       "shouldNotify": "isAlarmSet",
       "notifyTime": "alarmTime",
-      "relatedFriend": "friend"
+      "relatedFriend": "friendSimpleDto"
     ]
   }
 
@@ -55,7 +55,7 @@ public class ReminderObject: Object {
     reminderNo: Int,
     title: String,
     date: Date,
-    memo: String? = nil,
+    memo: String,
     shouldNotify: Bool,
     notifyTime: Date,
     friend: FriendObject?

@@ -33,7 +33,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     let button = UIButton(configuration: config)
     return button
   }()
-
+  
   // View Items
   private let contentsView = UIView()
   private lazy var stackView: UIStackView = {
@@ -42,7 +42,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     stackView.spacing = 40
     return stackView
   }()
-
+  
   // Header
   private let eventInfoViewContainer = UIView()
   private lazy var eventImageView = FavorIconImageView(.profile)
@@ -85,19 +85,26 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
   // MARK: - Life Cycle
 
   // MARK: - Binding
-
+  
   func bind(reactor: ReminderDetailViewReactor) {
     // Action
+    Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
+      .map { _ in Reactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     self.editButton.rx.tap
       .map { Reactor.Action.editButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.deleteButton.rx.tap
-      .map { Reactor.Action.deleteButtonDidTap }
-      .bind(to: reactor.action)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        owner.presentRemovalPopup()
+      }
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { $0.reminder }
       .asDriver(onErrorRecover: { _ in return .empty()})
@@ -105,22 +112,52 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
         // 헤더
         owner.eventTitleLabel.text = reminder.name
         owner.eventSubtitleLabel.text = reminder.date.toDday()
+        if let friend = reminder.relatedFriend,
+           let urlString = reminder.relatedFriend?.profilePhoto?.remote
+        {
+          if let url = URL(string: urlString) {
+            owner.eventImageView.imageView.setImage(
+              from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString))
+            )
+          }
+        } else {
+          owner.eventImageView.image = nil
+        }
         // 날짜
         owner.dateSelectorTextField.updateDate(reminder.date)
         // 알림
-        let isNotifyTimeSet: Bool = reminder.notifyDate != nil
-        owner.notifySelectorStack.arrangedSubviews[1].isHidden = !isNotifyTimeSet
-        owner.notifyEmptyLabel.isHidden = isNotifyTimeSet
+        owner.notifyDateSelectorButton.title = reminder.date.toNotifyDays(reminder.notifyDate).stringValue
+        owner.notifyDateSelectorButton.baseForegroundColor = .favorColor(.icon)
+        owner.notifyDateSelectorButton.isSelected = true
         owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
         // 메모
         owner.memoTextView.text = reminder.memo
         // 친구
-        owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: reminder.relatedFriend.friendName)
+        if let friend = reminder.relatedFriend {
+          owner.friendSelectorStack.isHidden = false
+          owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friend.friendName)
+          owner.friendSelectorButton.configuration?.image = nil
+        } else {
+          owner.friendSelectorStack.isHidden = true
+        }
       })
       .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
+  
+  func presentRemovalPopup() {
+    let removalPopup = NewAlertPopup(
+      .onlyTitle(
+        title: "삭제 하시겠습니까?",
+        NewAlertPopup.ActionButtons(reject: "취소", accept: "삭제")
+      ),
+      identifier: "RemoveGift"
+    )
+    removalPopup.accpetButtonCompletion = { self.reactor?.action.onNext(.deleteButtonDidTap) }
+    removalPopup.modalPresentationStyle = .overFullScreen
+    self.present(removalPopup, animated: false)
+  }
 
   // MARK: - UI Setups
 
@@ -128,7 +165,7 @@ final class ReminderDetailViewController: BaseReminderViewController, View {
     super.setupLayouts()
 
     // Navigation Items
-    let rightItems = [self.editButton.toBarButtonItem(), self.deleteButton.toBarButtonItem()]
+    let rightItems = [self.deleteButton.toBarButtonItem(), self.editButton.toBarButtonItem()]
     self.navigationItem.setRightBarButtonItems(rightItems, animated: false)
 
     // View Items

@@ -69,11 +69,11 @@ open class BaseCardCell: BaseCollectionViewCell, BaseView {
     imageView.clipsToBounds = true
     return imageView
   }()
-
-  private lazy var imageView: UIImageView = {
+  
+  public lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.backgroundColor = .clear
-    imageView.contentMode = .center
+    imageView.contentMode = .scaleAspectFill
     imageView.clipsToBounds = true
     return imageView
   }()

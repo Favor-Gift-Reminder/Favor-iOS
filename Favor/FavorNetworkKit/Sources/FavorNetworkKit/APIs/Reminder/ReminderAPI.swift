@@ -38,7 +38,7 @@ public enum ReminderAPI {
   ///   - dto: 수정하는 리마인더의 정보를 담은 리퀘스트 DTO - `Body`
   ///   - friendNo: 수정하는 리마인더와 관련된 친구의 DB 넘버 - `Query`
   ///   - reminderNo: 수정하는 리마인더의 DB 넘버 - `Path`
-  case patchReminder(ReminderRequestDTO, friendNo: Int, reminderNo: Int)
+  case patchReminder(ReminderUpdateRequestDTO, reminderNo: Int)
   
   /// 친구의 기념을을 리마인더로 추가
   /// - Parameters:
@@ -58,8 +58,7 @@ public enum ReminderAPI {
   /// ```
   /// - Parameters:
   ///   - dto: 리마인더 리퀘스트 DTO - `Body`
-  ///   - friendNo: 리마인더와 관련된 친구의 DB 넘버 - `Path`
-  case postReminder(ReminderRequestDTO, friendNo: Int)
+  case postReminder(ReminderRequestDTO)
 }
 
 extension ReminderAPI: BaseTargetType {

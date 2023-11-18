@@ -13,6 +13,7 @@ public struct ReminderResponseDTO: Decodable {
   public let reminderDate: Date
   public let userNo: Int
   public let alarmSet: Bool
+  public let friendSimpleDto: FriendResponseDTO?
   
   enum CodingKeys: CodingKey {
     case reminderNo
@@ -20,6 +21,7 @@ public struct ReminderResponseDTO: Decodable {
     case reminderDate
     case userNo
     case alarmSet
+    case friendSimpleDto
   }
   
   public init(from decoder: Decoder) throws {
@@ -29,6 +31,7 @@ public struct ReminderResponseDTO: Decodable {
     let reminderDateString = try container.decode(String.self, forKey: .reminderDate)
     self.reminderDate = reminderDateString.toDate("yyyy-MM-dd") ?? .distantPast
     self.userNo = try container.decode(Int.self, forKey: .userNo)
+    self.friendSimpleDto = try container.decode(FriendResponseDTO?.self, forKey: .friendSimpleDto)
     self.alarmSet = try container.decode(Bool.self, forKey: .alarmSet)
   }
 }

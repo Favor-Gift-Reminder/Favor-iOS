@@ -32,30 +32,52 @@ final class ReminderFlow: Flow {
     switch step {
     case .reminderIsRequired:
       return self.navigateToReminder()
-
+      
     case .newReminderIsRequired:
       return self.navigateToNewReminder()
       
     case .reminderDetailIsRequired(let reminder):
       return self.navigateToReminderDetail(reminder: reminder)
       
+    case .reminderDetailIsComplete:
+      self.rootViewController.popViewController(animated: true)
+      ToastManager.shared.showNewToast(.init(.reminderDeleted))
+      return .none
+      
     case .reminderEditIsRequired(let reminder):
       return self.navigateToEditReminder(reminder: reminder)
       
-    case .reminderEditIsComplete(let message):
-      return self.popFromReminderEdit(message)
+    case .reminderEditIsComplete:
+      self.rootViewController.popViewController(animated: true)
+      if self.rootViewController.topViewController is ReminderViewController {
+        ToastManager.shared.showNewToast(.init(.reminderAdded))
+      } else {
+        ToastManager.shared.showNewToast(.init(.reminderModifed))
+      }
+      return .none
 
     case .reminderIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
       
-    case .friendSelectorIsRequired(let friends):
-//      return self.navigateToFriendSelector(friends)
-      return .none
+    case let .friendSelectorIsRequired(friends, viewType):
+      let flow = FriendListFlow(rootViewController: self.rootViewController)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: flow,
+        withNextStepper: OneStepper(
+          withSingleStep: AppStep.friendSelectorIsRequired(friends, viewType: viewType)
+        )
+      ))
       
     case .friendSelectorIsComplete(let friends):
-      return self.popFromFriendSelector(friends)
+      guard
+        let reminderEditVC = self.rootViewController.topViewController as? ReminderEditViewController,
+        let friend = friends.first
+      else { return .none }
+      reminderEditVC.reactor?.action.onNext(.friendDidChange(friend))
+      return .none
 
-    default: return .none
+    default:
+      return .none
     }
   }
 }
@@ -107,7 +129,7 @@ private extension ReminderFlow {
   
   func navigateToEditReminder(reminder: Reminder) -> FlowContributors {
     let reminderEditVC = ReminderEditViewController()
-    let reminderEditReactor = ReminderEditViewReactor(reminder: reminder)
+    let reminderEditReactor = ReminderEditViewReactor(.edit, reminder: reminder)
     reminderEditVC.reactor = reminderEditReactor
     reminderEditVC.isEditable = true
 
@@ -117,32 +139,6 @@ private extension ReminderFlow {
       withNextPresentable: reminderEditVC,
       withNextStepper: reminderEditReactor
     ))
-  }
-  
-  func popFromReminderEdit(_ message: ToastMessage) -> FlowContributors {
-    if self.rootViewController.topViewController is ReminderEditViewController {
-      self.rootViewController.popViewController(animated: true)
-      guard
-        let reminderVC = self.rootViewController.topViewController as? ReminderViewController
-      else { return .none }
-      ToastManager.shared.showNewToast(.init(.reminderAdded))
-    }
-    
-    return .none
-  }
-  
-  func popFromFriendSelector(_ friends: [Friend]) -> FlowContributors {
-    if self.rootViewController.topViewController is FriendSelectorViewController {
-      self.rootViewController.popViewController(animated: true)
-      
-      guard
-        let reminderEditVC = self.rootViewController.topViewController as? ReminderEditViewController,
-        let friend = friends.first
-      else { return .none }
-      
-      reminderEditVC.reactor?.action.onNext(.friendDidChange(friend))
-    }
-    return .none
   }
   
   func navigateToFriendSelector(_ friends: [Friend]) -> FlowContributors {

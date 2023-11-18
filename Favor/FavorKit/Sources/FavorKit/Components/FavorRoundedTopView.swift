@@ -38,7 +38,7 @@ public final class FavorRoundedTopView: UIView {
     path.close()
     layer.path = path.cgPath
 
-    layer.fillColor = UIColor.favorColor(.background).cgColor
+    layer.fillColor = UIColor.favorColor(.card).cgColor
     self.layer.addSublayer(layer)
   }
 }

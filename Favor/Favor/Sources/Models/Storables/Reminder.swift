@@ -18,10 +18,10 @@ public struct Reminder: Storable, Receivable {
   public let identifier: Int
   public var name: String
   public var date: Date
-  public var memo: String?
+  public var memo: String = ""
   public var shouldNotify: Bool
   public var notifyDate: Date
-  public var relatedFriend: Friend
+  public var relatedFriend: Friend?
 
   // MARK: - Storable
 
@@ -35,7 +35,9 @@ public struct Reminder: Storable, Receivable {
     self.memo = realmObject.memo
     self.shouldNotify = realmObject.shouldNotify
     self.notifyDate = realmObject.notifyTime
-    self.relatedFriend = Friend(realmObject: realmObject.friend ?? .init())
+    if let friendObject = realmObject.friend {
+      self.relatedFriend = Friend(realmObject: friendObject)
+    }
   }
   
   public func realmObject() -> ReminderObject {
@@ -46,20 +48,22 @@ public struct Reminder: Storable, Receivable {
       memo: self.memo,
       shouldNotify: self.shouldNotify,
       notifyTime: self.notifyDate,
-      friend: self.relatedFriend.realmObject()
+      friend: self.relatedFriend?.realmObject()
     )
   }
 
   // MARK: - Receivable
-
+  
   public init(singleDTO: ReminderSingleResponseDTO) {
     self.identifier = singleDTO.reminderNo
     self.name = singleDTO.reminderTitle
     self.date = singleDTO.reminderDate
     self.memo = singleDTO.reminderMemo
     self.shouldNotify = singleDTO.isAlarmSet
-    self.notifyDate = singleDTO.reminderDate
-    self.relatedFriend = Friend(friendResponseDTO: singleDTO.friendSimpleDto)
+    self.notifyDate = singleDTO.alarmTime
+    if let friendDTO = singleDTO.friendSimpleDto {
+      self.relatedFriend = Friend(friendResponseDTO: friendDTO)
+    } 
   }
   
   public init(dto: ReminderResponseDTO) {
@@ -68,7 +72,9 @@ public struct Reminder: Storable, Receivable {
     self.date = dto.reminderDate
     self.shouldNotify = dto.alarmSet
     self.notifyDate = .distantPast
-    self.relatedFriend = .init()
+    if let friendSimpleDTO = dto.friendSimpleDto {
+      self.relatedFriend = Friend(friendResponseDTO: friendSimpleDTO)
+    }
   }
   
   // MARK: - Mock
@@ -81,9 +87,8 @@ public struct Reminder: Storable, Receivable {
     self.identifier = -1
     self.name = ""
     self.date = .distantPast
-    self.notifyDate = .distantPast
+    self.notifyDate = .now
     self.shouldNotify = false
-    self.relatedFriend = .init()
   }
 }
 

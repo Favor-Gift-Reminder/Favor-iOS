@@ -39,6 +39,8 @@ public enum ToastMessage {
   // MARK: - Reminder
   
   case reminderAdded
+  case reminderDeleted
+  case reminderModifed
     
   // MARK: - Network
   
@@ -75,6 +77,10 @@ extension ToastMessage {
       
     case .reminderAdded:
       return "리마인더가 등록되었습니다."
+    case .reminderDeleted:
+      return "리마인더가 삭제되었습니다."
+    case .reminderModifed:
+      return "리마인더가 수정되었습니다."
       
     case .networkStatus:
       return "인터넷 상태가 불안정합니다."

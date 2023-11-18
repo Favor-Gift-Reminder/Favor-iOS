@@ -38,7 +38,7 @@ open class FavorIconImageView: UIView {
 
   // MARK: - UI Components
 
-  private lazy var imageView: UIImageView = {
+  public lazy var imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
     return imageView

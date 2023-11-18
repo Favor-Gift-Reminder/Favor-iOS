@@ -110,6 +110,12 @@ final class ReminderViewController: BaseViewController, View {
 
     self.setupNavigationBar()
   }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    self.updateNavigationBarColor(.white)
+  }
 
   // MARK: - Binding
   
@@ -132,15 +138,16 @@ final class ReminderViewController: BaseViewController, View {
       .bind(to: self.collectionView.rx.items(dataSource: self.dataSource))
       .disposed(by: self.disposeBag)
     
-//    reactor.state.map { (past: $0.pastSection, upcoming: $0.upcomingSection) }
-//      .asDriver(onErrorRecover: { _ in return .empty() })
-//      .drive(with: self, onNext: { owner, sectionData in
-//        owner.navigationController?.navigationBar.backgroundColor = .white
-//        if !sectionData.past.items.isEmpty, sectionData.upcoming.items.isEmpty {
-//          owner.navigationController?.navigationBar.backgroundColor = .favorColor(.card)
-//        }
-//      })
-//      .disposed(by: self.disposeBag)
+    reactor.state.map { (past: $0.pastSection, upcoming: $0.upcomingSection) }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self, onNext: { owner, sectionData in
+        if sectionData.upcoming.items.isEmpty, !sectionData.past.items.isEmpty {
+          owner.updateNavigationBarColor(.favorColor(.card))
+        } else {
+          owner.updateNavigationBarColor(.white)
+        }
+      })
+      .disposed(by: self.disposeBag)
     
     reactor.state.map { $0.isReminderEmpty }
       .distinctUntilChanged()
@@ -195,6 +202,15 @@ final class ReminderViewController: BaseViewController, View {
   }
   
   // MARK: - Functions
+  
+  private func updateNavigationBarColor(_ color: UIColor) {
+    guard let appearance = self.navigationController?.navigationBar.standardAppearance else { return }
+    appearance.backgroundColor = color
+    self.navigationController?.navigationBar.isTranslucent = false
+    UINavigationBar.appearance().isTranslucent = false
+    self.navigationController?.navigationBar.standardAppearance = appearance
+    self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
+  }
 
   // MARK: - UI Setups
 

@@ -37,10 +37,10 @@ extension Date {
 
   public func toTimeString() -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "a h시 m분"
+    formatter.dateFormat = "a hh시 mm분"
     return formatter.string(from: self)
   }
-
+  
   public func toYearString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy"
@@ -55,12 +55,17 @@ extension Date {
 
   public func toDayString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(secondsFromGMT: 0)
     formatter.dateFormat = "d"
     return formatter.string(from: self)
   }
 
   public func toDday() -> String {
-    let dateComponents = Calendar.current.dateComponents([.day], from: self, to: Date())
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    let todayDate = dateFormatter.date(from: Date().toDTODateString() ) ?? Date()
+    let dateComponents = Calendar.current.dateComponents([.day], from: self, to: todayDate)
     guard let days = dateComponents.day else { return "D-Day 계산 실패" }
     let dayDate = self.toDayString()
     switch days.signum() {
@@ -70,7 +75,7 @@ extension Date {
     default: return "D-Day 계산 실패"
     }
   }
-
+  
   public func toDTODateString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
@@ -88,11 +93,14 @@ extension Date {
   ///  - Parameters:
   ///   - reminderDate: 알람으로 설정했던 시간입니다.
   public func toNotifyDays(_ alarmDate: Date?) -> NotifyDays {
-    guard let alarmDate else { return .day }
-    var calendar = Calendar.current
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd"
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+    let alarmDate = dateFormatter.date(from: alarmDate?.toDTODateString() ?? "")
+    let calendar = Calendar.current
     
     // 리마인더의 기념일 날짜와 차이를 구합니다.
-    let dateComponents = calendar.dateComponents([.day], from: self, to: alarmDate)
+    let dateComponents = calendar.dateComponents([.day], from: self, to: alarmDate ?? Date())
     
     // 구한 날짜의 일(day) 값입니다.
     guard let dayComponent = dateComponents.day else { return .day }

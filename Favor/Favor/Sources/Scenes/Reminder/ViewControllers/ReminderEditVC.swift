@@ -20,16 +20,16 @@ final class ReminderEditViewController: BaseReminderViewController, View {
   }
   
   // MARK: - Properties
-
+  
   // MARK: - UI Components
   
-  private lazy var doneButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.baseBackgroundColor = .clear
-    config.baseForegroundColor = .favorColor(.line2)
-    config.contentInsets = .zero
-
-    let button = UIButton(configuration: config)
+  private let doneButton: FavorButton = {
+    let button = FavorButton()
+    button.baseBackgroundColor = .white
+    button.baseForegroundColor = .favorColor(.line2)
+    button.configuration?.background.backgroundColor = .clear
+    button.font = .favorFont(.bold, size: 18)
+    button.contentInset = .zero
     button.configurationUpdateHandler = { button in
       switch button.state {
       case .normal:
@@ -87,6 +87,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     
     self.titleTextField.rx.text
       .orEmpty
+      .skip(1)
       .map { Reactor.Action.titleTextFieldDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -98,7 +99,26 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .disposed(by: self.disposeBag)
     
     // State
+    reactor.state.map { (type: $0.type, reminder: $0.reminder) }
+      .filter { $0.type == .edit }
+      .map { $0.reminder }
+      .take(1)
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, reminder in
+        owner.titleTextField.rx.text.onNext(reminder.name)
+        owner.dateSelectorTextField.updateDate(reminder.date)
+        owner.notifyDateSelectorButton.title = reminder.date.toNotifyDays(reminder.notifyDate).stringValue
+        owner.notifyDateSelectorButton.isSelected = true
+        owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
+        if let friendName = reminder.relatedFriend?.friendName {
+          owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friendName)
+        }
+        owner.memoTextView.text = reminder.memo
+      })
+      .disposed(by: self.disposeBag)
+    
     reactor.state.map { $0.type }
+      .take(1)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, type in
         owner.title = type == .new ? "새 리마인더" : "리마인더 수정"
@@ -107,6 +127,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
           doneText,
           font: .favorFont(.bold, size: 18)
         )
+        owner.doneButton.isEnabled = type == .edit
       })
       .disposed(by: self.disposeBag)
     
@@ -139,20 +160,21 @@ final class ReminderEditViewController: BaseReminderViewController, View {
   // MARK: - UI Setups
   override func setupStyles() {
     super.setupStyles()
-
+    
     self.scrollView.contentInset = UIEdgeInsets(
       top: self.verticalSpacing,
       left: .zero,
       bottom: self.verticalSpacing,
       right: .zero
     )
+    self.doneButton.isEnabled = self.reactor?.currentState.type == .edit
   }
   
   override func setupLayouts() {
     super.setupLayouts()
     
     // Navigation Items
-    self.navigationItem.setRightBarButton(self.doneButton.toBarButtonItem(), animated: true)
+    self.navigationItem.rightBarButtonItem = self.doneButton.toBarButtonItem()
     
     // View Items
     self.scrollView.addSubview(self.contentsView)

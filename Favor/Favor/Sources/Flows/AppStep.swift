@@ -50,6 +50,7 @@ enum AppStep: Step {
   case reminderIsComplete
   case newReminderIsRequired
   case reminderDetailIsRequired(Reminder)
+  case reminderDetailIsComplete
   case reminderEditIsRequired(Reminder)
   case reminderEditIsComplete(ToastMessage)
   

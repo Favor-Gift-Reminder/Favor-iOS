@@ -28,6 +28,7 @@ extension String {
   
   public func toDate(_ format: String? = nil) -> Date? {
     let dateFormatter = DateFormatter()
+    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
     if let format {
       dateFormatter.dateFormat = format
     }

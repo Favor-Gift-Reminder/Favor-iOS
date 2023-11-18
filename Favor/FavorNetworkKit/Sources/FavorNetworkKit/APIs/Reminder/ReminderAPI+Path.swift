@@ -21,14 +21,14 @@ extension ReminderAPI {
     case .deleteReminder(let reminderNo):
       return "/reminders/\(reminderNo)"
 
-    case .patchReminder(_, _, let reminderNo):
+    case .patchReminder(_, let reminderNo):
       return "/reminders/\(reminderNo)"
       
     case .postFriendReminder(let anniversaryNo):
       return "/reminders/\(anniversaryNo)"
       
-    case .postReminder(_, let friendNo):
-      return "/reminders/new/\(friendNo)"
+    case .postReminder:
+      return "/reminders/new"
     }
   }
 }

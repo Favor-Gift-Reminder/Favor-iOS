@@ -79,37 +79,28 @@ class BaseReminderViewController: BaseViewController {
   )
   
   // 알림
-  public lazy var notifyDateSelectorButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    var titleContainer = AttributeContainer()
-    titleContainer.font = .favorFont(.regular, size: 16)
-    config.attributedTitle = AttributedString(
-      "당일",
-      attributes: titleContainer
-    )
-    config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
-    config.background.backgroundColor = .clear
-    config.imagePadding = 8
-    config.imagePlacement = .trailing
-
-    let button = UIButton(configuration: config)
-
+  public lazy var notifyDateSelectorButton: FavorButton = {
+    let button = FavorButton("당일", image: .favorIcon(.down))
+    button.contentInset = .zero
+    button.baseBackgroundColor = .clear
+    button.imagePadding = 8
+    button.imagePlacement = .trailing
+    button.font = .favorFont(.regular, size: 16)
     button.configurationUpdateHandler = { button in
-      var config = button.configuration
+      guard let button = button as? FavorButton else { return }
       switch button.state {
       case .normal:
-        config?.image = .favorIcon(.down)?
+        button.image = .favorIcon(.down)?
           .withTintColor(.favorColor(.explain), renderingMode: .alwaysTemplate)
           .resize(newWidth: 12)
-        config?.baseForegroundColor = .favorColor(.explain)
+        button.baseForegroundColor = .favorColor(.line2)
       case .selected:
-        config?.image = .favorIcon(.down)?
+        button.image = .favorIcon(.down)?
           .withTintColor(.favorColor(.icon), renderingMode: .alwaysTemplate)
           .resize(newWidth: 12)
-        config?.baseForegroundColor = .favorColor(.icon)
+        button.baseForegroundColor = .favorColor(.icon)
       default: break
       }
-      button.configuration = config
     }
 
     button.showsMenuAsPrimaryAction = true
@@ -292,11 +283,15 @@ class BaseReminderViewController: BaseViewController {
   // MARK: - UI Setups
   
   override func setupLayouts() {
+    super.setupLayouts()
+    
     self.view.addSubview(self.scrollView)
     self.titleStack.spacing = 4.0
   }
   
   override func setupConstraints() {
+    super.setupConstraints()
+    
     self.memoTextView.snp.makeConstraints { make in
       make.height.greaterThanOrEqualTo(self.memoMinimumHeight)
     }

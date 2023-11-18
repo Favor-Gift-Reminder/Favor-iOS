@@ -21,19 +21,13 @@ extension ReminderAPI {
     case .deleteReminder:
       return .requestPlain
 
-    case .patchReminder(let reminderRequestDTO, let friendNo, _):
-      return .requestCompositeParameters(
-        bodyParameters: reminderRequestDTO.toDictionary(),
-        bodyEncoding: JSONEncoding.default,
-        urlParameters: [
-          "friendNo": friendNo
-        ]
-      )
+    case .patchReminder(let reminderRequestDTO, _):
+      return .requestJSONEncodable(reminderRequestDTO)
       
     case .postFriendReminder:
       return .requestPlain
       
-    case .postReminder(let reminderRequestDTO, _):
+    case .postReminder(let reminderRequestDTO):
       return .requestJSONEncodable(reminderRequestDTO)
     }
   }
