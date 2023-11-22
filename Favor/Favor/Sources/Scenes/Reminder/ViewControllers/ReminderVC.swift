@@ -85,7 +85,7 @@ final class ReminderViewController: BaseViewController, View {
   
   private lazy var collectionView: UICollectionView = {
     let collectionView = UICollectionView(
-      frame: self.view.bounds,
+      frame: .zero,
       collectionViewLayout: self.setupCollectionViewLayout()
     )
     
@@ -104,12 +104,6 @@ final class ReminderViewController: BaseViewController, View {
   }()
 
   // MARK: - Life Cycle
-
-  override func viewWillAppear(_ animated: Bool) {
-    super.viewWillAppear(animated)
-
-    self.setupNavigationBar()
-  }
   
   override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
@@ -161,7 +155,6 @@ final class ReminderViewController: BaseViewController, View {
   func bind(reactor: ReminderViewReactor) {
     // Action
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
-      .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
       .map { _ in Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
@@ -206,14 +199,18 @@ final class ReminderViewController: BaseViewController, View {
   private func updateNavigationBarColor(_ color: UIColor) {
     guard let appearance = self.navigationController?.navigationBar.standardAppearance else { return }
     appearance.backgroundColor = color
-    self.navigationController?.navigationBar.isTranslucent = false
-    UINavigationBar.appearance().isTranslucent = false
     self.navigationController?.navigationBar.standardAppearance = appearance
     self.navigationController?.navigationBar.scrollEdgeAppearance = appearance
   }
-
+  
   // MARK: - UI Setups
-
+  
+  override func setupStyles() {
+    super.setupStyles()
+    
+    self.setupNavigationBar()
+  }
+  
   override func setupLayouts() {
     [
       self.emptyImageView,
@@ -286,7 +283,7 @@ private extension ReminderViewController {
         heightDimension: .estimated(95)),
       subitems: [item]
     )
-
+    
     // Section
     let section = NSCollectionLayoutSection(group: group)
     section.interGroupSpacing = 10

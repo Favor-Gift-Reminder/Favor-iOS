@@ -12,14 +12,14 @@ import FavorKit
 
 // MARK: - Item
 
-enum NewGiftFriendItem: ComposableItem {
+enum FriendSelectorSection: ComposableItem {
   case empty
   case friend(friend: Friend, buttonType: FriendSelectorCell.RightButtonType)
 }
 
 // MARK: - Section
 
-enum NewGiftFriendSection: ComposableSection {
+enum FriendSelectorSectionItem: ComposableSection {
   case selectedFriends
   case friends
 }

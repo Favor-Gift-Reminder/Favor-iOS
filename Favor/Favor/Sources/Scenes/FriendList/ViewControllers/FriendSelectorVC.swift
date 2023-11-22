@@ -12,7 +12,7 @@ import ReactorKit
 import Reusable
 
 final class FriendSelectorViewController: BaseViewController, View {
-  typealias DataSource = UICollectionViewDiffableDataSource<NewGiftFriendSection, NewGiftFriendItem>
+  typealias DataSource = UICollectionViewDiffableDataSource<FriendSelectorSectionItem, FriendSelectorSection>
   
   private enum Metric {
     // Cell
@@ -212,7 +212,7 @@ final class FriendSelectorViewController: BaseViewController, View {
     reactor.state.map { (sections: $0.sections, items: $0.items) }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, sectionItems in
-        var snapshot = NSDiffableDataSourceSnapshot<NewGiftFriendSection, NewGiftFriendItem>()
+        var snapshot = NSDiffableDataSourceSnapshot<FriendSelectorSectionItem, FriendSelectorSection>()
         snapshot.appendSections(sectionItems.sections)
         snapshot.reloadSections([.selectedFriends])
         sectionItems.items.enumerated().forEach { index, items in
@@ -247,7 +247,7 @@ private extension FriendSelectorViewController {
   func setupCollectionViewLayout() -> UICollectionViewCompositionalLayout {
     return UICollectionViewCompositionalLayout(
       sectionProvider: { sectionIndex, _ in
-        let sections: [NewGiftFriendSection] = [.selectedFriends, .friends]
+        let sections: [FriendSelectorSectionItem] = [.selectedFriends, .friends]
         let sectionType = sections[sectionIndex]
         let isEmptySelectedFriends: Bool = self.reactor?.currentState.selectedFriends.isEmpty ?? false
         return self.createCollectionViewLayout(
@@ -259,7 +259,7 @@ private extension FriendSelectorViewController {
   }
   
   func createCollectionViewLayout(
-    sectionType: NewGiftFriendSection,
+    sectionType: FriendSelectorSectionItem,
     isEmptySelectedFriends: Bool
   ) -> NSCollectionLayoutSection {
     let emptyItemSize = NSCollectionLayoutSize(
@@ -305,14 +305,16 @@ private extension FriendSelectorViewController {
     section.boundarySupplementaryItems = [self.createHeader(section: sectionType)]
     
     if sectionType == .friends {
-      section.boundarySupplementaryItems.append(contentsOf: [self.createFooter()])
+      if self.reactor?.currentState.viewType == .gift {
+        section.boundarySupplementaryItems.append(contentsOf: [self.createFooter()])
+      }
     }
     return section
   }
   
   // 헤더 생성
   func createHeader(
-    section: NewGiftFriendSection
+    section: FriendSelectorSectionItem
   ) -> NSCollectionLayoutBoundarySupplementaryItem {
     let height: CGFloat
     switch section {

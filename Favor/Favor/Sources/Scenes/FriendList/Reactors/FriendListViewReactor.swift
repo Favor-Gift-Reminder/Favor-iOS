@@ -109,8 +109,6 @@ final class FriendListViewReactor: BaseFriendListViewReactor, Reactor, Stepper {
 // MARK: - Privates
 
 private extension FriendListViewReactor {
-  
-  
   func fetchFriendList(with query: String) -> Single<[Friend]> {
     return Single<[Friend]>.create { single in
       let task = Task {

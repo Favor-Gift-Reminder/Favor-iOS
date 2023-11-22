@@ -33,8 +33,8 @@ extension ReminderSectionType {
 
   var headerHeight: NSCollectionLayoutDimension {
     switch self {
-    case .upcoming: return .estimated(80)
-    case .past: return .estimated(130)
+    case .upcoming: return .absolute(80)
+    case .past: return .absolute(130)
     }
   }
 }

@@ -44,7 +44,7 @@ final class FriendSelectorHeaderView: UICollectionReusableView, Reusable {
   
   // MARK: - Configure
   
-  func configure(section: NewGiftFriendSection, friendsCount: Int) {
+  func configure(section: FriendSelectorSectionItem, friendsCount: Int) {
     self.countLabel.text = "\(friendsCount)"
     switch section {
     case .selectedFriends:

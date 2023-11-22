@@ -64,7 +64,18 @@ final class FriendSelectorCell: BaseFriendCell, Reusable {
   // MARK: - Configure
   
   func configure(with friend: Friend, buttonType: RightButtonType) {
-    self.friendName = friend.friendName
     self.currentButtonType = buttonType
+    if let profileUrl = friend.profilePhoto?.remote {
+      let mapper = CacheKeyMapper(friend: friend, subpath: .profilePhoto(profileUrl))
+      self.configure(
+        friendName: friend.friendName,
+        profileURL: profileUrl,
+        mapper: mapper
+      )
+    } else {
+      self.configure(
+        friendName: friend.friendName
+      )
+    }
   }
 }

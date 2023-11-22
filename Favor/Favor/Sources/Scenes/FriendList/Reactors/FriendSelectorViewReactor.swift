@@ -35,7 +35,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   
   var initialState: State
   var steps = PublishRelay<Step>()
-  private let fetcher = Fetcher<Friend>()
+  private let fetcher = Fetcher<User>()
   private let workbench = RealmWorkbench()
   
   enum Action {
@@ -48,6 +48,7 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   }
   
   enum Mutation {
+    case updateOriginFriends([Friend])
     case updateFriends([Friend])
     case updateSelectedFriends([Friend])
     case updateLoading(Bool)
@@ -56,10 +57,12 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
   
   struct State {
     var viewType: ViewType
-    var sections: [NewGiftFriendSection] = []
+    var sections: [FriendSelectorSectionItem] = []
     /// 0: 선택된 친구들
     /// 1: 현재 친구들
-    var items: [[NewGiftFriendItem]] = []
+    var items: [[FriendSelectorSection]] = []
+    /// 원본 친구 목록
+    var originFriends: [Friend] = []
     /// 현재 리스트로 보여지고 있는 친구 목록입니다.
     var currentFriends: [Friend] = []
     /// 선택된 친구 목록입니다.
@@ -83,10 +86,14 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     switch action {
     case .viewDidLoad:
       return self.fetcher.fetch()
-        .map { $0.results }
+        .compactMap { $0.results.first }
         .asObservable()
-        .flatMap { friends in
-          return Observable<Mutation>.just(.updateFriends(friends))
+        .flatMap { user in
+          let friends = user.friendList
+          return Observable<Mutation>.concat([
+            .just(.updateFriends(friends)),
+            .just(.updateOriginFriends(friends))
+          ])
         }
       
     case let .cellDidTap(indexPath, rightButtonType):
@@ -116,7 +123,9 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     case .textFieldDidChange(let text):
       let allFriends = self.currentState.currentFriends
       let filteredFriends = text.isEmpty ?
-      allFriends : allFriends.filter { $0.friendName.contains(text) }
+      self.currentState.originFriends : allFriends.filter {
+        $0.friendName.localizedCaseInsensitiveContains(text)
+      }
       return .just(.updateFriends(filteredFriends))
       
     case .addFriendDidTap:
@@ -146,6 +155,9 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
     case .updateFriends(let friends):
       newState.currentFriends = friends
       
+    case .updateOriginFriends(let friends):
+      newState.originFriends = friends
+      
     case .updateSelectedFriends(let friends):
       newState.selectedFriends = friends
       
@@ -164,8 +176,8 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
       
       // 친구 배열과 선택된 친구 배열을 참조하여
       // 새로운 아이템 2차원 배열을 만듭니다.
-      var newItems: [[NewGiftFriendItem]] = []
-      let newSections: [NewGiftFriendSection] = [.selectedFriends, .friends]
+      var newItems: [[FriendSelectorSection]] = []
+      let newSections: [FriendSelectorSectionItem] = [.selectedFriends, .friends]
       // 친구 아이템
       let friendItems = state.currentFriends
         .map { friend in
@@ -173,11 +185,11 @@ final class FriendSelectorViewReactor: Reactor, Stepper {
           if state.selectedFriends.first(where: { $0 == friend }) != nil {
             buttonType = .done
           }
-          return NewGiftFriendItem.friend(friend: friend, buttonType: buttonType)
+          return FriendSelectorSection.friend(friend: friend, buttonType: buttonType)
         }
       // 선택된 친구 아이템
       var selectedFriendItems = state.selectedFriends
-        .map { NewGiftFriendItem.friend(friend: $0, buttonType: .remove) }
+        .map { FriendSelectorSection.friend(friend: $0, buttonType: .remove) }
       selectedFriendItems = selectedFriendItems.isEmpty ? [.empty] : selectedFriendItems
       // 마지막으로 각 아이템들을 2차원 배열 안에 주입합니다.
       newItems.append(selectedFriendItems)
@@ -200,23 +212,21 @@ private extension FriendSelectorViewReactor {
     // onRemote
     self.fetcher.onRemote = {
       let networking = UserNetworking()
-      return networking.request(.getAllFriendList)
-        .map(ResponseDTO<[FriendResponseDTO]>.self)
-        .map { $0.data.map { Friend(friendResponseDTO: $0) } }
+      return networking.request(.getUser)
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { [User(singleDTO: $0.data)] }
         .asSingle()
     }
     // onLocal
     self.fetcher.onLocal = {
-      return await self.workbench.values(FriendObject.self)
-        .filter { $0.friendNo > 0 }
-        .map { return Friend(realmObject: $0) }
+      return await self.workbench.values(UserObject.self)
+        .map { User(realmObject: $0) }
     }
     // onLocalUpdate
-    self.fetcher.onLocalUpdate = { _, remoteFriend in
+    self.fetcher.onLocalUpdate = { _, remoteUser in
       try await self.workbench.write { transaction in
-        remoteFriend.forEach { friend in
-          transaction.update(Friend.self, values: [.name(friend.friendName)])
-        }
+        guard let user = remoteUser.first else { return }
+        transaction.update(user.realmObject())
       }
     }
   }
