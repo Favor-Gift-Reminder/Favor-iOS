@@ -28,7 +28,7 @@ final class HomeUpcomingCell: BaseCardCell {
 
   override func setupConstraints() {
     super.setupConstraints()
-
+    
     self.toggleSwitch.snp.makeConstraints { make in
       make.trailing.equalToSuperview().inset(16)
       make.centerY.equalToSuperview()
@@ -36,12 +36,20 @@ final class HomeUpcomingCell: BaseCardCell {
       make.height.equalTo(24)
     }
   }
-
+  
   // MARK: - Functions
-
+  
   public func bind(with reminder: Reminder) {
     self.cardCellType = .reminder
+    self.toggleSwitch.isOn = reminder.shouldNotify
     self.title = reminder.name
     self.subtitle = reminder.date.toDday()
+    if let friend = reminder.relatedFriend,
+       let profileUrl = friend.profilePhoto?.remote {
+      guard let url = URL(string: profileUrl) else { return }
+      self.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(profileUrl)))
+    } else {
+      self.imageView.image = nil
+    }
   }
 }

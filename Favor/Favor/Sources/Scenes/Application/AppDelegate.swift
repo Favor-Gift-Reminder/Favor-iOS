@@ -32,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     #if DEBUG
     UserInfoStorage.userNo = 1
     #endif
-    print("Current User: \(UserInfoStorage.userNo)")
+    print("Current User: \(UserInfoStorage.userNo)")    
     
 		return true
 	}

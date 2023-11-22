@@ -105,7 +105,7 @@ final class HomeViewController: BaseViewController, View {
       }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // 스크롤 로드
     let maxTimelines = reactor.state
       .flatMap { state -> Observable<(current: Int, unit: Int)> in

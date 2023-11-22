@@ -140,6 +140,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case .itemSelected(let item):
       if case let Item.upcoming(upcoming) = item {
         guard case let Item.Upcoming.reminder(reminder) = upcoming else { return .empty() }
+        self.steps.accept(AppStep.reminderDetailIsRequired(reminder))
       } else if case let Item.timeline(timeline) = item {
         guard case let Item.Timeline.gift(gift) = timeline else { return .empty() }
         self.steps.accept(AppStep.giftDetailIsRequired(gift))

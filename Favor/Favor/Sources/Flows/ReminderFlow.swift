@@ -116,6 +116,7 @@ private extension ReminderFlow {
   func navigateToReminderDetail(reminder: Reminder) -> FlowContributors {
     let reminderDetailVC = ReminderDetailViewController()
     let reminderDetailReactor = ReminderDetailViewReactor(reminder: reminder)
+    reminderDetailVC.hidesBottomBarWhenPushed = true
     reminderDetailVC.reactor = reminderDetailReactor
     reminderDetailVC.isEditable = false
 

@@ -34,6 +34,13 @@ final class HomeFlow: Flow {
     case .searchIsRequired:
       return self.navigateToSearch()
 
+    case .reminderDetailIsRequired(let reminder):
+      let reminderFlow = ReminderFlow(rootViewController: self.rootViewController)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: reminderFlow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.reminderDetailIsRequired(reminder))
+      ))
+      
     case .reminderIsRequired:
       return self.navigateToReminder()
 

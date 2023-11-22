@@ -44,8 +44,9 @@ final class ReminderCell: BaseCardCell, Reusable, View {
         {
           guard let url = URL(string: urlString) else { return }
           owner.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString)))
+          owner.imageView.isHidden = false
         } else {
-          owner.imageView.image = nil
+          owner.imageView.isHidden = true
         }
       })
       .disposed(by: self.disposeBag)

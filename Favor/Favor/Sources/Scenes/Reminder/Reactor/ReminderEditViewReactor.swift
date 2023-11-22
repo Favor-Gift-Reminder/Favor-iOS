@@ -97,7 +97,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       return .empty()
       
     case .friendSelectorButtonDidTap:
-      if let friend = self.currentState.reminder.relatedFriend {
+      if let friend = self.currentState.currentFriend {
         self.steps.accept(AppStep.friendSelectorIsRequired([friend], viewType: .reminder))
       } else {
         self.steps.accept(AppStep.friendSelectorIsRequired([], viewType: .reminder))
@@ -207,7 +207,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 private extension ReminderEditViewReactor {
   func requestPostReminder() -> Observable<Void> {
     guard let notifyDay = self.currentState.currentNotifyDay,
-          let time = self.currentState.currentAlarmTime,
+          let time = self.currentState.currentAlarmTime?.toUTCDate(false),
           let date = self.currentState.currentDate
     else { return .empty() }
     let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()
@@ -216,7 +216,7 @@ private extension ReminderEditViewReactor {
     let requestDTO = ReminderRequestDTO(
       title: self.currentState.currentTitle,
       reminderDate: date.toDTODateString(),
-      isAlarmSet: self.currentState.shouldNotify,
+      isAlarmSet: true,
       alarmTime: alarmString,
       friendNo: self.currentState.currentFriend?.identifier,
       reminderMemo: self.currentState.currentMemo
@@ -240,7 +240,7 @@ private extension ReminderEditViewReactor {
   
   func requestPatchReminder() -> Observable<Void> {
     guard let notifyDay = self.currentState.currentNotifyDay,
-          let time = self.currentState.currentAlarmTime,
+          let time = self.currentState.currentAlarmTime?.toUTCDate(false),
           let date = self.currentState.currentDate
     else { return .empty() }
     let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()

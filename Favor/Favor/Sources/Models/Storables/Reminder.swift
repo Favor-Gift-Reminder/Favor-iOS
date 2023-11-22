@@ -103,7 +103,7 @@ extension Reminder {
     case shouldNotify(Bool)
     case notifyDate(Date?)
     case relatedFriend(Int)
-
+    
     public var propertyValuePair: PropertyValuePair {
       switch self {
       case .identifier(let identifier):
@@ -127,22 +127,14 @@ extension Reminder {
 
 // MARK: - Hashable
 
-extension Reminder: Hashable, Equatable {
-  public static func == (lhs: Reminder, rhs: Reminder) -> Bool {
-    return lhs.identifier == rhs.identifier
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(self.identifier)
-  }
-}
+extension Reminder: Hashable, Equatable {}
 
 // MARK: - Array Extension
 
 extension Array where Element == Reminder {
   public func sort() -> (future: Self, past: Self) {
     let today = Calendar.current.startOfDay(for: .now)
-    let (future, past) = self.reduce(into: (future: Self(), past: Self())) { result, reminder in
+    var (future, past) = self.reduce(into: (future: Self(), past: Self())) { result, reminder in
       let reminderDate = Calendar.current.startOfDay(for: reminder.date)
       if reminderDate >= today {
         result.future.append(reminder)
@@ -150,6 +142,8 @@ extension Array where Element == Reminder {
         result.past.append(reminder)
       }
     }
+    future.sort { $0.date < $1.date }
+    past.sort { $0.date < $1.date }
 
     return (future: future, past: past)
   }

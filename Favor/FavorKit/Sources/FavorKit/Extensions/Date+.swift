@@ -34,10 +34,17 @@ extension Date {
     formatter.dateFormat = "yyyy. M. d"
     return formatter.string(from: self)
   }
-
+  
   public func toTimeString() -> String {
     let formatter = DateFormatter()
-    formatter.dateFormat = "a hh시 mm분"
+    formatter.locale = Locale(identifier: "ko_KR")
+    formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    let components = Calendar.current.dateComponents([.minute], from: self)
+    if components.minute == 0 {
+      formatter.dateFormat = "a h시"
+    } else {
+      formatter.dateFormat = "a h시 mm분"
+    }
     return formatter.string(from: self)
   }
   
@@ -46,25 +53,25 @@ extension Date {
     formatter.dateFormat = "yyyy"
     return formatter.string(from: self)
   }
-
+  
   public func toMonthString() -> String {
     let formatter = DateFormatter()
     formatter.dateFormat = "M"
     return formatter.string(from: self)
   }
-
+  
   public func toDayString() -> String {
     let formatter = DateFormatter()
     formatter.timeZone = TimeZone(secondsFromGMT: 0)
     formatter.dateFormat = "d"
     return formatter.string(from: self)
   }
-
+  
   public func toDday() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
     dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    let todayDate = dateFormatter.date(from: Date().toDTODateString() ) ?? Date()
+    let todayDate = dateFormatter.date(from: Date().toUTCDate(true).toDTODateString() ) ?? Date()
     let dateComponents = Calendar.current.dateComponents([.day], from: self, to: todayDate)
     guard let days = dateComponents.day else { return "D-Day 계산 실패" }
     let dayDate = self.toDayString()
@@ -88,6 +95,12 @@ extension Date {
     return formatter.string(from: self)
   }
   
+  public func toUTCDate(_ operation: Bool) -> Date {
+    let currentTimeZone = TimeZone.current
+    let delta = TimeInterval(currentTimeZone.secondsFromGMT(for: self))
+    return Date(timeInterval: operation ? +delta : -delta, since: self)
+  }
+  
   /// 리마인더 수정에서 필요한 날짜를
   /// `NotifyDays` 열거형으로 변환하는 메서드입니다.
   ///  - Parameters:
@@ -96,7 +109,7 @@ extension Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
     dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    let alarmDate = dateFormatter.date(from: alarmDate?.toDTODateString() ?? "")
+    let alarmDate = dateFormatter.date(from: alarmDate?.toUTCDate(false).toDTODateString() ?? "")
     let calendar = Calendar.current
     
     // 리마인더의 기념일 날짜와 차이를 구합니다.

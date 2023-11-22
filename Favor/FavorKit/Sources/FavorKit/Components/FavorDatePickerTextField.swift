@@ -13,7 +13,7 @@ import RxSwift
 import SnapKit
 
 public final class FavorDatePickerTextField: UIView {
-
+  
   // MARK: - PROPERTIES
   
   private let disposeBag = DisposeBag()
@@ -23,7 +23,7 @@ public final class FavorDatePickerTextField: UIView {
   /// 1. updateDate
   /// 2. 유저 선택
   fileprivate let date = BehaviorRelay<Date?>(value: nil)
-
+  
   public var pickerMode: UIDatePicker.Mode = .date {
     didSet { self.datePicker.datePickerMode = self.pickerMode }
   }
@@ -84,10 +84,11 @@ public final class FavorDatePickerTextField: UIView {
     let dp = UIDatePicker()
     dp.datePickerMode = .date
     dp.preferredDatePickerStyle = .wheels
+    dp.minuteInterval = 5
     dp.locale = Locale(identifier: "ko_KR")
     return dp
   }()
-
+  
   private lazy var doneButton = UIBarButtonItem(
     title: "완료",
     style: .plain,
@@ -102,7 +103,7 @@ public final class FavorDatePickerTextField: UIView {
     tb.setItems([spacing, self.doneButton], animated: false)
     return tb
   }()
-
+  
   fileprivate lazy var textField: UITextField = {
     let tf = UITextField()
     tf.textColor = .favorColor(.icon)
@@ -151,16 +152,16 @@ public final class FavorDatePickerTextField: UIView {
         owner.isSelected = true
       })
       .disposed(by: self.disposeBag)
-
+    
     self.datePicker.rx.date
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
         if owner.textField.isFirstResponder {
-          owner.date.accept(date)
+          owner.date.accept(date.toUTCDate(true))
         }
       })
       .disposed(by: self.disposeBag)
-
+    
     self.doneButton.rx.tap
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
@@ -220,7 +221,8 @@ extension FavorDatePickerTextField: BaseView {
 private extension FavorDatePickerTextField {
   func popDatePicker() {
     self.textField.becomeFirstResponder()
-    self.datePicker.setDate(self.date.value ?? .now, animated: true)
+    guard let date = self.date.value else { return }
+    self.datePicker.setDate(date.toUTCDate(false), animated: true)
   }
 }
 
