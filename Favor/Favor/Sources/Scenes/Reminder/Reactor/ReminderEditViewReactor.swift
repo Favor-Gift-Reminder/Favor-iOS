@@ -207,7 +207,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
 private extension ReminderEditViewReactor {
   func requestPostReminder() -> Observable<Void> {
     guard let notifyDay = self.currentState.currentNotifyDay,
-          let time = self.currentState.currentAlarmTime?.toUTCDate(false),
+          let time = self.currentState.currentAlarmTime,
           let date = self.currentState.currentDate
     else { return .empty() }
     let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()
@@ -240,7 +240,7 @@ private extension ReminderEditViewReactor {
   
   func requestPatchReminder() -> Observable<Void> {
     guard let notifyDay = self.currentState.currentNotifyDay,
-          let time = self.currentState.currentAlarmTime?.toUTCDate(false),
+          let time = self.currentState.currentAlarmTime,
           let date = self.currentState.currentDate
     else { return .empty() }
     let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()

@@ -22,15 +22,17 @@ extension Date {
     guard let dateWithoutTime = calendar.date(from: dateCommponents) else { return self }
     return dateWithoutTime
   }
-
+  
   public func toDateString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy년 M월 d일"
     return formatter.string(from: self)
   }
-
+  
   public func toShortenDateString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy. M. d"
     return formatter.string(from: self)
   }
@@ -38,7 +40,7 @@ extension Date {
   public func toTimeString() -> String {
     let formatter = DateFormatter()
     formatter.locale = Locale(identifier: "ko_KR")
-    formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     let components = Calendar.current.dateComponents([.minute], from: self)
     if components.minute == 0 {
       formatter.dateFormat = "a h시"
@@ -50,19 +52,21 @@ extension Date {
   
   public func toYearString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy"
     return formatter.string(from: self)
   }
   
   public func toMonthString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "M"
     return formatter.string(from: self)
   }
   
   public func toDayString() -> String {
     let formatter = DateFormatter()
-    formatter.timeZone = TimeZone(secondsFromGMT: 0)
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "d"
     return formatter.string(from: self)
   }
@@ -70,8 +74,8 @@ extension Date {
   public func toDday() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
-    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    let todayDate = dateFormatter.date(from: Date().toUTCDate(true).toDTODateString() ) ?? Date()
+    dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+    let todayDate = dateFormatter.date(from: Date().toDTODateString() ) ?? Date()
     let dateComponents = Calendar.current.dateComponents([.day], from: self, to: todayDate)
     guard let days = dateComponents.day else { return "D-Day 계산 실패" }
     let dayDate = self.toDayString()
@@ -85,20 +89,24 @@ extension Date {
   
   public func toDTODateString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "yyyy-MM-dd"
     return formatter.string(from: self)
   }
   
   public func toDTOTimeString() -> String {
     let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
     formatter.dateFormat = "HH:mm"
     return formatter.string(from: self)
   }
   
-  public func toUTCDate(_ operation: Bool) -> Date {
-    let currentTimeZone = TimeZone.current
-    let delta = TimeInterval(currentTimeZone.secondsFromGMT(for: self))
-    return Date(timeInterval: operation ? +delta : -delta, since: self)
+  public func toUTCDate() -> Date? {
+    let formatter = DateFormatter()
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss +0000"
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    let dateString = formatter.string(from: self)
+    return formatter.date(from: dateString)
   }
   
   /// 리마인더 수정에서 필요한 날짜를
@@ -108,8 +116,8 @@ extension Date {
   public func toNotifyDays(_ alarmDate: Date?) -> NotifyDays {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
-    dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-    let alarmDate = dateFormatter.date(from: alarmDate?.toUTCDate(false).toDTODateString() ?? "")
+    dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+    let alarmDate = dateFormatter.date(from: alarmDate?.toDTODateString() ?? "")
     let calendar = Calendar.current
     
     // 리마인더의 기념일 날짜와 차이를 구합니다.

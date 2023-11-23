@@ -85,6 +85,7 @@ public final class FavorDatePickerTextField: UIView {
     dp.datePickerMode = .date
     dp.preferredDatePickerStyle = .wheels
     dp.minuteInterval = 5
+    dp.timeZone = TimeZone(abbreviation: "UTC")
     dp.locale = Locale(identifier: "ko_KR")
     return dp
   }()
@@ -157,7 +158,7 @@ public final class FavorDatePickerTextField: UIView {
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, date in
         if owner.textField.isFirstResponder {
-          owner.date.accept(date.toUTCDate(true))
+          owner.date.accept(date)
         }
       })
       .disposed(by: self.disposeBag)
@@ -222,7 +223,7 @@ private extension FavorDatePickerTextField {
   func popDatePicker() {
     self.textField.becomeFirstResponder()
     guard let date = self.date.value else { return }
-    self.datePicker.setDate(date.toUTCDate(false), animated: true)
+    self.datePicker.setDate(date, animated: true)
   }
 }
 

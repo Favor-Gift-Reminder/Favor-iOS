@@ -91,8 +91,8 @@ final class ReminderViewReactor: Reactor, Stepper {
       
     case .reminderDidSelected(let item):
       switch item {
-      case .reminder(let reactor):
-        self.steps.accept(AppStep.reminderDetailIsRequired(reactor.currentState.reminderData))
+      case .reminder(let reminder):
+        self.steps.accept(AppStep.reminderDetailIsRequired(reminder))
       }
       return .empty()
 
@@ -176,12 +176,10 @@ private extension ReminderViewReactor {
     let (upcomingReminders, pastReminders) = reminders.sort()
     
     let upcomingItems = upcomingReminders.map { data in
-      let reactor = ReminderCellReactor(reminder: data)
-      return ReminderSection.ReminderSectionItem.reminder(reactor)
+      return ReminderSection.ReminderSectionItem.reminder(data)
     }
     let pastItems = pastReminders.map { data in
-      let reactor = ReminderCellReactor(reminder: data)
-      return ReminderSection.ReminderSectionItem.reminder(reactor)
+      return ReminderSection.ReminderSectionItem.reminder(data)
     }
 
     let upcomingSection = ReminderSection.ReminderSectionModel(

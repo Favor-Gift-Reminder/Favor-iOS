@@ -24,10 +24,10 @@ final class ReminderViewController: BaseViewController, View {
   private lazy var dataSource: ReminderDataSource = ReminderDataSource(
     configureCell: { _, collectionView, indexPath, item in
       switch item {
-      case .reminder(let reactor):
+      case .reminder(let reminder):
         let cell = collectionView.dequeueReusableCell(for: indexPath) as ReminderCell
         cell.cardCellType = .reminder
-        cell.reactor = reactor
+        cell.configure(reminder)
         return cell
       }
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in

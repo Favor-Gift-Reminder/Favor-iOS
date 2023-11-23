@@ -143,7 +143,7 @@ extension Array where Element == Reminder {
       }
     }
     future.sort { $0.date < $1.date }
-    past.sort { $0.date < $1.date }
+    past.sort { $0.date > $1.date }
 
     return (future: future, past: past)
   }

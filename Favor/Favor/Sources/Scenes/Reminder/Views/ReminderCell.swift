@@ -13,7 +13,7 @@ import Reusable
 import RxCocoa
 import SnapKit
 
-final class ReminderCell: BaseCardCell, Reusable, View {
+final class ReminderCell: BaseCardCell, Reusable {
 
   // MARK: - Constants
 
@@ -24,41 +24,37 @@ final class ReminderCell: BaseCardCell, Reusable, View {
   private lazy var toggleSwitch = FavorSwitch()
 
   // MARK: - Binding
-
-  func bind(reactor: ReminderCellReactor) {
-    // Action
-    self.toggleSwitch.rx.tap
-      .map { Reactor.Action.notifySwitchDidTap }
-      .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    // State
-    reactor.state.map { $0.reminderData }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, reminder in
-        owner.title = reminder.name
-        owner.subtitle = reminder.date.toDday()
-        owner.toggleSwitch.isOn = reminder.shouldNotify
-        if let friend = reminder.relatedFriend,
-           let urlString = friend.profilePhoto?.remote
-        {
-          guard let url = URL(string: urlString) else { return }
-          owner.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString)))
-          owner.imageView.isHidden = false
-        } else {
-          owner.imageView.isHidden = true
-        }
-      })
-      .disposed(by: self.disposeBag)
-  }
+  
+//  func bind(reactor: ReminderCellReactor) {
+//    // Action
+//    self.toggleSwitch.rx.tap
+//      .map { Reactor.Action.notifySwitchDidTap }
+//      .bind(to: reactor.action)
+//      .disposed(by: self.disposeBag)
+//  }
 
   // MARK: - Functions
+  
+  func configure(_ reminder: Reminder) {
+    self.title = reminder.name
+    self.subtitle = reminder.date.toDday()
+    self.toggleSwitch.isOn = reminder.shouldNotify
+    if let friend = reminder.relatedFriend,
+       let urlString = friend.profilePhoto?.remote
+    {
+      guard let url = URL(string: urlString) else { return }
+      self.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString)))
+      self.imageView.isHidden = false
+    } else {
+      self.imageView.isHidden = true
+    }
+  }
 
   // MARK: - UI Setups
 
   override func setupLayouts() {
     super.setupLayouts()
-
+    
     self.addSubview(self.toggleSwitch)
   }
 
