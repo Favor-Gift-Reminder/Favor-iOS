@@ -11,7 +11,7 @@ import FavorKit
 import ReactorKit
 import Reusable
 
-final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable, View {
+final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable {
   
   // MARK: - Properties
   
@@ -66,21 +66,19 @@ final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable, View {
   
   // MARK: - Bind
   
-  func bind(reactor: ProfileSetupHelperCellReactor) {
-    // Action
-    self.goButton.rx.tap
-      .asDriver()
-      .drive(with: self) { owner, _ in owner.goButtonHandler?() }
-      .disposed(by: self.disposeBag)
-    
-    // State
-    reactor.state.map { $0.type }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, type in
-        owner.iconImageView.image = type.iconImage
-        owner.descriptionLabel.text = type.description
-      })
-      .disposed(by: self.disposeBag)
+//  func bind(reactor: ProfileSetupHelperCellReactor) {
+//    // Action
+//    self.goButton.rx.tap
+//      .asDriver()
+//      .drive(with: self) { owner, _ in owner.goButtonHandler?() }
+//      .disposed(by: self.disposeBag)
+//  }
+  
+  // MARK: - Configure
+  
+  func configure(with profileHelper: ProfileHelperType) {
+    self.iconImageView.image = profileHelper.iconImage
+    self.descriptionLabel.text = profileHelper.description
   }
 }
 

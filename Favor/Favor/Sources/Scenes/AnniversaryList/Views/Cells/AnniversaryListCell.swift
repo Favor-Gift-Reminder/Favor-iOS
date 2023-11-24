@@ -24,6 +24,7 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
   public enum CellType: Hashable {
     case list
     case edit
+    case friend
 
     public var rightButtonImage: UIImage? {
       switch self {
@@ -31,13 +32,15 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
         return .favorIcon(.pin)
       case .edit:
         return .favorIcon(.edit)
+      case .friend:
+        return .favorIcon(.addnoti)
       }
     }
   }
-
+  
   private enum Metric {
     static let rightButtonSize = 48.0
-    static let rightButtonImageSize = 18.0
+    static let rightButtonImageSize = 22.0
   }
 
   // MARK: - Properties
@@ -48,13 +51,11 @@ public final class AnniversaryListCell: BaseCardCell, Reusable {
 
   // MARK: - UI Components
 
-  fileprivate let rightButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.background.backgroundColor = .clear
-    config.baseForegroundColor = .favorColor(.line2)
-
-    let button = UIButton(configuration: config)
-    button.contentMode = .center
+  fileprivate let rightButton: FavorButton = {
+    let button = FavorButton()
+    button.baseBackgroundColor = .clear
+    button.image = .favorIcon(.addnoti)
+    button.contentInset = .zero
     return button
   }()
 
@@ -118,10 +119,15 @@ private extension AnniversaryListCell {
     let iconColor: UIColor = cellModel.item.isPinned && cellModel.cellType == .list ?
       .favorColor(.icon) :
       .favorColor(.line2)
-    self.rightButton.configuration?.image = cellModel.cellType.rightButtonImage?
-      .withRenderingMode(.alwaysTemplate)
-      .resize(newWidth: Metric.rightButtonImageSize)
-      .withTintColor(iconColor)
+    if cellModel.cellType == .friend {
+      self.rightButton.image = .favorIcon(.addnoti)?
+        .resize(newWidth: Metric.rightButtonImageSize)
+    } else {
+      self.rightButton.image = cellModel.cellType.rightButtonImage?
+        .resize(newWidth: Metric.rightButtonImageSize)
+        .withTintColor(iconColor)
+    }
+    self.imageView.contentMode = .center
     self.image = cellModel.item.category.image
   }
 }

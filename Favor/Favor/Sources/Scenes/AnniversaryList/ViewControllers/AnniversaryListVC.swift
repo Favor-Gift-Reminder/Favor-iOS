@@ -80,6 +80,20 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
         }
       })
       .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.anniversaryListType }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, type in
+        switch type {
+        case .mine:
+          owner.navigationItem.title = "내 기념일"
+        case .friend(let friend):
+          owner.navigationItem.title = "\(friend.friendName)의 기념일"
+          owner.floatyButton.isHidden = true
+          owner.editButton.isHidden = true
+        }
+      }
+      .disposed(by: self.disposeBag)
   }
   
   // MARK: - Functions
@@ -89,21 +103,13 @@ final class AnniversaryListViewController: BaseAnniversaryListViewController, Vi
       let model = model as? AnniversaryListCellModel,
       let reactor = self.reactor
     else { return }
-    reactor.action.onNext(.pinButtonDidTap(model.item))
+    reactor.action.onNext(.rightButtonDidTap(model.item))
   }
   
   // MARK: - UI Setups
   
   override func setupStyles() {
     super.setupStyles()
-    
-    guard let reactor = self.reactor else { return }
-    switch reactor.currentState.anniversaryListType {
-    case .mine:
-      self.navigationItem.title = "내 기념일"
-    case .friend(let friend):
-      self.navigationItem.title = "\(friend.friendName)의 기념일"
-    }
   }
   
   override func setupLayouts() {

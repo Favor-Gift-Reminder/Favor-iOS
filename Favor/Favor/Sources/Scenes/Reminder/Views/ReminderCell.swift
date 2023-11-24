@@ -40,16 +40,16 @@ final class ReminderCell: BaseCardCell, Reusable {
     self.subtitle = reminder.date.toDday()
     self.toggleSwitch.isOn = reminder.shouldNotify
     if let friend = reminder.relatedFriend,
-       let urlString = friend.profilePhoto?.remote
-    {
+       let urlString = friend.profilePhoto?.remote {
       guard let url = URL(string: urlString) else { return }
       self.imageView.setImage(from: url, mapper: .init(friend: friend, subpath: .profilePhoto(urlString)))
+      self.imageView.contentMode = .scaleAspectFill
       self.imageView.isHidden = false
     } else {
       self.imageView.isHidden = true
     }
   }
-
+  
   // MARK: - UI Setups
 
   override func setupLayouts() {

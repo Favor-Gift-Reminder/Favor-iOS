@@ -21,8 +21,10 @@ public class FriendObject: Object {
   @Persisted public var friendID: String
   /// 친구 사진
   @Persisted public var profilePhoto: PhotoObject?
+  /// 친구 백그라운드 사진
+  @Persisted public var backgroundPhoto: PhotoObject?
   /// 친구에 대한 메모
-  @Persisted public var memo: String?
+  @Persisted public var memo: String
   /// 친구가 회원일 경우, 해당 친구의 회원 번호
   @Persisted public var friendUserNo: Int?
   /// 친구의 기념일 목록
@@ -63,7 +65,8 @@ public class FriendObject: Object {
     anniversaryList: [AnniversaryObject] = [],
     favorList: [String] = [],
     profilePhoto: PhotoObject? = nil,
-    memo: String? = nil,
+    backgroundPhoto: PhotoObject? = nil,
+    memo: String,
     friendUserNo: Int? = nil,
     totalGift: Int,
     receivedGift: Int,
@@ -75,6 +78,7 @@ public class FriendObject: Object {
     self.friendName = friendName
     self.friendID = friendID
     self.profilePhoto = profilePhoto
+    self.backgroundPhoto = backgroundPhoto
     self.memo = memo
     self.favorList.insert(objectsIn: favorList)
     let newAnniversaryList = List<AnniversaryObject>()

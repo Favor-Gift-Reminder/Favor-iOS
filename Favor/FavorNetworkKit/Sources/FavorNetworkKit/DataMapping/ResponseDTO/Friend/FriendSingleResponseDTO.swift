@@ -12,15 +12,17 @@ import FavorKit
 public struct FriendSingleResponseDTO: Decodable {
   public let friendNo: Int
   public let friendName: String
-  public let friendId: String
   public let friendMemo: String
-  public let reminderList: [ReminderSingleResponseDTO]
+  public let reminderList: [ReminderResponseDTO]
   public let favorList: [String]
   public let anniversaryList: [AnniversarySingleResponseDTO]
   public let givenGift: Int
   public let receivedGift: Int
   public let totalGift: Int
   public let userNo: Int
+  public let friendId: String
+  public let userPhoto: PhotoResponseDTO?
+  public let userBackgroundPhoto: PhotoResponseDTO?
   
   enum CodingKeys: CodingKey {
     case friendNo
@@ -34,6 +36,8 @@ public struct FriendSingleResponseDTO: Decodable {
     case receivedGift
     case totalGift
     case userNo
+    case userPhoto
+    case userBackgroundPhoto
   }
   
   public init(from decoder: Decoder) throws {
@@ -44,10 +48,12 @@ public struct FriendSingleResponseDTO: Decodable {
     self.friendName = try container.decode(String.self, forKey: .friendName)
     self.friendId = try container.decode(String.self, forKey: .friendId)
     self.friendNo = try container.decode(Int.self, forKey: .friendNo)
-    self.reminderList = try container.decode([ReminderSingleResponseDTO].self, forKey: .reminderList)
+    self.reminderList = try container.decode([ReminderResponseDTO].self, forKey: .reminderList)
     self.userNo = try container.decode(Int.self, forKey: .userNo)
     self.givenGift = try container.decode(Int.self, forKey: .givenGift)
     self.receivedGift = try container.decode(Int.self, forKey: .receivedGift)
     self.totalGift = try container.decode(Int.self, forKey: .totalGift)
+    self.userPhoto = try container.decodeIfPresent(PhotoResponseDTO.self, forKey: .userPhoto)
+    self.userBackgroundPhoto = try container.decodeIfPresent(PhotoResponseDTO.self, forKey: .userBackgroundPhoto)
   }
 }

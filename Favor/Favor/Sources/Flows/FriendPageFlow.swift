@@ -26,7 +26,7 @@ final class FriendPageFlow: Flow {
   
   // MARK: - Functions
   
-  func navigate(to step: Step) -> FlowContributors {
+  @MainActor func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
@@ -45,6 +45,17 @@ final class FriendPageFlow: Flow {
       
     case .anniversaryListIsRequired(let anniversaryListType):
       return self.navigateToAnniversaryList(anniversaryListType)
+      
+    case .friendPageIsComplete:
+      self.rootViewController.popViewController(animated: true)
+      return .end(forwardToParentFlowWithStep: AppStep.doNothing)
+      
+    case let .newReminderIsRequiredWithAnniversary(anniversary, friend):
+      let flow = ReminderFlow(rootViewController: self.rootViewController)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: flow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.newReminderIsRequiredWithAnniversary(anniversary, friend))
+      ))
       
     default:
       return .none

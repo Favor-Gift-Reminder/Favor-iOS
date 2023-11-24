@@ -75,7 +75,7 @@ extension Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
     dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
-    let todayDate = dateFormatter.date(from: Date().toDTODateString() ) ?? Date()
+    let todayDate = dateFormatter.date(from: Date().toDTODateStringWithoutUTC()) ?? Date()
     let dateComponents = Calendar.current.dateComponents([.day], from: self, to: todayDate)
     guard let days = dateComponents.day else { return "D-Day 계산 실패" }
     let dayDate = self.toDayString()
@@ -90,6 +90,12 @@ extension Date {
   public func toDTODateString() -> String {
     let formatter = DateFormatter()
     formatter.timeZone = TimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "yyyy-MM-dd"
+    return formatter.string(from: self)
+  }
+  
+  public func toDTODateStringWithoutUTC() -> String {
+    let formatter = DateFormatter()
     formatter.dateFormat = "yyyy-MM-dd"
     return formatter.string(from: self)
   }

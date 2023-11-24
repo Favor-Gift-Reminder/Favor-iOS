@@ -122,21 +122,21 @@ final class MyPageViewController: BaseProfileViewController, View {
       })
       .disposed(by: self.disposeBag)
     
-    reactor.state.compactMap { $0.backgroundURL }
+    reactor.state.map { $0.backgroundURL ?? "" }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, url in
         let user = owner.reactor?.currentState.user ?? .init()
-        owner.profileView.updateBackgroundImage(url, user: user)
+        owner.profileView.updateBackgroundImage(url, mapper: .init(user: user, subpath: .background(url)))
       }
       .disposed(by: self.disposeBag)
     
-    reactor.state.compactMap { $0.profileURL }
+    reactor.state.map { $0.profileURL ?? "" }
       .distinctUntilChanged()
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, url in
         let user = owner.reactor?.currentState.user ?? .init()
-        owner.profileView.updateProfileImage(url, user: user)
+        owner.profileView.updateProfileImage(url, mapper: .init(user: user, subpath: .profilePhoto(url)))
       }
       .disposed(by: self.disposeBag)
     
@@ -182,7 +182,7 @@ final class MyPageViewController: BaseProfileViewController, View {
   
   /// `ProfileSetup`의 바로가기 버튼을 클릭할 때의 이벤트 메서드입니다.
   override func profileSetupGoButtonDidTap(
-    at type: ProfileSetupHelperCellReactor.ProfileHelperType
+    at type: ProfileHelperType
   ) {
     guard let reactor = self.reactor else { return }
     reactor.action.onNext(.profileSetupCellDidTap(type))

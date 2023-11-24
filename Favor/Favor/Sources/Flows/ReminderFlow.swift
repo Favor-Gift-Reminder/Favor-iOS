@@ -47,13 +47,9 @@ final class ReminderFlow: Flow {
     case .reminderEditIsRequired(let reminder):
       return self.navigateToEditReminder(reminder: reminder)
       
-    case .reminderEditIsComplete:
+    case .reminderEditIsComplete(let message):
       self.rootViewController.popViewController(animated: true)
-      if self.rootViewController.topViewController is ReminderViewController {
-        ToastManager.shared.showNewToast(.init(.reminderAdded))
-      } else {
-        ToastManager.shared.showNewToast(.init(.reminderModifed))
-      }
+      ToastManager.shared.showNewToast(.init(message))
       return .none
 
     case .reminderIsComplete:
@@ -75,6 +71,16 @@ final class ReminderFlow: Flow {
       else { return .none }
       reminderEditVC.reactor?.action.onNext(.friendDidChange(friend))
       return .none
+      
+    case let .newReminderIsRequiredWithAnniversary(anniversary, friend):
+      let reminderEditVC = ReminderEditViewController()
+      let reactor = ReminderEditViewReactor(.newAnniversary, anniversary: anniversary, friend: friend)
+      reminderEditVC.reactor = reactor
+      self.rootViewController.pushViewController(reminderEditVC, animated: true)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: reminderEditVC,
+        withNextStepper: reactor
+      ))
 
     default:
       return .none

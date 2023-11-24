@@ -101,6 +101,21 @@ final class ProfileGiftStatsCollectionHeader: UICollectionReusableView, Reusable
       font: self.buttonFont
     )
   }
+  
+  func configure(with friend: Friend) {
+    self.totalGiftsButton.configuration?.updateAttributedTitle(
+      "\(friend.totalGift)",
+      font: self.buttonFont
+    )
+    self.receivedGiftsButton.configuration?.updateAttributedTitle(
+      "\(friend.receivedGift)",
+      font: self.buttonFont
+    )
+    self.givenGiftsButton.configuration?.updateAttributedTitle(
+      "\(friend.givenGift)",
+      font: self.buttonFont
+    )
+  }
 }
 
 // MARK: - Setup

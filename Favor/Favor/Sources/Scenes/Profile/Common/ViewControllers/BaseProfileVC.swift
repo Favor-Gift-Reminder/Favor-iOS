@@ -35,21 +35,22 @@ public class BaseProfileViewController: BaseViewController {
         case .anniversarySetupHelper:
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversarySetupHelperCell
           return cell
-        case .profileSetupHelper(let reactor):
+        case .profileSetupHelper(let profileHelper):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileSetupHelperCell
-          cell.reactor = reactor
+          cell.configure(with: profileHelper)
           // 바로 가기 버튼의 클로저 로직 입니다.
           cell.goButtonHandler = { [weak self] in
-            self?.profileSetupGoButtonDidTap(at: reactor.currentState.type)
+            self?.profileSetupGoButtonDidTap(at: profileHelper)
           }
           return cell
         case .favors(let favor):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileFavorCell
           cell.updateFavor(favor)
           return cell
-        case .anniversaries(let reactor):
+        case let .anniversaries(anniversary, isMine):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileAnniversaryCell
-          cell.reactor = reactor
+          cell.configure(with: anniversary, isMine: isMine)
+          cell.rightButtonDidTap = { self.rightButtonDidTap(anniversary: $0) }
           return cell
         case .memo(let memo):
           let cell = collectionView.dequeueReusableCell(for: indexPath) as ProfileMemoCell
@@ -212,7 +213,8 @@ public class BaseProfileViewController: BaseViewController {
   
   public func injectReactor(to view: UICollectionReusableView) { }
   func headerRightButtonDidTap(at section: ProfileSection) { }
-  func profileSetupGoButtonDidTap(at type: ProfileSetupHelperCellReactor.ProfileHelperType) { }
+  func rightButtonDidTap(anniversary: Anniversary) { }
+  func profileSetupGoButtonDidTap(at type: ProfileHelperType) { }
 
   // MARK: - UI Setups
 

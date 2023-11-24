@@ -18,7 +18,8 @@ public struct Friend: Storable, Receivable {
   public var friendName: String
   public var friendID: String
   public var profilePhoto: Photo?
-  public var memo: String?
+  public var backgroundPhoto: Photo?
+  public var memo: String
   public var anniversaryList: [Anniversary]
   public var favorList: [Favor]
   public let totalGift: Int
@@ -37,6 +38,9 @@ public struct Friend: Storable, Receivable {
     if let photoObject = realmObject.profilePhoto {
       self.profilePhoto = Photo(realmObject: photoObject)
     }
+    if let backgroundObject = realmObject.backgroundPhoto {
+      self.backgroundPhoto = Photo(realmObject: backgroundObject)
+    }
     self.memo = realmObject.memo
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
@@ -53,6 +57,7 @@ public struct Friend: Storable, Receivable {
       anniversaryList: self.anniversaryList.compactMap { $0.realmObject() },
       favorList: self.favorList.compactMap { $0.rawValue },
       profilePhoto: self.profilePhoto?.realmObject(),
+      backgroundPhoto: self.backgroundPhoto?.realmObject(),
       memo: self.memo,
       totalGift: self.totalGift,
       receivedGift: self.receivedGift,
@@ -87,6 +92,12 @@ public struct Friend: Storable, Receivable {
     self.receivedGift = singleDTO.receivedGift
     self.givenGift = singleDTO.givenGift
     self.friendID = singleDTO.friendId
+    if let userPhoto = singleDTO.userPhoto {
+      self.profilePhoto = Photo(singleDTO: userPhoto)
+    }
+    if let backgroundPhoto = singleDTO.userBackgroundPhoto {
+      self.backgroundPhoto = Photo(singleDTO: backgroundPhoto)
+    }
   }
   
   // MARK: - Mock
@@ -104,6 +115,7 @@ public struct Friend: Storable, Receivable {
     self.givenGift = 0
     self.totalGift = 0
     self.receivedGift = 0
+    self.memo = ""
   }
   
   /// 비회원 친구 구조체를 생성합니다.
@@ -117,6 +129,7 @@ public struct Friend: Storable, Receivable {
     self.givenGift = 0
     self.totalGift = 0 
     self.receivedGift = 0
+    self.memo = ""
   }
 }
 

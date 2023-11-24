@@ -100,16 +100,19 @@ final class ReminderEditViewController: BaseReminderViewController, View {
     
     // State
     reactor.state.map { (type: $0.type, reminder: $0.reminder) }
-      .filter { $0.type == .edit }
-      .map { $0.reminder }
+      .filter { !($0.type == .new) }
       .take(1)
       .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, reminder in
+      .drive(with: self, onNext: { owner, reminderData in
+        let reminder = reminderData.reminder
+        let type = reminderData.type
         owner.titleTextField.rx.text.onNext(reminder.name)
         owner.dateSelectorTextField.updateDate(reminder.date)
-        owner.notifyDateSelectorButton.title = reminder.date.toNotifyDays(reminder.notifyDate).stringValue
-        owner.notifyDateSelectorButton.isSelected = true
-        owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
+        if type == .edit {
+          owner.notifyDateSelectorButton.title = reminder.date.toNotifyDays(reminder.notifyDate).stringValue
+          owner.notifyDateSelectorButton.isSelected = true
+          owner.notifyTimeSelectorTextField.updateDate(reminder.notifyDate)
+        }
         if let friendName = reminder.relatedFriend?.friendName {
           owner.friendSelectorButton.updateButtonState(.favorColor(.icon), title: friendName)
         }

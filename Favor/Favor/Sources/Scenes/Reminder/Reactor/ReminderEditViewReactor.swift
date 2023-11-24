@@ -18,7 +18,9 @@ final class ReminderEditViewReactor: Reactor, Stepper {
   // MARK: - Constatns
   
   public enum EditType {
-    case edit, new
+    case edit
+    case new
+    case newAnniversary
   }
   
   // MARK: - Properties
@@ -81,6 +83,20 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     )
   }
   
+  init(_ type: EditType = .newAnniversary, anniversary: Anniversary, friend: Friend) {
+    var reminder = Reminder()
+    reminder.name = anniversary.name
+    reminder.relatedFriend = friend
+    reminder.date = anniversary.date
+    self.initialState = State(
+      type: type,
+      reminder: reminder,
+      currentFriend: reminder.relatedFriend,
+      currentTitle: reminder.name,
+      currentDate: reminder.date
+    )
+  }
+
   /// type이 `.new`일 경우 사용합니다.
   init(_ type: EditType = .new) {
     self.initialState = State(
@@ -108,7 +124,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       if self.currentState.type == .edit {
         return self.requestPatchReminder()
           .flatMap { _ -> Observable<Mutation> in
-            let message: ToastMessage = .reminderAdded
+            let message: ToastMessage = .reminderModifed
             // 현재 페이지를 종료합니다.
             self.steps.accept(AppStep.reminderEditIsComplete(message))
             return .empty()

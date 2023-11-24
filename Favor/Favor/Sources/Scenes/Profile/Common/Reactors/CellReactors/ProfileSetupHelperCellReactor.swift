@@ -13,23 +13,7 @@ final class ProfileSetupHelperCellReactor: Reactor {
 
   // MARK: - Constants
 
-  public enum ProfileHelperType {
-    case favor, anniversary
 
-    public var iconImage: UIImage? {
-      switch self {
-      case .favor: return .favorIcon(.favor)
-      case .anniversary: return .favorIcon(.favor)
-      }
-    }
-    
-    public var description: String {
-      switch self {
-      case .favor: return "5가지 취향 키워드를 등록해보세요."
-      case .anniversary: return "공유하고 싶은 기념일을 등록해보세요."
-      }
-    }
-  }
   
   // MARK: - Properties
   

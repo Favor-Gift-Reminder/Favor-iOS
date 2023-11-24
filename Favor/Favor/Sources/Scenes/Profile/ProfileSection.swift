@@ -16,13 +16,31 @@ enum ProfileElementKind {
   static let sectionWhiteBackground = "Profile.SectionWhiteBackground"
 }
 
+enum ProfileHelperType {
+  case favor, anniversary
+
+  public var iconImage: UIImage? {
+    switch self {
+    case .favor: return .favorIcon(.favor)
+    case .anniversary: return .favorIcon(.favor)
+    }
+  }
+  
+  public var description: String {
+    switch self {
+    case .favor: return "5가지 취향 키워드를 등록해보세요."
+    case .anniversary: return "공유하고 싶은 기념일을 등록해보세요."
+    }
+  }
+}
+
 // MARK: - Item
 
 enum ProfileSectionItem: ComposableItem {
-  case profileSetupHelper(ProfileSetupHelperCellReactor)
+  case profileSetupHelper(ProfileHelperType)
   case anniversarySetupHelper
   case favors(Favor)
-  case anniversaries(ProfileAnniversaryCellReactor)
+  case anniversaries(Anniversary, isMine: Bool)
   case memo(String?)
   case friends(Friend)
 }
@@ -36,44 +54,6 @@ enum ProfileSection: ComposableSection {
   case anniversaries
   case memo
   case friends
-}
-
-// MARK: - Hashable
-
-extension ProfileSectionItem {
-  static func == (lhs: ProfileSectionItem, rhs: ProfileSectionItem) -> Bool {
-    switch (lhs, rhs) {
-    case let (.profileSetupHelper(lhsValue), .profileSetupHelper(rhsValue)):
-      return lhsValue === rhsValue
-    case let (.favors(lhsValue), .favors(rhsValue)):
-      return lhsValue == rhsValue
-    case let (.anniversaries(lhsValue), .anniversaries(rhsValue)):
-      return lhsValue === rhsValue
-    case (.memo, .memo):
-      return true
-    case let (.friends(lhsValue), .friends(rhsValue)):
-      return lhsValue == rhsValue
-    default:
-      return false
-    }
-  }
-  
-  func hash(into hasher: inout Hasher) {
-    switch self {
-    case let .profileSetupHelper(reactor):
-      hasher.combine(ObjectIdentifier(reactor))
-    case let .favors(favor):
-      hasher.combine(favor.rawValue)
-    case let .anniversaries(reactor):
-      hasher.combine(ObjectIdentifier(reactor))
-    case .memo(let memo):
-      hasher.combine(memo)
-    case let .friends(friend):
-      hasher.combine(friend)
-    default:
-      break
-    }
-  }
 }
 
 // MARK: - Properties

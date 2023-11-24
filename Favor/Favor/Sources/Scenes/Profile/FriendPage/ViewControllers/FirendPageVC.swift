@@ -19,31 +19,30 @@ final class FriendPageViewController: BaseProfileViewController, View {
   
   private let moreButton: UIButton = UIButton().then {
     var config = UIButton.Configuration.plain()
-    config.image = .favorIcon(.more)
+    config.image = .favorIcon(.more)?.withTintColor(.white)
     $0.configuration = config
   }
   
-  // MARK: - Properties
-  
-  /// 유저가 유저인지 판별해주는 계산 프로퍼티입니다.
-  private var isUser: Bool {
-    guard let reactor = self.reactor else { return false }
-    return true
-  }
+  private let backButton: FavorButton = {
+    let button = FavorButton(image: .favorIcon(.left)?.withTintColor(.white))
+    button.baseForegroundColor = .white
+    button.baseBackgroundColor = .clear
+    button.contentInset = .zero
+    return button
+  }()
   
   // MARK: - Setup
   
   override func setupStyles() {
     super.setupStyles()
     
-    if !self.isUser {
-      self.profileView.idLabel.isHidden = true
-      self.profileView.nameLabel.textColor = .favorColor(.black)
-    }
+    self.setupNavigationBar()
   }
   
   private func setupNavigationBar() {
-    self.navigationItem.rightBarButtonItem = self.moreButton.toBarButtonItem()
+    self.navigationItem.setRightBarButton(self.moreButton.toBarButtonItem(), animated: true)
+    self.navigationItem.setLeftBarButton(self.backButton.toBarButtonItem(), animated: true)
+    self.navigationItem.setHidesBackButton(true, animated: true)
   }
   
   // MARK: - Bind
@@ -55,6 +54,11 @@ final class FriendPageViewController: BaseProfileViewController, View {
     Observable.combineLatest(self.rx.viewDidLoad, self.rx.viewWillAppear)
       .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
       .map { _ in FriendPageViewReactor.Action.viewNeedsLoaded }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
+    self.backButton.rx.tap
+      .map { Reactor.Action.backButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
@@ -79,12 +83,43 @@ final class FriendPageViewController: BaseProfileViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
-    // MARK: - State
+    // State
     
     reactor.state.map { $0.friend.friendName }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self) { owner, name in
         owner.profileView.rx.name.onNext(name)
+      }
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.friend.friendID }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, id in
+        owner.profileView.rx.id.onNext(id)
+      }
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.friend.profilePhoto?.remote ?? "" }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, url in
+        let friend = reactor.currentState.friend
+        owner.profileView.updateProfileImage(
+          url,
+          mapper: .init(friend: friend, subpath: .profilePhoto(url))
+        )
+      }
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.friend.backgroundPhoto?.remote ?? "" }
+      .distinctUntilChanged()
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, url in
+        let friend = reactor.currentState.friend
+        owner.profileView.updateBackgroundImage(
+          url,
+          mapper: .init(friend: friend, subpath: .background(url))
+        )
       }
       .disposed(by: self.disposeBag)
     
@@ -95,6 +130,9 @@ final class FriendPageViewController: BaseProfileViewController, View {
         snapShot.appendSections(sectionData.sections)
         sectionData.items.enumerated().forEach { idx, items in
           snapShot.appendItems(items, toSection: sectionData.sections[idx])
+        }
+        if let header = self.giftStatsHeader {
+          header.configure(with: reactor.currentState.friend)
         }
         owner.dataSource.apply(snapShot)
       }
@@ -116,6 +154,12 @@ final class FriendPageViewController: BaseProfileViewController, View {
     }
   }
   
+  override func rightButtonDidTap(anniversary: Anniversary) {
+    super.rightButtonDidTap(anniversary: anniversary)
+    
+    self.reactor?.action.onNext(.addnotiButtonDidTap(anniversary))
+  }
+  
   override func injectReactor(to view: UICollectionReusableView) {
     guard
       let view = view as? ProfileGiftStatsCollectionHeader,
@@ -125,6 +169,7 @@ final class FriendPageViewController: BaseProfileViewController, View {
   }
   
   func memoBottomSheetCompletion(memo: String?) {
+    guard let memo = memo else { return }
     self.reactor?.action.onNext(.memoDidChange(memo))
   }
 }

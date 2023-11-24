@@ -25,9 +25,11 @@ final class FriendPageViewReactor: Reactor, Stepper {
     case viewNeedsLoaded
     case doNothing
     case modfiyMemeButtonDidTap
+    case addnotiButtonDidTap(Anniversary)
     case anniversarySetupHelperCellDidTap
-    case memoDidChange(String?)
+    case memoDidChange(String)
     case moreAnniversaryDidTap
+    case backButtonDidTap
   }
   
   enum Mutation {
@@ -63,7 +65,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
             .just(.setFriend(friend))
           ])
         }
-
+      
     case .modfiyMemeButtonDidTap:
       self.steps.accept(AppStep.memoBottomSheetIsRequired(self.currentState.friend.memo))
       return .empty()
@@ -87,8 +89,16 @@ final class FriendPageViewReactor: Reactor, Stepper {
           }
       ])
       
+    case .backButtonDidTap:
+      self.steps.accept(AppStep.friendPageIsComplete)
+      return .empty()
+      
     case .moreAnniversaryDidTap:
       self.steps.accept(AppStep.anniversaryListIsRequired(.friend(friend: self.currentState.friend)))
+      return .empty()
+      
+    case .addnotiButtonDidTap(let anniversary):
+      self.steps.accept(AppStep.newReminderIsRequiredWithAnniversary(anniversary, self.currentState.friend))
       return .empty()
       
     case .doNothing:
@@ -125,9 +135,8 @@ final class FriendPageViewReactor: Reactor, Stepper {
       // 기념일
       if !state.friend.anniversaryList.isEmpty {
         newSection.append(.anniversaries)
-        // TODO: 고정된 기념일이 없으면 최근 3개 or 고정된 기념일 보여주기
-        newItems.append(state.friend.anniversaryList
-          .map { ProfileSectionItem.anniversaries(.init(anniversary: $0)) }
+        newItems.append(state.friend.anniversaryList.sort()
+          .map { ProfileSectionItem.anniversaries($0, isMine: false) }
           .prefix(3)
           .wrap()
         )
@@ -151,8 +160,8 @@ private extension FriendPageViewReactor {
     self.friendGetFetcher.onRemote = {
       let networking = FriendNetworking()
       return networking.request(.getFriend(friendNo: self.currentState.friend.identifier))
-        .flatMap { response -> Observable<[Friend]> in
-          let responseDTO: ResponseDTO<FriendSingleResponseDTO> = try APIManager.decode(response.data)
+        .map(ResponseDTO<FriendSingleResponseDTO>.self)
+        .flatMap { responseDTO -> Observable<[Friend]> in
           return .just([Friend(singleDTO: responseDTO.data)])
         }
         .asSingle()

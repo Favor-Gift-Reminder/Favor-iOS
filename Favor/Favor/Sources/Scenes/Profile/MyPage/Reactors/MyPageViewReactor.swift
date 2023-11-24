@@ -29,7 +29,7 @@ final class MyPageViewReactor: Reactor, Stepper {
     case settingButtonDidTap
     case headerRightButtonDidTap(ProfileSection)
     case newFriendCellDidTap
-    case profileSetupCellDidTap(ProfileSetupHelperCellReactor.ProfileHelperType)
+    case profileSetupCellDidTap(ProfileHelperType)
     case friendCellDidTap(Friend)
     case doNothing
   }
@@ -166,10 +166,8 @@ final class MyPageViewReactor: Reactor, Stepper {
       newState.favorItems = favorSection
       
     case .updateAnniversarySection(let anniversaries):
-      let anniversaries =
-      anniversaries.reversed().filter { $0.isPinned } + anniversaries.reversed().filter { !$0.isPinned }
-      let anniversarySection = anniversaries.map { anniversary -> ProfileSectionItem in
-        return .anniversaries(ProfileAnniversaryCellReactor(anniversary: anniversary))
+      let anniversarySection = anniversaries.sort().map { anniversary -> ProfileSectionItem in
+        return .anniversaries(anniversary, isMine: true)
       }
       newState.anniversaryItems = anniversarySection
       
@@ -198,14 +196,14 @@ final class MyPageViewReactor: Reactor, Stepper {
         newSections.append(.favors)
         newItems.append(state.favorItems)
       } else {
-        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.favor)))
+        profileSetupHelperItems.append(.profileSetupHelper(.favor))
       }
       // 기념일
       if !state.anniversaryItems.isEmpty {
         newSections.append(.anniversaries)
         newItems.append(state.anniversaryItems.prefix(3).wrap())
       } else {
-        profileSetupHelperItems.append(.profileSetupHelper(ProfileSetupHelperCellReactor(.anniversary)))
+        profileSetupHelperItems.append(.profileSetupHelper(.anniversary))
       }
       // 친구
       newSections.append(.friends)

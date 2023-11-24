@@ -118,9 +118,8 @@ extension Anniversary: Hashable {
 extension Array where Element == Anniversary {
   /// 기념일 배열을 등록순으로 정렬합니다.
   public func sort() -> Self {
-    let anniversaries = Array(self.reversed())
-    let pinnedAnniversaries = anniversaries.filter { $0.isPinned }
-    let normalAnniversaries = anniversaries.filter { !$0.isPinned }
+    let pinnedAnniversaries = self.reversed().filter { $0.isPinned }
+    let normalAnniversaries = self.filter { !$0.isPinned }
     
     return pinnedAnniversaries + normalAnniversaries
   }

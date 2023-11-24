@@ -12,7 +12,7 @@ extension UIImage {
   public enum FavorIcon: String {
     case add
     case addFriend
-    case addNoti
+    case addnoti
     case baby
     case check
     case checkFilled

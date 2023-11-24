@@ -45,7 +45,7 @@ final class ReminderViewController: BaseViewController, View {
   
   private let newReminderButton: UIButton = {
     var config = UIButton.Configuration.plain()
-    config.image = .favorIcon(.addNoti)
+    config.image = .favorIcon(.addnoti)
     let button = UIButton(configuration: config)
     return button
   }()

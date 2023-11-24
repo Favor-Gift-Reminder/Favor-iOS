@@ -25,7 +25,7 @@ final class AnniversaryFlow: Flow {
 
   // MARK: - Navigate
   
-  func navigate(to step: Step) -> FlowContributors {
+  @MainActor func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
@@ -46,6 +46,15 @@ final class AnniversaryFlow: Flow {
 
     case .anniversaryListIsComplete:
       return self.popFromAnniversaryList()
+      
+    case let .newReminderIsRequiredWithAnniversary(anniversary, friend):
+      let flow = ReminderFlow(rootViewController: self.rootViewController)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: flow,
+        withNextStepper: OneStepper(
+          withSingleStep: AppStep.newReminderIsRequiredWithAnniversary(anniversary, friend)
+        )
+      ))
       
     default:
       return .none

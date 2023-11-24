@@ -11,11 +11,13 @@ import FavorKit
 import ReactorKit
 import Reusable
 
-class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
+class ProfileAnniversaryCell: UICollectionViewCell, Reusable {
   
   // MARK: - Properties
   
   var disposeBag = DisposeBag()
+  var anniversary: Anniversary?
+  var rightButtonDidTap: ((Anniversary) -> Void)?
   
   // MARK: - UI Components
   
@@ -45,6 +47,18 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
     return label
   }()
   
+  private lazy var rightButton: FavorButton = {
+    let button = FavorButton()
+    button.baseBackgroundColor = .clear
+    button.contentInset = .zero
+    let action = UIAction { [weak self] _ in
+      guard let anniversary = self?.anniversary else { return }
+      self?.rightButtonDidTap?(anniversary)
+    }
+    button.addAction(action, for: .touchUpInside)
+    return button
+  }()
+  
   private lazy var vStack: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
@@ -71,20 +85,15 @@ class ProfileAnniversaryCell: UICollectionViewCell, Reusable, View {
     fatalError("init(coder:) has not been implemented")
   }
   
-  // MARK: - Bind
+  // MARK: - Configure
   
-  func bind(reactor: ProfileAnniversaryCellReactor) {
-    // Action
-    
-    // State
-    reactor.state.map { $0.anniversary }
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, anniversary in
-        owner.titleLabel.text = anniversary.name
-        owner.dateLabel.text = anniversary.date.toShortenDateString()
-        owner.iconImageView.image = anniversary.category.image?.resize(newWidth: 36.0)
-      })
-      .disposed(by: self.disposeBag)
+  func configure(with anniversary: Anniversary, isMine: Bool) {
+    self.titleLabel.text = anniversary.name
+    self.dateLabel.text = anniversary.date.toShortenDateString()
+    self.iconImageView.image = anniversary.category.image?.resize(newWidth: 36.0)
+    self.rightButton.isHidden = isMine
+    self.rightButton.image = .favorIcon(.addnoti)
+    self.anniversary = anniversary
   }
 }
 
@@ -100,7 +109,8 @@ extension ProfileAnniversaryCell: BaseView {
   func setupLayouts() {
     [
       self.iconImageView,
-      self.vStack
+      self.vStack,
+      self.rightButton
     ].forEach {
       self.addSubview($0)
     }
@@ -115,6 +125,12 @@ extension ProfileAnniversaryCell: BaseView {
     self.vStack.snp.makeConstraints { make in
       make.leading.equalTo(self.iconImageView.snp.trailing).offset(16)
       make.centerY.equalToSuperview()
+    }
+    
+    self.rightButton.snp.makeConstraints { make in
+      make.right.equalToSuperview().inset(29)
+      make.centerY.equalToSuperview()
+      make.width.height.equalTo(22.0)
     }
   }
 }

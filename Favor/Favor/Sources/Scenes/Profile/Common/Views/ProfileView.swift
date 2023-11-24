@@ -29,19 +29,19 @@ public final class ProfileView: UIView {
     return imageView
   }()
 
-//  fileprivate let profileImageButton: UIButton = {
-//    var config = UIButton.Configuration.filled()
-//    config.baseBackgroundColor = .favorColor(.line3)
-//    config.baseForegroundColor = .favorColor(.white)
-//    config.image = .favorIcon(.friend)?
-//      .withRenderingMode(.alwaysTemplate)
-//      .resize(newWidth: 30)
-//      .withTintColor(.favorColor(.white))
-//    config.background.cornerRadius = 30
-//
-//    let button = UIButton(configuration: config)
-//    return button
-//  }()
+  fileprivate let profileImageButton: UIButton = {
+    var config = UIButton.Configuration.filled()
+    config.baseBackgroundColor = .favorColor(.line3)
+    config.baseForegroundColor = .favorColor(.white)
+    config.image = .favorIcon(.friend)?
+      .withRenderingMode(.alwaysTemplate)
+      .resize(newWidth: 30)
+      .withTintColor(.favorColor(.white))
+    config.background.cornerRadius = 30
+
+    let button = UIButton(configuration: config)
+    return button
+  }()
   
   private let profileImageView: UIImageView = {
     let imageView = UIImageView()
@@ -100,26 +100,21 @@ public final class ProfileView: UIView {
     self.idLabel.text = "@\(id)"
   }
   
-  func updateBackgroundImage(_ urlString: String, user: User) {
+  func updateBackgroundImage(_ urlString: String, mapper: CacheKeyMapper) {
     if let url = URL(string: urlString) {
-      self.backgroundImageView.setImage(from: url, mapper: .init(user: user, subpath: .background(urlString)))
+      self.backgroundImageView.setImage(from: url, mapper: mapper)
     } else {
       let url = URL(string: "https://picsum.photos/1200/1200")!
-      self.backgroundImageView.setImage(from: url, mapper: CacheKeyMapper(
-        user: User(),
-        subpath: .background("https://picsum.photos/1200/1200")
-      ))
+      self.backgroundImageView.kf.setImage(with: url)
     }
   }
   
-  func updateProfileImage(_ urlString: String, user: User) {
+  func updateProfileImage(_ urlString: String, mapper: CacheKeyMapper) {
     if let url = URL(string: urlString) {
-      self.profileImageView.setImage(from: url, mapper: .init(user: user, subpath: .profilePhoto(urlString)))
+      self.profileImageView.setImage(from: url, mapper: mapper)
+      self.profileImageButton.isHidden = true
     } else {
-      self.profileImageView.image = .favorIcon(.friend)?
-        .withRenderingMode(.alwaysTemplate)
-        .resize(newWidth: 30)
-        .withTintColor(.favorColor(.white))
+      self.profileImageButton.isHidden = false
     }
   }
   
@@ -145,6 +140,7 @@ extension ProfileView: BaseView {
     [
       self.backgroundImageView,
       self.profileImageView,
+      self.profileImageButton,
       self.profileStackView
     ].forEach {
       self.addSubview($0)
@@ -167,6 +163,10 @@ extension ProfileView: BaseView {
       make.leading.equalToSuperview().inset(20)
       make.bottom.equalToSuperview().inset(60)
       make.width.height.equalTo(60)
+    }
+    
+    self.profileImageButton.snp.makeConstraints { make in
+      make.edges.equalTo(self.profileImageView)
     }
     
     self.profileStackView.snp.makeConstraints { make in

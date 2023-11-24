@@ -49,6 +49,7 @@ enum AppStep: Step {
   case reminderIsRequired
   case reminderIsComplete
   case newReminderIsRequired
+  case newReminderIsRequiredWithAnniversary(Anniversary, Friend)
   case reminderDetailIsRequired(Reminder)
   case reminderDetailIsComplete
   case reminderEditIsRequired(Reminder)
@@ -72,6 +73,7 @@ enum AppStep: Step {
   case friendManagementIsRequired(FriendManagementViewController.ViewControllerType)
   case friendManagementIsComplete(String)
   case friendPageIsRequired(Friend)
+  case friendPageIsComplete
   
   // MARK: - AnniversaryList
   case anniversaryListIsRequired(AnniversaryListType)
