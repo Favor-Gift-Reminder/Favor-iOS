@@ -141,7 +141,7 @@ extension MyPageFlow {
     ))
   }
   
-  private func navigateToImagePicker(_ pickerManager: PHPickerManager) -> FlowContributors {
+  private func navigateToImagePicker(_ pickerManager: PickerManager) -> FlowContributors {
     pickerManager.present(selectionLimit: 1)
     
     return .none

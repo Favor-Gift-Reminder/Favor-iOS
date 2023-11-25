@@ -24,7 +24,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
   var initialState: State
   var steps = PublishRelay<Step>()
   private let workBench = RealmWorkbench()
-  private var pickerManager: PHPickerManager?
+  private var pickerManager: PickerManager?
   
   enum Action {
     /// 화면 최초 접속
@@ -158,7 +158,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       
     case let .photoDidSelected(item):
       if case Item.photo(let image) = item, image == nil {
-        let pickerManager = PHPickerManager()
+        let pickerManager = PickerManager()
         self.pickerManager = pickerManager
         let selectionLimit = 5 - self.currentState.imageList.count
         // 사진 선택은 5개까지가 최대입니다.

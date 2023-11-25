@@ -1,5 +1,5 @@
 //
-//  PHPickerManager.swift
+//  PickerManager.swift
 //  Favor
 //
 //  Created by 이창준 on 2023/01/18.
@@ -7,33 +7,30 @@
 
 import OSLog
 import PhotosUI
-import UniformTypeIdentifiers
 
-import RxSwift
-
-public protocol PHPickerManagerDelegate: AnyObject {
+public protocol PickerManagerDelegate: AnyObject {
   func pickerManager(didFinishPicking image: UIImage?)
 }
 
-public final class PHPickerManager {
+public final class PickerManager: NSObject, UINavigationControllerDelegate {
   public typealias Selections = [String: PHPickerResult]
   
   // MARK: - Properties
   
-  public weak var delegate: PHPickerManagerDelegate?
+  public weak var delegate: PickerManagerDelegate?
   private var selections: Selections = [:]
   private var selectedAssetIdentifiers: [String] = []
   
   // MARK: - Initializer
   
-  public init() {}
+  public override init() {}
   
   // MARK: - Functions
   
   /// PHPickerViewController를 VC에 `present`합니다.
   ///
   /// VC는 PHPickerManager를 초기화할 때 지정해줄 수 있습니다.
-  public  func present(
+  public func present(
     filter: PHPickerFilter = .images,
     selectionLimit: Int,
     completion: (() -> Void)? = nil
@@ -48,7 +45,7 @@ public final class PHPickerManager {
     let picker = PHPickerViewController(configuration: config)
     picker.modalPresentationStyle = .overFullScreen
     picker.delegate = self
-    self.delegate = UIApplication.shared.topViewController() as? PHPickerManagerDelegate
+    self.delegate = UIApplication.shared.topViewController() as? PickerManagerDelegate
     UIApplication.shared.topViewController()?.present(picker, animated: true) {
       if let completion {
         completion()
@@ -79,7 +76,17 @@ public final class PHPickerManager {
   }
 }
 
-extension PHPickerManager: PHPickerViewControllerDelegate {
+//extension PickerManager: YPImagePickerDelegate {
+//  public func imagePickerHasNoItemsInLibrary(_ picker: YPImagePicker) {
+//    
+//  }
+//  
+//  public func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
+//    return true
+//  }
+//}
+
+extension PickerManager: PHPickerViewControllerDelegate {
   public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
     Task {
       for result in results {

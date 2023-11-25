@@ -177,8 +177,8 @@ extension Friend: Hashable {}
 
 extension FavorKit.CacheKeyMapper {
   public enum FriendSubpath {
-    case background(String)
-    case profilePhoto(String)
+    case background(String?)
+    case profilePhoto(String?)
     
     var rawValue: String {
       switch self {
@@ -192,9 +192,9 @@ extension FavorKit.CacheKeyMapper {
     var remote: String {
       switch self {
       case .background(let url):
-        return url
+        return url ?? ""
       case .profilePhoto(let url):
-        return url
+        return url ?? ""
       }
     }
   }
@@ -202,6 +202,7 @@ extension FavorKit.CacheKeyMapper {
   public init(friend: Friend, subpath: FriendSubpath) {
     let key: String = "friend/\(friend.identifier)/\(subpath.rawValue)/\(subpath.remote)"
     var mapper = CacheKeyMapper(key: key, cacheType: .memory)
+    mapper.url = subpath.remote
     switch subpath {
     case .background:
       mapper.preferredSize = ImageCacheManager.Metric.bannerSize

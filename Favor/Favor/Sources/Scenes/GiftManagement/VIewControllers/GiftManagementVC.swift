@@ -481,7 +481,7 @@ extension GiftManagementViewController: GiftManagementPinCellDelegate {
 
 // MARK: - PHPickerViewController
 
-extension GiftManagementViewController: PHPickerManagerDelegate {
+extension GiftManagementViewController: PickerManagerDelegate {
   func pickerManager(didFinishPicking image: UIImage?) {
     self.reactor?.action.onNext(.photoDidAdd(image))
   }

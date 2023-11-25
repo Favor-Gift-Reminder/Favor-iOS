@@ -27,7 +27,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
   var initialState: State
   var steps = PublishRelay<Step>()
   private let workBench = RealmWorkbench()
-  private var pickerManager: PHPickerManager?
+  private var pickerManager: PickerManager?
 
   enum Action {
     case viewNeedsLoaded
@@ -98,7 +98,7 @@ final class EditMyPageViewReactor: Reactor, Stepper {
       }
       
     case .profileHeaderDidTap(let imageType):
-      let pickerManager = PHPickerManager()
+      let pickerManager = PickerManager()
       self.pickerManager = pickerManager
       self.steps.accept(AppStep.imagePickerIsRequired(pickerManager, selectionLimit: 1))
       return .just(.updateImageType(imageType))

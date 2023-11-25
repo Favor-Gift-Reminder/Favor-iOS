@@ -123,7 +123,7 @@ enum AppStep: Step {
   case alertPopupIsComplete(isConfirmed: Bool)
   
   // MARK: - ImagePicker
-  case imagePickerIsRequired(PHPickerManager, selectionLimit: Int)
+  case imagePickerIsRequired(PickerManager, selectionLimit: Int)
   case imagePickerIsComplete
 
   // MARK: - Placeholder

@@ -38,7 +38,7 @@ public class FavorProfilePhotoView: UIView {
   }
   
   public var baseBackgroundColor: UIColor = .favorColor(.line3) {
-    willSet { self.profileImageView.backgroundColor = newValue }
+    willSet { self.defaultImageView.backgroundColor = newValue }
   }
   
   /// 추가하기 버튼으로 만들 수 있는 값입니다.
@@ -146,6 +146,15 @@ public class FavorProfilePhotoView: UIView {
       self.borderLineView.isHidden = true
     } else {
       self.borderLineView.isHidden = false
+    }
+  }
+  
+  public func updateProfileImage(_ mapper: CacheKeyMapper) {
+    if let url = URL(string: mapper.url) {
+      self.profileImageView.setImage(from: url, mapper: mapper)
+      self.defaultImageView.isHidden = true
+    } else {
+      self.defaultImageView.isHidden = false
     }
   }
 }

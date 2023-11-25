@@ -27,6 +27,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   private let isUserImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.image = .favorIcon(.user_circle)
+    imageView.contentMode = .scaleToFill
     return imageView
   }()
 
@@ -49,6 +50,8 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
     self.nameLabel.text = friend.friendName
     self.isUserImageView.isHidden = friend.identifier < 0
     self.profileImageView.isTempUser = friend.identifier < 0
+    let mapper = CacheKeyMapper(friend: friend, subpath: .profilePhoto(friend.profilePhoto?.remote))
+    self.profileImageView.updateProfileImage(mapper)
   }
 }
 

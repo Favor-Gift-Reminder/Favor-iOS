@@ -181,8 +181,8 @@ extension User: Hashable {
 
 extension FavorKit.CacheKeyMapper {
   public enum UserSubpath {
-    case background(String)
-    case profilePhoto(String)
+    case background(String?)
+    case profilePhoto(String?)
     
     public var rawValue: String {
       switch self {
@@ -194,9 +194,9 @@ extension FavorKit.CacheKeyMapper {
     public var url: String {
       switch self {
       case .background(let url):
-        return url
+        return url ?? ""
       case .profilePhoto(let url):
-        return url
+        return url ?? ""
       }
     }
   }
@@ -204,6 +204,7 @@ extension FavorKit.CacheKeyMapper {
   public init(user: User, subpath: UserSubpath) {
     let key: String = "user/\(user.identifier)/\(subpath.rawValue)/\(subpath.url)"
     var mapper = CacheKeyMapper(key: key, cacheType: .disk)
+    mapper.url = subpath.url
     switch subpath {
     case .background:
       mapper.preferredSize = ImageCacheManager.Metric.bannerSize

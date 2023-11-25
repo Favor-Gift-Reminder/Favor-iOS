@@ -20,6 +20,14 @@ public class FavorButton: UIButton {
     return view
   }()
   
+  private let leftProfileView: FavorProfilePhotoView = {
+    let view = FavorProfilePhotoView(.verySmall)
+    view.baseBackgroundColor = .favorColor(.line3)
+    view.isUserInteractionEnabled = false
+    view.isHidden = true 
+    return view
+  }()
+  
   // MARK: - Properties
   
   /// 버튼의 타이틀 `String`
@@ -154,8 +162,13 @@ public class FavorButton: UIButton {
     willSet { self.configuration?.background.strokeColor = newValue }
   }
   
-  public var leftProfileView = FavorProfilePhotoView(.verySmall) {
-    willSet { self.updateLeftProfileView() }
+  public var hasLeftPhotoView: Bool = false {
+    willSet {
+      self.leftProfileView.isHidden = !newValue
+      if newValue {
+        self.contentInset = .init(top: 8.5, leading: 34.0, bottom: 8.5, trailing: 12.0)
+      }
+    }
   }
   
   // MARK: - Init
@@ -183,7 +196,8 @@ public class FavorButton: UIButton {
   
   func setupLayouts() {
     [
-      self.bottomBorderLine
+      self.bottomBorderLine,
+      self.leftProfileView
     ].forEach {
       self.addSubview($0)
     }
@@ -193,6 +207,11 @@ public class FavorButton: UIButton {
     self.bottomBorderLine.snp.makeConstraints { make in
       make.bottom.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(1.0)
+    }
+    
+    self.leftProfileView.snp.makeConstraints { make in
+      make.centerY.equalToSuperview()
+      make.leading.equalToSuperview().inset(12.0)
     }
   }
   
@@ -208,19 +227,12 @@ public class FavorButton: UIButton {
   
   // MARK: - Update
   
-  private func updateLeftProfileView() {
-    self.configuration?.contentInsets = .init(top: 8.5, leading: 34.0, bottom: 8.5, trailing: 12.0)
-    self.leftProfileView.baseBackgroundColor = .favorColor(.line2)
-    self.leftProfileView.isUserInteractionEnabled = false
-    self.addSubview(self.leftProfileView)
-    self.leftProfileView.snp.makeConstraints { make in
-      make.centerY.equalToSuperview()
-      make.leading.equalToSuperview().inset(12.0)
-    }
-  }
-  
   public func updateEmotion(_ emotion: FavorEmotion?, size: CGFloat) {
     self.emotion = emotion
     self.image = emotion?.image?.resize(newWidth: size)
+  }
+  
+  public func updateProfileImage(_ mapper: CacheKeyMapper) {
+    self.leftProfileView.updateProfileImage(mapper)
   }
 }

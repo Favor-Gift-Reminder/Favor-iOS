@@ -20,12 +20,16 @@ public final class ProfileView: UIView {
   
   // MARK: - Properties
   
+  private var disposeBag = DisposeBag()
+  private var backgroundKeyMapper: CacheKeyMapper?
+  private var profileKeyMapper: CacheKeyMapper?
+  
   // MARK: - UI Components
   
-  let backgroundImageView: UIImageView = {
+  private lazy var backgroundImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
-    imageView.backgroundColor = .favorColor(.background)
+    imageView.backgroundColor = .black
     return imageView
   }()
 
@@ -74,14 +78,15 @@ public final class ProfileView: UIView {
     stackView.spacing = 10
     return stackView
   }()
-
+  
   // MARK: - Initializer
-
+  
   override init(frame: CGRect) {
     super.init(frame: frame)
     self.setupStyles()
     self.setupLayouts()
     self.setupConstraints()
+    self.bind()
   }
 
   required init?(coder: NSCoder) {
@@ -89,6 +94,26 @@ public final class ProfileView: UIView {
   }
   
   // MARK: - Binding
+  
+  private func bind() {
+    self.backgroundImageView.rx.tapGesture()
+      .skip(1)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        guard let mapper = owner.backgroundKeyMapper else { return }
+        ImageViewerManager().presentToIamgeViewer([mapper])
+      }
+      .disposed(by: self.disposeBag)
+    
+    self.profileImageView.rx.tapGesture()
+      .skip(1)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        guard let mapper = owner.profileKeyMapper else { return }
+        ImageViewerManager().presentToIamgeViewer([mapper])
+      }
+      .disposed(by: self.disposeBag)
+  }
   
   // MARK: - Functions
   
@@ -103,10 +128,8 @@ public final class ProfileView: UIView {
   func updateBackgroundImage(_ urlString: String, mapper: CacheKeyMapper) {
     if let url = URL(string: urlString) {
       self.backgroundImageView.setImage(from: url, mapper: mapper)
-    } else {
-      let url = URL(string: "https://picsum.photos/1200/1200")!
-      self.backgroundImageView.kf.setImage(with: url)
     }
+    self.backgroundKeyMapper = mapper
   }
   
   func updateProfileImage(_ urlString: String, mapper: CacheKeyMapper) {
@@ -116,6 +139,7 @@ public final class ProfileView: UIView {
     } else {
       self.profileImageButton.isHidden = false
     }
+    self.profileKeyMapper = mapper
   }
   
   func updateBackgroundAlpha(to alpha: CGFloat) {

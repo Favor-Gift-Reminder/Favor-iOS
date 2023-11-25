@@ -330,7 +330,7 @@ extension EditMyPageViewController: FavorTextFieldCellDelegate {
 
 // MARK: - PHPickerManager
 
-extension EditMyPageViewController: PHPickerManagerDelegate {
+extension EditMyPageViewController: PickerManagerDelegate {
   func pickerManager(didFinishPicking image: UIImage?) {
     self.reactor?.action.onNext(.imageDidFetched(image))
   }

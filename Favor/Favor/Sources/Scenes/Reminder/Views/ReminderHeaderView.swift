@@ -11,14 +11,14 @@ import FavorKit
 import Reusable
 import SnapKit
 
-final class ReminderHeaderView: UICollectionReusableView, Reusable {
+public final class ReminderHeaderView: UICollectionReusableView, Reusable {
 
   // MARK: - Constants
 
   // MARK: - Properties
   
-  private var bottomConstraint: Constraint?
-
+  public var bottomConstraint: Constraint?
+  
   // MARK: - UI Components
 
   private lazy var titleLabel: UILabel = {
@@ -28,7 +28,7 @@ final class ReminderHeaderView: UICollectionReusableView, Reusable {
     label.text = "헤더"
     return label
   }()
-
+  
   // MARK: - Initializer
 
   override init(frame: CGRect) {
@@ -38,7 +38,7 @@ final class ReminderHeaderView: UICollectionReusableView, Reusable {
     self.setupConstraints()
   }
 
-  required init?(coder: NSCoder) {
+  required public init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -58,15 +58,15 @@ final class ReminderHeaderView: UICollectionReusableView, Reusable {
 }
 
 extension ReminderHeaderView: BaseView {
-  func setupStyles() {
+  public func setupStyles() {
     //
   }
 
-  func setupLayouts() {
+  public func setupLayouts() {
     self.addSubview(self.titleLabel)
   }
 
-  func setupConstraints() {
+  public func setupConstraints() {
     self.titleLabel.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalToSuperview()
       self.bottomConstraint = make.bottom.equalToSuperview().constraint

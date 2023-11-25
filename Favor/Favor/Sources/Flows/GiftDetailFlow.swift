@@ -94,6 +94,14 @@ final class GiftDetailFlow: Flow {
       self.rootViewController.present(viewController, animated: false)
       return .one(flowContributor: .contribute(withNext: viewController))
       
+    case .friendPageIsRequired(let friend):
+      self.rootViewController.dismiss(animated: false)
+      let flow = FriendPageFlow(rootViewController: self.rootViewController)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: flow,
+        withNextStepper: OneStepper(withSingleStep: AppStep.friendPageIsRequired(friend))
+      ))
+      
     default:
       return .none
     }

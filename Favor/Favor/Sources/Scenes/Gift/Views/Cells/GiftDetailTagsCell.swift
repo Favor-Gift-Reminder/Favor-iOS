@@ -31,7 +31,13 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
   private let categoryButton = FavorSmallButton(with: .gray("카테고리"))
   private let isGivenButton = FavorSmallButton(with: .gray("준 선물"))
   private lazy var emotionButton = self.getTagButton()
-  private lazy var relatedFriendsButton = self.getTagButton()
+  private let leftProfileView = FavorProfilePhotoView(.verySmall)
+  
+  private lazy var relatedFriendsButton: FavorButton = {
+    let button = self.getTagButton()
+    button.hasLeftPhotoView = true
+    return button
+  }()
   
   private let stackView: UIStackView = {
     let stackView = UIStackView()
@@ -105,11 +111,12 @@ final class GiftDetailTagsCell: BaseCollectionViewCell {
       font: .favorFont(.regular, size: 12)
     )
     // relatedFriends
-    self.relatedFriendsButton.leftProfileView = .init(.verySmall)
     let friends: [Friend] = gift.relatedFriends + gift.tempFriends.map { Friend(friendName: $0) }
     self.relatedFriendsButton.isHidden = friends.isEmpty
     guard let firstFriend = friends.first else { return }
-    let friendsTitle = friends.count == 1 ? 
+    let mapper = CacheKeyMapper(friend: firstFriend, subpath: .profilePhoto(firstFriend.profilePhoto?.remote))
+    self.relatedFriendsButton.updateProfileImage(mapper)
+    let friendsTitle = friends.count == 1 ?
     firstFriend.friendName : "\(firstFriend.friendName) 외 \(friends.count - 1)"
     self.relatedFriendsButton.title = friendsTitle
   }

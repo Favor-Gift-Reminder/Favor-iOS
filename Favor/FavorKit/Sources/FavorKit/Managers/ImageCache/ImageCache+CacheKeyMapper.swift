@@ -20,6 +20,7 @@ import Kingfisher
 /// - Note: 각 `Storable`에 대한 생성자는 해당 파일의 `extension`으로 정의되어 있습니다.
 public struct CacheKeyMapper {
   public let key: String
+  public var url: String = ""
   public let cacheType: CacheType
   public var preferredSize: CGSize?
   
