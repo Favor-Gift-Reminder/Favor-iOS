@@ -73,6 +73,15 @@
       }
     },
     {
+      "identity" : "prynttrimmerview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/HHK1/PryntTrimmerView",
+      "state" : {
+        "revision" : "ac1b60a22c7e6a6514de7a66d2f3d5b537c956d5",
+        "version" : "4.0.2"
+      }
+    },
+    {
       "identity" : "reactiveswift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactiveCocoa/ReactiveSwift.git",
@@ -181,6 +190,15 @@
       }
     },
     {
+      "identity" : "stevia",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/freshOS/Stevia",
+      "state" : {
+        "revision" : "cfb1a1d2159277bb553c3dc46f3f742c0275566d",
+        "version" : "5.1.2"
+      }
+    },
+    {
       "identity" : "then",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devxoul/Then.git",
@@ -196,6 +214,15 @@
       "state" : {
         "revision" : "cb05d64cef2bbf51e85c53adee937df46540a74e",
         "version" : "1.2.1"
+      }
+    },
+    {
+      "identity" : "ypimagepicker",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Yummypets/YPImagePicker.git",
+      "state" : {
+        "revision" : "2db04eb020e3ef03828d3207d85250e110fa5919",
+        "version" : "5.2.2"
       }
     }
   ],

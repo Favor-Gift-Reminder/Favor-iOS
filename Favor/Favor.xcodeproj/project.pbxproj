@@ -231,6 +231,7 @@
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5DC1F062B11A6BB00666363 /* FriendPageMemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */; };
 		E5DC1F082B11A6D900666363 /* FriendPageMemoViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DC1F072B11A6D900666363 /* FriendPageMemoViewReactor.swift */; };
+		E5DC1F0B2B123B4A00666363 /* YPImagePicker in Frameworks */ = {isa = PBXBuildFile; productRef = E5DC1F0A2B123B4A00666363 /* YPImagePicker */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
@@ -470,6 +471,7 @@
 				2EE6B3972982EDA400CDBC81 /* RxFlow in Frameworks */,
 				2EC371F8299521AD00D1007B /* RxGesture in Frameworks */,
 				2EFDE6772A4BF8BC007A808F /* RxKakaoSDKAuth in Frameworks */,
+				E5DC1F0B2B123B4A00666363 /* YPImagePicker in Frameworks */,
 				2E7C30B7295D8E1000BAC43D /* SnapKit in Frameworks */,
 				2E946FDF2A2585BA00D0EED8 /* ImageViewer in Frameworks */,
 				2EE3BA8429AB60A4004FDCC9 /* RealmSwift in Frameworks */,
@@ -1644,6 +1646,7 @@
 				2EFDE6762A4BF8BC007A808F /* RxKakaoSDKAuth */,
 				2EFDE6782A4BF8BC007A808F /* RxKakaoSDKUser */,
 				2E79754C2A4E756D0083773B /* DeviceKit */,
+				E5DC1F0A2B123B4A00666363 /* YPImagePicker */,
 			);
 			productName = Favor;
 			productReference = 2E7C3098295D7C4300BAC43D /* Favor.app */;
@@ -1710,6 +1713,7 @@
 				2E55501D2A27A5AE00E6AB26 /* XCRemoteSwiftPackageReference "Composer" */,
 				2EFDE6752A4BF8BC007A808F /* XCRemoteSwiftPackageReference "kakao-ios-sdk-rx" */,
 				2E79754B2A4E756D0083773B /* XCRemoteSwiftPackageReference "DeviceKit" */,
+				E5DC1F092B123B4A00666363 /* XCRemoteSwiftPackageReference "YPImagePicker" */,
 			);
 			productRefGroup = 2E7C3099295D7C4300BAC43D /* Products */;
 			projectDirPath = "";
@@ -2389,6 +2393,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		E5DC1F092B123B4A00666363 /* XCRemoteSwiftPackageReference "YPImagePicker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Yummypets/YPImagePicker.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2488,6 +2500,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E59AB0962A17778700F0AC7D /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		E5DC1F0A2B123B4A00666363 /* YPImagePicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E5DC1F092B123B4A00666363 /* XCRemoteSwiftPackageReference "YPImagePicker" */;
+			productName = YPImagePicker;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
