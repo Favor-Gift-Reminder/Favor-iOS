@@ -145,7 +145,7 @@ public class BaseProfileViewController: BaseViewController {
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
-    collectionView.contentInset = .zero
+    collectionView.contentInset = .init(top: 0, left: 0, bottom: 40, right: 0)
     collectionView.contentInsetAdjustmentBehavior = .never
     return collectionView
   }()

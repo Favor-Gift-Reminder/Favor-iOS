@@ -229,6 +229,8 @@
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
+		E5DC1F062B11A6BB00666363 /* FriendPageMemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */; };
+		E5DC1F082B11A6D900666363 /* FriendPageMemoViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DC1F072B11A6D900666363 /* FriendPageMemoViewReactor.swift */; };
 		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
@@ -454,6 +456,8 @@
 		E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorFooterView.swift; sourceTree = "<group>"; };
 		E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListType.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
+		E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageMemoVC.swift; sourceTree = "<group>"; };
+		E5DC1F072B11A6D900666363 /* FriendPageMemoViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageMemoViewReactor.swift; sourceTree = "<group>"; };
 		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -903,7 +907,7 @@
 				2E1C5659296C24AE0067FC78 /* Auth */,
 				E5E423F229DC0D3400A6B48D /* BottomSheet */,
 				2EF1585929E3CC3C00D199DF /* Dashboard */,
-				E593C8232A176AF800711C0F /* Friend */,
+				E593C8232A176AF800711C0F /* FriendManagement */,
 				2E634E282A17566B00DD51ED /* FriendList */,
 				2EC358DC2A1E778C000313BB /* Gift */,
 				2EE07ED4296E8DFF00048A3C /* GiftManagement */,
@@ -1496,6 +1500,7 @@
 			isa = PBXGroup;
 			children = (
 				E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */,
+				E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -1504,6 +1509,7 @@
 			isa = PBXGroup;
 			children = (
 				E523F6462A231B17007A6317 /* FriendPageViewReactor.swift */,
+				E5DC1F072B11A6D900666363 /* FriendPageMemoViewReactor.swift */,
 			);
 			path = Reactors;
 			sourceTree = "<group>";
@@ -1549,13 +1555,13 @@
 			path = Flows;
 			sourceTree = "<group>";
 		};
-		E593C8232A176AF800711C0F /* Friend */ = {
+		E593C8232A176AF800711C0F /* FriendManagement */ = {
 			isa = PBXGroup;
 			children = (
 				E593C8262A176BC400711C0F /* ViewControllers */,
 				E593C8272A176BD000711C0F /* Reactors */,
 			);
-			path = Friend;
+			path = FriendManagement;
 			sourceTree = "<group>";
 		};
 		E593C8262A176BC400711C0F /* ViewControllers */ = {
@@ -1766,6 +1772,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DD30D6BE2A53E34A0043F1BE /* ReminderDatePopup.swift in Sources */,
+				E5DC1F062B11A6BB00666363 /* FriendPageMemoVC.swift in Sources */,
 				2E013D5D2A2EEAE600FBE833 /* Friend.swift in Sources */,
 				2E013D5E2A2EEAE600FBE833 /* Gift.swift in Sources */,
 				2EFDA0F62A3AA867009A11D7 /* SearchTagViewReactor.swift in Sources */,
@@ -1808,6 +1815,7 @@
 				2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */,
 				2E946FE32A2599CA00D0EED8 /* GiftShareViewReactor.swift in Sources */,
 				2E7330992A52D7DB009682D2 /* NewLocalAuthPopup.swift in Sources */,
+				E5DC1F082B11A6D900666363 /* FriendPageMemoViewReactor.swift in Sources */,
 				2E1C81B42A1F008100D4128E /* GiftDetailPageFooterView.swift in Sources */,
 				2EA384A0298D7C960081499C /* HomeVC.swift in Sources */,
 				2E6E28DE2A24636600E25DB6 /* GiftManagementPhotoCell.swift in Sources */,

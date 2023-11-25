@@ -31,6 +31,21 @@ final class FriendPageViewController: BaseProfileViewController, View {
     return button
   }()
   
+  private let deleteFriendButton: FavorButton = {
+    let button = FavorButton("친구 끊기")
+    button.font = .favorFont(.regular, size: 16)
+    button.contentInset = .init(top: 20, leading: 20, bottom: 20, trailing: 52)
+    button.baseBackgroundColor = .white
+    button.baseForegroundColor = .favorColor(.icon)
+    button.cornerRadius = 16
+    button.shadowOffset = CGSize(width: 0, height: -1)
+    button.shadowRadius = 4
+    button.shadowOpacity = 0.03
+    button.isHidden = true
+    button.layer.opacity = 0
+    return button
+  }()
+  
   // MARK: - Setup
   
   override func setupStyles() {
@@ -43,6 +58,21 @@ final class FriendPageViewController: BaseProfileViewController, View {
     self.navigationItem.setRightBarButton(self.moreButton.toBarButtonItem(), animated: true)
     self.navigationItem.setLeftBarButton(self.backButton.toBarButtonItem(), animated: true)
     self.navigationItem.setHidesBackButton(true, animated: true)
+  }
+  
+  override func setupLayouts() {
+    super.setupLayouts()
+    
+    self.view.addSubview(self.deleteFriendButton)
+  }
+  
+  override func setupConstraints() {
+    super.setupConstraints()
+    
+    self.deleteFriendButton.snp.makeConstraints { make in
+      make.trailing.equalToSuperview().inset(10)
+      make.top.equalTo(self.view.safeAreaLayoutGuide)
+    }
   }
   
   // MARK: - Bind
@@ -62,12 +92,34 @@ final class FriendPageViewController: BaseProfileViewController, View {
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
     
+    self.moreButton.rx.tap
+      .asDriver()
+      .drive(with: self) { owner, _ in
+        owner.animateDeleteFriendButton(owner.deleteFriendButton.isHidden)
+      }
+      .disposed(by: self.disposeBag)
+    
+    self.deleteFriendButton.rx.tap
+      .map { Reactor.Action.deleteFriendButtonDidTap }
+      .bind(to: reactor.action)
+      .disposed(by: self.disposeBag)
+    
     // 스크롤
     self.collectionView.rx.contentOffset
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, offset in
         owner.updateProfileViewLayout(by: offset, name: reactor.currentState.friend.friendName)
+        owner.animateDeleteFriendButton(false)
       })
+      .disposed(by: self.disposeBag)
+    
+    self.collectionView.rx.tapGesture { gesture, _ in
+      gesture.cancelsTouchesInView = true
+    }
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, _ in
+        owner.animateDeleteFriendButton(false)
+      }
       .disposed(by: self.disposeBag)
     
     self.collectionView.rx.itemSelected
@@ -171,5 +223,27 @@ final class FriendPageViewController: BaseProfileViewController, View {
   func memoBottomSheetCompletion(memo: String?) {
     guard let memo = memo else { return }
     self.reactor?.action.onNext(.memoDidChange(memo))
+  }
+  
+  func animateDeleteFriendButton(_ isAnimated: Bool) {
+    if isAnimated {
+      self.deleteFriendButton.isHidden = false
+      UIView.animate(
+        withDuration: 0.1,
+        animations: {
+          self.deleteFriendButton.layer.opacity = 1
+        }
+      )
+    } else {
+      UIView.animate(
+        withDuration: 0.1,
+        animations: {
+          self.deleteFriendButton.layer.opacity = 0
+        },
+        completion: { _ in
+          self.deleteFriendButton.isHidden = true
+        }
+      )
+    }
   }
 }

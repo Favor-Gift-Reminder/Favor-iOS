@@ -30,6 +30,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
     case memoDidChange(String)
     case moreAnniversaryDidTap
     case backButtonDidTap
+    case deleteFriendButtonDidTap
   }
   
   enum Mutation {
@@ -67,7 +68,7 @@ final class FriendPageViewReactor: Reactor, Stepper {
         }
       
     case .modfiyMemeButtonDidTap:
-      self.steps.accept(AppStep.memoBottomSheetIsRequired(self.currentState.friend.memo))
+      self.steps.accept(AppStep.friendPageMemoIsRequired(self.currentState.friend))
       return .empty()
       
     case .anniversarySetupHelperCellDidTap:
@@ -100,6 +101,13 @@ final class FriendPageViewReactor: Reactor, Stepper {
     case .addnotiButtonDidTap(let anniversary):
       self.steps.accept(AppStep.newReminderIsRequiredWithAnniversary(anniversary, self.currentState.friend))
       return .empty()
+      
+    case .deleteFriendButtonDidTap:
+      return self.requestDeleteFriend()
+        .flatMap { _ in
+          self.steps.accept(AppStep.friendPageIsComplete)
+          return Observable<Mutation>.empty()
+        }
       
     case .doNothing:
       return .empty()
@@ -210,6 +218,22 @@ private extension FriendPageViewReactor {
       try await self.workbench.write { transaction in
         transaction.update(friend.realmObject())
       }
+    }
+  }
+  
+  func requestDeleteFriend() -> Observable<Void> {
+    return Observable<Void>.create { observer in
+      let networking = FriendNetworking()
+      return networking.request(.deleteFriend(friendNo: self.currentState.friend.identifier))
+        .subscribe { _ in
+          Task {
+            try await self.workbench.write { transaction in
+              transaction.delete(self.currentState.friend.realmObject())
+              observer.onNext(())
+              observer.onCompleted()
+            }
+          }
+        }
     }
   }
 }

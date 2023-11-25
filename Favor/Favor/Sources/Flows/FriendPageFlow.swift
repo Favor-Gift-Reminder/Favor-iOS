@@ -54,8 +54,24 @@ final class FriendPageFlow: Flow {
       let flow = ReminderFlow(rootViewController: self.rootViewController)
       return .one(flowContributor: .contribute(
         withNextPresentable: flow,
-        withNextStepper: OneStepper(withSingleStep: AppStep.newReminderIsRequiredWithAnniversary(anniversary, friend))
+        withNextStepper: OneStepper(
+          withSingleStep: AppStep.newReminderIsRequiredWithAnniversary(anniversary, friend)
+        )
       ))
+      
+    case .friendPageMemoIsRequired(let friend):
+      let friendPageMemoVC = FriendPageMemoViewController()
+      let reactor = FriendPageMemoViewReactor(friend)
+      friendPageMemoVC.reactor = reactor
+      self.rootViewController.pushViewController(friendPageMemoVC, animated: true)
+      return .one(flowContributor: .contribute(
+        withNextPresentable: friendPageMemoVC,
+        withNextStepper: reactor
+      ))
+      
+    case .friendPageMemoIsComplete:
+      self.rootViewController.popViewController(animated: true)
+      return .none
       
     default:
       return .none

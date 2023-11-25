@@ -206,8 +206,10 @@ final class MyPageViewReactor: Reactor, Stepper {
         profileSetupHelperItems.append(.profileSetupHelper(.anniversary))
       }
       // 친구
-      newSections.append(.friends)
-      newItems.append(newState.friendItems)
+      if !state.friendItems.isEmpty {
+        newSections.append(.friends)
+        newItems.append(newState.friendItems)
+      }
       // 새 프로필
       if !profileSetupHelperItems.isEmpty {
         newSections.insert(.profileSetupHelper, at: .zero)

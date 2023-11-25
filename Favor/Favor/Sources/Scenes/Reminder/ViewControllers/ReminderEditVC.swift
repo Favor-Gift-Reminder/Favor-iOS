@@ -73,7 +73,7 @@ final class ReminderEditViewController: BaseReminderViewController, View {
       .map { Reactor.Action.datePickerDidUpdate($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.notifyTimeSelectorTextField.rx.date
       .distinctUntilChanged()
       .map { Reactor.Action.notifyTimePickerDidUpdate($0) }
