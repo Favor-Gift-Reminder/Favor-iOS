@@ -159,8 +159,12 @@ private extension ReminderViewReactor {
         .map { Reminder(realmObject: $0) }
     }
     // onLocalUpdate
-    self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
+    self.reminderFetcher.onLocalUpdate = { localReminders, remoteReminders in
+      let deleteReminders = localReminders.filter { localReminder in
+        !remoteReminders.map { $0.identifier }.contains(localReminder.identifier)
+      }
       try await self.workbench.write { transaction in
+        deleteReminders.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteReminders.map { $0.realmObject() })
       }
     }

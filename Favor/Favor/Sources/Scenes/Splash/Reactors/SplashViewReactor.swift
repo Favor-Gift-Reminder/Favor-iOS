@@ -27,7 +27,7 @@ public final class SplashViewReactor: Reactor, Stepper {
   }
   
   public enum Mutation {
-
+    
   }
 
   public struct State {

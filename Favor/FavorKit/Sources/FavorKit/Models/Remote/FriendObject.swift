@@ -26,7 +26,7 @@ public class FriendObject: Object {
   /// 친구에 대한 메모
   @Persisted public var memo: String
   /// 친구가 회원일 경우, 해당 친구의 회원 번호
-  @Persisted public var friendUserNo: Int?
+  @Persisted public var friendUserNo: Int
   /// 친구의 기념일 목록
   @Persisted public var anniversaryList: List<AnniversaryObject>
   /// 친구의 취향 태그
@@ -67,7 +67,7 @@ public class FriendObject: Object {
     profilePhoto: PhotoObject? = nil,
     backgroundPhoto: PhotoObject? = nil,
     memo: String,
-    friendUserNo: Int? = nil,
+    friendUserNo: Int,
     totalGift: Int,
     receivedGift: Int,
     givenGift: Int

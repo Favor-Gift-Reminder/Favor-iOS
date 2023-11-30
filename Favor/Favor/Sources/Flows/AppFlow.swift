@@ -159,10 +159,11 @@ private extension AppFlow {
       withNextStepper: localAuthReactor
     ))
   }
-
+  
   func popToDashboard() -> FlowContributors {
-    self.rootViewController.dismiss(animated: true)
-
+    self.rootViewController.dismiss(animated: true) {
+      self.rootViewController.requestInitialData()
+    }
     return .none
   }
   

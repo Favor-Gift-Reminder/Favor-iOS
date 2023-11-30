@@ -26,7 +26,6 @@ final class HomeViewReactor: Reactor, Stepper {
   private let workbench = RealmWorkbench()
   private let reminderFetcher = Fetcher<Reminder>()
   private let giftFetcher = Fetcher<Gift>()
-  private let userFetcher = Fetcher<User>()
 
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
@@ -83,7 +82,6 @@ final class HomeViewReactor: Reactor, Stepper {
     )
     self.setupReminderFetcher()
     self.setupGiftFetcher()
-    self.setupUserFetcher()
   }
   
   // MARK: - Functions
@@ -102,13 +100,7 @@ final class HomeViewReactor: Reactor, Stepper {
           resultSelector: { reminderResult, giftResult -> ([Reminder], [Gift]) in
             return (reminderResult.results, giftResult.results)
           })
-        return self.userFetcher.fetch()
-          .flatMap { fetchData in
-            if let identifier = fetchData.results.first?.identifier {
-              UserInfoStorage.userNo = identifier
-            }
-            return fetchedDatas
-          }
+        return fetchedDatas
           .flatMap { fetchData -> Observable<Mutation> in
             let reminders = fetchData.reminders
             let gifts = fetchData.gifts
@@ -154,7 +146,7 @@ final class HomeViewReactor: Reactor, Stepper {
       return .just(.updateSortType(sortType))
     }
   }
-
+  
   func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
 
@@ -267,8 +259,12 @@ private extension HomeViewReactor {
         .map { Reminder(realmObject: $0) }
     }
     // onLocalUpdate
-    self.reminderFetcher.onLocalUpdate = { _, remoteReminders in
+    self.reminderFetcher.onLocalUpdate = { localReminders, remoteReminders in
+      let deleteReminders = localReminders.filter { localReminder in
+        !remoteReminders.map { $0.identifier }.contains(localReminder.identifier)
+      }
       try await self.workbench.write { transaction in
+        deleteReminders.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteReminders.map { $0.realmObject() })
       }
     }
@@ -277,14 +273,11 @@ private extension HomeViewReactor {
   func setupGiftFetcher() {
     // onRemote
     self.giftFetcher.onRemote = {
-      let networking = GiftNetworking()
+      let networking = UserNetworking()
       let gifts = networking.request(.getAllGifts)
         .flatMap { response -> Observable<[Gift]> in
-          let responseDTO: ResponseDTO<[GiftSingleResponseDTO]> = try APIManager.decode(response.data)
-          return .just(responseDTO.data
-            .filter { $0.userNo == UserInfoStorage.userNo }
-            .map { Gift(singleDTO: $0) }
-          )
+          let responseDTO: ResponseDTO<[GiftResponseDTO]> = try APIManager.decode(response.data)
+          return .just(responseDTO.data.map { Gift(dto: $0) })
         }
         .catch { error in
           if let error = error as? APIError {
@@ -309,32 +302,6 @@ private extension HomeViewReactor {
       try await self.workbench.write { transaction in
         deleteGifts.forEach { transaction.delete($0.realmObject()) }
         transaction.update(remoteGifts.map { $0.realmObject() })
-      }
-    }
-  }
-  
-  func setupUserFetcher() {
-    // onRemote
-    self.userFetcher.onRemote = {
-      let networking = UserNetworking()
-      let user = networking.request(.getUser)
-        .flatMap { response -> Observable<[User]> in
-          let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
-          UserInfoStorage.userNo = responseDTO.data.userNo
-          return .just([User(singleDTO: responseDTO.data)])
-        }
-        .asSingle()
-      return user
-    }
-    // onLocal
-    self.userFetcher.onLocal = {
-      return await self.workbench.values(UserObject.self)
-        .map { User(realmObject: $0) }
-    }
-    // onLocalUpdate
-    self.userFetcher.onLocalUpdate = { _, remoteUser in
-      try await self.workbench.write { transaction in
-        transaction.update(remoteUser.map { $0.realmObject() })
       }
     }
   }

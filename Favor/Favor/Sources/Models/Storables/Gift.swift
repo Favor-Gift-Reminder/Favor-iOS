@@ -86,7 +86,7 @@ public struct Gift: Storable, Receivable {
     self.identifier = dto.giftNo
     self.name = dto.giftName
     self.date = dto.giftDate
-    self.photos = []
+    self.photos = dto.photoList.map { Photo(singleDTO: $0) }
     self.category = .etc
     self.emotion = .boring
     self.isPinned = false

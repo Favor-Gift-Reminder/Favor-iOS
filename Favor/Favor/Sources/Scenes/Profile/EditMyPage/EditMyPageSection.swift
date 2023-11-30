@@ -38,7 +38,8 @@ extension EditMyPageSection {
 
   public var footer: String? {
     switch self {
-    case .name, .id: return nil
+    case .name: return nil
+    case .id: return "문자, 숫자, 밑줄, 마침표만 사용할 수 있습니다."
     case .favor: return "최대 5개까지 선택할 수 있습니다."
     }
   }
@@ -79,7 +80,7 @@ extension EditMyPageSection: Composable {
 
   var section: UICollectionViewComposableLayout.Section {
     switch self {
-    case .name, .id:
+    case .name:
       return .base(
         contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),
         boundaryItems: [
@@ -90,6 +91,20 @@ extension EditMyPageSection: Composable {
           .footer(
             height: .absolute(17),
             contentInsets: NSDirectionalEdgeInsets(top: 16, leading: .zero, bottom: .zero, trailing: .zero)
+          )
+        ]
+      )
+    case .id:
+      return .base(
+        contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: 20, bottom: .zero, trailing: 20),
+        boundaryItems: [
+          .header(
+            height: .absolute(37),
+            contentInsets: NSDirectionalEdgeInsets(top: .zero, leading: .zero, bottom: 16, trailing: .zero)
+          ),
+          .footer(
+            height: .absolute(17),
+            contentInsets: NSDirectionalEdgeInsets(top: 16, leading: .zero, bottom: 40, trailing: .zero)
           )
         ]
       )

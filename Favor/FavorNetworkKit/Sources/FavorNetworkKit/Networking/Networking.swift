@@ -46,12 +46,16 @@ public final class Networking<TargetType: BaseTargetType> {
   // MARK: - Functions
   
   @discardableResult
-  public func request(_ target: TargetType, isOpeningPopup: Bool = true) -> Observable<Response> {
+  public func request(
+    _ target: TargetType,
+    isOpeningPopup: Bool = true,
+    loadingIndicator: Bool = false
+  ) -> Observable<Response> {
     let requestURL = "\(target.method.rawValue) \(target.path)"
     return UIApplication.shared.topViewControllerAsObservable()
       .flatMap { topViewController -> Observable<Response> in
         guard let topViewController = topViewController as? BaseViewController else { return .empty() }
-        topViewController.isLoadingWillChange(true)
+        if loadingIndicator { topViewController.isLoadingWillChange(true) }
         return self.provider.rx.request(target)
           .observe(on: MainScheduler.asyncInstance)
           .filterSuccessfulStatusCodes()
@@ -65,7 +69,7 @@ public final class Networking<TargetType: BaseTargetType> {
           }, onError: { error in
             let message = "🌐 ❌ FAILURE: \(requestURL)"
             os_log(.error, "\(message)")
-            topViewController.isLoadingWillChange(false)
+            if loadingIndicator { topViewController.isLoadingWillChange(false) }
             // Error Handling
             switch error {
             case APIError.timeOut:

@@ -17,6 +17,7 @@ public struct Friend: Storable, Receivable {
   public let identifier: Int
   public var friendName: String
   public var friendID: String
+  public var friendUserNo: Int
   public var profilePhoto: Photo?
   public var backgroundPhoto: Photo?
   public var memo: String
@@ -42,6 +43,7 @@ public struct Friend: Storable, Receivable {
       self.backgroundPhoto = Photo(realmObject: backgroundObject)
     }
     self.memo = realmObject.memo
+    self.friendUserNo = realmObject.friendUserNo
     self.anniversaryList = realmObject.anniversaryList.compactMap(Anniversary.init(realmObject:))
     self.favorList = realmObject.favorList.compactMap(Favor.init(rawValue:))
     self.totalGift = realmObject.totalGift
@@ -59,6 +61,7 @@ public struct Friend: Storable, Receivable {
       profilePhoto: self.profilePhoto?.realmObject(),
       backgroundPhoto: self.backgroundPhoto?.realmObject(),
       memo: self.memo,
+      friendUserNo: self.friendUserNo,
       totalGift: self.totalGift,
       receivedGift: self.receivedGift,
       givenGift: self.givenGift
@@ -71,12 +74,13 @@ public struct Friend: Storable, Receivable {
     self.identifier = friendResponseDTO.friendNo
     self.friendName = friendResponseDTO.friendName
     self.friendID = ""
-    if let photoDTO = friendResponseDTO.photo {
+    if let photoDTO = friendResponseDTO.userPhoto {
       self.profilePhoto = Photo(singleDTO: photoDTO)
     }
     self.memo = ""
     self.anniversaryList = []
     self.favorList = []
+    self.friendUserNo = friendResponseDTO.friendUserNo
     self.totalGift = -1
     self.receivedGift = -1
     self.givenGift = -1
@@ -88,6 +92,7 @@ public struct Friend: Storable, Receivable {
     self.memo = singleDTO.friendMemo
     self.anniversaryList = singleDTO.anniversaryList.map { Anniversary(singleDTO: $0) }
     self.favorList = singleDTO.favorList.compactMap { Favor(rawValue: $0) }
+    self.friendUserNo = singleDTO.userNo
     self.totalGift = singleDTO.totalGift
     self.receivedGift = singleDTO.receivedGift
     self.givenGift = singleDTO.givenGift
@@ -116,6 +121,7 @@ public struct Friend: Storable, Receivable {
     self.totalGift = 0
     self.receivedGift = 0
     self.memo = ""
+    self.friendUserNo = -1
   }
   
   /// 비회원 친구 구조체를 생성합니다.
@@ -130,6 +136,7 @@ public struct Friend: Storable, Receivable {
     self.totalGift = 0 
     self.receivedGift = 0
     self.memo = ""
+    self.friendUserNo = -1
   }
 }
 

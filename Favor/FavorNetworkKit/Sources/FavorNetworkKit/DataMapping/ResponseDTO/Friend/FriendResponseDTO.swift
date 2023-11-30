@@ -9,6 +9,7 @@ import Foundation
 
 public struct FriendResponseDTO: Decodable {
   public let friendName: String
+  public let friendUserNo: Int
   public let friendNo: Int
-  public let photo: PhotoResponseDTO?
+  public let userPhoto: PhotoResponseDTO?
 }

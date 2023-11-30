@@ -62,6 +62,13 @@ final class FavorTabBarController: UITabBarController, Stepper {
     tabBarFrame.size.height = height
     self.favorTabBar.frame.size.height = height
     self.tabBar.clipsToBounds = false
+  }  
+  
+  func requestInitialData() {
+    if let navigationVC = self.viewControllers?.first as? BaseNavigationController,
+       let homeVC = navigationVC.topViewController as? HomeViewController {
+      homeVC.reactor?.action.onNext(.viewNeedsLoaded)
+    }
   }
 }
 

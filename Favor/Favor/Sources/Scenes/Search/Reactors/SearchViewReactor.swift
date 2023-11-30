@@ -375,11 +375,14 @@ private extension SearchViewReactor {
         .asSingle()
         .map(ResponseDTO<UserSingleResponseDTO>.self)
         .subscribe(onSuccess: { response in
+          if response.data.userNo == UserInfoStorage.userNo {
+            single(.success((nil, false)))
+          }
           Task {
             let friendObjects = await self.workbench.values(FriendObject.self)
             single(.success((
               User(singleDTO: response.data),
-              friendObjects.contains(where: { $0.friendName == response.data.name })
+              friendObjects.contains(where: { $0.friendUserNo == response.data.userNo })
             )))
           }
         }, onFailure: { _ in
