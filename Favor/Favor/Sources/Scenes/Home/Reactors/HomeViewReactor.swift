@@ -26,7 +26,7 @@ final class HomeViewReactor: Reactor, Stepper {
   private let workbench = RealmWorkbench()
   private let reminderFetcher = Fetcher<Reminder>()
   private let giftFetcher = Fetcher<Gift>()
-
+  
   // Global State
   let currentSortType = BehaviorRelay<SortType>(value: .latest)
   

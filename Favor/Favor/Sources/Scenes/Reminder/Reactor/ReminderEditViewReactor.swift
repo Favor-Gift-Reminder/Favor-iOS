@@ -239,7 +239,7 @@ private extension ReminderEditViewReactor {
     )
     
     return Observable<Void>.create { observer in
-      return networking.request(.postReminder(requestDTO))
+      return networking.request(.postReminder(requestDTO), loadingIndicator: true)
         .map(ResponseDTO<ReminderSingleResponseDTO>.self)
         .map { Reminder(singleDTO: $0.data) }
         .subscribe { reminder in
@@ -272,7 +272,7 @@ private extension ReminderEditViewReactor {
     )
     
     return Observable<Void>.create { observer in
-      return networking.request(.patchReminder(requestDTO, reminderNo: self.currentState.reminder.identifier))
+      return networking.request(.patchReminder(requestDTO, reminderNo: self.currentState.reminder.identifier), loadingIndicator: true)
         .map(ResponseDTO<ReminderSingleResponseDTO>.self)
         .map { Reminder(singleDTO: $0.data) }
         .subscribe { reminder in

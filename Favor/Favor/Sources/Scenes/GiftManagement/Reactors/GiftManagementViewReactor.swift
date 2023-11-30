@@ -324,7 +324,7 @@ private extension GiftManagementViewReactor {
     let imageList = self.currentState.imageList
     var giftNo: Int = 0
     return Observable<Void>.create { observer in
-      return giftNetworking.request(.postGift(requestDTO))
+      return giftNetworking.request(.postGift(requestDTO), loadingIndicator: true)
         .map(ResponseDTO<GiftSingleResponseDTO>.self)
         .map { giftNo = $0.data.giftNo }
         .flatMap {
@@ -335,7 +335,7 @@ private extension GiftManagementViewReactor {
           }
         }
         .flatMap { self.requestPostGiftPhoto(imageList, giftNo: $0) }
-        .flatMap { giftNetworking.request(.getGift(giftNo: giftNo)) }
+        .flatMap { giftNetworking.request(.getGift(giftNo: giftNo), loadingIndicator: true) }
         .map(ResponseDTO<GiftSingleResponseDTO>.self)
         .map { Gift(singleDTO: $0.data) }
         .subscribe { gift in
@@ -374,7 +374,7 @@ private extension GiftManagementViewReactor {
             return .just(Void())
           }
         }
-        .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo)) }
+        .flatMap { _ in giftNetworking.request(.patchGift(requestDTO, giftNo: giftNo), loadingIndicator: true) }
         .map(ResponseDTO<GiftSingleResponseDTO>.self)
         .map { Gift(singleDTO: $0.data) }
         .subscribe { gift in
@@ -413,7 +413,7 @@ private extension GiftManagementViewReactor {
         _ = Observable.from(imageList)
           .concatMap { item in
             let file = APIManager.createMultiPartForm(item.image)
-            return networking.request(.postGiftPhotos(file: file, giftNo: giftNo))
+            return networking.request(.postGiftPhotos(file: file, giftNo: giftNo), loadingIndicator: true)
           }
           .subscribe { _ in
             completeCount += 1
@@ -436,7 +436,7 @@ private extension GiftManagementViewReactor {
         var completeCount: Int = 0
         _ = Observable.from(urls)
           .concatMap { url in
-            return networking.request(.deleteGiftPhotos(fileUrl: url, giftNo: giftNo))
+            return networking.request(.deleteGiftPhotos(fileUrl: url, giftNo: giftNo), loadingIndicator: true)
           }
           .subscribe { _ in
             completeCount += 1

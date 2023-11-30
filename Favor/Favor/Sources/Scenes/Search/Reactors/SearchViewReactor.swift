@@ -334,7 +334,7 @@ private extension SearchViewReactor {
     guard let userFriendNo = self.currentState.userSearchResults.first?.identifier else { fatalError() }
     return Single<Bool>.create { single in
       let networking = FriendNetworking()
-      _ = networking.request(.postUserFriend(userFriendNo: userFriendNo))
+      _ = networking.request(.postUserFriend(userFriendNo: userFriendNo), loadingIndicator: true)
         .asSingle()
         .subscribe(onSuccess: { response in
           guard 
@@ -371,7 +371,7 @@ private extension SearchViewReactor {
   func fetchRemoteUser(with queryString: String) -> Single<(User?, Bool)> {
     return Single<(User?, Bool)>.create { single in
       let networking = UserNetworking()
-      _ = networking.request(.getUserId(userId: queryString), isOpeningPopup: false)
+      _ = networking.request(.getUserId(userId: queryString), isOpeningPopup: false, loadingIndicator: true)
         .asSingle()
         .map(ResponseDTO<UserSingleResponseDTO>.self)
         .subscribe(onSuccess: { response in

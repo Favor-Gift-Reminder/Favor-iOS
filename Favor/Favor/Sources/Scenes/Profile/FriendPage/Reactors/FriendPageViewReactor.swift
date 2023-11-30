@@ -220,11 +220,11 @@ private extension FriendPageViewReactor {
       }
     }
   }
-  
+
   func requestDeleteFriend() -> Observable<Void> {
     return Observable<Void>.create { observer in
       let networking = FriendNetworking()
-      return networking.request(.deleteFriend(friendNo: self.currentState.friend.identifier))
+      return networking.request(.deleteFriend(friendNo: self.currentState.friend.identifier), loadingIndicator: true)
         .subscribe { _ in
           Task {
             try await self.workbench.write { transaction in

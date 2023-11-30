@@ -197,7 +197,7 @@ private extension EditMyPageViewReactor {
       return self.requestPostProfile()
         .flatMap { _ in self.requestPostBackground() }
         .flatMap { _ in
-          networking.request(.patchUser(name: name, userId: userId, favorList: favorList))
+          networking.request(.patchUser(name: name, userId: userId, favorList: favorList), loadingIndicator: true)
         }
         .map(ResponseDTO<UserSingleResponseDTO>.self)
         .map { User(singleDTO: $0.data) }
@@ -216,14 +216,14 @@ private extension EditMyPageViewReactor {
   func requestPostBackground() -> Observable<Void> {
     guard let image = self.currentState.profileBackgroundImage else { return .just(()) }
     let networking = UserPhotoNetworking()
-    return networking.request(.postBackground(file: APIManager.createMultiPartForm(image)))
+    return networking.request(.postBackground(file: APIManager.createMultiPartForm(image)), loadingIndicator: true)
       .map { _ in }
   }
   
   func requestPostProfile() -> Observable<Void> {
     guard let image = self.currentState.profilePhotoImage else { return .just(()) }
     let networking = UserPhotoNetworking()
-    return networking.request(.postProfile(file: APIManager.createMultiPartForm(image)))
+    return networking.request(.postProfile(file: APIManager.createMultiPartForm(image)), loadingIndicator: true)
       .map { _ in }
   }
 }

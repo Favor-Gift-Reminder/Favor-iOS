@@ -183,7 +183,7 @@ private extension GiftDetailViewReactor {
   func requestDeleteGift(_ gift: Gift) -> Observable<Gift> {
     let networking = GiftNetworking()
     return Observable<Gift>.create { observer in
-      return networking.request(.deleteGift(giftNo: gift.identifier))
+      return networking.request(.deleteGift(giftNo: gift.identifier), loadingIndicator: true)
         .subscribe { _ in
           Task {
             try await self.workBench.write { transaction in

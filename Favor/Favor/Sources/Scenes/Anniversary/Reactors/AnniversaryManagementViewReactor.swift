@@ -165,7 +165,7 @@ private extension AnniversaryManagementViewReactor {
       let networking = AnniversaryNetworking()
       let requestDTO = anniversary.requestDTO()
       
-      return networking.request(.postAnniversary(requestDTO))
+      return networking.request(.postAnniversary(requestDTO), loadingIndicator: true)
         .map(ResponseDTO<AnniversarySingleResponseDTO>.self)
         .map { Anniversary(singleDTO: $0.data) }
         .subscribe { anniversary in
@@ -189,7 +189,7 @@ private extension AnniversaryManagementViewReactor {
         category: anniversary.category.rawValue,
         isPinned: anniversary.isPinned
       )
-      return networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier))
+      return networking.request(.patchAnniversary(requestDTO, anniversaryNo: anniversary.identifier), loadingIndicator: true)
         .asSingle()
         .map(ResponseDTO<AnniversarySingleResponseDTO>.self)
         .map { Anniversary(singleDTO: $0.data) }
@@ -211,7 +211,7 @@ private extension AnniversaryManagementViewReactor {
   func requestDeleteAnniversary(_ anniversaryNo: Int) -> Single<Void> {
     return Single<Void>.create { single in
       let networking = AnniversaryNetworking()
-      return networking.request(.deleteAnniversary(anniversaryNo: anniversaryNo))
+      return networking.request(.deleteAnniversary(anniversaryNo: anniversaryNo), loadingIndicator: true)
         .asSingle()
         .subscribe(onSuccess: { anniversary in
           Task {

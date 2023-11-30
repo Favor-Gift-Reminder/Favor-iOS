@@ -57,7 +57,7 @@ final class FriendListModifyingViewReactor: BaseFriendListViewReactor, Reactor, 
         }
       
     case .deleteButtonDidTap(let friend):
-      return self.friendNetworking.request(.deleteFriend(friendNo: friend.identifier))   
+      return self.friendNetworking.request(.deleteFriend(friendNo: friend.identifier), loadingIndicator: true)   
         .flatMap { _ in
           Task {
             try await self.workbench.write { transaction in
