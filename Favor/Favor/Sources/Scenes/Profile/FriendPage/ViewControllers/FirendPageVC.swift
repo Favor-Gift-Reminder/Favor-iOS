@@ -46,6 +46,21 @@ final class FriendPageViewController: BaseProfileViewController, View {
     return button
   }()
   
+  // MARK: - Life Cycle
+  
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    // 스크롤
+    self.collectionView.rx.contentOffset
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, offset in
+        owner.updateProfileViewLayout(by: offset, name: self.reactor?.currentState.friend.friendName ?? "")
+        owner.animateDeleteFriendButton(false)
+      })
+      .disposed(by: self.disposeBag)
+  }
+  
   // MARK: - Setup
   
   override func setupStyles() {
@@ -102,15 +117,6 @@ final class FriendPageViewController: BaseProfileViewController, View {
     self.deleteFriendButton.rx.tap
       .map { Reactor.Action.deleteFriendButtonDidTap }
       .bind(to: reactor.action)
-      .disposed(by: self.disposeBag)
-    
-    // 스크롤
-    self.collectionView.rx.contentOffset
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, offset in
-        owner.updateProfileViewLayout(by: offset, name: reactor.currentState.friend.friendName)
-        owner.animateDeleteFriendButton(false)
-      })
       .disposed(by: self.disposeBag)
     
     self.collectionView.rx.tapGesture { gesture, _ in

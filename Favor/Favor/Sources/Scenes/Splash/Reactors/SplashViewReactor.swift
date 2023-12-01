@@ -57,20 +57,20 @@ private extension SplashViewReactor {
     switch FTUXStorage.authState {
     case .email: // Email 로그인
       // 자동 로그인
-      return Observable.zip(
-        self.requestSignIn().asObservable(),
-        self.requestUser().asObservable()
-      )
-        .flatMap { token, userNo -> Observable<Mutation> in
-          os_log(.debug, "🔐 Signed in via 📨 Email: Navigating to dashboardflow.")
-          // Token 저장
+      return self.requestSignIn()
+        .flatMap { token in
           if let tokenData = token.data(using: .utf8) {
             try self.keychain.set(
               value: tokenData,
               account: KeychainManager.Accounts.accessToken.rawValue
             )
           }
+          return self.requestUser()
+        }
+        .asObservable()
+        .flatMap { userNo -> Observable<Mutation> in
           UserInfoStorage.userNo = userNo
+          os_log(.debug, "🔐 Signed in via 📨 Email: Navigating to dashboardflow.")
           self.steps.accept(AppStep.splashIsComplete)
           return .empty()
         }

@@ -89,10 +89,10 @@ public struct Gift: Storable, Receivable {
     self.photos = dto.photoList.map { Photo(singleDTO: $0) }
     self.category = .etc
     self.emotion = .boring
-    self.isPinned = false
+    self.isPinned = dto.isPinned
     self.relatedFriends = []
     self.tempFriends = []
-    self.isGiven = false
+    self.isGiven = dto.isGiven
   }
   
   public func requestDTO() -> GiftRequestDTO {

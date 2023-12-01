@@ -88,7 +88,7 @@ private extension FriendPageMemoViewReactor {
     let friendNo = self.currentState.friend.identifier
     return Observable<Void>.create { observer in
       let networking = FriendNetworking()
-      return networking.request(.patchFriendMemo(memo: memo, friendNo: friendNo))
+      return networking.request(.patchFriendMemo(memo: memo, friendNo: friendNo), loadingIndicator: true)
         .map(ResponseDTO<FriendSingleResponseDTO>.self)
         .map { Friend(singleDTO: $0.data) }
         .subscribe { friend in

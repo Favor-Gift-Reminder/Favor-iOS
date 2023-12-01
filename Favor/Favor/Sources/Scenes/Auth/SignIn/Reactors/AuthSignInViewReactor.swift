@@ -168,7 +168,7 @@ private extension AuthSignInViewReactor {
         }
     }
   }
-
+  
   func handleSignInSuccess(email: String, password: String, token: String) throws {
     guard
       let emailData = email.data(using: .utf8),

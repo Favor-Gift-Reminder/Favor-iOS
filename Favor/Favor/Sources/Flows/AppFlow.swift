@@ -85,7 +85,7 @@ private extension AppFlow {
         allowStepWhenNotPresented: true
       )
     ]
-
+    
     return .multiple(flowContributors: splashContributor + self.dashboardContributors())
   }
 
@@ -107,7 +107,7 @@ private extension AppFlow {
         }
       }
     }
-
+    
     if UserInfoStorage.isLocalAuthEnabled {
       return .one(flowContributor: .contribute(
         withNextPresentable: localAuthVC,
@@ -173,7 +173,6 @@ private extension AppFlow {
   
   func navigateToGiftManagement() -> FlowContributors {
     let newGiftFlow = GiftManagementFlow()
-    
     Flows.use(newGiftFlow, when: .ready) { [unowned self] root in
       DispatchQueue.main.async {
         root.modalPresentationStyle = .fullScreen
@@ -205,6 +204,7 @@ private extension AppFlow {
     }
     
     return [
+      .contribute(withNext: self.rootViewController),
       .contribute(
         withNextPresentable: homeFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.homeIsRequired)
@@ -212,8 +212,7 @@ private extension AppFlow {
       .contribute(
         withNextPresentable: myPageFlow,
         withNextStepper: OneStepper(withSingleStep: AppStep.myPageIsRequired)
-      ),
-      .contribute(withNext: self.rootViewController)
+      )
     ]
   }
 }

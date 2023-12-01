@@ -11,12 +11,16 @@ public struct GiftResponseDTO: Decodable {
   public let giftNo: Int
   public let giftName: String
   public let giftDate: Date
+  public let isGiven: Bool
+  public let isPinned: Bool
   public let photoList: [PhotoResponseDTO]
   
   enum CodingKeys: CodingKey {
     case giftNo
     case giftName
     case giftDate
+    case isGiven
+    case isPinned
     case photoList
   }
   
@@ -27,6 +31,8 @@ public struct GiftResponseDTO: Decodable {
     let giftDateString = try container.decode(String.self, forKey: .giftDate)
     let giftDate = giftDateString.toDate("yyyy-MM-dd")
     self.giftDate = giftDate ?? .distantPast
+    self.isGiven = try container.decode(Bool.self, forKey: .isGiven)
+    self.isPinned = try container.decode(Bool.self, forKey: .isPinned)
     self.photoList = try container.decode([PhotoResponseDTO].self, forKey: .photoList)
   }
 }

@@ -29,7 +29,8 @@ public final class ProfileView: UIView {
   private lazy var backgroundImageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
-    imageView.backgroundColor = .black
+    imageView.layer.masksToBounds = true
+    imageView.backgroundColor = .favorColor(.subtext)
     return imageView
   }()
 

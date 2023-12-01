@@ -27,7 +27,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     self.enableNavigateLog()
     
     let appFlow = AppFlow()
-    self.coordinator.coordinate(flow: appFlow, with: OneStepper(withSingleStep: AppStep.splashIsRequired))
+    self.coordinator.coordinate(flow: appFlow, with: AppStepper())
 
     Flows.use(appFlow, when: .created) { root in
       window.rootViewController = root

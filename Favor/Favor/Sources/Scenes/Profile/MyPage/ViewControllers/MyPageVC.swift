@@ -60,6 +60,18 @@ final class MyPageViewController: BaseProfileViewController, View {
     self.setupNavigationBar()
   }
   
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    
+    // 스크롤
+    self.collectionView.rx.contentOffset
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .drive(with: self, onNext: { owner, offset in
+        owner.updateProfileViewLayout(by: offset, name: self.reactor?.currentState.userName ?? "")
+      })
+      .disposed(by: self.disposeBag)
+  }
+  
   // MARK: - Binding
   
   func bind(reactor: MyPageViewReactor) {
@@ -82,15 +94,7 @@ final class MyPageViewController: BaseProfileViewController, View {
       .map { Reactor.Action.settingButtonDidTap }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-    
-    // 스크롤
-    self.collectionView.rx.contentOffset
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, offset in
-        owner.updateProfileViewLayout(by: offset, name: reactor.currentState.userName)
-      })
-      .disposed(by: self.disposeBag)
-    
+
     // Cell 선택
     self.collectionView.rx.itemSelected
       .map { indexPath -> Reactor.Action in
