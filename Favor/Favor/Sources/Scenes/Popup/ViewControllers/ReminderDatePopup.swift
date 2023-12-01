@@ -169,7 +169,7 @@ final class ReminderDatePopup: BasePopup {
     // 미래는 버튼 선택이 되지 않게 함
     if Date().currentYear <= self.currentDate.year ?? 1 {
       if Date().currentYear == self.currentDate.year {
-        self.monthButtons[Date().currentMonth...11].forEach { $0.isEnabled = false }
+        self.monthButtons[(Date().currentMonth)...].forEach { $0.isEnabled = false }
       } else {
         self.monthButtons.forEach { $0.isEnabled = false }
       }
