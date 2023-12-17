@@ -111,62 +111,12 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
       ])
       
     case .nextButtonDidTap:
-      if self.currentState.isNextButtonEnabled {
-        let email = self.currentState.email
-        let password = self.currentState.password
-
-        return .concat([
-          .just(.updateLoading(true)),
-          self.requestSignUp(email: email, password: password)
-            .asObservable()
-            .flatMap { user -> Observable<Mutation> in
-              return .concat([
-                // Local User update
-                self.updateUser(with: user)
-                  .asObservable()
-                  .flatMap { user -> Observable<Mutation> in
-                    self.steps.accept(AppStep.setProfileIsRequired(user))
-                    return .empty()
-                  }
-                  .catch { _ in
-                    return .just(.updateLoading(false))
-                  },
-                // Request sign-in to retrieve access token
-                self.requestSignIn(email: email, password: password)
-                  .asObservable()
-                  .flatMap { token -> Observable<Mutation> in
-                    do {
-                      guard
-                        let emailData = email.data(using: .utf8),
-                        let passwordData = password.data(using: .utf8),
-                        let tokenData = token.data(using: .utf8)
-                      else { return .empty() }
-                      try self.keychain.set(
-                        value: emailData,
-                        account: KeychainManager.Accounts.userEmail.rawValue)
-                      try self.keychain.set(
-                        value: passwordData,
-                        account: KeychainManager.Accounts.userPassword.rawValue)
-                      try self.keychain.set(
-                        value: tokenData,
-                        account: KeychainManager.Accounts.accessToken.rawValue)
-                      FTUXStorage.authState = .email
-                    } catch {
-                      os_log(.error, "\(error)")
-                      return .just(.updateLoading(false))
-                    }
-                    return .just(.updateLoading(false))
-                  }
-                ])
-            }
-            .catch { error in
-              if let error = error as? APIError {
-                os_log(.error, "\(error.description)")
-              }
-              return .just(.updateLoading(false))
-            }
-        ])
-      }
+      let email = self.currentState.email
+      let password = self.currentState.password
+      let tempStorage = AuthTempStorage.shared
+      tempStorage.saveEmail(email)
+      tempStorage.savePassword(password)
+      self.steps.accept(AppStep.setProfileIsRequired(.init()))
       return .empty()
     }
   }
@@ -223,77 +173,5 @@ public final class AuthSignUpViewReactor: Reactor, Stepper {
     }
     
     return newState
-  }
-}
-
-// MARK: - Privates
-
-private extension AuthSignUpViewReactor {
-  func requestSignUp(email: String, password: String) -> Single<User> {
-    return Single<User>.create { single in
-      let networking = UserNetworking()
-      let disposable = networking.request(.postSignUp(email: email, password: password))
-        .take(1)
-        .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
-            single(.success(User(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
-          }
-        }, onFailure: { error in
-          if let error = error as? APIError {
-            os_log(.error, "\(error.description)")
-          }
-          single(.failure(error))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
-    }
-  }
-
-  func updateUser(with user: User) -> Single<User> {
-    return Single<User>.create { single in
-      let task = _Concurrency.Task {
-        do {
-          try await self.workbench.write { transaction in
-            transaction.update(user.realmObject(), update: .all)
-          }
-          single(.success(user))
-        } catch {
-          single(.failure(error))
-        }
-      }
-
-      return Disposables.create {
-        task.cancel()
-      }
-    }
-  }
-
-  func requestSignIn(email: String, password: String) -> Single<String> {
-    return Single<String>.create { single in
-      let networking = UserNetworking()
-      let disposable = networking.request(.postSignIn(email: email, password: password))
-        .take(1)
-        .asSingle()
-        .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<SignInResponseDTO> = try APIManager.decode(response.data)
-            single(.success(responseDTO.data.token))
-          } catch {
-            single(.failure(error))
-          }
-        }, onFailure: { error in
-          single(.failure(error))
-        })
-
-      return Disposables.create {
-        disposable.dispose()
-      }
-    }
   }
 }

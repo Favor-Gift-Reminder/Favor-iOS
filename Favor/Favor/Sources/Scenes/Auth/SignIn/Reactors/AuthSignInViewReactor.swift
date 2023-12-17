@@ -15,7 +15,7 @@ import RxCocoa
 import RxFlow
 
 public final class AuthSignInViewReactor: Reactor, Stepper {
-
+  
   // MARK: - Properties
   
   public var initialState: State
@@ -90,7 +90,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       return .concat([
         .just(.updateLoading(true)),
         self.requestSignIn(email: email, password: password)
-          .flatMap {
+          .flatMap { _ in
             self.steps.accept(AppStep.authIsComplete)
             return Observable<Mutation>.just(.updateLoading(false))
           }
@@ -105,7 +105,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       return .empty()
     }
   }
-
+  
   public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     // Global State의 Validation Result들을 합친 Mutation
     let combineValidationMutation: Observable<Mutation> = .combineLatest(
@@ -126,7 +126,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     switch mutation {
     case .updateEmail(let email):
       newState.email = email
-
+      
     case .updateEmailValidationResult(let emailValidate):
       newState.emailValidationResult = emailValidate
 
@@ -156,16 +156,16 @@ private extension AuthSignInViewReactor {
       return networking.request(.postSignIn(email: email, password: password))
         .map(ResponseDTO<SignInResponseDTO>.self)
         .flatMap { responseDTO in
-          try self.handleSignInSuccess(email: email, password: password, token: responseDTO.data.token)
+          try? self.handleSignInSuccess(email: email, password: password, token: responseDTO.data.token)
           return networking.request(.getUser)
         }
         .map(ResponseDTO<UserSingleResponseDTO>.self)
         .map { $0.data }
-        .subscribe { userData in
+        .subscribe(onNext: { userData in
           UserInfoStorage.userNo = userData.userNo
           observer.onNext(())
           observer.onCompleted()
-        }
+        })
     }
   }
   

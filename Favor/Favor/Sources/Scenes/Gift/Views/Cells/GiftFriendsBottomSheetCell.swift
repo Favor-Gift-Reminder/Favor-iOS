@@ -15,7 +15,7 @@ public final class GiftFriendsBottomSheetCell: BaseCollectionViewCell {
   // MARK: - UI Components
 
   private let profileImageView = FavorProfilePhotoView(.big)
-
+  
   private let nameLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.regular, size: 14)
@@ -78,7 +78,7 @@ extension GiftFriendsBottomSheetCell: BaseView {
     
     self.profileImageView.snp.makeConstraints { make in
       make.centerX.equalToSuperview()
-      make.bottom.equalTo(self.nameLabel.snp.top).offset(-10.0)
+      make.bottom.equalTo(self.nameLabel.snp.top).offset(-8.0)
     }
     
     self.isUserImageView.snp.makeConstraints { make in

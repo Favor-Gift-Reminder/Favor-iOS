@@ -77,6 +77,17 @@ public struct Reminder: Storable, Receivable {
     }
   }
   
+  public func toggleAlarmSet() -> ReminderUpdateRequestDTO {
+    return ReminderUpdateRequestDTO(
+      title: self.name,
+      reminderDate: self.date.toDTODateString(),
+      isAlarmSet: !self.shouldNotify,
+      alarmTime: "\(self.notifyDate.toDTODateString()) \(self.notifyDate.toDTOTimeString())",
+      friendNo: self.relatedFriend?.identifier,
+      reminderMemo: self.memo
+    )
+  }
+  
   // MARK: - Mock
   
   /// 비어있는 구조체를 생성합니다.

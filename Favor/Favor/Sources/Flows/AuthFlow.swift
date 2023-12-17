@@ -60,6 +60,10 @@ public final class AuthFlow: Flow {
     case .authIsComplete:
       return .end(forwardToParentFlowWithStep: AppStep.dashboardIsRequired)
       
+    case let .imagePickerIsRequired(pickerManager, selectionLimit):
+      pickerManager.present(selectionLimit: selectionLimit)
+      return .none
+      
     default:
       return .none
     }
@@ -109,7 +113,7 @@ private extension AuthFlow {
       withNextStepper: reactor)
     )
   }
-
+  
   func navigateToValidateEmailCode(with email: String) -> FlowContributors {
     let viewController = AuthValidateEmailViewController()
     let reactor = AuthValidateEmailViewReactor(with: email)
@@ -152,7 +156,7 @@ private extension AuthFlow {
   func navigateToSetProfile(with user: User) -> FlowContributors {
     let viewController = AuthSetProfileViewController()
     let reactor = AuthSetProfileViewReactor(user)
-    viewController.title = "프로필 작성"
+    viewController.title = "프로필 생성"
     viewController.reactor = reactor
     self.rootViewController.pushViewController(viewController, animated: true)
     

@@ -39,6 +39,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case updateMaxTimelineItems((current: Int, unit: Int))
     case itemSelected(Item)
     case timelineNeedsLoaded(Bool)
+    case switchDidTap(Item)
   }
   
   enum Mutation {
@@ -144,6 +145,12 @@ final class HomeViewReactor: Reactor, Stepper {
       
     case .didChangeSortType(let sortType):
       return .just(.updateSortType(sortType))
+      
+    case .switchDidTap(let item):
+      if case let Item.upcoming(.reminder(reminder)) = item {
+        self.toggleReminderAlarm(reminder)
+      }
+      return .empty()
     }
   }
   
@@ -232,7 +239,7 @@ final class HomeViewReactor: Reactor, Stepper {
   }
 }
 
-// MARK: - Fetcher
+// MARK: - Network
 
 private extension HomeViewReactor {
   func setupReminderFetcher() {
@@ -304,5 +311,19 @@ private extension HomeViewReactor {
         transaction.update(remoteGifts.map { $0.realmObject() })
       }
     }
+  }
+  
+  func toggleReminderAlarm(_ reminder: Reminder) {
+    let networking = ReminderNetworking()
+    _ = networking.request(.patchReminder(reminder.toggleAlarmSet(), reminderNo: reminder.identifier))
+      .map(ResponseDTO<ReminderSingleResponseDTO>.self)
+      .map { Reminder(singleDTO: $0.data) }
+      .subscribe(onNext: { reminder in
+        Task {
+          try await self.workbench.write { transaction in
+            transaction.update(reminder.realmObject())
+          }
+        }
+      })
   }
 }

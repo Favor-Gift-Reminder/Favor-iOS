@@ -226,6 +226,8 @@
 		E59AB09A2A17858C00F0AC7D /* FriendFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AB0992A17858C00F0AC7D /* FriendFlow.swift */; };
 		E59AB09C2A178ADE00F0AC7D /* FriendManagementViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */; };
 		E59AC13A29EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */; };
+		E5AFAAE32B2DF3F800A98730 /* ReminderAlertManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFAAE22B2DF3F800A98730 /* ReminderAlertManager.swift */; };
+		E5AFAAE52B2F126F00A98730 /* AuthTempStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5AFAAE42B2F126F00A98730 /* AuthTempStorage.swift */; };
 		E5B61F3529B37F260031046C /* (null) in Sources */ = {isa = PBXBuildFile; };
 		E5C4D11B2A3C8F7A00DA9BF3 /* AnniversaryListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */; };
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
@@ -454,6 +456,8 @@
 		E59AB0992A17858C00F0AC7D /* FriendFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendFlow.swift; sourceTree = "<group>"; };
 		E59AB09B2A178ADE00F0AC7D /* FriendManagementViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendManagementViewReactor.swift; sourceTree = "<group>"; };
 		E59AC13929EEEB6E00FCE0C0 /* FriendSelectorFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSelectorFooterView.swift; sourceTree = "<group>"; };
+		E5AFAAE22B2DF3F800A98730 /* ReminderAlertManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderAlertManager.swift; sourceTree = "<group>"; };
+		E5AFAAE42B2F126F00A98730 /* AuthTempStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthTempStorage.swift; sourceTree = "<group>"; };
 		E5C4D11A2A3C8F7A00DA9BF3 /* AnniversaryListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnniversaryListType.swift; sourceTree = "<group>"; };
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageMemoVC.swift; sourceTree = "<group>"; };
@@ -1093,6 +1097,7 @@
 		2EC52CB12A41F7ED0072998E /* SignUp */ = {
 			isa = PBXGroup;
 			children = (
+				E5AFAAE42B2F126F00A98730 /* AuthTempStorage.swift */,
 				2EC52CBB2A41F82D0072998E /* Reactors */,
 				2EC52CB92A41F8250072998E /* ViewControllers */,
 			);
@@ -1236,6 +1241,7 @@
 		2EE07EAA296E7BC100048A3C /* Reminder */ = {
 			isa = PBXGroup;
 			children = (
+				E5AFAAE22B2DF3F800A98730 /* ReminderAlertManager.swift */,
 				2EB3E71229D4500D008D10A0 /* ReminderSection.swift */,
 				2EE07EAD296E7BE200048A3C /* Reactor */,
 				2EE07EAC296E7BDE00048A3C /* Views */,
@@ -1784,6 +1790,7 @@
 				2E87B8CB2A0A504100570386 /* ProfileView.swift in Sources */,
 				2E87B8CA2A0A503400570386 /* ProfileSection.swift in Sources */,
 				2E87B8C92A0A501D00570386 /* HomeHeaderView.swift in Sources */,
+				E5AFAAE32B2DF3F800A98730 /* ReminderAlertManager.swift in Sources */,
 				2E8C664029BB95DB00006CBF /* AuthFindPasswordViewReactor.swift in Sources */,
 				2EEC734A2A14F819007A29A5 /* AnniversaryListModifyingViewReactor.swift in Sources */,
 				E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */,
@@ -1935,6 +1942,7 @@
 				2EC939F5299CF6C400C8C47F /* ProfileFavorCellReactor.swift in Sources */,
 				2E9B4CBA2A1277BC00C7E31E /* FriendListFlow.swift in Sources */,
 				2EEC97D329D9881C00AACF38 /* ReminderEditVC.swift in Sources */,
+				E5AFAAE52B2F126F00A98730 /* AuthTempStorage.swift in Sources */,
 				2E87B8D82A0BCCD400570386 /* FriendListModifyingVC.swift in Sources */,
 				2EB3E71729D48BFE008D10A0 /* ReminderCellReactor.swift in Sources */,
 				2E59BB0B2A28C92500A9AF9F /* GiftManagementVC.swift in Sources */,

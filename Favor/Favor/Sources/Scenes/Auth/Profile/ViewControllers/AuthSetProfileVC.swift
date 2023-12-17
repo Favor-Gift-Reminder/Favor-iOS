@@ -24,17 +24,17 @@ public final class AuthSetProfileViewController: BaseViewController, View {
     static let textFieldSpacing = 32.0
     static let bottomSpacing = 32.0
   }
-
+  
   private enum Typo {
-    static let namePlaceholder: String = "이름"
-    static let idPlaceholder: String = "유저 아이디"
+    static let namePlaceholder: String = "이름 (최대 20자)"
+    static let idPlaceholder: String = "아이디 (최대 20자)"
     static let nextButtonTitle: String = "다음"
   }
 
   // MARK: - Properties
   
   // MARK: - UI Components
-
+  
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsHorizontalScrollIndicator = false
@@ -44,24 +44,35 @@ public final class AuthSetProfileViewController: BaseViewController, View {
   
   private let profileImageButton: UIButton = {
     var config = UIButton.Configuration.filled()
-    config.baseBackgroundColor = .favorColor(.line3)
-    config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.friend)?.withTintColor(.favorColor(.white))
-    config.background.imageContentMode = .scaleAspectFill
-    
+    config.baseBackgroundColor = .favorColor(.divider)
+    config.image = .favorIcon(.friend)?
+      .withTintColor(.favorColor(.white))
+      .resize(newWidth: 60)
+    config.background.cornerRadius = Metric.profileImageSize / 2
     let button = UIButton(configuration: config)
-    button.clipsToBounds = true
-    button.layer.cornerRadius = Metric.profileImageSize / 2
+    button.layer.masksToBounds = true
+    button.imageView?.contentMode = .scaleAspectFill
     return button
+  }()
+  
+  private let profileImageView: UIImageView = {
+    let imageView = UIImageView()
+    imageView.backgroundColor = .clear
+    imageView.layer.masksToBounds = true
+    imageView.contentMode = .scaleAspectFill
+    imageView.layer.cornerRadius = Metric.profileImageSize / 2
+    return imageView
   }()
   
   private let plusImageView: UIButton = {
     var config = UIButton.Configuration.filled()
     config.baseBackgroundColor = .favorColor(.line2)
-    config.baseForegroundColor = .favorColor(.white)
-    config.image = .favorIcon(.add)?.withTintColor(.favorColor(.white))
+    config.image = .favorIcon(.gallery)?
+      .withTintColor(.favorColor(.white))
+      .resize(newWidth: 20)
     config.background.cornerRadius = Metric.plusImageSize / 2
-    
+    config.background.strokeColor = .white
+    config.background.strokeWidth = 3.0
     let button = UIButton(configuration: config)
     button.isUserInteractionEnabled = false
     return button
@@ -184,10 +195,11 @@ public final class AuthSetProfileViewController: BaseViewController, View {
     
     // State
     reactor.state.map { $0.profileImage }
+      .distinctUntilChanged()
       .skip(1)
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, image in
-        owner.profileImageButton.configuration?.image = image
+        owner.profileImageView.image = image
       })
       .disposed(by: self.disposeBag)
 
@@ -262,6 +274,7 @@ public final class AuthSetProfileViewController: BaseViewController, View {
     
     [
       self.profileImageButton,
+      self.profileImageView,
       self.plusImageView,
       self.textFieldStack
     ].forEach {
@@ -274,16 +287,20 @@ public final class AuthSetProfileViewController: BaseViewController, View {
       make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
-
+    
     self.profileImageButton.snp.makeConstraints { make in
       make.width.height.equalTo(Metric.profileImageSize)
       make.centerX.equalToSuperview()
       make.top.equalToSuperview().inset(Metric.topSpacing)
     }
     
+    self.profileImageView.snp.makeConstraints { make in
+      make.edges.equalTo(self.profileImageButton)
+    }
+    
     self.plusImageView.snp.makeConstraints { make in
       make.width.height.equalTo(Metric.plusImageSize)
-      make.bottom.trailing.equalTo(self.profileImageButton)
+      make.bottom.trailing.equalTo(self.profileImageButton).offset(4.0)
     }
     
     self.textFieldStack.snp.makeConstraints { make in
@@ -298,4 +315,10 @@ public final class AuthSetProfileViewController: BaseViewController, View {
       make.bottom.equalTo(self.view.keyboardLayoutGuide.snp.top).offset(-Metric.bottomSpacing)
     }
   }  
+}
+
+extension AuthSetProfileViewController: PickerManagerDelegate {
+  public func pickerManager(didFinishPicking image: UIImage?) {
+    self.reactor?.action.onNext(.imageDidSelected(image))
+  }
 }

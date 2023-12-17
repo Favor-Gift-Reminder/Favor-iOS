@@ -9,6 +9,7 @@ import OSLog
 import UIKit
 
 import FavorKit
+import FavorNetworkKit
 import ReactorKit
 import RxCocoa
 import RxFlow
@@ -19,6 +20,8 @@ public final class AuthTermViewReactor: Reactor, Stepper {
 
   public var initialState: State
   public var steps = PublishRelay<Step>()
+  private var workbench = RealmWorkbench()
+  private let keychain = KeychainManager()
 
   public enum Action {
     case viewNeedsLoaded
@@ -28,6 +31,7 @@ public final class AuthTermViewReactor: Reactor, Stepper {
   }
 
   public enum Mutation {
+    case updateLoading(Bool)
     case updateTerms([Terms])
     case toggleAllTerms
     case validateNextButton
@@ -40,16 +44,18 @@ public final class AuthTermViewReactor: Reactor, Stepper {
     var termItems: [AuthTermSectionItem] = []
     var isAllAccepted: Bool = false
     var isNextButtonEnabled: Bool = false
+    var isLoading: Bool = false
   }
-
+  
   // MARK: - Initializer
 
   init(with user: User) {
     self.initialState = State(
+      userProfile: AuthTempStorage.shared.profileImage,
       userName: user.name
     )
   }
-
+  
   // MARK: - Functions
 
   public func mutate(action: Action) -> Observable<Mutation> {
@@ -73,11 +79,57 @@ public final class AuthTermViewReactor: Reactor, Stepper {
       ])
       
     case .nextButtonDidTap:
-      os_log(.debug, "Next button did tap.")
-      if self.currentState.isNextButtonEnabled {  
-        self.steps.accept(AppStep.authIsComplete)
-      }
-      return .empty()
+      let storage = AuthTempStorage.shared
+      let email = storage.email
+      let password = storage.password
+      
+      return .concat([
+        .just(.updateLoading(true)),
+        self.requestSignUp(email: email, password: password)
+          .asObservable()
+          .flatMap { _ in
+            // Request sign-in to retrieve access token
+            return self.requestSignIn(email: email, password: password)
+              .asObservable()
+              .flatMap { token -> Observable<Mutation> in
+                do {
+                  guard
+                    let emailData = email.data(using: .utf8),
+                    let passwordData = password.data(using: .utf8),
+                    let tokenData = token.data(using: .utf8)
+                  else { return .empty() }
+                  try self.keychain.set(
+                    value: emailData,
+                    account: KeychainManager.Accounts.userEmail.rawValue)
+                  try self.keychain.set(
+                    value: passwordData,
+                    account: KeychainManager.Accounts.userPassword.rawValue)
+                  try self.keychain.set(
+                    value: tokenData,
+                    account: KeychainManager.Accounts.accessToken.rawValue)
+                  FTUXStorage.authState = .email
+                } catch {
+                  os_log(.error, "\(error)")
+                  return .just(.updateLoading(false))
+                }
+                return .just(.updateLoading(false))
+              }
+          }
+          .flatMap { _ in return self.requestPatchProfile() }
+          .flatMap { _ in
+            if let image = AuthTempStorage.shared.profileImage {
+              let userPhotoNetworking = UserPhotoNetworking()
+              return userPhotoNetworking.request(.postProfile(file: APIManager.createMultiPartForm(image)))
+                .flatMap { _ in
+                  self.steps.accept(AppStep.authIsComplete)
+                  return Observable<Mutation>.just(.updateLoading(false))
+                }
+            } else {
+              self.steps.accept(AppStep.authIsComplete)
+              return .just(.updateLoading(false))
+            }
+          }
+      ])
     }
   }
 
@@ -85,6 +137,9 @@ public final class AuthTermViewReactor: Reactor, Stepper {
     var newState = state
 
     switch mutation {
+    case .updateLoading(let isLoading):
+      newState.isLoading = isLoading
+      
     case .updateTerms(let terms):
       newState.terms = terms
 
@@ -115,6 +170,100 @@ public final class AuthTermViewReactor: Reactor, Stepper {
       newState.isAllAccepted = state.terms.filter { !$0.isAccepted }.isEmpty
 
       return newState
+    }
+  }
+}
+
+// MARK: - Newtorks
+
+private extension AuthTermViewReactor {
+  func requestSignup() -> Observable<Void> {
+    let email = AuthTempStorage.shared.email
+    let password = AuthTempStorage.shared.password
+    
+    return Observable<Void>.create { observer in
+      let userNetworking = UserNetworking()
+      return userNetworking.request(.postSignUp(email: email, password: password))
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { User(singleDTO: $0.data) }
+        .subscribe(onNext: { _ in
+          observer.onNext(())
+          observer.onCompleted()
+        })
+    }
+  }
+  
+  func requestPatchProfile() -> Observable<Void> {
+    let userId = AuthTempStorage.shared.user.searchID
+    let userName = AuthTempStorage.shared.user.name
+    return Observable<Void>.create { observer in
+      let userNetworking = UserNetworking()
+      return userNetworking.request(.patchProfile(userId: userId, name: userName))
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { User(singleDTO: $0.data) }
+        .subscribe(onNext: { user in
+          UserInfoStorage.userNo = user.identifier
+          self.updateUser(with: user)
+          observer.onNext(())
+          observer.onCompleted()
+        })
+    }
+  }
+  
+  func updateUser(with user: User) {
+    Task {
+      try await self.workbench.write { transaction in
+        transaction.update(user.realmObject(), update: .all)
+      }
+    }
+  }
+  
+  func requestSignIn(email: String, password: String) -> Single<String> {
+    return Single<String>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.postSignIn(email: email, password: password))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<SignInResponseDTO> = try APIManager.decode(response.data)
+            single(.success(responseDTO.data.token))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
+    }
+  }
+  
+  func requestSignUp(email: String, password: String) -> Single<User> {
+    return Single<User>.create { single in
+      let networking = UserNetworking()
+      let disposable = networking.request(.postSignUp(email: email, password: password))
+        .take(1)
+        .asSingle()
+        .subscribe(onSuccess: { response in
+          do {
+            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
+            single(.success(User(singleDTO: responseDTO.data)))
+          } catch {
+            single(.failure(error))
+          }
+        }, onFailure: { error in
+          if let error = error as? APIError {
+            os_log(.error, "\(error.description)")
+          }
+          single(.failure(error))
+        })
+
+      return Disposables.create {
+        disposable.dispose()
+      }
     }
   }
 }

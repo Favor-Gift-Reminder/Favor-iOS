@@ -23,10 +23,9 @@ public final class FavorSwitch: UIButton {
   public weak var delegate: FavorSwitchDelegate?
 
   private var animator: UIViewPropertyAnimator?
-
+  
   public var isOn: Bool = false {
     willSet { self.animateState(to: newValue) }
-    didSet { self.delegate?.switchDidToggled(to: self.isOn) }
   }
   
   /// Switch가 켜졌을 때의 색상
@@ -50,7 +49,7 @@ public final class FavorSwitch: UIButton {
   }
 
   public var duration: TimeInterval = 0.2
-
+  
   // MARK: - UI Components
 
   private lazy var barView = {
@@ -83,6 +82,7 @@ public final class FavorSwitch: UIButton {
 
   public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     self.isOn.toggle()
+    self.delegate?.switchDidToggled(to: self.isOn)
   }
 
   public override func layoutSublayers(of layer: CALayer) {

@@ -43,7 +43,6 @@ final class HomeViewController: BaseViewController, View {
       frame: .zero,
       collectionViewLayout: UICollectionViewLayout()
     )
-
     collectionView.backgroundColor = .clear
     collectionView.showsHorizontalScrollIndicator = false
     collectionView.showsVerticalScrollIndicator = false
@@ -52,7 +51,7 @@ final class HomeViewController: BaseViewController, View {
   }()
   
   // MARK: - Life Cycle
-
+  
   override func viewDidLoad() {
     super.viewDidLoad()
 
@@ -178,34 +177,35 @@ private extension HomeViewController {
     self.navigationItem.setRightBarButton(self.searchButton.toBarButtonItem(), animated: false)
     self.navigationController?.setNavigationBarHidden(false, animated: false)
   }
-
+  
   func setupDataSource() {
     let emptyCellRegistrationg = UICollectionView.CellRegistration
-      <FavorEmptyCell, HomeSectionItem> { [weak self] cell, _, item in
-        guard self != nil else { return }
-        if case let HomeSectionItem.upcoming(.empty(image, title)) = item {
-          cell.bindEmptyData(image: image, text: title)
-        } else if case let HomeSectionItem.timeline(.empty(image, title)) = item {
-          cell.bindEmptyData(image: image, text: title)
-        }
+    <FavorEmptyCell, HomeSectionItem> { [weak self] cell, _, item in
+      guard self != nil else { return }
+      if case let HomeSectionItem.upcoming(.empty(image, title)) = item {
+        cell.bindEmptyData(image: image, text: title)
+      } else if case let HomeSectionItem.timeline(.empty(image, title)) = item {
+        cell.bindEmptyData(image: image, text: title)
+      }
     }
     
     let upcomingCellRegistration = UICollectionView.CellRegistration
-      <HomeUpcomingCell, HomeSectionItem> { [weak self] cell, _, item in
-        guard
-          self != nil,
-          case let HomeSectionItem.upcoming(.reminder(reminder)) = item
-        else { return }
-        cell.bind(with: reminder)
+    <HomeUpcomingCell, HomeSectionItem> { [weak self] cell, _, item in
+      guard
+        self != nil,
+        case let HomeSectionItem.upcoming(.reminder(reminder)) = item
+      else { return }
+      cell.switchDidTap = { self?.reactor?.action.onNext(.switchDidTap(item)) }
+      cell.bind(with: reminder)
     }
     
     let timelineCellRegistration = UICollectionView.CellRegistration
-      <HomeTimelineCell, HomeSectionItem> { [weak self] cell, _, item in
-        guard
-          self != nil,
-          case let HomeSectionItem.timeline(.gift(gift)) = item
-        else { return }
-        cell.bind(with: gift)
+    <HomeTimelineCell, HomeSectionItem> { [weak self] cell, _, item in
+      guard
+        self != nil,
+        case let HomeSectionItem.timeline(.gift(gift)) = item
+      else { return }
+      cell.bind(with: gift)
     }
     
     self.dataSource = HomeDataSource(
@@ -218,8 +218,9 @@ private extension HomeViewController {
             return collectionView.dequeueConfiguredReusableCell(
               using: emptyCellRegistrationg, for: indexPath, item: item)
           case .reminder:
-            return collectionView.dequeueConfiguredReusableCell(
+            let cell = collectionView.dequeueConfiguredReusableCell(
               using: upcomingCellRegistration, for: indexPath, item: item)
+            return cell
           }
         case .timeline(let giftData):
           switch giftData {

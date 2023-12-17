@@ -14,9 +14,15 @@ final class HomeUpcomingCell: BaseCardCell {
   
   // MARK: - Properties
   
+  var switchDidTap: (() -> Void)?
+  
   // MARK: - UI Components
 
-  private let toggleSwitch = FavorSwitch()
+  private lazy var toggleSwitch: FavorSwitch = {
+    let favorSwitch = FavorSwitch()
+    favorSwitch.delegate = self
+    return favorSwitch
+  }()
 
   // MARK: - UI Setup
 
@@ -51,5 +57,11 @@ final class HomeUpcomingCell: BaseCardCell {
     } else {
       self.imageView.image = nil
     }
+  }
+}
+
+extension HomeUpcomingCell: FavorSwitchDelegate {
+  func switchDidToggled(to state: Bool) {
+    self.switchDidTap?()
   }
 }

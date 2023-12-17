@@ -76,16 +76,6 @@ public final class PickerManager: NSObject, UINavigationControllerDelegate {
   }
 }
 
-//extension PickerManager: YPImagePickerDelegate {
-//  public func imagePickerHasNoItemsInLibrary(_ picker: YPImagePicker) {
-//    
-//  }
-//  
-//  public func shouldAddToSelection(indexPath: IndexPath, numSelections: Int) -> Bool {
-//    return true
-//  }
-//}
-
 extension PickerManager: PHPickerViewControllerDelegate {
   public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
     Task {

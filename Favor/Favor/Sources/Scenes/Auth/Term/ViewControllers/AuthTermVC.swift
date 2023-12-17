@@ -19,8 +19,8 @@ public final class AuthTermViewController: BaseViewController, View {
   // MARK: - Constants
 
   private enum Metric {
-    static let topSpacing: CGFloat = 116.0
-    static let profileImageViewSize: CGFloat = 48.0
+    static let topSpacing: CGFloat = 64.0
+    static let profileImageViewSize: CGFloat = 100.0
     static let cellHeight: CGFloat = 32.0
     static let cellSpacing: CGFloat = 16.0
     static let bottomSpacing: CGFloat = 32.0
@@ -34,22 +34,38 @@ public final class AuthTermViewController: BaseViewController, View {
     let composer = Composer(collectionView: self.collectionView, dataSource: self.dataSource)
     return composer
   }()
-
+  
   // MARK: - UI Components
-
+  
   private let profileImageView: UIImageView = {
     let imageView = UIImageView()
-    imageView.image = .favorIcon(.friend)
-    imageView.tintColor = .favorColor(.icon)
+    imageView.image = .favorIcon(.friend)?
+      .withTintColor(.white)
+      .resize(newWidth: 50)
+    imageView.backgroundColor = .favorColor(.divider)
+    imageView.layer.cornerRadius = Metric.profileImageViewSize / 2
+    imageView.layer.masksToBounds = true
+    imageView.contentMode = .center
+    imageView.layer.borderWidth = 3.5
+    imageView.layer.borderColor = UIColor.white.cgColor
     return imageView
   }()
-
+  
+  private let userCircleImageView: UIImageView = {
+    let imageView = UIImageView(image: .favorIcon(.user_circle))
+    imageView.layer.borderColor = UIColor.favorColor(.main).cgColor
+    imageView.layer.borderWidth = 3.5
+    imageView.backgroundColor = .clear
+    imageView.layer.cornerRadius = 53.5
+    return imageView
+  }()
+  
   private let welcomeLabel: UILabel = {
     let label = UILabel()
     label.numberOfLines = 2
     label.textAlignment = .center
     label.font = .favorFont(.bold, size: 22)
-    label.text = "이름 님\n환영합니다"
+    label.text = "이름님\n환영합니다!"
     return label
   }()
 
@@ -71,7 +87,7 @@ public final class AuthTermViewController: BaseViewController, View {
   private var collectionViewHeight: Constraint?
 
   private let startButton: FavorLargeButton = {
-    let button = FavorLargeButton(with: .main("시작하기"))
+    let button = FavorLargeButton(with: .main("확인"))
     button.isEnabled = false
     return button
   }()
@@ -106,14 +122,16 @@ public final class AuthTermViewController: BaseViewController, View {
 
     // State
     reactor.state.map { $0.userProfile }
+      .filter { $0 != nil }
       .bind(with: self, onNext: { owner, image in
-        owner.profileImageView.image = image ?? .favorIcon(.friend)
+        owner.profileImageView.contentMode = .scaleAspectFill
+        owner.profileImageView.image = image
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.userName }
       .bind(with: self, onNext: { owner, userName in
-        owner.welcomeLabel.text = "\(userName) 님\n환영합니다"
+        owner.welcomeLabel.text = "\(userName)님\n환영합니다"
       })
       .disposed(by: self.disposeBag)
 
@@ -146,6 +164,10 @@ public final class AuthTermViewController: BaseViewController, View {
         owner.startButton.isEnabled = isEnabled
       })
       .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.isLoading }
+      .bind(to: self.rx.isLoading)
+      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
@@ -154,6 +176,7 @@ public final class AuthTermViewController: BaseViewController, View {
   
   public override func setupLayouts() {
     [
+      self.userCircleImageView,
       self.profileImageView,
       self.welcomeLabel,
       self.acceptAllView,
@@ -165,6 +188,11 @@ public final class AuthTermViewController: BaseViewController, View {
   }
   
   public override func setupConstraints() {
+    self.userCircleImageView.snp.makeConstraints { make in
+      make.size.equalTo(107.0)
+      make.center.equalTo(self.profileImageView)
+    }
+    
     self.profileImageView.snp.makeConstraints { make in
       make.top.equalTo(self.view.layoutMarginsGuide).inset(Metric.topSpacing)
       make.centerX.equalToSuperview()
@@ -181,15 +209,15 @@ public final class AuthTermViewController: BaseViewController, View {
       make.bottom.equalTo(self.collectionView.snp.top).offset(-Metric.cellSpacing)
       make.height.equalTo(Metric.cellHeight)
     }
-
+    
     self.collectionView.snp.makeConstraints { make in
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
       make.bottom.equalTo(self.startButton.snp.top).offset(-80)
       self.collectionViewHeight = make.height.equalTo(32).constraint
     }
-
+    
     self.startButton.snp.makeConstraints { make in
-      make.bottom.equalToSuperview().inset(Metric.bottomSpacing)
+      make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(Metric.bottomSpacing)
       make.directionalHorizontalEdges.equalTo(self.view.layoutMarginsGuide)
     }
   }

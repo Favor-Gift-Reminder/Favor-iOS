@@ -21,6 +21,7 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
   public var initialState: State
   public var steps = PublishRelay<Step>()
   private let workbench = RealmWorkbench()
+  private var pickerManager: PickerManager?
 
   // Global States
   let isNameEmpty = BehaviorRelay<Bool>(value: true)
@@ -31,6 +32,7 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
     case nameTextFieldDidUpdate(String)
     case idTextFieldDidUpdate(String)
     case nextButtonDidTap
+    case imageDidSelected(UIImage?)
   }
   
   public enum Mutation {
@@ -58,14 +60,15 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
   }
   
   // MARK: - Functions
-  
+    
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .profileImageButtonDidTap:
-      // TODO: Picker
-//      self.steps.accept(AppStep.imagePickerIsRequired(self.pickerManager))
+      let pickerManager = PickerManager()
+      self.pickerManager = pickerManager
+      self.steps.accept(AppStep.imagePickerIsRequired(pickerManager, selectionLimit: 1))
       return .empty()
-
+      
     case .nameTextFieldDidUpdate(let name):
       os_log(.debug, "Name TextField did update: \(name).")
       self.isNameEmpty.accept(name.isEmpty)
@@ -88,27 +91,18 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
       ])
       
     case .nextButtonDidTap:
-      if self.currentState.isNextButtonEnabled {
-        return .concat([
-          .just(.updateLoading(true)),
-          self.requestPatchProfile(self.currentState.user)
-            .asObservable()
-            .flatMap { user -> Observable<Mutation> in
-              self.steps.accept(AppStep.termIsRequired(user))
-              return .just(.updateLoading(false))
-            }
-        ])
-      }
+      let shared = AuthTempStorage.shared
+      shared.saveUser(self.currentState.user)
+      shared.saveProfileImage(self.currentState.profileImage)
+      self.steps.accept(AppStep.termIsRequired(self.currentState.user))
       return .empty()
+      
+    case .imageDidSelected(let image):
+      return .just(.updateProfileImage(image))
     }
   }
   
   public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
-    // TODO: Picker
-//    let pickerMutation = self.pickerManager.pickedContents
-//      .flatMap({ (picker) -> Observable<Mutation> in
-//        return .just(.updateProfileImage(picker.first))
-//      })
     let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
       self.isNameEmpty,
       self.idValidate,
@@ -147,7 +141,6 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
     
     return newState
   }
-  
 }
 
 // MARK: - Privates
@@ -155,8 +148,9 @@ public final class AuthSetProfileViewReactor: Reactor, Stepper {
 private extension AuthSetProfileViewReactor {
   func requestPatchProfile(_ user: User) -> Single<User> {
     return Single<User>.create { single in
-      let networking = UserNetworking()
-      let disposable = networking.request(
+      let userNetworking = UserNetworking()
+      let userPhotoNetworking = UserPhotoNetworking()
+      let disposable = userNetworking.request(
         .patchProfile(userId: user.searchID, name: user.name))
         .take(1)
         .asSingle()

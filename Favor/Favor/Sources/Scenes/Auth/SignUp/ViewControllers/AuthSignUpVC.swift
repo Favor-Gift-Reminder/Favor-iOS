@@ -29,11 +29,11 @@ public final class AuthSignUpViewController: BaseViewController, View {
     static let passwordValidatePlaceholder: String = "비밀번호 확인"
     static let nextButtonTitle: String = "다음"
   }
-
+  
   // MARK: - Properties
   
   // MARK: - UI Components
-
+  
   private let scrollView: UIScrollView = {
     let scrollView = UIScrollView()
     scrollView.showsVerticalScrollIndicator = false

@@ -11,7 +11,7 @@ public enum AuthType {
   var regex: String {
     switch self {
     case .email: return "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
-    case .password: return "((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\W]).{8,20})"
+    case .password: return "((?=.*\\d)(?=.*[a-z]).{8,20})"
     case .confirmPassword: return ""
     case .id: return "^[a-z0-9-_]{5,20}$"
     }
