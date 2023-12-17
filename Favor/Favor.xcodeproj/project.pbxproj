@@ -2144,7 +2144,7 @@
 				CODE_SIGN_ENTITLEMENTS = Favor/Favor.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = beta;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2160,7 +2160,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LIBTOOLFLAGS = "-WLinkingC true -XCBuildForPre true -XCExpApple true";
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -2184,8 +2184,9 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Favor/Favor.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = beta;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = XW996HTK32;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -2201,12 +2202,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.1.0;
 				OTHER_LIBTOOLFLAGS = "-WLinkingC true -XCBuildForPre true -XCExpApple true";
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Favor_iOS_Development;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Favor_iOS_AdHoc;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
