@@ -325,6 +325,7 @@ extension GiftDetailViewController: GiftDetailTagsCellDelegate {
 extension GiftDetailViewController: GalleryItemsDataSource {
   public func presentImageGallery(index: Int, total: Int) {
     guard let reactor = self.reactor else { return }
+    self.galleryItems = [] 
     let gift = reactor.currentState.gift
     let cache = ImageCacheManager()
     Task {

@@ -19,7 +19,7 @@ public final class ImageCacheManager {
   }
   
   public enum Metric {
-    public static let bannerSize: CGSize = CGSize(width: 500.0, height: 440.0)
+    public static let bannerSize: CGSize = CGSize(width: 5000.0, height: 4400.0)
     public static let profileSize: CGSize = CGSize(width: 90.0, height: 90.0)
   }
   

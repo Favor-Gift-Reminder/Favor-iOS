@@ -5,7 +5,7 @@
 //  Created by 김응철 on 11/16/23.
 //
 
-import Foundation
+import UIKit
 
 import FavorKit
 import RxFlow
@@ -30,7 +30,7 @@ final class GiftManagementFlow: Flow {
   
   // MARK: - Navigate
   
-  func navigate(to step: Step) -> FlowContributors {
+  @MainActor func navigate(to step: Step) -> FlowContributors {
     guard let step = step as? AppStep else { return .none }
     
     switch step {
@@ -57,6 +57,9 @@ final class GiftManagementFlow: Flow {
       
     case .editGiftIsComplete(let gift):
       self.rootViewController.popViewController(animated: true)
+      if let giftDetailVC = UIApplication.shared.topViewController() as? GiftDetailViewController {
+        giftDetailVC.update(gift: gift)
+      }
       ToastManager.shared.showNewToast(.init(.giftEdited(gift.name)))
       return .end(forwardToParentFlowWithStep: AppStep.doNothing)
       

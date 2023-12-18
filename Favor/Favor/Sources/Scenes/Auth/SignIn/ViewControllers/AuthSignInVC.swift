@@ -98,7 +98,7 @@ public final class AuthSignInViewController: BaseViewController, View {
       .map { Reactor.Action.viewNeedsLoaded }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.rx.viewDidAppear
       .asDriver(onErrorRecover: { _ in return .empty()})
       .drive(with: self, onNext: { owner, _ in
