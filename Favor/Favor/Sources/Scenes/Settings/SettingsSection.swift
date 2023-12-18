@@ -111,9 +111,16 @@ extension SettingsSection: Composable {
     case .appPrivacy:
       boundaryItems = []
     }
-    return .base(
-      contentInsets: NSDirectionalEdgeInsets(top: 24, leading: 12, bottom: 32, trailing: 12),
-      boundaryItems: boundaryItems
-    )
+    switch self {
+    case .appPrivacy:
+      return .base(
+        contentInsets: NSDirectionalEdgeInsets(top: 24, leading: 12, bottom: 32, trailing: 12)
+      )
+    default:
+      return .base(
+        contentInsets: NSDirectionalEdgeInsets(top: 24, leading: 12, bottom: 32, trailing: 12),
+        boundaryItems: boundaryItems
+      )
+    }
   }
 }

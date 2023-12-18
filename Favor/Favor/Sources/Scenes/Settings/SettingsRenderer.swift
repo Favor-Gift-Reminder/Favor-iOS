@@ -52,13 +52,6 @@ private extension SettingsRenderer {
         section: .notification,
         title: "리마인더 알림"
       ),
-      Item(
-        type: .switchable(
-          initialValue: UserInfoStorage.isMarketingNotificationEnabled,
-          .isMarketingNotificationEnabled),
-        section: .notification,
-        title: "마케팅 정보 알림"
-      ),
       Item(type: .tappable, section: .appInfo, title: "버전", staticInfo: version),
       Item(type: .navigatable, section: .appInfo, title: "팀", step: .devTeamInfoIsRequired),
       Item(type: .navigatable, section: .appInfo, title: "개발자 응원하기", step: .devTeamSupportIsRequired),
@@ -81,14 +74,7 @@ private extension SettingsRenderer {
     ))
     if UserInfoStorage.isLocalAuthEnabled {
       // 생체 인증
-      let biometricAuth: String
-      if device.isFaceIDCapable {
-        biometricAuth = "Face ID"
-      } else if device.isTouchIDCapable {
-        biometricAuth = "Touch ID"
-      } else {
-        biometricAuth = ""
-      }
+      let biometricAuth: String = "생채 인증 사용"
       items.append(Item(
         type: .switchable(
           initialValue: UserInfoStorage.isBiometricAuthEnabled,

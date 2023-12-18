@@ -140,7 +140,7 @@ public final class AuthTermViewController: BaseViewController, View {
         owner.acceptAllView.updateCheckButton(isAllAccepted: isAccepted)
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.termItems }
       .asDriver(onErrorRecover: { _ in return .never() })
       .drive(with: self, onNext: { (owner: AuthTermViewController, items: [AuthTermSectionItem]) in
@@ -157,7 +157,7 @@ public final class AuthTermViewController: BaseViewController, View {
         }
       })
       .disposed(by: self.disposeBag)
-
+    
     reactor.state.map { $0.isNextButtonEnabled }
       .asDriver(onErrorRecover: { _ in return .empty() })
       .drive(with: self, onNext: { owner, isEnabled in
@@ -169,7 +169,7 @@ public final class AuthTermViewController: BaseViewController, View {
       .bind(to: self.rx.isLoading)
       .disposed(by: self.disposeBag)
   }
-
+  
   // MARK: - Functions
   
   // MARK: - UI Setups

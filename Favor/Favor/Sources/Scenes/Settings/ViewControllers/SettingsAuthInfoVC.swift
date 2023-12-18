@@ -77,7 +77,7 @@ public final class SettingsAuthInfoViewController: BaseViewController, View {
   // MARK: - Life Cycle
 
   // MARK: - Binding
-
+  
   public func bind(reactor: SettingsAuthInfoViewReactor) {
     // Action
     self.signoutButton.rx.tap
@@ -183,8 +183,9 @@ private extension SettingsAuthInfoViewController {
       identifier: PopupIdentifier.signout
     )
     signOutPopup.modalPresentationStyle = .overFullScreen
-    signOutPopup.delegate = self
-
+    signOutPopup.accpetButtonCompletion = {
+      self.reactor?.action.onNext(.signoutDidRequested)
+    }
     DispatchQueue.main.async {
       self.present(signOutPopup, animated: false)
     }

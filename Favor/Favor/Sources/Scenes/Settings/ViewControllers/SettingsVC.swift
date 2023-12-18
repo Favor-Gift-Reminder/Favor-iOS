@@ -71,7 +71,7 @@ public final class SettingsViewController: BaseViewController, View {
       }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.pulse { $0.$biometricAuthPulse }
       .filter { $0 }

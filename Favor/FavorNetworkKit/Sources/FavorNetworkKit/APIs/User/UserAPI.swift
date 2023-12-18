@@ -126,6 +126,16 @@ public enum UserAPI {
   ///   - email: 가입하는 회원의 이메일 주소 - `Body`
   ///   - password: 가입하는 회원의 비밀번호 - `Body`
   case postSignUp(email: String, password: String)
+  
+  /// 비밀번호 변경
+  /// ``` json
+  /// // passwordDto
+  /// {
+  ///   "email": "favor@gmail.com
+  ///   "password": "*********"
+  /// }
+  /// ```
+  case patchPassword(email: String, password: String)
 }
 
 extension UserAPI: BaseTargetType {

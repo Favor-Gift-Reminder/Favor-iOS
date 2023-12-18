@@ -26,6 +26,8 @@ public class AuthNewPasswordViewReactor: Reactor, Stepper {
   public var initialState: State
   public var steps = PublishRelay<Step>()
   private let location: FlowLocation
+  private let keychain = KeychainManager()
+  private let workbench = RealmWorkbench()
 
   // Global States
   let oldPasswordValidate = BehaviorRelay<ValidationResult>(value: .empty)
@@ -67,15 +69,24 @@ public class AuthNewPasswordViewReactor: Reactor, Stepper {
   }
 
   // MARK: - Functions
-
+  
   public func mutate(action: Action) -> Observable<Mutation> {
     switch action {
     case .oldPasswordTextFieldDidUpdate(let oldPassword):
-      let oldPasswordValidate = AuthValidationManager(type: .password).validate(oldPassword)
-      self.oldPasswordValidate.accept(oldPasswordValidate)
+      guard
+        let passwordData = try? self.keychain.get(account: KeychainManager.Accounts.userPassword.rawValue)
+      else { return .empty() }
+      let password = String(decoding: passwordData, as: UTF8.self)
+      
+      if password == oldPassword {
+        self.oldPasswordValidate.accept(.valid)
+      } else {
+        self.oldPasswordValidate.accept(.invalid)
+      }
+      
       return .concat([
         .just(.updateOldPassword(oldPassword)),
-        .just(.updateOldPasswordValidationResult(oldPasswordValidate))
+        .just(.updateOldPasswordValidationResult(self.oldPasswordValidate.value))
       ])
 
     case .newPasswordTextFieldDidUpdate(let password):
@@ -116,7 +127,7 @@ public class AuthNewPasswordViewReactor: Reactor, Stepper {
       return .empty()
     }
   }
-
+  
   public func transform(mutation: Observable<Mutation>) -> Observable<Mutation> {
     let combineValidationsMutation: Observable<Mutation> = Observable.combineLatest(
       self.oldPasswordValidate,
@@ -138,10 +149,10 @@ public class AuthNewPasswordViewReactor: Reactor, Stepper {
       })
     return Observable.of(mutation, combineValidationsMutation).merge()
   }
-
+  
   public func reduce(state: State, mutation: Mutation) -> State {
     var newState = state
-
+    
     switch mutation {
     case .updateOldPassword(let oldPassword):
       newState.oldPassword = oldPassword
@@ -172,15 +183,33 @@ public class AuthNewPasswordViewReactor: Reactor, Stepper {
 // MARK: - Privates
 
 private extension AuthNewPasswordViewReactor {
-  // TODO: 서버 비밀번호 변경 구현 후 적용
-  func requestNewPassword() -> Single<Bool> {
+  func requestNewPassword() -> Single<Void> {
     let networking = UserNetworking()
-    return Single<Bool>.create { single in
-      single(.success(true))
-
-      return Disposables.create {
-        //
-      }
+    return Single<Void>.create { single in
+      guard
+        let emailData = try? self.keychain.get(account: KeychainManager.Accounts.userEmail.rawValue)
+      else { return Disposables.create() }
+      let email = String(decoding: emailData, as: UTF8.self)
+      let password = self.currentState.password
+      
+      return networking.request(
+        .patchPassword(email: email, password: password),
+        loadingIndicator: true
+      )
+        .map(ResponseDTO<UserSingleResponseDTO>.self)
+        .map { User(singleDTO: $0.data) }
+        .subscribe(onNext: { user in
+          Task {
+            try await self.workbench.write { transaction in
+              transaction.update(user.realmObject())
+              try self.keychain.set(
+                value: password.data(using: .utf8)!,
+                account: KeychainManager.Accounts.userPassword.rawValue
+              )
+              single(.success(()))
+            }
+          }
+        })
     }
   }
 }

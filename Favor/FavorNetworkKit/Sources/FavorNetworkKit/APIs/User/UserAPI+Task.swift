@@ -90,6 +90,15 @@ extension UserAPI {
         ],
         encoding: JSONEncoding.default
       )
+      
+    case let .patchPassword(email, password):
+      return .requestParameters(
+        parameters: [
+          "email": email,
+          "password": password
+        ],
+        encoding: JSONEncoding.default
+      )
     }
   }
 }

@@ -65,6 +65,9 @@ extension UserAPI {
 
     case .postSignUp:
       return .post
+      
+    case .patchPassword:
+      return .patch
     }
   }
 }

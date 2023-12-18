@@ -100,7 +100,7 @@ private extension SettingsAuthInfoViewReactor {
     }
     self.steps.accept(AppStep.wayBackToRootIsRequired)
   }
-
+  
   func handleDeleteAccount() -> Single<User> {
     return Single<User>.create { single in
       let networking = UserNetworking()

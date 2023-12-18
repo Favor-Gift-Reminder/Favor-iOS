@@ -19,7 +19,7 @@ public final class SettingsNewPasswordViewController: BaseViewController, View {
     static let currentPlaceholder: String = "현재 비밀번호"
     static let currentDescription: String = "기존 비밀번호를 입력해주세요."
     static let newPlaceholder: String = "새 비밀번호"
-    static let newDescription: String = "영문, 숫자 혼용 6자 이상"
+    static let newDescription: String = "영문, 숫자 혼용 8자 이상"
     static let validateNewPlaceholder: String = "새 비밀번호 확인"
     static let doneButtonTitle: String = "변경하기"
   }
@@ -124,12 +124,12 @@ public final class SettingsNewPasswordViewController: BaseViewController, View {
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     self.doneButton.rx.tap
       .map { Reactor.Action.nextFlowRequested }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { $0.isDoneButtonEnabled }
       .distinctUntilChanged()
@@ -137,6 +137,66 @@ public final class SettingsNewPasswordViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, isEnabled in
         owner.doneButton.configurationUpdateHandler = { button in
           button.isEnabled = isEnabled
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.oldPasswordValidationResult }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.currentPasswordTextField.updateMessageLabel(
+            "비밀번호가 기존 비밀번호와 다릅니다.",
+            state: .error
+          )
+        case .valid:
+          owner.currentPasswordTextField.updateMessageLabel(
+            Typo.currentDescription,
+            state: .normal
+          )
+        }
+      })
+      .disposed(by: self.disposeBag)
+    
+    reactor.state.map { $0.passwordValidationResult }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.newPasswordTextField.updateMessageLabel(
+            AuthValidationManager(type: .password).description(for: validationResult),
+            state: .error
+          )
+        case .valid:
+          owner.newPasswordTextField.updateMessageLabel(
+            AuthValidationManager(type: .password).description(for: validationResult),
+            state: .normal
+          )
+        }
+      })
+      .disposed(by: self.disposeBag)
+
+    reactor.state.map { $0.confirmPasswordValidationResult }
+      .asDriver(onErrorRecover: { _ in return .empty()})
+      .distinctUntilChanged()
+      .skip(1)
+      .drive(with: self, onNext: { owner, validationResult in
+        switch validationResult {
+        case .empty, .invalid:
+          owner.confirmNewPasswordTextField.updateMessageLabel(
+            AuthValidationManager(type: .confirmPassword).description(for: validationResult),
+            state: .error
+          )
+        case .valid:
+          owner.confirmNewPasswordTextField.updateMessageLabel(
+            AuthValidationManager(type: .confirmPassword).description(for: validationResult),
+            state: .normal
+          )
         }
       })
       .disposed(by: self.disposeBag)
