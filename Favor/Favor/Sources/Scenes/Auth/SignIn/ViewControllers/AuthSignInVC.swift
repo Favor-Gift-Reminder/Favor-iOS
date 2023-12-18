@@ -67,6 +67,7 @@ public final class AuthSignInViewController: BaseViewController, View {
     label.font = .favorFont(.regular, size: 14)
     label.textColor = .favorColor(.subtext)
     label.text = Typo.socialSignIn
+    label.isHidden = true
     return label
   }()
 
@@ -74,6 +75,7 @@ public final class AuthSignInViewController: BaseViewController, View {
     let stackView = UIStackView()
     stackView.axis = .horizontal
     stackView.spacing = 20
+    stackView.isHidden = true
     AuthState.allCases.forEach {
       if $0.isSocialAuth {
         stackView.addArrangedSubview(SocialAuthButton($0))
@@ -81,8 +83,12 @@ public final class AuthSignInViewController: BaseViewController, View {
     }
     return stackView
   }()
-
-  private let findPasswordButton = FavorPlainButton(with: .navigate(Typo.findPassword, isRight: false))
+  
+  private let findPasswordButton: FavorPlainButton = {
+    let button = FavorPlainButton(with: .navigate(Typo.findPassword, isRight: false))
+    button.isHidden = true
+    return button
+  }()
 
   // MARK: - Binding
   

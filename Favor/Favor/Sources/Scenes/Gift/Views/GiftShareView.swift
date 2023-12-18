@@ -24,6 +24,7 @@ final class GiftShareView: UIView {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
     imageView.image = UIImage(named: "GiftMock")
+    imageView.backgroundColor = .black
     return imageView
   }()
 
@@ -82,8 +83,9 @@ final class GiftShareView: UIView {
   // MARK: - Bind
 
   public func bind(with gift: Gift, image: UIImage?) {
-    if let image {
-      self.imageView.image = image
+    if let urlString = gift.photos.first?.remote {
+      guard let url = URL(string: urlString) else { return }
+      self.imageView.setImage(from: url, mapper: .init(gift: gift, subpath: .image(urlString)))
     }
     self.titleTextField.text = gift.name
   }
@@ -95,6 +97,7 @@ extension GiftShareView: BaseView {
   func setupStyles() {
     self.layer.cornerRadius = 16
     self.clipsToBounds = true
+    self.backgroundColor = .black
   }
 
   func setupLayouts() {

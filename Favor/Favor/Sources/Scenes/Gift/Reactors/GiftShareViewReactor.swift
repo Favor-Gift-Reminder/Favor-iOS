@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Photos
 
 import FavorKit
 import FavorNetworkKit
@@ -22,15 +23,16 @@ final class GiftShareViewReactor: Reactor, Stepper {
 
   enum Action {
     case instagramButtonDidTap(UIImage?, UIImage)
-    case photosButtonDidTap
+    case photosButtonDidTap(UIImage)
   }
 
   enum Mutation {
-
+    case updateShareImage(UIImage)
   }
 
   struct State {
     var gift: Gift
+    @Pulse var shareImage: UIImage = UIImage()
   }
 
   // MARK: - Initializer
@@ -40,7 +42,7 @@ final class GiftShareViewReactor: Reactor, Stepper {
       gift: gift
     )
   }
-
+  
   // MARK: - Functions
 
   func mutate(action: Action) -> Observable<Mutation> {
@@ -48,10 +50,21 @@ final class GiftShareViewReactor: Reactor, Stepper {
     case let .instagramButtonDidTap(background, sticker):
       self.share(to: .instagram(background, sticker))
       return .empty()
-
-    case .photosButtonDidTap:
-      return .empty()
+      
+    case .photosButtonDidTap(let image):
+      return .just(.updateShareImage(image))
     }
+  }
+  
+  func reduce(state: State, mutation: Mutation) -> State {
+    var newState = state
+    
+    switch mutation {
+    case .updateShareImage(let image):
+      newState.shareImage = image
+    }
+    
+    return newState
   }
 }
 
@@ -62,7 +75,7 @@ private extension GiftShareViewReactor {
   // MARK: - Constants
 
   // MARK: - Functions
-
+  
   private func share(to target: ShareTarget) {
     switch target {
     case let .instagram(background, sticker):
@@ -87,7 +100,7 @@ private extension GiftShareViewReactor {
       )
     }
   }
-
+  
   @MainActor
   private func backgroundImage(backgroundImage: Data, stickerImage: Data, appID: String) {
     if let url = URL(string: appID) {
@@ -104,7 +117,6 @@ private extension GiftShareViewReactor {
         ]
 
         UIPasteboard.general.setItems(pasteboardItems, options: pasteboardOptions)
-
         UIApplication.shared.open(url, options: [:])
       } else {
         // Error Handling

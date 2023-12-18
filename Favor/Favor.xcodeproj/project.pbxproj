@@ -2151,6 +2151,8 @@
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "페이버";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "앱 잠금을 위해서 생체 인식을 시작합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "선물 카드를 앨범에 저장혀려면 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -2193,6 +2195,8 @@
 				INFOPLIST_FILE = Favor/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "페이버";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "앱 잠금을 위해서 생체 인식을 시작합니다.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "선물 카드를 앨범에 저장혀려면 접근 권한이 필요합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;

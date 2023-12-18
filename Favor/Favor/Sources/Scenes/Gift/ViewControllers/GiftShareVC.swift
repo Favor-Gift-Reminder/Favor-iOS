@@ -36,8 +36,9 @@ final class GiftShareViewController: BaseViewController, View {
     view.layer.masksToBounds = false
     return view
   }()
+  
   private let shareImageView = GiftShareView()
-
+  
   private let shareLabel: UILabel = {
     let label = UILabel()
     label.font = .favorFont(.bold, size: 14)
@@ -46,7 +47,7 @@ final class GiftShareViewController: BaseViewController, View {
     label.text = "공유하기"
     return label
   }()
-
+  
   private lazy var instagramButton = self.shareButton(.instagram(nil, nil))
   private lazy var photosButton = self.shareButton(.photos)
 
@@ -57,9 +58,32 @@ final class GiftShareViewController: BaseViewController, View {
     stackView.alignment = .center
     return stackView
   }()
+  
+  private let titleLabel: UILabel = {
+    let label = UILabel()
+    label.text = "선물 한 컷"
+    label.textColor = .white
+    label.font = .favorFont(.bold, size: 18.0)
+    return label
+  }()
 
   // MARK: - Life Cycle
-
+  
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+    
+    self.navigationController?.navigationBar.tintColor = .white
+    self.navigationController?.navigationBar.backgroundColor = .black
+    self.navigationItem.titleView = self.titleLabel
+  }
+  
+  override func viewWillDisappear(_ animated: Bool) {
+    super.viewWillDisappear(animated)
+    
+    self.navigationController?.navigationBar.tintColor = .favorColor(.icon)
+    self.navigationController?.navigationBar.backgroundColor = .white
+  }
+  
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     self.setupShadowPath()
@@ -79,7 +103,8 @@ final class GiftShareViewController: BaseViewController, View {
       .disposed(by: self.disposeBag)
 
     self.photosButton.rx.tap
-      .map { Reactor.Action.photosButtonDidTap }
+      .map { self.shareImageView.toImage() }
+      .map { Reactor.Action.photosButtonDidTap($0) }
       .bind(to: reactor.action)
       .disposed(by: self.disposeBag)
 
@@ -90,7 +115,7 @@ final class GiftShareViewController: BaseViewController, View {
         owner.view.endEditing(true)
       })
       .disposed(by: self.disposeBag)
-
+    
     // State
     reactor.state.map { $0.gift }
       .take(1)
@@ -98,6 +123,14 @@ final class GiftShareViewController: BaseViewController, View {
       .drive(with: self, onNext: { owner, gift in
         owner.shareImageView.bind(with: gift, image: nil)
       })
+      .disposed(by: self.disposeBag)
+    
+    reactor.pulse(\.$shareImage)
+      .skip(1)
+      .asDriver(onErrorRecover: { _ in return .empty() })
+      .drive(with: self) { owner, image in
+        owner.presentShareSheet(image)
+      }
       .disposed(by: self.disposeBag)
   }
 
@@ -179,6 +212,11 @@ private extension GiftShareViewController {
       rect: self.shareShadowView.bounds).cgPath
     self.shareShadowView.layer.shouldRasterize = true
     self.shareShadowView.layer.rasterizationScale = UIScreen.main.scale
+  }
+  
+  func presentShareSheet(_ image: UIImage) {
+    let shareSheetVC = UIActivityViewController(activityItems: [image], applicationActivities: nil)
+    self.present(shareSheetVC, animated: true)
   }
 }
 

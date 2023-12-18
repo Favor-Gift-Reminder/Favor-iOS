@@ -16,7 +16,7 @@ public enum ShareTarget {
     case .instagram:
       return "스토리"
     case .photos:
-      return "사진에 저장"
+      return "사진 공유"
     }
   }
 

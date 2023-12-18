@@ -18,9 +18,9 @@ extension UIView {
     mask.path = path.cgPath
     self.layer.mask = mask
   }
-
+  
   public func toImage() -> UIImage {
-    let renderer = UIGraphicsImageRenderer(bounds: bounds)
+    let renderer = UIGraphicsImageRenderer(bounds: self.bounds.inset(by: .init(top: 10, left: 10, bottom: 10, right: 10)))
     return renderer.image { rendererContext in
       layer.render(in: rendererContext.cgContext)
     }
