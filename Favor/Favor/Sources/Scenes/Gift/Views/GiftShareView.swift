@@ -19,14 +19,20 @@ final class GiftShareView: UIView {
   }
 
   // MARK: - UI Components
+  
+  private let containerView: UIView = {
+    let view = UIView()
+    view.backgroundColor = .clear
+    view.layer.cornerRadius = 16.0
+    view.layer.masksToBounds = true
+    return view
+  }()
 
   private let imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
-    imageView.backgroundColor = .black
+    imageView.backgroundColor = .clear
     imageView.layer.masksToBounds = true
-    imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-    imageView.layer.cornerRadius = 16.0
     return imageView
   }()
   
@@ -66,6 +72,7 @@ final class GiftShareView: UIView {
   private let labelContainer: UIView = {
     let view = UIView()
     view.backgroundColor = .favorColor(.black)
+    view.layer.masksToBounds = true
     return view
   }()
   
@@ -107,18 +114,23 @@ final class GiftShareView: UIView {
 
 extension GiftShareView: BaseView {
   func setupStyles() {
-    self.layer.cornerRadius = 16
     self.clipsToBounds = true
     self.backgroundColor = .clear
   }
 
   func setupLayouts() {
     [
-      self.imageView,
-      self.labelContainer,
+      self.containerView,
       self.logoImageView
     ].forEach {
       self.addSubview($0)
+    }
+    
+    [
+      self.imageView,
+      self.labelContainer
+    ].forEach {
+      self.containerView.addSubview($0)
     }
 
     [
@@ -132,12 +144,18 @@ extension GiftShareView: BaseView {
   }
   
   func setupConstraints() {
-    self.imageView.snp.makeConstraints { make in
+    self.containerView.snp.makeConstraints { make in
       self.topInsetConstraint = make.top.equalToSuperview().inset(0).constraint
+      make.directionalHorizontalEdges.equalToSuperview()
+      make.bottom.equalToSuperview()
+    }
+    
+    self.imageView.snp.makeConstraints { make in
+      make.top.equalToSuperview()
       make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(self.imageView.snp.width)
     }
-
+    
     self.labelContainer.snp.makeConstraints { make in
       make.top.equalTo(self.imageView.snp.bottom)
       make.directionalHorizontalEdges.equalToSuperview()
