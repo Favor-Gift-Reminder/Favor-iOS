@@ -72,6 +72,8 @@ extension UIImage {
     case good
     case xoxo
     case boring
+    
+    case logo
   }
 
   public static func favorIcon(_ icon: FavorIcon) -> UIImage? {
@@ -85,5 +87,14 @@ extension UIImage {
       self.draw(in: CGRect(origin: .zero, size: newSize))
     }
     return renderedImage
+  }
+  
+  public func applyBlur_original(radius: CGFloat) -> UIImage {
+    guard let ciImage = CIImage(image: self) else { return self }
+    let filter = CIFilter(name: "CIGaussianBlur")
+    filter?.setValue(ciImage, forKey: kCIInputImageKey)
+    filter?.setValue(radius, forKey: kCIInputRadiusKey)
+    guard let output = filter?.outputImage else { return self }
+    return UIImage(ciImage: output)
   }
 }

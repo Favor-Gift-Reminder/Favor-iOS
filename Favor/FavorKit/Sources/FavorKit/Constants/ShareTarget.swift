@@ -10,7 +10,7 @@ import UIKit
 public enum ShareTarget {
   case instagram(UIImage? = nil, UIImage? = nil)
   case photos
-
+  
   public var title: String {
     switch self {
     case .instagram:

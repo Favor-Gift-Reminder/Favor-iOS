@@ -73,7 +73,7 @@ final class GiftShareViewController: BaseViewController, View {
     super.viewWillAppear(animated)
     
     self.navigationController?.navigationBar.tintColor = .white
-    self.navigationController?.navigationBar.backgroundColor = .black
+    self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .black
     self.navigationItem.titleView = self.titleLabel
   }
   
@@ -81,7 +81,7 @@ final class GiftShareViewController: BaseViewController, View {
     super.viewWillDisappear(animated)
     
     self.navigationController?.navigationBar.tintColor = .favorColor(.icon)
-    self.navigationController?.navigationBar.backgroundColor = .white
+    self.navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .white
   }
   
   override func viewDidLayoutSubviews() {
@@ -90,12 +90,12 @@ final class GiftShareViewController: BaseViewController, View {
   }
 
   // MARK: - Binding
-
+  
   func bind(reactor: GiftShareViewReactor) {
     // Action
     self.instagramButton.rx.tap
       .map { _ in
-        let stickerImage = self.shareImageView.toImage()
+        let stickerImage = self.shareImageView.toImageWithLogo()
         let backgroundImage = self.shareImageView.currentImage?.toBlurredBackgroundImage(self.view.frame)
         return Reactor.Action.instagramButtonDidTap(backgroundImage, stickerImage)
       }
@@ -235,13 +235,7 @@ fileprivate extension UIImage {
   func toBlurredBackgroundImage(_ frame: CGRect) -> UIImage {
     let imageView = UIImageView(frame: frame)
     imageView.contentMode = .scaleAspectFill
-    imageView.image = self
-
-    let blurEffect = UIBlurEffect(style: .dark)
-    let visualEffectView = UIVisualEffectView(effect: blurEffect)
-    visualEffectView.frame = frame
-    visualEffectView.center = imageView.center
-    imageView.addSubview(visualEffectView)
+    imageView.image = self.applyBlur_original(radius: 40)
     return imageView.toImage()
   }
 }

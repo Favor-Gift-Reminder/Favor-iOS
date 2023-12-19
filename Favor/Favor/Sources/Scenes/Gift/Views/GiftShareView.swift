@@ -23,11 +23,13 @@ final class GiftShareView: UIView {
   private let imageView: UIImageView = {
     let imageView = UIImageView()
     imageView.contentMode = .scaleAspectFill
-    imageView.image = UIImage(named: "GiftMock")
     imageView.backgroundColor = .black
+    imageView.layer.masksToBounds = true
+    imageView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    imageView.layer.cornerRadius = 16.0
     return imageView
   }()
-
+  
   private let titleTextField: UITextField = {
     let textField = UITextField()
     textField.borderStyle = .none
@@ -44,7 +46,7 @@ final class GiftShareView: UIView {
     textField.textAlignment = .center
     textField.textColor = .favorColor(.line3)
     let placeholder = NSAttributedString(
-      string: "여기를 눌러 문구를 입력하세요!",
+      string: "여기에 문구를 입력하세요! (최대 20자)",
       attributes: [
         .foregroundColor: UIColor.favorColor(.line3),
         .font: UIFont.favorFont(.regular, size: 12)
@@ -66,6 +68,16 @@ final class GiftShareView: UIView {
     view.backgroundColor = .favorColor(.black)
     return view
   }()
+  
+  private let logoImageView: UIImageView = {
+    let imageView = UIImageView(image: .favorIcon(.logo))
+    imageView.isHidden = true
+    return imageView
+  }()
+  
+  // MARK: - Properties
+  
+  private var topInsetConstraint: Constraint?
 
   // MARK: - Initializer
 
@@ -97,13 +109,14 @@ extension GiftShareView: BaseView {
   func setupStyles() {
     self.layer.cornerRadius = 16
     self.clipsToBounds = true
-    self.backgroundColor = .black
+    self.backgroundColor = .clear
   }
 
   func setupLayouts() {
     [
       self.imageView,
-      self.labelContainer
+      self.labelContainer,
+      self.logoImageView
     ].forEach {
       self.addSubview($0)
     }
@@ -117,10 +130,10 @@ extension GiftShareView: BaseView {
 
     self.labelContainer.addSubview(self.labelStack)
   }
-
+  
   func setupConstraints() {
     self.imageView.snp.makeConstraints { make in
-      make.top.equalToSuperview()
+      self.topInsetConstraint = make.top.equalToSuperview().inset(0).constraint
       make.directionalHorizontalEdges.equalToSuperview()
       make.height.equalTo(self.imageView.snp.width)
     }
@@ -128,13 +141,28 @@ extension GiftShareView: BaseView {
     self.labelContainer.snp.makeConstraints { make in
       make.top.equalTo(self.imageView.snp.bottom)
       make.directionalHorizontalEdges.equalToSuperview()
+      make.height.equalTo(80.0)
       make.bottom.equalToSuperview()
     }
-
+    
     self.labelStack.snp.makeConstraints { make in
-      make.directionalVerticalEdges.lessThanOrEqualToSuperview().inset(16)
-      make.directionalHorizontalEdges.lessThanOrEqualToSuperview()
       make.center.equalToSuperview()
     }
+    
+    self.logoImageView.snp.makeConstraints { make in
+      make.top.trailing.equalToSuperview()
+    }
+  }
+  
+  // MARK: - Functions
+  
+  func toImageWithLogo() -> UIImage {
+    self.logoImageView.isHidden = false
+    self.topInsetConstraint?.update(inset: 34.0)
+    self.layoutIfNeeded()
+    let image = self.toImage()
+    self.logoImageView.isHidden = true
+    self.topInsetConstraint?.update(inset: 0)
+    return image
   }
 }
