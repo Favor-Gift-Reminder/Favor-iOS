@@ -18,21 +18,17 @@ final class ReminderCell: BaseCardCell, Reusable {
   // MARK: - Constants
 
   // MARK: - Properties
+  
+  var toggleSwitchDidTap: (() -> Void)?
 
   // MARK: - UI Components
-
-  private lazy var toggleSwitch = FavorSwitch()
-
-  // MARK: - Binding
   
-//  func bind(reactor: ReminderCellReactor) {
-//    // Action
-//    self.toggleSwitch.rx.tap
-//      .map { Reactor.Action.notifySwitchDidTap }
-//      .bind(to: reactor.action)
-//      .disposed(by: self.disposeBag)
-//  }
-
+  private lazy var toggleSwitch: FavorSwitch = {
+    let toggleSwitch = FavorSwitch()
+    toggleSwitch.delegate = self
+    return toggleSwitch
+  }()
+  
   // MARK: - Functions
   
   func configure(_ reminder: Reminder) {
@@ -67,5 +63,11 @@ final class ReminderCell: BaseCardCell, Reusable {
       make.width.equalTo(40)
       make.height.equalTo(24)
     }
+  }
+}
+
+extension ReminderCell: FavorSwitchDelegate {
+  func switchDidToggled(to state: Bool) {
+    self.toggleSwitchDidTap?()
   }
 }

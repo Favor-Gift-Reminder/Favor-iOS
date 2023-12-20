@@ -11,6 +11,7 @@ public struct ReminderResponseDTO: Decodable {
   public let reminderNo: Int
   public let reminderTitle: String
   public let reminderDate: Date
+  public let alarmTime: Date
   public let userNo: Int
   public let alarmSet: Bool
   public let friendSimpleDto: FriendResponseDTO?
@@ -19,6 +20,7 @@ public struct ReminderResponseDTO: Decodable {
     case reminderNo
     case reminderTitle
     case reminderDate
+    case alarmTime
     case userNo
     case alarmSet
     case friendSimpleDto
@@ -30,6 +32,8 @@ public struct ReminderResponseDTO: Decodable {
     self.reminderTitle = try container.decode(String.self, forKey: .reminderTitle)
     let reminderDateString = try container.decode(String.self, forKey: .reminderDate)
     self.reminderDate = reminderDateString.toDate("yyyy-MM-dd") ?? .distantPast
+    let alarmTimeString = try container.decode(String.self, forKey: .alarmTime)
+    self.alarmTime = alarmTimeString.toDate("yyyy-MM-dd'T'HH:mm:ss") ?? .distantPast
     self.userNo = try container.decode(Int.self, forKey: .userNo)
     self.friendSimpleDto = try container.decode(FriendResponseDTO?.self, forKey: .friendSimpleDto)
     self.alarmSet = try container.decode(Bool.self, forKey: .alarmSet)

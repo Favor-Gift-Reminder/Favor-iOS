@@ -40,6 +40,7 @@ final class HomeViewReactor: Reactor, Stepper {
     case itemSelected(Item)
     case timelineNeedsLoaded(Bool)
     case switchDidTap(Item)
+    case reminderDidEdit(Reminder)
   }
   
   enum Mutation {
@@ -151,6 +152,14 @@ final class HomeViewReactor: Reactor, Stepper {
         self.toggleReminderAlarm(reminder)
       }
       return .empty()
+      
+    case .reminderDidEdit(let reminder):
+      var newReminders = self.currentState.reminders
+      guard let firstIndex = newReminders
+        .firstIndex(where: { $0.identifier == reminder.identifier })
+      else { return .empty() }
+      newReminders[firstIndex] = reminder
+      return .just(.updateReminders(newReminders))
     }
   }
   
@@ -318,10 +327,12 @@ private extension HomeViewReactor {
     _ = networking.request(.patchReminder(reminder.toggleAlarmSet(), reminderNo: reminder.identifier))
       .map(ResponseDTO<ReminderSingleResponseDTO>.self)
       .map { Reminder(singleDTO: $0.data) }
-      .subscribe(onNext: { reminder in
+      .subscribe(onNext: { newReminder in
+        ReminderAlertManager.shared.reminderDidEdit(newReminder)
+        self.action.onNext(.reminderDidEdit(newReminder))
         Task {
           try await self.workbench.write { transaction in
-            transaction.update(reminder.realmObject())
+            transaction.update(newReminder.realmObject())
           }
         }
       })

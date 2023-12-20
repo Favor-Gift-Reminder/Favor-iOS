@@ -28,6 +28,7 @@ final class ReminderViewController: BaseViewController, View {
         let cell = collectionView.dequeueReusableCell(for: indexPath) as ReminderCell
         cell.cardCellType = .reminder
         cell.configure(reminder)
+        cell.toggleSwitchDidTap = { self.reactor?.action.onNext(.toggleSwitchDidTap(reminder)) }
         return cell
       }
     }, configureSupplementaryView: { dataSource, collectionView, kind, indexPath in
@@ -110,7 +111,7 @@ final class ReminderViewController: BaseViewController, View {
     
     self.updateNavigationBarColor(.white)
   }
-
+  
   // MARK: - Binding
   
   override func bind() {

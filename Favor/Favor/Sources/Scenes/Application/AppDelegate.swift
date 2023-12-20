@@ -29,6 +29,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // 네트워크 모니터링 시작
     NetworkCheckManager.shared.startMonitoring()
     
+    // 로컬 푸쉬 알림
+    UNUserNotificationCenter.current().delegate = self
+    let authOptions: UNAuthorizationOptions = [.alert, .carPlay, .sound]
+    UNUserNotificationCenter.current().requestAuthorization(options: authOptions) { _, _ in }
+    
     #if DEBUG
     UserInfoStorage.userNo = 1
     #endif
@@ -58,5 +63,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     return false
+  }
+}
+
+// 로컬 알림
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    didReceive response: UNNotificationResponse,
+    withCompletionHandler completionHandler: @escaping () -> Void) {
+      completionHandler()
+  }
+  
+  func userNotificationCenter(
+    _ center: UNUserNotificationCenter,
+    willPresent noti: UNNotification,
+    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+  ) {
+    completionHandler([.list, .sound, .badge, .banner])
   }
 }

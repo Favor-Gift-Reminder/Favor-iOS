@@ -64,7 +64,7 @@ final class ReminderEditViewReactor: Reactor, Stepper {
     var currentAlarmTime: Date?
     var currentNotifyDay: NotifyDays?
     var currentMemo: String = ""
-    var shouldNotify: Bool = false
+    var shouldNotify: Bool = true
     var isLoading: Bool = false
   }
   
@@ -79,7 +79,8 @@ final class ReminderEditViewReactor: Reactor, Stepper {
       currentTitle: reminder.name,
       currentDate: reminder.date,
       currentAlarmTime: reminder.notifyDate.toTimeString().toDate("HH시 mm분"),
-      currentNotifyDay: reminder.date.toNotifyDays(reminder.notifyDate)
+      currentNotifyDay: reminder.date.toNotifyDays(reminder.notifyDate),
+      shouldNotify: reminder.shouldNotify
     )
   }
   
@@ -243,6 +244,7 @@ private extension ReminderEditViewReactor {
         .map(ResponseDTO<ReminderSingleResponseDTO>.self)
         .map { Reminder(singleDTO: $0.data) }
         .subscribe { reminder in
+          ReminderAlertManager.shared.addReminders(reminder)
           Task {
             try await self.workBranch.write { transaction in
               transaction.update(reminder.realmObject())
@@ -262,6 +264,7 @@ private extension ReminderEditViewReactor {
     let alarmString = notifyDay.toAlarmDate(date) + " " + time.toDTOTimeString()
     let networking = ReminderNetworking()
     
+    print("XXX \(self.currentState.reminder.shouldNotify)")
     let requestDTO = ReminderUpdateRequestDTO(
       title: self.currentState.currentTitle,
       reminderDate: date.toDTODateString(),
@@ -276,6 +279,7 @@ private extension ReminderEditViewReactor {
         .map(ResponseDTO<ReminderSingleResponseDTO>.self)
         .map { Reminder(singleDTO: $0.data) }
         .subscribe { reminder in
+          ReminderAlertManager.shared.reminderDidEdit(reminder)
           Task {
             try await self.workBranch.write { transaction in
               transaction.update(reminder.realmObject())

@@ -71,6 +71,20 @@ extension Date {
     return formatter.string(from: self)
   }
   
+  public func toHourString() -> String {
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "H"
+    return formatter.string(from: self)
+  }
+
+  public func toMinuteString() -> String {
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone(abbreviation: "UTC")
+    formatter.dateFormat = "m"
+    return formatter.string(from: self)
+  }
+  
   public func toDday() -> String {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"

@@ -29,11 +29,14 @@ final class ReminderViewReactor: Reactor, Stepper {
     case selectedDateDidChange(DateComponents)
     case reminderDidSelected(ReminderSection.ReminderSectionItem)
     case newReminderButtonDidTap
+    case toggleSwitchDidTap(Reminder)
+    case reminderDidToggle(Reminder)
   }
-
+  
   enum Mutation {
     case updateSelectedDate(DateComponents)
     case updateIsReminderEmpty(Bool)
+    case updateReminders([Reminder])
     case updateUpcoming(ReminderSection.ReminderSectionModel)
     case updatePast(ReminderSection.ReminderSectionModel)
     case updateLoading(Bool)
@@ -45,6 +48,7 @@ final class ReminderViewReactor: Reactor, Stepper {
       month: Int(Date().toMonthString())
     )
     var isReminderEmpty: Bool = true
+    var reminders: [Reminder] = []
     var upcomingSection = ReminderSection.ReminderSectionModel(
       model: .upcoming,
       items: []
@@ -77,15 +81,15 @@ final class ReminderViewReactor: Reactor, Stepper {
           }
           let (upcomingSection, pastSection) = self.extractUpcoming(from: filteredReminders)
           return .concat([
-            .just(.updateUpcoming(upcomingSection)),
-            .just(.updatePast(pastSection)),
+            .just(.updateReminders(filteredReminders)),
+            .just(.updateReminders(filteredReminders)),
             .just(.updateLoading(status == .inProgress)),
             .just(.updateIsReminderEmpty(
               upcomingSection.items.isEmpty && pastSection.items.isEmpty
             ))
           ])
         }
-
+      
     case .selectedDateDidChange(let selectedDate):
       return .just(.updateSelectedDate(selectedDate))
       
@@ -95,11 +99,25 @@ final class ReminderViewReactor: Reactor, Stepper {
         self.steps.accept(AppStep.reminderDetailIsRequired(reminder))
       }
       return .empty()
-
+      
     case .newReminderButtonDidTap:
       os_log(.debug, "New Reminder button did tap.")
       self.steps.accept(AppStep.newReminderIsRequired)
       return .empty()
+      
+    case .toggleSwitchDidTap(let reminder):
+      print(#function)
+      self.toggleReminderAlarm(reminder)
+      return .empty()
+      
+    case .reminderDidToggle(let reminder):
+      var reminders = self.currentState.reminders
+      if let firstIndex = reminders.firstIndex(where: { $0.identifier == reminder.identifier }) {
+        reminders[firstIndex] = reminder
+        return .just(.updateReminders(reminders))
+      } else {
+        return .empty()
+      }
     }
   }
 
@@ -122,9 +140,23 @@ final class ReminderViewReactor: Reactor, Stepper {
     case .updateSelectedDate(let selectedDate):
       newState.selectedDate = selectedDate
       self.action.onNext(.viewNeedsLoaded)
+      
+    case .updateReminders(let reminders):
+      newState.reminders = reminders
     }
     
     return newState
+  }
+  
+  func transform(state: Observable<State>) -> Observable<State> {
+    return state.map { state in
+      var newState = state
+      
+      newState.upcomingSection = self.extractUpcoming(from: state.reminders).0
+      newState.pastSection = self.extractUpcoming(from: state.reminders).1
+      
+      return newState
+    }
   }
 }
 
@@ -168,6 +200,22 @@ private extension ReminderViewReactor {
         transaction.update(remoteReminders.map { $0.realmObject() })
       }
     }
+  }
+  
+  func toggleReminderAlarm(_ reminder: Reminder) {
+    let networking = ReminderNetworking()
+    _ = networking.request(.patchReminder(reminder.toggleAlarmSet(), reminderNo: reminder.identifier))
+      .map(ResponseDTO<ReminderSingleResponseDTO>.self)
+      .map { Reminder(singleDTO: $0.data) }
+      .subscribe(onNext: { reminder in
+        ReminderAlertManager.shared.reminderDidEdit(reminder)
+        self.action.onNext(.reminderDidToggle(reminder))
+        Task {
+          try await self.workbench.write { transaction in
+            transaction.update(reminder.realmObject())
+          }
+        }
+      })
   }
 }
 

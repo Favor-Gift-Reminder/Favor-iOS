@@ -71,7 +71,7 @@ public struct Reminder: Storable, Receivable {
     self.name = dto.reminderTitle
     self.date = dto.reminderDate
     self.shouldNotify = dto.alarmSet
-    self.notifyDate = .distantPast
+    self.notifyDate = dto.alarmTime
     if let friendSimpleDTO = dto.friendSimpleDto {
       self.relatedFriend = Friend(friendResponseDTO: friendSimpleDTO)
     }

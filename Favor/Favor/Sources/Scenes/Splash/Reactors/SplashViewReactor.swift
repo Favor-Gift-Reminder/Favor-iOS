@@ -35,7 +35,7 @@ public final class SplashViewReactor: Reactor, Stepper {
   }
 
   // MARK: - Initializer
-
+  
   init() {
     self.initialState = State()
   }
@@ -72,6 +72,7 @@ private extension SplashViewReactor {
           UserInfoStorage.userNo = userNo
           os_log(.debug, "🔐 Signed in via 📨 Email: Navigating to dashboardflow.")
           self.steps.accept(AppStep.splashIsComplete)
+          ReminderAlertManager.shared.fetchReminders()
           return .empty()
         }
     case .apple: // Apple 로그인

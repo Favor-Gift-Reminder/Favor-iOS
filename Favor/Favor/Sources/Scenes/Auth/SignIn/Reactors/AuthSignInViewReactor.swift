@@ -91,6 +91,7 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
         .just(.updateLoading(true)),
         self.requestSignIn(email: email, password: password)
           .flatMap { _ in
+            ReminderAlertManager.shared.fetchReminders()
             self.steps.accept(AppStep.authIsComplete)
             return Observable<Mutation>.just(.updateLoading(false))
           }

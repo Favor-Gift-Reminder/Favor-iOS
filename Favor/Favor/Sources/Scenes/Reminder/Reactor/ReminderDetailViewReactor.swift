@@ -104,13 +104,14 @@ private extension ReminderDetailViewReactor {
   }
   
   func requestDeleteReminder() -> Observable<Void> {
+    let reminder = self.currentState.reminder
     return Observable<Void>.create { observer in
       let networking = ReminderNetworking()
-      return networking.request(.deleteReminder(reminderNo: self.currentState.reminder.identifier))
+      return networking.request(.deleteReminder(reminderNo: reminder.identifier))
         .subscribe { _ in
           Task {
             try await self.workBench.write { transaction in
-              transaction.delete(self.currentState.reminder.realmObject())
+              transaction.delete(reminder.realmObject())
               observer.onNext(())
               observer.onCompleted()
             }
