@@ -23,7 +23,7 @@ jobs:
 
       - name: Create secret file
         env:
-          API_SECRET: ${{ secrets.API_SECRET }}
+          API_SECRET: ${{ secrets.APIINFO_SECRET }}
         run: |
           echo -n $API_SECRET | base64 -D -o Favor/FavorNetworKit/Sources/FavorNetworkKit/API-Info.plist
 
