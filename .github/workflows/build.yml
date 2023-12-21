@@ -42,7 +42,7 @@ jobs:
     - name: Build
       env:
         XCODEPROJ: "${{ env.PROJECT }}/${{ env.PROJECT }}.xcodeproj"
-      run: >
-        xcodebuild
-        -project ${{ env.XCODEPROJ }} \
-        clean build
+      run: |
+        xcodebuild \
+          -project ${{ env.XCODEPROJ }} \
+          clean build
