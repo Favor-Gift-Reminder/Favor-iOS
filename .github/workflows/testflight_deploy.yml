@@ -17,7 +17,7 @@ jobs:
       DEPLOY_CERTIFICATE_BASE64: ${{ secrets.IOS_DEPLOY_CERTIFICATE_BASE64 }}
       P12_PASSWORD: ${{ secrets.IOS_P12_PASSWORD }}
       DEPLOY_PROVISION_PROFILE_BASE64: ${{ secrets.IOS_DEPLOY_PROVISION_PROFILE_BASE64 }}
-      KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWD }}
+      KEYCHAIN_PASSWORD: ${{ secrets.IOS_KEYCHAIN_PASSWORD }}
     steps:
       - uses: actions/checkout@v4
 
