@@ -7,8 +7,6 @@ env:
   XC_ARCHIVE: ${{ 'Favor.xcarchive' }}
   XC_IPA: ${{ 'Favor.ipa' }}
 
-  KEYCHAIN: ${{ 'build.keychain' }}
-
 on:
   pull_request:
     branches: [ main, dev ]
