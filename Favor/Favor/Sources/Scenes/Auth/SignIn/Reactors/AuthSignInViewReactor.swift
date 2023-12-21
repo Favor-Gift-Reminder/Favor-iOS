@@ -43,7 +43,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     case updatePassword(String)
     case updatePasswordValidationResult(ValidationResult)
     case validateSignInButton(Bool)
-    case updateLoading(Bool)
   }
   
   public struct State {
@@ -52,7 +51,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
     var password: String = ""
     var passwordValidationResult: ValidationResult = .empty
     var isSignInButtonEnabled: Bool = false
-    var isLoading: Bool = false
   }
   
   // MARK: - Initializer
@@ -88,12 +86,11 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
       let email = self.currentState.email
       let password = self.currentState.password
       return .concat([
-        .just(.updateLoading(true)),
         self.requestSignIn(email: email, password: password)
           .flatMap { _ in
             ReminderAlertManager.shared.fetchReminders()
             self.steps.accept(AppStep.authIsComplete)
-            return Observable<Mutation>.just(.updateLoading(false))
+            return Observable<Mutation>.empty()
           }
       ])
       
@@ -139,9 +136,6 @@ public final class AuthSignInViewReactor: Reactor, Stepper {
 
     case .validateSignInButton(let isNextButtonEnabled):
       newState.isSignInButtonEnabled = isNextButtonEnabled
-
-    case .updateLoading(let isLoading):
-      newState.isLoading = isLoading
     }
 
     return newState
@@ -154,7 +148,7 @@ private extension AuthSignInViewReactor {
   func requestSignIn(email: String, password: String) -> Observable<Void> {
     return Observable<Void>.create { observer in
       let networking = UserNetworking()
-      return networking.request(.postSignIn(email: email, password: password))
+      return networking.request(.postSignIn(email: email, password: password), loadingIndicator: true)
         .map(ResponseDTO<SignInResponseDTO>.self)
         .flatMap { responseDTO in
           try? self.handleSignInSuccess(email: email, password: password, token: responseDTO.data.token)

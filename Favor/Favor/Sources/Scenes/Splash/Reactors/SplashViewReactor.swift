@@ -39,7 +39,7 @@ public final class SplashViewReactor: Reactor, Stepper {
   init() {
     self.initialState = State()
   }
-
+  
   // MARK: - Functions
   
   public func mutate(action: Action) -> Observable<Mutation> {

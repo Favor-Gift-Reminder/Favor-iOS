@@ -78,4 +78,10 @@ public final class RealmWorkbench {
       }
     }
   }
+  
+  public func deleteAll() {
+    self.realmQueue.async {
+      self.realm.deleteAll()
+    }
+  }
 }

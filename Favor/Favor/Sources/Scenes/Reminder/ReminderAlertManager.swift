@@ -123,6 +123,20 @@ final class ReminderAlertManager {
       self.addNotification(reminder)
     }
   }
+  
+  /// 모든 리마인더의 알람을 일괄 취소합니다.
+  func cancelAllNotifications() {
+    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+  }
+  
+  /// 모든 리마인더의 알람을 일괄 등록합니다.
+  func addAllNotifications() {
+    self.reminders
+      .filter { $0.shouldNotify }
+      .forEach { reminder in
+        self.addNotification(reminder)
+      }
+  }
 }
 
 // MARK: - Private
@@ -159,19 +173,5 @@ private extension ReminderAlertManager {
   func cancelNotification(withIdentifier identifier: String) {
     UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [identifier])
     os_log(.default, "🔕 알림이 취소되었습니다. \(identifier)")
-  }
-  
-  /// 모든 리마인더의 알람을 일괄 취소합니다.
-  func cancelAllNotifications() {
-    UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
-  }
-  
-  /// 모든 리마인더의 알람을 일괄 등록합니다.
-  func addAllNotifications() {
-    self.reminders
-      .filter { $0.shouldNotify }
-      .forEach { reminder in
-        self.addNotification(reminder)
-      }
   }
 }
