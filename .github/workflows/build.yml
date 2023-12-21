@@ -43,8 +43,9 @@ jobs:
       env:
         XCODEPROJ: "${{ env.PROJECT }}/${{ env.PROJECT }}.xcodeproj"
       run: >
-        xcodebuild build
-        -project ${{ env.XCODEPROJ }}
-        -scheme ${{ env.XC_SCHEME }} 
+        xcodebuild
+        -project ${{ env.XCODEPROJ }} \
+        -scheme ${{ env.XC_SCHEME }} \
         -sdk 'iphonesimulator' \
         -destination 'platform=iOS Simulator,OS=17.0.1,name=iPhone 15 Pro' \
+        clean build
