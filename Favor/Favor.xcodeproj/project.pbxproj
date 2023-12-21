@@ -233,7 +233,6 @@
 		E5CFF72B298404F700E11D9A /* AppStep.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5CFF72A298404F700E11D9A /* AppStep.swift */; };
 		E5DC1F062B11A6BB00666363 /* FriendPageMemoVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */; };
 		E5DC1F082B11A6D900666363 /* FriendPageMemoViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DC1F072B11A6D900666363 /* FriendPageMemoViewReactor.swift */; };
-		E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -430,6 +429,7 @@
 		2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsCell.swift; sourceTree = "<group>"; };
 		2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTappableCell.swift; sourceTree = "<group>"; };
 		2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchableCell.swift; sourceTree = "<group>"; };
+		DD6C0F2A2B3498A300BEC800 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		DDA780DA2A57BCBF000B6E26 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
@@ -462,7 +462,6 @@
 		E5CFF72A298404F700E11D9A /* AppStep.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStep.swift; sourceTree = "<group>"; };
 		E5DC1F052B11A6BB00666363 /* FriendPageMemoVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageMemoVC.swift; sourceTree = "<group>"; };
 		E5DC1F072B11A6D900666363 /* FriendPageMemoViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendPageMemoViewReactor.swift; sourceTree = "<group>"; };
-		E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -759,11 +758,11 @@
 		2E7C308F295D7C4300BAC43D = {
 			isa = PBXGroup;
 			children = (
+				DD6C0F2A2B3498A300BEC800 /* .swiftlint.yml */,
 				2EEEF7102A5172B800D48038 /* Settings.bundle */,
 				2E6E28EC2A25855D00E25DB6 /* ImageViewer */,
 				2EEFD5B529BB7B3900BA46BA /* FavorKit */,
 				2E730C6829BA311C003668D9 /* FavorNetworkKit */,
-				E5E28ED3295DAE2C006B9245 /* .swiftlint.yml */,
 				2E7C309A295D7C4300BAC43D /* Favor */,
 				2EE0D595297A9D670064E932 /* FavorUITests */,
 				2E7C3099295D7C4300BAC43D /* Products */,
@@ -1732,7 +1731,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5E28ED4295DAE2C006B9245 /* .swiftlint.yml in Resources */,
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E68C70D2A394C9800B7ACD0 /* .gitkeep in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
@@ -2051,7 +2049,7 @@
 				DEVELOPMENT_TEAM = 95JTZ6AP78;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -2117,7 +2115,7 @@
 				DEVELOPMENT_TEAM = 95JTZ6AP78;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
