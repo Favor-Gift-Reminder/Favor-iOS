@@ -277,7 +277,7 @@ private extension LocalAuthViewReactor {
           os_log(.error, "\(error)")
         }
       }
-
+      
       // 생체 인증 Prompt
       if UserInfoStorage.isBiometricAuthEnabled {
         self.steps.accept(AppStep.localAuthIsComplete)
@@ -314,7 +314,7 @@ private extension LocalAuthViewReactor {
       return .just(.resetInput)
     }
   }
-
+  
   /// 입력된 암호와 설정된 암호를 대조합니다.
   /// - Returns: 입력된 암호와 설정된 암호의 동일 여부 `Bool`
   func validateCurrentInput(_ key: String) -> Bool {

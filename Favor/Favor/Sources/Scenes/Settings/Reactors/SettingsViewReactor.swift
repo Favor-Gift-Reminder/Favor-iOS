@@ -93,7 +93,7 @@ public final class SettingsViewReactor: Reactor, Stepper {
 
     case .updateSwitchMethodsCallable(let switchMethodsCallable):
       newState.switchMethodsCallable = switchMethodsCallable
-
+      
     case .updateItems(let renderer):
       newState.items = renderer.items
     }
@@ -130,6 +130,11 @@ private extension SettingsViewReactor {
         UserInfoStorage.isBiometricAuthEnabled = false
       }
     case .isReminderNotificationEnabled:
+      if isOn {
+        ReminderAlertManager.shared.addAllNotifications()
+      } else {
+        ReminderAlertManager.shared.cancelAllNotifications()
+      }
       UserInfoStorage.isReminderNotificationEnabled = isOn
     case .isMarketingNotificationEnabled:
       UserInfoStorage.isMarketingNotificationEnabled = isOn

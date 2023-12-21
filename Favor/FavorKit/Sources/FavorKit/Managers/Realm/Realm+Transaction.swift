@@ -69,4 +69,8 @@ public final class Transaction {
       .filter("\(pk) == %@", value.value(forKey: pk)!)
     self.realm.delete(object)
   }
+  
+  public func deleteAll() {
+    self.realm.deleteAll()
+  }
 }

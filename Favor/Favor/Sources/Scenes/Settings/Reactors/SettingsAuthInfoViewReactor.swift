@@ -20,6 +20,7 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
   public var initialState: State
   public let steps = PublishRelay<Step>()
   private var keychain: KeychainManager
+  private let workBench = RealmWorkbench()
 
   public enum Action {
     case signoutButtonDidTap
@@ -92,13 +93,18 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
 private extension SettingsAuthInfoViewReactor {
   func handleSignOut() {
     FTUXStorage.authState = .undefined
-    UserInfoStorage.userNo = -1
-    do {
-      try self.keychain.deleteAll()
-    } catch {
-      os_log(.error, "\(error)")
+    UserInfoStorage.deleteAll()
+    Task {
+      try await self.workBench.write { transaction in
+        transaction.deleteAll()
+        do {
+          try self.keychain.deleteAll()
+        } catch {
+          os_log(.error, "\(error)")
+        }
+        self.steps.accept(AppStep.wayBackToRootIsRequired)
+      }
     }
-    self.steps.accept(AppStep.wayBackToRootIsRequired)
   }
   
   func handleDeleteAccount() -> Single<User> {
@@ -108,11 +114,20 @@ private extension SettingsAuthInfoViewReactor {
         .take(1)
         .asSingle()
         .subscribe(onSuccess: { response in
-          do {
-            let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
-            single(.success(User(singleDTO: responseDTO.data)))
-          } catch {
-            single(.failure(error))
+          Task {
+            try await self.workBench.write { transaction in
+              FTUXStorage.authState = .undefined
+              UserInfoStorage.deleteAll()
+              transaction.deleteAll()
+              do {
+                try self.keychain.deleteAll()
+                let responseDTO: ResponseDTO<UserSingleResponseDTO> = try APIManager.decode(response.data)
+                single(.success(User(singleDTO: responseDTO.data)))
+              } catch {
+                single(.failure(error))
+              }
+              self.steps.accept(AppStep.wayBackToRootIsRequired)
+            }
           }
         }, onFailure: { error in
           single(.failure(error))

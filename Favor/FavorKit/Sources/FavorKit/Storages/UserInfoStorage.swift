@@ -26,4 +26,12 @@ public final class UserInfoStorage {
   /// 마케팅 정보 알림
   @UserDefault(key: .isMarketingNotificationEnabled, defaultValue: false)
   public static var isMarketingNotificationEnabled: Bool
+  
+  public static func deleteAll() {
+    UserInfoStorage.userNo = -1
+    UserInfoStorage.isLocalAuthEnabled = false
+    UserInfoStorage.isBiometricAuthEnabled = false
+    UserInfoStorage.isReminderNotificationEnabled = true
+    UserInfoStorage.isMarketingNotificationEnabled = true
+  }
 }

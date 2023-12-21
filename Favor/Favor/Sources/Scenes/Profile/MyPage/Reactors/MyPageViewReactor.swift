@@ -145,9 +145,13 @@ final class MyPageViewReactor: Reactor, Stepper {
       newState.user = user
       if let url = user.profileBackgroundPhoto?.remote {
         newState.backgroundURL = url
+      } else {
+        newState.backgroundURL = nil
       }
       if let url = user.profilePhoto?.remote {
         newState.profileURL = url
+      } else {
+        newState.profileURL = nil
       }
       newState.receivedGift = user.receivedGifts
       newState.givenGift = user.givenGifts

@@ -65,9 +65,13 @@ final class FavorTabBarController: UITabBarController, Stepper {
   }  
   
   func requestInitialData() {
-    if let navigationVC = self.viewControllers?.first as? BaseNavigationController,
-       let homeVC = navigationVC.topViewController as? HomeViewController {
+    guard let homeNavVC = self.viewControllers?.first as? BaseNavigationController else { return }
+    guard let myPageNavVC = self.viewControllers?.last as? BaseNavigationController else { return }
+    if let homeVC = homeNavVC.topViewController as? HomeViewController {
       homeVC.reactor?.action.onNext(.viewNeedsLoaded)
+    }
+    if let myPageVC = myPageNavVC.topViewController as? MyPageViewController {
+      myPageVC.reactor?.action.onNext(.viewNeedsLoaded)
     }
   }
 }

@@ -129,6 +129,8 @@ public final class ProfileView: UIView {
   func updateBackgroundImage(_ urlString: String, mapper: CacheKeyMapper) {
     if let url = URL(string: urlString) {
       self.backgroundImageView.setImage(from: url, mapper: mapper)
+    } else {
+      self.backgroundImageView.image = nil
     }
     self.backgroundKeyMapper = mapper
   }

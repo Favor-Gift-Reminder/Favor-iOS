@@ -161,7 +161,8 @@ private extension AppFlow {
   }
   
   func popToDashboard() -> FlowContributors {
-    self.rootViewController.dismiss(animated: true) {
+    self.rootViewController.dismiss(animated: true) {      
+      print(self.rootViewController)
       self.rootViewController.requestInitialData()
     }
     return .none
