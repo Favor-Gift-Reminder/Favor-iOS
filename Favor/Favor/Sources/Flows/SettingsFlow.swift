@@ -5,6 +5,7 @@
 //  Created by 이창준 on 6/28/23.
 //
 
+import OSLog
 import UIKit
 
 import FavorKit
@@ -61,14 +62,11 @@ public final class SettingsFlow: Flow {
     case .devTeamSupportIsRequired:
       return self.navigateToDevTeamSupport()
 
-    case .serviceUsageTermIsRequired:
-      return self.navigateToServiceUsageTerm()
+    case .serviceUsageTermIsRequired(let urlString):
+      return self.navigateToServiceUsageTerm(urlString: urlString)
 
-    case .privateInfoManagementTermIsRequired:
-      return self.navigateToPrivateInfoManagementTerm()
-
-    case .openSourceUsageIsRequired:
-      return self.navigateToOpenSourceUsage()
+    case .privateInfoManagementTermIsRequired(let urlString):
+      return self.navigateToPrivateInfoManagementTerm(urlString: urlString)
 
     case .wayBackToRootIsRequired:
       self.rootViewController.popToRootViewController(animated: false)
@@ -209,15 +207,15 @@ private extension SettingsFlow {
     return .none
   }
 
-  func navigateToServiceUsageTerm() -> FlowContributors {
+  func navigateToServiceUsageTerm(urlString: String) -> FlowContributors {
+    guard let url = URL(string: urlString) else { return .none }
+    UIApplication.shared.open(url)
     return .none
   }
 
-  func navigateToPrivateInfoManagementTerm() -> FlowContributors {
-    return .none
-  }
-
-  func navigateToOpenSourceUsage() -> FlowContributors {
+  func navigateToPrivateInfoManagementTerm(urlString: String) -> FlowContributors {
+    guard let url = URL(string: urlString) else { return .none }
+    UIApplication.shared.open(url)
     return .none
   }
 }

@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kakao/kakao-ios-sdk.git",
       "state" : {
-        "revision" : "d788f9a5a888f16253b9c3d9f3bd794835708c3f",
-        "version" : "2.15.0"
+        "revision" : "ae3c60cbd4e3b348775f8c766e5b908fa1e66c5a",
+        "version" : "2.20.0"
       }
     },
     {
@@ -42,7 +42,7 @@
       "location" : "https://github.com/kakao/kakao-ios-sdk-rx",
       "state" : {
         "branch" : "master",
-        "revision" : "ba12deed6bf97f6ac275cc1257fe7dd411e96afc"
+        "revision" : "4f3a1e5f17c1bb881ac00ab87c5579ed852f992b"
       }
     },
     {
@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "c1f60c63f356d364f4284ba82961acbe7de79bcc",
-        "version" : "7.8.1"
+        "revision" : "add0a87ec4e31e2ca2a0b2085f0559201e4f5918",
+        "version" : "7.10.1"
       }
     },
     {
