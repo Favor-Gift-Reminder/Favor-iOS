@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import OSLog
 
 import DeviceKit
 import FavorKit
@@ -41,6 +42,9 @@ private extension SettingsRenderer {
     } else {
       version = appVersion
     }
+    
+    let terms = self.fetchTerms()
+    
     return [
       Item(type: .navigatable, section: .userInfo, title: "로그인 정보", subtitle: FTUXStorage.authState.rawValue, step: .authInfoIsRequired),
       Item(type: .navigatable, section: .userInfo, title: "비밀번호 변경", step: .newPasswordIsRequired),
@@ -55,8 +59,8 @@ private extension SettingsRenderer {
       Item(type: .tappable, section: .appInfo, title: "버전", staticInfo: version),
       Item(type: .navigatable, section: .appInfo, title: "팀", step: .devTeamInfoIsRequired),
       Item(type: .navigatable, section: .appInfo, title: "개발자 응원하기", step: .devTeamSupportIsRequired),
-      Item(type: .navigatable, section: .appInfo, title: "서비스 이용약관", step: .serviceUsageTermIsRequired),
-      Item(type: .navigatable, section: .appInfo, title: "개인정보 처리방침", step: .privateInfoManagementTermIsRequired)
+      Item(type: .navigatable, section: .appInfo, title: "서비스 이용약관", step: .serviceUsageTermIsRequired(terms[0].url)),
+      Item(type: .navigatable, section: .appInfo, title: "개인정보 처리방침", step: .privateInfoManagementTermIsRequired(terms[1].url))
     ]
   }
 
@@ -99,5 +103,42 @@ private extension SettingsRenderer {
     }
 
     return items
+  }
+  
+  func fetchTerms() -> [Terms] {
+    typealias JSON = [String: Any]
+    
+    guard let filePath = Bundle.main.path(forResource: "Term-Info", ofType: "plist") else {
+      fatalError("Couldn't find the 'Term-Info.plist' file.")
+    }
+    
+    var terms: JSON = [:]
+    do {
+      var plistRAW: Data
+      if #available(iOS 16.0, *) {
+        plistRAW = try Data(contentsOf: URL(filePath: filePath))
+      } else {
+        plistRAW = try NSData(contentsOfFile: filePath) as Data
+      }
+      terms = try PropertyListSerialization.propertyList(from: plistRAW, format: nil) as! JSON
+    } catch {
+      os_log(.error, "\(error)")
+    }
+    
+    var decodedTerms: [Terms] = []
+    terms.forEach { term in
+      guard
+        let value = term.value as? JSON,
+        let title = value["Title"] as? String,
+        let isRequired = value["Required"] as? Bool,
+        let url = value["URL"] as? String,
+        let index = value["Index"] as? Int
+      else { return }
+      
+      let term = Terms(title: title, isRequired: isRequired, url: url, index: index)
+      decodedTerms.append(term)
+    }
+    
+    return decodedTerms.sorted(by: { $0.index < $1.index })
   }
 }

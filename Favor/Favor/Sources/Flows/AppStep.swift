@@ -105,9 +105,8 @@ enum AppStep: Step {
   case appPrivacyIsRequired // 앱 잠금
   case devTeamInfoIsRequired // 팀
   case devTeamSupportIsRequired // 개발자 응원하기
-  case serviceUsageTermIsRequired // 서비스 이용약관
-  case privateInfoManagementTermIsRequired // 개인정보 처리방침
-  case openSourceUsageIsRequired // 오픈소스 라이선스
+  case serviceUsageTermIsRequired(String) // 서비스 이용약관
+  case privateInfoManagementTermIsRequired(String) // 개인정보 처리방침
   case wayBackToRootIsRequired
   
   // MARK: - BottomSheet
