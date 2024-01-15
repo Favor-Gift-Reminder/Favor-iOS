@@ -57,8 +57,8 @@ private extension SettingsRenderer {
         title: "리마인더 알림"
       ),
       Item(type: .tappable, section: .appInfo, title: "버전", staticInfo: version),
-      Item(type: .navigatable, section: .appInfo, title: "팀", step: .devTeamInfoIsRequired),
-      Item(type: .navigatable, section: .appInfo, title: "개발자 응원하기", step: .devTeamSupportIsRequired),
+//      Item(type: .navigatable, section: .appInfo, title: "팀", step: .devTeamInfoIsRequired),
+//      Item(type: .navigatable, section: .appInfo, title: "개발자 응원하기", step: .devTeamSupportIsRequired),
       Item(type: .navigatable, section: .appInfo, title: "서비스 이용약관", step: .serviceUsageTermIsRequired(terms[0].url)),
       Item(type: .navigatable, section: .appInfo, title: "개인정보 처리방침", step: .privateInfoManagementTermIsRequired(terms[1].url))
     ]
