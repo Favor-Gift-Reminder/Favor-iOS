@@ -59,7 +59,7 @@ public final class SettingsAuthInfoViewReactor: Reactor, Stepper {
     case .signoutDidRequested:
       self.handleSignOut()
       return .empty()
-
+      
     case .deleteAccountDidRequested:
       return self.handleDeleteAccount()
         .asObservable()

@@ -89,7 +89,7 @@ public final class ProfileView: UIView {
     self.setupConstraints()
     self.bind()
   }
-
+  
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

@@ -190,7 +190,7 @@ private extension SettingsAuthInfoViewController {
       self.present(signOutPopup, animated: false)
     }
   }
-
+  
   func presentDeleteAccountPopup() {
     let description = NewAlertPopup.Description(
       description: Typo.deleteAccountDescription,
@@ -209,7 +209,9 @@ private extension SettingsAuthInfoViewController {
       identifier: PopupIdentifier.deleteAccount
     )
     deleteAccountPopup.modalPresentationStyle = .overFullScreen
-    deleteAccountPopup.delegate = self
+    deleteAccountPopup.accpetButtonCompletion = {
+      self.reactor?.action.onNext(.deleteAccountDidRequested)
+    }
 
     DispatchQueue.main.async {
       self.present(deleteAccountPopup, animated: false)
