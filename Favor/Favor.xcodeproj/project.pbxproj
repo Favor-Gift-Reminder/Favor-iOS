@@ -107,7 +107,6 @@
 		2EA384B6299234770081499C /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B5299234770081499C /* SearchVC.swift */; };
 		2EA384B8299235990081499C /* SearchViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B7299235990081499C /* SearchViewReactor.swift */; };
 		2EA384BA2992371C0081499C /* SearchFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA384B92992371C0081499C /* SearchFlow.swift */; };
-		2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2EA46B2929BA35570030904E /* Term-Info.plist */; };
 		2EA73C4729DE6FA0005097C0 /* ReminderDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */; };
 		2EA73C4929DE703F005097C0 /* ReminderDetailViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */; };
 		2EAC60A32A49DC5A0047A572 /* SplashViewReactor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EAC60A22A49DC5A0047A572 /* SplashViewReactor.swift */; };
@@ -199,6 +198,7 @@
 		2EFF67302A5059450097A664 /* SettingsTappableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */; };
 		2EFF67322A5059570097A664 /* SettingsSwitchableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */; };
 		DD30D6BE2A53E34A0043F1BE /* ReminderDatePopup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */; };
+		DD62BA8D2B56287000F7CA79 /* Term-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DD62BA8C2B56287000F7CA79 /* Term-Info.plist */; };
 		DDA780DB2A57BCBF000B6E26 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA780DA2A57BCBF000B6E26 /* Photo.swift */; };
 		E51F55842A4036650002EADB /* FavorTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = E51F55832A4036650002EADB /* FavorTabBar.swift */; };
 		E523F63E2A22EBDB007A6317 /* FirendPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E523F63D2A22EBDB007A6317 /* FirendPageVC.swift */; };
@@ -339,7 +339,6 @@
 		2EA384B5299234770081499C /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		2EA384B7299235990081499C /* SearchViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewReactor.swift; sourceTree = "<group>"; };
 		2EA384B92992371C0081499C /* SearchFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFlow.swift; sourceTree = "<group>"; };
-		2EA46B2929BA35570030904E /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		2EA73C4629DE6FA0005097C0 /* ReminderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailVC.swift; sourceTree = "<group>"; };
 		2EA73C4829DE703F005097C0 /* ReminderDetailViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDetailViewReactor.swift; sourceTree = "<group>"; };
 		2EAC60A22A49DC5A0047A572 /* SplashViewReactor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewReactor.swift; sourceTree = "<group>"; };
@@ -430,6 +429,7 @@
 		2EFF672D2A5058E50097A664 /* BaseSettingsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseSettingsCell.swift; sourceTree = "<group>"; };
 		2EFF672F2A5059450097A664 /* SettingsTappableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTappableCell.swift; sourceTree = "<group>"; };
 		2EFF67312A5059570097A664 /* SettingsSwitchableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsSwitchableCell.swift; sourceTree = "<group>"; };
+		DD62BA8C2B56287000F7CA79 /* Term-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Term-Info.plist"; sourceTree = "<group>"; };
 		DDA780DA2A57BCBF000B6E26 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		E51A21F22A51C7AC003E676F /* ReminderDatePopup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReminderDatePopup.swift; sourceTree = "<group>"; };
 		E51F55832A4036650002EADB /* FavorTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavorTabBar.swift; sourceTree = "<group>"; };
@@ -788,7 +788,7 @@
 				2EBB014A295E8C600072D158 /* Sources */,
 				2E7C30A6295D7C4500BAC43D /* LaunchScreen.storyboard */,
 				2E7C30A9295D7C4500BAC43D /* Info.plist */,
-				2EA46B2929BA35570030904E /* Term-Info.plist */,
+				DD62BA8C2B56287000F7CA79 /* Term-Info.plist */,
 			);
 			path = Favor;
 			sourceTree = "<group>";
@@ -1736,8 +1736,8 @@
 				2E7C30A8295D7C4500BAC43D /* LaunchScreen.storyboard in Resources */,
 				2E68C70D2A394C9800B7ACD0 /* .gitkeep in Resources */,
 				2E7C30A5295D7C4500BAC43D /* Assets.xcassets in Resources */,
+				DD62BA8D2B56287000F7CA79 /* Term-Info.plist in Resources */,
 				2EEEF7112A5172B800D48038 /* Settings.bundle in Resources */,
-				2EA46B2A29BA35570030904E /* Term-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2162,12 +2162,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.2;
 				OTHER_LIBTOOLFLAGS = "-WLinkingC true -XCBuildForPre true -XCExpApple true";
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Favor_iOS_Development;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor iOS Development";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -2206,12 +2206,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.2;
 				OTHER_LIBTOOLFLAGS = "-WLinkingC true -XCBuildForPre true -XCExpApple true";
 				PRODUCT_BUNDLE_IDENTIFIER = com.favor.Favor.iOS;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = Favor_iOS_AdHoc;
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "Favor iOS Distribution";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
