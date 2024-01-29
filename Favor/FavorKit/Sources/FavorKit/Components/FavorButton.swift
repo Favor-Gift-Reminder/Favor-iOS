@@ -171,6 +171,12 @@ public class FavorButton: UIButton {
     }
   }
   
+  /// 현재 선물 카테고리의 case를 알 수 있습니다.
+  public var category: FavorCategory {
+    guard let title = self.configuration?.title else { return .lightGift }
+    return FavorCategory(rawValue: title) ?? .lightGift
+  }
+  
   // MARK: - Init
   
   public init(_ title: String = "", image: UIImage? = nil) {
