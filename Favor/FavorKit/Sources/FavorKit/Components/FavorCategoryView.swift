@@ -23,8 +23,8 @@ public final class FavorCategoryView: UIScrollView {
   private lazy var graduationButton = self.button("졸업", selectedImage: .favorIcon(.graduate))
   private lazy var etcButton = self.button("기타", selectedImage: .favorIcon(.etc))
   
-  private lazy var buttons: [FavorSmallButton] = {
-    var buttons: [FavorSmallButton] = []
+  private lazy var buttons: [FavorButton] = {
+    var buttons: [FavorButton] = []
     [
       self.lightGiftButton,
       self.birthDayButton,
@@ -85,7 +85,7 @@ public final class FavorCategoryView: UIScrollView {
   // MARK: - SELECTORS
   
   @objc
-  private func didTapButton(_ sender: FavorSmallButton) {
+  private func didTapButton(_ sender: FavorButton) {
     for button in self.buttons {
       if button == sender {
         button.isSelected = true
@@ -169,22 +169,37 @@ extension FavorCategoryView: BaseView {
 }
 
 private extension FavorCategoryView {
-  func button(_ title: String, selectedImage: UIImage?) -> FavorSmallButton {
-    let btn = FavorSmallButton(with: .gray(title))
+  func button(_ title: String, selectedImage: UIImage?) -> FavorButton {
+    let btn = FavorButton(title)
+    btn.cornerRadius = 16.0
+    btn.font = .favorFont(.bold, size: 12.0)
+    btn.imagePlacement = .leading
+    btn.imagePadding = 6
+    btn.contentInset = NSDirectionalEdgeInsets(
+      top: 8,
+      leading: 16,
+      bottom: 8,
+      trailing: 16
+    )
     
-    btn.configurationUpdateHandler = {
-      switch $0.state {
+    btn.configurationUpdateHandler = { button in
+      guard let button = button as? FavorButton else { return }
+      switch button.state {
       case .normal:
-        $0.configuration = FavorSmallButtonType.gray(title).configuration
+        button.image = nil
+        button.baseBackgroundColor = .white
+        button.baseForegroundColor = .favorColor(.subtext)
+        button.borderColor = .favorColor(.line3)
+        button.borderWidth = 1.0
       case .selected:
-        let image = selectedImage?.withTintColor(.favorColor(.white))
-        $0.configuration = FavorSmallButtonType.dark(
-          title,
-          image: image
-        ).configuration
-        $0.configuration?.image = image?
-          .withRenderingMode(.alwaysTemplate)
-          .resize(newWidth: 16)
+        button.baseBackgroundColor = .favorColor(.main)
+        button.baseForegroundColor = .white
+        button.borderWidth = 0.0
+
+        let image = selectedImage?
+          .withTintColor(.favorColor(.white))
+          .resize(newWidth: 16.0)
+        button.image = image
       default:
         break
       }

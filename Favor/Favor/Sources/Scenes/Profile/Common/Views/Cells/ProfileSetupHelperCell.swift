@@ -48,6 +48,7 @@ final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable {
     config.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
     let button = UIButton(configuration: config)
+    button.isUserInteractionEnabled = false
     return button
   }()
   
@@ -66,13 +67,13 @@ final class ProfileSetupHelperCell: BaseCollectionViewCell, Reusable {
   
   // MARK: - Bind
   
-//  func bind(reactor: ProfileSetupHelperCellReactor) {
-//    // Action
+  func bind(reactor: ProfileSetupHelperCellReactor) {
+    // Action
 //    self.goButton.rx.tap
 //      .asDriver()
 //      .drive(with: self) { owner, _ in owner.goButtonHandler?() }
 //      .disposed(by: self.disposeBag)
-//  }
+  }
   
   // MARK: - Configure
   

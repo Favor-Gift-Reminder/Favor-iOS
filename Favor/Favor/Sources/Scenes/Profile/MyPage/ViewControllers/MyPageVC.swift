@@ -100,6 +100,8 @@ final class MyPageViewController: BaseProfileViewController, View {
       .map { indexPath -> Reactor.Action in
         guard let item = self.dataSource.itemIdentifier(for: indexPath) else { return .doNothing }
         switch item {
+        case .profileSetupHelper(.anniversary):
+          return .profileSetupCellDidTap(.anniversary)
         case .friends(let friend):
           return .friendCellDidTap(friend)
         default:

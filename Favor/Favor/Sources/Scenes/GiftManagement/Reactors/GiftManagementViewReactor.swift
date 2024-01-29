@@ -179,6 +179,7 @@ final class GiftManagementViewReactor: Reactor, Stepper {
       return .just(.updateMemo(memo))
 
     case .pinButtonDidTap(let isPinned):
+      print(isPinned)
       return .just(.updateIsPinned(isPinned))
       
     case .friendsDidAdd(let friends):
