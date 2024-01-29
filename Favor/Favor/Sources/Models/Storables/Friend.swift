@@ -208,7 +208,7 @@ extension FavorKit.CacheKeyMapper {
   
   public init(friend: Friend, subpath: FriendSubpath) {
     let key: String = "friend/\(friend.identifier)/\(subpath.rawValue)/\(subpath.remote)"
-    var mapper = CacheKeyMapper(key: key, cacheType: .memory)
+    var mapper = CacheKeyMapper(key: key, cacheType: .disk)
     mapper.url = subpath.remote
     switch subpath {
     case .background:
