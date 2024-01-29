@@ -29,9 +29,9 @@ public final class GiftManagementPinCell: BaseCollectionViewCell {
   public weak var delegate: GiftManagementPinCellDelegate?
 
   public var isPinned: Bool {
-    self.pinButton.isSelected
+    self.pinButton.isOn
   }
-
+  
   // MARK: - UI Components
 
   private let label: UILabel = {
@@ -41,34 +41,8 @@ public final class GiftManagementPinCell: BaseCollectionViewCell {
     label.text = "타임라인 고정"
     return label
   }()
-
-  private let pinButton: UIButton = {
-    var config = UIButton.Configuration.plain()
-    config.background.backgroundColor = .clear
-    config.image = .favorIcon(.pin)?
-      .withRenderingMode(.alwaysTemplate)
-
-    let button = UIButton(configuration: config)
-    button.configurationUpdateHandler = { button in
-      switch button.state {
-      case .selected:
-        button.configuration?.baseForegroundColor = .favorColor(.icon)
-      case .normal:
-        button.configuration?.baseForegroundColor = .favorColor(.line2)
-      default:
-        break
-      }
-    }
-    button.contentMode = .center
-    return button
-  }()
-
-  private let stackView: UIStackView = {
-    let stackView = UIStackView()
-    stackView.axis = .horizontal
-    stackView.spacing = 10
-    return stackView
-  }()
+  
+  private let pinButton = FavorSwitch()
 
   // MARK: - Initializer
 
@@ -87,46 +61,52 @@ public final class GiftManagementPinCell: BaseCollectionViewCell {
   // MARK: - Bind
 
   private func bind() {
-    self.pinButton.rx.tap
-      .asDriver(onErrorRecover: { _ in return .empty()})
-      .drive(with: self, onNext: { owner, _ in
-        owner.pinButton.isSelected.toggle()
-        owner.delegate?.pinButtonDidTap(from: self, isPinned: self.isPinned)
-      })
-      .disposed(by: self.disposeBag)
+//    self.pinButton.
+//      .asDriver(onErrorRecover: { _ in return .empty()})
+//      .drive(with: self, onNext: { owner, _ in
+//      })
+//      .disposed(by: self.disposeBag)
   }
 
   // MARK: - Functions
 
   public func bind(with isPinned: Bool) {
-    self.pinButton.isSelected = isPinned
+    self.pinButton.isOn = isPinned
   }
 }
 
 // MARK: - UI Setups
 
 extension GiftManagementPinCell: BaseView {
-  public func setupStyles() { }
+  public func setupStyles() { 
+    self.pinButton.delegate = self
+  }
 
   public func setupLayouts() {
     [
       self.label,
       self.pinButton
     ].forEach {
-      self.stackView.addArrangedSubview($0)
+      self.contentView.addSubview($0)
     }
-
-    self.addSubview(self.stackView)
   }
 
   public func setupConstraints() {
-    self.stackView.snp.makeConstraints { make in
-      make.directionalVerticalEdges.equalToSuperview()
+    self.label.snp.makeConstraints { make in
       make.leading.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
     }
-
+    
     self.pinButton.snp.makeConstraints { make in
-      make.width.height.equalTo(Metric.pinButtonSize)
+      make.trailing.equalToSuperview()
+      make.directionalVerticalEdges.equalToSuperview()
+      make.width.equalTo(40)
     }
+  }
+}
+
+extension GiftManagementPinCell: FavorSwitchDelegate {
+  public func switchDidToggled(to state: Bool) {
+    self.delegate?.pinButtonDidTap(from: self, isPinned: state)
   }
 }
