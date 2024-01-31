@@ -5,6 +5,7 @@
 # plist files
 
 *.plist
+!Term-Info.plist
 !API-Info.plist
 !Info.plist
 !IDEWorkspaceChecks.plist

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Operating Term</key>
+	<dict>
+		<key>Title</key>
+		<string>페이버 운영약관 동의 (필수)</string>
+		<key>Required</key>
+		<true/>
+		<key>URL</key>
+		<string>https://favorgiftapp.notion.site/Favor-d88735b1c56a47b4aee509f73acf1beb?pvs=4</string>
+		<key>Index</key>
+		<integer>0</integer>
+	</dict>
+	<key>Personal Information Term</key>
+	<dict>
+		<key>Title</key>
+		<string>개인정보 수집 및 이용 동의 (필수)</string>
+		<key>Required</key>
+		<true/>
+		<key>URL</key>
+		<string>https://favorgiftapp.notion.site/ec913ce419b94dfca96d89928f75a97d?pvs=4</string>
+		<key>Index</key>
+		<integer>1</integer>
+	</dict>
+</dict>
+</plist>
