@@ -34,7 +34,7 @@ private extension URLSchemes {
   private var plistKey: String {
     switch self {
     case .instagramStory:
-      return "InstagramStory"
+      return "INSTAGRAM_APP_ID"
     }
   }
 
@@ -44,7 +44,6 @@ private extension URLSchemes {
     }
 
     var value: String = ""
-    var plist: JSON = [:]
     do {
       var plistRAW: Data
       if #available(iOS 16.0, *) {
@@ -53,8 +52,7 @@ private extension URLSchemes {
         plistRAW = try NSData(contentsOfFile: filePath) as Data
       }
       let root = try PropertyListSerialization.propertyList(from: plistRAW, format: nil) as! JSON
-      plist = root["AppID"] as! JSON
-      value = plist[self.plistKey] as! String
+      value = root[self.plistKey] as! String
     } catch {
       os_log(.error, "\(error)")
     }

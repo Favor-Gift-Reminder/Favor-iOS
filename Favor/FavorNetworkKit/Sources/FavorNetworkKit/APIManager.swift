@@ -54,8 +54,8 @@ public class APIManager {
       os_log(.error, "\(error)")
     }
 
-    guard let value = plist["BaseURL"] as? String else {
-      fatalError("plist file doesn't have value with key 'BaseURL'.")
+    guard let value = plist["API_BASEURL"] as? String else {
+      fatalError("plist file doesn't have value with key 'API_BASEURL'.")
     }
     return value
   }
